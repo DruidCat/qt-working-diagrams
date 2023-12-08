@@ -9,9 +9,9 @@ Page{
 	property color clrFona: "grey"
 	property color clrKnopok: "grey"
 	property color clrRabOblasti: "lightblue"
+	property alias text: txtStrZagolovok.text
 
 	signal sStrelkaNazadCliked();//Сигнал нажатия кнопки Стрелка Назад
-	//signal sKnopkaMenuCliked();//Сигнал нажатия кнопки Меню.
 
 	Item{
 		id: tmStr
@@ -24,7 +24,7 @@ Page{
 
 			Rectangle {
 				id: rctStrZagolovok
-				width: ntWidth
+				width: rctStr.width
 				height: ntWidth*ntCoff+ntCoff
 				color: clrRabOblasti
 				anchors.top: rctStr.top
@@ -44,6 +44,27 @@ Page{
 
 					onSStrelkaNazadCliked: {
 						pgStrStrelkaNazad.sStrelkaNazadCliked();
+					}
+				}
+
+				Rectangle {
+					id: rctStrZagolovokText
+					width: rctStrZagolovok.width-2*rctStrZagolovok.height
+					height: rctStrZagolovok.height
+					color: "transparent"
+
+					anchors.left: dcStrelkaNazad.right
+					anchors.top: rctStrZagolovok.top
+
+					Text {
+						id: txtStrZagolovok
+						anchors.centerIn: rctStrZagolovokText
+						color: pgStrStrelkaNazad.clrKnopok
+
+						font.pixelSize: rctStrZagolovok.height-pgStrMenu.ntCoff
+						font.bold: true
+
+						text: ""
 					}
 				}
 			}

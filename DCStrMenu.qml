@@ -9,6 +9,7 @@ Page{
 	property color clrFona: "grey"
 	property color clrKnopok: "grey"
 	property color clrRabOblasti: "lightblue"
+	property alias text:  txtStrZagolovok.text
 
 	signal sKnopkaMenuCliked();//Сигнал нажатия кнопки Меню.
 
@@ -23,7 +24,7 @@ Page{
 
 			Rectangle {
 				id: rctStrZagolovok
-                width: ntWidth
+				width: rctStr.width
                 height: ntWidth*ntCoff+ntCoff
                 color: clrRabOblasti
 				anchors.top: rctStr.top
@@ -43,6 +44,27 @@ Page{
 
 					onSKnopkaMenuClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
 						pgStrMenu.sKnopkaMenuCliked();//Отправляем сигнил из компонента, что она нажата.
+					}
+				}
+
+				Rectangle {
+					id: rctStrZagolovokText
+					width: rctStrZagolovok.width-2*rctStrZagolovok.height
+					height: rctStrZagolovok.height
+					color: "transparent"
+
+					anchors.left: dcKnopkaMenu.right
+					anchors.top: rctStrZagolovok.top
+
+					Text {
+						id: txtStrZagolovok
+						anchors.centerIn: rctStrZagolovokText
+						color: pgStrMenu.clrKnopok
+
+						font.pixelSize: rctStrZagolovok.height-pgStrMenu.ntCoff
+						font.bold: true
+
+						text: ""
 					}
 				}
 			}

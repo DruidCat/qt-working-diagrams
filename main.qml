@@ -15,7 +15,7 @@ Window {
 
     property int ntWidth: 2
 	property int ntCoff: 8
-	property color clrKnopok: "grey"
+	property color clrKnopok: "orange"
 	property color clrFona: "grey"
 
 	StackView {
@@ -32,7 +32,9 @@ Window {
 
 			clrFona: wndRoot.clrFona
 			clrKnopok: wndRoot.clrKnopok
-            clrRabOblasti: "lightgreen"
+			clrRabOblasti: "indigo"
+
+			text: "МЕНЮ"
 
 			onSStrelkaNazadCliked: {
 				stvStr.pop()//Назад страницу
@@ -48,7 +50,9 @@ Window {
 
 			clrFona: wndRoot.clrFona
 			clrKnopok: wndRoot.clrKnopok
-			clrRabOblasti: "lightblue"
+			clrRabOblasti: "black"
+
+			text: "ТМК"
 
             DCLogoTMK {
                 id: dcLogoTMK
@@ -56,7 +60,6 @@ Window {
 
                 anchors.centerIn: parent
             }
-
 
 			onSKnopkaMenuCliked: {//Если пришёл сигнал из компонента о нажатии кнопки меню, то...
 				stvStr.push(pgStrMenu)
