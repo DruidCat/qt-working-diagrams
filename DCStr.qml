@@ -1,17 +1,20 @@
-﻿import QtQuick 2.12
+import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
-
-Page{
-	id: pgStrStrelkaNazad
+//TODO Сделать так, чтоб при уменьшении экрана или большого текста, размер шрифта уменьшался.
+//TODO Сделать так, чтоб текст не накладывался на Иконки.
+//TODO Нарисовать иконку поиска.
+//TODO Выделить область под иконку в заголовке
+//TODO Создать свойство для рабочей области
+Page {
+	id: pgStr
 	property int ntWidth: 8
 	property int ntCoff: 8
 	property color clrFona: "grey"
 	property color clrKnopok: "grey"
 	property color clrRabOblasti: "lightblue"
-	property alias text: txtStrZagolovok.text
-
-	signal sStrelkaNazadCliked();//Сигнал нажатия кнопки Стрелка Назад
+	property alias text:  txtStrZagolovok.text
+	property alias rctStrZagolovok: rctStrZagolovok
 
 	Item{
 		id: tmStr
@@ -33,18 +36,12 @@ Page{
 				anchors.margins: ntCoff
 				radius: (width/(ntWidth*ntCoff))/ntCoff
 
-				DCStrelkaNazad {
-					id: dcStrelkaNazad
-                    ntWidth: pgStrStrelkaNazad.ntWidth
-                    ntCoff: pgStrStrelkaNazad.ntCoff
-                    clrKnopki: pgStrStrelkaNazad.clrKnopok
-					anchors.verticalCenter: rctStrZagolovok.verticalCenter
+				Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
+					id: tmKnopka
+					height: rctStrZagolovok.height
+					width: height
+					anchors.top: rctStrZagolovok.top
 					anchors.left: rctStrZagolovok.left
-                    anchors.leftMargin: pgStrStrelkaNazad.ntCoff/2
-
-					onSStrelkaNazadCliked: {
-						pgStrStrelkaNazad.sStrelkaNazadCliked();
-					}
 				}
 
 				Rectangle {
@@ -53,15 +50,15 @@ Page{
 					height: rctStrZagolovok.height
 					color: "transparent"
 
-					anchors.left: dcStrelkaNazad.right
+					anchors.left: tmKnopka.right
 					anchors.top: rctStrZagolovok.top
 
 					Text {
 						id: txtStrZagolovok
 						anchors.centerIn: rctStrZagolovokText
-						color: pgStrStrelkaNazad.clrKnopok
+						color: pgStr.clrKnopok
 
-						font.pixelSize: rctStrZagolovok.height-pgStrMenu.ntCoff
+						font.pixelSize: rctStrZagolovok.height-pgStr.ntCoff
 						font.bold: true
 
 						text: ""
@@ -83,4 +80,5 @@ Page{
 			}
 		}
 	}
+
 }

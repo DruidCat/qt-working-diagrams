@@ -1,63 +1,43 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.16)
 
 project(qt-working-diagrams VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
-set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
 
-set(PROJECT_SOURCES
-        main.cpp
-        qml.qrc
+qt_standard_project_setup()
+
+qt_add_executable(appqt-working-diagrams
+    main.cpp
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(qt-working-diagrams
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-    )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET qt-working-diagrams APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(qt-working-diagrams SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(qt-working-diagrams
-          ${PROJECT_SOURCES}
-        )
-    endif()
-endif()
+qt_add_qml_module(appqt-working-diagrams
+    URI qt-working-diagrams
+    VERSION 1.0
+	QML_FILES main.qml
+	QML_FILES DCKnopkaKruglaya.qml DCKnopkaMenu.qml DCLogoTMK.qml DCStrelkaNazad.qml
+	QML_FILES DCStr.qml
+)
 
-target_link_libraries(qt-working-diagrams
-  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick)
-
-set_target_properties(qt-working-diagrams PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
+# If you are developing for iOS or macOS you should consider setting an
+# explicit, fixed bundle identifier manually though.
+set_target_properties(appqt-working-diagrams PROPERTIES
+#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appqt-working-diagrams
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
 
-install(TARGETS qt-working-diagrams
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+target_link_libraries(appqt-working-diagrams
+    PRIVATE Qt6::Quick
+)
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_import_qml_plugins(qt-working-diagrams)
-    qt_finalize_executable(qt-working-diagrams)
-endif()
+include(GNUInstallDirs)
+install(TARGETS appqt-working-diagrams
+    BUNDLE DESTINATION .
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)

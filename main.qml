@@ -21,9 +21,41 @@ Window {
 	StackView {
 		id: stvStr
 		anchors.fill: parent
-		initialItem: dcStrGlavnaya
+		initialItem: pgStrGlavnaya
 
-		DCStrStrelkaNazad {//Меню
+		DCStr {//Главная страница
+			id: pgStrGlavnaya
+			visible: true
+
+			ntWidth: wndRoot.ntWidth
+			ntCoff: wndRoot.ntCoff
+
+			clrFona: wndRoot.clrFona
+			clrKnopok: wndRoot.clrKnopok
+			clrRabOblasti: "black"
+
+			text: "ТМК"
+
+			DCKnopkaMenu {
+				ntWidth: pgStrGlavnaya.ntWidth
+				ntCoff: pgStrGlavnaya.ntCoff
+				clrKnopki: clrKnopok
+				x: pgStrGlavnaya.rctStrZagolovok.x+ntCoff/2
+				y: pgStrGlavnaya.rctStrZagolovok.y+ntCoff/2
+
+				onSKnopkaMenuClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
+					stvStr.push(pgStrMenu)
+				}
+			}
+
+			DCLogoTMK {//Логотип
+				ntCoff: 16
+				clrLogo: wndRoot.clrKnopok
+				anchors.centerIn: parent
+			}
+		}
+
+		DCStr {//Меню
 			id: pgStrMenu
 			visible: false
 
@@ -36,37 +68,20 @@ Window {
 
 			text: "МЕНЮ"
 
-			onSStrelkaNazadCliked: {
-				stvStr.pop()//Назад страницу
+			DCStrelkaNazad {
+				ntWidth: pgStrMenu.ntWidth
+				ntCoff: pgStrMenu.ntCoff
+				clrKnopki: clrKnopok
+				x: pgStrMenu.rctStrZagolovok.x+ntCoff/2
+				y: pgStrMenu.rctStrZagolovok.y+ntCoff/2
+
+				onSStrelkaNazadCliked: {
+					stvStr.pop()//Назад страницу
+				}
 			}
 		}
 
-		DCStrMenu {//Главная страница
-			id: dcStrGlavnaya
-			visible: true
-
-			ntWidth: wndRoot.ntWidth
-			ntCoff: wndRoot.ntCoff
-
-			clrFona: wndRoot.clrFona
-			clrKnopok: wndRoot.clrKnopok
-			clrRabOblasti: "black"
-
-			text: "ТМК"
-
-            DCLogoTMK {
-                id: dcLogoTMK
-                ntCoff: 12
-
-                anchors.centerIn: parent
-            }
-
-			onSKnopkaMenuCliked: {//Если пришёл сигнал из компонента о нажатии кнопки меню, то...
-				stvStr.push(pgStrMenu)
-			}
-		}
-
-		DCStrStrelkaNazad {//Вторая страница
+		DCStr {//Вторая страница
 			id: pgStrVtoraya
 			visible: false
 
@@ -75,14 +90,22 @@ Window {
 
 			clrFona: wndRoot.clrFona
 			clrKnopok: wndRoot.clrKnopok
-			clrRabOblasti: "purple"
+			clrRabOblasti: "SlateGray"
 
-			onSStrelkaNazadCliked: {
-				stvStr.pop()
+			DCStrelkaNazad {
+				ntWidth: pgStrVtoraya.ntWidth
+				ntCoff: pgStrVtoraya.ntCoff
+				clrKnopki: clrKnopok
+				x: pgStrVtoraya.rctStrZagolovok.x+ntCoff/2
+				y: pgStrVtoraya.rctStrZagolovok.y+ntCoff/2
+
+				onSStrelkaNazadCliked: {
+					stvStr.pop()//Назад страницу
+				}
 			}
 		}
 
-		DCStrStrelkaNazad {//Третья страница
+		DCStr {//Третья страница
 			id: pgStrTretiya
 			visible: false
 
@@ -91,10 +114,18 @@ Window {
 
 			clrFona: wndRoot.clrFona
 			clrKnopok: wndRoot.clrKnopok
-			clrRabOblasti: "lightblue"
+			clrRabOblasti: "MidnightBlue"
 
-			onSStrelkaNazadCliked: {
-				stvStr.pop()
+			DCStrelkaNazad {
+				ntWidth: pgStrTretiya.ntWidth
+				ntCoff: pgStrTretiya.ntCoff
+				clrKnopki: clrKnopok
+				x: pgStrTretiya.rctStrZagolovok.x+ntCoff/2
+				y: pgStrTretiya.rctStrZagolovok.y+ntCoff/2
+
+				onSStrelkaNazadCliked: {
+					stvStr.pop()//Назад страницу
+				}
 			}
 		}
 	}
