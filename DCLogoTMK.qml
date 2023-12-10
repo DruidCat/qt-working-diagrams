@@ -2,6 +2,8 @@
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 
+
+
 Item {
     id: tmLogoTMK
 
@@ -14,8 +16,36 @@ Item {
 
     Rectangle {
         id: rctLogoTMK
+        clip: true //Все прямоугольники, которые будут внутри этого прямоугольника, будут обрезаться по его границам.
         color: clrFona
         anchors.fill: tmLogoTMK
+
+        Rectangle {
+            id: rctKrugPervi
+            width: rctLogoTMK.width*2
+            height: width
+            radius: width/2
+            color: tmLogoTMK.clrLogo
+
+            anchors.right: rctLogoTMK.right
+            anchors.top: rctLogoTMK.top
+            anchors.rightMargin: -rctLogoTMK.width/1024
+            anchors.topMargin: -rctLogoTMK.width/1024
+        }
+
+        Rectangle {
+            id: rctKrugVtoroi
+            width: rctLogoTMK.width*2.4
+            height: width
+            radius: width/2
+            color: tmLogoTMK.clrFona
+
+            anchors.right: rctLogoTMK.right
+            anchors.top: rctLogoTMK.top
+            anchors.rightMargin: -rctLogoTMK.width/96
+            anchors.topMargin: -rctLogoTMK.width/96
+
+        }
 
         Rectangle {
             id: rctLogoT
@@ -24,8 +54,8 @@ Item {
             color: "transparent"
             anchors.top: rctLogoTMK.top
             anchors.left: rctLogoTMK.left
-            anchors.topMargin: 4*tmLogoTMK.ntCoff
-            anchors.leftMargin: 1*tmLogoTMK.ntCoff
+            anchors.topMargin: 7*tmLogoTMK.ntCoff
+            //anchors.leftMargin: 1*tmLogoTMK.ntCoff
 
             Rectangle {
                 id: rctGorizont
@@ -57,8 +87,8 @@ Item {
             color: "transparent"
             anchors.top: rctLogoTMK.top
             anchors.left: rctLogoTMK.left
-            anchors.topMargin: 6*tmLogoTMK.ntCoff
-            anchors.leftMargin: 5*tmLogoTMK.ntCoff
+            anchors.topMargin: 9*tmLogoTMK.ntCoff
+            anchors.leftMargin: 4*tmLogoTMK.ntCoff
 
             Rectangle {
                 id: rctVertikalMOdin
@@ -127,8 +157,8 @@ Item {
             color:  "transparent"
             anchors.top: rctLogoTMK.top
             anchors.left: rctLogoTMK.left
-            anchors.topMargin: 8*tmLogoTMK.ntCoff
-            anchors.leftMargin: 11*tmLogoTMK.ntCoff
+            anchors.topMargin: 11*tmLogoTMK.ntCoff
+            anchors.leftMargin: 10*tmLogoTMK.ntCoff
 
             Rectangle {
                 id: rctVertikalKOdin
