@@ -34,7 +34,7 @@ Window {
 			clrKnopok: wndRoot.clrKnopok
 			clrRabOblasti: "black"
 
-			text: "ТМК"
+            text: "СПАТЬ УЖЕ ЗАХОТЕЛОСЬ"
 
 			DCKnopkaMenu {
 				ntWidth: pgStrGlavnaya.ntWidth

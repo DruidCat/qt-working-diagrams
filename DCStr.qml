@@ -3,7 +3,6 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 //TODO Сделать так, чтоб при уменьшении экрана или большого текста, размер шрифта уменьшался.
 //TODO Сделать так, чтоб текст не накладывался на Иконки.
-//TODO Нарисовать иконку поиска.
 //TODO Выделить область под иконку в заголовке
 //TODO Создать свойство для рабочей области
 Page {
@@ -33,37 +32,48 @@ Page {
 				anchors.top: rctStr.top
 				anchors.left: rctStr.left
 				anchors.right: rctStr.right
-				anchors.margins: ntCoff
+                anchors.margins: ntCoff
 				radius: (width/(ntWidth*ntCoff))/ntCoff
 
 				Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
-					id: tmKnopka
+                    id: tmKnopkaCleva
 					height: rctStrZagolovok.height
 					width: height
 					anchors.top: rctStrZagolovok.top
-					anchors.left: rctStrZagolovok.left
+                    anchors.left: rctStrZagolovok.left
+                    anchors.bottom: rctStrZagolovok.bottom
 				}
 
 				Rectangle {
 					id: rctStrZagolovokText
-					width: rctStrZagolovok.width-2*rctStrZagolovok.height
-					height: rctStrZagolovok.height
+                    width: rctStrZagolovok.width-2*tmKnopkaCleva.width
+                    height: rctStrZagolovok.height-pgStr.ntCoff
 					color: "transparent"
 
-					anchors.left: tmKnopka.right
-					anchors.top: rctStrZagolovok.top
+                    anchors.left: tmKnopkaCleva.right
+                    anchors.verticalCenter: rctStrZagolovok.verticalCenter
 
 					Text {
 						id: txtStrZagolovok
 						anchors.centerIn: rctStrZagolovokText
 						color: pgStr.clrKnopok
 
-						font.pixelSize: rctStrZagolovok.height-pgStr.ntCoff
-						font.bold: true
-
 						text: ""
-					}
+                        font.bold: true
+                        font.pixelSize: (rctStrZagolovokText.width/text.length>=rctStrZagolovokText.height)
+                                        ? rctStrZagolovokText.height : rctStrZagolovokText.width/text.length
+                    }
 				}
+
+                Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
+                    id: tmKnopkaCprava
+                    height: rctStrZagolovok.height
+                    width: height
+                    anchors.top: rctStrZagolovok.top
+                    anchors.left: rctStrZagolovokText.right
+                    anchors.right: rctStrZagolovok.right
+                    anchors.bottom: rctStrZagolovok.bottom
+                }
 			}
 
 			Rectangle {
