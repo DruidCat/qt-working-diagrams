@@ -47,7 +47,6 @@ Window {
 					stvStr.push(pgStrMenu)
 				}
 			}
-
 			DCLogoTMK {//Логотип
 				ntCoff: 16
 				clrLogo: wndRoot.clrKnopok
@@ -64,9 +63,20 @@ Window {
 
 			clrFona: wndRoot.clrFona
 			clrKnopok: wndRoot.clrKnopok
-			clrRabOblasti: "indigo"
+            clrRabOblasti: "darkslategray"
 
 			text: "МЕНЮ"
+
+            DCKnopkaPoisk {
+                id: dCKnopkaPoisk
+                ntWidth: wndRoot.ntWidth
+                ntCoff: wndRoot.ntCoff
+
+                clrKnopki: wndRoot.clrKnopok
+                clrFona: "darkslategray"
+                anchors.centerIn: parent
+            }
+
 
 			DCStrelkaNazad {
 				ntWidth: pgStrMenu.ntWidth
@@ -90,7 +100,7 @@ Window {
 
 			clrFona: wndRoot.clrFona
 			clrKnopok: wndRoot.clrKnopok
-			clrRabOblasti: "SlateGray"
+            clrRabOblasti: "indigo"
 
 			DCStrelkaNazad {
 				ntWidth: pgStrVtoraya.ntWidth
