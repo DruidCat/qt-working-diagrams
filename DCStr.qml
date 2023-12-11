@@ -1,19 +1,17 @@
 import QtQuick 2.12
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
-//TODO Сделать так, чтоб при уменьшении экрана или большого текста, размер шрифта уменьшался.
-//TODO Сделать так, чтоб текст не накладывался на Иконки.
-//TODO Выделить область под иконку в заголовке
-//TODO Создать свойство для рабочей области
+//TODO Придумать новое название clrFona и clrRabOblasti
 Page {
 	id: pgStr
 	property int ntWidth: 8
 	property int ntCoff: 8
 	property color clrFona: "grey"
-	property color clrKnopok: "grey"
+	property color clrTexta: "grey"
 	property color clrRabOblasti: "lightblue"
 	property alias text:  txtStrZagolovok.text
 	property alias rctStrZagolovok: rctStrZagolovok
+	property alias rctStrZona: rctStrZona
 
 	Item{
 		id: tmStr
@@ -56,7 +54,7 @@ Page {
 					Text {
 						id: txtStrZagolovok
 						anchors.centerIn: rctStrZagolovokText
-						color: pgStr.clrKnopok
+						color: pgStr.clrTexta
 
 						text: ""
                         font.bold: true

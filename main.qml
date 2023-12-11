@@ -27,61 +27,81 @@ Window {
 			id: pgStrGlavnaya
 			visible: true
 
+			property color clrStranici: "black"
 			ntWidth: wndRoot.ntWidth
 			ntCoff: wndRoot.ntCoff
 
 			clrFona: wndRoot.clrFona
-			clrKnopok: wndRoot.clrKnopok
-			clrRabOblasti: "black"
+			clrTexta: wndRoot.clrKnopok
+			clrRabOblasti: clrStranici
 
-            text: "СПАТЬ УЖЕ ЗАХОТЕЛОСЬ"
+			text: "ТМК"
 
-			DCKnopkaMenu {
-				ntWidth: pgStrGlavnaya.ntWidth
-				ntCoff: pgStrGlavnaya.ntCoff
-				clrKnopki: clrKnopok
-				x: pgStrGlavnaya.rctStrZagolovok.x+ntCoff/2
-				y: pgStrGlavnaya.rctStrZagolovok.y+ntCoff/2
+			Item {
+				id: tmGlavnayaZagolovok
+				x: pgStrGlavnaya.rctStrZagolovok.x
+				y: pgStrGlavnaya.rctStrZagolovok.y
+				width: pgStrGlavnaya.rctStrZagolovok.width
+				height: pgStrGlavnaya.rctStrZagolovok.height
 
-				onSKnopkaMenuClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
-					stvStr.push(pgStrMenu)
+				DCKnopkaMenu {
+					ntWidth: pgStrGlavnaya.ntWidth
+					ntCoff: pgStrGlavnaya.ntCoff
+					clrKnopki: clrKnopok
+					clrFona: pgStrGlavnaya.clrStranici
+
+					anchors.verticalCenter: tmGlavnayaZagolovok.verticalCenter
+					anchors.left: tmGlavnayaZagolovok.left
+					anchors.margins: wndRoot.ntCoff/2
+					onSKnopkaMenuClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
+						stvStr.push(pgStrMenu)
+					}
+				}
+
+				DCKnopkaPoisk {
+					ntWidth: wndRoot.ntWidth
+					ntCoff: wndRoot.ntCoff
+					clrKnopki: wndRoot.clrKnopok
+					clrFona: pgStrGlavnaya.clrStranici
+					anchors.verticalCenter: tmGlavnayaZagolovok.verticalCenter
+					anchors.right: tmGlavnayaZagolovok.right
+					anchors.margins: wndRoot.ntCoff/2
 				}
 			}
-			DCLogoTMK {//Логотип
-				ntCoff: 16
-				clrLogo: wndRoot.clrKnopok
-				anchors.centerIn: parent
+			Item {
+				id: tmGlavnayaZona
+				x: pgStrGlavnaya.rctStrZona.x
+				y: pgStrGlavnaya.rctStrZona.y
+				width: pgStrGlavnaya.rctStrZona.width
+				height: pgStrGlavnaya.rctStrZona.height
+
+				DCLogoTMK {//Логотип
+					ntCoff: 16
+					clrLogo: wndRoot.clrKnopok
+					clrFona: pgStrGlavnaya.clrStranici
+					anchors.centerIn: parent
+				}
 			}
 		}
 
 		DCStr {//Меню
 			id: pgStrMenu
 			visible: false
+			property color clrStranici: "darkslategray"
 
 			ntWidth: wndRoot.ntWidth
 			ntCoff: wndRoot.ntCoff
 
 			clrFona: wndRoot.clrFona
-			clrKnopok: wndRoot.clrKnopok
-            clrRabOblasti: "darkslategray"
+			clrTexta: wndRoot.clrKnopok
+			clrRabOblasti: clrStranici
 
 			text: "МЕНЮ"
-
-            DCKnopkaPoisk {
-                id: dCKnopkaPoisk
-                ntWidth: wndRoot.ntWidth
-                ntCoff: wndRoot.ntCoff
-
-                clrKnopki: wndRoot.clrKnopok
-                clrFona: "darkslategray"
-                anchors.centerIn: parent
-            }
-
 
 			DCStrelkaNazad {
 				ntWidth: pgStrMenu.ntWidth
 				ntCoff: pgStrMenu.ntCoff
-				clrKnopki: clrKnopok
+				clrKnopki: wndRoot.clrKnopok
 				x: pgStrMenu.rctStrZagolovok.x+ntCoff/2
 				y: pgStrMenu.rctStrZagolovok.y+ntCoff/2
 
@@ -99,7 +119,7 @@ Window {
 			ntCoff: wndRoot.ntCoff
 
 			clrFona: wndRoot.clrFona
-			clrKnopok: wndRoot.clrKnopok
+			clrTexta: wndRoot.clrKnopok
             clrRabOblasti: "indigo"
 
 			DCStrelkaNazad {
@@ -123,7 +143,7 @@ Window {
 			ntCoff: wndRoot.ntCoff
 
 			clrFona: wndRoot.clrFona
-			clrKnopok: wndRoot.clrKnopok
+			clrTexta: wndRoot.clrKnopok
 			clrRabOblasti: "MidnightBlue"
 
 			DCStrelkaNazad {
