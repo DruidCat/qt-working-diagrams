@@ -6,7 +6,7 @@ Page {
 	id: pgStr
 	property int ntWidth: 8
 	property int ntCoff: 8
-	property color clrFona: "grey"
+	property color clrFona: "transparent"
 	property color clrTexta: "grey"
 	property color clrRabOblasti: "lightblue"
 	property alias text:  txtStrZagolovok.text
@@ -58,9 +58,10 @@ Page {
 
 						text: ""
                         font.bold: true
-                        font.pixelSize: (rctStrZagolovokText.width/text.length>=rctStrZagolovokText.height)
-                                        ? rctStrZagolovokText.height : rctStrZagolovokText.width/text.length
-                    }
+
+						font.pixelSize: (rctStrZagolovokText.width/text.length>=rctStrZagolovokText.height)
+										? rctStrZagolovokText.height : rctStrZagolovokText.width/text.length
+					}
 				}
 
                 Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
