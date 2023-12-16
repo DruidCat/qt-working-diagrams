@@ -1,11 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>DCKnopkaKruglaya.qml</file>
-        <file>DCKnopkaMenu.qml</file>
-        <file>DCLogoTMK.qml</file>
-        <file>DCStrelkaNazad.qml</file>
-        <file>DCStrMenu.qml</file>
-        <file>DCStrStrelkaNazad.qml</file>
+        <file>js/DCZonaGlavnaya.js</file>
+        <file>js/DCFunkciiJS.js</file>
     </qresource>
 </RCC>

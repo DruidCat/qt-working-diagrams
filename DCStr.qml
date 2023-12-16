@@ -58,7 +58,6 @@ Page {
 
 						text: ""
                         font.bold: true
-
 						font.pixelSize: (rctStrZagolovokText.width/text.length>=rctStrZagolovokText.height)
 										? rctStrZagolovokText.height : rctStrZagolovokText.width/text.length
 					}
