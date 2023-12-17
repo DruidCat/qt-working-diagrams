@@ -2,8 +2,6 @@
 import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 
-
-
 Item {
     id: tmLogoTMK
 
@@ -229,7 +227,6 @@ Item {
                 anchors.left: rctVertikalKTri.right
                 anchors.topMargin: 4*tmLogoTMK.ntCoff
             }
-
         }
     }
 }

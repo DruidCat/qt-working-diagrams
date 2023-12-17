@@ -69,5 +69,4 @@ Item {
             tmKnopkaPoisk.sKnopkaPoiskClicked();
         }
     }
-
 }

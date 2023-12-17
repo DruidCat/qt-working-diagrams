@@ -63,6 +63,9 @@ Window {
 					anchors.verticalCenter: tmGlavnayaZagolovok.verticalCenter
 					anchors.right: tmGlavnayaZagolovok.right
 					anchors.margins: wndRoot.ntCoff/2
+					onSKnopkaPoiskClicked: {
+						 Qt.quit();
+					}
 				}
 			}
 			Item {
@@ -80,7 +83,6 @@ Window {
 					clrFona: "SlateGray"
 					anchors.fill: tmGlavnayaZona
 					onSUchastki: function(ntNomer) {
-						console.log(ntNomer)
 						stvStr.push(pgStrVtoraya)
 					}
 				}
@@ -108,14 +110,14 @@ Window {
 
 			text: "МЕНЮ"
 
-			DCStrelkaNazad {
+			DCKnopkaNazad {
 				ntWidth: pgStrMenu.ntWidth
 				ntCoff: pgStrMenu.ntCoff
 				clrKnopki: wndRoot.clrKnopok
 				x: pgStrMenu.rctStrZagolovok.x+ntCoff/2
 				y: pgStrMenu.rctStrZagolovok.y+ntCoff/2
 
-				onSStrelkaNazadCliked: {
+				onSKnopkaNazadCliked: {
 					stvStr.pop()//Назад страницу
 				}
 			}
@@ -132,14 +134,14 @@ Window {
 			clrTexta: wndRoot.clrKnopok
             clrRabOblasti: "indigo"
 
-			DCStrelkaNazad {
+			DCKnopkaNazad {
 				ntWidth: pgStrVtoraya.ntWidth
 				ntCoff: pgStrVtoraya.ntCoff
 				clrKnopki: clrKnopok
 				x: pgStrVtoraya.rctStrZagolovok.x+ntCoff/2
 				y: pgStrVtoraya.rctStrZagolovok.y+ntCoff/2
 
-				onSStrelkaNazadCliked: {
+				onSKnopkaNazadCliked: {
 					stvStr.pop()//Назад страницу
 				}
 			}
@@ -156,14 +158,14 @@ Window {
 			clrTexta: wndRoot.clrKnopok
 			clrRabOblasti: "MidnightBlue"
 
-			DCStrelkaNazad {
+			DCKnopkaNazad {
 				ntWidth: pgStrTretiya.ntWidth
 				ntCoff: pgStrTretiya.ntCoff
 				clrKnopki: clrKnopok
 				x: pgStrTretiya.rctStrZagolovok.x+ntCoff/2
 				y: pgStrTretiya.rctStrZagolovok.y+ntCoff/2
 
-				onSStrelkaNazadCliked: {
+				onSKnopkaNazadCliked: {
 					stvStr.pop()//Назад страницу
 				}
 			}
