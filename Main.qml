@@ -15,6 +15,10 @@ Window {
 	property color clrKnopok: "orange"
 	property color clrFona: "grey"
 
+	function fcPolUchastokNazvanie() {
+		return cppqml.getUchastokNazvanie();
+	}
+
 	StackView {
 		id: stvStr
 		anchors.fill: parent
@@ -64,7 +68,8 @@ Window {
 					anchors.right: tmGlavnayaZagolovok.right
 					anchors.margins: wndRoot.ntCoff/2
 					onSKnopkaPoiskClicked: {
-						 Qt.quit();
+						cppqml.slotTest();
+						Qt.quit();
 					}
 				}
 			}
@@ -82,8 +87,10 @@ Window {
 					clrTexta: wndRoot.clrKnopok
 					clrFona: "SlateGray"
 					anchors.fill: tmGlavnayaZona
-					onSUchastki: function(ntNomer) {
-						stvStr.push(pgStrVtoraya)
+					onSUchastki: function(strUchastok) {
+						console.log(strUchastok);
+						cppqml.slotUchastokNazvanie(strUchastok);
+						stvStr.push(pgStrVtoraya);
 					}
 				}
 

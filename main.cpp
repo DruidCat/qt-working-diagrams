@@ -1,10 +1,14 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext> //Библиотека соединяющая черер контекст cpp c qml
 
+#include "cppqml.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+
+    DCCppQml odccppqml;//Создаём объект для движка, который соединит cpp c qml
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/qt-working-diagrams/Main.qml"_qs);
@@ -12,6 +16,9 @@ int main(int argc, char *argv[])
         &app, []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
     engine.load(url);
+
+    QQmlContext* pkornevoiKontekst = engine.rootContext();//создаём конревой контекст, видимый во всех файлах qml
+    pkornevoiKontekst->setContextProperty("cppqml", &odccppqml);//передаём имя и объект, с которыми будет работать в qml
 
     return app.exec();
 }

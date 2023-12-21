@@ -10,7 +10,7 @@ Item {
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
-	signal sUchastki(int ntNomer);
+	signal sUchastki(var strUchastok);
 
 	ListView {
 		id: lsvGlavnayaZona
@@ -37,7 +37,7 @@ Item {
 					id: maUchastki
 					anchors.fill: rctUchastki
 					onClicked: {
-						tmZonaGlavnaya.sUchastki(modelData.nomer)
+						tmZonaGlavnaya.sUchastki(modelData.uchastok)
 					}
 				}
 			}

@@ -3,9 +3,10 @@ cmake_minimum_required(VERSION 3.16)
 project(qt-working-diagrams VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# Команда включает файлы *.qrc.
 set(CMAKE_AUTORCC ON)
-
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+# Команда добавляет библиотеки, с которыми будет работать проект.
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Sql Widgets Core)
 
 qt_standard_project_setup()
 
@@ -17,8 +18,16 @@ qt_add_qml_module(appqt-working-diagrams
     URI qt-working-diagrams
     VERSION 1.0
     QML_FILES Main.qml
-RESOURCES qml.qrc
-QML_FILES DCKnopkaKruglaya.qml DCKnopkaMenu.qml DCKnopkaNazad.qml DCKnopkaPoisk.qml DCLogoTMK.qml DCStr.qml DCZonaGlavnaya.qml
+	QML_FILES DCKnopkaKruglaya.qml
+	QML_FILES DCKnopkaMenu.qml
+	QML_FILES DCKnopkaNazad.qml
+	QML_FILES DCKnopkaPoisk.qml
+	QML_FILES DCLogoTMK.qml
+	QML_FILES DCStr.qml
+	QML_FILES DCZonaGlavnaya.qml
+	RESOURCES qml.qrc
+	SOURCES cppqml.h cppqml.cpp
+	SOURCES dcdb.h dcdb.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
@@ -31,9 +40,12 @@ set_target_properties(appqt-working-diagrams PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-
+# Добавляем библиотеки в наш проект.
 target_link_libraries(appqt-working-diagrams
-    PRIVATE Qt6::Quick
+	PRIVATE Qt6::Quick
+	PRIVATE Qt6::Sql
+	PRIVATE Qt6::Widgets
+	PRIVATE Qt6::Core
 )
 
 include(GNUInstallDirs)
