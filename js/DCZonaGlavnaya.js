@@ -1,7 +1,7 @@
 var vrUchastki = [
 			{
 				"nomer": 1,
-				"uchastok": "Форомовка",
+				"uchastok": "Формовка",
 				"opisanie": "Участок формовки и всё такое."
 			},
 			{

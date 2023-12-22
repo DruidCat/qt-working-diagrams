@@ -88,8 +88,7 @@ Window {
 					clrFona: "SlateGray"
 					anchors.fill: tmGlavnayaZona
 					onSUchastki: function(strUchastok) {
-						console.log(strUchastok);
-                        cppqml.setStrUchastokNazvanie(strUchastok);
+						cppqml.strUchastokNazvanie = strUchastok;//Присваиваем к свойству Q_PROPERTY
 						stvStr.push(pgStrVtoraya);
 					}
 				}
@@ -141,8 +140,6 @@ Window {
 			clrTexta: wndRoot.clrKnopok
             clrRabOblasti: "indigo"
 
-            text: cppqml.strUchastokNazvanie
-
 			DCKnopkaNazad {
 				ntWidth: pgStrVtoraya.ntWidth
 				ntCoff: pgStrVtoraya.ntCoff
@@ -152,6 +149,13 @@ Window {
 
 				onSKnopkaNazadCliked: {
 					stvStr.pop()//Назад страницу
+				}
+			}
+
+			Connections {//Соединяем сигнал из C++ с действием в QML
+				target: cppqml//Цель объект класса С++ DCCppQml
+				function onStrUchastokNazvanieChanged() {//Функция сигнал, которая создалась в QML (on) для сигнала C++
+					pgStrVtoraya.text = cppqml.strUchastokNazvanie//Пишем текст заголовка из Свойтва Q_PROPERTY
 				}
 			}
 		}
