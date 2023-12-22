@@ -1,6 +1,6 @@
-﻿import QtQuick 2.12
-import QtQuick.Window 2.12
-import QtQuick.Controls 2.12
+﻿import QtQuick
+import QtQuick.Window
+import QtQuick.Controls
 
 Window {
 	id: wndRoot
@@ -89,6 +89,7 @@ Window {
 					anchors.fill: tmGlavnayaZona
 					onSUchastki: function(strUchastok) {
 						cppqml.strUchastokNazvanie = strUchastok;//Присваиваем к свойству Q_PROPERTY
+						pgStrVtoraya.text = strUchastok;//Задаём заголовок на второй странице.
 						stvStr.push(pgStrVtoraya);
 					}
 				}
@@ -155,7 +156,7 @@ Window {
 			Connections {//Соединяем сигнал из C++ с действием в QML
 				target: cppqml//Цель объект класса С++ DCCppQml
 				function onStrUchastokNazvanieChanged() {//Функция сигнал, которая создалась в QML (on) для сигнала C++
-					pgStrVtoraya.text = cppqml.strUchastokNazvanie//Пишем текст заголовка из Свойтва Q_PROPERTY
+					//pgStrVtoraya.text = cppqml.strUchastokNazvanie//Пишем текст заголовка из Свойтва Q_PROPERTY
 				}
 			}
 		}
