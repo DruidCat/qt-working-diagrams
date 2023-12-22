@@ -7,18 +7,20 @@
 
 class DCCppQml : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QString strUchastokNazvanie READ getUchastokNazvanie WRITE slotUchastokNazvanie
-                   NOTIFY signalUchastokNazvanieChanged FINAL)
+    Q_PROPERTY(QString strUchastokNazvanie
+                   READ strUchastokNazvanie
+                   WRITE setStrUchastokNazvanie
+                   NOTIFY strUchastokNazvanieChanged FINAL)
 public:
-    explicit DCCppQml(QObject* parent = nullptr);
-    QString	getUchastokNazvanie();
+    explicit	DCCppQml(QObject* parent = nullptr);
+    QString		strUchastokNazvanie();
+    void		setStrUchastokNazvanie (QString& strUchastokNazvanieNovi);
 
 signals:
-    void signalUchastokNazvanieChanged();
+    void strUchastokNazvanieChanged();
 
 public	slots:
     void slotTest();
-    void slotUchastokNazvanie (QString strUchastokNazvatie);
 
 private:
     QString m_strUchastokNazvanie;

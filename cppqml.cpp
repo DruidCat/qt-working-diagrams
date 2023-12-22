@@ -2,14 +2,14 @@
 
 #include <QDebug>
 
-DCCppQml::DCCppQml(QObject *parent) : QObject{parent} {
+DCCppQml::DCCppQml(QObject *parent) : QObject{parent}, m_strUchastokNazvanie("") {
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
-    m_strUchastokNazvanie = "";
+
 }
 
-QString DCCppQml::getUchastokNazvanie() {
+QString DCCppQml::strUchastokNazvanie() {
     return m_strUchastokNazvanie;
 }
 
@@ -20,6 +20,6 @@ void DCCppQml::slotTest(){
     qDebug() << "Тест";
 }
 
-void DCCppQml::slotUchastokNazvanie(QString strUchastokNazvatie) {
-    m_strUchastokNazvanie = strUchastokNazvatie;
+void DCCppQml::setStrUchastokNazvanie(QString& strUchastokNazvatieNovi) {
+    m_strUchastokNazvanie = strUchastokNazvatieNovi;
 }

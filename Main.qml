@@ -89,7 +89,7 @@ Window {
 					anchors.fill: tmGlavnayaZona
 					onSUchastki: function(strUchastok) {
 						console.log(strUchastok);
-						cppqml.slotUchastokNazvanie(strUchastok);
+                        cppqml.setStrUchastokNazvanie(strUchastok);
 						stvStr.push(pgStrVtoraya);
 					}
 				}
@@ -141,12 +141,14 @@ Window {
 			clrTexta: wndRoot.clrKnopok
             clrRabOblasti: "indigo"
 
+            text: cppqml.strUchastokNazvanie
+
 			DCKnopkaNazad {
 				ntWidth: pgStrVtoraya.ntWidth
 				ntCoff: pgStrVtoraya.ntCoff
 				clrKnopki: clrKnopok
 				x: pgStrVtoraya.rctStrZagolovok.x+ntCoff/2
-				y: pgStrVtoraya.rctStrZagolovok.y+ntCoff/2
+                y: pgStrVtoraya.rctStrZagolovok.y+ntCoff/2
 
 				onSKnopkaNazadCliked: {
 					stvStr.pop()//Назад страницу
