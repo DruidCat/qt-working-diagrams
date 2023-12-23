@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "dcdb.h"
+#include "odin.h"
 
 class DCCppQml : public QObject {
     Q_OBJECT
@@ -23,7 +24,8 @@ public	slots:
     void slotTest();
 
 private:
-    QString m_strUchastokNazvanie;
+    QString m_strUchastokNazvanie;//аргумент участка в Свойстве Q_PROPERTY
+    Odin* m_pOdin = nullptr;//Указатель на таблицу Один в БД.
 
 };
 

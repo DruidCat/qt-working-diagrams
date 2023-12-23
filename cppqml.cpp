@@ -7,6 +7,7 @@ DCCppQml::DCCppQml(QObject *parent) : QObject{parent}, m_strUchastokNazvanie("")
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
 
+    m_pOdin = new Odin("db.dc");
 }
 
 QString DCCppQml::strUchastokNazvanie() {
