@@ -8,13 +8,13 @@
 #include <QSqlQueryModel>
 #include <QSqlQuery>
 
-class DCDB : public QWidget{
+class DCDB : public QObject{
     Q_OBJECT
 
 public:
 	DCDB( 	const QString strDriver, const QString strImyaDB, QString strImyaTablici,
-			QWidget* proditel = nullptr);
-	DCDB( 	const QString strDriver, const QString strImyaDB, QWidget* proditel = nullptr);
+            QObject* proditel = nullptr);
+    DCDB( 	const QString strDriver, const QString strImyaDB, QObject* proditel = nullptr);
 	bool 	checkStatus();//Открыть и закрыть Базу данных, для того чтобы проверить статус сети.
 	bool 	CREATE(QStringList slsGrafi);//Создать таблицу.
 	bool 	DROP();//Метод удаляющий таблицу в БД.

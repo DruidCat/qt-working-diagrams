@@ -1,7 +1,7 @@
 #include "dcdb.h"
 
-DCDB::DCDB(const QString strDriver, const QString strImyaDB, QString strImyaTablici, QWidget* proditel)
-	: QWidget(proditel){
+DCDB::DCDB(const QString strDriver, const QString strImyaDB, QString strImyaTablici, QObject* proditel)
+    : QObject(proditel){
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
@@ -19,8 +19,8 @@ DCDB::DCDB(const QString strDriver, const QString strImyaDB, QString strImyaTabl
 	m_strKodImyaTablic.clear();//
 }
 
-DCDB::DCDB(const QString strDriver, const QString strImyaDB, QWidget* proditel)
-	: QWidget(proditel){
+DCDB::DCDB(const QString strDriver, const QString strImyaDB, QObject* proditel)
+    : QObject(proditel){
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
