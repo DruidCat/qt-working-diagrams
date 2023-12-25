@@ -8,7 +8,14 @@
 class Odin : public QObject {
     Q_OBJECT
 public:
-    explicit Odin(QString strImyaBD, QObject* parent = nullptr);
+    explicit Odin(QString strImyaBD, QString strLoginBD, QString strParolBD, QObject* parent = nullptr);
+    ~Odin();//Деструктор.
+
+private:
+    DCDB* m_pdbOdin = nullptr;//Указатель на базу данных первой таблицы.
+    QString m_strImyaBD;//Имя БД
+    QString m_strLoginBD;//Логин БД
+    QString m_strParolBD;//Пароль БД
 
 signals:
 

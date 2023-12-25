@@ -2,12 +2,12 @@
 
 #include <QDebug>
 
-DCCppQml::DCCppQml(QObject *parent) : QObject{parent}, m_strUchastokNazvanie("") {
+DCCppQml::DCCppQml(QObject* parent) : QObject{parent}, m_strUchastokNazvanie("") {
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
 
-    m_pOdin = new Odin("db.dc");
+    m_pOdin = new Odin("druidcat.dc", "druidcat", "druidcat");
 }
 
 QString DCCppQml::strUchastokNazvanie() {

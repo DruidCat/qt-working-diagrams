@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Команда включает файлы *.qrc.
 set(CMAKE_AUTORCC ON)
 # Команда добавляет библиотеки, с которыми будет работать проект.
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Sql Widgets Core)
+find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Sql Core)
 
 qt_standard_project_setup()
 
@@ -45,7 +45,6 @@ set_target_properties(appqt-working-diagrams PROPERTIES
 target_link_libraries(appqt-working-diagrams
 	PRIVATE Qt6::Quick
 	PRIVATE Qt6::Sql
-	PRIVATE Qt6::Widgets
 	PRIVATE Qt6::Core
 )
 
