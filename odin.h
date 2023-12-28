@@ -8,8 +8,10 @@
 class Odin : public QObject {
     Q_OBJECT
 public:
-    explicit Odin(QString strImyaBD, QString strLoginBD, QString strParolBD, QObject* parent = nullptr);
-    ~Odin();//Деструктор.
+    explicit	Odin(QString strImyaBD, QString strLoginBD, QString strParolBD, QObject* parent = nullptr);
+    ~			Odin();//Деструктор.
+    bool		dbStart();//Иннициализируем БД, и записываем в нёё данные, если она пустая.
+    QString		polOdin(int ntNomer);//Получить данные по номеру.
 
 private:
     DCDB* m_pdbOdin = nullptr;//Указатель на базу данных первой таблицы.
