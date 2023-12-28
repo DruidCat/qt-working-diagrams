@@ -146,7 +146,7 @@ private:
  * quint64 ullKolichestvo = pdcdb->SELECT("Фамилия", "Иванов");
  *
  * Считаем совпадения в БД.	quint64 SELECT(QStringList slsGrafi, QStringList slsKolonki);
- * ПРИМЕНТ:
+ * ПРИМЕР:
  * quint64 ullKolichestvo = pdcdb->SELECT(QStringList()<<"Фамилия"<<"Имя", QStringList()<<"Иванов"<<"Иван");
  *
  * Возвращаем максимальное число Primary Key в БД. quint64 SELECTPK(void);
