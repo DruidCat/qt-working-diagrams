@@ -69,6 +69,7 @@ Window {
 					anchors.margins: wndRoot.ntCoff/2
 					onSKnopkaPoiskClicked: {
 						cppqml.slotTest();
+						//console.log(cppqml.strUchastokNazvanie)
 						Qt.quit();
 					}
 				}
@@ -88,7 +89,7 @@ Window {
 					clrFona: "SlateGray"
 					anchors.fill: tmGlavnayaZona
 					onSUchastki: function(strUchastok) {
-						cppqml.strUchastokNazvanie = strUchastok;//Присваиваем к свойству Q_PROPERTY
+						//cppqml.strUchastokNazvanie = strUchastok;//Присваиваем к свойству Q_PROPERTY
 						pgStrVtoraya.text = strUchastok;//Задаём заголовок на второй странице.
 						stvStr.push(pgStrVtoraya);
 					}

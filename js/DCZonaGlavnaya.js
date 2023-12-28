@@ -1,3 +1,4 @@
+/*
 var vrUchastki = [
 			{
 				"nomer": 1,
@@ -16,4 +17,5 @@ var vrUchastki = [
 				"opisanie": "Участок отделки и всё такое."
 			}
 ]
-
+*/
+var vrUchastki = JSON.parse(cppqml.strUchastokNazvanie)
