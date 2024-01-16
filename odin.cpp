@@ -54,3 +54,30 @@ QString Odin::polOdin(int ntNomer) {//Получить данные по ном�
     QString strNazvanie = m_pdbOdin->SELECT("Номер", QString::number(ntNomer), "Название");
     return strNazvanie;
 }
+
+
+QString Odin::polOdinJSON() {//Получить JSON строчку первой вкладки (участки).
+/////////////////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   J S O N   П Е Р В О Й   В К Л А Д К И---//
+/////////////////////////////////////////////////////////////////
+	QString strOdinJSON("");//Строка, в которой будет собран JSON запрос.
+	quint64 ullKolichestvo = m_pdbOdin->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
+	if (!ullKolichestvo)//Если ноль, то...
+		return strOdinJSON;//Возвращаем пустую строку.
+	//Пример: [{"nomer":"1","uchastok":"формовка"},{"nomer":"2","uchastok":"сварка"}]
+	strOdinJSON = "[";//Начало массива объектов
+	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
+		strOdinJSON = strOdinJSON + "{\"nomer\":\"";//Начало списка объектов.
+    	strOdinJSON = strOdinJSON + m_pdbOdin->SELECT("Код", QString::number(ullShag), "Номер");
+		strOdinJSON = strOdinJSON + "\",\"uchastok\":\"";
+    	strOdinJSON = strOdinJSON + m_pdbOdin->SELECT("Код", QString::number(ullShag), "Название");
+		strOdinJSON = strOdinJSON + "\",\"opisanie\":\"";
+    	strOdinJSON = strOdinJSON + m_pdbOdin->SELECT("Код", QString::number(ullShag), "Описание");
+		strOdinJSON = strOdinJSON + "\"}";//Конец списка объектов.
+		if(ullShag<ullKolichestvo)//Если это не последний список объектов, то..
+			strOdinJSON = strOdinJSON + ",";//ставим запятую.
+	}
+	strOdinJSON = strOdinJSON + "]";//Конец массива объектов.
+
+	return strOdinJSON;
+}

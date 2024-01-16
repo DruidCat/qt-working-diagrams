@@ -68,8 +68,8 @@ Window {
 					anchors.right: tmGlavnayaZagolovok.right
 					anchors.margins: wndRoot.ntCoff/2
 					onSKnopkaPoiskClicked: {
-						cppqml.slotTest();
-						//console.log(cppqml.strUchastokNazvanie)
+						//cppqml.slotTest();
+						console.log(cppqml.strUchastokNazvanie)
 						Qt.quit();
 					}
 				}

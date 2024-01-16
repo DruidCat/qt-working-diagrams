@@ -12,6 +12,7 @@ public:
     ~			Odin();//Деструктор.
     bool		dbStart();//Иннициализируем БД, и записываем в нёё данные, если она пустая.
     QString		polOdin(int ntNomer);//Получить данные по номеру.
+	QString		polOdinJSON();//Получить JSON строчку первой вкладки (участки).
 
 private:
     DCDB* m_pdbOdin = nullptr;//Указатель на базу данных первой таблицы.

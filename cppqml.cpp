@@ -15,7 +15,8 @@ QString DCCppQml::strUchastokNazvanie() {
 ///////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Н А З В А Н И Е   У Ч А С Т К А---//
 ///////////////////////////////////////////////////////////
-    m_strUchastokNazvanie = "[{\"nomer\":\"1\",\"uchastok\":\"Формовка\",\"opisanie\":\"Участок формовки и всё такое.\"},{\"nomer\":\"2\",\"uchastok\":\"Сварка\",\"opisanie\":\"Участок сварки и всё такое.\"},{\"nomer\":\"3\",\"uchastok\":\"Отделка\",\"opisanie\":\"Участок отделки и всё такое.\"}]";
+//    m_strUchastokNazvanie = "[{\"nomer\":\"1\",\"uchastok\":\"Формовка\",\"opisanie\":\"Участок формовки и всё такое.\"},{\"nomer\":\"2\",\"uchastok\":\"Сварка\",\"opisanie\":\"Участок сварки и всё такое.\"},{\"nomer\":\"3\",\"uchastok\":\"Отделка\",\"opisanie\":\"Участок отделки и всё такое.\"}]";
+	m_strUchastokNazvanie = m_pOdin->polOdinJSON();
     //m_strUchastokNazvanie = m_pOdin->polOdin(3);
     return m_strUchastokNazvanie;
 }
