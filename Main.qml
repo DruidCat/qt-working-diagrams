@@ -22,7 +22,8 @@ Window {
 	StackView {
 		id: stvStr
 		anchors.fill: parent
-		initialItem: pgStrGlavnaya
+		//initialItem: pgStrGlavnaya
+		initialItem: pgStrMenu
 
 		DCStr {//Главная страница
 			id: pgStrGlavnaya
@@ -118,15 +119,51 @@ Window {
 
 			text: "МЕНЮ"
 
-			DCKnopkaNazad {
-				ntWidth: pgStrMenu.ntWidth
-				ntCoff: pgStrMenu.ntCoff
-				clrKnopki: wndRoot.clrKnopok
-				x: pgStrMenu.rctStrZagolovok.x+ntCoff/2
-				y: pgStrMenu.rctStrZagolovok.y+ntCoff/2
+			Item {
+				id: tmMenuZagolovok
+				x: pgStrMenu.rctStrZagolovok.x
+				y: pgStrMenu.rctStrZagolovok.y
+				width: pgStrMenu.rctStrZagolovok.width
+				height: pgStrMenu.rctStrZagolovok.height
 
-				onSKnopkaNazadCliked: {
-					stvStr.pop()//Назад страницу
+				DCKnopkaNazad {
+					ntWidth: pgStrMenu.ntWidth
+					ntCoff: pgStrMenu.ntCoff
+					clrKnopki: wndRoot.clrKnopok
+
+					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
+					anchors.left: tmMenuZagolovok.left
+					anchors.margins: wndRoot.ntCoff/2
+
+					onSKnopkaNazadCliked: {
+						stvStr.pop()//Назад страницу
+					}
+				}
+			}
+			Item {
+				id: tmMenuZona
+				x: pgStrMenu.rctStrZona.x
+				y: pgStrMenu.rctStrZona.y
+				width: pgStrMenu.rctStrZona.width
+				height: pgStrMenu.rctStrZona.height
+
+				DCKnopkaOriginal {
+					id: tmMenuUchastki
+					text: "Участки"
+					bold: true
+					italic: true
+
+					ntHeight: wndRoot.ntWidth
+					ntWidth: text.length*ntHeight
+					ntCoff: wndRoot.ntCoff
+
+					clrKnopki: "SlateGray"
+					clrTexta: wndRoot.clrKnopok
+
+					anchors.top: tmMenuZona.top
+					anchors.left: tmMenuZona.left
+					anchors.right: tmMenuZona.right
+					anchors.margins: wndRoot.ntCoff/2
 				}
 			}
 		}

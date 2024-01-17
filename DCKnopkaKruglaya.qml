@@ -24,7 +24,7 @@ Item{
 			id: txtKnopkaKruglaya
 			color: maKnopkaKruglaya.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
 			anchors.centerIn: rctKnopkaKruglaya
-			text: tmKnopkaKruglaya.strText
+			text: "Нажми"
 			font.pixelSize: rctKnopkaKruglaya.width/text.length//Расчёт размера шрифта
 		}
 
