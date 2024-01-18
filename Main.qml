@@ -22,8 +22,8 @@ Window {
 	StackView {
 		id: stvStr
 		anchors.fill: parent
-		//initialItem: pgStrGlavnaya
-		initialItem: pgStrMenu
+		initialItem: pgStrGlavnaya
+		//initialItem: pgStrMenu
 
 		DCStr {//Главная страница
 			id: pgStrGlavnaya
@@ -141,7 +141,7 @@ Window {
 
 					clrKnopki: wndRoot.clrKnopok
 
-					onSKnopkaNazadCliked: {
+					onClicked: {
 						stvStr.pop()//Назад страницу
 					}
 				}
@@ -202,7 +202,7 @@ Window {
 
 				clrKnopki: clrKnopok
 
-				onSKnopkaNazadCliked: {
+				onClicked: {
 					stvStr.pop()//Назад страницу
 				}
 			}
@@ -234,7 +234,7 @@ Window {
 
 				clrKnopki: clrKnopok
 
-				onSKnopkaNazadCliked: {
+				onClicked: {
 					stvStr.pop()//Назад страницу
 				}
 			}
