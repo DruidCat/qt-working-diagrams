@@ -129,15 +129,26 @@ Window {
 				DCKnopkaNazad {
 					ntWidth: pgStrMenu.ntWidth
 					ntCoff: pgStrMenu.ntCoff
-					clrKnopki: wndRoot.clrKnopok
-
 					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
 					anchors.left: tmMenuZagolovok.left
 					anchors.margins: wndRoot.ntCoff/2
 
+					clrKnopki: wndRoot.clrKnopok
+
 					onSKnopkaNazadCliked: {
 						stvStr.pop()//Назад страницу
 					}
+				}
+				DCKnopkaSozdat {
+					id: tmMenuKnopkaSozdat
+					ntWidth: pgStrMenu.ntWidth
+					ntCoff: pgStrMenu.ntCoff
+					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
+					anchors.right: tmMenuZagolovok.right
+					anchors.margins: wndRoot.ntCoff/2
+
+					clrKnopki: wndRoot.clrKnopok
+					clrFona: pgStrMenu.clrStranici
 				}
 			}
 			Item {
@@ -156,14 +167,23 @@ Window {
 					ntHeight: wndRoot.ntWidth
 					ntWidth: text.length*ntHeight
 					ntCoff: wndRoot.ntCoff
-
-					clrKnopki: "SlateGray"
-					clrTexta: wndRoot.clrKnopok
-
 					anchors.top: tmMenuZona.top
 					anchors.left: tmMenuZona.left
 					anchors.right: tmMenuZona.right
 					anchors.margins: wndRoot.ntCoff/2
+
+					clrKnopki: "SlateGray"
+					clrTexta: wndRoot.clrKnopok
+
+				}
+				DCKnopkaSozdat {
+					id: tmKnopkaSozdat
+					ntWidth: pgStrMenu.ntWidth*4
+					ntCoff: pgStrMenu.ntCoff
+					anchors.centerIn: tmMenuZona
+
+					clrKnopki: wndRoot.clrKnopok
+					clrFona: pgStrMenu.clrStranici
 				}
 			}
 		}
@@ -182,9 +202,10 @@ Window {
 			DCKnopkaNazad {
 				ntWidth: pgStrVtoraya.ntWidth
 				ntCoff: pgStrVtoraya.ntCoff
-				clrKnopki: clrKnopok
 				x: pgStrVtoraya.rctStrZagolovok.x+ntCoff/2
                 y: pgStrVtoraya.rctStrZagolovok.y+ntCoff/2
+
+				clrKnopki: clrKnopok
 
 				onSKnopkaNazadCliked: {
 					stvStr.pop()//Назад страницу
