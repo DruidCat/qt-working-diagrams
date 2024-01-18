@@ -49,13 +49,14 @@ Window {
 				DCKnopkaMenu {
 					ntWidth: pgStrGlavnaya.ntWidth
 					ntCoff: pgStrGlavnaya.ntCoff
-					clrKnopki: clrKnopok
-					clrFona: pgStrGlavnaya.clrStranici
-
 					anchors.verticalCenter: tmGlavnayaZagolovok.verticalCenter
 					anchors.left: tmGlavnayaZagolovok.left
 					anchors.margins: wndRoot.ntCoff/2
-					onSKnopkaMenuClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
+
+					clrKnopki: clrKnopok
+					clrFona: pgStrGlavnaya.clrStranici
+
+					onClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
 						stvStr.push(pgStrMenu)
 					}
 				}
@@ -63,11 +64,13 @@ Window {
 				DCKnopkaPoisk {
 					ntWidth: wndRoot.ntWidth
 					ntCoff: wndRoot.ntCoff
-					clrKnopki: wndRoot.clrKnopok
-					clrFona: pgStrGlavnaya.clrStranici
 					anchors.verticalCenter: tmGlavnayaZagolovok.verticalCenter
 					anchors.right: tmGlavnayaZagolovok.right
 					anchors.margins: wndRoot.ntCoff/2
+
+					clrKnopki: wndRoot.clrKnopok
+					clrFona: pgStrGlavnaya.clrStranici
+
 					onSKnopkaPoiskClicked: {
 						//cppqml.slotTest();
 						console.log(cppqml.strUchastokNazvanie)
@@ -86,9 +89,11 @@ Window {
 					id: lsvZonaGlavnaya
 					ntWidth: wndRoot.ntWidth
 					ntCoff: wndRoot.ntCoff
+					anchors.fill: tmGlavnayaZona
+
 					clrTexta: wndRoot.clrKnopok
 					clrFona: "SlateGray"
-					anchors.fill: tmGlavnayaZona
+
 					onSUchastki: function(strUchastok) {
 						//cppqml.strUchastokNazvanie = strUchastok;//Присваиваем к свойству Q_PROPERTY
 						pgStrVtoraya.text = strUchastok;//Задаём заголовок на второй странице.
@@ -98,9 +103,10 @@ Window {
 
 				DCLogoTMK {//Логотип
 					ntCoff: 16
+					anchors.centerIn: parent
+
 					clrLogo: wndRoot.clrKnopok
 					clrFona: pgStrGlavnaya.clrStranici
-					anchors.centerIn: parent
 				}
 			}
 		}
@@ -173,9 +179,7 @@ Window {
 
 					clrKnopki: "SlateGray"
 					clrTexta: wndRoot.clrKnopok
-
 				}
-
 			}
 		}
 
@@ -225,9 +229,10 @@ Window {
 			DCKnopkaNazad {
 				ntWidth: pgStrTretiya.ntWidth
 				ntCoff: pgStrTretiya.ntCoff
-				clrKnopki: clrKnopok
 				x: pgStrTretiya.rctStrZagolovok.x+ntCoff/2
 				y: pgStrTretiya.rctStrZagolovok.y+ntCoff/2
+
+				clrKnopki: clrKnopok
 
 				onSKnopkaNazadCliked: {
 					stvStr.pop()//Назад страницу
