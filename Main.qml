@@ -139,8 +139,8 @@ Window {
 						stvStr.pop()//Назад страницу
 					}
 				}
-				DCKnopkaSozdat {
-					id: tmMenuKnopkaSozdat
+				DCKnopkaNastroiki {
+					id: tmMenuKnopkaNastroiki
 					ntWidth: pgStrMenu.ntWidth
 					ntCoff: pgStrMenu.ntCoff
 					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
@@ -148,7 +148,6 @@ Window {
 					anchors.margins: wndRoot.ntCoff/2
 
 					clrKnopki: wndRoot.clrKnopok
-					clrFona: pgStrMenu.clrStranici
 				}
 			}
 			Item {
@@ -176,15 +175,7 @@ Window {
 					clrTexta: wndRoot.clrKnopok
 
 				}
-				DCKnopkaSozdat {
-					id: tmKnopkaSozdat
-					ntWidth: pgStrMenu.ntWidth*4
-					ntCoff: pgStrMenu.ntCoff
-					anchors.centerIn: tmMenuZona
 
-					clrKnopki: wndRoot.clrKnopok
-					clrFona: pgStrMenu.clrStranici
-				}
 			}
 		}
 
