@@ -71,7 +71,7 @@ Window {
 					clrKnopki: wndRoot.clrKnopok
 					clrFona: pgStrGlavnaya.clrStranici
 
-					onSKnopkaPoiskClicked: {
+					onClicked: {
 						//cppqml.slotTest();
 						console.log(cppqml.strUchastokNazvanie)
 						Qt.quit();
