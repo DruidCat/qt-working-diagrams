@@ -14,19 +14,19 @@ Window {
 	property int ntCoff: 8
 	property color clrKnopok: "orange"
 	property color clrFona: "grey"
-
+/*
 	function fcPolUchastokNazvanie() {
 		return cppqml.getUchastokNazvanie();
 	}
-
+*/
 	StackView {
 		id: stvStr
 		anchors.fill: parent
-		initialItem: pgStrGlavnaya
+		initialItem: pgStrSpisok
 		//initialItem: pgStrMenu
 
-		DCStr {//Главная страница
-			id: pgStrGlavnaya
+		DCStr {//Страница со Списком
+			id: pgStrSpisok
 			visible: true
 
 			property color clrStranici: "black"
@@ -40,77 +40,74 @@ Window {
 			text: "ТМК"
 
 			Item {
-				id: tmGlavnayaZagolovok
-				x: pgStrGlavnaya.rctStrZagolovok.x
-				y: pgStrGlavnaya.rctStrZagolovok.y
-				width: pgStrGlavnaya.rctStrZagolovok.width
-				height: pgStrGlavnaya.rctStrZagolovok.height
+				id: tmSpisokZagolovok
+				x: pgStrSpisok.rctStrZagolovok.x
+				y: pgStrSpisok.rctStrZagolovok.y
+				width: pgStrSpisok.rctStrZagolovok.width
+				height: pgStrSpisok.rctStrZagolovok.height
 
 				DCKnopkaMenu {
-					ntWidth: pgStrGlavnaya.ntWidth
-					ntCoff: pgStrGlavnaya.ntCoff
-					anchors.verticalCenter: tmGlavnayaZagolovok.verticalCenter
-					anchors.left: tmGlavnayaZagolovok.left
+					ntWidth: pgStrSpisok.ntWidth
+					ntCoff: pgStrSpisok.ntCoff
+					anchors.verticalCenter: tmSpisokZagolovok.verticalCenter
+					anchors.left: tmSpisokZagolovok.left
 					anchors.margins: wndRoot.ntCoff/2
 
 					clrKnopki: clrKnopok
-					clrFona: pgStrGlavnaya.clrStranici
+					clrFona: pgStrSpisok.clrStranici
 
 					onClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
 						stvStr.push(pgStrMenu)
 					}
 				}
-
 				DCKnopkaPoisk {
 					ntWidth: wndRoot.ntWidth
 					ntCoff: wndRoot.ntCoff
-					anchors.verticalCenter: tmGlavnayaZagolovok.verticalCenter
-					anchors.right: tmGlavnayaZagolovok.right
+					anchors.verticalCenter: tmSpisokZagolovok.verticalCenter
+					anchors.right: tmSpisokZagolovok.right
 					anchors.margins: wndRoot.ntCoff/2
 
 					clrKnopki: wndRoot.clrKnopok
-					clrFona: pgStrGlavnaya.clrStranici
+					clrFona: pgStrSpisok.clrStranici
 
 					onClicked: {
 						//cppqml.slotTest();
-						console.log(cppqml.strUchastokNazvanie)
+						console.log(cppqml.strSpisok)
 						Qt.quit();
 					}
 				}
 			}
 			Item {
-				id: tmGlavnayaZona
-				x: pgStrGlavnaya.rctStrZona.x
-				y: pgStrGlavnaya.rctStrZona.y
-				width: pgStrGlavnaya.rctStrZona.width
-				height: pgStrGlavnaya.rctStrZona.height
+				id: tmSpisokZona
+				x: pgStrSpisok.rctStrZona.x
+				y: pgStrSpisok.rctStrZona.y
+				width: pgStrSpisok.rctStrZona.width
+				height: pgStrSpisok.rctStrZona.height
 
-				DCZonaGlavnaya {
-					id: lsvZonaGlavnaya
+				DCZonaSpisok {
+					id: lsvZonaSpisok
 					ntWidth: wndRoot.ntWidth
 					ntCoff: wndRoot.ntCoff
-					anchors.fill: tmGlavnayaZona
+					anchors.fill: tmSpisokZona
 
 					clrTexta: wndRoot.clrKnopok
 					clrFona: "SlateGray"
 
-					onSUchastki: function(strUchastok) {
-						//cppqml.strUchastokNazvanie = strUchastok;//Присваиваем к свойству Q_PROPERTY
-						pgStrVtoraya.text = strUchastok;//Задаём заголовок на второй странице.
-						stvStr.push(pgStrVtoraya);
+					onSSpisok: function(strSpisok) {
+						//cppqml.strUchastokNazvanie = strSpisok;//Присваиваем к свойству Q_PROPERTY
+						pgStrSostav.text = strSpisok;//Задаём заголовок на второй странице.
+						stvStr.push(pgStrSostav);
 					}
 				}
-
 				DCLogoTMK {//Логотип
 					ntCoff: 16
 					anchors.centerIn: parent
 
 					clrLogo: wndRoot.clrKnopok
-					clrFona: pgStrGlavnaya.clrStranici
+					clrFona: pgStrSpisok.clrStranici
 				}
 			}
 		}
-
 		DCStr {//Меню
 			id: pgStrMenu
 			visible: false
@@ -146,7 +143,6 @@ Window {
 					}
 				}
 				DCKnopkaNastroiki {
-					id: tmMenuKnopkaNastroiki
 					ntWidth: pgStrMenu.ntWidth
 					ntCoff: pgStrMenu.ntCoff
 					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
@@ -164,7 +160,6 @@ Window {
 				height: pgStrMenu.rctStrZona.height
 
 				DCKnopkaOriginal {
-					id: tmMenuUchastki
 					text: "Участки"
 					bold: true
 					italic: true
@@ -182,9 +177,8 @@ Window {
 				}
 			}
 		}
-
-		DCStr {//Вторая страница
-			id: pgStrVtoraya
+		DCStr {//Страница Состава Списка
+			id: pgStrSostav
 			visible: false
 
 			ntWidth: wndRoot.ntWidth
@@ -195,28 +189,26 @@ Window {
             clrRabOblasti: "indigo"
 
 			DCKnopkaNazad {
-				ntWidth: pgStrVtoraya.ntWidth
-				ntCoff: pgStrVtoraya.ntCoff
-				x: pgStrVtoraya.rctStrZagolovok.x+ntCoff/2
-                y: pgStrVtoraya.rctStrZagolovok.y+ntCoff/2
+				ntWidth: pgStrSostav.ntWidth
+				ntCoff: pgStrSostav.ntCoff
+				x: pgStrSostav.rctStrZagolovok.x+ntCoff/2
+				y: pgStrSostav.rctStrZagolovok.y+ntCoff/2
 
-				clrKnopki: clrKnopok
+				clrKnopki: wndRoot.clrKnopok
 
 				onClicked: {
 					stvStr.pop()//Назад страницу
 				}
 			}
-
 			Connections {//Соединяем сигнал из C++ с действием в QML
 				target: cppqml//Цель объект класса С++ DCCppQml
-				function onStrUchastokNazvanieChanged() {//Функция сигнал, которая создалась в QML (on) для сигнала C++
-					//pgStrVtoraya.text = cppqml.strUchastokNazvanie//Пишем текст заголовка из Свойтва Q_PROPERTY
+				function onStrSpisokChanged() {//Функция сигнал, которая создалась в QML (on) для сигнала C++
+					//pgStrSostav.text = cppqml.strSpisok//Пишем текст заголовка из Свойтва Q_PROPERTY
 				}
 			}
 		}
-
-		DCStr {//Третья страница
-			id: pgStrTretiya
+		DCStr {//Страница с Данными
+			id: pgStrDannie
 			visible: false
 
 			ntWidth: wndRoot.ntWidth
@@ -227,10 +219,10 @@ Window {
 			clrRabOblasti: "MidnightBlue"
 
 			DCKnopkaNazad {
-				ntWidth: pgStrTretiya.ntWidth
-				ntCoff: pgStrTretiya.ntCoff
-				x: pgStrTretiya.rctStrZagolovok.x+ntCoff/2
-				y: pgStrTretiya.rctStrZagolovok.y+ntCoff/2
+				ntWidth: pgStrDannie.ntWidth
+				ntCoff: pgStrDannie.ntCoff
+				x: pgStrDannie.rctStrZagolovok.x+ntCoff/2
+				y: pgStrDannie.rctStrZagolovok.y+ntCoff/2
 
 				clrKnopki: clrKnopok
 

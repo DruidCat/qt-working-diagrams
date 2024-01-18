@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>js/DCZonaGlavnaya.js</file>
         <file>js/DCFunkciiJS.js</file>
         <file>TODO.txt</file>
     </qresource>

@@ -2,38 +2,37 @@
 
 #include <QDebug>
 
-DCCppQml::DCCppQml(QObject* parent) : QObject{parent}, m_strUchastokNazvanie("") {
+DCCppQml::DCCppQml(QObject* parent) : QObject{parent}, m_strSpisok("") {
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
-
-    m_pOdin = new Odin("druidcat.dc", "druidcat", "druidcat");
-    m_pOdin->dbStart();
+    m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");
+    m_pDataSpisok->dbStart();
 }
 
-QString DCCppQml::strUchastokNazvanie() {
+QString DCCppQml::strSpisok() {
 ///////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Н А З В А Н И Е   У Ч А С Т К А---//
 ///////////////////////////////////////////////////////////
-//    m_strUchastokNazvanie = "[{\"nomer\":\"1\",\"uchastok\":\"Формовка\",\"opisanie\":\"Участок формовки и всё такое.\"},{\"nomer\":\"2\",\"uchastok\":\"Сварка\",\"opisanie\":\"Участок сварки и всё такое.\"},{\"nomer\":\"3\",\"uchastok\":\"Отделка\",\"opisanie\":\"Участок отделки и всё такое.\"}]";
-	m_strUchastokNazvanie = m_pOdin->polOdinJSON();
-    //m_strUchastokNazvanie = m_pOdin->polOdin(3);
-    return m_strUchastokNazvanie;
+//    m_strSpisok = "[{\"nomer\":\"1\",\"uchastok\":\"Формовка\",\"opisanie\":\"Участок формовки и всё такое.\"},{\"nomer\":\"2\",\"uchastok\":\"Сварка\",\"opisanie\":\"Участок сварки и всё такое.\"},{\"nomer\":\"3\",\"uchastok\":\"Отделка\",\"opisanie\":\"Участок отделки и всё такое.\"}]";
+    m_strSpisok = m_pDataSpisok->polSpisokJSON();
+    //m_strSpisok = m_pDataSpisok->polSpisok(3);
+    return m_strSpisok;
 }
 
 void DCCppQml::slotTest(){
 ///////////////////////////
 //---С Л О Т   Т Е С Т---//
 ///////////////////////////
-    qDebug() << "СлотТест:" << m_strUchastokNazvanie;
+    qDebug() << "СлотТест:" << m_strSpisok;
 }
 
-void DCCppQml::setStrUchastokNazvanie(QString& strUchastokNazvatieNovi) {
+void DCCppQml::setStrSpisok(QString& strSpisokNovi) {
 ///////////////////////////////////////////////////////////
 //---С И Г Н А Л   И З М Е Н Е Н И Я   Н А З В А Н И Я---//
 ///////////////////////////////////////////////////////////
-    if (strUchastokNazvatieNovi != m_strUchastokNazvanie){
-        m_strUchastokNazvanie = strUchastokNazvatieNovi;
-        emit strUchastokNazvanieChanged();//Излучаем сигнал об изменении аргумента.
+    if (strSpisokNovi != m_strSpisok){
+        m_strSpisok = strSpisokNovi;
+        emit strSpisokChanged();//Излучаем сигнал об изменении аргумента.
     }
 }

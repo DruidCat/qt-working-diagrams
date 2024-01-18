@@ -17,7 +17,6 @@ qt_add_executable(appqt-working-diagrams
 qt_add_qml_module(appqt-working-diagrams
     URI qt-working-diagrams
     VERSION 1.0
-    QML_FILES Main.qml
 	QML_FILES DCKnopkaKruglaya.qml
 	QML_FILES DCKnopkaMenu.qml
 	QML_FILES DCKnopkaNastroiki.qml
@@ -27,11 +26,12 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES DCKnopkaSozdat.qml
 	QML_FILES DCLogoTMK.qml
 	QML_FILES DCStr.qml
-	QML_FILES DCZonaGlavnaya.qml
+	QML_FILES DCZonaSpisok.qml
+	QML_FILES Main.qml
 	RESOURCES qml.qrc
 	SOURCES cppqml.h cppqml.cpp
 	SOURCES dcdb.h dcdb.cpp
-	SOURCES odin.h odin.cpp
+	SOURCES dataspisok.h dataspisok.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
