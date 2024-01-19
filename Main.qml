@@ -60,7 +60,7 @@ Window {
 						stvStr.push(pgStrMenu)
 					}
 				}
-				DCKnopkaPoisk {
+				DCKnopkaZakrit {
 					ntWidth: wndRoot.ntWidth
 					ntCoff: wndRoot.ntCoff
 					anchors.verticalCenter: tmSpisokZagolovok.verticalCenter

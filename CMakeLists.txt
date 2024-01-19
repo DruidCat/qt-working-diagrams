@@ -24,11 +24,13 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES DCKnopkaOriginal.qml
 	QML_FILES DCKnopkaPoisk.qml
 	QML_FILES DCKnopkaSozdat.qml
+	QML_FILES DCKnopkaZakrit.qml
 	QML_FILES DCLogoTMK.qml
 	QML_FILES DCStr.qml
 	QML_FILES DCZonaSpisok.qml
 	QML_FILES Main.qml
 	RESOURCES qml.qrc
+	SOURCES main.cpp
 	SOURCES cppqml.h cppqml.cpp
 	SOURCES dcdb.h dcdb.cpp
 	SOURCES dataspisok.h dataspisok.cpp
