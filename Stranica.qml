@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
-//TODO Придумать новое название clrFona и clrRabOblasti
+
 Page {
 	id: pgStr
 	property int ntWidth: 8

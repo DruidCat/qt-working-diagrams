@@ -14,18 +14,14 @@ Window {
 	property int ntCoff: 8
 	property color clrKnopok: "orange"
 	property color clrFona: "grey"
-/*
-	function fcPolUchastokNazvanie() {
-		return cppqml.getUchastokNazvanie();
-	}
-*/
+
 	StackView {
 		id: stvStr
 		anchors.fill: parent
-		initialItem: pgStrSpisok
-		//initialItem: pgStrMenu
+		//initialItem: pgStrSpisok
+		initialItem: pgStrMenu
 
-		DCStr {//Страница со Списком
+		Stranica {//Страница со Списком
 			id: pgStrSpisok
 			visible: true
 
@@ -72,7 +68,7 @@ Window {
 
 					onClicked: {
 						//cppqml.slotTest();
-						console.log(cppqml.strSpisok)
+						//console.log(cppqml.strSpisok)
 						Qt.quit();
 					}
 				}
@@ -84,7 +80,7 @@ Window {
 				width: pgStrSpisok.rctStrZona.width
 				height: pgStrSpisok.rctStrZona.height
 
-				DCZonaSpisok {
+				ZonaSpisok {
 					id: lsvZonaSpisok
 					ntWidth: wndRoot.ntWidth
 					ntCoff: wndRoot.ntCoff
@@ -108,7 +104,7 @@ Window {
 				}
 			}
 		}
-		DCStr {//Меню
+		Stranica {//Меню
 			id: pgStrMenu
 			visible: false
 			property color clrStranici: "darkslategray"
@@ -160,24 +156,22 @@ Window {
 				height: pgStrMenu.rctStrZona.height
 
 				DCKnopkaOriginal {
-					text: "Участки"
-					bold: true
-					italic: true
-
 					ntHeight: wndRoot.ntWidth
-					ntWidth: text.length*ntHeight
 					ntCoff: wndRoot.ntCoff
 					anchors.top: tmMenuZona.top
 					anchors.left: tmMenuZona.left
 					anchors.right: tmMenuZona.right
 					anchors.margins: wndRoot.ntCoff/2
 
-					clrKnopki: "SlateGray"
+					clrKnopki: "slategray"
 					clrTexta: wndRoot.clrKnopok
+					text: "Участки"
+					bold: true
+					italic: true
 				}
 			}
 		}
-		DCStr {//Страница Состава Списка
+		Stranica {//Страница Состава Списка
 			id: pgStrSostav
 			visible: false
 
@@ -207,7 +201,7 @@ Window {
 				}
 			}
 		}
-		DCStr {//Страница с Данными
+		Stranica {//Страница с Данными
 			id: pgStrDannie
 			visible: false
 
