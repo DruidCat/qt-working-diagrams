@@ -146,6 +146,9 @@ Window {
 					anchors.margins: root.ntCoff/2
 
 					clrKnopki: root.clrKnopok
+					onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
+						Qt.quit();
+					}
 				}
 			}
 			Item {
@@ -156,7 +159,7 @@ Window {
 				height: pgStrMenu.rctStrZona.height
 
 				DCKnopkaOriginal {
-					id: knopka
+					id: menuZonaKnopka
 					ntHeight: root.ntWidth*root.ntCoff+8
 					anchors.top: tmMenuZona.top
 					anchors.left: tmMenuZona.left
@@ -170,9 +173,9 @@ Window {
 					italic: true
 				}
 				DCKnopkaOriginal {
-
+					id: menuZonaKnopkaSpisok
 					ntHeight: root.ntWidth*root.ntCoff+8
-					anchors.top: knopka.bottom
+					anchors.top: menuZonaKnopka.bottom
 					anchors.left: tmMenuZona.left
 					anchors.right: tmMenuZona.right
 					anchors.margins: root.ntCoff/2
@@ -182,6 +185,30 @@ Window {
 					text: "Участки"
 					bold: true
 					italic: true
+
+					onClicked: {//Слот запускающий 
+
+					}
+				}
+
+				PathViewSpisok {
+					id: lsvPVSpisok
+					ntWidth: root.ntWidth
+					ntCoff: root.ntCoff
+					anchors.top: menuZonaKnopkaSpisok.bottom
+					anchors.left: tmMenuZona.left
+					anchors.right: tmMenuZona.right
+					anchors.bottom: tmMenuZona.bottom
+
+					clrTexta: root.clrKnopok
+					clrFona: "SlateGray"
+/*
+					onSSpisok: function(strSpisok) {
+						//cppqml.strUchastokNazvanie = strSpisok;//Присваиваем к свойству Q_PROPERTY
+						pgStrSostav.text = strSpisok;//Задаём заголовок на второй странице.
+						stvStr.push(pgStrSostav);
+					}
+*/
 				}
 
 			}
