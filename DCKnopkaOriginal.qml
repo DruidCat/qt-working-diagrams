@@ -15,20 +15,20 @@ Item {
 	property color clrTexta: "black"
 
 	height: ntHeight*ntCoff
-	width: ntWidth*ntCoff
+	width: ntWidth*ntCoff//Длина кнопки расчитывается автоматически в слоте onCompleted в конце файла.
 
 	signal clicked();
 
 	Rectangle {
 		id: rctKnopkaOriginal
+		anchors.fill: tmKnopkaOriginal
+
 		color: maKnopkaOriginal.containsPress ? Qt.darker(clrKnopki, 1.3) : clrKnopki
 		radius: height/2
 		smooth: true//Сглаживание.
-		border.color: Qt.darker(clrKnopki, 1.3)//Окантовка чуть темнее цвета кнопки
-		border.width: 1//Толщина окантовки один пиксель
+		border.color: Qt.darker(clrKnopki, 1.3)//Граница чуть темнее цвета кнопки
+		border.width: 1//Толщина граници кнопки один пиксель
 		clip: true//Всё, что будет внутри прямоугольника и будет выходить за границы обрезается.
-
-		anchors.fill: tmKnopkaOriginal
 
 		Text {
 			id: txtKnopkaOriginal
@@ -47,8 +47,11 @@ Item {
 
 			onClicked: {
 				tmKnopkaOriginal.clicked();
-				//console.debug(txtKnopkaOriginal.font.pixelSize)
 			}
 		}
+	}
+	Component.onCompleted: {//Слот обрабатывает данные, когда сомпонет полностью отрисовался.
+		//Императивное присвоение значения, так как тут используется JS, нужно присваивать через знак "=".
+		tmKnopkaOriginal.width = txtKnopkaOriginal.text.length*tmKnopkaOriginal.height;//Расчёт длины строки.
 	}
 }
