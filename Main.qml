@@ -3,7 +3,7 @@ import QtQuick.Window
 import QtQuick.Controls
 
 Window {
-	id: wndRoot
+	id: root
     width: 380
     height: 640
 	visible: true
@@ -26,11 +26,11 @@ Window {
 			visible: true
 
 			property color clrStranici: "black"
-			ntWidth: wndRoot.ntWidth
-			ntCoff: wndRoot.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 
-			clrFona: wndRoot.clrFona
-			clrTexta: wndRoot.clrKnopok
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
 			clrRabOblasti: clrStranici
 
 			text: "ТМК"
@@ -47,7 +47,7 @@ Window {
 					ntCoff: pgStrSpisok.ntCoff
 					anchors.verticalCenter: tmSpisokZagolovok.verticalCenter
 					anchors.left: tmSpisokZagolovok.left
-					anchors.margins: wndRoot.ntCoff/2
+					anchors.margins: root.ntCoff/2
 
 					clrKnopki: clrKnopok
 					clrFona: pgStrSpisok.clrStranici
@@ -57,13 +57,13 @@ Window {
 					}
 				}
 				DCKnopkaZakrit {
-					ntWidth: wndRoot.ntWidth
-					ntCoff: wndRoot.ntCoff
+					ntWidth: root.ntWidth
+					ntCoff: root.ntCoff
 					anchors.verticalCenter: tmSpisokZagolovok.verticalCenter
 					anchors.right: tmSpisokZagolovok.right
-					anchors.margins: wndRoot.ntCoff/2
+					anchors.margins: root.ntCoff/2
 
-					clrKnopki: wndRoot.clrKnopok
+					clrKnopki: root.clrKnopok
 					clrFona: pgStrSpisok.clrStranici
 
 					onClicked: {
@@ -82,11 +82,11 @@ Window {
 
 				ZonaSpisok {
 					id: lsvZonaSpisok
-					ntWidth: wndRoot.ntWidth
-					ntCoff: wndRoot.ntCoff
+					ntWidth: root.ntWidth
+					ntCoff: root.ntCoff
 					anchors.fill: tmSpisokZona
 
-					clrTexta: wndRoot.clrKnopok
+					clrTexta: root.clrKnopok
 					clrFona: "SlateGray"
 
 					onSSpisok: function(strSpisok) {
@@ -99,7 +99,7 @@ Window {
 					ntCoff: 16
 					anchors.centerIn: parent
 
-					clrLogo: wndRoot.clrKnopok
+					clrLogo: root.clrKnopok
 					clrFona: pgStrSpisok.clrStranici
 				}
 			}
@@ -109,11 +109,11 @@ Window {
 			visible: false
 			property color clrStranici: "darkslategray"
 
-			ntWidth: wndRoot.ntWidth
-			ntCoff: wndRoot.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 
-			clrFona: wndRoot.clrFona
-			clrTexta: wndRoot.clrKnopok
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
 			clrRabOblasti: clrStranici
 
 			text: "МЕНЮ"
@@ -130,9 +130,9 @@ Window {
 					ntCoff: pgStrMenu.ntCoff
 					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
 					anchors.left: tmMenuZagolovok.left
-					anchors.margins: wndRoot.ntCoff/2
+					anchors.margins: root.ntCoff/2
 
-					clrKnopki: wndRoot.clrKnopok
+					clrKnopki: root.clrKnopok
 
 					onClicked: {
 						stvStr.pop()//Назад страницу
@@ -143,9 +143,9 @@ Window {
 					ntCoff: pgStrMenu.ntCoff
 					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
 					anchors.right: tmMenuZagolovok.right
-					anchors.margins: wndRoot.ntCoff/2
+					anchors.margins: root.ntCoff/2
 
-					clrKnopki: wndRoot.clrKnopok
+					clrKnopki: root.clrKnopok
 				}
 			}
 			Item {
@@ -156,30 +156,45 @@ Window {
 				height: pgStrMenu.rctStrZona.height
 
 				DCKnopkaOriginal {
-					ntHeight: wndRoot.ntWidth
-					ntCoff: wndRoot.ntCoff
+					id: knopka
+					ntHeight: root.ntWidth*root.ntCoff+8
 					anchors.top: tmMenuZona.top
 					anchors.left: tmMenuZona.left
-					anchors.right: tmMenuZona.right
-					anchors.margins: wndRoot.ntCoff/2
+					//anchors.right: tmMenuZona.right
+					anchors.margins: root.ntCoff/2
 
 					clrKnopki: "slategray"
-					clrTexta: wndRoot.clrKnopok
+					clrTexta: root.clrKnopok
 					text: "Участки"
 					bold: true
 					italic: true
 				}
+				DCKnopkaOriginal {
+
+					ntHeight: root.ntWidth*root.ntCoff+8
+					anchors.top: knopka.bottom
+					anchors.left: tmMenuZona.left
+					anchors.right: tmMenuZona.right
+					anchors.margins: root.ntCoff/2
+
+					clrKnopki: "slategray"
+					clrTexta: root.clrKnopok
+					text: "Участки"
+					bold: true
+					italic: true
+				}
+
 			}
 		}
 		Stranica {//Страница Состава Списка
 			id: pgStrSostav
 			visible: false
 
-			ntWidth: wndRoot.ntWidth
-			ntCoff: wndRoot.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 
-			clrFona: wndRoot.clrFona
-			clrTexta: wndRoot.clrKnopok
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
             clrRabOblasti: "indigo"
 
 			DCKnopkaNazad {
@@ -188,7 +203,7 @@ Window {
 				x: pgStrSostav.rctStrZagolovok.x+ntCoff/2
 				y: pgStrSostav.rctStrZagolovok.y+ntCoff/2
 
-				clrKnopki: wndRoot.clrKnopok
+				clrKnopki: root.clrKnopok
 
 				onClicked: {
 					stvStr.pop()//Назад страницу
@@ -205,11 +220,11 @@ Window {
 			id: pgStrDannie
 			visible: false
 
-			ntWidth: wndRoot.ntWidth
-			ntCoff: wndRoot.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 
-			clrFona: wndRoot.clrFona
-			clrTexta: wndRoot.clrKnopok
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
 			clrRabOblasti: "MidnightBlue"
 
 			DCKnopkaNazad {
