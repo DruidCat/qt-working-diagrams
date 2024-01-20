@@ -5,7 +5,6 @@ import QtQuick.Controls
 Item {
 	id: tmKnopkaOriginal
 	property int ntHeight: 8
-	property int ntWidth: ntHeight*6
 	property int ntCoff: 8
 	property alias text: txtKnopkaOriginal.text
 	property alias bold: txtKnopkaOriginal.font.bold
@@ -15,7 +14,7 @@ Item {
 	property color clrTexta: "black"
 
 	height: ntHeight*ntCoff
-	width: ntWidth*ntCoff//Длина кнопки расчитывается автоматически в слоте onCompleted в конце файла.
+	//Длина кнопки расчитывается автоматически в слоте onCompleted в конце файла.
 
 	signal clicked();
 
