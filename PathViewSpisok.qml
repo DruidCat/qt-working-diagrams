@@ -4,50 +4,75 @@ import QtQuick.Window
 import "qrc:/js/DCFunkciiJS.js" as JSSpisok
 
 Item {
-	id: tmZonaSpisok
-	property int ntWidth: 8
+	id: tmPVSpisok
+	property int ntWidth: 2
 	property int ntCoff: 8
+	property alias pathItemCount: pvwSpisok.pathItemCount
 	property color clrTexta: "orange"
-	property color clrFona: "SlateGray"
+	property color clrFona: "slategray"
+
+	height: pathItemCount*ntWidth*ntCoff*2
 
 	signal sSpisok(var strSpisok);
 
-	ListView {
-		id: lsvZonaSpisok
-
+	Rectangle {
+		anchors.fill: tmPVSpisok
+		color: "transparent"
+		border.color: "red"
+		border.width: 3
+	}
+	Path {//Размеры PathView, и направление бесконечного скролинга.
+		id: pthSpisok
+		startX: tmPVSpisok.width/2//Середина строчки списка - это середина Item
+		startY: ntWidth*ntCoff+ntCoff/2//Начальная Y координата середины строчки по вертикали.
+		PathLine {//координаты середины крайней строчки
+			id: plnSpisok
+			x: tmPVSpisok.width/2
+			y: tmPVSpisok.height
+		}
+	}
+	PathView {//Представление модели с бесконечным скролингом.
+		id: pvwSpisok
 		Component {
-			id: cmpZonaSpisok
-			Rectangle {
-				id: rctSpisok
-				width: lsvZonaSpisok.width
-				height: tmZonaSpisok.ntWidth*tmZonaSpisok.ntCoff+tmZonaSpisok.ntCoff
-				radius: (width/(tmZonaSpisok.ntWidth*tmZonaSpisok.ntCoff))/tmZonaSpisok.ntCoff
-				color: maUchastki.containsPress
-					   ? Qt.darker(tmZonaSpisok.clrFona, 1.3) : tmZonaSpisok.clrFona
-				Text {
-					color: maUchastki.containsPress
-						   ? Qt.darker(tmZonaSpisok.clrTexta, 1.3) : tmZonaSpisok.clrTexta
-					anchors.horizontalCenter: rctSpisok.horizontalCenter
-					anchors.verticalCenter: rctSpisok.verticalCenter
-					text: modelData.spisok
-					font.pixelSize: (rctSpisok.width/text.length>=rctSpisok.height)
-					? rctSpisok.height-tmZonaSpisok.ntCoff
-					: rctSpisok.width/text.length-tmZonaSpisok.ntCoff
+			id: cmpPVSpisok
+
+			Rectangle {//Прямоугольник каждой отдельной строчки в модели.
+				id: rctPVSpisok
+				width: tmPVSpisok.width
+				height: tmPVSpisok.ntWidth*tmPVSpisok.ntCoff+tmPVSpisok.ntCoff
+
+				color: maPVSpisok.containsPress
+					? Qt.darker(tmPVSpisok.clrFona, 1.3) : tmPVSpisok.clrFona
+				radius: (width/(tmPVSpisok.ntWidth*tmPVSpisok.ntCoff))/tmPVSpisok.ntCoff
+				opacity: PathView.isCurrentItem ? 1 : 0.5//Прозрачность
+
+				Text {//Текст внутри прямоугольника, считанный из модели.
+					anchors.horizontalCenter: rctPVSpisok.horizontalCenter
+					anchors.verticalCenter: rctPVSpisok.verticalCenter
+
+					color: maPVSpisok.containsPress
+						? Qt.darker(tmPVSpisok.clrTexta, 1.3) : tmPVSpisok.clrTexta
+					text: modelData.spisok//Читаем текст из модели.
+					font.pixelSize: (rctPVSpisok.width/text.length>=rctPVSpisok.height)
+						? rctPVSpisok.height-tmPVSpisok.ntCoff
+						: rctPVSpisok.width/text.length-tmPVSpisok.ntCoff
 				}
 				MouseArea {
-					id: maUchastki
-					anchors.fill: rctSpisok
+					id: maPVSpisok
+					anchors.fill: rctPVSpisok
 					onClicked: {
-						tmZonaSpisok.sSpisok(modelData.spisok)
+						tmPVSpisok.sSpisok(modelData.spisok)
 					}
 				}
 			}
 		}
-
-		anchors.fill: tmZonaSpisok
-		anchors.margins: tmZonaSpisok.ntCoff
-		spacing: tmZonaSpisok.ntCoff
+		anchors.fill: tmPVSpisok
 		model: JSSpisok.ltSpisok
-		delegate: cmpZonaSpisok
+		delegate: cmpPVSpisok
+		path: pthSpisok//Устанавливаем габариты и направление скролинга в представлении
+		pathItemCount: 3//Количество отображаемых элементов в представлении.
+	}
+	Component.onCompleted: {//Слот, кода всё представление отрисовалось.
+		//console.debug(pvwSpisok.pathItemCount);
 	}
 }

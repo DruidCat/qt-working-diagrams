@@ -187,28 +187,29 @@ Window {
 					italic: true
 
 					onClicked: {//Слот запускающий 
-
+						//Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
+						pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
 					}
 				}
 
 				PathViewSpisok {
-					id: lsvPVSpisok
+					id: pvSpisok
+					visible: false
 					ntWidth: root.ntWidth
 					ntCoff: root.ntCoff
-					anchors.top: menuZonaKnopkaSpisok.bottom
 					anchors.left: tmMenuZona.left
 					anchors.right: tmMenuZona.right
 					anchors.bottom: tmMenuZona.bottom
+					anchors.margins: root.ntCoff
 
 					clrTexta: root.clrKnopok
 					clrFona: "SlateGray"
-/*
+
 					onSSpisok: function(strSpisok) {
-						//cppqml.strUchastokNazvanie = strSpisok;//Присваиваем к свойству Q_PROPERTY
-						pgStrSostav.text = strSpisok;//Задаём заголовок на второй странице.
-						stvStr.push(pgStrSostav);
+						pvSpisok.visible = false;
+						menuZonaKnopkaSpisok.text = strSpisok;
 					}
-*/
+
 				}
 
 			}
