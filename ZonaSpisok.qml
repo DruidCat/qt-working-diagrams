@@ -18,25 +18,25 @@ Item {
 		Component {
 			id: cmpZonaSpisok
 			Rectangle {
-				id: rctSpisok
+				id: rctZonaSpisok
 				width: lsvZonaSpisok.width
 				height: tmZonaSpisok.ntWidth*tmZonaSpisok.ntCoff+tmZonaSpisok.ntCoff
 				radius: (width/(tmZonaSpisok.ntWidth*tmZonaSpisok.ntCoff))/tmZonaSpisok.ntCoff
-				color: maUchastki.containsPress
+				color: maZonaSpisok.containsPress
 					   ? Qt.darker(tmZonaSpisok.clrFona, 1.3) : tmZonaSpisok.clrFona
 				Text {
-					color: maUchastki.containsPress
+					color: maZonaSpisok.containsPress
 						   ? Qt.darker(tmZonaSpisok.clrTexta, 1.3) : tmZonaSpisok.clrTexta
-					anchors.horizontalCenter: rctSpisok.horizontalCenter
-					anchors.verticalCenter: rctSpisok.verticalCenter
+					anchors.horizontalCenter: rctZonaSpisok.horizontalCenter
+					anchors.verticalCenter: rctZonaSpisok.verticalCenter
 					text: modelData.spisok
-					font.pixelSize: (rctSpisok.width/text.length>=rctSpisok.height)
-					? rctSpisok.height-tmZonaSpisok.ntCoff
-					: rctSpisok.width/text.length-tmZonaSpisok.ntCoff
+					font.pixelSize: (rctZonaSpisok.width/text.length>=rctZonaSpisok.height)
+					? rctZonaSpisok.height-tmZonaSpisok.ntCoff
+					: rctZonaSpisok.width/text.length-tmZonaSpisok.ntCoff
 				}
 				MouseArea {
-					id: maUchastki
-					anchors.fill: rctSpisok
+					id: maZonaSpisok
+					anchors.fill: rctZonaSpisok
 					onClicked: {
 						tmZonaSpisok.sSpisok(modelData.spisok)
 					}
@@ -46,7 +46,7 @@ Item {
 
 		anchors.fill: tmZonaSpisok
 		anchors.margins: tmZonaSpisok.ntCoff
-		spacing: tmZonaSpisok.ntCoff
+		spacing: tmZonaSpisok.ntCoff//Расстояние между строками
 		model: JSSpisok.ltSpisok
 		delegate: cmpZonaSpisok
 	}
