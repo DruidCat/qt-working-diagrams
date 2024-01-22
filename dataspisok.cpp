@@ -66,11 +66,18 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
     strSpisokJSON = "[";//Начало массива объектов
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
         strSpisokJSON = strSpisokJSON + "{\"nomer\":\"";//Начало списка объектов.
-        strSpisokJSON = strSpisokJSON + m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Номер");
+		QString strNomer = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Номер");
+		if(strNomer == "")
+			return "";
+        strSpisokJSON = strSpisokJSON + strNomer;
         strSpisokJSON = strSpisokJSON + "\",\"spisok\":\"";
-        strSpisokJSON = strSpisokJSON + m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Список");
+		QString strSpisok = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Список");
+		if(strSpisok == "")
+			return "";
+        strSpisokJSON = strSpisokJSON + strSpisok;
         strSpisokJSON = strSpisokJSON + "\",\"opisanie\":\"";
-        strSpisokJSON = strSpisokJSON + m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Описание");
+		QString strOpisanie = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Описание");
+        strSpisokJSON = strSpisokJSON + strOpisanie;
         strSpisokJSON = strSpisokJSON + "\"}";//Конец списка объектов.
 		if(ullShag<ullKolichestvo)//Если это не последний список объектов, то..
             strSpisokJSON = strSpisokJSON + ",";//ставим запятую.
