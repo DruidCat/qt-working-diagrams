@@ -17,6 +17,7 @@ qt_add_executable(appqt-working-diagrams
 qt_add_qml_module(appqt-working-diagrams
     URI qt-working-diagrams
     VERSION 1.0
+	QML_FILES DCKnopkaInfo.qml
 	QML_FILES DCKnopkaKruglaya.qml
 	QML_FILES DCKnopkaMenu.qml
 	QML_FILES DCKnopkaNastroiki.qml

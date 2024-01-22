@@ -138,7 +138,7 @@ Window {
 						stvStr.pop()//Назад страницу
 					}
 				}
-				DCKnopkaNastroiki {
+				DCKnopkaInfo {
 					ntWidth: pgStrMenu.ntWidth
 					ntCoff: pgStrMenu.ntCoff
 					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
@@ -209,9 +209,7 @@ Window {
 						pvSpisok.visible = false;
 						menuZonaKnopkaSpisok.text = strSpisok;
 					}
-
 				}
-
 			}
 		}
 		Stranica {//Страница Состава Списка
