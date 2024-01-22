@@ -10,7 +10,7 @@ Item {
 	property color clrTexta: "orange"
 	property color clrFona: "slategray"
 
-	height: pathItemCount*ntWidth*ntCoff*2
+	height:pvwSpisok.pathItemCount*ntWidth*ntCoff*2
 
 	signal sSpisok(var strSpisok);
 
