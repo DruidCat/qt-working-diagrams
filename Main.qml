@@ -18,8 +18,8 @@ Window {
 	StackView {
 		id: stvStr
 		anchors.fill: parent
-		//initialItem: pgStrSpisok
-		initialItem: pgStrMenu
+		initialItem: pgStrSpisok
+		//initialItem: pgStrMenu
 
 		Stranica {//Страница со Списком
 			id: pgStrSpisok
@@ -138,7 +138,7 @@ Window {
 						stvStr.pop()//Назад страницу
 					}
 				}
-				DCKnopkaInfo {
+				DCKnopkaNastroiki {
 					ntWidth: pgStrMenu.ntWidth
 					ntCoff: pgStrMenu.ntCoff
 					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
@@ -159,7 +159,7 @@ Window {
 				height: pgStrMenu.rctStrZona.height
 
 				DCKnopkaOriginal {
-					id: menuZonaKnopka
+					id: menuZonaKnopkaObAvtore
 					ntHeight: root.ntWidth*root.ntCoff+8
 					anchors.top: tmMenuZona.top
 					anchors.left: tmMenuZona.left
@@ -168,14 +168,14 @@ Window {
 
 					clrKnopki: "slategray"
 					clrTexta: root.clrKnopok
-					text: "Участки"
+					text: "Об авторе"
 					bold: true
 					italic: true
 				}
 				DCKnopkaOriginal {
 					id: menuZonaKnopkaSpisok
 					ntHeight: root.ntWidth*root.ntCoff+8
-					anchors.top: menuZonaKnopka.bottom
+					anchors.top: menuZonaKnopkaObAvtore.bottom
 					anchors.left: tmMenuZona.left
 					anchors.right: tmMenuZona.right
 					anchors.margins: root.ntCoff/2
@@ -211,6 +211,26 @@ Window {
 					}
 				}
 			}
+			Item {
+				id: tmMenuToolbar
+				x: pgStrMenu.rctStrToolbar.x
+				y: pgStrMenu.rctStrToolbar.y
+				width: pgStrMenu.rctStrToolbar.width
+				height: pgStrMenu.rctStrToolbar.height
+
+				DCKnopkaInfo {
+					ntWidth: pgStrMenu.ntWidth
+					ntCoff: pgStrMenu.ntCoff
+					anchors.verticalCenter: tmMenuToolbar.verticalCenter
+					anchors.right: tmMenuToolbar.right
+					anchors.margins: root.ntCoff/2
+
+					clrKnopki: root.clrKnopok
+					onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
+						Qt.quit();
+					}
+				}
+			}
 		}
 		Stranica {//Страница Состава Списка
 			id: pgStrSostav
@@ -235,6 +255,27 @@ Window {
 					stvStr.pop()//Назад страницу
 				}
 			}
+			Item {
+				id: tmSostavToolbar
+				x: pgStrSostav.rctStrToolbar.x
+				y: pgStrSostav.rctStrToolbar.y
+				width: pgStrSostav.rctStrToolbar.width
+				height: pgStrSostav.rctStrToolbar.height
+
+				DCKnopkaInfo {
+					ntWidth: pgStrSostav.ntWidth
+					ntCoff: pgStrSostav.ntCoff
+					anchors.verticalCenter: tmSostavToolbar.verticalCenter
+					anchors.right: tmSostavToolbar.right
+					anchors.margins: root.ntCoff/2
+
+					clrKnopki: root.clrKnopok
+					onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
+						//Qt.quit();
+					}
+				}
+			}
+
 			Connections {//Соединяем сигнал из C++ с действием в QML
 				target: cppqml//Цель объект класса С++ DCCppQml
 				function onStrSpisokChanged() {//Функция сигнал, которая создалась в QML (on) для сигнала C++

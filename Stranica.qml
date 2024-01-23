@@ -12,6 +12,7 @@ Page {
 	property alias text:  txtStrZagolovok.text
 	property alias rctStrZagolovok: rctStrZagolovok
 	property alias rctStrZona: rctStrZona
+	property alias rctStrToolbar: rctStrToolbar
 
 	Item{
 		id: tmStr
@@ -98,6 +99,8 @@ Page {
 				anchors.margins: pgStr.ntCoff
 
 				color: clrRabOblasti
+				border.color: Qt.darker(clrRabOblasti, 1.3)
+				border.width: pgStr.ntCoff/4
 			}
 		}
 	}
