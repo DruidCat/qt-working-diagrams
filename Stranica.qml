@@ -73,18 +73,31 @@ Page {
                     anchors.bottom: rctStrZagolovok.bottom
                 }
 			}
-
 			Rectangle {
 				id: rctStrZona
 				width: rctStr.width
 				//height: Тут бы по уму минимально возможное значение высоты сделать, чтоб всё отображалось
-				color: clrRabOblasti
 				anchors.top: rctStrZagolovok.bottom
 				anchors.left: rctStr.left
 				anchors.right: rctStr.right
-				anchors.bottom: rctStr.bottom
+				anchors.bottom: rctStrToolbar.top
 				anchors.margins: ntCoff
+
 				radius: (width/(ntWidth*ntCoff))/ntCoff
+				color: clrRabOblasti
+			}
+			Rectangle {
+				id: rctStrToolbar
+				width: rctStr.width
+				height: pgStr.ntWidth*pgStr.ntCoff+pgStr.ntCoff
+
+				anchors.top: anchors.rctStrZona
+				anchors.left: rctStr.left
+				anchors.right: rctStr.right
+				anchors.bottom: rctStr.bottom
+				anchors.margins: pgStr.ntCoff
+
+				color: clrRabOblasti
 			}
 		}
 	}
