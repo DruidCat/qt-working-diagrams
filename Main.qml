@@ -14,6 +14,7 @@ Window {
 	property int ntCoff: 8
 	property color clrKnopok: "orange"
 	property color clrFona: "grey"
+	property color clrStranic: "black"
 
 	StackView {
 		id: stvStr
@@ -21,6 +22,7 @@ Window {
 		initialItem: pgStrSpisok
 		//initialItem: pgStrMenu
 
+		//---С П И С О К---//
 		Stranica {//Страница со Списком
 			id: pgStrSpisok
 			visible: true
@@ -89,10 +91,10 @@ Window {
 					clrTexta: root.clrKnopok
 					clrFona: "SlateGray"
 
-					onSSpisok: function(strSpisok) {
-						//cppqml.strUchastokNazvanie = strSpisok;//Присваиваем к свойству Q_PROPERTY
+					onSSpisok: function(ntNomer, strSpisok) {//Слот нажатия на один из элементов Списка.
+						cppqml.untSpisokNomer = ntNomer;//Присваиваем номер списка к свойству Q_PROPERTY
 						pgStrSostav.text = strSpisok;//Задаём заголовок на второй странице.
-						stvStr.push(pgStrSostav);
+						stvStr.push(pgStrSostav);//Переключаемся на страницу Состава.
 					}
 				}
 				DCLogoTMK {//Логотип
@@ -104,6 +106,7 @@ Window {
 				}
 			}
 		}
+		//---М Е Н Ю---//
 		Stranica {//Меню
 			id: pgStrMenu
 			visible: false
@@ -232,6 +235,7 @@ Window {
 				}
 			}
 		}
+		//---С О С Т А В---//
 		Stranica {//Страница Состава Списка
 			id: pgStrSostav
 			visible: false
@@ -241,7 +245,7 @@ Window {
 
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
-            clrRabOblasti: "indigo"
+            clrRabOblasti: root.clrStranic
 
 			DCKnopkaNazad {
 				ntWidth: pgStrSostav.ntWidth
@@ -255,7 +259,14 @@ Window {
 					stvStr.pop()//Назад страницу
 				}
 			}
-			Item {
+			Item {//Состава Зона
+				id: tmSostavZona
+				x: pgStrSostav.rctStrZona.x
+				y: pgStrSostav.rctStrZona.y
+				width: pgStrSostav.rctStrZona.width
+				height: pgStrSostav.rctStrZona.height
+			}
+			Item {//Состава Тулбар
 				id: tmSostavToolbar
 				x: pgStrSostav.rctStrToolbar.x
 				y: pgStrSostav.rctStrToolbar.y
@@ -271,7 +282,8 @@ Window {
 
 					clrKnopki: root.clrKnopok
 					onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
-						//Qt.quit();
+						txtOpisanie.text = cppqml.strSpisokOpisanie;
+						stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 					}
 				}
 			}
@@ -283,6 +295,49 @@ Window {
 				}
 			}
 		}
+		//---О П И С А Н И Е---//
+		Stranica {
+			id: pgStrOpisanie
+			visible: false
+		
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
+			clrRabOblasti: root.clrStranic
+
+			text: "Описание"
+
+			DCKnopkaNazad {
+				ntWidth: pgStrOpisanie.ntWidth
+				ntCoff: pgStrOpisanie.ntCoff
+				x: pgStrOpisanie.rctStrZagolovok.x+ntCoff/2
+				y: pgStrOpisanie.rctStrZagolovok.y+ntCoff/2
+
+				clrKnopki: clrKnopok
+
+				onClicked: {
+					stvStr.pop()//Назад страницу
+				}
+			}
+			Item {
+				id: tmOpisanieZona
+				x: pgStrOpisanie.rctStrZona.x
+				y: pgStrOpisanie.rctStrZona.y
+				width: pgStrOpisanie.rctStrZona.width
+				height: pgStrOpisanie.rctStrZona.height
+				Text {//текс выводящий описание в рабочую зону страницы.
+					id: txtOpisanie
+					anchors.fill: tmOpisanieZona
+
+					color: clrKnopok
+					text: ""
+					font.pixelSize: root.ntWidth*root.ntCoff
+				}
+			}
+		}
+		//---Д А Н Н Ы Е---//
 		Stranica {//Страница с Данными
 			id: pgStrDannie
 			visible: false

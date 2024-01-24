@@ -46,11 +46,12 @@ bool DataSpisok::dbStart() {//Иннициализируем БД, и запис
     return true;//Выход, успех!
 }
 
-QString DataSpisok::polSpisok(int ntNomer) {//Получить данные по номеру
+QString DataSpisok::polSpisok(uint untNomer) {//Получить название элемента Списка по номеру.
 ///////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Н А З В А Н И Е---//
 ///////////////////////////////////////////
-    QString strSpisok = m_pdbSpisok->SELECT("Номер", QString::number(ntNomer), "Список");
+	//TODO сделать проверку номера на <=0
+    QString strSpisok = m_pdbSpisok->SELECT("Номер", QString::number(untNomer), "Список");
     return strSpisok;
 }
 
@@ -85,4 +86,13 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
     strSpisokJSON = strSpisokJSON + "]";//Конец массива объектов.
 
     return strSpisokJSON;
+}
+
+QString DataSpisok::polSpisokOpisanie(uint untNomer){//Полчить Описание элемента Списка по номеру.
+/////////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   О П И С А Н И Е   С П И С К А---//
+/////////////////////////////////////////////////////////
+	//TODO проверка номера на <=0
+    QString strSpisokOpisanie = m_pdbSpisok->SELECT("Номер", QString::number(untNomer), "Описание");
+    return strSpisokOpisanie;
 }

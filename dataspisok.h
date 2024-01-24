@@ -11,8 +11,9 @@ public:
     explicit	DataSpisok(QString strImyaBD, QString strLoginBD, QString strParolBD, QObject* parent = nullptr);
     ~			DataSpisok();//Деструктор.
     bool		dbStart();//Иннициализируем БД, и записываем в нёё данные, если она пустая.
-    QString		polSpisok(int ntNomer);//Получить данные по номеру.
+    QString		polSpisok(uint untNomer);//Получить название элемента Списка по номеру.
     QString		polSpisokJSON();//Получить JSON строчку Списка
+	QString 	polSpisokOpisanie(uint untNomer);//Полчить Описание элемента Списка по номеру.
 
 private:
     DCDB* m_pdbSpisok = nullptr;//Указатель на базу данных таблицы списков.
