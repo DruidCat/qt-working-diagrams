@@ -27,13 +27,16 @@ bool DataSpisok::dbStart() {//Иннициализируем БД, и запис
 ///////////////////////////////////////////
 //---З А П И С Ы В А Е М   Д А Н Н Ы Е---//
 ///////////////////////////////////////////
+	QString strOpisanieFormovki = "Описание участка формовки.";
+	QString strOpisanieSvarki = "Описание участка сварки.";
+	QString strOpisanieOtdelki = "Описание участка отделки. Оборудование участка распологается со второго по четвёртый пролёт. Начало участки на 28 оси второго пролёта начинается на Транспорте 5. Оканчивается на 28 оси третьего пролёта Транспорта 9. Так же на Оси 47 есть перекатная телега с третьего в четвёртый пролёт. На участке много разнообразных акрегатов, это Транспорты 5, 6, 7, 8, 9. Это Экспандер 1 и 2, это агрегат шлифования сварочных швов. Также это две ультразвуковые остановки проверки качества сварочного шва.";
     if(!m_pdbSpisok->SELECT()){//Если нет ни одной записи в таблице, то...
         if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание"<<"Состав",
-                              QStringList()<<"1"<<"Формовка"<<"Описание участка формовки."<<"")){
+                              QStringList()<<"1"<<"Формовка"<<strOpisanieFormovki<<"")){
             if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание"<<"Состав",
-                                  QStringList()<<"2"<<"Сварка"<<"Описание участка сварки."<<"")){
+                                  QStringList()<<"2"<<"Сварка"<<strOpisanieSvarki<<"")){
                 if(!m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание"<<"Состав",
-                                       QStringList()<<"3"<<"Отделка"<<"Описание участка отделки."<<"")){
+                                       QStringList()<<"3"<<"Отделка"<<strOpisanieOtdelki<<"")){
                     return false;//Выход, ошибка.
                 }
             }
@@ -84,7 +87,6 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
             strSpisokJSON = strSpisokJSON + ",";//ставим запятую.
 	}
     strSpisokJSON = strSpisokJSON + "]";//Конец массива объектов.
-
     return strSpisokJSON;
 }
 
@@ -95,4 +97,11 @@ QString DataSpisok::polSpisokOpisanie(uint untNomer){//Полчить Описа
 	//TODO проверка номера на <=0
     QString strSpisokOpisanie = m_pdbSpisok->SELECT("Номер", QString::number(untNomer), "Описание");
     return strSpisokOpisanie;
+}
+
+void DataSpisok::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
+/////////////////////
+//---Q D E B U G---//
+/////////////////////
+	emit signalDebug(strDebug);//Испускаем сигнал со строчкой Лог
 }

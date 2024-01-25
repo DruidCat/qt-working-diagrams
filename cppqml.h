@@ -23,6 +23,11 @@ class DCCppQml : public QObject {
                    WRITE setStrSpisokOpisanie
                    NOTIFY strSpisokOpisanieChanged FINAL)
 
+    Q_PROPERTY(QString strDebug
+                   READ strDebug
+                   WRITE setStrDebug
+                   NOTIFY strDebugChanged FINAL)
+
 public:
     explicit	DCCppQml(QObject* parent = nullptr);
     QString		strSpisok();//Возвращает в формате JSON строчку со списком
@@ -31,20 +36,25 @@ public:
     void		setUntSpisokNomer(uint untSpisokNomerNovi);//Изменить номер списка.
     QString		strSpisokOpisanie();//Возвращает Описание элемента Списка
     void		setStrSpisokOpisanie(QString& strOpisanieNovi);//Изменить описание списка.
+    QString		strDebug();//Возвращает ошибку.
+    void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 
-														 
 signals:
-    void strSpisokChanged();
-    void untSpisokNomerChanged();
-    void strSpisokOpisanieChanged();
+    void strSpisokChanged();//Сигнал о том, что добавился новый элемент Списка.
+    void untSpisokNomerChanged();//Сигнал, что номер выбранного элемента Списка изменился.
+    void strSpisokOpisanieChanged();//Сигнал, что описание изменилось.
+	void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
     void slotTest();
+	void slotDebug(QString strDebug);//Слот обрабатывающий ошибку приходящую по сигналу.
 
 private:
     QString m_strSpisok;//аргумент списка в Свойстве Q_PROPERTY
 	uint	m_untSpisokNomer;//Номер элемента списка в Свойстве Q_PROPERTY.
     QString m_strSpisokOpisanie;//аргумент описания списка в Свойстве Q_PROPERTY
+	QString m_strDebug;//Текс ошибки.
+
     DataSpisok* m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
 };
 

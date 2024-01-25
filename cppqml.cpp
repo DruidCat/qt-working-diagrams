@@ -5,12 +5,19 @@
 DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
 										m_strSpisok(""),
 										m_untSpisokNomer(0),
-										m_strSpisokOpisanie("") {
+										m_strSpisokOpisanie(""),
+										m_strDebug("")
+{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
     m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");
     m_pDataSpisok->dbStart();
+
+	connect(	m_pDataSpisok,
+				SIGNAL(signalDebug(QString)),
+				this,
+				SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
 }
 
 QString DCCppQml::strSpisok() {//Возвратить JSON строку Списка.
@@ -68,11 +75,33 @@ void DCCppQml::setStrSpisokOpisanie(QString& strSpisokOpisanieNovi){//Измен
 	}
 }
 
+QString DCCppQml::strDebug(){//Возвращает ошибку.
+///////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   Т Е К С Т   О Ш И Б К И---//
+///////////////////////////////////////////////////
+	return m_strDebug;
+}
+
+void DCCppQml::setStrDebug(QString& strDebugNovi){//Установить Новую ошибку.
+///////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   Т Е К С Т   О Ш И Б К И---//
+///////////////////////////////////////////////////////
+	if(strDebugNovi != m_strDebug){
+		m_strDebug = strDebugNovi;
+		emit strDebugChanged();
+	}
+}
+
 void DCCppQml::slotTest(){
 ///////////////////////////
 //---С Л О Т   Т Е С Т---//
 ///////////////////////////
-    qDebug() << "СлотТест:" << m_strSpisok;
+    qDebug() << "СлотТест:" << m_strDebug;
 }
 
-
+void DCCppQml::slotDebug(QString strDebug){//Слот обрабатывающий ошибку приходящую по сигналу.
+/////////////////////////////////////////////////////////////
+//---С Л О Т   О Б Р А Б А Т Ы В А Ю Щ И Й   О Ш И Б К У---//
+/////////////////////////////////////////////////////////////
+	setStrDebug(strDebug);//Передаём ошибку на Q_PROPERTY
+}

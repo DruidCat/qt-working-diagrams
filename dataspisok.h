@@ -17,12 +17,15 @@ public:
 
 private:
     DCDB* m_pdbSpisok = nullptr;//Указатель на базу данных таблицы списков.
+	void qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
+								  
     QString m_strImyaBD;//Имя БД
     QString m_strLoginBD;//Логин БД
     QString m_strParolBD;//Пароль БД
 
 signals:
-
+	void signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
+						  
 };
 
 #endif // DATASPISOK_H
