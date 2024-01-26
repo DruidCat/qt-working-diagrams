@@ -7,8 +7,6 @@ Window {
     width: 380
     height: 640
 	visible: true
-	//width: Screen.width
-	//height: Screen.height
 	color: "grey"
 	title: qsTr("Список от druidcat@yandex.ru.")
 
@@ -201,6 +199,7 @@ Window {
 						cppqml.untSpisokNomer = ntNomer;//Присваиваем номер списка к свойству Q_PROPERTY
 						pgStrSostav.textZagolovok = strSpisok;//Задаём заголовок на второй странице.
 						stvStr.push(pgStrSostav);//Переключаемся на страницу Состава.
+						//stvStr.push(pgStrDannie);
 					}
 				}
 				DCLogoTMK {//Логотип
@@ -363,7 +362,6 @@ Window {
 					id: txdOpisanie
 					ntWidth: pgStrOpisanie.ntWidth
 					ntCoff: pgStrOpisanie.ntCoff
-					anchors.fill: tmOpisanieZona
 					readOnly: true//Запрещено редактировать текст
 					radius: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
 					clrFona: pgStrOpisanie.clrRabOblasti//Цвет фона рабочей области
@@ -383,60 +381,20 @@ Window {
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
-			clrRabOblasti: "black"
-			Item {//Данные Заголовок
-				id: tmDannieZagolovok
-				x: pgStrDannie.rctStrZagolovok.x
-				y: pgStrDannie.rctStrZagolovok.y
-				width: pgStrDannie.rctStrZagolovok.width
-				height: pgStrDannie.rctStrZagolovok.height
-				DCKnopkaNazad {
-					ntWidth: pgStrDannie.ntWidth
-					ntCoff: pgStrDannie.ntCoff
-					anchors.verticalCenter: tmDannieZagolovok.verticalCenter
-					anchors.left:tmDannieZagolovok.left
-					anchors.margins: ntCoff/2
-					clrKnopki: pgStrDannie.clrTexta
-					onClicked: {
-						stvStr.pop()//Назад страницу
-					}
-				}
-				DCKnopkaSozdat {
-					ntWidth: root.ntWidth
-					ntCoff: root.ntCoff
-					anchors.verticalCenter: tmDannieZagolovok.verticalCenter
-					anchors.right: tmDannieZagolovok.right
-					anchors.margins: root.ntCoff/2
-					clrKnopki: pgStrDannie.clrTexta
-					clrFona: pgStrDannie.clrRabOblasti
-					onClicked: {
-					}
-				}
-			}
-			Item {//Данные Зона
-				id: tmDannieZona
-				x: pgStrDannie.rctStrZona.x
-				y: pgStrDannie.rctStrZona.y
-				width: pgStrDannie.rctStrZona.width
-				height: pgStrDannie.rctStrZona.height
-				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-			}
-			Item {//Данные Тулбар
-				id: tmDannieToolbar
-				x: pgStrDannie.rctStrToolbar.x
-				y: pgStrDannie.rctStrToolbar.y
-				width: pgStrDannie.rctStrToolbar.width
-				height: pgStrDannie.rctStrToolbar.height
-				DCKnopkaInfo {
-					ntWidth: root.ntWidth
-					ntCoff: root.ntCoff
-					anchors.verticalCenter: tmDannieToolbar.verticalCenter
-					anchors.right: tmDannieToolbar.right
-					anchors.margins: root.ntCoff/2
-					clrKnopki: pgStrDannie.clrTexta
-					clrFona: pgStrDannie.clrRabOblasti
-					onClicked: {
-					}
+			clrRabOblasti: root.clrStranic
+			StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
+				ntWidth: pgStrDannie.ntWidth
+				ntCoff: pgStrDannie.ntCoff
+				clrTexta: pgStrDannie.clrTexta
+				clrFona: pgStrDannie.clrRabOblasti
+				zagolovokX: pgStrDannie.rctStrZagolovok.x; zagolovokY: pgStrDannie.rctStrZagolovok.y
+				zagolovokWidth: pgStrDannie.rctStrZagolovok.width; zagolovokHeight: pgStrDannie.rctStrZagolovok.height
+				zonaX: pgStrDannie.rctStrZona.x; zonaY: pgStrDannie.rctStrZona.y
+				zonaWidth: pgStrDannie.rctStrZona.width; zonaHeight: pgStrDannie.rctStrZona.height
+				toolbarX: pgStrDannie.rctStrToolbar.x; toolbarY: pgStrDannie.rctStrToolbar.y
+				toolbarWidth: pgStrDannie.rctStrToolbar.width; toolbarHeight: pgStrDannie.rctStrToolbar.height
+				onClickedNazad: {//Слот нажатия кнопки Назад.
+					stvStr.pop()//Назад страницу
 				}
 			}
 		}
