@@ -50,10 +50,13 @@ void DCCppQml::setUntSpisokNomer(uint untSpisokNomerNovi){//Изменить н�
 ///////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   Н О М Е Р   С П И С К А---//
 ///////////////////////////////////////////////////////
-	//TODO сделать проверку на номер <=0
-	if (m_untSpisokNomer != untSpisokNomerNovi){//Если не равны параметры, то...
-		m_untSpisokNomer = untSpisokNomerNovi;
-		emit untSpisokNomerChanged();//Сигнал о том, что номер списка изменился.
+	if (untSpisokNomerNovi<=0)//Если номер меньше или равен 0, то...
+		qdebug("DCCppQml::setUntSpisokNomer(uint untSpisokNomerNovi): untSpisokNomerNovi меньше или равен 0");
+	else {//Иначе...
+		if (m_untSpisokNomer != untSpisokNomerNovi){//Если не равны параметры, то...
+			m_untSpisokNomer = untSpisokNomerNovi;
+			emit untSpisokNomerChanged();//Сигнал о том, что номер списка изменился.
+		}
 	}
 }
 
@@ -88,8 +91,16 @@ void DCCppQml::setStrDebug(QString& strDebugNovi){//Установить Нов�
 ///////////////////////////////////////////////////////
 	if(strDebugNovi != m_strDebug){
 		m_strDebug = strDebugNovi;
+		qDebug()<<m_strDebug;//Пишем ошибку в отладочную консоль.
 		emit strDebugChanged();
 	}
+}
+
+void DCCppQml::qdebug(QString strDebug){//Передаёт ошибки в QML через Q_PROPERTY.
+/////////////////////
+//---Q D E B U G---//
+/////////////////////
+	setStrDebug(strDebug);//Передаём ошибку в метод Q_PROPERTY
 }
 
 void DCCppQml::slotTest(){

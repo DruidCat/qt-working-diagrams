@@ -30,6 +30,7 @@ class DCCppQml : public QObject {
 
 public:
     explicit	DCCppQml(QObject* parent = nullptr);
+	//---Методы Q_PROPERTY---//
     QString		strSpisok();//Возвращает в формате JSON строчку со списком
     void		setStrSpisok (QString& strSpisokNovi);//Добавить новый элемент списка или его изменить.
     uint 		untSpisokNomer();//Возвращает номер элемента Списка.
@@ -38,6 +39,8 @@ public:
     void		setStrSpisokOpisanie(QString& strOpisanieNovi);//Изменить описание списка.
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
+	//---Ошибки---//
+	void 		qdebug(QString strDebug);//Передаёт ошибки в QML через Q_PROPERTY.
 
 signals:
     void strSpisokChanged();//Сигнал о том, что добавился новый элемент Списка.
