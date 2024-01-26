@@ -27,6 +27,7 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES DCKnopkaSozdat.qml
 	QML_FILES DCKnopkaZakrit.qml
 	QML_FILES DCLogoTMK.qml
+	QML_FILES DCTextEdit.qml
 	QML_FILES PathViewSpisok.qml
 	QML_FILES Stranica.qml
 	QML_FILES ZonaSpisok.qml

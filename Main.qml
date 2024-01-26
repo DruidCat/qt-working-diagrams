@@ -7,6 +7,8 @@ Window {
     width: 380
     height: 640
 	visible: true
+	//width: Screen.width
+	//height: Screen.height
 	color: "grey"
 	title: qsTr("Список от druidcat@yandex.ru.")
 
@@ -21,6 +23,7 @@ Window {
 		anchors.fill: parent
 		initialItem: pgStrSpisok
 		//initialItem: pgStrMenu
+		//initialItem: pgStrDannie
 		Stranica {//Меню
 		/////////////
 		///М Е Н Ю///
@@ -31,7 +34,8 @@ Window {
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
-			clrRabOblasti: "darkslategray"
+			//clrRabOblasti: "darkslategray"
+			clrRabOblasti: "MidnightBlue"
 			textZagolovok: "МЕНЮ"
 			Item {
 				id: tmMenuZagolovok
@@ -68,11 +72,26 @@ Window {
 				y: pgStrMenu.rctStrZona.y
 				width: pgStrMenu.rctStrZona.width
 				height: pgStrMenu.rctStrZona.height
+				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+				DCKnopkaOriginal {
+					id: menuZonaKnopkaLog
+					ntHeight: root.ntWidth*root.ntCoff+8
+					anchors.top: tmMenuZona.top
+					anchors.left: tmMenuZona.left
+					anchors.right: tmMenuZona.right
+					anchors.margins: root.ntCoff/2
+					clrKnopki: "slategray"
+					clrTexta: pgStrMenu.clrTexta
+					text: "Логи"
+					bold: true
+					italic: true
+				}
 				DCKnopkaOriginal {
 					id: menuZonaKnopkaObAvtore
 					ntHeight: root.ntWidth*root.ntCoff+8
-					anchors.top: tmMenuZona.top
-					anchors.horizontalCenter: tmMenuZona.horizontalCenter
+					anchors.top: menuZonaKnopkaLog.bottom
+					anchors.left: tmMenuZona.left
+					anchors.right: tmMenuZona.right
 					anchors.margins: root.ntCoff/2
 					clrKnopki: "slategray"
 					clrTexta: pgStrMenu.clrTexta
@@ -120,18 +139,6 @@ Window {
 				y: pgStrMenu.rctStrToolbar.y
 				width: pgStrMenu.rctStrToolbar.width
 				height: pgStrMenu.rctStrToolbar.height
-				DCKnopkaInfo {
-					ntWidth: pgStrMenu.ntWidth
-					ntCoff: pgStrMenu.ntCoff
-					anchors.verticalCenter: tmMenuToolbar.verticalCenter
-					anchors.right: tmMenuToolbar.right
-					anchors.margins: root.ntCoff/2
-
-					clrKnopki: pgStrMenu.clrTexta
-					onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
-						Qt.quit();
-					}
-				}
 			}
 		}
 		Stranica {//Страница со Списком
@@ -182,6 +189,7 @@ Window {
 				y: pgStrSpisok.rctStrZona.y
 				width: pgStrSpisok.rctStrZona.width
 				height: pgStrSpisok.rctStrZona.height
+				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
 				ZonaSpisok {
 					id: lsvZonaSpisok
 					ntWidth: root.ntWidth
@@ -280,6 +288,7 @@ Window {
 				y: pgStrSostav.rctStrZona.y
 				width: pgStrSostav.rctStrZona.width
 				height: pgStrSostav.rctStrZona.height
+				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
 			}
 			Item {//Состава Тулбар
 				id: tmSostavToolbar
@@ -295,7 +304,7 @@ Window {
 					anchors.margins: root.ntCoff/2
 					clrKnopki: pgStrSostav.clrTexta
 					onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
-						txtOpisanie.text = cppqml.strSpisokOpisanie;
+						txdOpisanie.text = cppqml.strSpisokOpisanie;
 						stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 					}
 				}
@@ -339,6 +348,7 @@ Window {
 					clrKnopki: pgStrOpisanie.clrTexta
 					clrFona: pgStrOpisanie.clrRabOblasti
 					onClicked: {
+						txdOpisanie.readOnly ? txdOpisanie.readOnly = false : txdOpisanie.readOnly = true;
 					}
 				}
 			}
@@ -348,12 +358,18 @@ Window {
 				y: pgStrOpisanie.rctStrZona.y
 				width: pgStrOpisanie.rctStrZona.width
 				height: pgStrOpisanie.rctStrZona.height
-				Text {//текс выводящий описание в рабочую зону страницы.
-					id: txtOpisanie
+				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+				DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
+					id: txdOpisanie
+					ntWidth: pgStrOpisanie.ntWidth
+					ntCoff: pgStrOpisanie.ntCoff
 					anchors.fill: tmOpisanieZona
-					color: pgStrOpisanie.clrTexta
-					text: ""
-					font.pixelSize: root.ntWidth*root.ntCoff
+					readOnly: true//Запрещено редактировать текст
+					radius: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
+					clrFona: pgStrOpisanie.clrRabOblasti//Цвет фона рабочей области
+					clrTexta: pgStrOpisanie.clrTexta//Цвет текста
+					clrBorder: pgStrOpisanie.clrTexta//Цвет бардюра при редактировании текста.
+					italic: true//Текст курсивом.
 				}
 			}
 		}
@@ -367,15 +383,60 @@ Window {
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
-			clrRabOblasti: "MidnightBlue"
-			DCKnopkaNazad {
-				ntWidth: pgStrDannie.ntWidth
-				ntCoff: pgStrDannie.ntCoff
-				x: pgStrDannie.rctStrZagolovok.x+ntCoff/2
-				y: pgStrDannie.rctStrZagolovok.y+ntCoff/2
-				clrKnopki: pgStrDannie.clrTexta
-				onClicked: {
-					stvStr.pop()//Назад страницу
+			clrRabOblasti: "black"
+			Item {//Данные Заголовок
+				id: tmDannieZagolovok
+				x: pgStrDannie.rctStrZagolovok.x
+				y: pgStrDannie.rctStrZagolovok.y
+				width: pgStrDannie.rctStrZagolovok.width
+				height: pgStrDannie.rctStrZagolovok.height
+				DCKnopkaNazad {
+					ntWidth: pgStrDannie.ntWidth
+					ntCoff: pgStrDannie.ntCoff
+					anchors.verticalCenter: tmDannieZagolovok.verticalCenter
+					anchors.left:tmDannieZagolovok.left
+					anchors.margins: ntCoff/2
+					clrKnopki: pgStrDannie.clrTexta
+					onClicked: {
+						stvStr.pop()//Назад страницу
+					}
+				}
+				DCKnopkaSozdat {
+					ntWidth: root.ntWidth
+					ntCoff: root.ntCoff
+					anchors.verticalCenter: tmDannieZagolovok.verticalCenter
+					anchors.right: tmDannieZagolovok.right
+					anchors.margins: root.ntCoff/2
+					clrKnopki: pgStrDannie.clrTexta
+					clrFona: pgStrDannie.clrRabOblasti
+					onClicked: {
+					}
+				}
+			}
+			Item {//Данные Зона
+				id: tmDannieZona
+				x: pgStrDannie.rctStrZona.x
+				y: pgStrDannie.rctStrZona.y
+				width: pgStrDannie.rctStrZona.width
+				height: pgStrDannie.rctStrZona.height
+				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+			}
+			Item {//Данные Тулбар
+				id: tmDannieToolbar
+				x: pgStrDannie.rctStrToolbar.x
+				y: pgStrDannie.rctStrToolbar.y
+				width: pgStrDannie.rctStrToolbar.width
+				height: pgStrDannie.rctStrToolbar.height
+				DCKnopkaInfo {
+					ntWidth: root.ntWidth
+					ntCoff: root.ntCoff
+					anchors.verticalCenter: tmDannieToolbar.verticalCenter
+					anchors.right: tmDannieToolbar.right
+					anchors.margins: root.ntCoff/2
+					clrKnopki: pgStrDannie.clrTexta
+					clrFona: pgStrDannie.clrRabOblasti
+					onClicked: {
+					}
 				}
 			}
 		}
