@@ -164,60 +164,26 @@ Window {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: root.clrStranic
-			Item {//Состав Заголовок
-				id: tmSostavZagolovok
-				x: pgStrSostav.rctStrZagolovok.x
-				y: pgStrSostav.rctStrZagolovok.y
-				width: pgStrSostav.rctStrZagolovok.width
-				height: pgStrSostav.rctStrZagolovok.height
-				DCKnopkaNazad {
-					ntWidth: pgStrSostav.ntWidth
-					ntCoff: pgStrSostav.ntCoff
-					anchors.left: tmSostavZagolovok.left
-					anchors.verticalCenter: tmSostavZagolovok.verticalCenter
-					anchors.margins: ntCoff/2
-					clrKnopki: pgStrSostav.clrTexta
-					onClicked: {
-						stvStr.pop()//Назад страницу
-					}
+			StrSostav {
+				id: tmSostav
+				ntWidth: pgStrSostav.ntWidth; ntCoff: pgStrSostav.ntCoff
+				clrTexta: pgStrSostav.clrTexta; clrFona: pgStrSostav.clrRabOblasti
+				zagolovokX: pgStrSostav.rctStrZagolovok.x; zagolovokY: pgStrSostav.rctStrZagolovok.y
+				zagolovokWidth: pgStrSostav.rctStrZagolovok.width
+				zagolovokHeight: pgStrSostav.rctStrZagolovok.height
+				zonaX: pgStrSostav.rctStrZona.x; zonaY: pgStrSostav.rctStrZona.y
+				zonaWidth: pgStrSostav.rctStrZona.width; zonaHeight: pgStrSostav.rctStrZona.height
+				toolbarX: pgStrSostav.rctStrToolbar.x; toolbarY: pgStrSostav.rctStrToolbar.y
+				toolbarWidth: pgStrSostav.rctStrToolbar.width; toolbarHeight: pgStrSostav.rctStrToolbar.height
+				onClickedNazad: {//Слот нажатия кнопки Назад.
+					stvStr.pop()//Назад страницу
 				}
-				DCKnopkaSozdat {
-					ntWidth: pgStrSostav.ntWidth
-					ntCoff: pgStrSostav.ntCoff
-					anchors.right: tmSostavZagolovok.right
-					anchors.verticalCenter: tmSostavZagolovok.verticalCenter
-					anchors.margins: ntCoff/2
-					clrKnopki: pgStrSostav.clrTexta
-					clrFona: pgStrSostav.clrRabOblasti
-					onClicked: {
-					}
+				onClickedSozdat: {
+
 				}
-			}
-			Item {//Состава Зона
-				id: tmSostavZona
-				x: pgStrSostav.rctStrZona.x
-				y: pgStrSostav.rctStrZona.y
-				width: pgStrSostav.rctStrZona.width
-				height: pgStrSostav.rctStrZona.height
-				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-			}
-			Item {//Состава Тулбар
-				id: tmSostavToolbar
-				x: pgStrSostav.rctStrToolbar.x
-				y: pgStrSostav.rctStrToolbar.y
-				width: pgStrSostav.rctStrToolbar.width
-				height: pgStrSostav.rctStrToolbar.height
-				DCKnopkaInfo {
-					ntWidth: pgStrSostav.ntWidth
-					ntCoff: pgStrSostav.ntCoff
-					anchors.verticalCenter: tmSostavToolbar.verticalCenter
-					anchors.right: tmSostavToolbar.right
-					anchors.margins: root.ntCoff/2
-					clrKnopki: pgStrSostav.clrTexta
-					onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
-						tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;
-						stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
-					}
+				onClickedInfo: {
+					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;
+					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 			}
 		}
