@@ -10,7 +10,7 @@ Item {
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
 
-	signal sSpisok(int ntNomer, var strSpisok);
+	signal clickedSpisok(int ntNomer, var strSpisok);
 
 	ListView {
 		id: lsvZonaSpisok
@@ -38,7 +38,7 @@ Item {
 					id: maZonaSpisok
 					anchors.fill: rctZonaSpisok
 					onClicked: {
-						tmZonaSpisok.sSpisok(modelData.nomer, modelData.spisok)
+						tmZonaSpisok.clickedSpisok(modelData.nomer, modelData.spisok)
 					}
 				}
 			}

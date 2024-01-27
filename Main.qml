@@ -63,93 +63,28 @@ Window {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
 			textZagolovok: "ТМК"
-			Item {//Спискок Заголовка
-				id: tmSpisokZagolovok
-				x: pgStrSpisok.rctStrZagolovok.x
-				y: pgStrSpisok.rctStrZagolovok.y
-				width: pgStrSpisok.rctStrZagolovok.width
-				height: pgStrSpisok.rctStrZagolovok.height
-				DCKnopkaMenu {
-					ntWidth: pgStrSpisok.ntWidth
-					ntCoff: pgStrSpisok.ntCoff
-					anchors.verticalCenter: tmSpisokZagolovok.verticalCenter
-					anchors.left: tmSpisokZagolovok.left
-					anchors.margins: root.ntCoff/2
-					clrKnopki: pgStrSpisok.clrTexta
-					clrFona: pgStrSpisok.clrRabOblasti
-					onClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
-						stvStr.push(pgStrMenu)
-					}
+			StrSpisok {
+				id: tmSpisok
+				ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
+				clrTexta: pgStrSpisok.clrTexta; clrFona: pgStrSpisok.clrRabOblasti
+				zagolovokX: pgStrSpisok.rctStrZagolovok.x; zagolovokY: pgStrSpisok.rctStrZagolovok.y
+				zagolovokWidth: pgStrSpisok.rctStrZagolovok.width
+				zagolovokHeight: pgStrSpisok.rctStrZagolovok.height
+				zonaX: pgStrSpisok.rctStrZona.x; zonaY: pgStrSpisok.rctStrZona.y
+				zonaWidth: pgStrSpisok.rctStrZona.width; zonaHeight: pgStrSpisok.rctStrZona.height
+				toolbarX: pgStrSpisok.rctStrToolbar.x; toolbarY: pgStrSpisok.rctStrToolbar.y
+				toolbarWidth: pgStrSpisok.rctStrToolbar.width; toolbarHeight: pgStrSpisok.rctStrToolbar.height
+				onClickedMenu: {//Слот нажатия кнопки Меню.
+					stvStr.push(pgStrMenu)//Перейти на страницу Меню
 				}
-				DCKnopkaSozdat {
-					ntWidth: root.ntWidth
-					ntCoff: root.ntCoff
-					anchors.verticalCenter: tmSpisokZagolovok.verticalCenter
-					anchors.right: tmSpisokZagolovok.right
-					anchors.margins: root.ntCoff/2
-					clrKnopki: pgStrSpisok.clrTexta
-					clrFona: pgStrSpisok.clrRabOblasti
-					onClicked: {
-					}
+				onClickedSozdat: {
+
 				}
-			}
-			Item {//Список Рабочей Зоны
-				id: tmSpisokZona
-				x: pgStrSpisok.rctStrZona.x
-				y: pgStrSpisok.rctStrZona.y
-				width: pgStrSpisok.rctStrZona.width
-				height: pgStrSpisok.rctStrZona.height
-				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-				ZonaSpisok {
-					id: lsvZonaSpisok
-					ntWidth: root.ntWidth
-					ntCoff: root.ntCoff
-					anchors.fill: tmSpisokZona
-					clrTexta: pgStrSpisok.clrTexta
-					clrFona: "SlateGray"
-					onSSpisok: function(ntNomer, strSpisok) {//Слот нажатия на один из элементов Списка.
-						cppqml.untSpisokNomer = ntNomer;//Присваиваем номер списка к свойству Q_PROPERTY
-						pgStrSostav.textZagolovok = strSpisok;//Задаём заголовок на второй странице.
-						stvStr.push(pgStrSostav);//Переключаемся на страницу Состава.
-						//stvStr.push(pgStrDannie);
-					}
+				onClickedInfo: {
 				}
-				DCLogoTMK {//Логотип
-					ntCoff: 16
-					anchors.centerIn: parent
-					clrLogo: pgStrSpisok.clrTexta
-					clrFona: pgStrSpisok.clrRabOblasti
-				}
-			}
-			
-			Item {//Список Тулбара
-				id: tmSpisokToolbar
-				x: pgStrSpisok.rctStrToolbar.x
-				y: pgStrSpisok.rctStrToolbar.y
-				width: pgStrSpisok.rctStrToolbar.width
-				height: pgStrSpisok.rctStrToolbar.height
-				DCKnopkaZakrit {
-					ntWidth: root.ntWidth
-					ntCoff: root.ntCoff
-					anchors.verticalCenter: tmSpisokToolbar.verticalCenter
-					anchors.left: tmSpisokToolbar.left
-					anchors.margins: root.ntCoff/2
-					clrKnopki: pgStrSpisok.clrTexta
-					clrFona: pgStrSpisok.clrRabOblasti
-					onClicked: {
-						Qt.quit();
-					}
-				}
-				DCKnopkaInfo {
-					ntWidth: root.ntWidth
-					ntCoff: root.ntCoff
-					anchors.verticalCenter: tmSpisokToolbar.verticalCenter
-					anchors.right: tmSpisokToolbar.right
-					anchors.margins: root.ntCoff/2
-					clrKnopki: pgStrSpisok.clrTexta
-					clrFona: pgStrSpisok.clrRabOblasti
-					onClicked: {
-					}
+				onClickedSpisok: function(strSpisok) {
+					pgStrSostav.textZagolovok = strSpisok;//Задаём заголовок на второй странице.
+					stvStr.push(pgStrSostav);//Переключаемся на страницу Состава.
 				}
 			}
 		}
