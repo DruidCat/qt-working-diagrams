@@ -22,6 +22,7 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES DCKnopkaMenu.qml
 	QML_FILES DCKnopkaNastroiki.qml
 	QML_FILES DCKnopkaNazad.qml
+	QML_FILES DCKnopkaOk.qml
 	QML_FILES DCKnopkaOriginal.qml
 	QML_FILES DCKnopkaPoisk.qml
 	QML_FILES DCKnopkaSozdat.qml
