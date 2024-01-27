@@ -35,108 +35,20 @@ Window {
 			//clrRabOblasti: "darkslategray"
 			clrRabOblasti: "MidnightBlue"
 			textZagolovok: "МЕНЮ"
-			Item {
-				id: tmMenuZagolovok
-				x: pgStrMenu.rctStrZagolovok.x
-				y: pgStrMenu.rctStrZagolovok.y
-				width: pgStrMenu.rctStrZagolovok.width
-				height: pgStrMenu.rctStrZagolovok.height
-				DCKnopkaNazad {
-					ntWidth: pgStrMenu.ntWidth
-					ntCoff: pgStrMenu.ntCoff
-					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
-					anchors.left: tmMenuZagolovok.left
-					anchors.margins: root.ntCoff/2
-					clrKnopki: pgStrMenu.clrTexta
-					onClicked: {
-						stvStr.pop()//Назад страницу
-					}
+			StrMenu {
+				id: tmMenu
+				ntWidth: pgStrMenu.ntWidth; ntCoff: pgStrMenu.ntCoff
+				clrTexta: pgStrMenu.clrTexta; clrFona: pgStrMenu.clrRabOblasti
+				zagolovokX: pgStrMenu.rctStrZagolovok.x; zagolovokY: pgStrMenu.rctStrZagolovok.y
+				zagolovokWidth: pgStrMenu.rctStrZagolovok.width
+				zagolovokHeight: pgStrMenu.rctStrZagolovok.height
+				zonaX: pgStrMenu.rctStrZona.x; zonaY: pgStrMenu.rctStrZona.y
+				zonaWidth: pgStrMenu.rctStrZona.width; zonaHeight: pgStrMenu.rctStrZona.height
+				toolbarX: pgStrMenu.rctStrToolbar.x; toolbarY: pgStrMenu.rctStrToolbar.y
+				toolbarWidth: pgStrMenu.rctStrToolbar.width; toolbarHeight: pgStrMenu.rctStrToolbar.height
+				onClickedNazad: {
+					stvStr.pop()//Назад страницу
 				}
-				DCKnopkaNastroiki {
-					ntWidth: pgStrMenu.ntWidth
-					ntCoff: pgStrMenu.ntCoff
-					anchors.verticalCenter: tmMenuZagolovok.verticalCenter
-					anchors.right: tmMenuZagolovok.right
-					anchors.margins: root.ntCoff/2
-					clrKnopki: pgStrMenu.clrTexta
-					onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
-						Qt.quit();
-					}
-				}
-			}
-			Item {
-				id: tmMenuZona
-				x: pgStrMenu.rctStrZona.x
-				y: pgStrMenu.rctStrZona.y
-				width: pgStrMenu.rctStrZona.width
-				height: pgStrMenu.rctStrZona.height
-				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-				DCKnopkaOriginal {
-					id: menuZonaKnopkaLog
-					ntHeight: root.ntWidth*root.ntCoff+8
-					anchors.top: tmMenuZona.top
-					anchors.left: tmMenuZona.left
-					anchors.right: tmMenuZona.right
-					anchors.margins: root.ntCoff/2
-					clrKnopki: "slategray"
-					clrTexta: pgStrMenu.clrTexta
-					text: "Логи"
-					bold: true
-					italic: true
-				}
-				DCKnopkaOriginal {
-					id: menuZonaKnopkaObAvtore
-					ntHeight: root.ntWidth*root.ntCoff+8
-					anchors.top: menuZonaKnopkaLog.bottom
-					anchors.left: tmMenuZona.left
-					anchors.right: tmMenuZona.right
-					anchors.margins: root.ntCoff/2
-					clrKnopki: "slategray"
-					clrTexta: pgStrMenu.clrTexta
-					text: "Об авторе"
-					bold: true
-					italic: true
-				}
-				DCKnopkaOriginal {
-					id: menuZonaKnopkaSpisok
-					ntHeight: root.ntWidth*root.ntCoff+8
-					anchors.top: menuZonaKnopkaObAvtore.bottom
-					anchors.left: tmMenuZona.left
-					anchors.right: tmMenuZona.right
-					anchors.margins: root.ntCoff/2
-					clrKnopki: "slategray"
-					clrTexta: pgStrMenu.clrTexta
-					text: "Участки"
-					bold: true
-					italic: true
-					onClicked: {//Слот запускающий 
-						//Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
-						pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
-					}
-				}
-				PathViewSpisok {
-					id: pvSpisok
-					visible: false
-					ntWidth: root.ntWidth
-					ntCoff: root.ntCoff
-					anchors.left: tmMenuZona.left
-					anchors.right: tmMenuZona.right
-					anchors.bottom: tmMenuZona.bottom
-					anchors.margins: root.ntCoff
-					clrTexta: pgStrMenu.clrTexta
-					clrFona: "SlateGray"
-					onSSpisok: function(strSpisok) {
-						pvSpisok.visible = false;
-						menuZonaKnopkaSpisok.text = strSpisok;
-					}
-				}
-			}
-			Item {
-				id: tmMenuToolbar
-				x: pgStrMenu.rctStrToolbar.x
-				y: pgStrMenu.rctStrToolbar.y
-				width: pgStrMenu.rctStrToolbar.width
-				height: pgStrMenu.rctStrToolbar.height
 			}
 		}
 		Stranica {//Страница со Списком
