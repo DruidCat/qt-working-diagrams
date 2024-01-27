@@ -303,7 +303,7 @@ Window {
 					anchors.margins: root.ntCoff/2
 					clrKnopki: pgStrSostav.clrTexta
 					onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
-						txdOpisanie.text = cppqml.strSpisokOpisanie;
+						tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;
 						stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 					}
 				}
@@ -321,53 +321,24 @@ Window {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: root.clrStranic
 			textZagolovok: "Описание"
-			Item {
-				id: tmOpisanieZagolovok
-				x: pgStrOpisanie.rctStrZagolovok.x
-				y: pgStrOpisanie.rctStrZagolovok.y
-				width: pgStrOpisanie.rctStrZagolovok.width
-				height: pgStrOpisanie.rctStrZagolovok.height
-				DCKnopkaNazad {
-					ntWidth: pgStrOpisanie.ntWidth
-					ntCoff: pgStrOpisanie.ntCoff
-					anchors.verticalCenter: tmOpisanieZagolovok.verticalCenter
-					anchors.left: tmOpisanieZagolovok.left
-					anchors.margins: ntCoff/2
-					clrKnopki: pgStrOpisanie.clrTexta
-					onClicked: {
-						stvStr.pop()//Назад страницу
-					}
+			StrOpisanie {
+				id: tmOpisanie
+				ntWidth: pgStrOpisanie.ntWidth; ntCoff: pgStrOpisanie.ntCoff
+				clrTexta: pgStrOpisanie.clrTexta; clrFona: pgStrOpisanie.clrRabOblasti
+				zagolovokX: pgStrOpisanie.rctStrZagolovok.x; zagolovokY: pgStrOpisanie.rctStrZagolovok.y
+				zagolovokWidth: pgStrOpisanie.rctStrZagolovok.width
+				zagolovokHeight: pgStrOpisanie.rctStrZagolovok.height
+				zonaX: pgStrOpisanie.rctStrZona.x; zonaY: pgStrOpisanie.rctStrZona.y
+				zonaWidth: pgStrOpisanie.rctStrZona.width; zonaHeight: pgStrOpisanie.rctStrZona.height
+				toolbarX: pgStrOpisanie.rctStrToolbar.x; toolbarY: pgStrOpisanie.rctStrToolbar.y
+				toolbarWidth: pgStrOpisanie.rctStrToolbar.width
+				toolbarHeight: pgStrOpisanie.rctStrToolbar.height
+				radiusTextEdit: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
+				onClickedNazad: {//Слот нажатия кнопки Назад.
+					stvStr.pop()//Назад страницу
 				}
-				DCKnopkaSozdat {
-					ntWidth: pgStrOpisanie.ntWidth
-					ntCoff: pgStrOpisanie.ntCoff
-					anchors.verticalCenter: tmOpisanieZagolovok.verticalCenter
-					anchors.right: tmOpisanieZagolovok.right
-					anchors.margins: ntCoff/2
-					clrKnopki: pgStrOpisanie.clrTexta
-					clrFona: pgStrOpisanie.clrRabOblasti
-					onClicked: {
-						txdOpisanie.readOnly ? txdOpisanie.readOnly = false : txdOpisanie.readOnly = true;
-					}
-				}
-			}
-			Item {
-				id: tmOpisanieZona
-				x: pgStrOpisanie.rctStrZona.x
-				y: pgStrOpisanie.rctStrZona.y
-				width: pgStrOpisanie.rctStrZona.width
-				height: pgStrOpisanie.rctStrZona.height
-				clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-				DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
-					id: txdOpisanie
-					ntWidth: pgStrOpisanie.ntWidth
-					ntCoff: pgStrOpisanie.ntCoff
-					readOnly: true//Запрещено редактировать текст
-					radius: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
-					clrFona: pgStrOpisanie.clrRabOblasti//Цвет фона рабочей области
-					clrTexta: pgStrOpisanie.clrTexta//Цвет текста
-					clrBorder: pgStrOpisanie.clrTexta//Цвет бардюра при редактировании текста.
-					italic: true//Текст курсивом.
+				onClickedSozdat: {
+
 				}
 			}
 		}
@@ -383,12 +354,11 @@ Window {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: root.clrStranic
 			StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
-				ntWidth: pgStrDannie.ntWidth
-				ntCoff: pgStrDannie.ntCoff
-				clrTexta: pgStrDannie.clrTexta
-				clrFona: pgStrDannie.clrRabOblasti
+				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
+				clrTexta: pgStrDannie.clrTexta; clrFona: pgStrDannie.clrRabOblasti
 				zagolovokX: pgStrDannie.rctStrZagolovok.x; zagolovokY: pgStrDannie.rctStrZagolovok.y
-				zagolovokWidth: pgStrDannie.rctStrZagolovok.width; zagolovokHeight: pgStrDannie.rctStrZagolovok.height
+				zagolovokWidth: pgStrDannie.rctStrZagolovok.width;
+				zagolovokHeight: pgStrDannie.rctStrZagolovok.height
 				zonaX: pgStrDannie.rctStrZona.x; zonaY: pgStrDannie.rctStrZona.y
 				zonaWidth: pgStrDannie.rctStrZona.width; zonaHeight: pgStrDannie.rctStrZona.height
 				toolbarX: pgStrDannie.rctStrToolbar.x; toolbarY: pgStrDannie.rctStrToolbar.y
