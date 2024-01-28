@@ -75,7 +75,7 @@ Item {
 	}
 	Item {//Список Тулбара
 		id: tmToolbar
-		DCKnopkaZakrit {
+		DCKnopkaOk{
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter

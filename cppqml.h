@@ -2,6 +2,7 @@
 #define CPPQML_H
 
 #include <QObject>
+#include <QTime>
 
 #include "dcdb.h"
 #include "dataspisok.h"
@@ -29,7 +30,8 @@ class DCCppQml : public QObject {
                    NOTIFY strDebugChanged FINAL)
 
 public:
-    explicit	DCCppQml(QObject* parent = nullptr);
+    explicit	DCCppQml(QObject* parent = nullptr);//Конструктор.
+	~			DCCppQml();//Деструктор.
 	//---Методы Q_PROPERTY---//
     QString		strSpisok();//Возвращает в формате JSON строчку со списком
     void		setStrSpisok (QString& strSpisokNovi);//Добавить новый элемент списка или его изменить.
@@ -49,7 +51,6 @@ signals:
 	void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
-    void slotTest();
 	void slotDebug(QString strDebug);//Слот обрабатывающий ошибку приходящую по сигналу.
 
 private:

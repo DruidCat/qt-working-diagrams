@@ -14,6 +14,7 @@ public:
     QString		polSpisok(uint untNomer);//Получить название элемента Списка по номеру.
     QString		polSpisokJSON();//Получить JSON строчку Списка
 	QString 	polSpisokOpisanie(uint untNomer);//Полчить Описание элемента Списка по номеру.
+	bool 		ustSpisokOpisanie(uint untNomer, QString strSpisokOpisanie);//Записать в БД описание списка.
 
 private:
     DCDB* m_pdbSpisok = nullptr;//Указатель на базу данных таблицы списков.

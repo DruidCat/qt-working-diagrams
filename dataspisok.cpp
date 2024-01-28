@@ -111,6 +111,17 @@ QString DataSpisok::polSpisokOpisanie(uint untNomer){//Полчить Описа
     return strSpisokOpisanie;
 }
 
+bool DataSpisok::ustSpisokOpisanie(uint untNomer, QString strSpisokOpisanie){//Записать в БД описание списка.
+/////////////////////////////////////////////////////////
+//---З А П И С А Т Ь   О П И С А Н И Е   С П И С К А---//
+/////////////////////////////////////////////////////////
+		if(m_pdbSpisok->UPDATE(QStringList()<<"Номер"<<"Описание",
+							QStringList()<<QString::number(untNomer)<<strSpisokOpisanie))//Если успех записи
+			return true;
+		qdebug("DataSpisok::ustSpisokOpisanie() - ошибка записи Описания.");
+		return false;//Ошибка.
+}
+
 void DataSpisok::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////
 //---Q D E B U G---//

@@ -36,20 +36,48 @@ Item {
 			anchors.margins: tmOpisanie.ntCoff/2
 			clrKnopki: tmOpisanie.clrTexta
 			onClicked: {
-				tmOpisanie.clickedNazad();
+				knopkaOk.visible = false;//Делаем невидимой кнопку Ок.
+				knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
+				txdZona.readOnly = true;//Запрещаем редактировать текст.
+				cppqml.strSpisokOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
+				tmOpisanie.clickedNazad();//Сигнал, что кнопка Назад нажата.
 			}
 		}
 		DCKnopkaSozdat {
+			id: knopkaSozdat
 			ntWidth: tmOpisanie.ntWidth
 			ntCoff: tmOpisanie.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
 			anchors.margins: tmOpisanie.ntCoff/2
+			visible: true 
 			clrKnopki: tmOpisanie.clrTexta
 			clrFona: tmOpisanie.clrFona
 			onClicked: {
-				txdZona.readOnly ? txdZona.readOnly = false : txdZona.readOnly = true;
-				tmOpisanie.clickedSozdat();//Излучаем сигнал
+				txdZona.readOnly = false;//Разрешить редактировать.
+				txdZona.textEdit.cursorPosition = txdZona.text.length;//Курсор в конец текста
+				txdZona.textEdit.focus = true;//Сфокусироваться на области ввода
+				txdZona.textEdit.cursorVisible = true;//Курсор сделать видимым
+				visible = false//Делаем невидимой кнопку Создать.
+				knopkaOk.visible = true;//Делаем видимой кнопку Ок
+				tmOpisanie.clickedSozdat();//Излучаем сигнал Создать
+			}
+		}
+		DCKnopkaOk {
+			id: knopkaOk
+			ntWidth: tmOpisanie.ntWidth
+			ntCoff: tmOpisanie.ntCoff
+			anchors.verticalCenter: tmZagolovok.verticalCenter
+			anchors.right: tmZagolovok.right
+			anchors.margins: tmOpisanie.ntCoff/2
+			visible: false 
+			clrKnopki: tmOpisanie.clrTexta
+			clrFona: tmOpisanie.clrFona
+			onClicked: {
+				visible = false;//Делаем невидимой кнопку Ок.
+				knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
+				txdZona.readOnly = true;//Запрещаем редактировать текст.
+				cppqml.strSpisokOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
 			}
 		}
 	}

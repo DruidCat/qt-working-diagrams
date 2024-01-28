@@ -5,6 +5,7 @@ Item {
     id: tmTextEdit
     property alias text: txdTextEdit.text //Текст
     property alias readOnly: txdTextEdit.readOnly//читатьТолько текст. (false - можно изменять)
+	property alias textEdit: txdTextEdit//Передаём в виде свойства весь объект TextEdit
     property alias radius: rctTextEdit.radius//Радиус рабочей зоны
     property alias clrFona: rctTextEdit.color //цвет текста
     property alias clrTexta: txdTextEdit.color //цвет текста

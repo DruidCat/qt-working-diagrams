@@ -18,19 +18,20 @@ qt_add_qml_module(appqt-working-diagrams
     URI qt-working-diagrams
     VERSION 1.0
 	QML_FILES DCKnopkaInfo.qml
-	QML_FILES DCKnopkaKruglaya.qml
+	# QML_FILES DCKnopkaKruglaya.qml
 	QML_FILES DCKnopkaMenu.qml
-	QML_FILES DCKnopkaNastroiki.qml
+	# QML_FILES DCKnopkaNastroiki.qml
 	QML_FILES DCKnopkaNazad.qml
 	QML_FILES DCKnopkaOk.qml
 	QML_FILES DCKnopkaOriginal.qml
-	QML_FILES DCKnopkaPoisk.qml
+	# QML_FILES DCKnopkaPoisk.qml
 	QML_FILES DCKnopkaSozdat.qml
-	QML_FILES DCKnopkaZakrit.qml
+	# QML_FILES DCKnopkaZakrit.qml
 	QML_FILES DCLogoTMK.qml
 	QML_FILES DCTextEdit.qml
 	QML_FILES PathViewSpisok.qml
 	QML_FILES StrDannie.qml
+	QML_FILES StrDebug.qml
 	QML_FILES StrMenu.qml
 	QML_FILES StrOpisanie.qml
 	QML_FILES StrSostav.qml
