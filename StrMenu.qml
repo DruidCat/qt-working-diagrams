@@ -22,6 +22,7 @@ Item {
 	property alias toolbarHeight: tmToolbar.height
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
+	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	Item {
 		id: tmZagolovok
 		DCKnopkaNazad {
@@ -35,23 +36,12 @@ Item {
 				tmMenu.clickedNazad();//Сигнал нажатия кнопки Назад.
 			}
 		}
-		DCKnopkaNastroiki {
-			ntWidth: tmMenu.ntWidth
-			ntCoff: tmMenu.ntCoff
-			anchors.verticalCenter: tmZagolovok.verticalCenter
-			anchors.right: tmZagolovok.right
-			anchors.margins: tmMenu.ntCoff/2
-			clrKnopki: tmMenu.clrTexta
-			onClicked: {//Выход, чтоб удобней было настраивать. Потом удалю.
-				Qt.quit();
-			}
-		}
 	}
 	Item {
 		id: tmZona
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
 		DCKnopkaOriginal {
-			id: zonaKnopkaLog
+			id: knopkaLogi
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
 			anchors.top: tmZona.top
 			anchors.left: tmZona.left
@@ -62,11 +52,14 @@ Item {
 			text: "Логи"
 			bold: true
 			italic: true
+			onClicked: {
+				tmMenu.clickedLogi();//Сигнал нажатия кнопки Логи.
+			}
 		}
 		DCKnopkaOriginal {
-			id: zonaKnopkaObAvtore
+			id: knopkaObAvtore
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-			anchors.top: zonaKnopkaLog.bottom
+			anchors.top: knopkaLogi.bottom
 			anchors.left: tmZona.left
 			anchors.right: tmZona.right
 			anchors.margins: tmMenu.ntCoff/2
@@ -79,7 +72,7 @@ Item {
 		DCKnopkaOriginal {
 			id: zonaKnopkaSpisok
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-			anchors.top: zonaKnopkaObAvtore.bottom
+			anchors.top: knopkaObAvtore.bottom
 			anchors.left: tmZona.left
 			anchors.right: tmZona.right
 			anchors.margins: tmMenu.ntCoff/2

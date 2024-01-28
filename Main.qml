@@ -49,6 +49,38 @@ Window {
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
+				onClickedLogi: {
+					stvStr.push(pgStrDebug)//Переходим на страницу Логи.
+				}
+			}
+		}
+		Stranica {//Debug
+		///////////////
+		///D E B U G///
+		///////////////
+			id: pgStrDebug
+			visible: false
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
+			clrRabOblasti: "MidnightBlue"
+			textZagolovok: "Логи"
+			StrDebug{
+				id: tmDebug
+				ntWidth: pgStrDebug.ntWidth; ntCoff: pgStrDebug.ntCoff
+				clrTexta: pgStrDebug.clrTexta; clrFona: pgStrDebug.clrRabOblasti
+				zagolovokX: pgStrDebug.rctStrZagolovok.x; zagolovokY: pgStrDebug.rctStrZagolovok.y
+				zagolovokWidth: pgStrDebug.rctStrZagolovok.width
+				zagolovokHeight: pgStrDebug.rctStrZagolovok.height
+				zonaX: pgStrDebug.rctStrZona.x; zonaY: pgStrDebug.rctStrZona.y
+				zonaWidth: pgStrDebug.rctStrZona.width; zonaHeight: pgStrDebug.rctStrZona.height
+				toolbarX: pgStrDebug.rctStrToolbar.x; toolbarY: pgStrDebug.rctStrToolbar.y
+				toolbarWidth: pgStrDebug.rctStrToolbar.width; toolbarHeight: pgStrDebug.rctStrToolbar.height
+				radiusTextEdit: pgStrDebug.rctStrZona.radius//Радиус берём из настроек элемента qml
+				onClickedNazad: {
+					stvStr.pop()//Назад страницу
+				}
 			}
 		}
 		Stranica {//Страница со Списком

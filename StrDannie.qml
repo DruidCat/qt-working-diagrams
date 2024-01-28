@@ -35,7 +35,6 @@ Item {
             clrKnopki: tmDannie.clrTexta
             onClicked: {
 				tmDannie.clickedNazad();
-				//stvStr.pop()//Назад страницу
             }
         }
         DCKnopkaSozdat {
