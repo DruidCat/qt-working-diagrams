@@ -59,9 +59,12 @@ Item {
     }
 	Connections {//Соединяем сигнал из C++ с действием в QML
 		target: cppqml;//Цель объект класса С++ DCCppQml
-		function onStrDebugChanged(){//Функция сигнал,которая создалась в QML(on) для сигнала C++
-			strDebug = strDebug + cppqml.strDebug + "\n";//Пишем текст в переменную из Свойтва Q_PROPERTY
-			txdZona.text = strDebug;//Отображаем собранную строку в TextEdit модуле.
+		function onStrDebugChanged(){//Слот Если изменилось сообщение в strDebug (Q_PROPERTY), то...
+			let ltDebug = cppqml.strDebug;//Считываем сообщение из переменной.
+			if(ltDebug != ""){//Если не пустая строка, которая затирает старое сообщение в Toolbar, то...
+				strDebug = strDebug + ltDebug + "\n";//Пишем текст в переменную из Свойтва Q_PROPERTY
+				txdZona.text = strDebug;//Отображаем собранную строку в TextEdit модуле.
+			}
 		}
 	}
 }

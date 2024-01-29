@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QTime>
+#include <QTimer>
 
 #include "dcdb.h"
 #include "dataspisok.h"
@@ -52,6 +53,7 @@ signals:
 
 public	slots:
 	void slotDebug(QString strDebug);//Слот обрабатывающий ошибку приходящую по сигналу.
+	void slotTimerDebug();//Слот прерывания от таймена Отладчика.
 
 private:
     QString m_strSpisok;//аргумент списка в Свойстве Q_PROPERTY
@@ -60,6 +62,8 @@ private:
 	QString m_strDebug;//Текс ошибки.
 
     DataSpisok* m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
+	QTimer*		m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.
+	uint 		m_untDebugSec;//Счётчик секунд для таймера отладки.
 };
 
 #endif // CPPQML_H
