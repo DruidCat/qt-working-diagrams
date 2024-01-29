@@ -52,6 +52,9 @@ Window {
 				onClickedLogi: {
 					stvStr.push(pgStrDebug)//Переходим на страницу Логи.
 				}
+				onClickedAvtor: {
+					stvStr.push(pgStrAvtor)//Переходим на страницу об Авторе.
+				}
 			}
 		}
 		Stranica {//Debug
@@ -66,7 +69,7 @@ Window {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "MidnightBlue"
 			textZagolovok: "Логи"
-			StrDebug{
+			StrDebug {
 				id: tmDebug
 				ntWidth: pgStrDebug.ntWidth; ntCoff: pgStrDebug.ntCoff
 				clrTexta: pgStrDebug.clrTexta; clrFona: pgStrDebug.clrRabOblasti
@@ -78,6 +81,35 @@ Window {
 				toolbarX: pgStrDebug.rctStrToolbar.x; toolbarY: pgStrDebug.rctStrToolbar.y
 				toolbarWidth: pgStrDebug.rctStrToolbar.width; toolbarHeight: pgStrDebug.rctStrToolbar.height
 				radiusTextEdit: pgStrDebug.rctStrZona.radius//Радиус берём из настроек элемента qml
+				onClickedNazad: {
+					stvStr.pop()//Назад страницу
+				}
+			}
+		}
+		Stranica {//Автор
+		///////////////
+		///А В Т О Р///
+		///////////////
+			id: pgStrAvtor
+			visible: false
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
+			clrRabOblasti: "black"
+			textZagolovok: "Об авторе программы"
+			StrAvtor {
+				id: tmAvtor
+				ntWidth: pgStrAvtor.ntWidth; ntCoff: pgStrAvtor.ntCoff
+				clrTexta: pgStrAvtor.clrTexta; clrFona: pgStrAvtor.clrRabOblasti
+				zagolovokX: pgStrAvtor.rctStrZagolovok.x; zagolovokY: pgStrAvtor.rctStrZagolovok.y
+				zagolovokWidth: pgStrAvtor.rctStrZagolovok.width
+				zagolovokHeight: pgStrAvtor.rctStrZagolovok.height
+				zonaX: pgStrAvtor.rctStrZona.x; zonaY: pgStrAvtor.rctStrZona.y
+				zonaWidth: pgStrAvtor.rctStrZona.width; zonaHeight: pgStrAvtor.rctStrZona.height
+				toolbarX: pgStrAvtor.rctStrToolbar.x; toolbarY: pgStrAvtor.rctStrToolbar.y
+				toolbarWidth: pgStrAvtor.rctStrToolbar.width; toolbarHeight: pgStrAvtor.rctStrToolbar.height
+				radiusTextEdit: pgStrAvtor.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}

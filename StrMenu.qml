@@ -23,6 +23,7 @@ Item {
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
+	signal clickedAvtor();//Сигнал нажатия кнопки Автор.
 	Item {
 		id: tmZagolovok
 		DCKnopkaNazad {
@@ -57,7 +58,7 @@ Item {
 			}
 		}
 		DCKnopkaOriginal {
-			id: knopkaObAvtore
+			id: knopkaAvtor
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
 			anchors.top: knopkaLogi.bottom
 			anchors.left: tmZona.left
@@ -68,11 +69,14 @@ Item {
 			text: "Об авторе"
 			bold: true
 			italic: true
+			onClicked: {
+				tmMenu.clickedAvtor();//Сигнал нажатия кнопки об Авторе.
+			}
 		}
 		DCKnopkaOriginal {
 			id: zonaKnopkaSpisok
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-			anchors.top: knopkaObAvtore.bottom
+			anchors.top: knopkaAvtor.bottom
 			anchors.left: tmZona.left
 			anchors.right: tmZona.right
 			anchors.margins: tmMenu.ntCoff/2

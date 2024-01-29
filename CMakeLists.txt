@@ -30,6 +30,7 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES DCLogoTMK.qml
 	QML_FILES DCTextEdit.qml
 	QML_FILES PathViewSpisok.qml
+	QML_FILES StrAvtor.qml
 	QML_FILES StrDannie.qml
 	QML_FILES StrDebug.qml
 	QML_FILES StrMenu.qml
