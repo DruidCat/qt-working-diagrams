@@ -70,7 +70,6 @@ Page {
 			Rectangle {
 				id: rctStrZona
 				width: rctStr.width
-				//height: Тут бы по уму минимально возможное значение высоты сделать, чтоб всё отображалось
 				anchors.top: rctStrZagolovok.bottom
 				anchors.left: rctStr.left
 				anchors.right: rctStr.right

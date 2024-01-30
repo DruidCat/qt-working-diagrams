@@ -4,6 +4,7 @@
 
 DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
 										m_strSpisok(""),
+										m_strSpisokJSON(""),
 										m_untSpisokNomer(0),
 										m_strSpisokOpisanie(""),
 										m_strDebug("")
@@ -34,12 +35,10 @@ DCCppQml::~DCCppQml(){//Деструктор.
 	delete m_pTimerDebug;//Удаляем указатель на таймер.
 	m_pTimerDebug = nullptr;//Обнуляем указатель на таймер отладки.
 }
-QString DCCppQml::strSpisok() {//Возвратить JSON строку Списка.
-///////////////////////////////////////////////////////////
-//---П О Л У Ч И Т Ь   Н А З В А Н И Е   У Ч А С Т К А---//
-///////////////////////////////////////////////////////////
-//    m_strSpisok = "[{\"nomer\":\"1\",\"uchastok\":\"Формовка\",\"opisanie\":\"Участок формовки и всё такое.\"},{\"nomer\":\"2\",\"uchastok\":\"Сварка\",\"opisanie\":\"Участок сварки и всё такое.\"},{\"nomer\":\"3\",\"uchastok\":\"Отделка\",\"opisanie\":\"Участок отделки и всё такое.\"}]";
-    m_strSpisok = m_pDataSpisok->polSpisokJSON();
+QString DCCppQml::strSpisok() {//Полуить элемента Списка.
+///////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   Э Л Е М Е Н Т   С П И С К А---//
+///////////////////////////////////////////////////////
     return m_strSpisok;
 }
 void DCCppQml::setStrSpisok(QString& strSpisokNovi) {//Изменение элемента списка.
@@ -49,6 +48,23 @@ void DCCppQml::setStrSpisok(QString& strSpisokNovi) {//Изменение эле
     if (strSpisokNovi != m_strSpisok){
         m_strSpisok = strSpisokNovi;
         emit strSpisokChanged();//Излучаем сигнал об изменении аргумента.
+    }
+}
+QString DCCppQml::strSpisokJSON() {//Возвратить JSON строку Списка.
+/////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   J S O N   С П И С К А---//
+/////////////////////////////////////////////////
+//    m_strSpisok = "[{\"nomer\":\"1\",\"uchastok\":\"Формовка\",\"opisanie\":\"Участок формовки и всё такое.\"},{\"nomer\":\"2\",\"uchastok\":\"Сварка\",\"opisanie\":\"Участок сварки и всё такое.\"},{\"nomer\":\"3\",\"uchastok\":\"Отделка\",\"opisanie\":\"Участок отделки и всё такое.\"}]";
+    m_strSpisokJSON = m_pDataSpisok->polSpisokJSON();//Считываем строку JSON, приравниваем её к переменной.
+    return m_strSpisokJSON;//И только после этого возвращаем её, это важно.
+}
+void DCCppQml::setStrSpisokJSON(QString& strSpisokJSONNovi) {//Изменение JSON запроса Списка.
+///////////////////////////////////////////////////////////////////
+//---И З М Е Н Е Н И Я   J S O N   З А П Р О С А   С П И С К А---//
+///////////////////////////////////////////////////////////////////
+    if (strSpisokJSONNovi != m_strSpisokJSON){
+        m_strSpisokJSON = strSpisokJSONNovi;
+        emit strSpisokJSONChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
 uint DCCppQml::untSpisokNomer(){//Возвращает номер элемента Списка.

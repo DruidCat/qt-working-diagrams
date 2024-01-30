@@ -47,7 +47,7 @@ Item {
 		anchors.fill: tmZonaSpisok
 		anchors.margins: tmZonaSpisok.ntCoff
 		spacing: tmZonaSpisok.ntCoff//Расстояние между строками
-		model: JSSpisok.ltSpisok
+		model: JSSpisok.strSpisokJSON
 		delegate: cmpZonaSpisok
 	}
 }

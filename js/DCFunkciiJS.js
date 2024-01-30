@@ -19,4 +19,4 @@ var vrUchastki = [
 ]
 */
 
-let ltSpisok = JSON.parse(cppqml.strSpisok)
+let strSpisokJSON = JSON.parse(cppqml.strSpisokJSON)
