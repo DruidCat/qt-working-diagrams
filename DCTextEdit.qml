@@ -22,6 +22,7 @@ Item {
     Rectangle {
         id: rctTextEdit
         anchors.fill: tmTextEdit
+		color: "transparent"//Цвет фона прозрачный.
 		border.color: tmTextEdit.clrBorder
 		border.width: tmTextEdit.ntCoff/2
         Flickable {//Перелистывание

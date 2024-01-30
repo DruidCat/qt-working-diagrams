@@ -29,6 +29,7 @@ qt_add_qml_module(appqt-working-diagrams
 	# QML_FILES DCKnopkaZakrit.qml
 	QML_FILES DCLogoTMK.qml
 	QML_FILES DCTextEdit.qml
+	QML_FILES DCTextInput.qml
 	QML_FILES PathViewSpisok.qml
 	QML_FILES StrAvtor.qml
 	QML_FILES StrDannie.qml

@@ -28,6 +28,7 @@ Item {
 	Item {//Спискок Заголовка
 		id: tmZagolovok
 		DCKnopkaMenu {
+			id: knopkaMenu
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -40,14 +41,57 @@ Item {
 			}
 		}
 		DCKnopkaSozdat {
+			id: knopkaSozdat
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
+			visible: true
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
 			anchors.margins: tmSpisok.ntCoff/2
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
+				knopkaSozdat.visible = false;
+				knopkaOk.visible = true;
+				txnZagolovok.visible = true;
+				txnZagolovok.textInput.cursorPosition = txnZagolovok.text.length;//Курсор в конец текста
+				txnZagolovok.textInput.focus = true;//Сфокусироваться на области ввода
+				txnZagolovok.textInput.cursorVisible = true;//Курсор сделать видимым
+			}
+		}
+		DCKnopkaOk{
+			id: knopkaOk
+			ntWidth: tmSpisok.ntWidth
+			ntCoff: tmSpisok.ntCoff
+			visible: false
+			anchors.verticalCenter: tmZagolovok.verticalCenter
+			anchors.right: tmZagolovok.right
+			anchors.margins: tmSpisok.ntCoff/2
+			clrKnopki: tmSpisok.clrTexta
+			clrFona: tmSpisok.clrFona
+			onClicked: {
+				knopkaSozdat.visible = true;
+				knopkaOk.visible = false;			
+				txnZagolovok.visible = false;
+
+			}
+		}
+		Item {
+			id: tmTextInput
+			anchors.top: tmZagolovok.top
+			anchors.bottom: tmZagolovok.bottom
+			anchors.left: knopkaMenu.right
+			anchors.right: knopkaSozdat.left
+			anchors.margins: tmSpisok.ntCoff/2
+			DCTextInput {
+				id: txnZagolovok
+				ntWidth: tmSpisok.ntWidth
+				ntCoff: tmSpisok.ntCoff
+				visible: false
+				clrTexta: tmSpisok.clrTexta
+				clrFona: "SlateGray"
+				radius: tmSpisok.ntCoff/2
+				text: "ПРИВЕТ"
 			}
 		}
 	}
@@ -76,18 +120,6 @@ Item {
 	}
 	Item {//Список Тулбара
 		id: tmToolbar
-		DCKnopkaOk{
-			ntWidth: tmSpisok.ntWidth
-			ntCoff: tmSpisok.ntCoff
-			anchors.verticalCenter: tmToolbar.verticalCenter
-			anchors.left: tmToolbar.left
-			anchors.margins: tmSpisok.ntCoff/2
-			clrKnopki: tmSpisok.clrTexta
-			clrFona: tmSpisok.clrFona
-			onClicked: {
-				Qt.quit();
-			}
-		}
 		DCKnopkaInfo {
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
