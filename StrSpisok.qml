@@ -37,6 +37,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
+				txnZagolovok.visible = false;
 				tmSpisok.clickedMenu();//Сигнал Меню
 			}
 		}
@@ -51,12 +52,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
-				knopkaSozdat.visible = false;
-				knopkaOk.visible = true;
 				txnZagolovok.visible = true;
-				txnZagolovok.textInput.cursorPosition = txnZagolovok.text.length;//Курсор в конец текста
-				txnZagolovok.textInput.focus = true;//Сфокусироваться на области ввода
-				txnZagolovok.textInput.cursorVisible = true;//Курсор сделать видимым
 			}
 		}
 		DCKnopkaOk{
@@ -70,10 +66,8 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
-				knopkaSozdat.visible = true;
-				knopkaOk.visible = false;			
 				txnZagolovok.visible = false;
-
+				cppqml.strSpisok = txnZagolovok.text;//Сохранить название элемента списка.
 			}
 		}
 		Item {
@@ -87,11 +81,18 @@ Item {
 				id: txnZagolovok
 				ntWidth: tmSpisok.ntWidth
 				ntCoff: tmSpisok.ntCoff
+				anchors.fill: tmTextInput
 				visible: false
 				clrTexta: tmSpisok.clrTexta
 				clrFona: "SlateGray"
 				radius: tmSpisok.ntCoff/2
-				text: "ПРИВЕТ"
+				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
+					txnZagolovok.visible ? knopkaOk.visible = true : knopkaOk.visible = false; 
+					txnZagolovok.visible ? knopkaSozdat.visible = false : knopkaSozdat.visible = true; 
+					if(txnZagolovok.visible == false){//Если DCTextInput не видим, то...
+						txnZagolovok.text = "";//Текст обнуляем вводимый.
+					}
+				}
 			}
 		}
 	}
@@ -129,6 +130,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
+				txnZagolovok.visible = false;//Делаем невидимым ввод текста.
 			}
 		}
 	}
