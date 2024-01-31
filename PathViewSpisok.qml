@@ -92,7 +92,7 @@ Item {
 			}
 		}
 		anchors.fill: tmPVSpisok
-		model: JSSpisok.ltSpisok
+		model: JSSpisok.strSpisokJSON
 		delegate: cmpPVSpisok
 		path: pthSpisok//Устанавливаем габариты и направление скролинга в представлении
 		pathItemCount: 3//Количество отображаемых элементов в представлении.
