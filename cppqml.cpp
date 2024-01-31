@@ -48,10 +48,22 @@ void DCCppQml::setStrSpisok(QString& strSpisokNovi) {//Изменение эле
 /////////////////////////////////////////
 //---И З М Е Н Е Н И Я   С П И С К А---//
 /////////////////////////////////////////
-    if (strSpisokNovi != m_strSpisok){
-        m_strSpisok = strSpisokNovi;
-        emit strSpisokChanged();//Излучаем сигнал об изменении аргумента.
-    }
+	qDebug()<<strSpisokNovi;
+	if(m_pdcclass->isEmpty(strSpisokNovi)){//Если пустая строка, то...
+		qdebug("Нельзя сохранять пустые элементы списка.");
+	}
+	else{
+		QString strSpisok = m_pdcclass->udalitPustotu(strSpisokNovi);//Удаляем пробулы по краям, если есть.
+		QStringList slsSpisok = m_pDataSpisok->polSpisok();//Получить список всез элементов Списка.
+		for(uint untShag = 0; untShag<slsSpisok.size(); untShag++){
+			if(slsSpisok[untShag] == strSpisok){
+				qdebug("Нельзя сохранять одинаковые элементы.");
+				return;
+			}
+		}
+		m_strSpisok = strSpisok;
+		emit strSpisokChanged();//Излучаем сигнал об изменении аргумента.
+	}
 }
 QString DCCppQml::strSpisokJSON() {//Возвратить JSON строку Списка.
 /////////////////////////////////////////////////

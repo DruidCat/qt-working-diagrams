@@ -4,6 +4,7 @@ DataSpisok::DataSpisok(QString strImyaBD, QString strLoginBD, QString strParolBD
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
+	m_slsSpisok.clear();//Пустой список элементов Списка.
     //Настройки соединения к БД Настроек.
     m_strImyaBD = strImyaBD;//Имя локальной базы данных.
     m_strLoginBD = strLoginBD;//Логин локальной базы данных.
@@ -14,7 +15,6 @@ DataSpisok::DataSpisok(QString strImyaBD, QString strLoginBD, QString strParolBD
     m_pdbSpisok->setPassword(m_strParolBD);//Устанавливаем пароль.
     m_pdbSpisok->CREATE(QStringList()<<"#Код"<<"Номер"<<"Список"<<"Описание"<<"Состав");
 }
-
 DataSpisok::~DataSpisok(){//Деструктор
 //////////////////////////////
 //--- Д Е С Т Р У К Т О Р---//
@@ -22,7 +22,6 @@ DataSpisok::~DataSpisok(){//Деструктор
     delete m_pdbSpisok;//Удаляем указатель на БД Спмска
     m_pdbSpisok = nullptr;//Обнуляем указатель.
 }
-
 bool DataSpisok::dbStart() {//Иннициализируем БД, и записываем в нёё данные, если она пустая.
 ///////////////////////////////////////////
 //---З А П И С Ы В А Е М   Д А Н Н Ы Е---//
@@ -48,7 +47,6 @@ bool DataSpisok::dbStart() {//Иннициализируем БД, и запис
     }
     return true;//Выход, успех!
 }
-
 QString DataSpisok::polSpisok(uint untNomer) {//Получить название элемента Списка по номеру.
 ///////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Н А З В А Н И Е---//
@@ -60,7 +58,12 @@ QString DataSpisok::polSpisok(uint untNomer) {//Получить названи�
     QString strSpisok = m_pdbSpisok->SELECT("Номер", QString::number(untNomer), "Список");
     return strSpisok;
 }
-
+QStringList	DataSpisok::polSpisok(){//Получить полный список всех элементов Списка.
+///////////////////////////////////////
+//---П О Л У Ч И Т Ь   С П И С О К---//
+///////////////////////////////////////
+	return m_slsSpisok;//Возвращаем полный список элементов Списка.
+}
 QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Списка.
 ///////////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   С Т Р О К У   С П И С К А---//
@@ -71,6 +74,7 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
 		qdebug("DataSpisok::polSpisokJSON(): quint64 ullKolichestvo = 0, всего PRIMARY KEY 0.");
         return "";//Возвращаем пустую строку.
 	}
+	m_slsSpisok.clear();//Пустой список элементов списка.
     //Пример: [{"nomer":"1","spisok":"формовка"},{"nomer":"2","spisok":"сварка"}]
     strSpisokJSON = "[";//Начало массива объектов
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
@@ -78,13 +82,16 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
 		QString strNomer = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Номер");
 		if(strNomer == ""){//Если номер пустая строка, то...
 			qdebug("DataSpisok::polSpisokJSON(): strNomer="", Нет Номера в БД по заданному Коду.");
+			m_slsSpisok.clear();//Пустой список элементов списка.
 			return "";
 		}
         strSpisokJSON = strSpisokJSON + strNomer;
         strSpisokJSON = strSpisokJSON + "\",\"spisok\":\"";
 		QString strSpisok = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Список");
+		m_slsSpisok = m_slsSpisok<<strSpisok;//
 		if(strSpisok == ""){//Если Список пустая строка, то...
 			qdebug("DataSpisok::polSpisokJSON(): strSpisok="", Нет элемента Списка в БД по заданному Коду.");
+			m_slsSpisok.clear();//Пустой список элементов списка.
 			return "";
 		}
         strSpisokJSON = strSpisokJSON + strSpisok;
@@ -98,7 +105,6 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
     strSpisokJSON = strSpisokJSON + "]";//Конец массива объектов.
     return strSpisokJSON;
 }
-
 QString DataSpisok::polSpisokOpisanie(uint untNomer){//Полчить Описание элемента Списка по номеру.
 /////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   О П И С А Н И Е   С П И С К А---//
@@ -110,7 +116,6 @@ QString DataSpisok::polSpisokOpisanie(uint untNomer){//Полчить Описа
     QString strSpisokOpisanie = m_pdbSpisok->SELECT("Номер", QString::number(untNomer), "Описание");
     return strSpisokOpisanie;
 }
-
 bool DataSpisok::ustSpisokOpisanie(uint untNomer, QString strSpisokOpisanie){//Записать в БД описание списка.
 /////////////////////////////////////////////////////////
 //---З А П И С А Т Ь   О П И С А Н И Е   С П И С К А---//
@@ -121,7 +126,6 @@ bool DataSpisok::ustSpisokOpisanie(uint untNomer, QString strSpisokOpisanie){//�
 		qdebug("DataSpisok::ustSpisokOpisanie() - ошибка записи Описания.");
 		return false;//Ошибка.
 }
-
 void DataSpisok::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////
 //---Q D E B U G---//
