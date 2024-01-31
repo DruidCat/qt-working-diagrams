@@ -14,6 +14,7 @@ DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
 ///////////////////////////////
     m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");//Динамический указатель на класс.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
+ 	m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	connect(	m_pDataSpisok,
 				SIGNAL(signalDebug(QString)),
 				this,
@@ -34,8 +35,10 @@ DCCppQml::~DCCppQml(){//Деструктор.
     m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД обнуляем.
 	delete m_pTimerDebug;//Удаляем указатель на таймер.
 	m_pTimerDebug = nullptr;//Обнуляем указатель на таймер отладки.
+	delete m_pdcclass;//Удаляем указатель.
+	m_pdcclass = nullptr;//Обнуляем указатель
 }
-QString DCCppQml::strSpisok() {//Полуить элемента Списка.
+QString DCCppQml::strSpisok() {//Получить элемента Списка.
 ///////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Э Л Е М Е Н Т   С П И С К А---//
 ///////////////////////////////////////////////////////

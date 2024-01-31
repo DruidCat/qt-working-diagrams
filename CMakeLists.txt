@@ -46,6 +46,7 @@ qt_add_qml_module(appqt-working-diagrams
 	SOURCES cppqml.h cppqml.cpp
 	SOURCES dcdb.h dcdb.cpp
 	SOURCES dataspisok.h dataspisok.cpp
+	SOURCES dcclass.h dcclass.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.

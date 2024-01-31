@@ -6,6 +6,7 @@
 #include <QTimer>
 
 #include "dcdb.h"
+#include "dcclass.h"
 #include "dataspisok.h"
 
 class DCCppQml : public QObject {
@@ -35,7 +36,7 @@ public:
     explicit	DCCppQml(QObject* parent = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
 	//---Методы Q_PROPERTY---//
-    QString		strSpisok();//Полуить элемента Списка.
+    QString		strSpisok();//Получить элемента Списка.
     void		setStrSpisok (QString& strSpisokNovi);//Изменение элемента списка.
     QString		strSpisokJSON();//Возвратить JSON строку Списка.
     void		setStrSpisokJSON (QString& strSpisokJSONNovi);//Изменение JSON запроса Списка.
@@ -69,5 +70,6 @@ private:
     DataSpisok* m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
 	QTimer*		m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.
 	uint 		m_untDebugSec;//Счётчик секунд для таймера отладки.
+ 	DCClass* 	m_pdcclass = nullptr;//Указатель на класс часто используемых методов.
 };
 #endif // CPPQML_H
