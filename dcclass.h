@@ -13,6 +13,7 @@ public:
 	bool isEmpty(QString strTekst);//если в строчке пусто, один или множество пробелов, то возвращается true. 
 	//---пробелы-в-начале-текста?---//
 	QString udalitPustotu(QString strTekst);//Удаляет пробелы вначале и в конце текста.
+	QString udalitProbeli(QString strTekst);//Удаляем два и более пробела между словами.
 	//---данные-в-число---//
 	QTime tmMinus(const QTime& tmVremya1, const QTime& tmVremya2 );//Возращает разницу tmVremya1-tmVremya2
 	QTime tmPlus(const QTime& tmVremya1, const QTime& tmVremya2 );//Возращает сумму tmVremya1+tmVremya2
