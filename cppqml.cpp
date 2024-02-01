@@ -48,20 +48,22 @@ void DCCppQml::setStrSpisok(QString& strSpisokNovi) {//Изменение эле
 /////////////////////////////////////////
 //---И З М Е Н Е Н И Я   С П И С К А---//
 /////////////////////////////////////////
-	qDebug()<<strSpisokNovi;
 	if(m_pdcclass->isEmpty(strSpisokNovi)){//Если пустая строка, то...
 		qdebug("Нельзя сохранять пустые элементы списка.");
 	}
 	else{
-		QString strSpisok = m_pdcclass->udalitPustotu(strSpisokNovi);//Удаляем пробулы по краям, если есть.
-		QStringList slsSpisok = m_pDataSpisok->polSpisok();//Получить список всез элементов Списка.
-		for(uint untShag = 0; untShag<slsSpisok.size(); untShag++){
-			if(slsSpisok[untShag] == strSpisok){
-				qdebug("Нельзя сохранять одинаковые элементы.");
+		strSpisokNovi = strSpisokNovi.toUpper();//Делаем все буквы в строке заглавные.
+		strSpisokNovi = m_pdcclass->udalitProbeli(strSpisokNovi);//Удаляем 2 и более пробелов между словами.
+		strSpisokNovi = m_pdcclass->udalitPustotu(strSpisokNovi);//Удаляем пробелы по краям, если есть.
+		qDebug()<<strSpisokNovi;
+		QStringList slsSpisok = m_pDataSpisok->polSpisok();//Получить список всех элементов Списка.
+		for(uint untShag = 0; untShag<slsSpisok.size(); untShag++){//Проверка на одинаковые имена элементов 
+			if(slsSpisok[untShag] == strSpisokNovi){
+				qdebug("Нельзя сохранять одинаковые элементы списка.");
 				return;
 			}
 		}
-		m_strSpisok = strSpisok;
+		m_strSpisok = strSpisokNovi;
 		emit strSpisokChanged();//Излучаем сигнал об изменении аргумента.
 	}
 }

@@ -66,8 +66,8 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
-				txnZagolovok.visible = false;
-				cppqml.strSpisok = txnZagolovok.text;//Сохранить название элемента списка.
+				cppqml.strSpisok = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
+				txnZagolovok.visible = false;//Сначала записываем, потом обнуляем.
 			}
 		}
 		Item {
@@ -86,6 +86,8 @@ Item {
 				clrTexta: tmSpisok.clrTexta
 				clrFona: "SlateGray"
 				radius: tmSpisok.ntCoff/2
+				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
+				textInput.maximumLength: 33
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
 					txnZagolovok.visible ? knopkaOk.visible = true : knopkaOk.visible = false; 
 					txnZagolovok.visible ? knopkaSozdat.visible = false : knopkaSozdat.visible = true; 

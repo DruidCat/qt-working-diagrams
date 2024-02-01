@@ -29,6 +29,8 @@ Item {
 			verticalAlignment: TextInput.AlignVCenter
 			text: ""
 			font.pixelSize: tmTextInput.ntWidth*tmTextInput.ntCoff//размер шрифта текста.
+			//font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
+			maximumLength: 33//Максимальная длина ввода текста.
 			readOnly: false//Можно редактировать. 
 			focus: true//Фокус на TextInput
 			selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
