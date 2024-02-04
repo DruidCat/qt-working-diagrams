@@ -41,7 +41,11 @@ QString DCClass::udalitPustotu(QString strTekst){//Удаляет пробелы
 				break;//Выходим из цикла, так как подсчитали количество пустот в конце текста.	
 		}
 	}
-	return strTekst.mid(untKolPustotiNachalo,untTekst-untKolPustotiNachalo-untKolPustotiKonec);//без пустот
+	//Собираем строку символов без пробелов с начала и конца.
+	QByteArray btrStroka;//Массив символов, в котором соберём строку без пробелов с начала и конца.
+	for(int untShag = untKolPustotiNachalo; untShag < untTekst-untKolPustotiKonec; untShag++)
+		btrStroka = btrStroka + btrTekst[untShag];	
+	return QString(btrStroka);//Передаём QString строку.
 }
 QString DCClass::udalitProbeli(QString strTekst){//Удаляем два и более пробела между словами.
 ///////////////////////////////////////////////////////////////////////////////////
