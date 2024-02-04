@@ -19,4 +19,6 @@ var vrUchastki = [
 ]
 */
 
-let strSpisokJSON = JSON.parse(cppqml.strSpisokJSON)
+function fnSpisokJSON () {
+	return JSON.parse(cppqml.strSpisokDB);
+}

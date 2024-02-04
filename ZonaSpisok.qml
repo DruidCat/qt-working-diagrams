@@ -5,11 +5,10 @@ import "qrc:/js/DCFunkciiJS.js" as JSSpisok
 
 Item {
 	id: tmZonaSpisok
-	property int ntWidth: 8
+	property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
-
 	signal clickedSpisok(int ntNomer, var strSpisok);
 
 	ListView {
@@ -47,7 +46,13 @@ Item {
 		anchors.fill: tmZonaSpisok
 		anchors.margins: tmZonaSpisok.ntCoff
 		spacing: tmZonaSpisok.ntCoff//Расстояние между строками
-		model: JSSpisok.strSpisokJSON
+		model: JSSpisok.fnSpisokJSON()
 		delegate: cmpZonaSpisok
+		Connections {//Соединяем сигнал из C++ с действием в QML
+			target: cppqml;//Цель объект класса С++ DCCppQml
+			function onStrSpisokDBChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то.
+				lsvZonaSpisok.model = JSSpisok.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
+			}
+		}
 	}
 }
