@@ -11,11 +11,12 @@ public:
     explicit	DataSpisok(QString strImyaBD, QString strLoginBD, QString strParolBD, QObject* parent = nullptr);
     ~			DataSpisok();//Деструктор.
     bool		dbStart();//Иннициализируем БД, и записываем в нёё данные, если она пустая.
-    QString		polSpisok(uint untNomer);//Получить название элемента Списка по номеру.
+    QString		polSpisok(quint64 ullKod);//Получить название элемента Списка по Коду.
 	QStringList	polSpisok();//Получить полный список всех элементов Списка.
+	bool 		ustSpisok(QString strSpisok);//Записать в БД элемент списка.
     QString		polSpisokJSON();//Получить JSON строчку Списка
-	QString 	polSpisokOpisanie(uint untNomer);//Полчить Описание элемента Списка по номеру.
-	bool 		ustSpisokOpisanie(uint untNomer, QString strSpisokOpisanie);//Записать в БД описание списка.
+	QString 	polSpisokOpisanie(quint64 ullKod);//Полчить Описание элемента Списка по Коду.
+	bool 		ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie);//Записать в БД описание списка
 
 private:
     DCDB* m_pdbSpisok = nullptr;//Указатель на базу данных таблицы списков.

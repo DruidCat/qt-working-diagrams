@@ -66,7 +66,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
-				cppqml.strSpisok = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
+				cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
 				txnZagolovok.visible = false;//Сначала записываем, потом обнуляем.
 			}
 		}
@@ -108,8 +108,8 @@ Item {
 			anchors.fill: tmZona
 			clrTexta: tmSpisok.clrTexta
 			clrFona: "SlateGray"
-			onClickedSpisok: function(ntNomer, strSpisok) {//Слот нажатия на один из элементов Списка.
-				cppqml.untSpisokNomer = ntNomer;//Присваиваем номер списка к свойству Q_PROPERTY
+			onClickedSpisok: function(ntKod, strSpisok) {//Слот нажатия на один из элементов Списка.
+				cppqml.ullSpisokKod = ntKod;//Присваиваем Код списка к свойству Q_PROPERTY
 				cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
 				tmSpisok.clickedSpisok(strSpisok);//Излучаем сигнал с именем элемента Списка.
 			}

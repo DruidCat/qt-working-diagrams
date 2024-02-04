@@ -1,6 +1,7 @@
 #include "dataspisok.h"
 
-DataSpisok::DataSpisok(QString strImyaBD, QString strLoginBD, QString strParolBD, QObject* parent) : QObject{parent}{
+DataSpisok::DataSpisok(QString strImyaBD, QString strLoginBD, QString strParolBD, QObject* parent)
+	: QObject{parent}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
@@ -47,15 +48,15 @@ bool DataSpisok::dbStart() {//Иннициализируем БД, и запис
     }
     return true;//Выход, успех!
 }
-QString DataSpisok::polSpisok(uint untNomer) {//Получить название элемента Списка по номеру.
+QString DataSpisok::polSpisok(quint64 ullKod) {//Получить название элемента Списка по Коду.
 ///////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Н А З В А Н И Е---//
 ///////////////////////////////////////////
-	if (untNomer <=0){//Если номер меньше или равен 0, то...
-		qdebug("DataSpisok::polSpisok(uint untNomer): untNomer меньше или равен 0");//Транслируем ошибку.
+	if (ullKod <=0){//Если номер меньше или равен 0, то...
+		qdebug("DataSpisok::polSpisok(uint ullKod): ullKod меньше или равен 0");//Транслируем ошибку.
 		return "";//Возвращаем пустую строку.
 	}
-    QString strSpisok = m_pdbSpisok->SELECT("Номер", QString::number(untNomer), "Список");
+    QString strSpisok = m_pdbSpisok->SELECT("Номер", QString::number(ullKod), "Список");
     return strSpisok;
 }
 QStringList	DataSpisok::polSpisok(){//Получить полный список всех элементов Списка.
@@ -63,6 +64,19 @@ QStringList	DataSpisok::polSpisok(){//Получить полный список
 //---П О Л У Ч И Т Ь   С П И С О К---//
 ///////////////////////////////////////
 	return m_slsSpisok;//Возвращаем полный список элементов Списка.
+}
+bool DataSpisok::ustSpisok(QString strSpisok){//Записать в БД элемент списка.
+///////////////////////////////////////////////////////
+//---З А П И С А Т Ь   Э Л Е М Е Н Т   С П И С К А---//
+///////////////////////////////////////////////////////
+    quint64 ullKolichestvo = m_pdbSpisok->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
+	if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание"<<"Состав",
+                              QStringList()<<QString::number(ullKolichestvo+1)<<strSpisok
+							  <<"Описание. Необходимо его редактировать."<<"")){
+		return true;//Успех записи в БД.
+	}
+	qdebug("DataSpisok::ustSpisok(): Ошибка записи элемента Списка в БД.");
+	return false;//Ошибка записи в БД.
 }
 QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Списка.
 ///////////////////////////////////////////////////////////////
@@ -105,23 +119,23 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
     strSpisokJSON = strSpisokJSON + "]";//Конец массива объектов.
     return strSpisokJSON;
 }
-QString DataSpisok::polSpisokOpisanie(uint untNomer){//Полчить Описание элемента Списка по номеру.
+QString DataSpisok::polSpisokOpisanie(quint64 ullKod){//Полчить Описание элемента Списка по Коду.
 /////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   О П И С А Н И Е   С П И С К А---//
 /////////////////////////////////////////////////////////
-	if (untNomer <=0){//Если номер меньше или равен 0, то...
-		qdebug("DataSpisok::polSpisokOpisanie(uint untNomer): untNomer меньше или равен 0");//Транслир. ошибку
+	if (ullKod <=0){//Если номер меньше или равен 0, то...
+		qdebug("DataSpisok::polSpisokOpisanie(quint64 ullKod): ullKod меньше или равен 0");//ошибка
 		return "";//Возвращаем пустую строку.
 	}
-    QString strSpisokOpisanie = m_pdbSpisok->SELECT("Номер", QString::number(untNomer), "Описание");
+    QString strSpisokOpisanie = m_pdbSpisok->SELECT("Номер", QString::number(ullKod), "Описание");
     return strSpisokOpisanie;
 }
-bool DataSpisok::ustSpisokOpisanie(uint untNomer, QString strSpisokOpisanie){//Записать в БД описание списка.
+bool DataSpisok::ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie){//Записать в БД описание списк
 /////////////////////////////////////////////////////////
 //---З А П И С А Т Ь   О П И С А Н И Е   С П И С К А---//
 /////////////////////////////////////////////////////////
 		if(m_pdbSpisok->UPDATE(QStringList()<<"Номер"<<"Описание",
-							QStringList()<<QString::number(untNomer)<<strSpisokOpisanie))//Если успех записи
+							QStringList()<<QString::number(ullKod)<<strSpisokOpisanie))//Если успех записи
 			return true;
 		qdebug("DataSpisok::ustSpisokOpisanie() - ошибка записи Описания.");
 		return false;//Ошибка.

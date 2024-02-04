@@ -15,14 +15,14 @@ class DCCppQml : public QObject {
                    READ strSpisok
                    WRITE setStrSpisok
                    NOTIFY strSpisokChanged FINAL)
-    Q_PROPERTY(QString strSpisokJSON
-                   READ strSpisokJSON
-                   WRITE setStrSpisokJSON
-                   NOTIFY strSpisokJSONChanged FINAL)
-    Q_PROPERTY(uint untSpisokNomer
-                   READ untSpisokNomer
-                   WRITE setUntSpisokNomer
-                   NOTIFY untSpisokNomerChanged FINAL)
+    Q_PROPERTY(QString strSpisokDB
+                   READ strSpisokDB
+                   WRITE setStrSpisokDB
+                   NOTIFY strSpisokDBChanged FINAL)
+    Q_PROPERTY(quint64 ullSpisokKod
+                   READ ullSpisokKod
+                   WRITE setUllSpisokKod
+                   NOTIFY ullSpisokKodChanged FINAL)
     Q_PROPERTY(QString strSpisokOpisanie
                    READ strSpisokOpisanie
                    WRITE setStrSpisokOpisanie
@@ -38,21 +38,23 @@ public:
 	//---Методы Q_PROPERTY---//
     QString		strSpisok();//Получить элемента Списка.
     void		setStrSpisok (QString& strSpisokNovi);//Изменение элемента списка.
-    QString		strSpisokJSON();//Возвратить JSON строку Списка.
-    void		setStrSpisokJSON (QString& strSpisokJSONNovi);//Изменение JSON запроса Списка.
-    uint 		untSpisokNomer();//Возвращает номер элемента Списка.
-    void		setUntSpisokNomer(uint untSpisokNomerNovi);//Изменить номер списка.
+    QString		strSpisokDB();//Возвратить JSON строку Списка.
+    void		setStrSpisokDB(QString& strSpisokNovi);//Изменение JSON запроса Списка.
+    quint64		ullSpisokKod();//Возвращает Код элемента Списка.
+    void		setUllSpisokKod(quint64 ullSpisokKodNovi);//Изменить Код списка.
     QString		strSpisokOpisanie();//Возвращает Описание элемента Списка
     void		setStrSpisokOpisanie(QString& strOpisanieNovi);//Изменить описание списка.
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
+	//---Методы---//
+	QString 	redaktorTexta(QString strTekst);//Редактор текста по стандартам Приложения.
 	//---Ошибки---//
 	void 		qdebug(QString strDebug);//Передаёт ошибки в QML через Q_PROPERTY.
 
 signals:
     void strSpisokChanged();//Сигнал о том, что добавился новый элемент Списка.
-    void strSpisokJSONChanged();//Сигнал о том, что изменён JSON запрос Списка.
-    void untSpisokNomerChanged();//Сигнал, что номер выбранного элемента Списка изменился.
+    void strSpisokDBChanged();//Сигнал о том, что записан элемент Списка в БД.
+    void ullSpisokKodChanged();//Сигнал, что Код выбранного элемента Списка изменился.
     void strSpisokOpisanieChanged();//Сигнал, что описание изменилось.
 	void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
@@ -62,8 +64,8 @@ public	slots:
 
 private:
     QString m_strSpisok;//аргумент элемента списка в Свойстве Q_PROPERTY
-    QString m_strSpisokJSON;//аргумент JSON запроса Списка в Свойстве Q_PROPERTY
-	uint	m_untSpisokNomer;//Номер элемента списка в Свойстве Q_PROPERTY.
+    QString m_strSpisokDB;//аргумент JSON запроса Списка в Свойстве Q_PROPERTY
+	quint64	m_ullSpisokKod;//Код элемента списка в Свойстве Q_PROPERTY.
     QString m_strSpisokOpisanie;//аргумент описания элемента списка в Свойстве Q_PROPERTY
 	QString m_strDebug;//Текс ошибки.
 
