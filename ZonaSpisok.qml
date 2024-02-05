@@ -37,7 +37,7 @@ Item {
 					id: maZonaSpisok
 					anchors.fill: rctZonaSpisok
 					onClicked: {
-						tmZonaSpisok.clickedSpisok(modelData.nomer, modelData.spisok)
+						tmZonaSpisok.clickedSpisok(modelData.kod, modelData.spisok)
 					}
 				}
 			}
