@@ -57,6 +57,10 @@ QString DataSpisok::polSpisok(quint64 ullKod) {//Получить названи
 		return "";//Возвращаем пустую строку.
 	}
     QString strSpisok = m_pdbSpisok->SELECT("Код", QString::number(ullKod), "Список");
+	if(strSpisok.isEmpty()){//Если элемент списка пустой, то...
+		qdebug("DataSpisok::polSpisok(quint64) - Код: "
+				+QString::number(ullKod)+" отсутствует, т.к. пустой элемент списка.");
+	}
     return strSpisok;
 }
 QStringList	DataSpisok::polSpisok(){//Получить полный список всех элементов Списка.
