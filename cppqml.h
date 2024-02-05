@@ -8,6 +8,7 @@
 #include "dcdb.h"
 #include "dcclass.h"
 #include "dataspisok.h"
+#include "datasostav.h"
 
 class DCCppQml : public QObject {
     Q_OBJECT
@@ -70,6 +71,7 @@ private:
 	QString m_strDebug;//Текс ошибки.
 
     DataSpisok* m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
+    DataSostav* m_pDataSostav = nullptr;//Указатель на таблицу Состава в БД.
 	QTimer*		m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.
 	uint 		m_untDebugSec;//Счётчик секунд для таймера отладки.
  	DCClass* 	m_pdcclass = nullptr;//Указатель на класс часто используемых методов.
