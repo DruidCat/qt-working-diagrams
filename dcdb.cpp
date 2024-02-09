@@ -38,6 +38,24 @@ DCDB::DCDB(const QString strDriver, const QString strImyaDB, QObject* proditel)
 	m_ntKodKolichestvo = 0;//
 	m_strKodImyaTablic.clear();//
 }
+DCDB::DCDB(QObject* proditel) : QObject(proditel){//Конструктор для QVector, без параметров.
+///////////////////////////////
+//---К О Н С Т Р У К Т О Р---//
+///////////////////////////////
+	m_strDriver = "";//Имя QSL драйвера. Необходимо определить методом.
+	m_strImyaDB = "";//Имя базы данных. Необходимо определить методом.
+	m_strImyaTablici = "";//Имя таблицы в БД.
+	m_strHostName = "127.0.0.1";//Поумолчанию локальное расположение сервера с БД PostgreSQL
+	m_untPort = 5432;//Порт поумолчанию в PostgreSQL
+	m_strUserName = "postgres";//Пользователь по умолчанию в созданной БД PostgreSQL.
+	m_strPassword.clear();//Поумолчанию нет пароля.
+	m_slsGrafi.clear();//
+	m_ntKolGraf = 0;//количество граф.
+	m_strPrimaryKey.clear();//
+	/////коды/////
+	m_ntKodKolichestvo = 0;//
+	m_strKodImyaTablic.clear();//
+}
 
 bool DCDB::checkStatus(){//Открыть и закрыть Базу данных, для того чтобы проверить статус сети. 
 /////////////////////////////////////////
@@ -1062,7 +1080,6 @@ void DCDB::ustImyaTablici(QString  strImyaTablici){//Установить имя
 		}
 	}
 }
-
 
 bool DCDB::kodCREATE(QString strKodImyaTablic, int ntKodKolichestvo){//Создать таблицу кодов.
 ///////////////////////////////////////////////////

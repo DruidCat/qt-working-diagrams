@@ -12,8 +12,9 @@ DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
-    m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");//Динамический указатель на класс.
-    m_pDataSostav = new DataSostav("druidcat.dc", "druidcat", "druidcat");//Динамический указатель на класс.
+	uint untSpisokKolichestvo = 32;//Максимальное Количество классов БД Списка.
+    m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");//Список.
+    m_pDataSostav = new DataSostav("druidcat.dc", "druidcat", "druidcat", untSpisokKolichestvo);//Состав.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
  	m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	connect(	m_pDataSpisok,
@@ -78,6 +79,7 @@ void DCCppQml::setStrSpisokDB(QString& strSpisokNovi) {//Запись элеме
 				return;
 			}
 		}
+		m_pDataSostav->dbStart(1);
 		if(m_pDataSpisok->ustSpisok(strSpisokNovi)){//Если элемент списка записался успешно, то...
         	emit strSpisokDBChanged();//Излучаем сигнал об изменении аргумента.
 		}

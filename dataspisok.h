@@ -8,7 +8,7 @@
 class DataSpisok : public QObject {
     Q_OBJECT
 public:
-    explicit	DataSpisok(QString strImyaBD, QString strLoginBD, QString strParolBD, QObject* parent = nullptr);
+    explicit	DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* parent = nullptr);
     ~			DataSpisok();//Деструктор.
     bool		dbStart();//Иннициализируем БД, и записываем в нёё данные, если она пустая.
     QString		polSpisok(quint64 ullKod);//Получить название элемента Списка по Коду.
@@ -19,13 +19,13 @@ public:
 	bool 		ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie);//Записать в БД описание списка
 
 private:
-    DCDB* m_pdbSpisok = nullptr;//Указатель на базу данных таблицы списков.
-	void qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
+    DCDB* 		m_pdbSpisok = nullptr;//Указатель на базу данных таблицы списков.
+	void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
 	
 	QStringList m_slsSpisok;//Переменная хранящая в себе прочитаный из БД список элементов Списка.
-    QString 	m_strImyaBD;//Имя БД
-    QString 	m_strLoginBD;//Логин БД
-    QString 	m_strParolBD;//Пароль БД
+    QString 	m_strImyaDB;//Имя БД
+    QString 	m_strLoginDB;//Логин БД
+    QString 	m_strParolDB;//Пароль БД
 
 signals:
 	void signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог

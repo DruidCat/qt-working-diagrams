@@ -15,6 +15,7 @@ public:
 	DCDB( 	const QString strDriver, const QString strImyaDB, QString strImyaTablici,
             QObject* proditel = nullptr);
     DCDB( 	const QString strDriver, const QString strImyaDB, QObject* proditel = nullptr);
+    DCDB( 	QObject* proditel = nullptr);
 	bool 	checkStatus();//Открыть и закрыть Базу данных, для того чтобы проверить статус сети.
 	bool 	CREATE(QStringList slsGrafi);//Создать таблицу.
 	bool 	DROP();//Метод удаляющий таблицу в БД.
@@ -33,6 +34,8 @@ public:
 			QString strOrderBy, int ntLimit, int ntSdvig);//Запрос с поиском, ограничениями, сортировкой и лим
 	QSqlQuery CLEAR();//Пустой запрос.
 
+	void 	ustDriverDB(QString strDriver)	{m_strDriver = strDriver;}	//Установить драйвер БД.
+	void 	ustImyaDB(QString strImyaDB)	{m_strImyaDB = strImyaDB;}	//Установить имя БД.
 	QString polImyaDB()						{return m_strImyaDB;}		//Получить имя базы данных.
 	void 	ustImyaTablici(QString  strImyaTablici);//Установить имя таблицы.
 	QString polImyaTablici()				{return m_strImyaTablici;}	//Получить имя таблицы.
