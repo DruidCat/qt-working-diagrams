@@ -12,9 +12,8 @@ DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
-	uint untSpisokKolichestvo = 32;//Максимальное Количество классов БД Списка.
     m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");//Список.
-    m_pDataSostav = new DataSostav("druidcat.dc", "druidcat", "druidcat", untSpisokKolichestvo);//Состав.
+    m_pDataElement = new DataElement("druidcat.dc", "druidcat", "druidcat");//Элементы.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
  	m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	connect(	m_pDataSpisok,
@@ -35,8 +34,8 @@ DCCppQml::~DCCppQml(){//Деструктор.
 //////////////////////////////
 	delete m_pDataSpisok;//Удаляем указатель.
     m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД обнуляем.
-	delete m_pDataSostav;//Удаляем указатель.
-    m_pDataSostav = nullptr;//Указатель на таблицу Состава в БД обнуляем.
+	delete m_pDataElement;//Удаляем указатель.
+    m_pDataElement = nullptr;//Указатель на таблицу Элементов в БД обнуляем.
 	delete m_pTimerDebug;//Удаляем указатель на таймер.
 	m_pTimerDebug = nullptr;//Обнуляем указатель на таймер отладки.
 	delete m_pdcclass;//Удаляем указатель.
@@ -79,7 +78,7 @@ void DCCppQml::setStrSpisokDB(QString& strSpisokNovi) {//Запись элеме
 				return;
 			}
 		}
-		m_pDataSostav->dbStart(1);
+		m_pDataElement->dbStart(1);
 		if(m_pDataSpisok->ustSpisok(strSpisokNovi)){//Если элемент списка записался успешно, то...
         	emit strSpisokDBChanged();//Излучаем сигнал об изменении аргумента.
 		}

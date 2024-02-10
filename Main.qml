@@ -147,33 +147,34 @@ Window {
 				onClickedInfo: {
 				}
 				onClickedSpisok: function(strSpisok) {
-					pgStrSostav.textZagolovok = strSpisok;//Задаём заголовок на второй странице.
-					stvStr.push(pgStrSostav);//Переключаемся на страницу Состава.
+					pgStrElement.textZagolovok = strSpisok;//Задаём заголовок на второй странице.
+					stvStr.push(pgStrElement);//Переключаемся на страницу Состава.
 				}
 			}
 		}
-		Stranica {//Страница Состава Списка
-		/////////////////
-		///С О С Т А В///
-		/////////////////
-			id: pgStrSostav
+		Stranica {//Страница Элементы Списка
+		/////////////////////
+		///Э Л Е М Е Н Т Ы///
+		/////////////////////
+			id: pgStrElement
 			visible: false
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: root.clrStranic
-			StrSostav {
-				id: tmSostav
-				ntWidth: pgStrSostav.ntWidth; ntCoff: pgStrSostav.ntCoff
-				clrTexta: pgStrSostav.clrTexta; clrFona: pgStrSostav.clrRabOblasti
-				zagolovokX: pgStrSostav.rctStrZagolovok.x; zagolovokY: pgStrSostav.rctStrZagolovok.y
-				zagolovokWidth: pgStrSostav.rctStrZagolovok.width
-				zagolovokHeight: pgStrSostav.rctStrZagolovok.height
-				zonaX: pgStrSostav.rctStrZona.x; zonaY: pgStrSostav.rctStrZona.y
-				zonaWidth: pgStrSostav.rctStrZona.width; zonaHeight: pgStrSostav.rctStrZona.height
-				toolbarX: pgStrSostav.rctStrToolbar.x; toolbarY: pgStrSostav.rctStrToolbar.y
-				toolbarWidth: pgStrSostav.rctStrToolbar.width; toolbarHeight: pgStrSostav.rctStrToolbar.height
+			StrElement {
+				id: tmElement
+				ntWidth: pgStrElement.ntWidth; ntCoff: pgStrElement.ntCoff
+				clrTexta: pgStrElement.clrTexta; clrFona: pgStrElement.clrRabOblasti
+				zagolovokX: pgStrElement.rctStrZagolovok.x; zagolovokY: pgStrElement.rctStrZagolovok.y
+				zagolovokWidth: pgStrElement.rctStrZagolovok.width
+				zagolovokHeight: pgStrElement.rctStrZagolovok.height
+				zonaX: pgStrElement.rctStrZona.x; zonaY: pgStrElement.rctStrZona.y
+				zonaWidth: pgStrElement.rctStrZona.width; zonaHeight: pgStrElement.rctStrZona.height
+				toolbarX: pgStrElement.rctStrToolbar.x; toolbarY: pgStrElement.rctStrToolbar.y
+				toolbarWidth: pgStrElement.rctStrToolbar.width
+				toolbarHeight: pgStrElement.rctStrToolbar.height
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.pop()//Назад страницу
 				}

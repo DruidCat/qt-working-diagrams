@@ -34,9 +34,9 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES StrAvtor.qml
 	QML_FILES StrDannie.qml
 	QML_FILES StrDebug.qml
+	QML_FILES StrElement.qml
 	QML_FILES StrMenu.qml
 	QML_FILES StrOpisanie.qml
-	QML_FILES StrSostav.qml
 	QML_FILES StrSpisok.qml
 	QML_FILES Stranica.qml
 	QML_FILES ZonaSpisok.qml
@@ -47,7 +47,7 @@ qt_add_qml_module(appqt-working-diagrams
 	SOURCES dcclass.h dcclass.cpp
 	SOURCES cppqml.h cppqml.cpp
 	SOURCES dataspisok.h dataspisok.cpp
-	SOURCES datasostav.h datasostav.cpp
+	SOURCES dataelement.h dataelement.cpp
 )
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
