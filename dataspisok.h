@@ -4,6 +4,7 @@
 #include <QObject>
 
 #include "dcdb.h"
+#include "dcclass.h"
 
 class DataSpisok : public QObject {
     Q_OBJECT
@@ -17,15 +18,19 @@ public:
     QString		polSpisokJSON();//Получить JSON строчку Списка
 	QString 	polSpisokOpisanie(quint64 ullKod);//Полчить Описание элемента Списка по Коду.
 	bool 		ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie);//Записать в БД описание списка
+	quint64 	polKod(QString strSpisok);//Получить Код по названию элемента списка.
 
 private:
     DCDB* 		m_pdbSpisok = nullptr;//Указатель на базу данных таблицы списков.
-	void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
+	DCClass* 	m_pdcclass = nullptr;//Указатель на мой класс с методами.
 	
 	QStringList m_slsSpisok;//Переменная хранящая в себе прочитаный из БД список элементов Списка.
     QString 	m_strImyaDB;//Имя БД
     QString 	m_strLoginDB;//Логин БД
     QString 	m_strParolDB;//Пароль БД
+
+private slots:
+	void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
 
 signals:
 	void signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог

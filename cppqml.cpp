@@ -78,9 +78,9 @@ void DCCppQml::setStrSpisokDB(QString& strSpisokNovi) {//Запись элеме
 				return;
 			}
 		}
-		m_pDataElement->dbStart(1);
 		if(m_pDataSpisok->ustSpisok(strSpisokNovi)){//Если элемент списка записался успешно, то...
         	emit strSpisokDBChanged();//Излучаем сигнал об изменении аргумента.
+			m_pDataElement->dbStart(m_pDataSpisok->polKod(strSpisokNovi));//Создаём таблицу Элемент_Код
 		}
 	}
 }

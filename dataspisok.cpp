@@ -5,6 +5,7 @@ DataSpisok::DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
+	m_pdcclass = new DCClass();//Мой класс с методами по работе с текстом.
 	m_slsSpisok.clear();//Пустой список элементов Списка.
     //Настройки соединения к БД Настроек.
     m_strImyaDB = strImyaDB;//Имя локальной базы данных.
@@ -15,6 +16,10 @@ DataSpisok::DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB
     m_pdbSpisok->setUserName(m_strLoginDB);//Пользователь.
     m_pdbSpisok->setPassword(m_strParolDB);//Устанавливаем пароль.
     m_pdbSpisok->CREATE(QStringList()<<"#Код"<<"Номер"<<"Список"<<"Описание");
+	connect(	m_pdbSpisok,
+				SIGNAL(signalDebug(QString)),
+				this,
+				SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
 }
 DataSpisok::~DataSpisok(){//Деструктор
 //////////////////////////////
@@ -22,6 +27,8 @@ DataSpisok::~DataSpisok(){//Деструктор
 //////////////////////////////
     delete m_pdbSpisok;//Удаляем указатель на БД Спмска
     m_pdbSpisok = nullptr;//Обнуляем указатель.
+	delete m_pdcclass;//Удаляем указатель
+	m_pdcclass = nullptr;//Обнуляем указатель.
 }
 bool DataSpisok::dbStart() {//Иннициализируем БД, и записываем в нёё данные, если она пустая.
 ///////////////////////////////////////////
@@ -134,6 +141,22 @@ bool DataSpisok::ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie){//
 			return true;
 		qdebug("DataSpisok::ustSpisokOpisanie() - ошибка записи Описания.");
 		return false;//Ошибка.
+}
+quint64 DataSpisok::polKod(QString strSpisok){//Получить Код по названию элемента списка.
+///////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   К О Д   Э Л Е М Е Н Т А---//
+///////////////////////////////////////////////////
+	if (m_pdcclass->isEmpty(strSpisok)){//Если это пустая строка, то...
+		qdebug("DataSpisok::polKod(QString): strSpisok пустая строка.");//Транслируем ошибку.
+		return 0;//Возвращаем пустую строку.
+	}
+    QString strKod = m_pdbSpisok->SELECT("Список", strSpisok, "Код");
+	if(strKod.isEmpty()){//Если строка Кода пустая, то...
+		qdebug("DataSpisok::polKod(QString) - элемент Списка: "
+				+strSpisok+" отсутствует.");
+		return 0;
+	}
+    return strKod.toULongLong();//Возвращаем код элемента строки.
 }
 void DataSpisok::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////

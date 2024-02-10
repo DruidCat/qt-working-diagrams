@@ -17,7 +17,22 @@ DataElement::~DataElement(){//Деструктор
 //////////////////////////////
 }
 bool DataElement::dbStart(quint64 ullKod){//Создать класс БД элемента Списка.
-	return true;
+    DCDB* pdbElement = new DCDB("QSQLITE", m_strImyaDB, "элемент_"+QString::number(ullKod));
+	connect(	pdbElement,
+				SIGNAL(signalDebug(QString)),
+				this,
+				SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    pdbElement->setUserName(m_strLoginDB);//Пользователь.
+    pdbElement->setPassword(m_strParolDB);//Устанавливаем пароль.
+    if(pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание")){//Если таблица создалась, то
+		delete pdbElement;//Удаляем
+		pdbElement = nullptr;//Обнуляем
+		return true;//Успех
+	}
+	delete pdbElement;//Удаляем
+	pdbElement = nullptr;//Обнуляем
+	qdebug("DataElement::dbStart(quint64) - ошибка создания таблицы элемент_"+QString::number(ullKod));
+	return false;//Ошибка.
 }
 void DataElement::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////
