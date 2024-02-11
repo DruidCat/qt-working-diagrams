@@ -37,7 +37,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
-				txnZagolovok.visible = false;
+				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
 				tmSpisok.clickedMenu();//Сигнал Меню
 			}
 		}
@@ -76,7 +76,10 @@ Item {
 			anchors.bottom: tmZagolovok.bottom
 			anchors.left: knopkaMenu.right
 			anchors.right: knopkaSozdat.left
-			anchors.margins: tmSpisok.ntCoff/2
+			anchors.topMargin: tmElement.ntCoff/4
+			anchors.bottomMargin: tmElement.ntCoff/4
+			anchors.leftMargin: tmElement.ntCoff/2
+			anchors.rightMargin: tmElement.ntCoff/2
 			DCTextInput {
 				id: txnZagolovok
 				ntWidth: tmSpisok.ntWidth
@@ -109,6 +112,7 @@ Item {
 			clrTexta: tmSpisok.clrTexta
 			clrFona: "SlateGray"
 			onClickedSpisok: function(ntKod, strSpisok) {//Слот нажатия на один из элементов Списка.
+				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
 				cppqml.ullSpisokKod = ntKod;//Присваиваем Код списка к свойству Q_PROPERTY
 				cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
 				tmSpisok.clickedSpisok(strSpisok);//Излучаем сигнал с именем элемента Списка.

@@ -24,9 +24,11 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
+	signal clickedElement(var strElement);//Сигнал когда нажат один из Элементов.
 	Item {//Состав Заголовок
 		id: tmZagolovok
 		DCKnopkaNazad {
+			id: knopkaNazad
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
 			anchors.left: tmZagolovok.left
@@ -34,10 +36,12 @@ Item {
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
 			onClicked: {
+				txnZagolovok.visible = false;
 				tmElement.clickedNazad();//Сигнал Назад.
 			}
 		}
 		DCKnopkaSozdat {
+			id: knopkaSozdat
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
 			anchors.right: tmZagolovok.right
@@ -46,12 +50,78 @@ Item {
 			clrKnopki: tmElement.clrTexta
 			clrFona: tmElement.clrFona
 			onClicked: {
+				txnZagolovok.visible = true;
+			}
+		}
+		DCKnopkaOk{
+			id: knopkaOk
+			ntWidth: tmElement.ntWidth
+			ntCoff: tmElement.ntCoff
+			visible: false
+			anchors.verticalCenter: tmZagolovok.verticalCenter
+			anchors.right: tmZagolovok.right
+			anchors.margins: tmElement.ntCoff/2
+			clrKnopki: tmElement.clrTexta
+			clrFona: tmElement.clrFona
+			onClicked: {
+				cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
+				txnZagolovok.visible = false;//Сначала записываем, потом обнуляем.
+			}
+		}
+		Item {
+			id: tmTextInput
+			anchors.top: tmZagolovok.top
+			anchors.bottom: tmZagolovok.bottom
+			anchors.left: knopkaNazad.right
+			anchors.right: knopkaSozdat.left
+			anchors.topMargin: tmElement.ntCoff/4
+			anchors.bottomMargin: tmElement.ntCoff/4
+			anchors.leftMargin: tmElement.ntCoff/2
+			anchors.rightMargin: tmElement.ntCoff/2
+			DCTextInput {
+				id: txnZagolovok
+				ntWidth: tmElement.ntWidth
+				ntCoff: tmElement.ntCoff
+				anchors.fill: tmTextInput
+				visible: false
+				clrTexta: tmElement.clrTexta
+				clrFona: "SlateGray"
+				radius: tmElement.ntCoff/2
+				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
+				textInput.maximumLength: 33
+				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
+					txnZagolovok.visible ? knopkaOk.visible = true : knopkaOk.visible = false; 
+					txnZagolovok.visible ? knopkaSozdat.visible = false : knopkaSozdat.visible = true; 
+					if(txnZagolovok.visible == false){//Если DCTextInput не видим, то...
+						txnZagolovok.text = "";//Текст обнуляем вводимый.
+					}
+				}
 			}
 		}
 	}
-	Item {//Состава Зона
+	Item {//Список Рабочей Зоны
 		id: tmZona
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+		ZonaElement {
+			id: lsvZona
+			ntWidth: tmElement.ntWidth
+			ntCoff: tmElement.ntCoff
+			anchors.fill: tmZona
+			clrTexta: tmElement.clrTexta
+			clrFona: "SlateGray"
+			onClicked: function(ntKod, strElement) {//Слот нажатия на один из элементов Списка.
+				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
+				cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
+				//cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
+				tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
+			}
+		}
+		DCLogoTMK {//Логотип
+			ntCoff: 16
+			anchors.centerIn: parent
+			clrLogo: tmElement.clrTexta
+			clrFona: tmElement.clrFona
+		}
 	}
 	Item {//Состава Тулбар
 		id: tmToolbar
@@ -63,6 +133,7 @@ Item {
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
 			onClicked: {//Слот клика кнопки Инфо
+				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
 				tmElement.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
 			}
 		}

@@ -18,7 +18,10 @@ var vrUchastki = [
 			}
 ]
 */
+function fnSpisokJSON () {//Функция чтения JSON запроса Списка из бизнес логики.
+	return JSON.parse(cppqml.strSpisokDB);//Читаем JSON запрос.
+}
 
-function fnSpisokJSON () {
-	return JSON.parse(cppqml.strSpisokDB);
+function fnElementJSON () {//Функция чтения JSON запроса Элементов из бизнес логики.
+	return JSON.parse(cppqml.strElementDB);//Читаем JSON запрос.
 }

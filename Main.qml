@@ -147,8 +147,8 @@ Window {
 				onClickedInfo: {
 				}
 				onClickedSpisok: function(strSpisok) {
-					pgStrElement.textZagolovok = strSpisok;//Задаём заголовок на второй странице.
-					stvStr.push(pgStrElement);//Переключаемся на страницу Состава.
+					pgStrElement.textZagolovok = strSpisok;//Задаём заголовок на странице Данных.
+					stvStr.push(pgStrElement);//Переключаемся на страницу Элементов.
 				}
 			}
 		}
@@ -184,6 +184,10 @@ Window {
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;
 					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
+				}
+				onClickedElement: function(strElement) {
+					pgStrDannie.textZagolovok = strElement;//Задаём заголовок на странице Данных.
+					stvStr.push(pgStrDannie);//Переключаемся на страницу Данных..
 				}
 			}
 		}

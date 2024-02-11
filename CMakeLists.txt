@@ -39,6 +39,7 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES StrOpisanie.qml
 	QML_FILES StrSpisok.qml
 	QML_FILES Stranica.qml
+	QML_FILES ZonaElement.qml
 	QML_FILES ZonaSpisok.qml
 	QML_FILES Main.qml
 	RESOURCES qml.qrc

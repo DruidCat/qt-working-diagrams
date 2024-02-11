@@ -28,11 +28,18 @@ class DCCppQml : public QObject {
                    READ strSpisokOpisanie
                    WRITE setStrSpisokOpisanie
                    NOTIFY strSpisokOpisanieChanged FINAL)
+    Q_PROPERTY(QString strElementDB
+                   READ strElementDB
+                   WRITE setStrElementDB
+                   NOTIFY strElementDBChanged FINAL)
+    Q_PROPERTY(quint64 ullElementKod
+                   READ ullElementKod
+                   WRITE setUllElementKod
+                   NOTIFY ullElementKodChanged FINAL)
     Q_PROPERTY(QString strDebug
                    READ strDebug
                    WRITE setStrDebug
                    NOTIFY strDebugChanged FINAL)
-
 public:
     explicit	DCCppQml(QObject* parent = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
@@ -45,6 +52,10 @@ public:
     void		setUllSpisokKod(quint64 ullSpisokKodNovi);//Изменить Код списка.
     QString		strSpisokOpisanie();//Возвращает Описание элемента Списка
     void		setStrSpisokOpisanie(QString& strOpisanieNovi);//Изменить описание списка.
+    QString		strElementDB();//Возвратить JSON строку элемента.
+    void		setStrElementDB(QString& strSpisokNovi);//Изменение JSON запроса Элемента.
+    quint64		ullElementKod();//Возвращает Код Элемента.
+    void		setUllElementKod(quint64 ullElementKodNovi);//Изменить Код Элемента.
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//
@@ -57,6 +68,8 @@ signals:
     void strSpisokDBChanged();//Сигнал о том, что записан элемент Списка в БД.
     void ullSpisokKodChanged();//Сигнал, что Код выбранного элемента Списка изменился.
     void strSpisokOpisanieChanged();//Сигнал, что описание изменилось.
+    void strElementDBChanged();//Сигнал о том, что записан элемент в БД.
+    void ullElementKodChanged();//Сигнал, что Код выбранного Элемента изменился.
 	void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
@@ -68,6 +81,8 @@ private:
     QString m_strSpisokDB;//аргумент JSON запроса Списка в Свойстве Q_PROPERTY
 	quint64	m_ullSpisokKod;//Код элемента списка в Свойстве Q_PROPERTY.
     QString m_strSpisokOpisanie;//аргумент описания элемента списка в Свойстве Q_PROPERTY
+    QString m_strElementDB;//аргумент JSON запроса Элементов в Свойстве Q_PROPERTY
+	quint64	m_ullElementKod;//Код Элемента в Свойстве Q_PROPERTY.
 	QString m_strDebug;//Текс ошибки.
 
     DataSpisok* m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
