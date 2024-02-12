@@ -9,6 +9,24 @@ DataElement::DataElement(QString strImyaDB, QString strLoginDB, QString strParol
     m_strImyaDB = strImyaDB;//Имя локальной базы данных.
     m_strLoginDB = strLoginDB;//Логин локальной базы данных.
     m_strParolDB = strParolDB;//Пароль локальной базы данных.
+    DCDB* pdbElement = new DCDB("QSQLITE", m_strImyaDB, "элемент_0");//Создаём нулевую таблицу элементов.
+	connect(	pdbElement,
+				SIGNAL(signalDebug(QString)),
+				this,
+				SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    pdbElement->setUserName(m_strLoginDB);//Пользователь.
+    pdbElement->setPassword(m_strParolDB);//Устанавливаем пароль.
+    if(pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание")){//Если таблица создалась, то
+		if(!pdbElement->INSERT(	QStringList()<<"Номер"<<"Элемент"<<"Описание",
+								QStringList()<<"1"<<"druidcat@yandex.ru"<<"druidcat@yandex.ru"))
+			qdebug("DataElement::DataElement: ошибка создания первоначальной записи в таблицу элемент_0.");
+	}
+	else//Если не создалась таблица, то...
+		qdebug("DataElement::DataElement: ошибка создания таблицы элемент_0.");
+	delete pdbElement;//Удаляем
+	pdbElement = nullptr;//Обнуляем
+
+	m_blElementPervi = false;//Не первый Элемент в Списке элементов.(false)
 }
 DataElement::~DataElement(){//Деструктор
 //////////////////////////////
@@ -33,13 +51,16 @@ bool DataElement::dbStart(quint64 ullKod){//Создать класс БД эл�
 	}
 	delete pdbElement;//Удаляем
 	pdbElement = nullptr;//Обнуляем
-	qdebug("DataElement::dbStart(quint64) - ошибка создания таблицы элемент_"+QString::number(ullKod));
+	qdebug("DataElement::dbStart(quint64): ошибка создания таблицы элемент_"+QString::number(ullKod)+".");
 	return false;//Ошибка.
 }
 QStringList	DataElement::polElement(quint64 ullKod){//Получить полный список всех Элементов.
 ///////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   С П И С О К   Э Л Е М Е Н Т О В---//
 ///////////////////////////////////////////////////////////
+	QStringList slsElement;//Пустой список Элементов.
+	if(m_blElementPervi)//Если это первый записываемый элемент, то нет смысла перебирать все элементы...
+		return slsElement;//Возвращаем пустую строку.
     DCDB* pdbElement = new DCDB("QSQLITE", m_strImyaDB, "элемент_"+QString::number(ullKod));
 	connect(	pdbElement,
 				SIGNAL(signalDebug(QString)),
@@ -47,16 +68,16 @@ QStringList	DataElement::polElement(quint64 ullKod){//Получить полн�
 				SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
     pdbElement->setUserName(m_strLoginDB);//Пользователь.
     pdbElement->setPassword(m_strParolDB);//Устанавливаем пароль.
-	QStringList slsElement;//Пустой список Элементов.
     if(!pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание")){//Если таблица не создалась
-		qdebug("DataElement::polElement(quint64) - ошибка создания таблицы элемент_"+QString::number(ullKod));
+		qdebug("DataElement::polElement(quint64): ошибка создания таблицы элемент_"
+				+QString::number(ullKod)+".");
 		delete pdbElement;//Удаляем
 		pdbElement = nullptr;//Обнуляем
 		return slsElement;//Не успех
 	}
     quint64 ullKolichestvo = pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
-		qdebug("DataElement::polElement(quint64): quint64 ullKolichestvo = 0, всего PRIMARY KEY 0.");
+		qdebug("DataElement::polElement(quint64): quint64 = 0, всего PRIMARY KEY 0.");
 		delete pdbElement;//Удаляем
 		pdbElement = nullptr;//Обнуляем
         return slsElement;//Возвращаем пустую строку.
@@ -82,8 +103,8 @@ bool DataElement::ustElement(quint64 ullKod, QString strElement){//Записа�
     pdbElement->setUserName(m_strLoginDB);//Пользователь.
     pdbElement->setPassword(m_strParolDB);//Устанавливаем пароль.
     if(!pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание")){//Если таблица не создалась
-		qdebug("DataElement::ustElement(quint64, QString) - ошибка создания таблицы элемент_"
-				+QString::number(ullKod));
+		qdebug("DataElement::ustElement(quint64, QString): ошибка создания таблицы элемент_"
+				+QString::number(ullKod)+".");
 		delete pdbElement;//Удаляем
 		pdbElement = nullptr;//Обнуляем
 		return false;//Не успех
@@ -114,19 +135,22 @@ QString DataElement::polElementJSON(quint64 ullKod) {//Получить JSON с�
     pdbElement->setUserName(m_strLoginDB);//Пользователь.
     pdbElement->setPassword(m_strParolDB);//Устанавливаем пароль.
     if(!pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание")){//Если таблица не создалась
-		qdebug("DataElement::polElementJSON(quint64) - ошибка создания таблицы элемент_"
-				+QString::number(ullKod));
+		qdebug("DataElement::polElementJSON(quint64): ошибка создания таблицы элемент_"
+				+QString::number(ullKod)+".");
 		delete pdbElement;//Удаляем
 		pdbElement = nullptr;//Обнуляем
 		return "";//Не успех
 	}
     quint64 ullKolichestvo = pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
-		qdebug("DataElement::polElementJSON(quint64): quint64 ullKolichestvo = 0, всего PRIMARY KEY 0.");
+		m_blElementPervi = true;//Первый элемент записывается (true).
+		qdebug("Нажмите кнопку \"Создать новый элемент.\"");
 		delete pdbElement;//Удаляем
 		pdbElement = nullptr;//Обнуляем
-        return "";//Возвращаем пустую строку.
+        return "[{\"kod\":\"0\",\"nomer\":\"0\",\"element\":\"Создайте новый элемент.\"}]";//Возвращаем строку
 	}
+	else
+		m_blElementPervi = false;//Не первый элемент записывается.
     //Пример: [{"kod":"1","nomer":"1","element":"фаска"},{"kod":"2","nomer":"2","element":"торцовка"}]
     strElementJSON = "[";//Начало массива объектов
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){

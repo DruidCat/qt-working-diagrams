@@ -4,54 +4,54 @@ import QtQuick.Window
 import "qrc:/js/DCFunkciiJS.js" as JSSpisok
 
 Item {
-	id: tmZonaSpisok
+	id: tmZona
 	property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
-	signal clickedSpisok(int ntNomer, var strSpisok);
+	signal clicked(int ntNomer, var strSpisok);
 
 	ListView {
-		id: lsvZonaSpisok
+		id: lsvZona
 
 		Component {
-			id: cmpZonaSpisok
+			id: cmpZona
 			Rectangle {
-				id: rctZonaSpisok
-				width: lsvZonaSpisok.width
-				height: tmZonaSpisok.ntWidth*tmZonaSpisok.ntCoff+tmZonaSpisok.ntCoff
-				radius: (width/(tmZonaSpisok.ntWidth*tmZonaSpisok.ntCoff))/tmZonaSpisok.ntCoff
-				color: maZonaSpisok.containsPress
-					   ? Qt.darker(tmZonaSpisok.clrFona, 1.3) : tmZonaSpisok.clrFona
+				id: rctZona
+				width: lsvZona.width
+				height: tmZona.ntWidth*tmZona.ntCoff+tmZona.ntCoff
+				radius: (width/(tmZona.ntWidth*tmZona.ntCoff))/tmZona.ntCoff
+				color: maZona.containsPress
+					   ? Qt.darker(tmZona.clrFona, 1.3) : tmZona.clrFona
 				Text {
-					color: maZonaSpisok.containsPress
-						   ? Qt.darker(tmZonaSpisok.clrTexta, 1.3) : tmZonaSpisok.clrTexta
-					anchors.horizontalCenter: rctZonaSpisok.horizontalCenter
-					anchors.verticalCenter: rctZonaSpisok.verticalCenter
+					color: maZona.containsPress
+						   ? Qt.darker(tmZona.clrTexta, 1.3) : tmZona.clrTexta
+					anchors.horizontalCenter: rctZona.horizontalCenter
+					anchors.verticalCenter: rctZona.verticalCenter
 					text: modelData.spisok
-					font.pixelSize: (rctZonaSpisok.width/text.length>=rctZonaSpisok.height)
-					? rctZonaSpisok.height-tmZonaSpisok.ntCoff
-					: rctZonaSpisok.width/text.length-tmZonaSpisok.ntCoff
+					font.pixelSize: (rctZona.width/text.length>=rctZona.height)
+					? rctZona.height-tmZona.ntCoff
+					: rctZona.width/text.length-tmZona.ntCoff
 				}
 				MouseArea {
-					id: maZonaSpisok
-					anchors.fill: rctZonaSpisok
+					id: maZona
+					anchors.fill: rctZona
 					onClicked: {
-						tmZonaSpisok.clickedSpisok(modelData.kod, modelData.spisok)
+						tmZona.clicked(modelData.kod, modelData.spisok)
 					}
 				}
 			}
 		}
 
-		anchors.fill: tmZonaSpisok
-		anchors.margins: tmZonaSpisok.ntCoff
-		spacing: tmZonaSpisok.ntCoff//Расстояние между строками
+		anchors.fill: tmZona
+		anchors.margins: tmZona.ntCoff
+		spacing: tmZona.ntCoff//Расстояние между строками
 		model: JSSpisok.fnSpisokJSON()
-		delegate: cmpZonaSpisok
+		delegate: cmpZona
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrSpisokDBChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то.
-				lsvZonaSpisok.model = JSSpisok.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
+				lsvZona.model = JSSpisok.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
 			}
 		}
 	}

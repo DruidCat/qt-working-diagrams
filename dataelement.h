@@ -15,10 +15,11 @@ public:
 	bool 		ustElement(quint64 ullKod, QString strElement);//Записать в БД Элемент.
     QString		polElementJSON(quint64 ullKod);//Получить JSON строчку Элементов. 
 private:
-
     QString 	m_strImyaDB;//Имя БД
     QString 	m_strLoginDB;//Логин БД
     QString 	m_strParolDB;//Пароль БД
+
+	bool 		m_blElementPervi;//Первый Элемент в Списке элементов.
 
 private slots:
 	void qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог

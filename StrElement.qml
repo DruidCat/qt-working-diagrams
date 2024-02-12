@@ -112,7 +112,7 @@ Item {
 			onClicked: function(ntKod, strElement) {//Слот нажатия на один из элементов Списка.
 				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
 				cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
-				//cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
+				cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPERTY
 				tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
 			}
 		}

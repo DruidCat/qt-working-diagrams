@@ -7,6 +7,7 @@ DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
 										m_strSpisokDB(""),
 										m_ullSpisokKod(0),
 										m_strSpisokOpisanie(""),
+										m_strElement(""),
 										m_strElementDB(""),
 										m_ullElementKod(0),
 										m_strDebug("")
@@ -101,7 +102,7 @@ void DCCppQml::setUllSpisokKod(quint64 ullSpisokKodNovi){//Изменить ко
 //---У С Т А Н О В И Т Ь   К О Д   С П И С К А---//
 ///////////////////////////////////////////////////
 	if (ullSpisokKodNovi<=0)//Если номер меньше или равен 0, то...
-		qdebug("DCCppQml::setUllSpisokKod(quint64): ullSpisokKodNovi меньше или равен 0.");
+		qdebug("DCCppQml::setUllSpisokKod(quint64): quint64 меньше или равен 0.");
 	else {//Иначе...
 		if (m_ullSpisokKod != ullSpisokKodNovi){//Если не равны параметры, то...
 			m_ullSpisokKod = ullSpisokKodNovi;
@@ -133,6 +134,21 @@ void DCCppQml::setStrSpisokOpisanie(QString& strSpisokOpisanieNovi){//Измен
 		}
 	}
 }
+QString DCCppQml::strElement() {//Получить элемент.
+/////////////////////////////////////////
+//---П О Л У Ч И Т Ь   Э Л Е М Е Н Т---//
+/////////////////////////////////////////
+    return m_strElement;
+}
+void DCCppQml::setStrElement(QString& strElementNovi) {//Изменение элемента.
+/////////////////////////////////////////////
+//---И З М Е Н Е Н И Е   Э Л Е М Е Н Т А---//
+/////////////////////////////////////////////
+	if(strElementNovi != m_strElement){//Если элемент не равен выбранному до этого, то...
+		m_strElement = strElementNovi;//Приравниваем.
+		emit strElementChanged();//Излучаем сигнал об изменении аргумента.
+	}
+}
 QString DCCppQml::strElementDB() {//Возвратить JSON строку Элементов.
 ///////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   Э Л Е М Е Н Т О В---//
@@ -148,8 +164,8 @@ void DCCppQml::setStrElementDB(QString& strElementNovi) {//Запись Элем
 		qdebug("Нельзя сохранять пустой элемент.");
 	else{
 		strElementNovi = redaktorTexta(strElementNovi);//Редактируем текст по стандартам приложения.
-		QStringList slsSpisok = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементов.
-		for(uint untShag = 0; untShag<slsSpisok.size(); untShag++){//Проверка на одинаковые имена элементов 
+		QStringList slsSpisok = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементо
+		for(uint untShag = 0; untShag<slsSpisok.size(); untShag++){//Проверка на одинаковые имена элементо 
 			if(slsSpisok[untShag] == strElementNovi){
 				qdebug("Нельзя сохранять одинаковые элементы.");
 				return;
@@ -171,7 +187,7 @@ void DCCppQml::setUllElementKod(quint64 ullElementKodNovi){//Изменить к
 //---У С Т А Н О В И Т Ь   К О Д   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////////////////////
 	if (ullElementKodNovi<=0)//Если номер меньше или равен 0, то...
-		qdebug("DCCppQml::setUllElementKod(quint64): ullElementKodNovi меньше или равен 0.");
+		qdebug("DCCppQml::setUllElementKod(quint64): quint64 меньше или равен 0.");
 	else {//Иначе...
 		if (m_ullElementKod != ullElementKodNovi){//Если не равны параметры, то...
 			m_ullElementKod = ullElementKodNovi;

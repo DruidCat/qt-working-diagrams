@@ -111,7 +111,7 @@ Item {
 			anchors.fill: tmZona
 			clrTexta: tmSpisok.clrTexta
 			clrFona: "SlateGray"
-			onClickedSpisok: function(ntKod, strSpisok) {//Слот нажатия на один из элементов Списка.
+			onClicked: function(ntKod, strSpisok) {//Слот нажатия на один из элементов Списка.
 				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
 				cppqml.ullSpisokKod = ntKod;//Присваиваем Код списка к свойству Q_PROPERTY
 				cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
