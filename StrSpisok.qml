@@ -111,6 +111,9 @@ Item {
 				onClickedEnter: {//Если нажата Enter, то такое же действие, как и при нажатии кнопки Ок.
 					fnClickedOk();//Нажимаем на кнопки Сохранить. Чтоб не изменять в нескольких местах.
 				}
+				onClickedEscape: {
+					txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+				}
 			}
 		}
 	}

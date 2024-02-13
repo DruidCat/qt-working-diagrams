@@ -108,6 +108,9 @@ Item {
 				onClickedEnter: {//слот нажатия кнопки Enter.
 					fnClickedOk();//Функция сохранения данных.
 				}
+				onClickedEscape: {
+					txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+				}
 			}
 		}
 	}
