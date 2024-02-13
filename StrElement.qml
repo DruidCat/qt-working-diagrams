@@ -25,7 +25,12 @@ Item {
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedElement(var strElement);//Сигнал когда нажат один из Элементов.
-	Item {//Состав Заголовок
+
+	function fnClickedOk(){//Функция сохранения данных.
+		cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
+		txnZagolovok.visible = false;//Сначала записываем, потом обнуляем.
+	}
+	Item {//Элементы Заголовок
 		id: tmZagolovok
 		DCKnopkaNazad {
 			id: knopkaNazad
@@ -64,8 +69,7 @@ Item {
 			clrKnopki: tmElement.clrTexta
 			clrFona: tmElement.clrFona
 			onClicked: {
-				cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
-				txnZagolovok.visible = false;//Сначала записываем, потом обнуляем.
+				fnClickedOk();//Функция сохранения данных.
 			}
 		}
 		Item {
@@ -94,7 +98,15 @@ Item {
 					txnZagolovok.visible ? knopkaSozdat.visible = false : knopkaSozdat.visible = true; 
 					if(txnZagolovok.visible == false){//Если DCTextInput не видим, то...
 						txnZagolovok.text = "";//Текст обнуляем вводимый.
+						knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
 					}
+					else{//Если DCTextInput видимый, то...
+						textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
+						textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+					}
+				}
+				onClickedEnter: {//слот нажатия кнопки Enter.
+					fnClickedOk();//Функция сохранения данных.
 				}
 			}
 		}

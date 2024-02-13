@@ -25,8 +25,14 @@ Item {
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedSpisok(var strSpisok);//Сигнал когда нажат один из элементов Списка.
+
+	function fnClickedOk(){//Функция сохранения данных.
+		cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
+		txnZagolovok.visible = false;//Сначала записываем, потом обнуляем.		
+	}
 	Item {//Спискок Заголовка
 		id: tmZagolovok
+
 		DCKnopkaMenu {
 			id: knopkaMenu
 			ntWidth: tmSpisok.ntWidth
@@ -65,9 +71,8 @@ Item {
 			anchors.margins: tmSpisok.ntCoff/2
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
-			onClicked: {
-				cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
-				txnZagolovok.visible = false;//Сначала записываем, потом обнуляем.
+			onClicked: {//Нажимаем Сохранить.
+				fnClickedOk();//Нажимаем на кнопки Сохранить. Чтоб не изменять в нескольких местах.
 			}
 		}
 		Item {
@@ -96,7 +101,15 @@ Item {
 					txnZagolovok.visible ? knopkaSozdat.visible = false : knopkaSozdat.visible = true; 
 					if(txnZagolovok.visible == false){//Если DCTextInput не видим, то...
 						txnZagolovok.text = "";//Текст обнуляем вводимый.
+						knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
 					}
+					else{
+						textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
+						textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+					}
+				}
+				onClickedEnter: {//Если нажата Enter, то такое же действие, как и при нажатии кнопки Ок.
+					fnClickedOk();//Нажимаем на кнопки Сохранить. Чтоб не изменять в нескольких местах.
 				}
 			}
 		}

@@ -13,6 +13,7 @@ Item {
     property int  ntWidth: 2
     property int ntCoff: 8
     anchors.fill: parent
+	signal clickedEnter();
 
     Rectangle {
         id: rctTextInput
@@ -36,6 +37,11 @@ Item {
 			selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
 			//cursorPosition: text.length;//Курсор в конец текста
 			cursorVisible: true//Курсор сделать видимым
+			Keys.onPressed: event => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+				if(event.key === 16777220){//Код 16777220 - Enter
+					tmTextInput.clickedEnter();//Излучаем сигнал о том, что нажат Enter.
+				}
+			}
 		}
     }
 }
