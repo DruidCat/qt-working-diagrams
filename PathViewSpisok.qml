@@ -97,12 +97,8 @@ Item {
 		path: pthSpisok//Устанавливаем габариты и направление скролинга в представлении
 		pathItemCount: 3//Количество отображаемых элементов в представлении.
 		snapMode: PathView.SnapOneItem
-		/*
-		//Не работает, хз почему.
-		focus: true//Без фокуса не будут работать клавиши.
 		Keys.onUpPressed: decrementCurrentIndex();
 		Keys.onDownPressed: incrementCurrentIndex();
-		*/
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrSpisokDBChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то...
@@ -111,7 +107,6 @@ Item {
 		}
 	}
 	Component.onCompleted: {//Слот, кода всё представление отрисовалось.
-		//console.debug(pvwSpisok.pathItemCount);
+		pvwSpisok.forceActiveFocus();//Без форсированного фокуса не будут работать клавиши.
 	}
-
 }
