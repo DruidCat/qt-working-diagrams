@@ -20,7 +20,7 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES DCKnopkaInfo.qml
 	# QML_FILES DCKnopkaKruglaya.qml
 	QML_FILES DCKnopkaMenu.qml
-	# QML_FILES DCKnopkaNastroiki.qml
+	QML_FILES DCKnopkaNastroiki.qml
 	QML_FILES DCKnopkaNazad.qml
 	QML_FILES DCKnopkaOk.qml
 	QML_FILES DCKnopkaOriginal.qml
@@ -38,6 +38,7 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES StrMenu.qml
 	QML_FILES StrOpisanie.qml
 	QML_FILES StrSpisok.qml
+	QML_FILES StrSvet.qml
 	QML_FILES Stranica.qml
 	QML_FILES ZonaElement.qml
 	QML_FILES ZonaSpisok.qml

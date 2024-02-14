@@ -10,6 +10,7 @@ DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
 										m_strElement(""),
 										m_strElementDB(""),
 										m_ullElementKod(0),
+										m_blElementPervi(false),
 										m_strDebug("")
 {
 ///////////////////////////////
@@ -154,6 +155,7 @@ QString DCCppQml::strElementDB() {//Возвратить JSON строку Эл�
 //---П О Л У Ч И Т Ь   J S O N   Э Л Е М Е Н Т О В---//
 ///////////////////////////////////////////////////////
     m_strElementDB = m_pDataElement->polElementJSON(m_ullSpisokKod);//Считываем строку JSON.
+	m_blElementPervi = m_pDataElement->polElementPervi();//Первый элемент или нет? Строчка обязательна тут.
     return m_strElementDB;//И только после этого возвращаем её, это важно.
 }
 void DCCppQml::setStrElementDB(QString& strElementNovi) {//Запись Элемента в БД.

@@ -125,10 +125,15 @@ Item {
 			clrTexta: tmElement.clrTexta
 			clrFona: "SlateGray"
 			onClicked: function(ntKod, strElement) {//Слот нажатия на один из элементов Списка.
-				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
-				cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
-				cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPERTY
-				tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
+				if(cppqml.blElementPervi){//Если это первый элемент, то...
+					txnZagolovok.visible = true;//Включаем создание Элемента.
+				}
+				else{//Если не первый элемент, то...
+					txnZagolovok.visible = false;//Отключаем создание Элемента.
+					cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
+					cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPERTY
+					tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
+				}
 			}
 		}
 		DCLogoTMK {//Логотип
@@ -150,6 +155,18 @@ Item {
 			onClicked: {//Слот клика кнопки Инфо
 				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
 				tmElement.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
+			}
+		}
+		DCKnopkaNastroiki {
+			ntWidth: tmElement.ntWidth
+			ntCoff: tmElement.ntCoff
+			anchors.verticalCenter: tmToolbar.verticalCenter
+			anchors.left: tmToolbar.left
+			anchors.margins: tmElement.ntCoff/2
+			clrKnopki: tmElement.clrTexta
+			clrFona: tmElement.clrFona
+			onClicked: {
+
 			}
 		}
 	}

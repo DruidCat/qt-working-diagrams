@@ -24,6 +24,7 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	signal clickedAvtor();//Сигнал нажатия кнопки Автор.
+	signal clickedSvet();//Сигнал нажатия кнопки Потолочное освещение.
 	Item {
 		id: tmZagolovok
 		DCKnopkaNazad {
@@ -74,7 +75,7 @@ Item {
 			}
 		}
 		DCKnopkaOriginal {
-			id: zonaKnopkaSpisok
+			id: knopkaSpisok
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
 			anchors.top: knopkaAvtor.bottom
 			anchors.left: tmZona.left
@@ -90,6 +91,22 @@ Item {
 				pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
 			}
 		}
+		DCKnopkaOriginal {
+			id: knopkaSvet
+			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+			anchors.top: knopkaSpisok.bottom
+			anchors.left: tmZona.left
+			anchors.right: tmZona.right
+			anchors.margins: tmMenu.ntCoff/2
+			clrKnopki: "slategray"
+			clrTexta: tmMenu.clrTexta
+			text: "Потолочное освещение"
+			bold: true
+			italic: true
+			onClicked: {//Слот запускающий 
+				tmMenu.clickedSvet();//Сигнал нажатия кнопки Потолочного освещения.
+			}
+		}
 		PathViewSpisok {
 			id: pvSpisok
 			visible: false
@@ -103,7 +120,7 @@ Item {
 			clrFona: "SlateGray"
 			onSSpisok: function(strSpisok) {
 				pvSpisok.visible = false;
-				zonaKnopkaSpisok.text = strSpisok;
+				knopkaSpisok.text = strSpisok;
 			}
 		}
 	}

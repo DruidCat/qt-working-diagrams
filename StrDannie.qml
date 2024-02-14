@@ -68,5 +68,17 @@ Item {
 				tmDannie.clickedInfo();
             }
         }
+		DCKnopkaNastroiki {
+			ntWidth: tmDannie.ntWidth
+			ntCoff: tmDannie.ntCoff
+			anchors.verticalCenter: tmToolbar.verticalCenter
+			anchors.left: tmToolbar.left
+			anchors.margins: tmDannie.ntCoff/2
+			clrKnopki: tmDannie.clrTexta
+			clrFona: tmDannie.clrFona
+			onClicked: {
+
+			}
+		}
     }
 }

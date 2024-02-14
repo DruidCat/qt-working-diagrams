@@ -55,6 +55,9 @@ Window {
 				onClickedAvtor: {
 					stvStr.push(pgStrAvtor)//Переходим на страницу об Авторе.
 				}
+				onClickedSvet: {
+					stvStr.push(pgStrSvet)//Переходим на страницу Потолочного освещения.
+				}
 			}
 		}
 		Stranica {//Debug
@@ -110,6 +113,34 @@ Window {
 				toolbarX: pgStrAvtor.rctStrToolbar.x; toolbarY: pgStrAvtor.rctStrToolbar.y
 				toolbarWidth: pgStrAvtor.rctStrToolbar.width; toolbarHeight: pgStrAvtor.rctStrToolbar.height
 				radiusTextEdit: pgStrAvtor.rctStrZona.radius//Радиус берём из настроек элемента qml
+				onClickedNazad: {
+					stvStr.pop()//Назад страницу
+				}
+			}
+		}
+		Stranica {//Свет
+		/////////////
+		///С В Е Т///
+		/////////////
+			id: pgStrSvet
+			visible: false
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
+			clrRabOblasti: "black"
+			textZagolovok: "Управление потолочным освещением"
+			StrSvet {
+				id: tmSvet
+				ntWidth: pgStrSvet.ntWidth; ntCoff: pgStrSvet.ntCoff
+				clrTexta: pgStrSvet.clrTexta; clrFona: pgStrSvet.clrRabOblasti
+				zagolovokX: pgStrSvet.rctStrZagolovok.x; zagolovokY: pgStrSvet.rctStrZagolovok.y
+				zagolovokWidth: pgStrSvet.rctStrZagolovok.width
+				zagolovokHeight: pgStrSvet.rctStrZagolovok.height
+				zonaX: pgStrSvet.rctStrZona.x; zonaY: pgStrSvet.rctStrZona.y
+				zonaWidth: pgStrSvet.rctStrZona.width; zonaHeight: pgStrSvet.rctStrZona.height
+				toolbarX: pgStrSvet.rctStrToolbar.x; toolbarY: pgStrSvet.rctStrToolbar.y
+				toolbarWidth: pgStrSvet.rctStrToolbar.width; toolbarHeight: pgStrSvet.rctStrToolbar.height
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}

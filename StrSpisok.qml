@@ -155,5 +155,17 @@ Item {
 				txnZagolovok.visible = false;//Делаем невидимым ввод текста.
 			}
 		}
+		DCKnopkaNastroiki {
+			ntWidth: tmSpisok.ntWidth
+			ntCoff: tmSpisok.ntCoff
+			anchors.verticalCenter: tmToolbar.verticalCenter
+			anchors.left: tmToolbar.left
+			anchors.margins: tmSpisok.ntCoff/2
+			clrKnopki: tmSpisok.clrTexta
+			clrFona: tmSpisok.clrFona
+			onClicked: {
+
+			}
+		}
 	}
 }

@@ -40,6 +40,8 @@ class DCCppQml : public QObject {
                    READ ullElementKod
                    WRITE setUllElementKod
                    NOTIFY ullElementKodChanged FINAL)
+    Q_PROPERTY(bool blElementPervi
+                   READ blElementPervi FINAL)
     Q_PROPERTY(QString strDebug
                    READ strDebug
                    WRITE setStrDebug
@@ -62,6 +64,7 @@ public:
     void		setStrElementDB(QString& strElementNovi);//Изменение JSON запроса Элемента.
     quint64		ullElementKod();//Возвращает Код Элемента.
     void		setUllElementKod(quint64 ullElementKodNovi);//Изменить Код Элемента.
+    bool 		blElementPervi() { return m_blElementPervi; }//Возвращает флаг Первый Элемент?
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//
@@ -91,6 +94,7 @@ private:
     QString m_strElement;//переменная записывающая Элемент в Свойстве Q_PROPERTY
     QString m_strElementDB;//аргумент JSON запроса Элементов в Свойстве Q_PROPERTY
 	quint64	m_ullElementKod;//Код Элемента в Свойстве Q_PROPERTY.
+	bool 	m_blElementPervi;//Флаг Первый Элемент? в Свойстве Q_PROPERTY.
 	QString m_strDebug;//Текс ошибки.
 
     DataSpisok* m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
