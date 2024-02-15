@@ -1,23 +1,18 @@
-/*
-var vrUchastki = [
+var vrMenuSpisok = [
 			{
-				"nomer": 1,
-				"spisok": "Формовка",
-				"opisanie": "Участок формовки и всё такое."
+				"nomer": "1",
+				"menu": "Переименовать"
 			},
 			{
-				"nomer": 2,
-				"spisok": "Сварка",
-				"opisanie": "Участок сварки и всё такое."
-
+				"nomer": "2",
+				"menu": "Удалить"
 			},
 			{
-				"nomer": 3,
-				"spisok": "Отделка",
-				"opisanie": "Участок отделки и всё такое."
+				"nomer": "3",
+				"menu": "Выход"
 			}
 ]
-*/
+
 function fnSpisokJSON () {//Функция чтения JSON запроса Списка из бизнес логики.
 	return JSON.parse(cppqml.strSpisokDB);//Читаем JSON запрос.
 }

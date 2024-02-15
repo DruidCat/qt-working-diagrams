@@ -169,6 +169,7 @@ Window {
 				zonaWidth: pgStrSpisok.rctStrZona.width; zonaHeight: pgStrSpisok.rctStrZona.height
 				toolbarX: pgStrSpisok.rctStrToolbar.x; toolbarY: pgStrSpisok.rctStrToolbar.y
 				toolbarWidth: pgStrSpisok.rctStrToolbar.width; toolbarHeight: pgStrSpisok.rctStrToolbar.height
+				radiusZona: pgStrSpisok.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedMenu: {//Слот нажатия кнопки Меню.
 					stvStr.push(pgStrMenu)//Перейти на страницу Меню
 				}

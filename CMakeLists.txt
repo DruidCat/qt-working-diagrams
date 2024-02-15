@@ -43,6 +43,7 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES ZonaElement.qml
 	QML_FILES ZonaSpisok.qml
 	QML_FILES Main.qml
+	QML_FILES MenuSpisok.qml
 	RESOURCES qml.qrc
 	SOURCES main.cpp
 	SOURCES dcdb.h dcdb.cpp
