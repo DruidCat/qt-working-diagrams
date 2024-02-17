@@ -54,6 +54,7 @@ public:
     void		setStrSpisok (QString& strSpisokNovi);//Изменение элемента списка.
     QString		strSpisokDB();//Возвратить JSON строку Списка.
     void		setStrSpisokDB(QString& strSpisokNovi);//Изменение JSON запроса Списка.
+	Q_INVOKABLE bool renStrSpisokDB(QString strSpisok, QString strSpisokNovi);//Переимен. элемент Списка
     quint64		ullSpisokKod();//Возвращает Код элемента Списка.
     void		setUllSpisokKod(quint64 ullSpisokKodNovi);//Изменить Код списка.
     QString		strSpisokOpisanie();//Возвращает Описание элемента Списка

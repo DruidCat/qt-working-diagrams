@@ -28,11 +28,16 @@ Item {
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedSpisok(var strSpisok);//Сигнал когда нажат один из элементов Списка.
 
-	function fnClickedOk(){//Функция сохранения данных.
+	function fnClickedOk(){//Функция сохранения/переименования элемента Списка.
+		if(blPereimenovat){//Если Переименовываем, то...
+			cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text);//Переименовываем элемент Списка.
+		}
+		else{//иначе...
+			cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
+		}
 		blPereimenovat = false;//Запрещено переименовывать.
 		menuSpisok.visible = false;//Делаем невидимым меню.
-		cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
-		txnZagolovok.visible = false;//Сначала записываем, потом обнуляем.		
+		txnZagolovok.visible = false;//Сначала записываем или переименовываем, и только потом обнуляем.		
 	}
 	Item {//Спискок Заголовка
 		id: tmZagolovok
@@ -79,8 +84,8 @@ Item {
 			anchors.margins: tmSpisok.ntCoff/2
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
-			onClicked: {//Нажимаем Сохранить.
-				fnClickedOk();//Нажимаем на кнопки Сохранить. Чтоб не изменять в нескольких местах.
+			onClicked: {//Нажимаем Ок.
+				fnClickedOk();//Нажимаем на Ок(Сохранить/Переименовать), чтоб не изменять в нескольких местах.
 			}
 		}
 		Item {
@@ -117,7 +122,7 @@ Item {
 					}
 				}
 				onClickedEnter: {//Если нажата Enter, то такое же действие, как и при нажатии кнопки Ок.
-					fnClickedOk();//Нажимаем на кнопки Сохранить. Чтоб не изменять в нескольких местах.
+					fnClickedOk();//Нажимаем Ок(Сохранить/Переименовать), чтоб не менять в нескольких местах.
 				}
 				onClickedEscape: {
 					txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
@@ -147,6 +152,7 @@ Item {
 				onClicked: function(ntKod, strSpisok) {//Слот нажатия на один из элементов Списка.
 					if(blPereimenovat){
 						txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
+						cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
 						txnZagolovok.text = strSpisok;//Добавляем в строку выбранный элемент Списка.
 					}
 					else{
@@ -165,7 +171,7 @@ Item {
 				clrLogo: tmSpisok.clrTexta
 				clrFona: tmSpisok.clrFona
 			}
-			MenuSpisok {
+			DCMenu {
 				id: menuSpisok
 				visible: false//Невидимое меню. 
 				ntWidth: tmSpisok.ntWidth
@@ -176,13 +182,13 @@ Item {
 				anchors.margins: tmSpisok.ntCoff
 				clrTexta: tmSpisok.clrTexta
 				clrFona: "SlateGray"
+				imyaMenu: "spisok"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
 					menuSpisok.visible = false;//Делаем невидимым меню.
-					if(ntNomer == 1){
+					if(ntNomer == 2){//Переименовать.
 						blPereimenovat = true;
-						//TODO сделать борюр редактирования.
 					}
-					if(ntNomer == 3){//Выход
+					if(ntNomer == 4){//Выход
 						Qt.quit();//Закрыть приложение.
 					}
 				}

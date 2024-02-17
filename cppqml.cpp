@@ -92,6 +92,30 @@ void DCCppQml::setStrSpisokDB(QString& strSpisokNovi) {//Запись элеме
 		}
 	}
 }
+bool DCCppQml::renStrSpisokDB(QString strSpisok, QString strSpisokNovi){//Переимен. элемент Списка
+/////////////////////////////////////////////////////////////////
+//---П Е Р Е И М Е Н О В А Т Ь   Э Л Е М Е Н Т   С П И С К А---//
+/////////////////////////////////////////////////////////////////
+	if(m_pdcclass->isEmpty(strSpisokNovi)){//Если пустая строка, то...
+		qdebug("Нельзя переименовывать на пустой элемент списка.");
+		return false;//Отмена.
+	}
+	else{
+		strSpisokNovi = redaktorTexta(strSpisokNovi);//Редактируем текст по стандартам приложения.
+		QStringList slsSpisok = m_pDataSpisok->polSpisok();//Получить список всех элементов Списка.
+		for(uint untShag = 0; untShag<slsSpisok.size(); untShag++){//Проверка на одинаковые имена элементов 
+			if(slsSpisok[untShag] == strSpisokNovi){
+				qdebug("Нельзя переименовывать на одноимённый элемент списка.");
+				return false;//Отмена.
+			}
+		}
+		if(m_pDataSpisok->renSpisok(strSpisok, strSpisokNovi))//Если элемент списка записался успешно, то...
+        	emit strSpisokDBChanged();//Излучаем сигнал об изменении аргумента.
+		else
+			return false;//Отмена.
+	}
+	return true;//Успех.
+}
 quint64 DCCppQml::ullSpisokKod(){//Возвращает Код элемента Списка.
 ///////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   К О Д   С П И С К А---//

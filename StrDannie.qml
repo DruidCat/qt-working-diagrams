@@ -52,7 +52,36 @@ Item {
     }
     Item {//Данные Зона
 		id: tmZona
-        clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+		Rectangle {
+			id: rctZona
+			anchors.fill: tmZona
+			color: "transparent"
+			border.width: tmDannie.ntCoff/2//Бордюр при переименовании.
+			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+
+			DCMenu {
+				id: menuDannie
+				visible: false//Невидимое меню. 
+				ntWidth: tmDannie.ntWidth
+				ntCoff: tmDannie.ntCoff
+				anchors.left: rctZona.left
+				anchors.right: rctZona.right
+				anchors.bottom: rctZona.bottom
+				anchors.margins: tmDannie.ntCoff
+				clrTexta: tmDannie.clrTexta
+				clrFona: "SlateGray"
+				imyaMenu: "dannie"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
+				onClicked: function(ntNomer, strMenu) {
+					menuDannie.visible = false;//Делаем невидимым меню.
+					if(ntNomer == 2){//Переименовать.
+						//blPereimenovat = true;
+					}
+					if(ntNomer == 4){//Выход
+						Qt.quit();//Закрыть приложение.
+					}
+				}
+			}
+		}
     }
     Item {//Данные Тулбар
 		id: tmToolbar
@@ -77,7 +106,9 @@ Item {
 			clrKnopki: tmDannie.clrTexta
 			clrFona: tmDannie.clrFona
 			onClicked: {
-
+				//blPereimenovat = false;//Запрещено переименовывать.
+				menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;	
+				//txnZagolovok.visible = false;//Отключаем создание Элемента списка.
 			}
 		}
     }

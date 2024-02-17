@@ -28,6 +28,7 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES DCKnopkaSozdat.qml
 	# QML_FILES DCKnopkaZakrit.qml
 	QML_FILES DCLogoTMK.qml
+	QML_FILES DCMenu.qml
 	QML_FILES DCTextEdit.qml
 	QML_FILES DCTextInput.qml
 	QML_FILES PathViewSpisok.qml
@@ -43,7 +44,6 @@ qt_add_qml_module(appqt-working-diagrams
 	QML_FILES ZonaElement.qml
 	QML_FILES ZonaSpisok.qml
 	QML_FILES Main.qml
-	QML_FILES MenuSpisok.qml
 	RESOURCES qml.qrc
 	SOURCES main.cpp
 	SOURCES dcdb.h dcdb.cpp

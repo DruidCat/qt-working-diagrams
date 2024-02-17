@@ -9,8 +9,8 @@ Item {
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
+	property string imyaMenu: "spisok"
 	signal clicked(int ntNomer, var strMenu)
-	height:3*(ntWidth*ntCoff+ntCoff)+ntCoff
 	ListView {
 		id: lsvMenu
 		Component {
@@ -50,7 +50,23 @@ Item {
 		anchors.rightMargin:tmMenu.width/2
 		opacity: 0.7//Прозрачность.
 		interactive: false//Запретить листать.
-		model: JSMenu.vrMenuSpisok
+		//model: JSMenu.vrMenuSpisok
 		delegate: cmpMenu
+	}
+	Component.onCompleted: {//Слот, кода всё представление отрисовалось.
+		if(imyaMenu == "spisok"){//Если это Список, то...
+			lsvMenu.model = JSMenu.vrMenuSpisok;//Перегружаем модель ListView с новыми данными.
+		}
+		else{
+			if(imyaMenu == "element"){//Если это Элемент, то...
+				lsvMenu.model = JSMenu.vrMenuElement;//Перегружаем модель ListView с новыми данными.
+			}
+			else{
+				if(imyaMenu == "dannie"){//Если это Данные, то...
+					lsvMenu.model = JSMenu.vrMenuDannie;//Перегружаем модель ListView с новыми данными.
+				}
+			}
+		}
+		tmMenu.height = lsvMenu.count*(ntWidth*ntCoff+ntCoff)+ntCoff;//Выставляем высоту под размер меню.
 	}
 }

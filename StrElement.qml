@@ -116,31 +116,59 @@ Item {
 	}
 	Item {//Список Рабочей Зоны
 		id: tmZona
-		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-		ZonaElement {
-			id: lsvZona
-			ntWidth: tmElement.ntWidth
-			ntCoff: tmElement.ntCoff
+		Rectangle {
+			id: rctZona
 			anchors.fill: tmZona
-			clrTexta: tmElement.clrTexta
-			clrFona: "SlateGray"
-			onClicked: function(ntKod, strElement) {//Слот нажатия на один из элементов Списка.
-				if(cppqml.blElementPervi){//Если это первый элемент, то...
-					txnZagolovok.visible = true;//Включаем создание Элемента.
-				}
-				else{//Если не первый элемент, то...
-					txnZagolovok.visible = false;//Отключаем создание Элемента.
-					cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
-					cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPERTY
-					tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
+			color: "transparent"
+			border.width: tmElement.ntCoff/2//Бордюр при переименовании.
+			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+			ZonaElement {
+				id: lsvZona
+				ntWidth: tmElement.ntWidth
+				ntCoff: tmElement.ntCoff
+				anchors.fill: rctZona
+				clrTexta: tmElement.clrTexta
+				clrFona: "SlateGray"
+				onClicked: function(ntKod, strElement) {//Слот нажатия на один из элементов Списка.
+					if(cppqml.blElementPervi){//Если это первый элемент, то...
+						txnZagolovok.visible = true;//Включаем создание Элемента.
+					}
+					else{//Если не первый элемент, то...
+						txnZagolovok.visible = false;//Отключаем создание Элемента.
+						cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
+						cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPERTY
+						tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
+					}
 				}
 			}
-		}
-		DCLogoTMK {//Логотип
-			ntCoff: 16
-			anchors.centerIn: parent
-			clrLogo: tmElement.clrTexta
-			clrFona: tmElement.clrFona
+			DCLogoTMK {//Логотип
+				ntCoff: 16
+				anchors.centerIn: parent
+				clrLogo: tmElement.clrTexta
+				clrFona: tmElement.clrFona
+			}
+			DCMenu {
+				id: menuElement
+				visible: false//Невидимое меню. 
+				ntWidth: tmElement.ntWidth
+				ntCoff: tmElement.ntCoff
+				anchors.left: rctZona.left
+				anchors.right: rctZona.right
+				anchors.bottom: rctZona.bottom
+				anchors.margins: tmElement.ntCoff
+				clrTexta: tmElement.clrTexta
+				clrFona: "SlateGray"
+				imyaMenu: "element"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
+				onClicked: function(ntNomer, strMenu) {
+					menuElement.visible = false;//Делаем невидимым меню.
+					if(ntNomer == 2){//Переименовать.
+						//blPereimenovat = true;
+					}
+					if(ntNomer == 4){//Выход
+						Qt.quit();//Закрыть приложение.
+					}
+				}
+			}
 		}
 	}
 	Item {//Состава Тулбар
@@ -166,7 +194,9 @@ Item {
 			clrKnopki: tmElement.clrTexta
 			clrFona: tmElement.clrFona
 			onClicked: {
-
+				//blPereimenovat = false;//Запрещено переименовывать.
+				menuElement.visible ? menuElement.visible = false : menuElement.visible = true;	
+				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
 			}
 		}
 	}
