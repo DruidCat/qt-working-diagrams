@@ -173,6 +173,66 @@ QString DataElement::polElementJSON(quint64 ullKod) {//Получить JSON с�
 	pdbElement = nullptr;//Обнуляем
     return strElementJSON;
 }
+QString DataElement::polElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod){//Получ Описание Элемента
+/////////////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   О П И С А Н И Е   Э Л Е М Е Н Т А---//
+/////////////////////////////////////////////////////////////
+	if ((ullSpisokKod <=0)||(ullElementKod <=0)){//Если номера меньше или равны 0, то...
+		qdebug("DataElement::polElementOpisanie(quint64, quint64): quint64 меньше или равен 0.");//ошибка
+		return "";//Возвращаем пустую строку.
+	}
+    DCDB* pdbElement = new DCDB("QSQLITE", m_strImyaDB, "элемент_"+QString::number(ullSpisokKod));
+	connect(	pdbElement,
+				SIGNAL(signalDebug(QString)),
+				this,
+				SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    pdbElement->setUserName(m_strLoginDB);//Пользователь.
+    pdbElement->setPassword(m_strParolDB);//Устанавливаем пароль.
+    if(!pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание")){//Если таблица не создалась
+		qdebug("DataElement::polElementOpisanie(quint64,quint64): ошибка создания таблицы элемент_"
+				+QString::number(ullSpisokKod)+".");
+		delete pdbElement;//Удаляем
+		pdbElement = nullptr;//Обнуляем
+		return "";//Не успех
+	}
+    QString strElementOpisanie = pdbElement->SELECT("Код", QString::number(ullElementKod), "Описание");
+	delete pdbElement;//Удаляем
+	pdbElement = nullptr;//Обнуляем
+    return strElementOpisanie;
+}
+bool DataElement::ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod, QString strElementOpisanie){
+/////////////////////////////////////////////////////////
+//---З А П И С А Т Ь   О П И С А Н И Е   С П И С К А---//
+/////////////////////////////////////////////////////////
+	if ((ullSpisokKod <=0)||(ullElementKod <=0)){//Если номера меньше или равны 0, то...
+		qdebug("DataElement::ustElementOpisanie(quint64,quint64,QString): quint64 меньше или равен 0.");//ошиб
+		return false;//Возвращаем ошибку.
+	}
+    DCDB* pdbElement = new DCDB("QSQLITE", m_strImyaDB, "элемент_"+QString::number(ullSpisokKod));
+	connect(	pdbElement,
+				SIGNAL(signalDebug(QString)),
+				this,
+				SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    pdbElement->setUserName(m_strLoginDB);//Пользователь.
+    pdbElement->setPassword(m_strParolDB);//Устанавливаем пароль.
+    if(!pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание")){//Если таблица не создалась
+		qdebug("DataElement::ustElementOpisanie(quint64,quint64,QString): ошибка создания таблицы элемент_"
+				+QString::number(ullSpisokKod)+".");
+		delete pdbElement;//Удаляем
+		pdbElement = nullptr;//Обнуляем
+		return false;//Не успех
+	}
+	if(pdbElement->UPDATE(QStringList()<<"Код"<<"Описание",
+						QStringList()<<QString::number(ullElementKod)<<strElementOpisanie)){//Успех записи, то
+		delete pdbElement;//Удаляем
+		pdbElement = nullptr;//Обнуляем
+		return true;//Успех
+	}
+	qdebug("DataElement::ustElementOpisanie(quint64,quint64,QString): ошибка записи Описания.");
+	delete pdbElement;//Удаляем
+	pdbElement = nullptr;//Обнуляем
+	return false;//Ошибка.
+}
 void DataElement::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////
 //---Q D E B U G---//

@@ -10,6 +10,7 @@ DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
 										m_strElement(""),
 										m_strElementDB(""),
 										m_ullElementKod(0),
+										m_strElementOpisanie(""),
 										m_blElementPervi(false),
 										m_strDebug("")
 {
@@ -154,7 +155,7 @@ void DCCppQml::setStrSpisokOpisanie(QString& strSpisokOpisanieNovi){//Измен
 	if(strSpisokOpisanieNovi != m_strSpisokOpisanie){//Если Описания разные, то...
 		if(m_pDataSpisok->ustSpisokOpisanie(m_ullSpisokKod, strSpisokOpisanieNovi)){//Записалось Описание,то
 			m_strSpisokOpisanie = strSpisokOpisanieNovi;//Новое описание присвоили.
-			qdebug("Новоя запись Описания.");
+			qdebug("Новоя запись в описании.");
 			emit strSpisokOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}
@@ -218,6 +219,32 @@ void DCCppQml::setUllElementKod(quint64 ullElementKodNovi){//Изменить к
 		if (m_ullElementKod != ullElementKodNovi){//Если не равны параметры, то...
 			m_ullElementKod = ullElementKodNovi;
 			emit ullElementKodChanged();//Сигнал о том, что код Элемента изменился.
+		}
+	}
+}
+QString DCCppQml::strElementOpisanie(){//Возвращает Описание Элемента
+/////////////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   О П И С А Н И Е   Э Л Е М Е Н Т А---//
+/////////////////////////////////////////////////////////////
+	//Используем статическую переменную, чтоб минимизировать обращение к БД.
+	static uint stullSpisokKod = 0;//Статическая переменная, запоминает данные, и не обнуляется.
+	static uint stullElementKod = 0;//Статическая переменная, запоминает данные, и не обнуляется.
+	if((stullSpisokKod != m_ullSpisokKod)||(stullElementKod != m_ullElementKod)){//Если коды списка разные, то
+		m_strElementOpisanie = m_pDataElement->polElementOpisanie(m_ullSpisokKod, m_ullElementKod);//Описание.
+		stullSpisokKod = m_ullSpisokKod;//Присваеваем статической переменной Код Описания Списка.
+		stullElementKod = m_ullElementKod;//Присваеваем статической переменной Код Описания Элемента.
+	}
+	return m_strElementOpisanie;//Возвращаем считаное или не считаное из БД Описание.
+}
+void DCCppQml::setStrElementOpisanie(QString& strElementOpisanieNovi){//Изменить описание Элемента.
+///////////////////////////////////////////////////////////////
+//---И З М Е Н Е Н И Е   О П И С А Н И Я   Э Л Е М Е Н Т А---//
+///////////////////////////////////////////////////////////////
+	if(strElementOpisanieNovi != m_strElementOpisanie){//Если Описания разные, то...
+		if(m_pDataElement->ustElementOpisanie(m_ullSpisokKod, m_ullElementKod, strElementOpisanieNovi)){
+			m_strElementOpisanie = strElementOpisanieNovi;//Новое описание присвоили.
+			qdebug("Новоя запись в описании.");
+			emit strElementOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}
 }

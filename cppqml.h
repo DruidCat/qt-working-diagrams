@@ -40,6 +40,10 @@ class DCCppQml : public QObject {
                    READ ullElementKod
                    WRITE setUllElementKod
                    NOTIFY ullElementKodChanged FINAL)
+    Q_PROPERTY(QString strElementOpisanie
+                   READ strElementOpisanie
+                   WRITE setStrElementOpisanie
+                   NOTIFY strElementOpisanieChanged FINAL)
     Q_PROPERTY(bool blElementPervi
                    READ blElementPervi FINAL)
     Q_PROPERTY(QString strDebug
@@ -65,6 +69,8 @@ public:
     void		setStrElementDB(QString& strElementNovi);//Изменение JSON запроса Элемента.
     quint64		ullElementKod();//Возвращает Код Элемента.
     void		setUllElementKod(quint64 ullElementKodNovi);//Изменить Код Элемента.
+    QString		strElementOpisanie();//Возвращает Описание Элемента
+    void		setStrElementOpisanie(QString& strOpisanieNovi);//Изменить описание Элемента.
     bool 		blElementPervi() { return m_blElementPervi; }//Возвращает флаг Первый Элемент?
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
@@ -81,6 +87,7 @@ signals:
     void strElementChanged();//Сигнал о том, что записан новый элемент.
     void strElementDBChanged();//Сигнал о том, что записан элемент в БД.
     void ullElementKodChanged();//Сигнал, что Код выбранного Элемента изменился.
+    void strElementOpisanieChanged();//Сигнал, что описание изменилось.
 	void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
@@ -95,6 +102,7 @@ private:
     QString m_strElement;//переменная записывающая Элемент в Свойстве Q_PROPERTY
     QString m_strElementDB;//аргумент JSON запроса Элементов в Свойстве Q_PROPERTY
 	quint64	m_ullElementKod;//Код Элемента в Свойстве Q_PROPERTY.
+    QString m_strElementOpisanie;//аргумент описания элемента в Свойстве Q_PROPERTY
 	bool 	m_blElementPervi;//Флаг Первый Элемент? в Свойстве Q_PROPERTY.
 	QString m_strDebug;//Текс ошибки.
 

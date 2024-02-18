@@ -18,6 +18,7 @@ Window {
 
 	StackView {
 		id: stvStr
+		property string strOpisanie: "titul"
 		anchors.fill: parent
 		initialItem: pgStrSpisok
 		//initialItem: pgStrMenu
@@ -177,8 +178,10 @@ Window {
 
 				}
 				onClickedInfo: {
+					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 				onClickedSpisok: function(strSpisok) {
+					stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
 					pgStrElement.textZagolovok = strSpisok;//Задаём заголовок на странице Элементов.
 					stvStr.push(pgStrElement);//Переключаемся на страницу Элементов.
 				}
@@ -208,18 +211,52 @@ Window {
 				toolbarWidth: pgStrElement.rctStrToolbar.width
 				toolbarHeight: pgStrElement.rctStrToolbar.height
 				onClickedNazad: {//Слот нажатия кнопки Назад.
+					stvStr.strOpisanie = "titul";//Показываем описание Титульной страницы.
 					stvStr.pop()//Назад страницу
 				}
 				onClickedSozdat: {
 
 				}
 				onClickedInfo: {
-					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;//Читаем оприсание из БД и отображаем.
+					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;//Отправляем текст в бизнес логику.
 					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 				onClickedElement: function(strElement) {
+					stvStr.strOpisanie = "element";//Показываем описание Элемента.
 					pgStrDannie.textZagolovok = strElement;//Задаём заголовок на странице Данных.
 					stvStr.push(pgStrDannie);//Переключаемся на страницу Данных..
+				}
+			}
+		}
+
+		Stranica {//Страница с Данными
+		/////////////////
+		///Д А Н Н Ы Е///
+		/////////////////
+			id: pgStrDannie
+			visible: false
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
+			clrRabOblasti: root.clrStranic
+			StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
+				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
+				clrTexta: pgStrDannie.clrTexta; clrFona: pgStrDannie.clrRabOblasti
+				zagolovokX: pgStrDannie.rctStrZagolovok.x; zagolovokY: pgStrDannie.rctStrZagolovok.y
+				zagolovokWidth: pgStrDannie.rctStrZagolovok.width;
+				zagolovokHeight: pgStrDannie.rctStrZagolovok.height
+				zonaX: pgStrDannie.rctStrZona.x; zonaY: pgStrDannie.rctStrZona.y
+				zonaWidth: pgStrDannie.rctStrZona.width; zonaHeight: pgStrDannie.rctStrZona.height
+				toolbarX: pgStrDannie.rctStrToolbar.x; toolbarY: pgStrDannie.rctStrToolbar.y
+				toolbarWidth: pgStrDannie.rctStrToolbar.width; toolbarHeight: pgStrDannie.rctStrToolbar.height
+				onClickedNazad: {//Слот нажатия кнопки Назад.
+					stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
+					stvStr.pop()//Назад страницу
+				}
+				onClickedInfo: {
+					tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
+					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 			}
 		}
@@ -248,37 +285,12 @@ Window {
 				toolbarWidth: pgStrOpisanie.rctStrToolbar.width
 				toolbarHeight: pgStrOpisanie.rctStrToolbar.height
 				radiusTextEdit: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
+				strOpisanie: stvStr.strOpisanie//Передаём флаг Отображения конкретного Описания.
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.pop()//Назад страницу
 				}
 				onClickedSozdat: {
 
-				}
-			}
-		}
-		Stranica {//Страница с Данными
-		/////////////////
-		///Д А Н Н Ы Е///
-		/////////////////
-			id: pgStrDannie
-			visible: false
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-			clrRabOblasti: root.clrStranic
-			StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
-				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
-				clrTexta: pgStrDannie.clrTexta; clrFona: pgStrDannie.clrRabOblasti
-				zagolovokX: pgStrDannie.rctStrZagolovok.x; zagolovokY: pgStrDannie.rctStrZagolovok.y
-				zagolovokWidth: pgStrDannie.rctStrZagolovok.width;
-				zagolovokHeight: pgStrDannie.rctStrZagolovok.height
-				zonaX: pgStrDannie.rctStrZona.x; zonaY: pgStrDannie.rctStrZona.y
-				zonaWidth: pgStrDannie.rctStrZona.width; zonaHeight: pgStrDannie.rctStrZona.height
-				toolbarX: pgStrDannie.rctStrToolbar.x; toolbarY: pgStrDannie.rctStrToolbar.y
-				toolbarWidth: pgStrDannie.rctStrToolbar.width; toolbarHeight: pgStrDannie.rctStrToolbar.height
-				onClickedNazad: {//Слот нажатия кнопки Назад.
-					stvStr.pop()//Назад страницу
 				}
 			}
 		}

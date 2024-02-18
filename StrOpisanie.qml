@@ -22,10 +22,28 @@ Item {
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusTextEdit: txdZona.radius
 	property alias textTextEdit: txdZona.text
+	property string strOpisanie: "titul"
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
+	function fnClickedOk(){
+		knopkaOk.visible = false;//Делаем невидимой кнопку Ок.
+		knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
+		txdZona.readOnly = true;//Запрещаем редактировать текст.
+		if(strOpisanie == "titul"){//Если Титул, то...
 
+		}
+		else{
+			if(strOpisanie == "spisok"){//Если Список, то...
+				cppqml.strSpisokOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
+			}
+			else{
+				if(strOpisanie == "element"){//Если Элемент, то...
+					cppqml.strElementOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
+				}
+			}
+		}
+	}
 	Item {
 		id: tmZagolovok
 		DCKnopkaNazad {
@@ -36,10 +54,7 @@ Item {
 			anchors.margins: tmOpisanie.ntCoff/2
 			clrKnopki: tmOpisanie.clrTexta
 			onClicked: {
-				knopkaOk.visible = false;//Делаем невидимой кнопку Ок.
-				knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
-				txdZona.readOnly = true;//Запрещаем редактировать текст.
-				cppqml.strSpisokOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
+				fnClickedOk();//Нажатие кнопки Ок.
 				tmOpisanie.clickedNazad();//Сигнал, что кнопка Назад нажата.
 			}
 		}
@@ -74,10 +89,7 @@ Item {
 			clrKnopki: tmOpisanie.clrTexta
 			clrFona: tmOpisanie.clrFona
 			onClicked: {
-				visible = false;//Делаем невидимой кнопку Ок.
-				knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
-				txdZona.readOnly = true;//Запрещаем редактировать текст.
-				cppqml.strSpisokOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
+				fnClickedOk();//Нажата кнопка Ок.
 			}
 		}
 	}

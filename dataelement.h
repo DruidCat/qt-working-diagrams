@@ -14,6 +14,8 @@ public:
 	QStringList	polElement(quint64 ullKod);//Получить полный список всех Элементов по Коду Списка.
 	bool 		ustElement(quint64 ullKod, QString strElement);//Записать в БД Элемент.
     QString		polElementJSON(quint64 ullKod);//Получить JSON строчку Элементов. 
+	QString 	polElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod);//Полчить Описание Элемента
+	bool 		ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod, QString strElementOpisanie);
 	bool 		polElementPervi() { return m_blElementPervi; }//Вернуть состояние флага Первый Элемент?
 private:
     QString 	m_strImyaDB;//Имя БД

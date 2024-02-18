@@ -209,6 +209,7 @@ Item {
 				blPereimenovat = false;//Запрещено переименовывать.
 				menuSpisok.visible = false;//Делаем невидимым меню.
 				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
+				tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
 			}
 		}
 		DCKnopkaNastroiki {
