@@ -3,6 +3,8 @@
 #include <QDebug>
 
 DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
+										m_strTitul(""),
+										m_strTitulOpisanie(""),
 										m_strSpisok(""),
 										m_strSpisokDB(""),
 										m_ullSpisokKod(0),
@@ -17,10 +19,16 @@ DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
+    m_pDataTitul = new DataTitul("druidcat.dc", "druidcat", "druidcat");//Титул.
     m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");//Список.
     m_pDataElement = new DataElement("druidcat.dc", "druidcat", "druidcat");//Элементы.
+    m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
  	m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
+	connect(	m_pDataTitul,
+				SIGNAL(signalDebug(QString)),
+				this,
+				SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
 	connect(	m_pDataSpisok,
 				SIGNAL(signalDebug(QString)),
 				this,
@@ -41,6 +49,8 @@ DCCppQml::~DCCppQml(){//Деструктор.
 //////////////////////////////
 //--- Д Е С Т Р У К Т О Р---//
 //////////////////////////////
+	delete m_pDataTitul;//Удаляем указатель.
+    m_pDataTitul = nullptr;//Указатель на таблицу Списка в БД обнуляем.
 	delete m_pDataSpisok;//Удаляем указатель.
     m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД обнуляем.
 	delete m_pDataElement;//Удаляем указатель.
@@ -49,6 +59,51 @@ DCCppQml::~DCCppQml(){//Деструктор.
 	m_pTimerDebug = nullptr;//Обнуляем указатель на таймер отладки.
 	delete m_pdcclass;//Удаляем указатель.
 	m_pdcclass = nullptr;//Обнуляем указатель
+}
+QString DCCppQml::strTitul() {//Получить имя Титула.
+///////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   И М Я   Т И Т У Л А---//
+///////////////////////////////////////////////
+	QString strTitul = m_pDataTitul->polTitul();
+	m_strTitul = strTitul;
+    return m_strTitul;
+}
+void DCCppQml::setStrTitul(QString& strTitulNovi) {//Переименование имени Титула.
+///////////////////////////////////////////////////////////////
+//---П Е Р Е И М Е Н О В А Н И Е   И М Е Н И   Т И Т У Л А---//
+///////////////////////////////////////////////////////////////
+	if(m_pdcclass->isEmpty(strTitulNovi)){//Если пустая строка, то...
+		qdebug("Нельзя переименовывать на пустое имя титула.");
+	}
+	else{
+		strTitulNovi = redaktorTexta(strTitulNovi);//Редактируем текст по стандартам приложения.
+		if(m_strTitul != strTitulNovi){//Если имена титулов не совпадают, то...
+			if(m_pDataTitul->renTitul(strTitulNovi))//Если имя Титула записалось успешно, то...
+				emit strTitulChanged();//Излучаем сигнал об изменении аргумента.
+		}
+	}
+}
+QString DCCppQml::strTitulOpisanie() {//Получить описание Титула.
+/////////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   О П И С А Н И Е   Т И Т У Л А---//
+/////////////////////////////////////////////////////////
+	QString strTitulOpisanie = m_pDataTitul->polTitulOpisanie();
+	m_strTitulOpisanie = strTitulOpisanie;
+    return m_strTitulOpisanie;
+}
+void DCCppQml::setStrTitulOpisanie(QString& strTitulOpisanieNovi) {//Переименование описание Титула.
+/////////////////////////////////////////////////////////////////////
+//---П Е Р Е И М Е Н О В А Н И Е   О П И С А Н И Е   Т И Т У Л А---//
+/////////////////////////////////////////////////////////////////////
+	if(m_pdcclass->isEmpty(strTitulOpisanieNovi)){//Если пустая строка, то...
+		qdebug("Нельзя переименовывать на пустое предложение описания.");
+	}
+	else{
+		if(m_strTitulOpisanie != strTitulOpisanieNovi){//Если описание титулов не совпадают, то...
+			if(m_pDataTitul->renTitulOpisanie(strTitulOpisanieNovi))//Если описание Титула записалось успешно
+				emit strTitulOpisanieChanged();//Излучаем сигнал об изменении аргумента.
+		}
+	}
 }
 QString DCCppQml::strSpisok() {//Получить элемента Списка.
 ///////////////////////////////////////////////////////

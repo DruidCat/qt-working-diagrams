@@ -7,11 +7,20 @@
 
 #include "dcdb.h"
 #include "dcclass.h"
+#include "datatitul.h"
 #include "dataspisok.h"
 #include "dataelement.h"
 
 class DCCppQml : public QObject {
     Q_OBJECT
+    Q_PROPERTY(QString strTitul
+                   READ strTitul
+                   WRITE setStrTitul
+                   NOTIFY strTitulChanged FINAL)
+    Q_PROPERTY(QString strTitulOpisanie
+                   READ strTitulOpisanie
+                   WRITE setStrTitulOpisanie
+                   NOTIFY strTitulOpisanieChanged FINAL)
     Q_PROPERTY(QString strSpisok
                    READ strSpisok
                    WRITE setStrSpisok
@@ -54,6 +63,10 @@ public:
     explicit	DCCppQml(QObject* parent = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
 	//---Методы Q_PROPERTY---//
+    QString		strTitul();//Получить имя Титула.
+    void		setStrTitul(QString& strTitulNovi);//Изменение имени Титула.
+    QString		strTitulOpisanie();//Возвращает Описание имени Титула. 
+    void		setStrTitulOpisanie(QString& strOpisanieNovi);//Изменить описание титула.
     QString		strSpisok();//Получить элемента Списка.
     void		setStrSpisok (QString& strSpisokNovi);//Изменение элемента списка.
     QString		strSpisokDB();//Возвратить JSON строку Списка.
@@ -80,6 +93,8 @@ public:
 	void 		qdebug(QString strDebug);//Передаёт ошибки в QML через Q_PROPERTY.
 
 signals:
+    void strTitulChanged();//Сигнал о том, что имя Титула изменилось.
+    void strTitulOpisanieChanged();//Сигнал, что описание Титула изменилось.
     void strSpisokChanged();//Сигнал о том, что добавился новый элемент Списка.
     void strSpisokDBChanged();//Сигнал о том, что записан элемент Списка в БД.
     void ullSpisokKodChanged();//Сигнал, что Код выбранного элемента Списка изменился.
@@ -95,6 +110,8 @@ public	slots:
 	void slotTimerDebug();//Слот прерывания от таймена Отладчика.
 
 private:
+    QString m_strTitul;//аргумент элемента имени Титула в Свойстве Q_PROPERTY
+    QString m_strTitulOpisanie;//аргумент описания титула в Свойстве Q_PROPERTY
     QString m_strSpisok;//аргумент элемента списка в Свойстве Q_PROPERTY
     QString m_strSpisokDB;//аргумент JSON запроса Списка в Свойстве Q_PROPERTY
 	quint64	m_ullSpisokKod;//Код элемента списка в Свойстве Q_PROPERTY.
@@ -106,6 +123,7 @@ private:
 	bool 	m_blElementPervi;//Флаг Первый Элемент? в Свойстве Q_PROPERTY.
 	QString m_strDebug;//Текс ошибки.
 
+    DataTitul* 	m_pDataTitul = nullptr;//Указатель на таблицу Титула в БД.
     DataSpisok* m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
     DataElement* m_pDataElement = nullptr;//Указатель на таблицу Элементов в БД.
 	QTimer*		m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.
