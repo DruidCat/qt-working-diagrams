@@ -31,7 +31,7 @@ Item {
 		knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
 		txdZona.readOnly = true;//Запрещаем редактировать текст.
 		if(strOpisanie == "titul"){//Если Титул, то...
-
+			cppqml.strTitulOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
 		}
 		else{
 			if(strOpisanie == "spisok"){//Если Список, то...

@@ -178,6 +178,7 @@ Window {
 
 				}
 				onClickedInfo: {
+					tmOpisanie.textTextEdit = cppqml.strTitulOpisanie;//Отправляем текст в бизнес логику.
 					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 				onClickedSpisok: function(strSpisok) {
