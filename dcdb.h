@@ -18,6 +18,7 @@ public:
     DCDB( 	QObject* proditel = nullptr);
 	bool 	checkStatus();//Открыть и закрыть Базу данных, для того чтобы проверить статус сети.
 	bool 	CREATE(QStringList slsGrafi);//Создать таблицу.
+	bool 	CREATE();//Создать таблицу, при условии что был передан список Граф в CREATE(QStringList).
 	bool 	DROP();//Метод удаляющий таблицу в БД.
 	bool 	INSERT(QStringList slsGrafi, QStringList slsKolonki);//Вставить данные.
 	bool 	UPDATE(QStringList slsGrafi, QStringList slsKolonki);//Обновить данные.

@@ -86,11 +86,11 @@ bool DCDB::CREATE(QStringList slsGrafi){//Создать таблицу.
 ///////////////////////////////////////
 //---С О З Д А Т Ь   Т А Б Л И Ц У---//
 ///////////////////////////////////////
+	//Важен порядок if, для того, чтоб работала конструкция CREATE(QStringList());
 	if(!slsGrafi.isEmpty()){//Если не пустой списток, то...
 		m_slsGrafi = slsGrafi;//Графы в таблице.
 		m_ntKolGraf = slsGrafi.size();//Количество граф.
 	}
-
 	if(m_slsGrafi.isEmpty()){//Если пустые графы, то...
 		qdebug(tr("Ошибка 014 в DCDB::CREATE(): В Базе данных ")+m_strImyaDB+tr(" не заданы графы таблицы."));
 		return false;//Ошибка.
@@ -99,7 +99,9 @@ bool DCDB::CREATE(QStringList slsGrafi){//Создать таблицу.
 		qdebug(tr("Ошибка 012 в DCDB::CREATE(): В Базе данных ")+m_strImyaDB+tr(" имя таблицы не заданно."));
 		return false;//Ошибка.
 	}
-
+	QString strPervayaGrafa(m_slsGrafi[0]);//Строка именно тут, для того чтоб не вызвать CREATE() постоянно.
+	if(strPervayaGrafa[0] == '#')//Если первый символ #(ПЕРВИЧНЫЙ КЛЮЧ), то...
+		m_strPrimaryKey = strPervayaGrafa.remove(0, 1);//Удаляем первый символ # и присваиваем
 	bool blFlagOshibki(true);//Успех функции
 	static uint untCREATE(0);//Счётчик запросов на открытие и закрытие базы данных
 	{
@@ -115,9 +117,6 @@ bool DCDB::CREATE(QStringList slsGrafi){//Создать таблицу.
 		}
 		else{//В противном случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
-			QString strPervayaGrafa(m_slsGrafi[0]);
-			if(strPervayaGrafa[0] == '#')
-				m_strPrimaryKey = strPervayaGrafa.remove(0, 1);//Удаляем первый символ # и присваиваем
 			QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
 			///////////////////////////////////////////
 			/////П Р О В Е Р И Т Ь   Т А Б Л И Ц У/////
@@ -175,7 +174,93 @@ bool DCDB::CREATE(QStringList slsGrafi){//Создать таблицу.
 	QSqlDatabase::removeDatabase(QString("dbCREATE%1").arg(untCREATE));//Закрываем открытую БД
 	return blFlagOshibki;
 }
-
+bool DCDB::CREATE(){//Создать таблицу, при условии что был передан список Граф в CREATE(QStringList).
+///////////////////////////////////////
+//---С О З Д А Т Ь   Т А Б Л И Ц У---//
+///////////////////////////////////////
+	if(m_slsGrafi.isEmpty()){//Если пустые графы, то...
+		qdebug(tr("Ошибка 014 в DCDB::CREATE(): В Базе данных ")+m_strImyaDB+tr(" не заданы графы таблицы."));
+		return false;//Ошибка.
+	}
+	if(m_strImyaTablici.isEmpty()){//Если имя таблицы пустое место, то...
+		qdebug(tr("Ошибка 012 в DCDB::CREATE(): В Базе данных ")+m_strImyaDB+tr(" имя таблицы не заданно."));
+		return false;//Ошибка.
+	}
+	QString strPervayaGrafa(m_slsGrafi[0]);//Строка именно тут.
+	if(strPervayaGrafa[0] == '#')//Если первый символ #(ПЕРВИЧНЫЙ КЛЮЧ), то...
+		m_strPrimaryKey = strPervayaGrafa.remove(0, 1);//Удаляем первый символ # и присваиваем
+	bool blFlagOshibki(true);//Успех функции
+	static uint untCREATE(0);//Счётчик запросов на открытие и закрытие базы данных
+	{
+		QSqlDatabase sqlDB = QSqlDatabase::addDatabase(m_strDriver, QString("dbCREATE%1").arg(++untCREATE));
+		sqlDB.setDatabaseName(m_strImyaDB);
+		sqlDB.setHostName(m_strHostName);
+		sqlDB.setPort(m_untPort);
+		if(!sqlDB.open(m_strUserName, m_strPassword)){//Если база не открылась, то...
+			qdebug(tr("Ошибка 010 в DCDB::CREATE(): База данных ") + m_strImyaDB
+					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
+			blFlagOshibki = false;//Ошибка.
+			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
+		}
+		else{//В противном случае...
+			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
+			QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
+			///////////////////////////////////////////
+			/////П Р О В Е Р И Т Ь   Т А Б Л И Ц У/////
+			///////////////////////////////////////////
+			if(!sqlQuery.exec("SELECT * FROM \""+m_strImyaTablici+"\";")){//Если нет ТАБЛИЦЫ с заданным именем
+				QHash<QString,int> hshGrafi;//Хэшь, в котором будут храниться одинаковые графы
+				foreach (const QString & pstrGrafi, m_slsGrafi)//Перебираем все графы из списка
+					hshGrafi[pstrGrafi]++;//Подсчет одинаковых столбиков
+				QHash<QString, int>::iterator it = hshGrafi.begin();//Создаём итератор хеша столбиков
+				for (;it != hshGrafi.end(); ++it){//Перечисление столбиков в хеше
+					if (it.value() > 1){//Если итератор в хеше больше одного, то...
+						qdebug(tr("Ошибка 011 в DCDB::CREATE(): В базе данных ") + m_strImyaDB
+								+ tr(" при создании таблицы: ") +  m_strImyaTablici + tr(", заданно ")
+								+ QString::number(it.value()) + tr(" графы: ") + it.key() + "!");
+						blFlagOshibki = false;//Ошибка, заданны одинаковые Графы
+					}
+				}
+				if(blFlagOshibki){//Если нет одинаковых графф, то...
+					QString strSqlGrafi("");//Переменная, которая будет хранить строчку запрос sql
+					QString strSqlPK("");//Переменная будет хранить запрос на первичный ключ, если он есть.
+					//Цикл создания строчки запроса на создание столбиков в таблице
+					for(int ntStep = 0; ntStep < m_slsGrafi.size(); ntStep++){
+			    		if(ntStep)//Если это не нулевой элемент, то...
+			    			strSqlGrafi += ", \""+m_slsGrafi[ntStep]+"\" VARCHAR";//Добавляем запрос 
+						else{//Если это нулевой элемент, т.е. первый, то...
+							QString strSqlType(" VARCHAR");//Переменная хранящая тип переменных в БД 
+							if(!m_strPrimaryKey.isEmpty()){//Если Первичный ключь не пустая строчка, то...
+								if(m_strDriver == "QPSQL"){//Если это PostgreSQL, то...
+									strSqlType = " SERIAL";//Присваиваем переменной данный тип
+									strSqlPK=", PRIMARY KEY(\""+m_strPrimaryKey+"\")";//Запрос на Первич. Ключ
+								}
+								else{//В противном случае...
+									strSqlType = " INTEGER PRIMARY KEY";//Присваиваем переменной данный тип
+								}
+							}
+							strSqlGrafi = strPervayaGrafa + strSqlType;//Добавляем запрос
+						}
+					}
+					if(blFlagOshibki){//Если не было ошибки, то...
+						strSqlGrafi += strSqlPK;//Добавляем запрос на первичный ключ, если он есть.
+						///////////////////////////////////////
+						/////С О З Д А Т Ь   Т А Б Л И Ц У/////
+						///////////////////////////////////////
+						if(!sqlQuery.exec("CREATE TABLE \""+m_strImyaTablici+"\" (" + strSqlGrafi + ");")){
+							qdebug(tr("Ошибка в 013 DCDB::CREATE(): В базе данных: ") + m_strImyaDB
+									+ tr(" не смог создать таблицу: ") + m_strImyaTablici 
+									+ tr(" по причине: ") + sqlQuery.lastError().text());
+							blFlagOshibki = false;//Ошибка
+			    		}
+					}
+				}
+			}
+		}
+	}
+	QSqlDatabase::removeDatabase(QString("dbCREATE%1").arg(untCREATE));//Закрываем открытую БД
+	return blFlagOshibki;
+}
 bool DCDB::DROP(){//Метод удаляющий таблицу в БД.
 /////////////////
 //---D R O P---//

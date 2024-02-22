@@ -24,6 +24,7 @@ DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
     m_pDataElement = new DataElement("druidcat.dc", "druidcat", "druidcat");//Элементы.
     m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
+	m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
  	m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	connect(	m_pDataTitul,
 				SIGNAL(signalDebug(QString)),
@@ -144,7 +145,6 @@ void DCCppQml::setStrSpisokDB(QString& strSpisokNovi) {//Запись элеме
 		}
 		if(m_pDataSpisok->ustSpisok(strSpisokNovi)){//Если элемент списка записался успешно, то...
         	emit strSpisokDBChanged();//Излучаем сигнал об изменении аргумента.
-			m_pDataElement->dbStart(m_pDataSpisok->polKod(strSpisokNovi));//Создаём таблицу Элемент_Код
 		}
 	}
 }

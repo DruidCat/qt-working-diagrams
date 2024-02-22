@@ -10,7 +10,7 @@ public:
     explicit	DataElement(QString strImyaDB, QString strLoginDB, QString strParolDB,
 					QObject* parent = nullptr);
     ~			DataElement();//Деструктор.
-	bool 		dbStart(quint64 ullKod);//Создать класс БД элемента Списка.
+	bool 		dbStart();//Создать первоначальные Элементы.
 	QStringList	polElement(quint64 ullKod);//Получить полный список всех Элементов по Коду Списка.
 	bool 		ustElement(quint64 ullKod, QString strElement);//Записать в БД Элемент.
     QString		polElementJSON(quint64 ullKod);//Получить JSON строчку Элементов. 
@@ -23,6 +23,7 @@ private:
     QString 	m_strParolDB;//Пароль БД
 
 	bool 		m_blElementPervi;//Первый Элемент в Списке элементов.
+	DCDB*		m_pdbElement = nullptr;//Указатель на класс DCDB.
 
 private slots:
 	void qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
