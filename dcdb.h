@@ -35,8 +35,9 @@ public:
 			QString strOrderBy, int ntLimit, int ntSdvig);//Запрос с поиском, ограничениями, сортировкой и лим
 	QSqlQuery CLEAR();//Пустой запрос.
 
-	void 	ustDriverDB(QString strDriver)	{m_strDriver = strDriver;}	//Установить драйвер БД.
-	void 	ustImyaDB(QString strImyaDB)	{m_strImyaDB = strImyaDB;}	//Установить имя БД.
+	void 	ustDriverDB(QString strDriver);								//Установить драйвер БД.
+	QString polDriverDB()					{return m_strDriver;}		//Получить имя драйвера БД.
+	void 	ustImyaDB(QString strImyaDB);								//Установить имя БД.
 	QString polImyaDB()						{return m_strImyaDB;}		//Получить имя базы данных.
 	void 	ustImyaTablici(QString  strImyaTablici);//Установить имя таблицы.
 	QString polImyaTablici()				{return m_strImyaTablici;}	//Получить имя таблицы.
@@ -82,12 +83,24 @@ private:
 /////////////////////////////
 /*
  * Конструктор.		DCDB(	const QString strDriver, const QString strImyaDB, const QString strImyaTablici,
- * 							QWidget* proditel = nullptr);
+ * 							QObject* proditel = nullptr);
  * 1) strDriver		- это SQL драйвер.										ПРИМЕР: "QPSQL" или "QSQLITE"
- * 2) strImyaFaila	- это имя Файла базы данных, включая его расширение.	ПРИМЕР: "компания.dc"
+ * 2) strImyaDB - это имя Файла базы данных, включая его расширение.		ПРИМЕР: "компания.dc"
  * 3) strImyaTablici- это имя Таблицы, в которой будут хранится данный.		ПРИМЕР: "Работники"
  * ПРИМЕР:
  * DCDB* pdcdb = new DCDB("QPSQL", "компания.dc", "Работники");
+ *
+ * Конструктор.		DCDB(	const QString strDriver, const QString strImyaDB, QObject* proditel = nullptr);
+ * ПРИМЕР:
+ * DCDB* pdcdb = new DCDB("QPSQL", "компания.dc");
+ * pdcdb->ustImyaTablici("Работники");
+ *
+ * Конструктор.		DCDB(	QObject* proditel = nullptr);
+ * ПРИМЕР:
+ * DCDB* pdcdb = new DCDB();
+ * pdcdb->ustDriverDB("QPSQL");
+ * pdcdb->ustImyaDB("компания.dc");
+ * pdcdb->ustImyaTablici("Работники");
  *
  * Создание нескольких таблиц с одинаковыми параметрами.. 
  * Конструктор.		DCDB(	const QString strDriver, const QString strImyaDB, QWidget* proditel=nullptr);
@@ -97,6 +110,8 @@ private:
  * pdcdb->CREATE(QStringList()<<"#Код"<<"Группа"<<"Описание");
  * pdcdb->ustImyaTablici("группа_02");
  * pdcdb->CREATE(QStringList());//Повторный список граф отправлять не нужно!!!
+ *						или
+ * pdcdb->CREATE();//Повторный список граф отправлять не нужно!!!
  *
  * Установиь пароль. 		void setPasword(QString strPassword);
  * strPassword 		- это Пароль к подключаемой БД.
