@@ -370,7 +370,7 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 			uint untKolonki = slsKolonki.size();//Считаем колличество значений Колонок
 			QString	strSqlGrafi("");//Строчка в которой соберется запрос по Графам
 			QString	strSqlKolonki("");//В строчке в соберется запрос по Данным колонок
-			if (!(untGrafi == untKolonki)){//Если нет = граф таблиц и их значений, то...
+			if (untGrafi != untKolonki){//Если нет равенства граф таблиц и их значений, то...
                 qdebug(tr("Ошибка 021 в DCDB::INSERT(): В базе данных ")+m_strImyaDB+tr(" с именем таблици: ")
                         +m_strImyaTablici+tr(" задано разное колличество Граф: ")+QString::number(untGrafi)
                         +tr(" и Колонок: ")+QString::number(untKolonki)+"!");
