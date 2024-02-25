@@ -19,6 +19,7 @@ DataElement::DataElement(QString strImyaDB, QString strLoginDB, QString strParol
     if(!m_pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание"))//Если таблица не создалас
 		qdebug("DataElement::DataElement: ошибка создания таблицы элемент_0.");
 
+	m_pdcclass = new DCClass();//Класс с методами по работе с текстом.
 	m_blElementPervi = false;//Не первый Элемент в Списке элементов.(false)
 }
 DataElement::~DataElement(){//Деструктор
@@ -27,6 +28,8 @@ DataElement::~DataElement(){//Деструктор
 //////////////////////////////
 	delete m_pdbElement;//Удаляем
 	m_pdbElement = nullptr;//Обнуляем
+	delete m_pdcclass;//Удаляем.
+	m_pdcclass = nullptr;//Обнуляем.
 }
 bool DataElement::dbStart(){//Создать первоначальные Элементы.
 ///////////////////////////////////////////////////////////
@@ -109,7 +112,8 @@ QString DataElement::polElementJSON(quint64 ullKod) {//Получить JSON с�
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
 		QString strNomer = m_pdbElement->SELECT("Код", QString::number(ullShag), "Номер");
 		if(strNomer != ""){//Если номер не пустая строка, то...
-			QString strElement = m_pdbElement->SELECT("Код", QString::number(ullShag), "Элемент");
+			QString strElement = m_pdcclass->
+				json_encode(m_pdbElement->SELECT("Код", QString::number(ullShag), "Элемент"));
 			if(strElement != ""){//Если Список не пустая строка, то...
 				strElementJSON = strElementJSON + "{";
 				strElementJSON = strElementJSON + "\"kod\":\"" + QString::number(ullShag) + "\",";

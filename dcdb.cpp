@@ -383,8 +383,8 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 			    		strSqlGrafi += ", ";
 			    		strSqlKolonki += ", ";
 			    	}
-			    	strSqlGrafi +="\"" + (slsGrafi[untStep]) + "\"";//Добавляем имя граф
-		    		strSqlKolonki += ("'" + slsKolonki[untStep] + "'");//Добавм значения колонок
+			    	strSqlGrafi +="\"" + json_encode(slsGrafi[untStep]) + "\"";//Добавляем имя граф
+		    		strSqlKolonki += ("'" + json_encode(slsKolonki[untStep]) + "'");//Добавм значения колонок
 				}
 			}
 			///////////////////////////////////////
@@ -457,14 +457,16 @@ bool DCDB::UPDATE(QStringList slsGrafi, QStringList slsKolonki){//Обновит
 					for(uint untStep = 1; untStep < untGrafi; untStep++){
 		    			if(!(untStep == 1))//Если это не первый элемент, то...
 		    				strSqlUpdate += ", ";
-		    			strSqlUpdate += "\""+slsGrafi[untStep]+"\" = '"+slsKolonki[untStep]+"'";//Запрос
+		    			strSqlUpdate += "\""	+ json_encode(slsGrafi[untStep]) + "\" = '"
+												+ json_encode(slsKolonki[untStep]) + "'";//Запрос
 					}
 					///////////////////////////////////////
 					/////О Б Н О В И Т Ь   Д А Н Н Ы Е/////
 					///////////////////////////////////////
 					QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
 					if (!sqlQuery.exec("UPDATE \"" + m_strImyaTablici + "\" SET " + strSqlUpdate +
-							   " WHERE \"" + slsGrafi[0] + "\" = '" + slsKolonki[0] + "';")){//не запустился
+							   " WHERE \"" + json_encode(slsGrafi[0])
+							   + "\" = '"  + json_encode(slsKolonki[0]) + "';")){//не запустился
 						qdebug(tr("Ошибка 033 в DCDB::UPDATE(): В базе данных: ")
 								+ m_strImyaDB + tr(" таблицы: ") + m_strImyaTablici
 								+ tr(", не смог записать данные: ") + strSqlUpdate
@@ -525,6 +527,9 @@ bool DCDB::UPDATE(QString strGrafa, QStringList slsKolonki){//Переимено
 				/////////////////////////////////////////////////
 				/////П Е Р Е И М Е Н О В А Т Ь   Д А Н Н Ы Е/////
 				/////////////////////////////////////////////////
+				strGrafa 		= json_encode(strGrafa);//заменяем ' на "
+				slsKolonki[0] 	= json_encode(slsKolonki[0]);//заменяем ' на "
+				slsKolonki[1] 	= json_encode(slsKolonki[1]);//заменяем ' на "
 	    		QSqlQueryModel* pqrmModel = new QSqlQueryModel(this);
 	    		pqrmModel->setQuery(QSqlQuery(("SELECT * FROM \""+ m_strImyaTablici + "\" WHERE \""
 						+ strGrafa + "\" = '" +slsKolonki[0]+ "';"), sqlDB));
@@ -1403,4 +1408,19 @@ bool DCDB::kodCREATE(QString strKodImyaTablic, int ntKodKolichestvo){//Созд�
 
 	}
 	return false;//Ошибка
+}
+QString DCDB::json_encode(QString strTekst){//Преобразует все кавычки(' ") в формат (\' \")
+/////////////////////////////////////////////////////////////
+//---П Р Е О Б Р А З У Е М   Р А З Н Ы Е   К А В Ы Ч К И---//
+/////////////////////////////////////////////////////////////
+	QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
+	QByteArray btrStroka;//Строка, в которой соберётся предложение.
+	uint untTekst = btrTekst.size();//Количество символов в тексте.
+	for(uint untShag = 0; untShag<untTekst; untShag++){//Цикл перебора на поиск всех видов кавычек
+		if((btrTekst[untShag] == '\''))//Если "'
+			btrStroka = btrStroka + "\"";//Добавляем якорь перед кавычками.
+		else
+			btrStroka = btrStroka + btrTekst[untShag];//Собираем строку.
+	}
+	return QString(btrStroka);//Переводим набор символов в строку и возвращаем её.
 }

@@ -55,6 +55,7 @@ var vrMenuDannie = [
 
 function fnSpisokJSON () {//Функция чтения JSON запроса Списка из бизнес логики.
 	return JSON.parse(cppqml.strSpisokDB);//Читаем JSON запрос.
+
 }
 
 function fnElementJSON () {//Функция чтения JSON запроса Элементов из бизнес логики.

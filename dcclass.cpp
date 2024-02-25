@@ -72,6 +72,24 @@ QString DCClass::udalitProbeli(QString strTekst){//Удаляем два и бо
 	}
 	return QString(btrStroka);//Переводим набор символов в строку и возвращаем её.
 }
+QString DCClass::json_encode(QString strTekst){//Преобразует все кавычки(' ") в формат (\' \")
+/////////////////////////////////////////////////////////////
+//---П Р Е О Б Р А З У Е М   Р А З Н Ы Е   К А В Ы Ч К И---//
+/////////////////////////////////////////////////////////////
+	QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
+	QByteArray btrStroka;//Строка, в которой соберётся предложение.
+	uint untTekst = btrTekst.size();//Количество символов в тексте.
+	for(uint untShag = 0; untShag<untTekst; untShag++){//Цикл перебора на поиск всех видов кавычек
+		if(btrTekst[untShag] != '\\'){//Если это НЕ обратная косая черта.
+			if((btrTekst[untShag] == '\"')||(btrTekst[untShag] == '\''))//Если "'
+				btrStroka = btrStroka + "\\";//Добавляем якорь перед кавычками.
+			btrStroka = btrStroka + btrTekst[untShag];//Собираем строку.
+		}
+		else//Если это обратная косая черта, то...
+			btrStroka = btrStroka + "/";//Заменяем на /.
+	}
+	return QString(btrStroka);//Переводим набор символов в строку и возвращаем её.
+}
 QTime DCClass::tmMinus(const QTime& tmVremya1, const QTime& tmVremya2 ){//Возращает tmVremya1-tmVremya2
 /////////////////////////////////////////////////////
 //---Р А С Ч Ё Т   Р А З Н И Ц Ы   В Р Е М Е Н И---//

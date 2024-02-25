@@ -113,7 +113,8 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
 		QString strNomer = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Номер");
 		if(strNomer != ""){//Если номер не пустая строка, то...
-			QString strSpisok = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Список");
+			QString strSpisok = m_pdcclass->
+				json_encode(m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Список"));
 			if(strSpisok != ""){//Если Список не пустая строка, то...
 				strSpisokJSON = strSpisokJSON + "{";
 				strSpisokJSON = strSpisokJSON + "\"kod\":\"" + QString::number(ullShag) + "\",";

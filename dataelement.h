@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include "dcdb.h"
+#include "dcclass.h"
 
 class DataElement : public QObject {
     Q_OBJECT
@@ -24,6 +25,7 @@ private:
 
 	bool 		m_blElementPervi;//Первый Элемент в Списке элементов.
 	DCDB*		m_pdbElement = nullptr;//Указатель на класс DCDB.
+	DCClass* 	m_pdcclass = nullptr;//Указатель на класс DCClass.
 
 private slots:
 	void qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
