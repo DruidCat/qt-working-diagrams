@@ -76,7 +76,7 @@ private:
 	int m_ntKodKolichestvo;//Заданное количество кодов.
 	QString m_strKodImyaTablic;//Общее имя таблиц кодов.
 	//---текст---//
-	QString json_encode(QString strTekst);//Преобразует все кавычки(' ") в формат (\' \")
+	QString sql_encode(QString strTekst);//Преобразует кавычку(') в формат (\")
 };
 
 #endif // DCDB_H
