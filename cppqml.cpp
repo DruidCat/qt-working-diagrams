@@ -1,20 +1,22 @@
-#include "cppqml.h"
+﻿#include "cppqml.h"
 
 #include <QDebug>
 
-DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
+DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 										m_strTitul(""),
 										m_strTitulOpisanie(""),
 										m_strSpisok(""),
 										m_strSpisokDB(""),
 										m_ullSpisokKod(0),
 										m_strSpisokOpisanie(""),
-										m_strElement(""),
+                                        m_blSpisokPervi(false),
+                                        m_strElement(""),
 										m_strElementDB(""),
 										m_ullElementKod(0),
 										m_strElementOpisanie(""),
 										m_blElementPervi(false),
-										m_strDebug("")
+                                        m_strFileDialog(""),
+                                        m_strDebug("")
 {
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
@@ -22,9 +24,10 @@ DCCppQml::DCCppQml(QObject* parent) : 	QObject{parent},
     m_pDataTitul = new DataTitul("druidcat.dc", "druidcat", "druidcat");//Титул.
     m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");//Список.
     m_pDataElement = new DataElement("druidcat.dc", "druidcat", "druidcat");//Элементы.
+    m_pFileDialog = new DCFileDialog();//Проводник.
     m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
-	m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
+    m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
  	m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	connect(	m_pDataTitul,
 				SIGNAL(signalDebug(QString)),
@@ -54,8 +57,10 @@ DCCppQml::~DCCppQml(){//Деструктор.
     m_pDataTitul = nullptr;//Указатель на таблицу Списка в БД обнуляем.
 	delete m_pDataSpisok;//Удаляем указатель.
     m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД обнуляем.
-	delete m_pDataElement;//Удаляем указатель.
+    delete m_pDataElement;//Удаляем указатель.
     m_pDataElement = nullptr;//Указатель на таблицу Элементов в БД обнуляем.
+    delete m_pFileDialog;//Удаляем указатель.
+    m_pFileDialog = nullptr;//Указатель на Проводник в БД обнуляем.
 	delete m_pTimerDebug;//Удаляем указатель на таймер.
 	m_pTimerDebug = nullptr;//Обнуляем указатель на таймер отладки.
 	delete m_pdcclass;//Удаляем указатель.
@@ -126,6 +131,7 @@ QString DCCppQml::strSpisokDB() {//Возвратить JSON строку Спи
 //---П О Л У Ч И Т Ь   J S O N   С П И С К А---//
 /////////////////////////////////////////////////
     m_strSpisokDB = m_pDataSpisok->polSpisokJSON();//Считываем строку JSON, приравниваем её к переменной.
+    m_blSpisokPervi = m_pDataSpisok->polSpisokPervi();//Первый в списке или нет? Строчка обязательна тут.
     return m_strSpisokDB;//И только после этого возвращаем её, это важно.
 }
 void DCCppQml::setStrSpisokDB(QString& strSpisokNovi) {//Запись элемента Списка в БД.
@@ -137,8 +143,8 @@ void DCCppQml::setStrSpisokDB(QString& strSpisokNovi) {//Запись элеме
 	else{
 		strSpisokNovi = redaktorTexta(strSpisokNovi);//Редактируем текст по стандартам приложения.
 		QStringList slsSpisok = m_pDataSpisok->polSpisok();//Получить список всех элементов Списка.
-		for(uint untShag = 0; untShag<slsSpisok.size(); untShag++){//Проверка на одинаковые имена элементов 
-			if(slsSpisok[untShag] == strSpisokNovi){
+        for(int ntShag = 0; ntShag<slsSpisok.size(); ntShag++){//Проверка на одинаковые имена элементов
+            if(slsSpisok[ntShag] == strSpisokNovi){
 				qdebug("Нельзя сохранять одинаковые элементы списка.");
 				return;
 			}
@@ -159,8 +165,8 @@ bool DCCppQml::renStrSpisokDB(QString strSpisok, QString strSpisokNovi){//Пер
 	else{
 		strSpisokNovi = redaktorTexta(strSpisokNovi);//Редактируем текст по стандартам приложения.
 		QStringList slsSpisok = m_pDataSpisok->polSpisok();//Получить список всех элементов Списка.
-		for(uint untShag = 0; untShag<slsSpisok.size(); untShag++){//Проверка на одинаковые имена элементов 
-			if(slsSpisok[untShag] == strSpisokNovi){
+        for(int ntShag = 0; ntShag<slsSpisok.size(); ntShag++){//Проверка на одинаковые имена элементов
+            if(slsSpisok[ntShag] == strSpisokNovi){
 				qdebug("Нельзя переименовывать на одноимённый элемент списка.");
 				return false;//Отмена.
 			}
@@ -182,7 +188,7 @@ void DCCppQml::setUllSpisokKod(quint64 ullSpisokKodNovi){//Изменить ко
 ///////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   К О Д   С П И С К А---//
 ///////////////////////////////////////////////////
-	if (ullSpisokKodNovi<=0)//Если номер меньше или равен 0, то...
+    if (ullSpisokKodNovi<=0)//Если номер меньше или равен 0, то...
 		qdebug("DCCppQml::setUllSpisokKod(quint64): quint64 меньше или равен 0.");
 	else {//Иначе...
 		if (m_ullSpisokKod != ullSpisokKodNovi){//Если не равны параметры, то...
@@ -246,9 +252,9 @@ void DCCppQml::setStrElementDB(QString& strElementNovi) {//Запись Элем
 		qdebug("Нельзя сохранять пустой элемент.");
 	else{
 		strElementNovi = redaktorTexta(strElementNovi);//Редактируем текст по стандартам приложения.
-		QStringList slsSpisok = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементо
-		for(uint untShag = 0; untShag<slsSpisok.size(); untShag++){//Проверка на одинаковые имена элементо 
-			if(slsSpisok[untShag] == strElementNovi){
+        QStringList slsSpisok = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементов.
+        for(int ntShag = 0; ntShag<slsSpisok.size(); ntShag++){//Проверка на одинаковые имена элементо
+            if(slsSpisok[ntShag] == strElementNovi){
 				qdebug("Нельзя сохранять одинаковые элементы.");
 				return;
 			}
@@ -256,8 +262,34 @@ void DCCppQml::setStrElementDB(QString& strElementNovi) {//Запись Элем
 		if(m_pDataElement->ustElement(m_ullSpisokKod, strElementNovi)){//Если элемент списка записался успешно
         	emit strElementDBChanged();//Излучаем сигнал об изменении списка Элементов.
 		}
-	}
+    }
 }
+
+bool DCCppQml::renStrElementDB(QString strElement, QString strElementNovi) {//Переимен. Элемент
+///////////////////////////////////////////////////
+//---П Е Р Е И М Е Н О В А Т Ь   Э Л Е М Е Н Т---//
+///////////////////////////////////////////////////
+    if(m_pdcclass->isEmpty(strElementNovi)) {//Если пустая строка, то...
+        qdebug("Нельзя переименовывать на пустой элемент списка.");
+        return false;//Отмена.
+    }
+    else {
+        strElementNovi = redaktorTexta(strElementNovi);//Редактируем текст по стандартам приложения.
+        QStringList slsElement = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементов.
+        for(int ntShag = 0; ntShag<slsElement.size(); ntShag++){//Проверка на одинаковые имена элементов
+            if(slsElement[ntShag] == strElementNovi) {
+                qdebug("Нельзя переименовывать на одноимённый элемент списка.");
+                return false;//Отмена.
+            }
+        }
+        if(m_pDataElement->renElement(m_ullSpisokKod, strElement, strElementNovi))//элемент записался успешно.
+            emit strElementDBChanged();//Излучаем сигнал об изменении Элемента в списке.
+        else//Если ошибка записи, то...
+            return false;//Отмена.
+    }
+    return true;//Успех.
+}
+
 quint64 DCCppQml::ullElementKod(){//Возвращает Код Элемента.
 ///////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   К О Д   Э Л Е М Е Н Т А---//
@@ -302,6 +334,21 @@ void DCCppQml::setStrElementOpisanie(QString& strElementOpisanieNovi){//Изме
 			emit strElementOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}
+}
+QString DCCppQml::strFileDialog() {//Возвратить JSON строку с папками и файлами.
+///////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   F I L E D I A L O G---//
+///////////////////////////////////////////////
+    return m_strFileDialog;
+}
+void DCCppQml::setStrFileDialog(QString& strFileDialogNovi) {//Изменение JSON запроса с папками и файлами.
+/////////////////////////////////////////////////
+//---И З М Е Н Е Н И Е   F I L E D I A L O G---//
+/////////////////////////////////////////////////
+    if(strFileDialogNovi != m_strFileDialog){//Если элемент не равен выбранному до этого, то...
+        m_strFileDialog = strFileDialogNovi;//Приравниваем.
+        emit strFileDialogChanged();//Излучаем сигнал об изменении аргумента.
+    }
 }
 QString DCCppQml::strDebug(){//Возвращает ошибку.
 ///////////////////////////////////////////////////

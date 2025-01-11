@@ -1,5 +1,5 @@
-import QtQuick
-import QtQuick.Window
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
 
 import "qrc:/js/DCFunkciiJS.js" as JSSpisok
 

@@ -1,4 +1,4 @@
-#include "datatitul.h"
+﻿#include "datatitul.h"
 
 DataTitul::DataTitul(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* parent)
 	: QObject{parent}{
@@ -62,7 +62,7 @@ bool DataTitul::renTitul(QString strTitulNovi){//Переименовать в �
 /////////////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Т Ь   И М Я   Т И Т У Л А---//
 /////////////////////////////////////////////////////////
-	if(m_pdbTitul->UPDATE("Титул", QStringList()<<m_strTitul<<strTitulNovi))
+    if(m_pdbTitul->UPDATE("Титул", QStringList()<<m_strTitul<<strTitulNovi))
 		return true;//Успех
 	return false;//Неудача
 }
@@ -80,7 +80,7 @@ bool DataTitul::renTitulOpisanie(QString strOpisanieNovi){//Переименов
 ///////////////////////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Т Ь   О П И С А Н И Е   Т И Т У Л А---//
 ///////////////////////////////////////////////////////////////////
-	if(m_pdbTitul->UPDATE("Описание", QStringList()<<m_strOpisanie<<strOpisanieNovi))
+    if(m_pdbTitul->UPDATE("Описание", QStringList()<<m_strOpisanie<<strOpisanieNovi))
 		return true;//Успех
 	return false;//Неудача
 }

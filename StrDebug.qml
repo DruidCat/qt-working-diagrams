@@ -1,7 +1,10 @@
-import QtQuick
-import QtQuick.Window
-import QtQuick.Controls
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
+import QtQuick.Controls 2.14
 
+import "qrc:/qml"//Импортируем основные элементы qml
+import "qrc:/qml/buttons"//Импортируем кнопки
+//Страница с отладочной информацией.
 Item {
     id: tmDebug
     property int ntWidth: 2
@@ -61,7 +64,7 @@ Item {
 		target: cppqml;//Цель объект класса С++ DCCppQml
 		function onStrDebugChanged(){//Слот Если изменилось сообщение в strDebug (Q_PROPERTY), то...
 			let ltDebug = cppqml.strDebug;//Считываем сообщение из переменной.
-			if(ltDebug != ""){//Если не пустая строка, которая затирает старое сообщение в Toolbar, то...
+            if(ltDebug !== ""){//Если не пустая строка, которая затирает старое сообщение в Toolbar, то...
 				strDebug = strDebug + ltDebug + "\n";//Пишем текст в переменную из Свойтва Q_PROPERTY
 				txdZona.text = strDebug;//Отображаем собранную строку в TextEdit модуле.
 			}

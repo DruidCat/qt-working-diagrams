@@ -1,7 +1,10 @@
-import QtQuick
-import QtQuick.Window
-import QtQuick.Controls
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
+import QtQuick.Controls 2.14
 
+import "qrc:/qml"//Импортируем основные элементы qml
+import "qrc:/qml/buttons"//Импортируем кнопки
+//Страница отображающая Меню.
 Item {
 	id: tmMenu
     property int ntWidth: 2
@@ -25,6 +28,17 @@ Item {
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	signal clickedAvtor();//Сигнал нажатия кнопки Автор.
 	signal clickedSvet();//Сигнал нажатия кнопки Потолочное освещение.
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+            menuMenu.visible = false;//Делаем невидимым всплывающее меню.
+        }
+    }
+
+    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
+        anchors.fill: tmMenu
+        onClicked: menuMenu.visible = false
+    }
+
 	Item {
 		id: tmZagolovok
 		DCKnopkaNazad {
@@ -35,7 +49,8 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: tmMenu.clrTexta
 			onClicked: {
-				tmMenu.clickedNazad();//Сигнал нажатия кнопки Назад.
+                menuMenu.visible = false;//Делаем невидимым меню.
+                tmMenu.clickedNazad();//Сигнал нажатия кнопки Назад.
 			}
 		}
 	}
@@ -55,7 +70,8 @@ Item {
 			bold: true
 			italic: true
 			onClicked: {
-				tmMenu.clickedLogi();//Сигнал нажатия кнопки Логи.
+                menuMenu.visible = false;//Делаем невидимым меню.
+                tmMenu.clickedLogi();//Сигнал нажатия кнопки Логи.
 			}
 		}
 		DCKnopkaOriginal {
@@ -71,7 +87,8 @@ Item {
 			bold: true
 			italic: true
 			onClicked: {
-				tmMenu.clickedAvtor();//Сигнал нажатия кнопки об Авторе.
+                menuMenu.visible = false;//Делаем невидимым меню.
+                tmMenu.clickedAvtor();//Сигнал нажатия кнопки об Авторе.
 			}
 		}
 		DCKnopkaOriginal {
@@ -87,7 +104,8 @@ Item {
 			bold: true
 			italic: true
 			onClicked: {//Слот запускающий 
-				//Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
+                menuMenu.visible = false;//Делаем невидимым меню.
+                //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
 				pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
 			}
 		}
@@ -104,7 +122,8 @@ Item {
 			bold: true
 			italic: true
 			onClicked: {//Слот запускающий 
-				tmMenu.clickedSvet();//Сигнал нажатия кнопки Потолочного освещения.
+                menuMenu.visible = false;//Делаем невидимым меню.
+                tmMenu.clickedSvet();//Сигнал нажатия кнопки Потолочного освещения.
 			}
 		}
 		PathViewSpisok {
@@ -123,8 +142,39 @@ Item {
 				knopkaSpisok.text = strSpisok;
 			}
 		}
+        DCMenu {//Меню отображается в Рабочей Зоне приложения.
+            id: menuMenu
+            visible: false//Невидимое меню.
+            ntWidth: tmMenu.ntWidth
+            ntCoff: tmMenu.ntCoff
+            anchors.left: tmZona.left
+            anchors.right: tmZona.right
+            anchors.bottom: tmZona.bottom
+            anchors.margins: tmMenu.ntCoff
+            clrTexta: tmMenu.clrTexta
+            clrFona: "SlateGray"
+            imyaMenu: "vihod"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
+            onClicked: function(ntNomer, strMenu) {//Слот сигнала клика по пункту меню.
+                menuMenu.visible = false;//Делаем невидимым меню.
+                if(ntNomer === 1){//Выход
+                    Qt.quit();//Закрыть приложение.
+                }
+            }
+        }
 	}
-	Item {
+    Item {//Тулбар
 		id: tmToolbar
+        DCKnopkaNastroiki {//Кнопка Меню.
+            ntWidth: tmMenu.ntWidth
+            ntCoff: tmMenu.ntCoff
+            anchors.verticalCenter: tmToolbar.verticalCenter
+            anchors.left: tmToolbar.left
+            anchors.margins: tmMenu.ntCoff/2
+            clrKnopki: tmMenu.clrTexta
+            clrFona: tmMenu.clrFona
+            onClicked: {//Слот сигнала нажатия на кнопку Меню.
+                menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость
+            }
+        }
 	}
 }

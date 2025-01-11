@@ -1,8 +1,7 @@
-#ifndef DCDBDATA_H
+﻿#ifndef DCDBDATA_H
 #define DCDBDATA_H
 
 #include <QObject>
-#include <QWidget>
 #include <QtSql>
 #include <QtDebug>
 #include <QString>
@@ -12,13 +11,13 @@
 #include <QDir>
 #include <QByteArray>
 
-class DCDBData : public QWidget{
+class DCDBData : public QObject{
 	Q_OBJECT
 
 public:
 	explicit DCDBData(const QString strImyaDB, const QString strImyaTablici, const qint64 llntRazmer,
-			QWidget* proditel = nullptr);//Конструктор.
-	explicit DCDBData(const QString strImyaDB,const qint64 llntRazmer,QWidget* proditel = nullptr);
+            QObject* proditel = nullptr);//Конструктор.
+    explicit DCDBData(const QString strImyaDB,const qint64 llntRazmer,QObject* proditel = nullptr);
 	~DCDBData();//Деструктор.
 	bool 	CREATE();//Метод создающий пустую таблицу в БД с выделенным местом под файл.
 	bool 	DROP();//Метод удаляющий таблицу в БД.
@@ -67,7 +66,7 @@ private slots:
 /////////////////////////////
 /*
  * explicit DCDBData(const QString strImyaDB, const QString strImyaTablici, const qint64 llntRazmer,
- * 		QWidget* proditel = nullptr);
+ * 		QObject* proditel = nullptr);
  *
  * 1) strImyaDB			- имя БД с данными SQL
  * 2) strImyaTablici	- имя таблици SQL, в которой будут хранится данные с данными.

@@ -1,4 +1,4 @@
-#ifndef CPPQML_H
+﻿#ifndef CPPQML_H
 #define CPPQML_H
 
 #include <QObject>
@@ -10,6 +10,7 @@
 #include "datatitul.h"
 #include "dataspisok.h"
 #include "dataelement.h"
+#include "dcfiledialog.h"
 
 class DCCppQml : public QObject {
     Q_OBJECT
@@ -37,6 +38,8 @@ class DCCppQml : public QObject {
                    READ strSpisokOpisanie
                    WRITE setStrSpisokOpisanie
                    NOTIFY strSpisokOpisanieChanged FINAL)
+    Q_PROPERTY(bool blSpisokPervi
+                   READ blSpisokPervi FINAL)
     Q_PROPERTY(QString strElement
                    READ strElement
                    WRITE setStrElement
@@ -55,6 +58,10 @@ class DCCppQml : public QObject {
                    NOTIFY strElementOpisanieChanged FINAL)
     Q_PROPERTY(bool blElementPervi
                    READ blElementPervi FINAL)
+    Q_PROPERTY(QString strFileDialog
+                   READ strFileDialog
+                   WRITE setStrFileDialog
+                   NOTIFY strFileDialogChanged FINAL)
     Q_PROPERTY(QString strDebug
                    READ strDebug
                    WRITE setStrDebug
@@ -76,15 +83,19 @@ public:
     void		setUllSpisokKod(quint64 ullSpisokKodNovi);//Изменить Код списка.
     QString		strSpisokOpisanie();//Возвращает Описание элемента Списка
     void		setStrSpisokOpisanie(QString& strOpisanieNovi);//Изменить описание списка.
+    bool 		blSpisokPervi() { return m_blSpisokPervi; }//Возвращает флаг Первый в Списке?
     QString		strElement();//Возвратить элемент.
     void		setStrElement(QString& strElementNovi);//Измененит Элемент.
     QString		strElementDB();//Возвратить JSON строку элемента.
     void		setStrElementDB(QString& strElementNovi);//Изменение JSON запроса Элемента.
+    Q_INVOKABLE bool renStrElementDB(QString strElement, QString strElementNovi);//Переимен. Элемент списка
     quint64		ullElementKod();//Возвращает Код Элемента.
     void		setUllElementKod(quint64 ullElementKodNovi);//Изменить Код Элемента.
     QString		strElementOpisanie();//Возвращает Описание Элемента
     void		setStrElementOpisanie(QString& strOpisanieNovi);//Изменить описание Элемента.
     bool 		blElementPervi() { return m_blElementPervi; }//Возвращает флаг Первый Элемент?
+    QString		strFileDialog();//Возвратить JSON строку с папками и файлами.
+    void		setStrFileDialog(QString& strFileDialogNovi);//Изменение JSON запроса с папками и файлами.
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//
@@ -103,7 +114,8 @@ signals:
     void strElementDBChanged();//Сигнал о том, что записан элемент в БД.
     void ullElementKodChanged();//Сигнал, что Код выбранного Элемента изменился.
     void strElementOpisanieChanged();//Сигнал, что описание изменилось.
-	void strDebugChanged();//Сигнал, что новая ошибка появилась.
+    void strFileDialogChanged();//Сигнал о том, что изменился каталог папок и файлов.
+    void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
 	void slotDebug(QString strDebug);//Слот обрабатывающий ошибку приходящую по сигналу.
@@ -116,16 +128,19 @@ private:
     QString m_strSpisokDB;//аргумент JSON запроса Списка в Свойстве Q_PROPERTY
 	quint64	m_ullSpisokKod;//Код элемента списка в Свойстве Q_PROPERTY.
     QString m_strSpisokOpisanie;//аргумент описания элемента списка в Свойстве Q_PROPERTY
+    bool 	m_blSpisokPervi;//Флаг Первый Список? в Свойстве Q_PROPERTY.
     QString m_strElement;//переменная записывающая Элемент в Свойстве Q_PROPERTY
     QString m_strElementDB;//аргумент JSON запроса Элементов в Свойстве Q_PROPERTY
 	quint64	m_ullElementKod;//Код Элемента в Свойстве Q_PROPERTY.
     QString m_strElementOpisanie;//аргумент описания элемента в Свойстве Q_PROPERTY
 	bool 	m_blElementPervi;//Флаг Первый Элемент? в Свойстве Q_PROPERTY.
-	QString m_strDebug;//Текс ошибки.
+    QString m_strFileDialog;//переменная записывающая каталог пакок и файлов в Свойстве Q_PROPERTY
+    QString m_strDebug;//Текс ошибки.
 
     DataTitul* 	m_pDataTitul = nullptr;//Указатель на таблицу Титула в БД.
     DataSpisok* m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
     DataElement* m_pDataElement = nullptr;//Указатель на таблицу Элементов в БД.
+    DCFileDialog* m_pFileDialog = nullptr;//Указатель на Проводник.
 	QTimer*		m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.
 	uint 		m_untDebugSec;//Счётчик секунд для таймера отладки.
  	DCClass* 	m_pdcclass = nullptr;//Указатель на класс часто используемых методов.

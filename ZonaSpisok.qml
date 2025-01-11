@@ -1,5 +1,5 @@
-import QtQuick
-import QtQuick.Window
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
 
 import "qrc:/js/DCFunkciiJS.js" as JSSpisok
 
@@ -13,7 +13,6 @@ Item {
 
 	ListView {
 		id: lsvZona
-
 		Component {
 			id: cmpZona
 			Rectangle {
@@ -21,6 +20,7 @@ Item {
 				width: lsvZona.width
 				height: tmZona.ntWidth*tmZona.ntCoff+tmZona.ntCoff
 				radius: (width/(tmZona.ntWidth*tmZona.ntCoff))/tmZona.ntCoff
+                opacity: 0.9//Небольшая прозрачность, чтоб был виден Логотип под надписями.
 				color: maZona.containsPress
 					   ? Qt.darker(tmZona.clrFona, 1.3) : tmZona.clrFona
 				Text {

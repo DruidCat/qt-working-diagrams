@@ -1,14 +1,16 @@
-﻿import QtQuick
-import QtQuick.Window
-import QtQuick.Controls
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
+import QtQuick.Controls 2.14
+
+import "pages"//Импортируем Страницы программы.
 
 Window {
 	id: root
-    width: 380
+    width: 480
     height: 640
 	visible: true
 	color: "grey"
-	title: qsTr("Список от druidcat@yandex.ru.")
+    title: qsTr("Рабочий Список от druidcat@yandex.ru")
 
     property int ntWidth: 2
 	property int ntCoff: 8
@@ -159,9 +161,9 @@ Window {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
 			textZagolovok: "ТМК"
-			StrSpisok {
+            StrSpisok {
 				id: tmSpisok
-				ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
+                ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
 				clrTexta: pgStrSpisok.clrTexta; clrFona: pgStrSpisok.clrRabOblasti
 				zagolovokX: pgStrSpisok.rctStrZagolovok.x; zagolovokY: pgStrSpisok.rctStrZagolovok.y
 				zagolovokWidth: pgStrSpisok.rctStrZagolovok.width
@@ -177,7 +179,7 @@ Window {
 				onClickedSozdat: {
 
 				}
-				onClickedInfo: {
+                onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strTitulOpisanie;//Отправляем текст в бизнес логику.
 					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
@@ -186,6 +188,9 @@ Window {
 					pgStrElement.textZagolovok = strSpisok;//Задаём заголовок на странице Элементов.
 					stvStr.push(pgStrElement);//Переключаемся на страницу Элементов.
 				}
+                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrSpisok.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
+                }
 			}
 		}
 		Stranica {//Страница Элементы Списка
@@ -222,11 +227,14 @@ Window {
 					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;//Отправляем текст в бизнес логику.
 					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
-				onClickedElement: function(strElement) {
+                onClickedElement: function(strElement) {//Слот сигнала нажатия на Элемент, вернув имя Элемента
 					stvStr.strOpisanie = "element";//Показываем описание Элемента.
 					pgStrDannie.textZagolovok = strElement;//Задаём заголовок на странице Данных.
 					stvStr.push(pgStrDannie);//Переключаемся на страницу Данных..
 				}
+                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrElement.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
+                }
 			}
 		}
 
@@ -255,12 +263,61 @@ Window {
 					stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
 					stvStr.pop()//Назад страницу
 				}
+                onClickedSozdat: {//Слот нажатия кнопки Создать.
+                    stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
+                }
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
 					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
+                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrDannie.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
+                }
 			}
 		}
+        Stranica {//Страница Файловым Диалогом
+        ///////////////////////////////////
+        ///Ф А Й Л О В Ы Й   Д И А Л О Г///
+        ///////////////////////////////////
+            id: pgStrFileDialog
+            visible: false
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            clrFona: root.clrFona
+            clrTexta: root.clrKnopok
+            clrRabOblasti: root.clrStranic
+            textZagolovok: "ПРОВОДНИК"
+            StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
+                ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
+                clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
+                zagolovokX: pgStrFileDialog.rctStrZagolovok.x; zagolovokY: pgStrFileDialog.rctStrZagolovok.y
+                zagolovokWidth: pgStrFileDialog.rctStrZagolovok.width;
+                zagolovokHeight: pgStrFileDialog.rctStrZagolovok.height
+                zonaX: pgStrFileDialog.rctStrZona.x; zonaY: pgStrFileDialog.rctStrZona.y
+                zonaWidth: pgStrFileDialog.rctStrZona.width; zonaHeight: pgStrFileDialog.rctStrZona.height
+                toolbarX: pgStrFileDialog.rctStrToolbar.x; toolbarY: pgStrFileDialog.rctStrToolbar.y
+                toolbarWidth: pgStrFileDialog.rctStrToolbar.width;
+                toolbarHeight: pgStrFileDialog.rctStrToolbar.height
+                onClickedNazad: {//Слот нажатия кнопки Назад.
+                    //stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
+                    //TODO сделать описание.
+                    //TODO вернуть Путь первоначальный.
+                    stvStr.pop()//Назад страницу
+                }
+                onClickedZakrit: {
+                    //TODO вернуть Путь первоначальный.
+                    stvStr.pop()//Назад страницу
+                }
+                onClickedInfo: {
+                    //tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
+                    //stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
+                    //TODO Зделать описание.
+                }
+//                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+//                    pgStrFileDialog.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
+//                }
+            }
+        }
 		Stranica {//Страница Описания
 		/////////////////////
 		///О П И С А Н И Е///

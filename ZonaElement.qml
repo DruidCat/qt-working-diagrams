@@ -1,5 +1,5 @@
-import QtQuick
-import QtQuick.Window
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
 
 import "qrc:/js/DCFunkciiJS.js" as JSElement
 
@@ -9,19 +9,20 @@ Item {
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
-	signal clicked(int ntNomer, var strElement);
+    signal clicked(int ntNomer, var strElement);//Сигнал клика на одном из элементов, передаёт номер и имя.
 
 	ListView {
 		id: lsvZona
 
-		Component {
+        Component {//Компонент читающий из Модели, и создающий поочереди каждый Элемент с настройками.
 			id: cmpZona
 			Rectangle {
 				id: rctZona
 				width: lsvZona.width
 				height: tmZona.ntWidth*tmZona.ntCoff+tmZona.ntCoff
 				radius: (width/(tmZona.ntWidth*tmZona.ntCoff))/tmZona.ntCoff
-				color: maZona.containsPress
+                opacity: 0.9//Небольшая прозрачность, чтоб был виден Логотип под надписями.
+                color: maZona.containsPress
 					   ? Qt.darker(tmZona.clrFona, 1.3) : tmZona.clrFona
 				Text {
 					color: maZona.containsPress
@@ -33,11 +34,11 @@ Item {
 					? rctZona.height-tmZona.ntCoff
 					: rctZona.width/text.length-tmZona.ntCoff
 				}
-				MouseArea {
+                MouseArea {//Создаём MA для каждого Элемента.
 					id: maZona
 					anchors.fill: rctZona
-					onClicked: {
-						tmZona.clicked(modelData.kod, modelData.element)
+                    onClicked: {//При клике на Элемент
+                        tmZona.clicked(modelData.kod, modelData.element);//Излучаем сигнал с номером и именем.
 					}
 				}
 			}

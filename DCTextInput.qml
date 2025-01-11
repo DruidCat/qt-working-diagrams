@@ -1,6 +1,6 @@
-import QtQuick
-import QtQuick.Window
-
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
+//DCTextInput - ШАБЛОН ДЛЯ РАБОТЫ СО СТРОКОЙ ТЕКСТА. (33 БУКВЫ, работает ESCAPE и ENTER)
 Item {
     id: tmTextInput
     property alias text: txnTextInput.text //Текст

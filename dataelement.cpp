@@ -1,10 +1,11 @@
-#include "dataelement.h"
+﻿#include "dataelement.h"
 
 DataElement::DataElement(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* parent)
 	: QObject{parent}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
+    m_pdcclass = new DCClass();//Класс с методами по работе с текстом.
     //Настройки соединения к БД Настроек.
     m_strImyaDB = strImyaDB;//Имя локальной базы данных.
     m_strLoginDB = strLoginDB;//Логин локальной базы данных.
@@ -19,7 +20,6 @@ DataElement::DataElement(QString strImyaDB, QString strLoginDB, QString strParol
     if(!m_pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание"))//Если таблица не создалас
 		qdebug("DataElement::DataElement: ошибка создания таблицы элемент_0.");
 
-	m_pdcclass = new DCClass();//Класс с методами по работе с текстом.
 	m_blElementPervi = false;//Не первый Элемент в Списке элементов.(false)
 }
 DataElement::~DataElement(){//Деструктор
@@ -37,11 +37,13 @@ bool DataElement::dbStart(){//Создать первоначальные Эле
 ///////////////////////////////////////////////////////////
     m_pdbElement->ustImyaTablici("элемент_0");
 	if(m_pdbElement->CREATE()){//Если таблица создалась, то
-		if(!m_pdbElement->INSERT(	QStringList()<<"Номер"<<"Элемент"<<"Описание",
-									QStringList()<<"1"<<"druidcat@yandex.ru"<<"druidcat@yandex.ru")){
-			qdebug("DataElement::DataElement: ошибка создания первоначальной записи в таблицу элемент_0.");
-			return false;//Ошибка.
-		}
+        if(!m_pdbElement->SELECT()){//если нет ни одной записи в БД, то...
+            if(!m_pdbElement->INSERT(	QStringList()<<"Номер"<<"Элемент"<<"Описание",
+                                        QStringList()<<"1"<<"druidcat@yandex.ru"<<"druidcat@yandex.ru")){
+                qdebug("DataElement::DataElement: ошибка создания первоначальной записи в таблицу элемент_0.");
+                return false;//Ошибка.
+            }
+        }
 	}
 	else{
 		qdebug("DataElement::dbStart(quint64): ошибка создания таблицы элемент_0.");
@@ -63,7 +65,7 @@ QStringList	DataElement::polElement(quint64 ullKod){//Получить полн�
         return slsElement;//Возвращаем пустую строку.
 	}
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
-		QString strElement = m_pdbElement->SELECT("Код", QString::number(ullShag), "Элемент");
+        QString strElement = m_pdbElement->SELECT("Код", QString::number(ullShag), "Элемент");
 		if(strElement != "")//Если Список не пустая строка, то...
 			slsElement = slsElement<<strElement;//Собираем полный список Элементов.
 	}
@@ -73,21 +75,32 @@ bool DataElement::ustElement(quint64 ullKod, QString strElement){//Записа�
 /////////////////////////////////////////
 //---З А П И С А Т Ь   Э Л Е М Е Н Т---//
 /////////////////////////////////////////
-    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));//Задаём имя таблицы, с которой работаем.
     if(!m_pdbElement->CREATE()){//Если таблица не создалась
 		qdebug("DataElement::ustElement(quint64, QString): ошибка создания таблицы элемент_"
 				+QString::number(ullKod)+".");
 		return false;//Не успех
 	}
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
-	if(m_pdbElement->INSERT(QStringList()<<"Номер"<<"Элемент"<<"Описание",
+    if(m_pdbElement->INSERT(QStringList()<<"Номер"<<"Элемент"<<"Описание",
                               QStringList()<<QString::number(ullKolichestvo+1)<<strElement
 							  <<"Описание. Необходимо его редактировать.")){
 		return true;//Успех записи в БД.
 	}
 	qdebug("DataElement::ustElement(quint64, QString): Ошибка записи Элемента в БД.");
-	return false;//Ошибка записи в БД.
+    return false;//Ошибка записи в БД.
 }
+
+bool DataElement::renElement(quint64 ullKod, QString strElement, QString strElementNovi) {//Переиме. элемент
+ //////////////////////////////////////////////////
+//---П Е Р Е И М Е Н О В А Т Ь   Э Л Е М Е Н Т---//
+///////////////////////////////////////////////////
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));//Задаём имя таблицы, с которой работаем.
+    if(m_pdbElement->UPDATE("Элемент", QStringList()<<strElement<<strElementNovi))//Перезаписываем данные в БД
+        return true;//Успех
+    return false;//Неудача
+}
+
 QString DataElement::polElementJSON(quint64 ullKod) {//Получить JSON строчку Элемента.
 ///////////////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   С Т Р О К У   Э Л Е М Е Н Т А---//
@@ -110,10 +123,10 @@ QString DataElement::polElementJSON(quint64 ullKod) {//Получить JSON с�
     //Пример: [{"kod":"1","nomer":"1","element":"фаска"},{"kod":"2","nomer":"2","element":"торцовка"}]
     strElementJSON = "[";//Начало массива объектов
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
-		QString strNomer = m_pdbElement->SELECT("Код", QString::number(ullShag), "Номер");
+        QString strNomer = m_pdbElement->SELECT("Код", QString::number(ullShag), "Номер");
 		if(strNomer != ""){//Если номер не пустая строка, то...
 			QString strElement = m_pdcclass->
-				json_encode(m_pdbElement->SELECT("Код", QString::number(ullShag), "Элемент"));
+                json_encode(m_pdbElement->SELECT("Код", QString::number(ullShag), "Элемент"));
 			if(strElement != ""){//Если Список не пустая строка, то...
 				strElementJSON = strElementJSON + "{";
 				strElementJSON = strElementJSON + "\"kod\":\"" + QString::number(ullShag) + "\",";
@@ -148,7 +161,7 @@ bool DataElement::ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod
 		return false;//Возвращаем ошибку.
 	}
    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
-	if(m_pdbElement->UPDATE(QStringList()<<"Код"<<"Описание",
+    if(m_pdbElement->UPDATE(QStringList()<<"Код"<<"Описание",
 						QStringList()<<QString::number(ullElementKod)<<strElementOpisanie)){//Успех записи, то
 		return true;//Успех
 	}

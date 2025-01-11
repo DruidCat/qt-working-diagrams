@@ -1,6 +1,6 @@
-import QtQuick
-import QtQuick.Window
-
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
+//DCMenu - ШАБЛОН ВСПЛЫВАЮЩЕГО МЕНЮ НАСТРОЕК.
 import "qrc:/js/DCFunkciiJS.js" as JSMenu
 
 Item {
@@ -9,9 +9,10 @@ Item {
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
-	property string imyaMenu: "spisok"
+    property string imyaMenu: ""
 	signal clicked(int ntNomer, var strMenu)
-	ListView {
+
+    ListView {
 		id: lsvMenu
 		Component {
 			id: cmpMenu
@@ -50,6 +51,7 @@ Item {
 		anchors.rightMargin:tmMenu.width/2
 		opacity: 0.7//Прозрачность.
 		interactive: false//Запретить листать.
+
 		//model: JSMenu.vrMenuSpisok
 		delegate: cmpMenu
 	}
@@ -65,7 +67,10 @@ Item {
 				if(imyaMenu == "dannie"){//Если это Данные, то...
 					lsvMenu.model = JSMenu.vrMenuDannie;//Перегружаем модель ListView с новыми данными.
 				}
-			}
+                else{
+                    lsvMenu.model = JSMenu.vrMenuVihod;//Перегружаем модель ListView с новыми данными.
+                }
+            }
 		}
 		tmMenu.height = lsvMenu.count*(ntWidth*ntCoff+ntCoff)+ntCoff;//Выставляем высоту под размер меню.
 	}

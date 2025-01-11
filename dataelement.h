@@ -1,4 +1,4 @@
-#ifndef DATAELEMENT_H
+﻿#ifndef DATAELEMENT_H
 #define DATAELEMENT_H
 
 #include <QObject>
@@ -14,7 +14,8 @@ public:
 	bool 		dbStart();//Создать первоначальные Элементы.
 	QStringList	polElement(quint64 ullKod);//Получить полный список всех Элементов по Коду Списка.
 	bool 		ustElement(quint64 ullKod, QString strElement);//Записать в БД Элемент.
-    QString		polElementJSON(quint64 ullKod);//Получить JSON строчку Элементов. 
+    bool 		renElement(quint64 ullKod, QString strElement, QString strElementNovi);//Переименовать элемент
+    QString		polElementJSON(quint64 ullKod);//Получить JSON строчку Элементов.
 	QString 	polElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod);//Полчить Описание Элемента
 	bool 		ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod, QString strElementOpisanie);
 	bool 		polElementPervi() { return m_blElementPervi; }//Вернуть состояние флага Первый Элемент?

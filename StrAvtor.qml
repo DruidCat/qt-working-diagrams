@@ -1,7 +1,10 @@
-import QtQuick
-import QtQuick.Window
-import QtQuick.Controls
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
+import QtQuick.Controls 2.14
 
+import "qrc:/qml"//Импортируем основные элементы qml
+import "qrc:/qml/buttons"//Импортируем кнопки
+//Страница об Авторе.
 Item {
     id: tmAvtor
     property int ntWidth: 2

@@ -1,7 +1,11 @@
-import QtQuick
-import QtQuick.Window
-import QtQuick.Controls
+﻿import QtQuick 2.14
+import QtQuick.Window 2.14
+import QtQuick.Controls 2.14
 
+import "qrc:/qml"//Импортируем основные элементы qml
+import "qrc:/qml/buttons"//Импортируем кнопки
+import "qrc:/qml/zones"//Импортируем зону списка.
+//Страниц отображающая Список, первый, главный экран со Списком чего либо.
 Item {
     id: tmSpisok
     property int ntWidth: 2
@@ -27,7 +31,24 @@ Item {
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedSpisok(var strSpisok);//Сигнал когда нажат один из элементов Списка.
+    signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
 
+    function fnClickedEscape(){//Функция нажатия кнопки Escape.
+        txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+        menuSpisok.visible = false;//Делаем невидимым всплывающее меню.
+        tmSpisok.blPereimenovat = false;//Запрещаем переименовывать.
+        tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+    }
+    //onClickedEscape: {}
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+            fnClickedEscape();//Функция нажатия кнопки Escape.
+        }
+    }
+    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
+        anchors.fill: tmSpisok
+        onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
 	function fnClickedOk(){//Функция сохранения/переименования элемента Списка.
 		if(blPereimenovat){//Если Переименовываем, то...
 			cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text);//Переименовываем элемент Списка.
@@ -35,13 +56,24 @@ Item {
 		else{//иначе...
 			cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
 		}
-		blPereimenovat = false;//Запрещено переименовывать.
-		menuSpisok.visible = false;//Делаем невидимым меню.
-		txnZagolovok.visible = false;//Сначала записываем или переименовываем, и только потом обнуляем.		
-	}
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
+    function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
+        blPereimenovat = false;//Запрещено переименовывать. НЕ УДАЛЯТЬ.
+        menuSpisok.visible = false;//Делаем невидимым меню.
+        txnZagolovok.visible = true;//Режим создания элемента Списка.
+        tmSpisok.signalToolbar("Создайте новый список.")
+    }
+    function fnMenuSozdat(){//Нажат пункт меню Добавить.
+        fnClickedSozdat();//Функция обработки кнопки Создать.
+    }
+    function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
+        blPereimenovat = true;
+        tmSpisok.signalToolbar("Выберите список для его переименования.")
+    }
+
 	Item {//Спискок Заголовка
 		id: tmZagolovok
-
 		DCKnopkaMenu {
 			id: knopkaMenu
 			ntWidth: tmSpisok.ntWidth
@@ -52,9 +84,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
-				blPereimenovat = false;//Запрещено переименовывать.
-				menuSpisok.visible = false;//Делаем невидимым меню.
-				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
+                fnClickedEscape();//Функция нажатия кнопки Escape.
 				tmSpisok.clickedMenu();//Сигнал Меню
 			}
 		}
@@ -68,10 +98,8 @@ Item {
 			anchors.margins: tmSpisok.ntCoff/2
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
-			onClicked: {
-				blPereimenovat = false;//Запрещено переименовывать.
-				menuSpisok.visible = false;//Делаем невидимым меню.
-				txnZagolovok.visible = true;//Режим создания элемента Списка.
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+                fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
 			}
 		}
 		DCKnopkaOk{
@@ -124,16 +152,13 @@ Item {
 				onClickedEnter: {//Если нажата Enter, то такое же действие, как и при нажатии кнопки Ок.
 					fnClickedOk();//Нажимаем Ок(Сохранить/Переименовать), чтоб не менять в нескольких местах.
 				}
-				onClickedEscape: {
-					txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
-					blPereimenovat = false;//Запрещено переименовывать.
-				}
 			}
 		}
 	}
-	onBlPereimenovatChanged: {//Сигнал изменения property blPereimenovat 
+    onBlPereimenovatChanged: {//Слот сигнала изменения property blPereimenovat (on...Changed)
    		tmSpisok.blPereimenovat ? rctZona.border.color = clrTexta : rctZona.border.color = "transparent";
 	}
+
 	Item {//Список Рабочей Зоны
 		id: tmZona
 		Rectangle {
@@ -142,35 +167,40 @@ Item {
 			color: "transparent"
 			border.width: tmSpisok.ntCoff/2//Бордюр при переименовании.
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+            DCLogoTMK {//Логотип до ZonaSpisok, чтоб не перекрывать список.
+                ntCoff: 16
+                anchors.centerIn: parent
+                clrLogo: tmSpisok.clrTexta
+                clrFona: tmSpisok.clrFona
+            }
 			ZonaSpisok {
 				id: lsvZonaSpisok
 				ntWidth: tmSpisok.ntWidth
 				ntCoff: tmSpisok.ntCoff
 				anchors.fill: rctZona
 				clrTexta: tmSpisok.clrTexta
-				clrFona: "SlateGray"
-				onClicked: function(ntKod, strSpisok) {//Слот нажатия на один из элементов Списка.
-					if(blPereimenovat){
-						txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
-						cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
-						txnZagolovok.text = strSpisok;//Добавляем в строку выбранный элемент Списка.
-					}
-					else{
-						blPereimenovat = false;//Запрещено переименовывать.
-						txnZagolovok.visible = false;//Отключаем создание Элемента списка.
-						menuSpisok.visible = false;//Делаем невидимым меню.
-						cppqml.ullSpisokKod = ntKod;//Присваиваем Код списка к свойству Q_PROPERTY
-						cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
-						tmSpisok.clickedSpisok(strSpisok);//Излучаем сигнал с именем элемента Списка.
-					}
+				clrFona: "SlateGray" 
+                onClicked: function(ntKod, strSpisok) {//Слот clicked нажатия на один из элементов Списка.
+                    if(cppqml.blSpisokPervi){//Если это первый в Списке, то...
+                        fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
+                    }
+                    else{//Если не первый элемент, то...
+                        if(blPereimenovat){//Если ПЕРЕИМНОВАТЬ, то...
+                            txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
+                            cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
+                            txnZagolovok.text = strSpisok;//Добавляем в строку выбранный элемент Списка.
+                        }
+                        else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то СОХРАНИТЬ...
+                            blPereimenovat = false;//Запрещено переименовывать.
+                            txnZagolovok.visible = false;//Отключаем создание Элемента списка.
+                            menuSpisok.visible = false;//Делаем невидимым меню.
+                            cppqml.ullSpisokKod = ntKod;//Присваиваем Код списка к свойству Q_PROPERTY
+                            cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
+                            tmSpisok.clickedSpisok(strSpisok);//Излучаем сигнал с именем элемента Списка.
+                        }
+                    }
 				}
-			}
-			DCLogoTMK {//Логотип
-				ntCoff: 16
-				anchors.centerIn: parent
-				clrLogo: tmSpisok.clrTexta
-				clrFona: tmSpisok.clrFona
-			}
+			}	
 			DCMenu {
 				id: menuSpisok
 				visible: false//Невидимое меню. 
@@ -185,18 +215,21 @@ Item {
 				imyaMenu: "spisok"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
 					menuSpisok.visible = false;//Делаем невидимым меню.
-					if(ntNomer == 2){//Переименовать.
-						blPereimenovat = true;
+                    if(ntNomer === 1){//Добавить.
+                        fnMenuSozdat();//Функция обработки нажатия меню Добавить.
+                    }
+                    if(ntNomer === 2){//Переименовать.
+                        fnMenuPereimenovat();//Функция нажатия пункта меню Переименовать.
 					}
-					if(ntNomer == 4){//Выход
+                    if(ntNomer === 5){//Выход
 						Qt.quit();//Закрыть приложение.
 					}
 				}
-			}
-		}
+            }
+		} 
 	}
 	Item {//Список Тулбара
-		id: tmToolbar
+        id: tmToolbar
 		DCKnopkaInfo {
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
@@ -206,10 +239,8 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
-				blPereimenovat = false;//Запрещено переименовывать.
-				menuSpisok.visible = false;//Делаем невидимым меню.
-				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
-				tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
+                fnClickedEscape();//Функция нажатия кнопки Escape.
+                tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
 			}
 		}
 		DCKnopkaNastroiki {
@@ -221,10 +252,12 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
-				blPereimenovat = false;//Запрещено переименовывать.
-				menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;	
-				txnZagolovok.visible = false;//Отключаем создание Элемента списка.
-			}
+                txnZagolovok.visible = false;//Отключаем создание Элемента списка.
+                menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;
+                blPereimenovat = false;//Запрещено переименовывать.
+                tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+            }
 		}
-	}
+    }
 }
+

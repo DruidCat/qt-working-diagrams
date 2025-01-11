@@ -1,4 +1,4 @@
-#include "dataspisok.h"
+﻿#include "dataspisok.h"
 
 DataSpisok::DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* parent)
 	: QObject{parent}{
@@ -11,15 +11,15 @@ DataSpisok::DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB
     m_strImyaDB = strImyaDB;//Имя локальной базы данных.
     m_strLoginDB = strLoginDB;//Логин локальной базы данных.
     m_strParolDB = strParolDB;//Пароль локальной базы данных.
-
     m_pdbSpisok = new DCDB("QSQLITE", m_strImyaDB, "список");//Таблица с данными по Подключ.
     m_pdbSpisok->setUserName(m_strLoginDB);//Пользователь.
     m_pdbSpisok->setPassword(m_strParolDB);//Устанавливаем пароль.
-    m_pdbSpisok->CREATE(QStringList()<<"#Код"<<"Номер"<<"Список"<<"Описание");
 	connect(	m_pdbSpisok,
 				SIGNAL(signalDebug(QString)),
 				this,
 				SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    m_pdbSpisok->CREATE(QStringList()<<"#Код"<<"Номер"<<"Список"<<"Описание");
+    m_blSpisokPervi = false;//Не первый Список в Списке.(false)
 }
 DataSpisok::~DataSpisok(){//Деструктор
 //////////////////////////////
@@ -34,7 +34,8 @@ bool DataSpisok::dbStart() {//Иннициализируем БД, и запис
 ///////////////////////////////////////////
 //---З А П И С Ы В А Е М   Д А Н Н Ы Е---//
 ///////////////////////////////////////////
-	QString strOpisanieFormovki = "Описание участка формовки.";
+/*
+    QString strOpisanieFormovki = "Описание участка формовки.";
 	QString strOpisanieSvarki = "Описание участка сварки.";
 	QString strOpisanieOtdelki = "Описание участка отделки. Оборудование участка распологается со второго по четвёртый пролёт. Начало участки на 28 оси второго пролёта начинается на Транспорте 5. Оканчивается на 28 оси третьего пролёта Транспорта 9. Так же на Оси 47 есть перекатная телега с третьего в четвёртый пролёт. На участке много разнообразных акрегатов, это Транспорты 5, 6, 7, 8, 9. Это Экспандер 1 и 2, это агрегат шлифования сварочных швов. Также это две ультразвуковые остановки проверки качества сварочного шва.";
     if(!m_pdbSpisok->SELECT()){//Если нет ни одной записи в таблице, то...
@@ -53,6 +54,7 @@ bool DataSpisok::dbStart() {//Иннициализируем БД, и запис
         else//Если БД не отрылась, то...
             return false;//Выход, ошибка.
     }
+*/
     return true;//Выход, успех!
 }
 QString DataSpisok::polSpisok(quint64 ullKod) {//Получить название элемента Списка по Коду.
@@ -81,7 +83,7 @@ bool DataSpisok::ustSpisok(QString strSpisok){//Записать в БД эле�
 //---З А П И С А Т Ь   Э Л Е М Е Н Т   С П И С К А---//
 ///////////////////////////////////////////////////////
     quint64 ullKolichestvo = m_pdbSpisok->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
-	if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание",
+    if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание",
                               QStringList()<<QString::number(ullKolichestvo+1)<<strSpisok
 							  <<"Описание. Необходимо его редактировать.")){
 		return true;//Успех записи в БД.
@@ -93,7 +95,7 @@ bool DataSpisok::renSpisok(QString strSpisok, QString strSpisokNovi){//Пере�
 /////////////////////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Т Ь   Э Л Е М Е Н Т   С П И С К А---//
 /////////////////////////////////////////////////////////////////
-	if(m_pdbSpisok->UPDATE("Список", QStringList()<<strSpisok<<strSpisokNovi))
+    if(m_pdbSpisok->UPDATE("Список", QStringList()<<strSpisok<<strSpisokNovi))
 		return true;//Успех
 	return false;//Неудача
 }
@@ -103,18 +105,21 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
 ///////////////////////////////////////////////////////////////
     quint64 ullKolichestvo = m_pdbSpisok->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
+        m_blSpisokPervi = true;//Флаг - это будет первый в списке.
 		qdebug("Нажмите кнопку \"Создать новый элемент.\"");
         return "[{\"kod\":\"0\",\"nomer\":\"0\",\"spisok\":\"Создайте новый элемент.\"}]";//Возвращаем строку.
 	}
+    else
+        m_blSpisokPervi = false;//Флаг - не первый в списке.
     QString strSpisokJSON("");//Строка, в которой будет собран JSON запрос.
 	m_slsSpisok.clear();//Пустой список элементов списка.
     //Пример: [{"kod":"1","nomer":"1","spisok":"формовка"},{"kod":"2","nomer":"2","spisok":"сварка"}]
     strSpisokJSON = "[";//Начало массива объектов
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
-		QString strNomer = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Номер");
+        QString strNomer = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Номер");
 		if(strNomer != ""){//Если номер не пустая строка, то...
 			QString strSpisok = m_pdcclass->
-				json_encode(m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Список"));
+                json_encode(m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Список"));
 			if(strSpisok != ""){//Если Список не пустая строка, то...
 				strSpisokJSON = strSpisokJSON + "{";
 				strSpisokJSON = strSpisokJSON + "\"kod\":\"" + QString::number(ullShag) + "\",";
@@ -145,7 +150,7 @@ bool DataSpisok::ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie){//
 /////////////////////////////////////////////////////////
 //---З А П И С А Т Ь   О П И С А Н И Е   С П И С К А---//
 /////////////////////////////////////////////////////////
-		if(m_pdbSpisok->UPDATE(QStringList()<<"Код"<<"Описание",
+        if(m_pdbSpisok->UPDATE(QStringList()<<"Код"<<"Описание",
 							QStringList()<<QString::number(ullKod)<<strSpisokOpisanie))//Если успех записи
 			return true;
 		qdebug("DataSpisok::ustSpisokOpisanie(quint64, QString): ошибка записи Описания.");

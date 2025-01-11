@@ -1,7 +1,7 @@
-#include "dcdbdata.h"
+﻿#include "dcdbdata.h"
 
 DCDBData::DCDBData(const QString strImyaDB, const QString strImyaTablici, const qint64 llntRazmer,
-		QWidget* proditel) : QWidget(proditel){//Конструктор.
+        QObject* proditel) : QObject(proditel){//Конструктор.
 ////////////////////////////////
 //---К О Н С Т Р У К Т О-Р----//
 ////////////////////////////////
@@ -10,7 +10,7 @@ DCDBData::DCDBData(const QString strImyaDB, const QString strImyaTablici, const 
 	m_llntRazmer = llntRazmer * 1024;//Переводим в байты (тестно связан с параметром m_untKolichestvoGraf)
 }
 
-DCDBData::DCDBData(const QString strImyaDB, const qint64 llntRazmer, QWidget* proditel) : QWidget(proditel){
+DCDBData::DCDBData(const QString strImyaDB, const qint64 llntRazmer, QObject* proditel) : QObject(proditel){
 ////////////////////////////////
 //---К О Н С Т Р У К Т О-Р----//
 ////////////////////////////////

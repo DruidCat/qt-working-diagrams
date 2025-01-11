@@ -1,7 +1,34 @@
 <RCC>
     <qresource prefix="/">
+        <file>qml/ru.WorkingDiagrams.qml</file>
+        <file>qml/buttons/DCKnopkaInfo.qml</file>
+        <file>qml/buttons/DCKnopkaKruglaya.qml</file>
+        <file>qml/buttons/DCKnopkaMenu.qml</file>
+        <file>qml/buttons/DCKnopkaNastroiki.qml</file>
+        <file>qml/buttons/DCKnopkaNazad.qml</file>
+        <file>qml/buttons/DCKnopkaOk.qml</file>
+        <file>qml/buttons/DCKnopkaOriginal.qml</file>
+        <file>qml/buttons/DCKnopkaPoisk.qml</file>
+        <file>qml/buttons/DCKnopkaSozdat.qml</file>
+        <file>qml/buttons/DCKnopkaZakrit.qml</file>
+        <file>qml/DCLogoTMK.qml</file>
+        <file>qml/DCMenu.qml</file>
+        <file>qml/DCTextEdit.qml</file>
+        <file>qml/DCTextInput.qml</file>
+        <file>qml/PathViewSpisok.qml</file>
+        <file>qml/pages/Stranica.qml</file>
+        <file>qml/pages/StrAvtor.qml</file>
+        <file>qml/pages/StrDannie.qml</file>
+        <file>qml/pages/StrDebug.qml</file>
+        <file>qml/pages/StrElement.qml</file>
+        <file>qml/pages/StrMenu.qml</file>
+        <file>qml/pages/StrOpisanie.qml</file>
+        <file>qml/pages/StrSpisok.qml</file>
+        <file>qml/pages/StrSvet.qml</file>
+        <file>qml/zones/ZonaElement.qml</file>
+        <file>qml/zones/ZonaSpisok.qml</file>
         <file>js/DCFunkciiJS.js</file>
-        <file>TODO.txt</file>
-        <file>vim.txt</file>
+        <file>qml/pages/StrFileDialog.qml</file>
+        <file>qml/zones/ZonaFileDialog.qml</file>
     </qresource>
 </RCC>

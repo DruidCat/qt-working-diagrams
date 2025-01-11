@@ -1,4 +1,4 @@
-#include "dcdb.h"
+﻿#include "dcdb.h"
 
 DCDB::DCDB(const QString strDriver, const QString strImyaDB, QString strImyaTablici, QObject* proditel)
     : QObject(proditel){
@@ -342,13 +342,15 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 //---I N S E R T---//
 /////////////////////
 	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
-		qdebug(tr("Ошибка 024 в DCDB::INSERT(): Имя драйвера SQL не указано."));
-		return false;//Возвращаем ошибку.
+        qdebug(tr("Ошибка 024 в DCDB::INSERT(): Имя драйвера SQL не указано."));
+        qDebug()<<tr("Ошибка 024 в DCDB::INSERT(): Имя драйвера SQL не указано.");
+        return false;//Возвращаем ошибку.
 	}
 	else{
 		if(m_strImyaDB.isEmpty()){//Если имя БД пустое, то...
-			qdebug(tr("Ошибка 025 в DCDB::INSERT(): Имя базы данных SQL не указано."));
-			return false;//Возвращаем ошибку.
+            qdebug(tr("Ошибка 025 в DCDB::INSERT(): Имя базы данных SQL не указано."));
+            qDebug()<<tr("Ошибка 025 в DCDB::INSERT(): Имя базы данных SQL не указано.");
+            return false;//Возвращаем ошибку.
 		}
 	}
 	bool blFlagZakritiya(true);//Флаг ошибки
@@ -361,6 +363,9 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 		if(!sqlDB.open(m_strUserName, m_strPassword)){//Если база не открылась, то...
 			qdebug(tr("Ошибка 020 в DCDB::INSERT(): База данных ") + m_strImyaDB 
 					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
+            qDebug()<<tr("Ошибка 020 в DCDB::INSERT(): База данных ") + m_strImyaDB
+                    + tr(" не открылась по причине: ") + sqlDB.lastError().text();
+
 			blFlagZakritiya = false;
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
@@ -374,6 +379,9 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
                 qdebug(tr("Ошибка 021 в DCDB::INSERT(): В базе данных ")+m_strImyaDB+tr(" с именем таблици: ")
                         +m_strImyaTablici+tr(" задано разное колличество Граф: ")+QString::number(untGrafi)
                         +tr(" и Колонок: ")+QString::number(untKolonki)+"!");
+                qDebug()<<tr("Ошибка 021 в DCDB::INSERT(): В базе данных ")+m_strImyaDB+tr(" с именем таблици: ")
+                        +m_strImyaTablici+tr(" задано разное колличество Граф: ")+QString::number(untGrafi)
+                        +tr(" и Колонок: ")+QString::number(untKolonki)+"!";
 				blFlagZakritiya = false;//Ошибка
 			}
 			else{
@@ -397,6 +405,9 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 		        qdebug(tr("Ошибка 023 в DCDB::INSERT(): В базе данных: ") + m_strImyaDB
 						+ tr(" не смог вставить данные: ") + strSqlKolonki + tr(", в таблицу: ")
 						+ m_strImyaTablici + " по причине: " + sqlQuery.lastError().text() +"!");
+                qDebug()<<tr("Ошибка 023 в DCDB::INSERT(): В базе данных: ") + m_strImyaDB
+                        + tr(" не смог вставить данные: ") + strSqlKolonki + tr(", в таблицу: ")
+                        + m_strImyaTablici + " по причине: " + sqlQuery.lastError().text() +"!";
 		        blFlagZakritiya = false;//Ошибка
 		    }
 		}
@@ -1345,8 +1356,8 @@ void DCDB::ustImyaDB(QString strImyaDB){//Установить имя БД.
 	static QString sstrImyaDB;//Статическая переменная запоминающая имя БД.
 	if(!strImyaDB.isEmpty()){//Если строчка не пустая а содежжит символы, то...
 		QByteArray btrImyaDB = strImyaDB.toLocal8Bit();//переводим строчку в QByteArray
-		for(uint untShag = 0; untShag < btrImyaDB.size(); untShag++){//Перебераем по символам строчку.
-			if(btrImyaDB[untShag] != ' '){//Если это не пробел, то...
+        for(int ntShag = 0; ntShag < btrImyaDB.size(); ntShag++){//Перебераем по символам строчку.
+            if(btrImyaDB[ntShag] != ' '){//Если это не пробел, то...
 				blPusto = false;//Строка не пустая.
 				break;//То строчка не пустая. Выходим из цикла.
 			}

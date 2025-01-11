@@ -1,4 +1,4 @@
-#include "dcclass.h"
+﻿#include "dcclass.h"
 
 DCClass::DCClass(QObject* parent) : QObject(parent){
 }
@@ -10,8 +10,8 @@ bool DCClass::isEmpty(QString strTekst){//в строчке пусто, один
 		return true;//Строчка пустая.
 	else{//Если строчка не пустая а содежжит символы, то...
 		QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
-		for(uint untShag = 0; untShag < btrTekst.size(); untShag++){
-			if(btrTekst[untShag] != ' ')//Если это не пробел, то...
+        for(int ntShag = 0; ntShag < btrTekst.size(); ntShag++){
+            if(btrTekst[ntShag] != ' ')//Если это не пробел, то...
 				return false;//То строчка не пустая.
 		}	
 	}
@@ -22,29 +22,30 @@ QString DCClass::udalitPustotu(QString strTekst){//Удаляет пробелы
 //---У Д А Л И Т   П У С Т О Т У---//
 /////////////////////////////////////
 	QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
-	uint untTekst = btrTekst.size();//Количество символов в тексте.
-	uint untKolPustotiNachalo(0);//Количество пустых символов в начале текста.
-	uint untKolPustotiKonec(0);//Количество пустых символов в конце текста.
-	for(int untShag = 0; untShag < untTekst; untShag++){//Цикл подсчёта пустот в начале текста.
-		if((btrTekst[untShag] == ' ')||(btrTekst[untShag] == '\n'))//Если это пустота, то...
-			untKolPustotiNachalo++;//+1
+    int ntTekst = btrTekst.size();//Количество символов в тексте.
+    int ntKolPustotiNachalo(0);//Количество пустых символов в начале текста.
+    int ntKolPustotiKonec(0);//Количество пустых символов в конце текста.
+    for(int ntShag = 0; ntShag < ntTekst; ntShag++){//Цикл подсчёта пустот в начале текста.
+        if((btrTekst[ntShag] == ' ')||(btrTekst[ntShag] == '\n'))//Если это пустота, то...
+            ntKolPustotiNachalo++;//+1
 		else//Если это не пустота, то...
 			break;//Если не было пустоты в первом символе, заканчиваю работу цикла 
 	}
-	if(untTekst == untKolPustotiNachalo)//Если это одни пустоты, то...
+    if(ntTekst == ntKolPustotiNachalo)//Если это одни пустоты, то...
 		return "";//Возвращаем пустую строчку
 	else{//Если там есть символы, то...
-		for(int untShag = untTekst-1; untShag > 0; untShag--){//Цикл поиска пустот в конце текста.
+        for(int untShag = ntTekst-1; untShag > 0; untShag--){//Цикл поиска пустот в конце текста.
 			if((btrTekst[untShag] == ' ')||(btrTekst[untShag] == '\n'))//Если это пустота, то...
-				untKolPustotiKonec++;//Считаю пустоты в конце текста.
+                ntKolPustotiKonec++;//Считаю пустоты в конце текста.
 			else//Если это не пустота, то...
 				break;//Выходим из цикла, так как подсчитали количество пустот в конце текста.	
 		}
 	}
 	//Собираем строку символов без пробелов с начала и конца.
 	QByteArray btrStroka;//Массив символов, в котором соберём строку без пробелов с начала и конца.
-	for(int untShag = untKolPustotiNachalo; untShag < untTekst-untKolPustotiKonec; untShag++)
-		btrStroka = btrStroka + btrTekst[untShag];	
+    for(int ntShag = ntKolPustotiNachalo; ntShag < ntTekst-ntKolPustotiKonec; ntShag++){
+        btrStroka = btrStroka + btrTekst[ntShag];
+    }
 	return QString(btrStroka);//Передаём QString строку.
 }
 QString DCClass::udalitProbeli(QString strTekst){//Удаляем два и более пробела между словами.
@@ -72,7 +73,7 @@ QString DCClass::udalitProbeli(QString strTekst){//Удаляем два и бо
 	}
 	return QString(btrStroka);//Переводим набор символов в строку и возвращаем её.
 }
-QString DCClass::json_encode(QString strTekst){//Преобразует все кавычки(' ") в формат (\' \") и \ на \\
+QString DCClass::json_encode(QString strTekst){//Преобразует все кавычки(' ") в формат (\' \") и \ на \\_
 /////////////////////////////////////////////////////////////
 //---П Р Е О Б Р А З У Е М   Р А З Н Ы Е   К А В Ы Ч К И---//
 /////////////////////////////////////////////////////////////

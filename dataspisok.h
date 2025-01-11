@@ -1,4 +1,4 @@
-#ifndef DATASPISOK_H
+﻿#ifndef DATASPISOK_H
 #define DATASPISOK_H
 
 #include <QObject>
@@ -20,8 +20,10 @@ public:
 	QString 	polSpisokOpisanie(quint64 ullKod);//Полчить Описание элемента Списка по Коду.
 	bool 		ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie);//Записать в БД описание списка
 	quint64 	polKod(QString strSpisok);//Получить Код по названию элемента списка.
+    bool 		polSpisokPervi() { return m_blSpisokPervi; }//Вернуть состояние флага Первый Список?
 
 private:
+    bool 		m_blSpisokPervi;//Первый Список в Списке.
     DCDB* 		m_pdbSpisok = nullptr;//Указатель на базу данных таблицы списков.
 	DCClass* 	m_pdcclass = nullptr;//Указатель на мой класс с методами.
 	
