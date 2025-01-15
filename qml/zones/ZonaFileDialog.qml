@@ -14,7 +14,7 @@ Item {
     ListView {
         id: lsvZona
 
-        Component {//Компонент читающий из Модели, и создающий поочереди каждый Элемент с настройками.
+        Component {//Компонент читающий из Модели, и создающий поочереди каждый элемент каталога с настройками
             id: cmpZona
             Rectangle {
                 id: rctZona
@@ -34,11 +34,11 @@ Item {
                     ? rctZona.height-tmZona.ntCoff
                     : rctZona.width/text.length-tmZona.ntCoff
                 }
-                MouseArea {//Создаём MA для каждого Элемента.
+                MouseArea {//Создаём MA для каждого элемента каталога.
                     id: maZona
                     anchors.fill: rctZona
                     onClicked: {//При клике на Элемент
-                        tmZona.clicked(modelData.kod, modelData.filedialog);//Излучаем сигнал с номером и именем.
+                        tmZona.clicked(modelData.tip, modelData.filedialog);//Излучаем сигнал с типом и именем.
                     }
                 }
             }
@@ -50,8 +50,8 @@ Item {
         delegate: cmpZona
         Connections {//Соединяем сигнал из C++ с действием в QML
             target: cppqml;//Цель объект класса С++ DCCppQml
-            function onStrFileDialogChanged(){//Слот Если изменился strFileDialog (Q_PROPERTY), то...
-//				lsvZona.model = JSFileDialog.fnFileDialogJSON();//Перегружаем модель ListView с новыми данными.
+            function onStrFileDialogPutChanged(){//Слот Если изменился strFileDialog (Q_PROPERTY), то...
+                lsvZona.model = JSFileDialog.fnFileDialogJSON();//Перегружаем модель ListView с новыми данными
             }
         }
     }

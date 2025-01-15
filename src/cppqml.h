@@ -62,6 +62,10 @@ class DCCppQml : public QObject {
                    READ strFileDialog
                    WRITE setStrFileDialog
                    NOTIFY strFileDialogChanged FINAL)
+    Q_PROPERTY(QString strFileDialogPut
+                   READ strFileDialogPut
+                   WRITE setStrFileDialogPut
+                   NOTIFY strFileDialogPutChanged FINAL)
     Q_PROPERTY(QString strDebug
                    READ strDebug
                    WRITE setStrDebug
@@ -96,6 +100,8 @@ public:
     bool 		blElementPervi() { return m_blElementPervi; }//Возвращает флаг Первый Элемент?
     QString		strFileDialog();//Возвратить JSON строку с папками и файлами.
     void		setStrFileDialog(QString& strFileDialogNovi);//Изменение JSON запроса с папками и файлами.
+    QString		strFileDialogPut();//Возвратить путь папки, содержимое которой нужно отобразить.
+    void		setStrFileDialogPut(QString& strFileDialogPutNovi);//Изменение отображаемого пути папки.
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//
@@ -115,6 +121,7 @@ signals:
     void ullElementKodChanged();//Сигнал, что Код выбранного Элемента изменился.
     void strElementOpisanieChanged();//Сигнал, что описание изменилось.
     void strFileDialogChanged();//Сигнал о том, что изменился каталог папок и файлов.
+    void strFileDialogPutChanged();//Сигнал о том, что изменился путь отображаемой папки.
     void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
@@ -134,7 +141,8 @@ private:
 	quint64	m_ullElementKod;//Код Элемента в Свойстве Q_PROPERTY.
     QString m_strElementOpisanie;//аргумент описания элемента в Свойстве Q_PROPERTY
 	bool 	m_blElementPervi;//Флаг Первый Элемент? в Свойстве Q_PROPERTY.
-    QString m_strFileDialog;//переменная записывающая каталог пакок и файлов в Свойстве Q_PROPERTY
+    QString m_strFileDialog;//переменная записывающая каталог папок и файлов в Свойстве Q_PROPERTY
+    QString m_strFileDialogPut;//переменная записывающая путь отображения папки Свойстве Q_PROPERTY
     QString m_strDebug;//Текс ошибки.
 
     DataTitul* 	m_pDataTitul = nullptr;//Указатель на таблицу Титула в БД.

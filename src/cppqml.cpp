@@ -16,6 +16,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 										m_strElementOpisanie(""),
 										m_blElementPervi(false),
                                         m_strFileDialog(""),
+                                        m_strFileDialogPut(""),
                                         m_strDebug("")
 {
 ///////////////////////////////
@@ -339,7 +340,8 @@ QString DCCppQml::strFileDialog() {//Возвратить JSON строку с �
 ///////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   F I L E D I A L O G---//
 ///////////////////////////////////////////////
-    return m_strFileDialog;
+    m_strFileDialog = m_pFileDialog->polSpisokJSON();//Возвратить список папок и файлов в формате JSON.
+    return m_strFileDialog;//Возвратить список папок и файлов в формате JSON.
 }
 void DCCppQml::setStrFileDialog(QString& strFileDialogNovi) {//Изменение JSON запроса с папками и файлами.
 /////////////////////////////////////////////////
@@ -348,6 +350,22 @@ void DCCppQml::setStrFileDialog(QString& strFileDialogNovi) {//Изменени�
     if(strFileDialogNovi != m_strFileDialog){//Если элемент не равен выбранному до этого, то...
         m_strFileDialog = strFileDialogNovi;//Приравниваем.
         emit strFileDialogChanged();//Излучаем сигнал об изменении аргумента.
+    }
+}
+QString DCCppQml::strFileDialogPut() {//Возвратить путь отображения содержимого папки.
+/////////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   П У Т Ь   F I L E D I A L O G---//
+/////////////////////////////////////////////////////////
+    //m_strFileDialog = m_pFileDialog->polSpisokJSON();//Возвратить список папок и файлов в формате JSON.
+    return m_strFileDialogPut;//Возвратить путь отображения содержимого папки.
+}
+void DCCppQml::setStrFileDialogPut(QString& strFileDialogPutNovi){//Записываем новый путь отображения папки.
+/////////////////////////////////////////////////
+//---И З М Е Н Е Н И Е   F I L E D I A L O G---//
+/////////////////////////////////////////////////
+    if(m_pFileDialog->ustFileDialogPut(strFileDialogPutNovi)){//Если задан новый путь успешно, то...
+        m_strFileDialogPut = strFileDialogPutNovi;//Приравниваем.
+        emit strFileDialogPutChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
 QString DCCppQml::strDebug(){//Возвращает ошибку.

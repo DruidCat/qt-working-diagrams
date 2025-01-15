@@ -83,7 +83,19 @@ Item {
                 anchors.fill: rctZona
                 clrTexta: tmFileDialog.clrTexta
                 clrFona: "SlateGray"
-                onClicked: function(ntKod, strFileDialog) {//Слот нажатия на один из Элементов Проводника.
+                onClicked: function(ntTip, strFileDialog) {//Слот нажатия на один из Элементов Проводника.
+                    if(!ntTip){//Если Тип = 0, это нажатие кнопки Назад
+                        cppqml.strFileDialogPut = "..";//Назад в папке.
+                    }
+                    else{
+                        if(ntTip === 1){//Если это Папки, то...
+                            cppqml.strFileDialogPut = strFileDialog;//Присваиваем имя папки выбранной.
+                        }
+                        else{//Если это file.pdf, то...
+
+                        }
+                    }
+
 //					if(cppqml.blElementPervi){//Если это первый элемент, то...
 //                        fnClickedSozdat();//Функция при нажатии кнопки Создать.
 //					}
@@ -104,31 +116,6 @@ Item {
 //					}
                 }
             }
-//			DCMenu {
-//				id: menuFileDialog
-//				visible: false//Невидимое меню.
-//				ntWidth: tmFileDialog.ntWidth
-//				ntCoff: tmFileDialog.ntCoff
-//				anchors.left: rctZona.left
-//				anchors.right: rctZona.right
-//				anchors.bottom: rctZona.bottom
-//				anchors.margins: tmFileDialog.ntCoff
-//				clrTexta: tmFileDialog.clrTexta
-//				clrFona: "SlateGray"
-//				imyaMenu: "filedialog"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
-//				onClicked: function(ntNomer, strMenu) {
-//					menuFileDialog.visible = false;//Делаем невидимым меню.
-//                    if(ntNomer === 1){//Добавить.
-//                        fnMenuSozdat();//Функция нажат пункт меню Добавить.
-//                    }
-//                    if(ntNomer === 2){//Переименовать.
-//                        fnMenuPereimenovat();//Функция нажатия пункта меню Переименовать.
-//					}
-//                    if(ntNomer === 5){//Выход
-//						Qt.quit();//Закрыть приложение.
-//					}
-//				}
-//			}
         }
     }
     Item {//Данные Тулбар
