@@ -347,8 +347,7 @@ void DCCppQml::setStrFileDialog(QString& strFileDialogNovi) {//Изменени�
 /////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   F I L E D I A L O G---//
 /////////////////////////////////////////////////
-    if(strFileDialogNovi != m_strFileDialog){//Если элемент не равен выбранному до этого, то...
-        m_strFileDialog = strFileDialogNovi;//Приравниваем.
+    if(m_pFileDialog->ustSpisokJSON(strFileDialogNovi)){//Если задан новый путь успешно, то...
         emit strFileDialogChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
@@ -356,14 +355,14 @@ QString DCCppQml::strFileDialogPut() {//Возвратить путь отобр
 /////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   П У Т Ь   F I L E D I A L O G---//
 /////////////////////////////////////////////////////////
-    //m_strFileDialog = m_pFileDialog->polSpisokJSON();//Возвратить список папок и файлов в формате JSON.
+    m_strFileDialogPut = m_pFileDialog->polFileDialogPut();//Получить путь каталога.
     return m_strFileDialogPut;//Возвратить путь отображения содержимого папки.
 }
 void DCCppQml::setStrFileDialogPut(QString& strFileDialogPutNovi){//Записываем новый путь отображения папки.
 /////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   F I L E D I A L O G---//
 /////////////////////////////////////////////////
-    if(m_pFileDialog->ustFileDialogPut(strFileDialogPutNovi)){//Если задан новый путь успешно, то...
+    if(m_strFileDialogPut != strFileDialogPutNovi){//Если задан новый путь успешно, то...
         m_strFileDialogPut = strFileDialogPutNovi;//Приравниваем.
         emit strFileDialogPutChanged();//Излучаем сигнал об изменении аргумента.
     }

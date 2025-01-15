@@ -71,7 +71,19 @@ QString DCClass::udalitProbeli(QString strTekst){//Удаляем два и бо
 				untKolProbelov = 0;//Обнуляем количество пробелов.
 		}
 	}
-	return QString(btrStroka);//Переводим набор символов в строку и возвращаем её.
+    return QString(btrStroka);//Переводим набор символов в строку и возвращаем её.
+}
+QString DCClass::udalitPryamieSkobki(QString strTekst){//Удаляет прямые скобки [] вначале и в конце текста.
+///////////////////////////////////////////////////
+//---У Д А Л И Т Ь   П Р Я М Ы Е   С К О Б К И---//
+///////////////////////////////////////////////////
+    QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
+    int ntTekst = btrTekst.size();//Количество символов в тексте.
+    QByteArray btrStroka;//Массив символов, в котором соберём строку без [] с начала и конца.
+    for(int ntShag = 1; ntShag < ntTekst-1; ntShag++){//Цикл сбора слова без [ в начале и ] в конце.
+        btrStroka = btrStroka + btrTekst[ntShag];
+    }
+    return QString(btrStroka);//Передаём QString строку.
 }
 QString DCClass::json_encode(QString strTekst){//Преобразует все кавычки(' ") в формат (\' \") и \ на \\_
 /////////////////////////////////////////////////////////////

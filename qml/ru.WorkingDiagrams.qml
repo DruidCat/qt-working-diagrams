@@ -308,6 +308,9 @@ Window {
                     //TODO вернуть Путь первоначальный.
                     stvStr.pop()//Назад страницу
                 }
+                onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
+                    pgStrFileDialog.textZagolovok = strZagolovok;//Изменяем заголовок.
+                }
                 onClickedInfo: {
                     //tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
                     //stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.

@@ -14,6 +14,7 @@ public:
 	//---пробелы-в-начале-текста?---//
 	QString udalitPustotu(QString strTekst);//Удаляет пробелы вначале и в конце текста.
 	QString udalitProbeli(QString strTekst);//Удаляем два и более пробела между словами.
+    QString udalitPryamieSkobki(QString strTekst);//Удаляет прямые скобки [] вначале и в конце текста.
     QString json_encode(QString strTekst);//Преобразует все кавычки(' ") в формат (\' \") и \ на \\_
 	//---данные-в-число---//
 	QTime tmMinus(const QTime& tmVremya1, const QTime& tmVremya2 );//Возращает разницу tmVremya1-tmVremya2

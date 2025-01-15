@@ -29,6 +29,13 @@ Item {
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть.
     signal clickedInfo();//Сигнал нажатич кнопки Инфо, где будет описание работы Файлового Диалога.
     signal clickedPut (var strPut);//Сигнал излучающий путь к файлу.
+    signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
+
+    function fnClickedNazad(){//Функция нажатия кнопки Назад или клика папки [..]
+        tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
+        cppqml.strFileDialog = "[..]";//Назад в папке.
+        //tmFileDialog.clickedNazad();
+    }
 
     function fnClickedZakrit(){
        tmFileDialog.clickedZakrit();//Излучаем сигнал закрытия проводника.
@@ -44,7 +51,7 @@ Item {
             anchors.margins: tmFileDialog.ntCoff/2
             clrKnopki: tmFileDialog.clrTexta
             onClicked: {
-                tmFileDialog.clickedNazad();
+                fnClickedNazad();//Функция клика Назад.
             }
         }
         DCKnopkaZakrit {
@@ -85,11 +92,12 @@ Item {
                 clrFona: "SlateGray"
                 onClicked: function(ntTip, strFileDialog) {//Слот нажатия на один из Элементов Проводника.
                     if(!ntTip){//Если Тип = 0, это нажатие кнопки Назад
-                        cppqml.strFileDialogPut = "..";//Назад в папке.
+                        fnClickedNazad();//Функция клика назад.
                     }
                     else{
                         if(ntTip === 1){//Если это Папки, то...
-                            cppqml.strFileDialogPut = strFileDialog;//Присваиваем имя папки выбранной.
+                            tmFileDialog.signalZagolovok(strFileDialog);//Передаю имя выбранной папки.
+                            cppqml.strFileDialog = strFileDialog;//Присваиваем имя папки выбранной.
                         }
                         else{//Если это file.pdf, то...
 

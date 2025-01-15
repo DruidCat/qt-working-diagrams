@@ -5,31 +5,38 @@ DCFileDialog::DCFileDialog(QObject* proditel) : QObject(proditel){//Констр
 ////////////////////////////////
 //---К О Н С Т Р У К Т О-Р----//
 ////////////////////////////////
+    m_pdcclass = new DCClass();//Указатель на класс по работе с текстом.
     m_pdrPut = new QDir (QDir::home());//Путь дериктории, который необходимо отобразить.
     m_blFileDialogPervi = true;//Первый запуск проводника - это истина.
 }
-
 DCFileDialog::~DCFileDialog(){//Деструктор.
 /////////////////////////////
 //---Д Е С Т Р У К Т О Р---//
 /////////////////////////////
+    delete m_pdcclass;//удаляем указатель.
+    m_pdcclass = nullptr;//Обнуляем указатель.
     delete m_pdrPut;//Удаляем указатель.
     m_pdrPut = nullptr;//Обнуляем указатель.
 }
-
-bool DCFileDialog::ustFileDialogPut(QString strFileDialogPut){//Установить новый путь отображаемой папки.
+QString DCFileDialog::polFileDialogPut(){//Получить путь к каталогу.
+/////////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   П У Т Ь   К   К А Т А Л О Г У---//
+/////////////////////////////////////////////////////////
+    m_strFileDialogPut = m_pdrPut->absolutePath();//Получить Абсолютный путь дерриктории.
+    qDebug()<<"Путь: "<<m_strFileDialogPut;
+    return m_strFileDialogPut;
+}
+bool DCFileDialog::ustSpisokJSON(QString strFileDialogPut){//Установить новый путь отображаемой папки.
 ///////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   П У Т Ь   П А П К И---//
 ///////////////////////////////////////////////////
     if(!strFileDialogPut.isEmpty()){//Если путь не пустой, то...
-        qDebug()<<"Каталог: "<< strFileDialogPut;
-        m_pdrPut->cd(strFileDialogPut);
-        qDebug()<<&m_pdrPut;
+        strFileDialogPut = m_pdcclass->udalitPryamieSkobki(strFileDialogPut);//Удаляем скобки []
+        m_pdrPut->cd(strFileDialogPut);//Устанавливаем путь
         return true;//Путь новый установлен.
     }
     return false;//Путь не установлен новый.
 }
-
 QString DCFileDialog::polSpisokJSON(){//Метод создающий список каталогов и файлов конкретной дериктории.
 /////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   С П И С О К   J S O N---//
@@ -38,8 +45,6 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
 
     QStringList slsPapki = m_pdrPut->entryList(QDir::Dirs);
     QStringList slsFaili = m_pdrPut->entryList(slsMaska, QDir::Files);
-    qDebug() << "Папки: " << slsPapki;
-    qDebug() << "Файлы: " << slsFaili;
     QString strFileDialogJSON("");//Строка, собирающая JSON команду.
     quint64 ullKolichestvoPapok = slsPapki.size();//Количество папок.
     quint64 ullKolichestvoFailov = slsFaili.size();//Количество файлов.
@@ -53,8 +58,8 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
                 strFileDialogJSON = strFileDialogJSON + "\"tip\":\"0\",";//Папка назад.
             else//Если нет, то папка
                 strFileDialogJSON = strFileDialogJSON + "\"tip\":\"1\",";//Папка
-            //strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\"["	+ slsPapki[ullShag] + "]\"";
-            strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\""	+ slsPapki[ullShag] + "\"";
+            strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\"["	+ slsPapki[ullShag] + "]\"";
+            //strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\""	+ slsPapki[ullShag] + "\"";
             strFileDialogJSON = strFileDialogJSON + "}";//Конец списка объектов.
             if (ullShag == (ullKolichestvoPapok-1)){//Если это последняя папка, то...
                 if(!ullKolichestvoFailov)//Если файлов в данной папке нет, то запятую не ставим.
