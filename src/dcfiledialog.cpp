@@ -7,7 +7,7 @@ DCFileDialog::DCFileDialog(QObject* proditel) : QObject(proditel){//Констр
 ////////////////////////////////
     m_pdcclass = new DCClass();//Указатель на класс по работе с текстом.
     m_pdrPut = new QDir (QDir::home());//Путь дериктории, который необходимо отобразить.
-    m_blFileDialogPervi = true;//Первый запуск проводника - это истина.
+    m_strFileDialogPut = m_strFileDialogPutDom = m_pdrPut->absolutePath();//Иннициализируем пути по умолчанию.
 }
 DCFileDialog::~DCFileDialog(){//Деструктор.
 /////////////////////////////
@@ -17,6 +17,16 @@ DCFileDialog::~DCFileDialog(){//Деструктор.
     m_pdcclass = nullptr;//Обнуляем указатель.
     delete m_pdrPut;//Удаляем указатель.
     m_pdrPut = nullptr;//Обнуляем указатель.
+}
+bool DCFileDialog::ustFileDialogPut(QString strPut){//Устанавливаем фиксированные пути.
+/////////////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   П У Т Ь   К   К А Т А Л О Г У---//
+/////////////////////////////////////////////////////////////
+    if (strPut == "dom"){//Если переменная дом, то...
+        m_pdrPut->setPath(m_strFileDialogPutDom);//Задаём домашний каталог.
+        return true;//Истина.
+    }
+    return false;//не успех.
 }
 QString DCFileDialog::polFileDialogPut(){//Получить путь к каталогу.
 /////////////////////////////////////////////////////////

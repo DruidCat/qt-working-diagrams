@@ -50,7 +50,7 @@ Item {
         delegate: cmpZona
         Connections {//Соединяем сигнал из C++ с действием в QML
             target: cppqml;//Цель объект класса С++ DCCppQml
-            function onStrFileDialogChanged(){//Слот Если изменился strFileDialog (Q_PROPERTY), то...
+            function onStrFileDialogPutChanged(){//Слот Если изменился strFileDialogPut (Q_PROPERTY), то...
                 lsvZona.model = JSFileDialog.fnFileDialogJSON();//Перегружаем модель ListView с новыми данными
             }
         }

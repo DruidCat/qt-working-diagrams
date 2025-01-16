@@ -11,6 +11,7 @@ class DCFileDialog : public QObject {
 public:
     explicit	DCFileDialog(QObject* proditel = nullptr);
     ~			DCFileDialog();//Деструктор.
+    bool 		ustFileDialogPut(QString strPut);//Устанавливаем фиксированные пути.
     QString 	polFileDialogPut(void);
     bool 		ustSpisokJSON(QString strFileDialogPut);//Установить значение нового пути папки.
     QString 	polSpisokJSON();//Метод создающий список каталогов и файлов конкретной дериктории.
@@ -19,7 +20,7 @@ private:
     DCClass*	m_pdcclass;//Класс работающий с текстом.
     QDir*		m_pdrPut;//Путь, который в данный момент нужно показать.
     QString 	m_strFileDialogPut;//Путь папки, содержимое которой нужно отобразить.
-    bool 		m_blFileDialogPervi;//Первоначальный запуск Проводника.
+    QString 	m_strFileDialogPutDom;//Путь папки, содержащий имя каталога по умолчанию. Домашний.
 
 signals:
 

@@ -32,13 +32,14 @@ Item {
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 
     function fnClickedNazad(){//Функция нажатия кнопки Назад или клика папки [..]
-        tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
         cppqml.strFileDialog = "[..]";//Назад в папке.
+        tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
         //tmFileDialog.clickedNazad();
     }
 
     function fnClickedZakrit(){
-       tmFileDialog.clickedZakrit();//Излучаем сигнал закрытия проводника.
+        cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.
+        tmFileDialog.clickedZakrit();//Излучаем сигнал закрытия проводника.
     }
 
     Item {//Данные Заголовок
@@ -96,8 +97,8 @@ Item {
                     }
                     else{
                         if(ntTip === 1){//Если это Папки, то...
-                            tmFileDialog.signalZagolovok(strFileDialog);//Передаю имя выбранной папки.
                             cppqml.strFileDialog = strFileDialog;//Присваиваем имя папки выбранной.
+                            tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки.`
                         }
                         else{//Если это file.pdf, то...
 
