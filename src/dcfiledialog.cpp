@@ -1,13 +1,13 @@
 ﻿#include "dcfiledialog.h"
 
-
-DCFileDialog::DCFileDialog(QObject* proditel) : QObject(proditel){//Конструктор.
+DCFileDialog::DCFileDialog(QStringList slsFileDialogMaska, QObject* proditel):QObject(proditel){//Конструктор.
 ////////////////////////////////
 //---К О Н С Т Р У К Т О-Р----//
 ////////////////////////////////
     m_pdcclass = new DCClass();//Указатель на класс по работе с текстом.
     m_pdrPut = new QDir (QDir::home());//Путь дериктории, который необходимо отобразить.
     m_strFileDialogPut = m_strFileDialogPutDom = m_pdrPut->absolutePath();//Иннициализируем пути по умолчанию.
+    m_slsFileDialogMaska = slsFileDialogMaska;//Задаём параметр маски отображения разширений файлов.
 }
 DCFileDialog::~DCFileDialog(){//Деструктор.
 /////////////////////////////
@@ -50,8 +50,7 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
 /////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   С П И С О К   J S O N---//
 /////////////////////////////////////////////////
-    QStringList slsMaska = QStringList() << "*";
-
+    QStringList slsMaska = m_slsFileDialogMaska;//Задаём маску отображаемых разширений файлов.
     QStringList slsPapki = m_pdrPut->entryList(QDir::Dirs);
     QStringList slsFaili = m_pdrPut->entryList(slsMaska, QDir::Files);
     QString strFileDialogJSON("");//Строка, собирающая JSON команду.

@@ -24,6 +24,7 @@ Item {
     property alias toolbarY: tmToolbar.y
     property alias toolbarWidth: tmToolbar.width
     property alias toolbarHeight: tmToolbar.height
+    property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
     anchors.fill: parent//Растянется по Родителю.
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть.
@@ -32,9 +33,13 @@ Item {
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 
     function fnClickedNazad(){//Функция нажатия кнопки Назад или клика папки [..]
-        cppqml.strFileDialog = "[..]";//Назад в папке.
-        tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
-        //tmFileDialog.clickedNazad();
+        if(cppqml.strFileDialogPut === tmFileDialog.strPutDom){//Если каталог совпадает с домашним, то...
+           fnClickedZakrit();//Закрываем проводник.
+        }
+        else{//Противном случае...
+            cppqml.strFileDialog = "[..]";//Назад в папке.
+            tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
+        }
     }
 
     function fnClickedZakrit(){
@@ -104,25 +109,6 @@ Item {
 
                         }
                     }
-
-//					if(cppqml.blElementPervi){//Если это первый элемент, то...
-//                        fnClickedSozdat();//Функция при нажатии кнопки Создать.
-//					}
-//					else{//Если не первый элемент, то...
-//                        if(blPereimenovat) {//Если ПЕРЕИМНОВАТЬ, то...
-//                            txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
-//                            cppqml.strElement = strElement;//Присваиваем Элемент списка к свойству Q_PROPERTY
-//                            txnZagolovok.text = strElement;//Добавляем в строку выбранный Элемент списка.
-//                        }
-//                        else {//Если НЕ ПЕРЕИМЕНОВАТЬ, то СОХРАНИТЬ...
-//                            blPereimenovat = false;//Запрещено переименовывать
-//                            txnZagolovok.visible = false;//Отключаем создание Элемента.
-//                            menuFileDialog.visible = false;//Делаем невидимым всплывающее меню.
-//                            cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
-//                            cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPERTY
-//                            tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
-//                        }
-//					}
                 }
             }
         }
@@ -141,5 +127,8 @@ Item {
                 tmFileDialog.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
             }
         }
+    }
+    Component.onCompleted: {//Вызывается при завершении иннициализации компонента.
+        tmFileDialog.strPutDom = cppqml.strFileDialogPut;//Запоминаем домашнюю деррикторию.
     }
 }

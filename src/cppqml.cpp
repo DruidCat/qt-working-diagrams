@@ -25,7 +25,8 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataTitul = new DataTitul("druidcat.dc", "druidcat", "druidcat");//Титул.
     m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");//Список.
     m_pDataElement = new DataElement("druidcat.dc", "druidcat", "druidcat");//Элементы.
-    m_pFileDialog = new DCFileDialog();//Проводник.
+    QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf";
+    m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
     m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
     m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
