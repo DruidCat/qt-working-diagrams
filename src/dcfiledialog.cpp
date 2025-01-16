@@ -22,8 +22,7 @@ QString DCFileDialog::polFileDialogPut(){//Получить путь к ката
 /////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   П У Т Ь   К   К А Т А Л О Г У---//
 /////////////////////////////////////////////////////////
-    m_strFileDialogPut = m_pdrPut->absolutePath();//Получить Абсолютный путь дерриктории.
-    qDebug()<<"Путь: "<<m_strFileDialogPut;
+    m_strFileDialogPut = m_pdrPut->absolutePath();//Получить Абсолютный путь к дерриктории.
     return m_strFileDialogPut;
 }
 bool DCFileDialog::ustSpisokJSON(QString strFileDialogPut){//Установить новый путь отображаемой папки.
@@ -53,19 +52,20 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
     strFileDialogJSON = "[";//Начало массива объектов
     for (quint64 ullShag = 0; ullShag < ullKolichestvoPapok; ullShag++){//Цикл папок.
         if(slsPapki[ullShag] != "."){//Если это не ".", то...
-            strFileDialogJSON = strFileDialogJSON + "{";//Открываем скобки.
-            if(slsPapki[ullShag] == "..")//Если это папка назад "..", то...
-                strFileDialogJSON = strFileDialogJSON + "\"tip\":\"0\",";//Папка назад.
-            else//Если нет, то папка
-                strFileDialogJSON = strFileDialogJSON + "\"tip\":\"1\",";//Папка
-            strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\"["	+ slsPapki[ullShag] + "]\"";
-            //strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\""	+ slsPapki[ullShag] + "\"";
-            strFileDialogJSON = strFileDialogJSON + "}";//Конец списка объектов.
-            if (ullShag == (ullKolichestvoPapok-1)){//Если это последняя папка, то...
-                if(!ullKolichestvoFailov)//Если файлов в данной папке нет, то запятую не ставим.
-                    break;//Выходим из цикла.
+            if(!m_pdcclass->isHideFolder(slsPapki[ullShag])){//Если не скрытая папка, то..
+                strFileDialogJSON = strFileDialogJSON + "{";//Открываем скобки.
+                if(slsPapki[ullShag] == "..")//Если это папка назад "..", то...
+                    strFileDialogJSON = strFileDialogJSON + "\"tip\":\"0\",";//Папка назад.
+                else//Если нет, то папка
+                    strFileDialogJSON = strFileDialogJSON + "\"tip\":\"1\",";//Папка
+                strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\"["	+ slsPapki[ullShag] + "]\"";
+                strFileDialogJSON = strFileDialogJSON + "}";//Конец списка объектов.
+                if (ullShag == (ullKolichestvoPapok-1)){//Если это последняя папка, то...
+                    if(!ullKolichestvoFailov)//Если файлов в данной папке нет, то запятую не ставим.
+                        break;//Выходим из цикла.
+                }
+                strFileDialogJSON = strFileDialogJSON + ",";//ставим запятую.
             }
-            strFileDialogJSON = strFileDialogJSON + ",";//ставим запятую.
         }
     }
     for (quint64 ullShag = 0; ullShag < ullKolichestvoFailov ; ullShag++){//Цикл файлов.

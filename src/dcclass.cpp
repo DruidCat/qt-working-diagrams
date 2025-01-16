@@ -1,6 +1,9 @@
 ﻿#include "dcclass.h"
 
-DCClass::DCClass(QObject* parent) : QObject(parent){
+DCClass::DCClass(QObject* proditel) : QObject(proditel){
+///////////////////////////////
+//---К О Н С Т Р У К Т О Р---//
+///////////////////////////////
 }
 bool DCClass::isEmpty(QString strTekst){//в строчке пусто, один или множество пробелов, то возвращается true. 
 /////////////////////////////////////
@@ -15,7 +18,19 @@ bool DCClass::isEmpty(QString strTekst){//в строчке пусто, один
 				return false;//То строчка не пустая.
 		}	
 	}
-	return true;//Строчка пустая.
+    return true;//Строчка пустая.
+}
+bool DCClass::isHideFolder(QString strTekst){//Если папка скрытая, то истина.
+/////////////////////////////////////////////
+//---Э Т О   С К Р Ы Т А Я   П А П К А ?---//
+/////////////////////////////////////////////
+    QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
+    if(!strTekst.isEmpty()){//Если cтрока не пустая, то...
+        if ((strTekst != ".")&&(strTekst != ".."))//Если это не . и не .., то..
+            if(btrTekst[0] == '.')//Если имя папки начинается с '.', то...
+                return true;//Это скрытая папка.
+    }
+    return false;//Не скрытая папка.
 }
 QString DCClass::udalitPustotu(QString strTekst){//Удаляет пробелы вначале и в конце текста.
 /////////////////////////////////////
@@ -79,6 +94,8 @@ QString DCClass::udalitPryamieSkobki(QString strTekst){//Удаляет прям
 ///////////////////////////////////////////////////
     QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
     int ntTekst = btrTekst.size();//Количество символов в тексте.
+    if(ntTekst < 3)//Если папка с [] меньше трёх символов, то это [] без имени.
+        return "DCClass Error.";
     QByteArray btrStroka;//Массив символов, в котором соберём строку без [] с начала и конца.
     for(int ntShag = 1; ntShag < ntTekst-1; ntShag++){//Цикл сбора слова без [ в начале и ] в конце.
         btrStroka = btrStroka + btrTekst[ntShag];

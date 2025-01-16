@@ -11,9 +11,12 @@ public:
 	explicit DCClass(QObject* proditel = nullptr);
 	//---пустая-строчка?---//
 	bool isEmpty(QString strTekst);//если в строчке пусто, один или множество пробелов, то возвращается true. 
+    //---скрытая-папка?---//
+    bool isHideFolder(QString strTekst);//Если папка скрытая, то истина.
 	//---пробелы-в-начале-текста?---//
 	QString udalitPustotu(QString strTekst);//Удаляет пробелы вначале и в конце текста.
-	QString udalitProbeli(QString strTekst);//Удаляем два и более пробела между словами.
+    QString udalitProbeli(QString strTekst);//Удаляем два и более пробела между словами.
+    //---удалить-прямые-скобки---//
     QString udalitPryamieSkobki(QString strTekst);//Удаляет прямые скобки [] вначале и в конце текста.
     QString json_encode(QString strTekst);//Преобразует все кавычки(' ") в формат (\' \") и \ на \\_
 	//---данные-в-число---//
