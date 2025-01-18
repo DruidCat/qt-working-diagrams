@@ -287,6 +287,7 @@ Window {
             clrTexta: root.clrKnopok
             clrRabOblasti: root.clrStranic
             textZagolovok: "ПРОВОДНИК"
+            textToolbar:"ВЫБЕРИТЕ PDF ДОКУМЕНТ ДЛЯ ДОБАВЛЕНИЯ."
             StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
@@ -299,12 +300,12 @@ Window {
                 toolbarWidth: pgStrFileDialog.rctStrToolbar.width;
                 toolbarHeight: pgStrFileDialog.rctStrToolbar.height
                 onClickedNazad: {//Слот нажатия кнопки Назад.
-                    //stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
-                    //TODO сделать описание.
+                    stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
                     //TODO вернуть Путь первоначальный.
                     stvStr.pop()//Назад страницу
                 }
                 onClickedZakrit: {
+                    stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
                     //TODO вернуть Путь первоначальный.
                     stvStr.pop()//Назад страницу
                 }
@@ -312,13 +313,10 @@ Window {
                     pgStrFileDialog.textZagolovok = strZagolovok;//Изменяем заголовок.
                 }
                 onClickedInfo: {
+                    //TODO Сделать описание.
                     //tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
-                    //stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
-                    //TODO Зделать описание.
+                    stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
                 }
-//                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
-//                    pgStrFileDialog.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
-//                }
             }
         }
 		Stranica {//Страница Описания

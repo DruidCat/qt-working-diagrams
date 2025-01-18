@@ -32,18 +32,32 @@ Item {
     signal clickedPut (var strPut);//Сигнал излучающий путь к файлу.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 
+    function fnClickedEscape(){//Функция нажатия кнопки Escape.
+        menuFileDialog.visible = false;//Делаем невидимым всплывающее меню.
+    }
+    focus: true//Не удалять, может Escape не работать.
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+            fnClickedEscape();//Функция нажатия кнопки Escape.
+        }
+    }
+    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
+        anchors.fill: tmFileDialog
+        onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
     function fnClickedNazad(){//Функция нажатия кнопки Назад или клика папки [..]
         if(cppqml.strFileDialogPut === tmFileDialog.strPutDom){//Если каталог совпадает с домашним, то...
-           fnClickedZakrit();//Закрываем проводник.
+            fnClickedZakrit();//Закрываем проводник.
         }
         else{//Противном случае...
             cppqml.strFileDialog = "[..]";//Назад в папке.
+            fnClickedEscape();//Меню сворачиваем
             tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
         }
     }
-
     function fnClickedZakrit(){
         cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.
+        fnClickedEscape();//Меню сворачиваем
         tmFileDialog.clickedZakrit();//Излучаем сигнал закрытия проводника.
     }
 
@@ -102,6 +116,7 @@ Item {
                     }
                     else{
                         if(ntTip === 1){//Если это Папки, то...
+                            fnClickedEscape();//Меню сворачиваем
                             cppqml.strFileDialog = strFileDialog;//Присваиваем имя папки выбранной.
                             tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки.`
                         }
@@ -111,10 +126,42 @@ Item {
                     }
                 }
             }
+            DCMenu {
+                id: menuFileDialog
+                visible: false//Невидимое меню.
+                ntWidth: tmFileDialog.ntWidth
+                ntCoff: tmFileDialog.ntCoff
+                anchors.left: rctZona.left
+                anchors.right: rctZona.right
+                anchors.bottom: rctZona.bottom
+                anchors.margins: tmFileDialog.ntCoff
+                clrTexta: tmFileDialog.clrTexta
+                clrFona: "SlateGray"
+                imyaMenu: "filedialog"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
+                onClicked: function(ntNomer, strMenu) {
+                    menuFileDialog.visible = false;//Делаем невидимым меню.
+                    if(ntNomer === 1){//Добавить.
+                        fnClickedZakrit();//Закрываем проводник.
+                    }
+                }
+            }
         }
     }
     Item {//Данные Тулбар
         id: tmToolbar
+        DCKnopkaNastroiki {
+            ntWidth: tmFileDialog.ntWidth
+            ntCoff: tmFileDialog.ntCoff
+            anchors.verticalCenter: tmToolbar.verticalCenter
+            anchors.left: tmToolbar.left
+            anchors.margins: tmFileDialog.ntCoff/2
+            clrKnopki: tmFileDialog.clrTexta
+            clrFona: tmFileDialog.clrFona
+            onClicked: {
+                menuFileDialog.visible ? menuFileDialog.visible = false : menuFileDialog.visible = true;
+                //tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+            }
+        }
         DCKnopkaInfo {
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
@@ -124,6 +171,7 @@ Item {
             clrKnopki: tmFileDialog.clrTexta
             clrFona: tmFileDialog.clrFona
             onClicked: {
+                fnClickedEscape();//Меню сворачиваем
                 tmFileDialog.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
             }
         }

@@ -29,7 +29,7 @@ Item {
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
-	function fnClickedOk(){
+    function fnClickedOk(){
 		knopkaOk.visible = false;//Делаем невидимой кнопку Ок.
 		knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
 		txdZona.readOnly = true;//Запрещаем редактировать текст.
@@ -43,7 +43,7 @@ Item {
 			else{
 				if(strOpisanie == "element"){//Если Элемент, то...
 					cppqml.strElementOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
-				}
+                }
 			}
 		}
 	}

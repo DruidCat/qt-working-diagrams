@@ -49,7 +49,7 @@ Item {
 		anchors.bottomMargin:tmMenu.ntCoff
 		anchors.leftMargin:tmMenu.ntCoff/2
 		anchors.rightMargin:tmMenu.width/2
-		opacity: 0.7//Прозрачность.
+        opacity: 0.9//Прозрачность.
 		interactive: false//Запретить листать.
 
 		//model: JSMenu.vrMenuSpisok
@@ -68,7 +68,11 @@ Item {
 					lsvMenu.model = JSMenu.vrMenuDannie;//Перегружаем модель ListView с новыми данными.
 				}
                 else{
-                    lsvMenu.model = JSMenu.vrMenuVihod;//Перегружаем модель ListView с новыми данными.
+                    if(imyaMenu == "filedialog"){
+                        lsvMenu.model = JSMenu.vrMenuFileDialog;//Перегружаем модель ListView с новыми данными
+                    }
+                    else
+                        lsvMenu.model = JSMenu.vrMenuVihod;//Перегружаем модель ListView с новыми данными.
                 }
             }
 		}

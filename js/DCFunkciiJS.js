@@ -64,6 +64,12 @@ var vrMenuDannie = [
 				"menu": "Выход"
 			}
 ]
+var vrMenuFileDialog = [
+            {
+                "nomer": "1",
+                "menu": "Закрыть"
+            }
+]
 var vrMenuVihod = [
             {
                 "nomer": "1",
