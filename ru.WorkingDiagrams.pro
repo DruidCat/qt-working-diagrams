@@ -1,21 +1,41 @@
+# Название исполняемого файла.
 TARGET = ru.WorkingDiagrams
 
+# В свойстве файла Версия приложения.
+VERSION = 0.1.1.0
+
+# В свойстве файла Компания.
+QMAKE_TARGET_COMPANY = DruidCat Co
+
+# В свойстве файла Название приложения.
+QMAKE_TARGET_PRODUCT = Working Diagrams
+
+# В свойстве файла Описание.
+QMAKE_TARGET_DESCRIPTION = For working with the document catalog.
+
+# В свойстве файла Права.
+QMAKE_TARGET_COPYRIGHT = DruidCat
+
+# Добавляем библиотеки сюда.
 QT += \
 	quick \
 	sql
 
 CONFIG += c++11
 
-# The following define makes your compiler emit warnings if you use
-# any Qt feature that has been marked deprecated (the exact warnings
-# depend on your compiler). Refer to the documentation for the
-# deprecated API to know how to port your code away from it.
+# Иконка для exe файла в Windows.
+win32: RC_ICONS += ru.WorkingDiagrams.ico
+
+# Следующее определение заставляет ваш компьютер выдавать предупреждения,
+# если вы используете какую-либо функцию Qt,
+# которая была помечена как устаревшая (точные предупреждения зависят от вашего компилятора).
+# Обратитесь к документации по устаревшему API, чтобы узнать, как перенести свой код с него.
 DEFINES += QT_DEPRECATED_WARNINGS
 
-# You can also make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-# You can also select to disable deprecated APIs only up to a certain version of Qt.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+# Вы также можете привести к сбою компиляции вашего кода, если он использует устаревшие API.
+# Для этого раскомментируйте следующую строку.
+# Вы также можете отключить устаревшие API только до определенной версии Qt.
+#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000   # отключает все API, которые были устаревшими до Qt 6.0.0
 
 SOURCES += \
 		src/cppqml.cpp \
@@ -28,15 +48,16 @@ SOURCES += \
 		src/dcfiledialog.cpp \
 		src/main.cpp
 
+# Добавляем здесь файлы ресурсы.
 RESOURCES += qml.qrc
 
-# Additional import path used to resolve QML modules in Qt Creator's code model
+# Дополнительный путь импорта, используемый для разрешения QML-модулей в модели кода Qt Creator
 QML_IMPORT_PATH =
 
-# Additional import path used to resolve QML modules just for Qt Quick Designer
+# Дополнительный путь импорта, используемый для разрешения модулей QML только для Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
 
-# Default rules for deployment.
+# Правила развертывания по умолчанию.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
@@ -60,4 +81,5 @@ DISTFILES += \
 	README.ru.md \
 	TODO.txt \
 	screenshots/KnopkiQML.png \
-	screenshots/ru.WorkingDiagrams.png
+    screenshots/ru.WorkingDiagrams.png \
+    vim.txt
