@@ -1,6 +1,7 @@
 ﻿#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext> //Библиотека соединяющая через контекст cpp с qml
+#include <QIcon>//Иконки.
 
 #include "cppqml.h"
 
@@ -11,6 +12,7 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     //Устанавливаем кодировку UTF-8 во всём проекте и в БД в первую очередь.
+    app.setWindowIcon(QIcon(":/icons/86x86/ru.WorkingDiagrams.png"));//Выставляем иконку приложения.
     QTextCodec* ptxcCodec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(ptxcCodec);
 

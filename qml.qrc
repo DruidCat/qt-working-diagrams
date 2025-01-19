@@ -30,5 +30,9 @@
         <file>js/DCFunkciiJS.js</file>
         <file>qml/pages/StrFileDialog.qml</file>
         <file>qml/zones/ZonaFileDialog.qml</file>
+        <file>icons/108x108/ru.WorkingDiagrams.png</file>
+        <file>icons/128x128/ru.WorkingDiagrams.png</file>
+        <file>icons/172x172/ru.WorkingDiagrams.png</file>
+        <file>icons/86x86/ru.WorkingDiagrams.png</file>
     </qresource>
 </RCC>
