@@ -13,7 +13,7 @@ Page {
 	property alias textToolbar: txtStrToolbar.text
 	property alias rctStrZagolovok: rctStrZagolovok
 	property alias rctStrZona: rctStrZona
-	property alias rctStrToolbar: rctStrToolbar
+    property alias rctStrToolbar: rctStrToolbar
 
 	Item{
 		id: tmStr

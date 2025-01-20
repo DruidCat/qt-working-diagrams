@@ -22,6 +22,7 @@ Item {
                 height: tmZona.ntWidth*tmZona.ntCoff+tmZona.ntCoff
                 radius: (width/(tmZona.ntWidth*tmZona.ntCoff))/tmZona.ntCoff
                 opacity: 0.9//Небольшая прозрачность, чтоб был виден Логотип под надписями.
+                clip: true//Обрезаем лишний текст в прямоугольнике.
                 color: maZona.containsPress
                        ? Qt.darker(tmZona.clrFona, 1.3) : tmZona.clrFona
                 Text {
@@ -30,9 +31,7 @@ Item {
                     anchors.horizontalCenter: rctZona.horizontalCenter
                     anchors.verticalCenter: rctZona.verticalCenter
                     text: modelData.filedialog
-                    font.pixelSize: (rctZona.width/text.length>=rctZona.height)
-                    ? rctZona.height-tmZona.ntCoff
-                    : rctZona.width/text.length-tmZona.ntCoff
+                    font.pixelSize: rctZona.height-tmZona.ntCoff
                 }
                 MouseArea {//Создаём MA для каждого элемента каталога.
                     id: maZona

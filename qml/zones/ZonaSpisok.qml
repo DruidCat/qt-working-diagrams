@@ -21,17 +21,16 @@ Item {
 				height: tmZona.ntWidth*tmZona.ntCoff+tmZona.ntCoff
 				radius: (width/(tmZona.ntWidth*tmZona.ntCoff))/tmZona.ntCoff
                 opacity: 0.9//Небольшая прозрачность, чтоб был виден Логотип под надписями.
-				color: maZona.containsPress
-					   ? Qt.darker(tmZona.clrFona, 1.3) : tmZona.clrFona
+                clip: true//Обрезаем лишний текст в прямоугольнике.
+                color: maZona.containsPress
+					   ? Qt.darker(tmZona.clrFona, 1.3) : tmZona.clrFona 
 				Text {
 					color: maZona.containsPress
 						   ? Qt.darker(tmZona.clrTexta, 1.3) : tmZona.clrTexta
 					anchors.horizontalCenter: rctZona.horizontalCenter
 					anchors.verticalCenter: rctZona.verticalCenter
 					text: modelData.spisok
-					font.pixelSize: (rctZona.width/text.length>=rctZona.height)
-					? rctZona.height-tmZona.ntCoff
-					: rctZona.width/text.length-tmZona.ntCoff
+                    font.pixelSize: rctZona.height-tmZona.ntCoff
 				}
 				MouseArea {
 					id: maZona

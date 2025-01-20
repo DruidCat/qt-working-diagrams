@@ -11,7 +11,6 @@ Window {
 	visible: true
 	color: "grey"
     title: qsTr("Рабочий Список от druidcat@yandex.ru")
-
     property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrKnopok: "orange"
@@ -22,9 +21,9 @@ Window {
 		id: stvStr
 		property string strOpisanie: "titul"
 		anchors.fill: parent
-		initialItem: pgStrSpisok
-		//initialItem: pgStrMenu
-		//initialItem: pgStrDannie
+        initialItem: pgStrSpisok
+        //initialItem: pgStrMenu
+        //initialItem: pgStrDannie
 		Stranica {//Меню
 		/////////////
 		///М Е Н Ю///
@@ -154,13 +153,13 @@ Window {
 		///С П И С О К///
 		/////////////////
 			id: pgStrSpisok
-			visible: true
+            visible: false
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
-			textZagolovok: "ТМК"
+            textZagolovok: "ТМК"
             StrSpisok {
 				id: tmSpisok
                 ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
@@ -353,5 +352,5 @@ Window {
 				}
 			}
 		}
-	}
+	} 
 }

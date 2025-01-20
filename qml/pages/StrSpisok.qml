@@ -39,7 +39,7 @@ Item {
         tmSpisok.blPereimenovat = false;//Запрещаем переименовывать.
         tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
     }
-    //onClickedEscape: {}
+    focus: true
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             fnClickedEscape();//Функция нажатия кнопки Escape.
@@ -72,9 +72,9 @@ Item {
         tmSpisok.signalToolbar("Выберите список для его переименования.")
     }
 
-	Item {//Спискок Заголовка
+    Item {//Спискок Заголовка
 		id: tmZagolovok
-		DCKnopkaMenu {
+        DCKnopkaMenu {
 			id: knopkaMenu
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
@@ -142,11 +142,11 @@ Item {
 					txnZagolovok.visible ? knopkaSozdat.visible = false : knopkaSozdat.visible = true; 
 					if(txnZagolovok.visible == false){//Если DCTextInput не видим, то...
 						txnZagolovok.text = "";//Текст обнуляем вводимый.
-						knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
+                        knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
 					}
 					else{
 						textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
-						textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+                        textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 					}
 				}
 				onClickedEnter: {//Если нажата Enter, то такое же действие, как и при нажатии кнопки Ок.
@@ -154,14 +154,13 @@ Item {
 				}
 			}
 		}
-	}
+    }
     onBlPereimenovatChanged: {//Слот сигнала изменения property blPereimenovat (on...Changed)
    		tmSpisok.blPereimenovat ? rctZona.border.color = clrTexta : rctZona.border.color = "transparent";
 	}
-
 	Item {//Список Рабочей Зоны
 		id: tmZona
-		Rectangle {
+        Rectangle {
 			id: rctZona
 			anchors.fill: tmZona
 			color: "transparent"
@@ -227,10 +226,10 @@ Item {
 				}
             }
 		} 
-	}
+    }
 	Item {//Список Тулбара
         id: tmToolbar
-		DCKnopkaInfo {
+        DCKnopkaInfo {
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
@@ -260,4 +259,3 @@ Item {
 		}
     }
 }
-

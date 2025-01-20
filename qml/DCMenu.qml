@@ -23,7 +23,8 @@ Item {
 				radius: (width/(tmMenu.ntWidth*tmMenu.ntCoff))/tmMenu.ntCoff
 				border.width: 1
 				border.color: Qt.darker(tmMenu.clrFona, 1.3)
-				color: maMenu.containsPress
+                clip: true//Обрезаем лишний текст в прямоугольнике.
+                color: maMenu.containsPress
 					   ? Qt.darker(tmMenu.clrFona, 1.3) : tmMenu.clrFona
 				Text {
 					color: maMenu.containsPress
@@ -31,9 +32,7 @@ Item {
 					anchors.horizontalCenter: rctMenu.horizontalCenter
 					anchors.verticalCenter: rctMenu.verticalCenter
 					text: modelData.menu
-					font.pixelSize: (rctMenu.width/text.length>=rctMenu.height)
-					? rctMenu.height-tmMenu.ntCoff
-					: rctMenu.width/text.length-tmMenu.ntCoff
+                    font.pixelSize: rctMenu.height-tmMenu.ntCoff
 				}
 				MouseArea {
 					id: maMenu
