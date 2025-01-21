@@ -103,9 +103,10 @@ Window {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
 			textZagolovok: "Об авторе программы"
-			StrAvtor {
+            StrInstrukciya {
 				id: tmAvtor
-				ntWidth: pgStrAvtor.ntWidth; ntCoff: pgStrAvtor.ntCoff
+                strInstrukciya: "obavtore"
+                ntWidth: pgStrAvtor.ntWidth; ntCoff: pgStrAvtor.ntCoff
 				clrTexta: pgStrAvtor.clrTexta; clrFona: pgStrAvtor.clrRabOblasti
 				zagolovokX: pgStrAvtor.rctStrZagolovok.x; zagolovokY: pgStrAvtor.rctStrZagolovok.y
 				zagolovokWidth: pgStrAvtor.rctStrZagolovok.width
@@ -314,7 +315,40 @@ Window {
                 onClickedInfo: {
                     //TODO Сделать описание.
                     //tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
-                    stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
+                    stvStr.push(pgStrFDInstrukciya);//Переключаемся на страницу Инструкция проводника.
+                }
+            }
+        }
+        Stranica {//Описание Проводника.
+        ///////////////////////////////////////////////
+        ///И Н С Т Р У К Ц И Я   П Р О В О Д Н И К А///
+        ///////////////////////////////////////////////
+            id: pgStrFDInstrukciya
+            visible: false
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            clrFona: root.clrFona
+            clrTexta: root.clrKnopok
+            clrRabOblasti: "black"
+            textZagolovok: "ИНСТРУКЦИЯ ПО ПРОВОДНИКУ"
+            StrInstrukciya {
+                id: tmFDInstrukciya
+                strInstrukciya: "fdinstrukciya"
+                ntWidth: pgStrFDInstrukciya.ntWidth; ntCoff: pgStrFDInstrukciya.ntCoff
+                clrTexta: pgStrFDInstrukciya.clrTexta; clrFona: pgStrFDInstrukciya.clrRabOblasti
+                zagolovokX: pgStrFDInstrukciya.rctStrZagolovok.x;
+                zagolovokY: pgStrFDInstrukciya.rctStrZagolovok.y
+                zagolovokWidth: pgStrFDInstrukciya.rctStrZagolovok.width
+                zagolovokHeight: pgStrFDInstrukciya.rctStrZagolovok.height
+                zonaX: pgStrFDInstrukciya.rctStrZona.x; zonaY: pgStrFDInstrukciya.rctStrZona.y
+                zonaWidth: pgStrFDInstrukciya.rctStrZona.width;
+                zonaHeight: pgStrFDInstrukciya.rctStrZona.height
+                toolbarX: pgStrFDInstrukciya.rctStrToolbar.x; toolbarY: pgStrFDInstrukciya.rctStrToolbar.y
+                toolbarWidth: pgStrFDInstrukciya.rctStrToolbar.width;
+                toolbarHeight: pgStrFDInstrukciya.rctStrToolbar.height
+                radiusTextEdit: pgStrFDInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
+                onClickedNazad: {
+                    stvStr.pop()//Назад страницу
                 }
             }
         }

@@ -17,7 +17,7 @@
         <file>qml/DCTextInput.qml</file>
         <file>qml/PathViewSpisok.qml</file>
         <file>qml/pages/Stranica.qml</file>
-        <file>qml/pages/StrAvtor.qml</file>
+        <file>qml/pages/StrInstrukciya.qml</file>
         <file>qml/pages/StrDannie.qml</file>
         <file>qml/pages/StrDebug.qml</file>
         <file>qml/pages/StrElement.qml</file>
