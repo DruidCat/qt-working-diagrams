@@ -102,7 +102,7 @@ Window {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
-			textZagolovok: "Об авторе программы"
+            textZagolovok: "ОБ АВТОРЕ ПРИЛОЖЕНИЯ"
             StrInstrukciya {
 				id: tmAvtor
                 strInstrukciya: "obavtore"
