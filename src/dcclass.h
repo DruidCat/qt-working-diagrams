@@ -11,6 +11,8 @@ public:
 	explicit DCClass(QObject* proditel = nullptr);
 	//---пустая-строчка?---//
 	bool isEmpty(QString strTekst);//если в строчке пусто, один или множество пробелов, то возвращается true. 
+    //---это-папка?---//
+    bool isFolder(QString strTekst);//Если это [папка], то истина.
     //---скрытая-папка?---//
     bool isHideFolder(QString strTekst);//Если папка скрытая, то истина.
 	//---пробелы-в-начале-текста?---//

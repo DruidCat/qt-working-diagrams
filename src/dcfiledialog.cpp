@@ -6,6 +6,7 @@ DCFileDialog::DCFileDialog(QStringList slsFileDialogMaska, QObject* proditel):QO
 ////////////////////////////////
     m_pdcclass = new DCClass();//Указатель на класс по работе с текстом.
     m_pdrPut = new QDir (QDir::home());//Путь дериктории, который необходимо отобразить.
+    m_strFileDialogImya.clear();//Пустое имя.
     m_strFileDialogPut = m_strFileDialogPutDom = m_pdrPut->absolutePath();//Иннициализируем пути по умолчанию.
     m_slsFileDialogMaska = slsFileDialogMaska;//Задаём параметр маски отображения разширений файлов.
 }
@@ -23,6 +24,7 @@ bool DCFileDialog::ustFileDialogPut(QString strPut){//Устанавливаем
 //---У С Т А Н О В И Т Ь   П У Т Ь   К   К А Т А Л О Г У---//
 /////////////////////////////////////////////////////////////
     if (strPut == "dom"){//Если переменная дом, то...
+        m_strFileDialogImya.clear();//Обнуляем строку с именем файла.
         m_pdrPut->setPath(m_strFileDialogPutDom);//Задаём домашний каталог.
         return true;//Истина.
     }
@@ -35,14 +37,19 @@ QString DCFileDialog::polFileDialogPut(){//Получить путь к ката
     m_strFileDialogPut = m_pdrPut->absolutePath();//Получить Абсолютный путь к дерриктории.
     return m_strFileDialogPut;
 }
-bool DCFileDialog::ustSpisokJSON(QString strFileDialogPut){//Установить новый путь отображаемой папки.
+bool DCFileDialog::ustSpisokJSON(QString strFileDialogPut){//Установить новый путь отображаемой папки или Файл.
 ///////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   П У Т Ь   П А П К И---//
 ///////////////////////////////////////////////////
     if(!strFileDialogPut.isEmpty()){//Если путь не пустой, то...
-        strFileDialogPut = m_pdcclass->udalitPryamieSkobki(strFileDialogPut);//Удаляем скобки []
-        m_pdrPut->cd(strFileDialogPut);//Устанавливаем путь
-        return true;//Путь новый установлен.
+        if(m_pdcclass->isFolder(strFileDialogPut)){//Если это [папка], то...
+            strFileDialogPut = m_pdcclass->udalitPryamieSkobki(strFileDialogPut);//Удаляем скобки []
+            m_pdrPut->cd(strFileDialogPut);//Устанавливаем путь
+            return true;//Путь новый установлен.
+        }
+        else{//Если это файл, то...
+            m_strFileDialogImya = strFileDialogPut;//Задаём имя файла.
+        }
     }
     return false;//Путь не установлен новый.
 }
@@ -50,6 +57,9 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
 /////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   С П И С О К   J S O N---//
 /////////////////////////////////////////////////
+    if(!m_strFileDialogImya.isEmpty()){//Если Имя файла не постая строка, то...
+        return m_strFileDialogImya;//Возвратим имя ФАЙЛА.
+    }
     QStringList slsMaska = m_slsFileDialogMaska;//Задаём маску отображаемых разширений файлов.
     QStringList slsPapki = m_pdrPut->entryList(QDir::Dirs);
     QStringList slsFaili = m_pdrPut->entryList(slsMaska, QDir::Files);
@@ -89,3 +99,8 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
     strFileDialogJSON = strFileDialogJSON + "]";//Конец массива объектов.
     return strFileDialogJSON;
 }
+
+
+
+
+

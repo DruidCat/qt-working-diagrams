@@ -121,7 +121,13 @@ Item {
                             tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки.`
                         }
                         else{//Если это file.pdf, то...
-
+                            if(ntTip === 2){
+                                cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
+                                console.log(cppqml.strFileDialog);
+                                console.log(cppqml.strFileDialogPut);
+                                //TODO сделать тут запись файла в базу данных
+                                fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дом дерикторию! Сворачиваем, закрываем.
+                            }
                         }
                     }
                 }

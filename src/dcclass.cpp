@@ -20,6 +20,17 @@ bool DCClass::isEmpty(QString strTekst){//в строчке пусто, один
 	}
     return true;//Строчка пустая.
 }
+bool DCClass::isFolder(QString strTekst){//Если это [папка], то истина.
+/////////////////////////////
+//---Э Т О   П А П К А ?---//
+/////////////////////////////
+    QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
+    if(!strTekst.isEmpty()){//Если cтрока не пустая, то...
+        if ((btrTekst[0] == '[')&&(btrTekst[btrTekst.size()-1] == ']'))//Если это [ и ], то..
+            return true;//Это [папка].
+    }
+    return false;//Не папка.
+}
 bool DCClass::isHideFolder(QString strTekst){//Если папка скрытая, то истина.
 /////////////////////////////////////////////
 //---Э Т О   С К Р Ы Т А Я   П А П К А ?---//

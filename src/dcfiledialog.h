@@ -13,12 +13,13 @@ public:
     ~			DCFileDialog();//Деструктор.
     bool 		ustFileDialogPut(QString strPut);//Устанавливаем фиксированные пути.
     QString 	polFileDialogPut(void);//Получить путь к каталогу.
-    bool 		ustSpisokJSON(QString strFileDialogPut);//Установить значение нового пути папки.
+    bool 		ustSpisokJSON(QString strFileDialogPut);//Установить значение нового пути папки, или имя файла
     QString 	polSpisokJSON();//Метод создающий список каталогов и файлов конкретной дериктории.
 
 private:
     DCClass*	m_pdcclass;//Класс работающий с текстом.
     QDir*		m_pdrPut;//Путь, который в данный момент нужно показать.
+    QString 	m_strFileDialogImya;//Имя выбранного файла.
     QString 	m_strFileDialogPut;//Путь папки, содержимое которой нужно отобразить.
     QString 	m_strFileDialogPutDom;//Путь папки, содержащий имя каталога по умолчанию. Домашний.
     QStringList m_slsFileDialogMaska;//Маска, список отображаемых разширений файлов.
