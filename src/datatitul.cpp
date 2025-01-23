@@ -1,7 +1,7 @@
 ﻿#include "datatitul.h"
 
-DataTitul::DataTitul(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* parent)
-	: QObject{parent}{
+DataTitul::DataTitul(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* proditel)
+    : QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////

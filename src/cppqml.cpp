@@ -103,15 +103,13 @@ void DCCppQml::setStrTitulOpisanie(QString& strTitulOpisanieNovi) {//Переи�
 /////////////////////////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Н И Е   О П И С А Н И Е   Т И Т У Л А---//
 /////////////////////////////////////////////////////////////////////
-	if(m_pdcclass->isEmpty(strTitulOpisanieNovi)){//Если пустая строка, то...
-		qdebug("Нельзя переименовывать на пустое предложение описания.");
-	}
-	else{
-		if(m_strTitulOpisanie != strTitulOpisanieNovi){//Если описание титулов не совпадают, то...
-			if(m_pDataTitul->renTitulOpisanie(strTitulOpisanieNovi))//Если описание Титула записалось успешно
-				emit strTitulOpisanieChanged();//Излучаем сигнал об изменении аргумента.
-		}
-	}
+    if(m_strTitulOpisanie != strTitulOpisanieNovi){//Если описание титулов не совпадают, то...
+        if(m_pDataTitul->renTitulOpisanie(strTitulOpisanieNovi)){//Если описание Титула записалось успешно
+            m_strTitulOpisanie = strTitulOpisanieNovi;
+            qdebug("Новоя запись в описании заголовка.");
+            emit strTitulOpisanieChanged();//Излучаем сигнал об изменении аргумента.
+        }
+    }
 }
 QString DCCppQml::strSpisok() {//Получить элемента Списка.
 ///////////////////////////////////////////////////////
@@ -218,7 +216,7 @@ void DCCppQml::setStrSpisokOpisanie(QString& strSpisokOpisanieNovi){//Измен
 	if(strSpisokOpisanieNovi != m_strSpisokOpisanie){//Если Описания разные, то...
 		if(m_pDataSpisok->ustSpisokOpisanie(m_ullSpisokKod, strSpisokOpisanieNovi)){//Записалось Описание,то
 			m_strSpisokOpisanie = strSpisokOpisanieNovi;//Новое описание присвоили.
-			qdebug("Новоя запись в описании.");
+            qdebug("Новоя запись в описании списка.");
 			emit strSpisokOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}
@@ -332,7 +330,7 @@ void DCCppQml::setStrElementOpisanie(QString& strElementOpisanieNovi){//Изме
 	if(strElementOpisanieNovi != m_strElementOpisanie){//Если Описания разные, то...
 		if(m_pDataElement->ustElementOpisanie(m_ullSpisokKod, m_ullElementKod, strElementOpisanieNovi)){
 			m_strElementOpisanie = strElementOpisanieNovi;//Новое описание присвоили.
-			qdebug("Новоя запись в описании.");
+            qdebug("Новоя запись в описании элемента.");
 			emit strElementOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}

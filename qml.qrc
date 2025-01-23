@@ -24,7 +24,7 @@
         <file>qml/pages/StrMenu.qml</file>
         <file>qml/pages/StrOpisanie.qml</file>
         <file>qml/pages/StrSpisok.qml</file>
-        <file>qml/pages/StrSvet.qml</file>
+        <file>qml/pages/StrPlan.qml</file>
         <file>qml/zones/ZonaElement.qml</file>
         <file>qml/zones/ZonaSpisok.qml</file>
         <file>js/DCFunkciiJS.js</file>

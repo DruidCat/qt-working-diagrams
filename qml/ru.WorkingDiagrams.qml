@@ -57,8 +57,8 @@ Window {
 				onClickedAvtor: {
 					stvStr.push(pgStrAvtor)//Переходим на страницу об Авторе.
 				}
-				onClickedSvet: {
-					stvStr.push(pgStrSvet)//Переходим на страницу Потолочного освещения.
+                onClickedPlan: {
+                    stvStr.push(pgStrPlan)//Переходим на страницу Плана.
 				}
 			}
 		}
@@ -121,29 +121,29 @@ Window {
 				}
 			}
 		}
-		Stranica {//Свет
+        Stranica {//План
 		/////////////
-		///С В Е Т///
+        ///П Л А Н///
 		/////////////
-			id: pgStrSvet
+            id: pgStrPlan
 			visible: false
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
-			textZagolovok: "Управление потолочным освещением"
-			StrSvet {
-				id: tmSvet
-				ntWidth: pgStrSvet.ntWidth; ntCoff: pgStrSvet.ntCoff
-				clrTexta: pgStrSvet.clrTexta; clrFona: pgStrSvet.clrRabOblasti
-				zagolovokX: pgStrSvet.rctStrZagolovok.x; zagolovokY: pgStrSvet.rctStrZagolovok.y
-				zagolovokWidth: pgStrSvet.rctStrZagolovok.width
-				zagolovokHeight: pgStrSvet.rctStrZagolovok.height
-				zonaX: pgStrSvet.rctStrZona.x; zonaY: pgStrSvet.rctStrZona.y
-				zonaWidth: pgStrSvet.rctStrZona.width; zonaHeight: pgStrSvet.rctStrZona.height
-				toolbarX: pgStrSvet.rctStrToolbar.x; toolbarY: pgStrSvet.rctStrToolbar.y
-				toolbarWidth: pgStrSvet.rctStrToolbar.width; toolbarHeight: pgStrSvet.rctStrToolbar.height
+            textZagolovok: "ПЛАН"
+            StrPlan {
+                id: tmPlan
+                ntWidth: pgStrPlan.ntWidth; ntCoff: pgStrPlan.ntCoff
+                clrTexta: pgStrPlan.clrTexta; clrFona: pgStrPlan.clrRabOblasti
+                zagolovokX: pgStrPlan.rctStrZagolovok.x; zagolovokY: pgStrPlan.rctStrZagolovok.y
+                zagolovokWidth: pgStrPlan.rctStrZagolovok.width
+                zagolovokHeight: pgStrPlan.rctStrZagolovok.height
+                zonaX: pgStrPlan.rctStrZona.x; zonaY: pgStrPlan.rctStrZona.y
+                zonaWidth: pgStrPlan.rctStrZona.width; zonaHeight: pgStrPlan.rctStrZona.height
+                toolbarX: pgStrPlan.rctStrToolbar.x; toolbarY: pgStrPlan.rctStrToolbar.y
+                toolbarWidth: pgStrPlan.rctStrToolbar.width; toolbarHeight: pgStrPlan.rctStrToolbar.height
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}

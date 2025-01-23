@@ -27,7 +27,7 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	signal clickedAvtor();//Сигнал нажатия кнопки Автор.
-	signal clickedSvet();//Сигнал нажатия кнопки Потолочное освещение.
+    signal clickedPlan();//Сигнал нажатия кнопки План.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             menuMenu.visible = false;//Делаем невидимым всплывающее меню.
@@ -110,7 +110,7 @@ Item {
 			}
 		}
 		DCKnopkaOriginal {
-			id: knopkaSvet
+            id: knopkaPlan
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
 			anchors.top: knopkaSpisok.bottom
 			anchors.left: tmZona.left
@@ -118,12 +118,12 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-			text: "Потолочное освещение"
+            text: "План"
 			bold: true
 			italic: true
 			onClicked: {//Слот запускающий 
                 menuMenu.visible = false;//Делаем невидимым меню.
-                tmMenu.clickedSvet();//Сигнал нажатия кнопки Потолочного освещения.
+                tmMenu.clickedPlan();//Сигнал нажатия кнопки План.
 			}
 		}
 		PathViewSpisok {
