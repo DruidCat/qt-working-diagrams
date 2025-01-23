@@ -549,7 +549,7 @@ bool DCDB::UPDATE(QString strGrafa, QStringList slsKolonki){//Переимено
                     if(!pqrmModel->rowCount()){//Если счётчик 0, то это ошибка запроса
                         qdebug(tr("Ошибка 047 в DCDB::UPDATE(): В базе данных: ") + m_strImyaDB
                                + tr(", в таблице: ") + m_strImyaTablici
-                               + tr(" ошибка не верного запроса: ") + pqrmModel->query().lastQuery());
+                               + tr(" ошибка неверного запроса: ") + pqrmModel->query().lastQuery());
                         blFlagZakritiya = false;//Ошибка
                     }
                     else{//в ином случае...

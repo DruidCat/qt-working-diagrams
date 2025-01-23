@@ -25,18 +25,21 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctZona.radius//Радиус Зоны рабочей
-	property bool blPereimenovat: false//Переименовать, если true
-	anchors.fill: parent//Растянется по Родителю.
+    property bool blPereimenovat: false//Переименовать элемент Списка, если true
+    property bool blZagolovok: false//Переименовать Заголовок, если true
+    anchors.fill: parent//Растянется по Родителю.
 	signal clickedMenu();//Сигнал нажатия кнопки Меню. 
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedSpisok(var strSpisok);//Сигнал когда нажат один из элементов Списка.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
+    signal signalZagolovok(var strZagolovok);//Сигнал, когда передаём новую надпись в Заголовок.
 
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuSpisok.visible = false;//Делаем невидимым всплывающее меню.
         tmSpisok.blPereimenovat = false;//Запрещаем переименовывать.
+        tmSpisok.blZagolovok = false;//Запрещаем изменять заголовок.
     }
     focus: true
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -54,12 +57,18 @@ Item {
     }
 	function fnClickedOk(){//Функция сохранения/переименования элемента Списка.
         tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
-        if(blPereimenovat){//Если Переименовываем, то...
-            cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text);//Переименовываем элемент Списка.
-		}
-		else{//иначе...
-            cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
-		}
+        if(blZagolovok){//Если изменить имя заголовка, то...
+            cppqml.strTitul = txnZagolovok.text;//Переименовываем Заголовок Списка.
+            tmSpisok.signalZagolovok(txnZagolovok.text);//Отображаем Заголовок
+        }
+        else{//В ином случае...
+            if(blPereimenovat){//Если Переименовываем, то...
+                cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text);//Переименовываем элемент Списка.
+            }
+            else{//иначе...
+                cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
+            }
+        }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
@@ -74,6 +83,13 @@ Item {
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
         blPereimenovat = true;
         tmSpisok.signalToolbar("Выберите список для его переименования.")
+    }
+    function fnMenuZagolovok(){//Нажат пункт меню Изменить Заголовок.
+        blZagolovok = true;//Изменить заголовок.
+        menuSpisok.visible = false;//Делаем невидимым меню.
+        txnZagolovok.text = cppqml.strTitul;//Добавляем в строку Заголовок, для более понятного редактирования
+        txnZagolovok.visible = true;//Режим отображения текстового редактора Заголовка.
+        tmSpisok.signalToolbar("Измените имя заголовка списка.");
     }
 
     Item {//Спискок Заголовка
@@ -225,7 +241,10 @@ Item {
                     if(ntNomer === 2){//Переименовать.
                         fnMenuPereimenovat();//Функция нажатия пункта меню Переименовать.
 					}
-                    if(ntNomer === 5){//Выход
+                    if(ntNomer === 5){//Изменить Заголовок.
+                        fnMenuZagolovok();//Функция нажатия пункта меню Изменить Заголовок.
+                    }
+                    if(ntNomer === 6){//Выход
 						Qt.quit();//Закрыть приложение.
 					}
 				}

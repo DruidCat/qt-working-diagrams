@@ -160,7 +160,7 @@ Window {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
-            textZagolovok: "ТМК"
+            textZagolovok: cppqml.strTitul
             StrSpisok {
 				id: tmSpisok
                 ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
@@ -190,6 +190,9 @@ Window {
 				}
                 onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
                     pgStrSpisok.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
+                }
+                onSignalZagolovok: function(strZagolovok) {//Слот сигнала signalZagolovok с новым Заголовком.
+                    pgStrSpisok.textZagolovok = cppqml.strTitul;//Выставляем изменённый Заголовок.
                 }
 			}
 		}
