@@ -36,19 +36,23 @@ Item {
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuElement.visible = false;//Делаем невидимым всплывающее меню.
         tmElement.blPereimenovat = false;//Запрещаем переименовывать.
-        tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
     }
     //onClickedEscape: {}
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+            tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: tmElement
-        onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
+        onClicked: {
+            tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+            fnClickedEscape();//Функция нажатия кнопки Escape.
+        }
     }
     function fnClickedOk(){//Функция сохранения/переименования Элементов списка.
+        tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
         if(blPereimenovat){//Если Переименовываем, то...
             cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text);//Переименовываем Элемент списка.
         }
@@ -82,6 +86,7 @@ Item {
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
 			onClicked: {
+                tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
 				tmElement.clickedNazad();//Сигнал Назад.
 			}
@@ -236,6 +241,7 @@ Item {
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
 			onClicked: {//Слот клика кнопки Инфо
+                tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
 				tmElement.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
 			}

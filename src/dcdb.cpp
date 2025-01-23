@@ -18,7 +18,6 @@ DCDB::DCDB(const QString strDriver, const QString strImyaDB, QString strImyaTabl
 	m_ntKodKolichestvo = 0;//
 	m_strKodImyaTablic.clear();//
 }
-
 DCDB::DCDB(const QString strDriver, const QString strImyaDB, QObject* proditel)
     : QObject(proditel){
 ///////////////////////////////
@@ -56,7 +55,6 @@ DCDB::DCDB(QObject* proditel) : QObject(proditel){//Конструктор дл�
 	m_ntKodKolichestvo = 0;//
 	m_strKodImyaTablic.clear();//
 }
-
 bool DCDB::checkStatus(){//Открыть и закрыть Базу данных, для того чтобы проверить статус сети. 
 /////////////////////////////////////////
 //---П Р О В Е Р И Т Ь   С Т А Т У С---//
@@ -91,7 +89,6 @@ bool DCDB::checkStatus(){//Открыть и закрыть Базу данны�
 	QSqlDatabase::removeDatabase(QString("dbCheckStatus%1").arg(untCheckStatus));//Закрываем открытую БД
 	return blFlagOshibki;
 }
-
 bool DCDB::CREATE(QStringList slsGrafi){//Создать таблицу.
 ///////////////////////////////////////
 //---С О З Д А Т Ь   Т А Б Л И Ц У---//
@@ -135,7 +132,7 @@ bool DCDB::CREATE(QStringList slsGrafi){//Создать таблицу.
 			blFlagOshibki = false;//Ошибка.
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
 			///////////////////////////////////////////
@@ -232,7 +229,7 @@ bool DCDB::CREATE(){//Создать таблицу, при условии чт�
 			blFlagOshibki = false;//Ошибка.
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
 			///////////////////////////////////////////
@@ -318,7 +315,7 @@ bool DCDB::DROP(){//Метод удаляющий таблицу в БД.
 					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
 			blFlagZakritiya = false;//Ошибка открытия базы данных
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса к БД
 			if(sqlQuery.exec("SELECT * FROM \""+m_strImyaTablici+"\";")){//Если есть ТАБЛИЦА с заданным именем
@@ -336,7 +333,6 @@ bool DCDB::DROP(){//Метод удаляющий таблицу в БД.
 	QSqlDatabase::removeDatabase(QString("dbDROP%1").arg(untDrop));//Закрываем открытую БД
 	return blFlagZakritiya;//Возвращаем состояние!
 }
-
 bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставить данные
 /////////////////////
 //---I N S E R T---//
@@ -369,7 +365,7 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 			blFlagZakritiya = false;
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			uint untGrafi = slsGrafi.size();//Считаем количество граф
 			uint untKolonki = slsKolonki.size();//Считаем колличество значений Колонок
@@ -415,7 +411,6 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 	QSqlDatabase::removeDatabase(QString("dbINSERT%1").arg(untINSERT));//Закрываем открытую БД
 	return blFlagZakritiya;
 }
-
 bool DCDB::UPDATE(QStringList slsGrafi, QStringList slsKolonki){//Обновить данные
 /////////////////////
 //---U P D A T E---//
@@ -443,7 +438,7 @@ bool DCDB::UPDATE(QStringList slsGrafi, QStringList slsKolonki){//Обновит
 			blFlagZakritiya = false;//Ошибка
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			uint untGrafi = slsGrafi.size();//Считаем количество граф
 			uint untKolonki = slsKolonki.size();//Считаем колличество значений Колонок
@@ -491,7 +486,6 @@ bool DCDB::UPDATE(QStringList slsGrafi, QStringList slsKolonki){//Обновит
 	QSqlDatabase::removeDatabase(QString("dbUPDATE_1%1").arg(untUPDATE_1));//Закрываем открытую БД
 	return blFlagZakritiya;
 }
-
 bool DCDB::UPDATE(QString strGrafa, QStringList slsKolonki){//Переименовать данные
 /////////////////////
 //---U P D A T E---//
@@ -514,8 +508,8 @@ bool DCDB::UPDATE(QString strGrafa, QStringList slsKolonki){//Переимено
 				+ tr(" отсутствует Первичный Ключ!"));
         blFlagZakritiya = false;//Ошибка
 	}
-	else{//В протичном случае...
-		QSqlDatabase sqlDB=QSqlDatabase::addDatabase(m_strDriver, QString("dbUPDATE_2%1").arg(++untUPDATE_2));
+    else{//В ином случае...
+        QSqlDatabase sqlDB=QSqlDatabase::addDatabase(m_strDriver, QString("dbUPDATE_2%1").arg(++untUPDATE_2));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
 		sqlDB.setPort(m_untPort);
@@ -525,7 +519,7 @@ bool DCDB::UPDATE(QString strGrafa, QStringList slsKolonki){//Переимено
     		blFlagZakritiya = false;//Ошибка
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			uint untKolonki = slsKolonki.size();//Считаем колличество значений Колонок
 			if(untKolonki != 2){//Если колонок не две, то ...
@@ -534,38 +528,46 @@ bool DCDB::UPDATE(QString strGrafa, QStringList slsKolonki){//Переимено
 						+ tr(" количество колонок: ") + QString::number(untKolonki) + tr(" не равно двум!"));
 		        blFlagZakritiya = false;//Ошибка
 			}
-			else{//в протичном случае...
+            else{//в ином случае...
 				/////////////////////////////////////////////////
 				/////П Е Р Е И М Е Н О В А Т Ь   Д А Н Н Ы Е/////
 				/////////////////////////////////////////////////
 				strGrafa 		= sql_encode(strGrafa);//заменяем ' на "
 				slsKolonki[0] 	= sql_encode(slsKolonki[0]);//заменяем ' на "
 				slsKolonki[1] 	= sql_encode(slsKolonki[1]);//заменяем ' на "
-	    		QSqlQueryModel* pqrmModel = new QSqlQueryModel(this);
+                QSqlQueryModel* pqrmModel = new QSqlQueryModel(this);
 	    		pqrmModel->setQuery(QSqlQuery(("SELECT * FROM \""+ m_strImyaTablici + "\" WHERE \""
 						+ strGrafa + "\" = '" +slsKolonki[0]+ "';"), sqlDB));
  				if(pqrmModel->lastError().isValid()){//Если есть ошибка в запросе, то...
 					qdebug(tr("Ошибка 044 в DCDB::UPDATE(): В базе данных: ")+m_strImyaDB+tr(", в таблице: ")
-							+ m_strImyaTablici + tr(" ошибка по причине: ") + pqrmModel->lastError().text());
+                            + m_strImyaTablici + tr(" ошибка по причине: ") + pqrmModel->lastError().text());
 					blFlagZakritiya = false;//Ошибка
 				}
-				else{//в противном случае...
-					QString strPKey("");//Хранит значение Primary Key
+                else{//в ином случае...
+                    QString strPKey("");//Хранит значение Primary Key
 					QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
-					for(int ntShag = 0; ntShag < pqrmModel->rowCount(); ntShag++){//Цикл
-						strPKey = pqrmModel->record(ntShag).value(m_strPrimaryKey).toString();
-						//если запрос не запустился, то...
-						if (!sqlQuery.exec("UPDATE \""+m_strImyaTablici+"\" SET \""+strGrafa+"\" = '"
-								+ slsKolonki[1]+"' WHERE \""+m_strPrimaryKey+"\" = '"+strPKey+"';")){
-							qdebug(tr("Ошибка 043 в DCDB::UPDATE(): В базе данных: ")
-									+ m_strImyaDB + tr(" таблицы: ") + m_strImyaTablici
-									+ tr(", не смог переименовать данные c ")
-									+ slsKolonki[0] + tr(" на ") + slsKolonki[1]
-									+ tr(" в графе ") + strGrafa + tr(" по причине: ")
-									+ sqlQuery.lastError().text());
-							blFlagZakritiya = false;//Ошибка
-						}
-					}
+                    if(!pqrmModel->rowCount()){//Если счётчик 0, то это ошибка запроса
+                        qdebug(tr("Ошибка 047 в DCDB::UPDATE(): В базе данных: ") + m_strImyaDB
+                               + tr(", в таблице: ") + m_strImyaTablici
+                               + tr(" ошибка не верного запроса: ") + pqrmModel->query().lastQuery());
+                        blFlagZakritiya = false;//Ошибка
+                    }
+                    else{//в ином случае...
+                        for(int ntShag = 0; ntShag < pqrmModel->rowCount(); ntShag++){//Цикл
+                            strPKey = pqrmModel->record(ntShag).value(m_strPrimaryKey).toString();
+                            //если запрос не запустился, то...
+                            if (!sqlQuery.exec("UPDATE \""+m_strImyaTablici+"\" SET \""+strGrafa+"\" = '"
+                                    + slsKolonki[1]+"' WHERE \""+m_strPrimaryKey+"\" = '"+strPKey+"';")){
+                                qdebug(tr("Ошибка 043 в DCDB::UPDATE(): В базе данных: ")
+                                        + m_strImyaDB + tr(" таблицы: ") + m_strImyaTablici
+                                        + tr(", не смог переименовать данные c ")
+                                        + slsKolonki[0] + tr(" на ") + slsKolonki[1]
+                                        + tr(" в графе ") + strGrafa + tr(" по причине: ")
+                                        + sqlQuery.lastError().text());
+                                blFlagZakritiya = false;//Ошибка
+                            }
+                        }
+                    }
     			}
 				delete pqrmModel;//Обязательно удалить указатель, иначе утечка памяти будет.
 				pqrmModel = nullptr;//Обнуляем указатель.
@@ -598,7 +600,7 @@ bool DCDB::UPDATE(QString strGrafa, QString strGrafaParametri, QStringList slsKo
 				+ tr(" отсутствует Первичный Ключ!"));
         blFlagZakritiya = false;//Ошибка
 	}
-	else{//В протичном случае...
+    else{//В ином случае...
 		QSqlDatabase sqlDB=QSqlDatabase::addDatabase(m_strDriver, QString("dbUPDATE_3%1").arg(++untUPDATE_3));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
@@ -609,7 +611,7 @@ bool DCDB::UPDATE(QString strGrafa, QString strGrafaParametri, QStringList slsKo
     		blFlagZakritiya = false;//Ошибка
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			uint untKolonki = slsKolonki.size();//Считаем колличество значений Колонок
 			if(untKolonki != 2){//Если колонок не две, то ...
@@ -618,7 +620,7 @@ bool DCDB::UPDATE(QString strGrafa, QString strGrafaParametri, QStringList slsKo
 						+ tr(" количество колонок: ") + QString::number(untKolonki) + tr(" не равно двум!"));
 		        blFlagZakritiya = false;//Ошибка
 			}
-			else{//в протичном случае...			
+            else{//в ином случае...
 				/////////////////////////////////////////////////////////////////////////////////
 				/////П О И С К   М А К С И М А Л Ь Н О Г О   П Е Р В И Ч Н О Г О   К Л Ю Ч А/////
 				/////////////////////////////////////////////////////////////////////////////////
@@ -643,7 +645,7 @@ bool DCDB::UPDATE(QString strGrafa, QString strGrafaParametri, QStringList slsKo
 						blFlagZakritiya = false;//Ошибка
 					}
 				}
-				else{//В противном случае...
+                else{//В ином случае...
 	    			QSqlQueryModel* pqrmModel = new QSqlQueryModel(this);
 	    			pqrmModel->setQuery(QSqlQuery(("SELECT * FROM \""+ m_strImyaTablici + "\";"), sqlDB));
  					if(pqrmModel->lastError().isValid()){//Если есть ошибка в запросе, то...
@@ -652,7 +654,7 @@ bool DCDB::UPDATE(QString strGrafa, QString strGrafaParametri, QStringList slsKo
 								+ pqrmModel->lastError().text());
 						blFlagZakritiya = false;//Ошибка
 					}
-					else{//в противном случае...
+                    else{//в ином случае...
 						quint64 ullKolichestvoStrok=pqrmModel->rowCount();//Присваиваем кол-во строк в модели.
 						quint64 ullPKey(0);//Хранит значение Primary Key
 						quint64 ullMaxPKey(0);//Хранит максимальное значение Primary Key
@@ -749,7 +751,6 @@ bool DCDB::UPDATE(QString strGrafa, QString strGrafaParametri, QStringList slsKo
 	QSqlDatabase::removeDatabase(QString("dbUPDATE_3%1").arg(untUPDATE_3));//Закрываем открытую БД
 	return blFlagZakritiya;
 }
-
 bool DCDB::DELETE(QString strGrafa, QString strKolonka){//Удалить данные
 /////////////////////
 //---D E L E T E---//
@@ -777,7 +778,7 @@ bool DCDB::DELETE(QString strGrafa, QString strKolonka){//Удалить дан�
     		blFlagZakritiya = false;//Ошибка
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
 			/////////////////////////////////////
@@ -796,7 +797,6 @@ bool DCDB::DELETE(QString strGrafa, QString strKolonka){//Удалить дан�
 	QSqlDatabase::removeDatabase(QString("dbDELETE%1").arg(untDELETE));//Закрываем открытую БД
 	return blFlagZakritiya;
 }
-
 QString DCDB::SELECT(QString strGrafa, QString strKolonka, QString strChitaemayaGrafa){//Читаем данные из БД.
 /////////////////////
 //---S E L E C T---//
@@ -850,7 +850,6 @@ QString DCDB::SELECT(QString strGrafa, QString strKolonka, QString strChitaemaya
 	QSqlDatabase::removeDatabase(QString("dbSELECT_1%1").arg(untSELECT_1));//Закрываем открытую БД
 	return strChitaemSQL;
 }
-
 quint64 DCDB::SELECT(void){//Подсчёт количества строк в БД.
 /////////////////////
 //---S E L E C T---//
@@ -877,7 +876,7 @@ quint64 DCDB::SELECT(void){//Подсчёт количества строк в �
 					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
     		QSqlQueryModel* pqrmModel = new QSqlQueryModel(this);
 	    	pqrmModel->setQuery(QSqlQuery(("SELECT * FROM \""+m_strImyaTablici+"\";"), sqlDB));
@@ -885,7 +884,7 @@ quint64 DCDB::SELECT(void){//Подсчёт количества строк в �
 				qdebug(tr("Ошибка 073 в DCDB::SELECT(): В базе данных: ") + m_strImyaDB + tr(", в таблице: ")
 						+ m_strImyaTablici + tr(" ошибка по причине: ") + pqrmModel->lastError().text());
 			}
-			else{//в противном случае...
+            else{//в ином случае...
 				///////////////////////////////
 				//---С У М М А   С Т Р О К---//
 				///////////////////////////////
@@ -898,7 +897,6 @@ quint64 DCDB::SELECT(void){//Подсчёт количества строк в �
 	QSqlDatabase::removeDatabase(QString("dbSELECT_2%1").arg(untSELECT_2));//Закрываем открытую БД	
 	return ullSchetchik;
 }
-
 quint64 DCDB::SELECT(QString strGrafa, QString strKolonka){//Считаем совпадения в БД
 /////////////////////
 //---S E L E C T---//
@@ -925,7 +923,7 @@ quint64 DCDB::SELECT(QString strGrafa, QString strKolonka){//Считаем со
 					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
 			//Создаём запрос на поиск совпадений в заданной таблицы БД
@@ -943,7 +941,6 @@ quint64 DCDB::SELECT(QString strGrafa, QString strKolonka){//Считаем со
 	QSqlDatabase::removeDatabase(QString("dbSELECT_3%1").arg(untSELECT_3));//Закрываем открытую БД
 	return ullSchetchik;
 }
-
 quint64 DCDB::SELECT(QStringList slsGrafi, QStringList slsKolonki){//Считаем совпадения в БД
 /////////////////////
 //---S E L E C T---//
@@ -972,7 +969,7 @@ quint64 DCDB::SELECT(QStringList slsGrafi, QStringList slsKolonki){//Счита�
 					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			QString	strSqlZapros("");//Строчка в которой соберется запрос
 			for(uint untStep = 0; untStep < untGrafi; untStep++){
@@ -1000,7 +997,6 @@ quint64 DCDB::SELECT(QStringList slsGrafi, QStringList slsKolonki){//Счита�
 	QSqlDatabase::removeDatabase(QString("dbSELECT_4%1").arg(untSELECT_4));//Закрываем открытую БД
 	return ullSchetchik;
 }
-
 quint64 DCDB::SELECTPK(void){//Возвращаем максимальное число Primary Key в БД.
 /////////////////////
 //---S E L E C T---//
@@ -1031,7 +1027,7 @@ quint64 DCDB::SELECTPK(void){//Возвращаем максимальное ч�
 					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			if(m_strDriver == "QPSQL"){
 				QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса к БД
@@ -1049,7 +1045,7 @@ quint64 DCDB::SELECTPK(void){//Возвращаем максимальное ч�
 							+ sqlQuery.lastError().text());
 				}
 			}
-			else{//В противном случае...
+            else{//В ином случае...
 	    		QSqlQueryModel* pqrmModel = new QSqlQueryModel(this);
 	    		pqrmModel->setQuery(QSqlQuery(("SELECT * FROM \""+ m_strImyaTablici + "\";"), sqlDB));
  				if(pqrmModel->lastError().isValid()){//Если есть ошибка в запросе, то...
@@ -1057,7 +1053,7 @@ quint64 DCDB::SELECTPK(void){//Возвращаем максимальное ч�
 							+ tr(", в таблице: ") + m_strImyaTablici + tr(" ошибка по причине: ")
 							+ pqrmModel->lastError().text());
 				}
-				else{//в противном случае...
+                else{//в ином случае...
 					quint64 ullKolichestvoStrok=pqrmModel->rowCount();//Присваиваем количество строк в модели 
 					quint64 ullPKey(0);//Хранит значение Primary Key
 					quint64 ullMaxPKey(0);//Хранит максимальное значение Primary Key
@@ -1076,7 +1072,6 @@ quint64 DCDB::SELECTPK(void){//Возвращаем максимальное ч�
 	QSqlDatabase::removeDatabase(QString("dbSELECTPK%1").arg(untSELECTPK));//Закрываем открытую БД
 	return ullSchetchik;
 }
-
 QSqlQuery DCDB::SELECT(bool blUdalitDB, QString strZapros, QString strOrderBy, int ntLimit, int ntSdvig){
 /////////////////////
 //---S E L E C T---//
@@ -1153,7 +1148,6 @@ QSqlQuery DCDB::SELECT(bool blUdalitDB, QString strZapros, QString strOrderBy, i
 			}
 		}
 	}
-
 	QString strZaprosDB("");//Запрос ограничения.
 	QString strOrderByDB("");//Запрос сортировки.
 	QString strLimit("");//Запрос ограничения показа.
@@ -1173,7 +1167,7 @@ QSqlQuery DCDB::SELECT(bool blUdalitDB, QString strZapros, QString strOrderBy, i
 					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			QSqlQuery sqrQuery(sqlDB);//Создаем объект запроса
 			//Создаём запрос на поиск совпадений в заданной таблицы БД
@@ -1187,7 +1181,6 @@ QSqlQuery DCDB::SELECT(bool blUdalitDB, QString strZapros, QString strOrderBy, i
 	}
 	return sqrZapros;//Возращаем пустой запрос.
 }
-
 QSqlQuery DCDB::LIKE(bool blUdalitDB, QStringList slsConcat, QString strLike, QString strZapros,
 		QString strOrderBy, int ntLimit, int ntSdvig){//Запрос с поиском, ограничениями, сортировкой и лимитом
 /////////////////
@@ -1236,7 +1229,6 @@ QSqlQuery DCDB::LIKE(bool blUdalitDB, QStringList slsConcat, QString strLike, QS
 			slsTablici.clear();//Очищаем список от мусора полностью.
 			ntTablici = 0;//Таблиц нет.
 		}
-		
 		if(!ntTablici){//Если нет ни одной таблицы в списке, то...
 			slsTablici<<m_strImyaTablici;//Добавляем имя таблицы в список.
 			blFlag = false;//добавлять в список не надо.
@@ -1266,7 +1258,6 @@ QSqlQuery DCDB::LIKE(bool blUdalitDB, QStringList slsConcat, QString strLike, QS
 			}
 		}
 	}
-
 	QString strConcatDB("");//Границы поиска.
 	QString strLikeDB("");//Поисковый запрос.
 	QString strZaprosDB("");//Запрос ограничения.
@@ -1304,7 +1295,7 @@ QSqlQuery DCDB::LIKE(bool blUdalitDB, QStringList slsConcat, QString strLike, QS
 					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
 		}
-		else{//В противном случае...
+        else{//В ином случае...
 			emit signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
 			QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
 			//Создаём запрос на поиск совпадений в заданной таблицы БД
@@ -1319,7 +1310,6 @@ QSqlQuery DCDB::LIKE(bool blUdalitDB, QStringList slsConcat, QString strLike, QS
 	}
 	return sqrZapros;//Возращаем пустой запрос.
 }
-
 QSqlQuery DCDB::CLEAR(){//Пустой запрос.
 ///////////////////
 //---C L E A R---//
@@ -1327,7 +1317,6 @@ QSqlQuery DCDB::CLEAR(){//Пустой запрос.
 	QSqlQuery sqrZapros;//Пустой запрос для возврата во время ошибки.
 	return sqrZapros;//Возвращаем пустой запрос.
 }
-
 void DCDB::ustDriverDB(QString strDriver){//Установить драйвер БД.
 ///////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   И М Я   Д Р А Й В Е Р А---//
@@ -1347,7 +1336,6 @@ void DCDB::ustDriverDB(QString strDriver){//Установить драйвер 
 			m_strDriver = "";//Это значит впервые задаём имя Драйвера и оно не верное, поэтому "".
 	}
 }
-
 void DCDB::ustImyaDB(QString strImyaDB){//Установить имя БД.
 ///////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   И М Я   Б Д---//
@@ -1377,7 +1365,6 @@ void DCDB::ustImyaDB(QString strImyaDB){//Установить имя БД.
 			m_strImyaDB = strImyaDB;
 	}
 }
-
 void DCDB::ustImyaTablici(QString  strImyaTablici){//Установить имя таблицы.
 /////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   И М Я   Т А Б Л И Ц И---//
@@ -1394,7 +1381,6 @@ void DCDB::ustImyaTablici(QString  strImyaTablici){//Установить имя
 		}
 	}
 }
-
 bool DCDB::kodCREATE(QString strKodImyaTablic, int ntKodKolichestvo){//Создать таблицу кодов.
 ///////////////////////////////////////////////////
 //---С О З Д А Т Ь   Т А Б Л И Ц У   К О Д О В---//
@@ -1419,7 +1405,6 @@ bool DCDB::kodCREATE(QString strKodImyaTablic, int ntKodKolichestvo){//Созд�
 				}
 			}
 		}
-
 	}
 	return false;//Ошибка
 }

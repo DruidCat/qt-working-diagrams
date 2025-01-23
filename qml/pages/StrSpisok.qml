@@ -37,24 +37,28 @@ Item {
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuSpisok.visible = false;//Делаем невидимым всплывающее меню.
         tmSpisok.blPereimenovat = false;//Запрещаем переименовывать.
-        tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
     }
     focus: true
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+            tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: tmSpisok
-        onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
+        onClicked: {
+            tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+            fnClickedEscape();//Функция нажатия кнопки Escape.
+        }
     }
 	function fnClickedOk(){//Функция сохранения/переименования элемента Списка.
-		if(blPereimenovat){//Если Переименовываем, то...
-			cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text);//Переименовываем элемент Списка.
+        tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+        if(blPereimenovat){//Если Переименовываем, то...
+            cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text);//Переименовываем элемент Списка.
 		}
 		else{//иначе...
-			cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
+            cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
 		}
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
@@ -84,6 +88,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
+                tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
 				tmSpisok.clickedMenu();//Сигнал Меню
 			}
@@ -238,6 +243,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
+                tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
                 tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
 			}

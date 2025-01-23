@@ -45,12 +45,12 @@ Item {
 		anchors.fill: tmZona
 		anchors.margins: tmZona.ntCoff
 		spacing: tmZona.ntCoff//Расстояние между строками
-		model: JSSpisok.fnSpisokJSON()
+        model: JSSpisok.fnSpisokJSON()
 		delegate: cmpZona
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrSpisokDBChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то.
-				lsvZona.model = JSSpisok.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
+                lsvZona.model = JSSpisok.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
 			}
 		}
 	}

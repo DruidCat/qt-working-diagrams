@@ -364,7 +364,8 @@ Window {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: root.clrStranic
 			textZagolovok: "Описание"
-			StrOpisanie {
+            textToolbar: "ДЛЯ ИЗМЕНЕНИЯ ОПИСАНИЯ НАЖМИТЕ ИКОНКУ +"
+            StrOpisanie {
 				id: tmOpisanie
 				ntWidth: pgStrOpisanie.ntWidth; ntCoff: pgStrOpisanie.ntCoff
 				clrTexta: pgStrOpisanie.clrTexta; clrFona: pgStrOpisanie.clrRabOblasti
