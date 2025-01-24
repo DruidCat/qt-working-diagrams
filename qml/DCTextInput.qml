@@ -29,8 +29,13 @@ Item {
 			color: "black"//цвет текста
 			horizontalAlignment: TextInput.AlignHCenter
 			verticalAlignment: TextInput.AlignVCenter
+            validator: RegExpValidator {//Чтоб не было SQL инъекции, запрещены символы ';*%_?\
+                //regExp: /[0-9a-zA-Zа-яА-ЯёЁ ~`!@#№$^:&<>,./"(){}|=+-]+/
+                //Если код начинается с ^ [^.....] то это запретить вводить и перечисляются символы.\\ - это \
+                regExp: /[^';*%_\\?]+/
+            }
 			text: ""
-			font.pixelSize: tmTextInput.ntWidth*tmTextInput.ntCoff//размер шрифта текста.
+            font.pixelSize: tmTextInput.ntWidth*tmTextInput.ntCoff//размер шрифта текста.
 			//font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
 			maximumLength: 33//Максимальная длина ввода текста.
 			readOnly: false//Можно редактировать. 
