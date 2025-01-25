@@ -75,6 +75,7 @@ Item {
         blPereimenovat = false;//Запрещено переименовывать. НЕ УДАЛЯТЬ.
         menuSpisok.visible = false;//Делаем невидимым меню.
         txnZagolovok.visible = true;//Режим создания элемента Списка.
+        txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ СПИСКА";//Подсказка пользователю, что вводить нужно.
         tmSpisok.signalToolbar("Создайте новый список.")
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
@@ -82,6 +83,7 @@ Item {
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
         blPereimenovat = true;
+        txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ СПИСКА";//Подсказка пользователю, что вводить нужно.
         tmSpisok.signalToolbar("Выберите список для его переименования.")
     }
     function fnMenuZagolovok(){//Нажат пункт меню Изменить Заголовок.
@@ -89,6 +91,7 @@ Item {
         menuSpisok.visible = false;//Делаем невидимым меню.
         txnZagolovok.text = cppqml.strTitul;//Добавляем в строку Заголовок, для более понятного редактирования
         txnZagolovok.visible = true;//Режим отображения текстового редактора Заголовка.
+        txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ ЗАГОЛОВКА";//Подсказка пользователю, что вводить нужно.
         tmSpisok.signalToolbar("Измените имя заголовка списка.");
     }
 

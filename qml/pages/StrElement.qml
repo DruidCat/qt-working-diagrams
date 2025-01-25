@@ -65,6 +65,7 @@ Item {
         blPereimenovat = false;//Запрещено переименовывать. НЕ УДАЛЯТЬ.
         menuElement.visible = false;//Делаем невидимым меню.
         txnZagolovok.visible = true;//Режим создания элемента Списка.
+        txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА";//Подсказка пользователю, что вводить нужно.
         tmElement.signalToolbar("Создайте новый элемент.")
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
@@ -72,6 +73,7 @@ Item {
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
         blPereimenovat = true;
+        txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА";//Подсказка пользователю, что вводить нужно.
         tmElement.signalToolbar("Выберите элемент для его переименования.")
     }
 

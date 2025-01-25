@@ -12,6 +12,8 @@ Item {
     property alias italic: txnTextInput.font.italic
     property int  ntWidth: 2
     property int ntCoff: 8
+    property alias placeholderText: txtTextInput.text//Текст в строке, подсказывающий, что нужно вводить юзеру
+    property alias clrPlaceHolderText: txtTextInput.color//Цвет текста подсказки
     anchors.fill: parent
 	signal clickedEnter();//Сигнал нажатия Enter
 	signal clickedEscape();//Сигнал нажатия Escape
@@ -53,6 +55,15 @@ Item {
 					tmTextInput.clickedEscape();//Излучаем сигнал о том, что нажат Ecape
 				}
 			}
+            Text {//Текст, подсказывающий пользователю, что нужно вводить.
+                id: txtTextInput
+                anchors.fill: txnTextInput
+                text: ""//По умолчанию нет надписи.
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                color: "#aaa"//Светло серый цвет по умолчанию.
+                visible: !txnTextInput.text
+            }
 		}
     }
 }
