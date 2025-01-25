@@ -25,7 +25,7 @@ public:
 	QTime tmMinus(const QTime& tmVremya1, const QTime& tmVremya2 );//Возращает разницу tmVremya1-tmVremya2
 	QTime tmPlus(const QTime& tmVremya1, const QTime& tmVremya2 );//Возращает сумму tmVremya1+tmVremya2
     //---текст---//
-    QString sql_encode(QString strTekst);//Преобразует кавычку(') в формат (\")
+    QString sql_encode(QString strTekst);//Преобразует символы sql инъекций
 };
 
 #endif // DCCLASS_H
