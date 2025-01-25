@@ -57,7 +57,10 @@ Item {
 			anchors.margins: tmOpisanie.ntCoff/2
 			clrKnopki: tmOpisanie.clrTexta
 			onClicked: {
-				fnClickedOk();//Нажатие кнопки Ок.
+                //fnClickedOk();//Нажатие кнопки Ок. Если строку расскоментировать, сохранение будет текста.
+                knopkaOk.visible = false;//Делаем невидимой кнопку Ок.
+                knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
+                txdZona.readOnly = true;//Запрещаем редактировать текст.
 				tmOpisanie.clickedNazad();//Сигнал, что кнопка Назад нажата.
 			}
 		}
@@ -110,6 +113,24 @@ Item {
 			clrBorder: tmOpisanie.clrTexta//Цвет бардюра при редактировании текста.
 			italic: true//Текст курсивом.
 		}
+        Connections {//Соединяем сигнал из C++ с действием в QML
+            target: cppqml;//Цель объект класса С++ DCCppQml
+            function onStrTitulOpisanieChanged(){//Слот, изменилось Описание в strTitulOpisanie(Q_PROPERTY)
+                txdZona.text = cppqml.strTitulOpisanie;//Отображаем проверенное описание через sql_encode()
+            }
+        }
+        Connections {//Соединяем сигнал из C++ с действием в QML
+            target: cppqml;//Цель объект класса С++ DCCppQml
+            function onStrSpisokOpisanieChanged(){//Слот, изменилось Описание в strSpisokOpisanie(Q_PROPERTY)
+                txdZona.text = cppqml.strSpisokOpisanie;//Отображаем проверенное описание через sql_encode()
+            }
+        }
+        Connections {//Соединяем сигнал из C++ с действием в QML
+            target: cppqml;//Цель объект класса С++ DCCppQml
+            function onStrElementOpisanieChanged(){//Слот,изменилось Описание в strElementOpisanie(Q_PROPERTY)
+                txdZona.text = cppqml.strElementOpisanie;//Отображаем проверенное описание через sql_encode()
+            }
+        }
 	}
 	Item {
 		id: tmToolbar

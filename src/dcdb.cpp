@@ -387,8 +387,8 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 			    		strSqlGrafi += ", ";
 			    		strSqlKolonki += ", ";
 			    	}
-			    	strSqlGrafi +="\"" + sql_encode(slsGrafi[untStep]) + "\"";//Добавляем имя граф
-		    		strSqlKolonki += ("'" + sql_encode(slsKolonki[untStep]) + "'");//Добавм значения колонок
+                    strSqlGrafi +="\"" + slsGrafi[untStep] + "\"";//Добавляем имя граф
+                    strSqlKolonki += ("'" + slsKolonki[untStep] + "'");//Добавм значения колонок
 				}
 			}
 			///////////////////////////////////////
@@ -463,16 +463,15 @@ bool DCDB::UPDATE(QStringList slsGrafi, QStringList slsKolonki){//Обновит
 					for(uint untStep = 1; untStep < untGrafi; untStep++){
 		    			if(!(untStep == 1))//Если это не первый элемент, то...
 		    				strSqlUpdate += ", ";
-		    			strSqlUpdate += "\""	+ sql_encode(slsGrafi[untStep]) + "\" = '"
-												+ sql_encode(slsKolonki[untStep]) + "'";//Запрос
+                        strSqlUpdate += "\""	+ slsGrafi[untStep] + "\" = '"
+                                                + slsKolonki[untStep] + "'";//Запрос
 					}
 					///////////////////////////////////////
 					/////О Б Н О В И Т Ь   Д А Н Н Ы Е/////
 					///////////////////////////////////////
 					QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
 					if (!sqlQuery.exec("UPDATE \"" + m_strImyaTablici + "\" SET " + strSqlUpdate +
-							   " WHERE \"" + sql_encode(slsGrafi[0])
-							   + "\" = '"  + sql_encode(slsKolonki[0]) + "';")){//не запустился
+                               " WHERE \"" + slsGrafi[0] + "\" = '" + slsKolonki[0] + "';")){//не запустился
 						qdebug(tr("Ошибка 033 в DCDB::UPDATE(): В базе данных: ")
 								+ m_strImyaDB + tr(" таблицы: ") + m_strImyaTablici
 								+ tr(", не смог записать данные: ") + strSqlUpdate
@@ -532,9 +531,6 @@ bool DCDB::UPDATE(QString strGrafa, QStringList slsKolonki){//Переимено
 				/////////////////////////////////////////////////
 				/////П Е Р Е И М Е Н О В А Т Ь   Д А Н Н Ы Е/////
 				/////////////////////////////////////////////////
-				strGrafa 		= sql_encode(strGrafa);//заменяем ' на "
-				slsKolonki[0] 	= sql_encode(slsKolonki[0]);//заменяем ' на "
-				slsKolonki[1] 	= sql_encode(slsKolonki[1]);//заменяем ' на "
                 QSqlQueryModel* pqrmModel = new QSqlQueryModel(this);
 	    		pqrmModel->setQuery(QSqlQuery(("SELECT * FROM \""+ m_strImyaTablici + "\" WHERE \""
 						+ strGrafa + "\" = '" +slsKolonki[0]+ "';"), sqlDB));
@@ -624,9 +620,6 @@ bool DCDB::UPDATE(QString strGrafa, QString strGrafaParametri, QStringList slsKo
 				/////////////////////////////////////////////////////////////////////////////////
 				/////П О И С К   М А К С И М А Л Ь Н О Г О   П Е Р В И Ч Н О Г О   К Л Ю Ч А/////
 				/////////////////////////////////////////////////////////////////////////////////
-				strGrafa 		= sql_encode(strGrafa);//заменяем ' на "
-				slsKolonki[0] 	= sql_encode(slsKolonki[0]);//заменяем ' на "
-				slsKolonki[1] 	= sql_encode(slsKolonki[1]);//заменяем ' на "
 				quint64 ullSchetchik(0);//Счётчик, в котором будет хранится результат работы функции
 				if(m_strDriver == "QPSQL"){
 					QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса к БД
@@ -1407,19 +1400,4 @@ bool DCDB::kodCREATE(QString strKodImyaTablic, int ntKodKolichestvo){//Созд�
 		}
 	}
 	return false;//Ошибка
-}
-QString DCDB::sql_encode(QString strTekst){//Преобразует кавычку (') в формат (\")
-/////////////////////////////////////////////////////////////
-//---П Р Е О Б Р А З У Е М   К А В Ы Ч К У---//
-/////////////////////////////////////////////////////////////
-	QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
-	QByteArray btrStroka;//Строка, в которой соберётся предложение.
-	uint untTekst = btrTekst.size();//Количество символов в тексте.
-	for(uint untShag = 0; untShag<untTekst; untShag++){//Цикл перебора на поиск всех кавычек
-		if((btrTekst[untShag] == '\''))//Если (')
-			btrStroka = btrStroka + "\"";//Добавляем экран перед кавычкой.
-		else
-			btrStroka = btrStroka + btrTekst[untShag];//Собираем строку.
-	}
-	return QString(btrStroka);//Переводим набор символов в строку и возвращаем её.
 }

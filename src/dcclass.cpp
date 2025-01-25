@@ -144,3 +144,18 @@ QTime DCClass::tmPlus(const QTime& tmVremya1, const QTime& tmVremya2 ){//Воз�
 /////////////////////////////////////////////////
 	return tmVremya1.addSecs(tmVremya2.hour()*3600+tmVremya2.minute()*60+tmVremya2.second());
 }
+QString DCClass::sql_encode(QString strTekst){//Преобразует кавычку (') в формат (\")
+/////////////////////////////////////////////////////////////
+//---П Р Е О Б Р А З У Е М   К А В Ы Ч К У---//
+/////////////////////////////////////////////////////////////
+    QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
+    QByteArray btrStroka;//Строка, в которой соберётся предложение.
+    uint untTekst = btrTekst.size();//Количество символов в тексте.
+    for(uint untShag = 0; untShag<untTekst; untShag++){//Цикл перебора на поиск всех кавычек
+        if((btrTekst[untShag] == '\''))//Если (')
+            btrStroka = btrStroka + "\"";//Добавляем экран перед кавычкой.
+        else
+            btrStroka = btrStroka + btrTekst[untShag];//Собираем строку.
+    }
+    return QString(btrStroka);//Переводим набор символов в строку и возвращаем её.
+}

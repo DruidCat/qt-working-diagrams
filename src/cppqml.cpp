@@ -103,6 +103,7 @@ void DCCppQml::setStrTitulOpisanie(QString& strTitulOpisanieNovi) {//Переи�
 /////////////////////////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Н И Е   О П И С А Н И Е   Т И Т У Л А---//
 /////////////////////////////////////////////////////////////////////
+    strTitulOpisanieNovi = m_pdcclass->sql_encode(strTitulOpisanieNovi);//Удаляем sql инекции.
     if(m_strTitulOpisanie != strTitulOpisanieNovi){//Если описание титулов не совпадают, то...
         if(m_pDataTitul->renTitulOpisanie(strTitulOpisanieNovi)){//Если описание Титула записалось успешно
             m_strTitulOpisanie = strTitulOpisanieNovi;
@@ -213,7 +214,8 @@ void DCCppQml::setStrSpisokOpisanie(QString& strSpisokOpisanieNovi){//Измен
 ///////////////////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   О П И С А Н И Я   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////////////////////////////
-	if(strSpisokOpisanieNovi != m_strSpisokOpisanie){//Если Описания разные, то...
+    strSpisokOpisanieNovi = m_pdcclass->sql_encode(strSpisokOpisanieNovi);//Удаляем sql инекции.
+    if(strSpisokOpisanieNovi != m_strSpisokOpisanie){//Если Описания разные, то...
 		if(m_pDataSpisok->ustSpisokOpisanie(m_ullSpisokKod, strSpisokOpisanieNovi)){//Записалось Описание,то
 			m_strSpisokOpisanie = strSpisokOpisanieNovi;//Новое описание присвоили.
             qdebug("Новоя запись в описании списка.");
@@ -327,7 +329,8 @@ void DCCppQml::setStrElementOpisanie(QString& strElementOpisanieNovi){//Изме
 ///////////////////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   О П И С А Н И Я   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////////////////////////////
-	if(strElementOpisanieNovi != m_strElementOpisanie){//Если Описания разные, то...
+    strElementOpisanieNovi = m_pdcclass->sql_encode(strElementOpisanieNovi);//Удаляем sql инекции.
+    if(strElementOpisanieNovi != m_strElementOpisanie){//Если Описания разные, то...
 		if(m_pDataElement->ustElementOpisanie(m_ullSpisokKod, m_ullElementKod, strElementOpisanieNovi)){
 			m_strElementOpisanie = strElementOpisanieNovi;//Новое описание присвоили.
             qdebug("Новоя запись в описании элемента.");

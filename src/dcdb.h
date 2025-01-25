@@ -1,4 +1,4 @@
-#ifndef DCDB_H
+﻿#ifndef DCDB_H
 #define DCDB_H
 
 #include <QObject>
@@ -74,9 +74,7 @@ private:
 	QString m_strPrimaryKey;//Переменная хранящая имя PrimaryKey
 	//---коды---//
 	int m_ntKodKolichestvo;//Заданное количество кодов.
-	QString m_strKodImyaTablic;//Общее имя таблиц кодов.
-	//---текст---//
-	QString sql_encode(QString strTekst);//Преобразует кавычку(') в формат (\")
+	QString m_strKodImyaTablic;//Общее имя таблиц кодов.	
 };
 
 #endif // DCDB_H
