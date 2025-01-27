@@ -44,19 +44,19 @@ Item {
     focus: true
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: tmSpisok
         onClicked: {
-            tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
 	function fnClickedOk(){//Функция сохранения/переименования элемента Списка.
-        tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
         if(blZagolovok){//Если изменить имя заголовка, то...
             cppqml.strTitul = txnZagolovok.text;//Переименовываем Заголовок Списка.
             tmSpisok.signalZagolovok(txnZagolovok.text);//Отображаем Заголовок
@@ -107,7 +107,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
-                tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
 				tmSpisok.clickedMenu();//Сигнал Меню
 			}
@@ -265,7 +265,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
-                tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
                 tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
 			}
@@ -282,7 +282,7 @@ Item {
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;
                 blPereimenovat = false;//Запрещено переименовывать.
-                tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             }
 		}
     }

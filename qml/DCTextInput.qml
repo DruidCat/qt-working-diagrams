@@ -54,7 +54,12 @@ Item {
 				if(event.key === Qt.Key_Escape){
 					tmTextInput.clickedEscape();//Излучаем сигнал о том, что нажат Ecape
 				}
-			}
+                if((event.key === 63)||(event.key === 39)||(event.key === 59)||(event.key === 42)
+                   ||(event.key === 37)||(event.key === 95)||(event.key === 92)){
+                    cppqml.strDebug = "Нельза использовать данные символы ? ' ; * % _ \\ ";
+                }
+                //console.log(event.key);
+            }
             Text {//Текст, подсказывающий пользователю, что нужно вводить.
                 id: txtTextInput
                 anchors.fill: txnTextInput

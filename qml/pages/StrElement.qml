@@ -40,19 +40,19 @@ Item {
     //onClickedEscape: {}
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: tmElement
         onClicked: {
-            tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     function fnClickedOk(){//Функция сохранения/переименования Элементов списка.
-        tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
         if(blPereimenovat){//Если Переименовываем, то...
             cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text);//Переименовываем Элемент списка.
         }
@@ -88,7 +88,7 @@ Item {
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
 			onClicked: {
-                tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
 				tmElement.clickedNazad();//Сигнал Назад.
 			}
@@ -243,7 +243,7 @@ Item {
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
 			onClicked: {//Слот клика кнопки Инфо
-                tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
 				tmElement.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
 			}
@@ -260,7 +260,7 @@ Item {
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuElement.visible ? menuElement.visible = false : menuElement.visible = true;
                 blPereimenovat = false;//Запрещено переименовывать.
-                tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             }
 		}
 	}

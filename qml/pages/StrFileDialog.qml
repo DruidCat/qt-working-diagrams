@@ -146,7 +146,7 @@ Item {
                 imyaMenu: "filedialog"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
                 onClicked: function(ntNomer, strMenu) {
                     menuFileDialog.visible = false;//Делаем невидимым меню.
-                    if(ntNomer === 1){//Добавить.
+                    if(ntNomer === 1){//Закрыть.
                         fnClickedZakrit();//Закрываем проводник.
                     }
                 }

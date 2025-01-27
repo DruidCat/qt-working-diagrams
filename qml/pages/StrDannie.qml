@@ -39,19 +39,19 @@ Item {
     //onClickedEscape: {}
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: tmDannie
         onClicked: {
-            tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     function fnClickedOk(){//Функция переименования Данных.
-        tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
 //        if(blPereimenovat){//Если Переименовываем, то...
 //            cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text);//Переименовываем Элемент списка.
 //        }
@@ -85,7 +85,7 @@ Item {
             anchors.margins: tmDannie.ntCoff/2
             clrKnopki: tmDannie.clrTexta
             onClicked: {
-                tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
                 tmDannie.clickedNazad();
             }
@@ -170,7 +170,7 @@ Item {
             clrKnopki: tmDannie.clrTexta
 			clrFona: tmDannie.clrFona
             onClicked: {
-                tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
                 tmDannie.clickedInfo();
             }
@@ -187,7 +187,7 @@ Item {
                 //txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
                 blPereimenovat = false;//Запрещено переименовывать.
-                tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             }
 		}
     }
