@@ -96,9 +96,9 @@ Item {
     }
 
     Item {//Спискок Заголовка
-		id: tmZagolovok
+        id: tmZagolovok
         DCKnopkaMenu {
-			id: knopkaMenu
+            id: knopkaMenu
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -110,10 +110,10 @@ Item {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
 				tmSpisok.clickedMenu();//Сигнал Меню
-			}
+            }
 		}
 		DCKnopkaSozdat {
-			id: knopkaSozdat
+            id: knopkaSozdat
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			visible: true
@@ -124,10 +124,10 @@ Item {
 			clrFona: tmSpisok.clrFona
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
-			}
+            }
 		}
 		DCKnopkaOk{
-			id: knopkaOk
+            id: knopkaOk
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			visible: false
@@ -137,11 +137,11 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {//Нажимаем Ок.
-				fnClickedOk();//Нажимаем на Ок(Сохранить/Переименовать), чтоб не изменять в нескольких местах.
-			}
+                fnClickedOk();//Нажимаем на Ок(Сохранить/Переименовать), чтоб не изменять в нескольких местах.
+            }
 		}
 		Item {
-			id: tmTextInput
+            id: tmTextInput
 			anchors.top: tmZagolovok.top
 			anchors.bottom: tmZagolovok.bottom
 			anchors.left: knopkaMenu.right
@@ -149,9 +149,9 @@ Item {
 			anchors.topMargin: tmElement.ntCoff/4
 			anchors.bottomMargin: tmElement.ntCoff/4
 			anchors.leftMargin: tmElement.ntCoff/2
-			anchors.rightMargin: tmElement.ntCoff/2
+            anchors.rightMargin: tmElement.ntCoff/2
 			DCTextInput {
-				id: txnZagolovok
+                id: txnZagolovok
 				ntWidth: tmSpisok.ntWidth
 				ntCoff: tmSpisok.ntCoff
 				anchors.fill: tmTextInput
@@ -161,7 +161,7 @@ Item {
 				radius: tmSpisok.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
 				textInput.maximumLength: 33
-				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
+                onVisibleChanged: {//Если видимость DCTextInput изменился, то...
 					txnZagolovok.visible ? knopkaOk.visible = true : knopkaOk.visible = false; 
 					txnZagolovok.visible ? knopkaSozdat.visible = false : knopkaSozdat.visible = true; 
 					if(txnZagolovok.visible == false){//Если DCTextInput не видим, то...
@@ -169,13 +169,13 @@ Item {
                         knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
 					}
 					else{
-						textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
+                        textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
                         textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
-					}
+                    }
 				}
 				onClickedEnter: {//Если нажата Enter, то такое же действие, как и при нажатии кнопки Ок.
 					fnClickedOk();//Нажимаем Ок(Сохранить/Переименовать), чтоб не менять в нескольких местах.
-				}
+                }
 			}
 		}
     }
@@ -183,13 +183,13 @@ Item {
    		tmSpisok.blPereimenovat ? rctZona.border.color = clrTexta : rctZona.border.color = "transparent";
 	}
 	Item {//Список Рабочей Зоны
-		id: tmZona
+        id: tmZona
         Rectangle {
-			id: rctZona
+            id: rctZona
 			anchors.fill: tmZona
 			color: "transparent"
 			border.width: tmSpisok.ntCoff/2//Бордюр при переименовании.
-			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+            clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
             DCLogoTMK {//Логотип до ZonaSpisok, чтоб не перекрывать список.
                 ntCoff: 16
                 anchors.centerIn: parent
@@ -197,7 +197,7 @@ Item {
                 clrFona: tmSpisok.clrFona
             }
 			ZonaSpisok {
-				id: lsvZonaSpisok
+                id: lsvZonaSpisok
 				ntWidth: tmSpisok.ntWidth
 				ntCoff: tmSpisok.ntCoff
 				anchors.fill: rctZona
@@ -225,7 +225,7 @@ Item {
 				}
 			}	
 			DCMenu {
-				id: menuSpisok
+                id: menuSpisok
 				visible: false//Невидимое меню. 
 				ntWidth: tmSpisok.ntWidth
 				ntCoff: tmSpisok.ntCoff
@@ -237,7 +237,7 @@ Item {
 				clrFona: "SlateGray"
 				imyaMenu: "spisok"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
-					menuSpisok.visible = false;//Делаем невидимым меню.
+                    menuSpisok.visible = false;//Делаем невидимым меню.
                     if(ntNomer === 1){//Добавить.
                         fnMenuSozdat();//Функция обработки нажатия меню Добавить.
                     }
@@ -268,9 +268,9 @@ Item {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
                 tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
-			}
+            }
 		}
-		DCKnopkaNastroiki {
+        DCKnopkaNastroiki {
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
@@ -279,6 +279,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
 			onClicked: {
+                txnZagolovok.textInput.forceActiveFocus();//ОБЯЗАТЕЛЬНАЯ СТРОКА, чтоб работало нажатие Escape.
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;
                 blPereimenovat = false;//Запрещено переименовывать.

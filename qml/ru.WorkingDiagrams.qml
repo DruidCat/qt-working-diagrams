@@ -155,14 +155,14 @@ Window {
 		/////////////////
 			id: pgStrSpisok
             visible: false
-			ntWidth: root.ntWidth
+            ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
             textZagolovok: cppqml.strTitul
             StrSpisok {
-				id: tmSpisok
+                id: tmSpisok
                 ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
 				clrTexta: pgStrSpisok.clrTexta; clrFona: pgStrSpisok.clrRabOblasti
 				zagolovokX: pgStrSpisok.rctStrZagolovok.x; zagolovokY: pgStrSpisok.rctStrZagolovok.y

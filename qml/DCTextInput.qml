@@ -42,7 +42,7 @@ Item {
 			//font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
 			maximumLength: 33//Максимальная длина ввода текста.
 			readOnly: false//Можно редактировать. 
-			focus: true//Фокус на TextInput
+            focus: true//Фокус на TextInput
 			selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
 			//cursorPosition: text.length;//Курсор в конец текста
 			cursorVisible: true//Курсор сделать видимым

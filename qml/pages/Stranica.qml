@@ -17,13 +17,13 @@ Page {
 
 	Item{
 		id: tmStr
-		anchors.fill: parent
+        anchors.fill: parent
 		Rectangle{
-			id: rctStr
+            id: rctStr
 			anchors.fill: tmStr
 			color: clrFona
 			Rectangle {
-				id: rctStrZagolovok
+                id: rctStrZagolovok
 				width: rctStr.width
 				height: ntWidth*ntCoff+ntCoff
 				anchors.top: rctStr.top
@@ -41,14 +41,14 @@ Page {
                     anchors.bottom: rctStrZagolovok.bottom
 				}
 				Rectangle {
-					id: rctStrZagolovokText
+                    id: rctStrZagolovokText
                     width: rctStrZagolovok.width-2*tmZagolovokKnopkaCleva.width
                     height: rctStrZagolovok.height-pgStr.ntCoff
                     anchors.left: tmZagolovokKnopkaCleva.right
                     anchors.verticalCenter: rctStrZagolovok.verticalCenter
 					color: "transparent"
 					Text {
-						id: txtStrZagolovok
+                        id: txtStrZagolovok
 						anchors.centerIn: rctStrZagolovokText
 						color: pgStr.clrTexta
 						text: ""
@@ -68,7 +68,7 @@ Page {
                 }
 			}
 			Rectangle {
-				id: rctStrZona
+                id: rctStrZona
 				width: rctStr.width
 				anchors.top: rctStrZagolovok.bottom
 				anchors.left: rctStr.left
@@ -79,7 +79,7 @@ Page {
 				color: clrRabOblasti
 			}
 			Rectangle {
-				id: rctStrToolbar
+                id: rctStrToolbar
 				width: rctStr.width
 				height: pgStr.ntWidth*pgStr.ntCoff+pgStr.ntCoff
 				anchors.left: rctStr.left
@@ -98,14 +98,14 @@ Page {
                     anchors.bottom: rctStrToolbar.bottom
 				}
 				Rectangle {
-					id: rctStrToolbarText
+                    id: rctStrToolbarText
                     width: rctStrToolbar.width-2*tmToolbarKnopkaCleva.width
                     height: rctStrToolbar.height-pgStr.ntCoff
                     anchors.left: tmToolbarKnopkaCleva.right
                     anchors.verticalCenter: rctStrToolbar.verticalCenter
 					color: "transparent"
 					Text {
-						id: txtStrToolbar
+                        id: txtStrToolbar
 						anchors.centerIn: rctStrToolbarText
 						color: pgStr.clrTexta
 						text: ""
