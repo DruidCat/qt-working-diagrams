@@ -16,7 +16,9 @@ int main(int argc, char *argv[])
     QTextCodec* ptxcCodec = QTextCodec::codecForName("UTF-8");
     QTextCodec::setCodecForLocale(ptxcCodec);
 
-    QQmlApplicationEngine engine;
+    DCCppQml odccppqml;//Создаём объект для движка, который соединит cpp с qml
+    QQmlApplicationEngine engine;//Создаём движок qml после объекта C++, иначе ошибки debug при закрытии будут
+
     const QUrl url(QStringLiteral("qrc:/qml/ru.WorkingDiagrams.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
@@ -24,9 +26,8 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-	DCCppQml odccppqml;//Создаём объект для движка, который соединит cpp с qml
     QQmlContext* pkornevoiKontekst = engine.rootContext();//Создаём корневой контекс
-    pkornevoiKontekst->setContextProperty("cppqml", &odccppqml);//Передаём имя и объ
+    pkornevoiKontekst->setContextProperty("cppqml", &odccppqml);//Передаём имя и объект
 
     engine.load(url);
 
