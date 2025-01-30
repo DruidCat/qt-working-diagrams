@@ -1,79 +1,79 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.14)
 
-project(qt-working-diagrams VERSION 0.1 LANGUAGES CXX)
+project(ru.WorkingDiagrams VERSION 0.1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-# Команда включает файлы *.qrc.
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
-# Команда добавляет библиотеки, с которыми будет работать проект.
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick Sql Core)
 
-qt_standard_project_setup()
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-qt_add_executable(appqt-working-diagrams
-    main.cpp
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Sql)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql)
+
+set(PROJECT_SOURCES
+		src/cppqml.h
+		src/cppqml.cpp
+		src/dataelement.h
+		src/dataelement.cpp
+		src/dataspisok.h
+		src/dataspisok.cpp
+		src/datatitul.h
+		src/datatitul.cpp
+		src/dcclass.h
+		src/dcclass.cpp
+		src/dcdb.h
+		src/dcdb.cpp
+		src/dcdbdata.h
+		src/dcdbdata.cpp
+		src/dcfiledialog.h
+		src/dcfiledialog.cpp
+		src/main.cpp
+		qml.qrc
 )
 
-qt_add_qml_module(appqt-working-diagrams
-    URI qt-working-diagrams
-    VERSION 1.0
-	QML_FILES DCKnopkaInfo.qml
-	# QML_FILES DCKnopkaKruglaya.qml
-	QML_FILES DCKnopkaMenu.qml
-	QML_FILES DCKnopkaNastroiki.qml
-	QML_FILES DCKnopkaNazad.qml
-	QML_FILES DCKnopkaOk.qml
-	QML_FILES DCKnopkaOriginal.qml
-	# QML_FILES DCKnopkaPoisk.qml
-	QML_FILES DCKnopkaSozdat.qml
-	# QML_FILES DCKnopkaZakrit.qml
-	QML_FILES DCLogoTMK.qml
-	QML_FILES DCMenu.qml
-	QML_FILES DCTextEdit.qml
-	QML_FILES DCTextInput.qml
-	QML_FILES PathViewSpisok.qml
-	QML_FILES StrAvtor.qml
-	QML_FILES StrDannie.qml
-	QML_FILES StrDebug.qml
-	QML_FILES StrElement.qml
-	QML_FILES StrMenu.qml
-	QML_FILES StrOpisanie.qml
-	QML_FILES StrSpisok.qml
-	QML_FILES StrSvet.qml
-	QML_FILES Stranica.qml
-	QML_FILES ZonaElement.qml
-	QML_FILES ZonaSpisok.qml
-	QML_FILES Main.qml
-	RESOURCES qml.qrc
-	SOURCES main.cpp
-	SOURCES dcdb.h dcdb.cpp
-	SOURCES dcclass.h dcclass.cpp
-	SOURCES cppqml.h cppqml.cpp
-	SOURCES dataspisok.h dataspisok.cpp
-	SOURCES dataelement.h dataelement.cpp
-	SOURCES datatitul.h datatitul.cpp
-)
+if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
+	qt_add_executable(ru.WorkingDiagrams
+        MANUAL_FINALIZATION
+        ${PROJECT_SOURCES}
+    )
+# Define target properties for Android with Qt 6 as:
+#    set_property(TARGET ru.WorkingDiagrams APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
+#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
+# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
+else()
+    if(ANDROID)
+		add_library(ru.WorkingDiagrams SHARED
+            ${PROJECT_SOURCES}
+        )
+# Define properties for Android with Qt 5 after find_package() calls as:
+#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+    else()
+		add_executable(ru.WorkingDiagrams
+          ${PROJECT_SOURCES}
+        )
+    endif()
+endif()
 
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-set_target_properties(appqt-working-diagrams PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appqt-working-diagrams
+target_link_libraries(ru.WorkingDiagrams
+  PRIVATE Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Quick Qt${QT_VERSION_MAJOR}::Sql)
+
+set_target_properties(ru.WorkingDiagrams PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
 )
-# Добавляем библиотеки в наш проект.
-target_link_libraries(appqt-working-diagrams
-	PRIVATE Qt6::Quick
-	PRIVATE Qt6::Sql
-	PRIVATE Qt6::Core
-)
 
-include(GNUInstallDirs)
-install(TARGETS appqt-working-diagrams
+install(TARGETS ru.WorkingDiagrams
     BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+if(QT_VERSION_MAJOR EQUAL 6)
+	qt_import_qml_plugins(ru.WorkingDiagrams)
+	qt_finalize_executable(ru.WorkingDiagrams)
+endif()

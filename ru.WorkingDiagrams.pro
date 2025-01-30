@@ -82,4 +82,5 @@ DISTFILES += \
 	TODO.txt \
 	screenshots/KnopkiQML.png \
     screenshots/ru.WorkingDiagrams.png \
-    vim.txt
+	vim.txt \
+	CMakeLists.txt
