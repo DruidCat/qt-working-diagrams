@@ -72,7 +72,7 @@ Item {
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
         blPereimenovat = true;
-        tmDannie.signalToolbar("Выберите документ для его переименования.")
+        tmDannie.signalToolbar(qsTr("Выберите документ для его переименования."))
     }
 
     Item {//Данные Заголовок
@@ -131,7 +131,6 @@ Item {
                 clrLogo: tmElement.clrTexta
                 clrFona: tmElement.clrFona
             }
-
 			DCMenu {
 				id: menuDannie
 				visible: false//Невидимое меню. 

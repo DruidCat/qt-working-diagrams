@@ -37,7 +37,6 @@ Item {
         menuElement.visible = false;//Делаем невидимым всплывающее меню.
         tmElement.blPereimenovat = false;//Запрещаем переименовывать.
     }
-    //onClickedEscape: {}
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
@@ -65,16 +64,16 @@ Item {
         blPereimenovat = false;//Запрещено переименовывать. НЕ УДАЛЯТЬ.
         menuElement.visible = false;//Делаем невидимым меню.
         txnZagolovok.visible = true;//Режим создания элемента Списка.
-        txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА";//Подсказка пользователю, что вводить нужно.
-        tmElement.signalToolbar("Создайте новый элемент.")
+        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
+        tmElement.signalToolbar(qsTr("Создайте новый элемент."));
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
         fnClickedSozdat();//Функция обработки кнопки Создать.
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
         blPereimenovat = true;
-        txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА";//Подсказка пользователю, что вводить нужно.
-        tmElement.signalToolbar("Выберите элемент для его переименования.")
+        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
+        tmElement.signalToolbar(qsTr("Выберите элемент для его переименования."));
     }
 
 	Item {//Элементы Заголовок

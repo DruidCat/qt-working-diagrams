@@ -40,13 +40,14 @@ bool DataElement::dbStart(){//Создать первоначальные Эле
         if(!m_pdbElement->SELECT()){//если нет ни одной записи в БД, то...
             if(!m_pdbElement->INSERT(	QStringList()<<"Номер"<<"Элемент"<<"Описание",
                                         QStringList()<<"1"<<"druidcat@yandex.ru"<<"druidcat@yandex.ru")){
-                qdebug("DataElement::DataElement: ошибка создания первоначальной записи в таблицу элемент_0.");
+                qdebug(tr("DataElement::DataElement: ошибка создания первоначальной записи в таблицу "
+                          " элемент_0."));
                 return false;//Ошибка.
             }
         }
 	}
 	else{
-		qdebug("DataElement::dbStart(quint64): ошибка создания таблицы элемент_0.");
+        qdebug(tr("DataElement::dbStart(quint64): ошибка создания таблицы элемент_0."));
 		return false;//Ошибка.
 	}
 	return true;
@@ -61,7 +62,7 @@ QStringList	DataElement::polElement(quint64 ullKod){//Получить полн�
     m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
-		qdebug("DataElement::polElement(quint64): quint64 = 0, всего PRIMARY KEY 0.");
+        qdebug(tr("DataElement::polElement(quint64): quint64 = 0, всего PRIMARY KEY 0."));
         return slsElement;//Возвращаем пустую строку.
 	}
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
@@ -77,20 +78,19 @@ bool DataElement::ustElement(quint64 ullKod, QString strElement){//Записа�
 /////////////////////////////////////////
     m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));//Задаём имя таблицы, с которой работаем.
     if(!m_pdbElement->CREATE()){//Если таблица не создалась
-		qdebug("DataElement::ustElement(quint64, QString): ошибка создания таблицы элемент_"
+        qdebug(tr("DataElement::ustElement(quint64, QString): ошибка создания таблицы элемент_")
 				+QString::number(ullKod)+".");
 		return false;//Не успех
 	}
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
     if(m_pdbElement->INSERT(QStringList()<<"Номер"<<"Элемент"<<"Описание",
                               QStringList()<<QString::number(ullKolichestvo+1)<<strElement
-							  <<"Описание. Необходимо его редактировать.")){
+                              <<tr("Описание. Необходимо его редактировать."))){
 		return true;//Успех записи в БД.
 	}
-	qdebug("DataElement::ustElement(quint64, QString): Ошибка записи Элемента в БД.");
+    qdebug(tr("DataElement::ustElement(quint64, QString): Ошибка записи Элемента в БД."));
     return false;//Ошибка записи в БД.
 }
-
 bool DataElement::renElement(quint64 ullKod, QString strElement, QString strElementNovi) {//Переиме. элемент
  //////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Т Ь   Э Л Е М Е Н Т---//
@@ -108,14 +108,14 @@ QString DataElement::polElementJSON(quint64 ullKod) {//Получить JSON с�
     QString strElementJSON("");//Строка, в которой будет собран JSON запрос.
     m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));
     if(!m_pdbElement->CREATE()){//Если таблица не создалась. НЕ УДАЛЯТЬ ЭТО СОЗДАНИЕ ТАБЛИЦЫ.
-		qdebug("DataElement::polElementJSON(quint64): ошибка создания таблицы элемент_"
+        qdebug(tr("DataElement::polElementJSON(quint64): ошибка создания таблицы элемент_")
 				+QString::number(ullKod)+".");
 		return "";//Не успех
 	}
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
 		m_blElementPervi = true;//Первый элемент записывается (true).
-        return "[{\"kod\":\"0\",\"nomer\":\"0\",\"element\":\"Создайте новый элемент.\"}]";//Возвращаем строку
+        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"element\":\"Создайте новый элемент.\"}]");//Возвращаем
 	}
 	else
 		m_blElementPervi = false;//Не первый элемент записывается.
@@ -145,7 +145,7 @@ QString DataElement::polElementOpisanie(quint64 ullSpisokKod, quint64 ullElement
 //---П О Л У Ч И Т Ь   О П И С А Н И Е   Э Л Е М Е Н Т А---//
 /////////////////////////////////////////////////////////////
 	if ((ullSpisokKod <=0)||(ullElementKod <=0)){//Если номера меньше или равны 0, то...
-		qdebug("DataElement::polElementOpisanie(quint64, quint64): quint64 меньше или равен 0.");//ошибка
+        qdebug(tr("DataElement::polElementOpisanie(quint64, quint64): quint64 меньше или равен 0."));//ошибка
 		return "";//Возвращаем пустую строку.
 	}
     m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
@@ -156,7 +156,7 @@ bool DataElement::ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod
 //---З А П И С А Т Ь   О П И С А Н И Е   С П И С К А---//
 /////////////////////////////////////////////////////////
 	if ((ullSpisokKod <=0)||(ullElementKod <=0)){//Если номера меньше или равны 0, то...
-		qdebug("DataElement::ustElementOpisanie(quint64,quint64,QString): quint64 меньше или равен 0.");//ошиб
+        qdebug(tr("DataElement::ustElementOpisanie(quint64,quint64,QString): quint64 меньше или равен 0."));
 		return false;//Возвращаем ошибку.
 	}
    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
@@ -164,7 +164,7 @@ bool DataElement::ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod
 						QStringList()<<QString::number(ullElementKod)<<strElementOpisanie)){//Успех записи, то
 		return true;//Успех
 	}
-	qdebug("DataElement::ustElementOpisanie(quint64,quint64,QString): ошибка записи Описания.");
+    qdebug(tr("DataElement::ustElementOpisanie(quint64,quint64,QString): ошибка записи Описания."));
 	return false;//Ошибка.
 }
 void DataElement::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог

@@ -51,7 +51,6 @@ Item {
         opacity: 0.9//Прозрачность.
 		interactive: false//Запретить листать.
 
-		//model: JSMenu.vrMenuSpisok
 		delegate: cmpMenu
 	}
 	Component.onCompleted: {//Слот, кода всё представление отрисовалось.

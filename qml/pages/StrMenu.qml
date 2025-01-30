@@ -66,7 +66,7 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-			text: "Логи"
+            text: qsTr("ЛОГИ")
 			bold: true
 			italic: true
 			onClicked: {
@@ -83,7 +83,7 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-			text: "Об авторе"
+            text: qsTr("ОБ АВТОРЕ")
 			bold: true
 			italic: true
 			onClicked: {
@@ -100,7 +100,7 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-			text: "Участки"
+            text: qsTr("УЧАСТКИ")
 			bold: true
 			italic: true
 			onClicked: {//Слот запускающий 
@@ -118,7 +118,7 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-            text: "План"
+            text: qsTr("ПЛАН")
 			bold: true
 			italic: true
 			onClicked: {//Слот запускающий 
@@ -142,6 +142,22 @@ Item {
 				knopkaSpisok.text = strSpisok;
 			}
 		}
+        DCKnopkaOriginal {
+            id: knopkaVihod
+            ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+            anchors.top: knopkaPlan.bottom
+            anchors.left: tmZona.left
+            anchors.right: tmZona.right
+            anchors.margins: tmMenu.ntCoff/2
+            clrKnopki: "slategray"
+            clrTexta: tmMenu.clrTexta
+            text: qsTr("ВЫХОД")
+            bold: true
+            italic: true
+            onClicked: {//Слот запускающий
+                Qt.quit();//Закрыть приложение.
+            }
+        }
         DCMenu {//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
             visible: false//Невидимое меню.

@@ -1,83 +1,83 @@
 ﻿var vrMenuSpisok = [
 			{
 				"nomer": "1",
-                "menu": "Добавить"
+                "menu": qsTr("Добавить")
 			},
 			{
 				"nomer": "2",
-				"menu": "Переименовать"
+                "menu": qsTr("Переименовать")
 			},
 			{
 				"nomer": "3",
-				"menu": "Удалить"
+                "menu": qsTr("Удалить")
 			},
             {
                 "nomer": "4",
-                "menu": "Сортировать"
+                "menu": qsTr("Сортировать")
             },
             {
                 "nomer": "5",
-                "menu": "Изменить Заголовок"
+                "menu": qsTr("Изменить Заголовок")
             },
 			{
                 "nomer": "6",
-				"menu": "Выход"
+                "menu": qsTr("Выход")
 			}
 ]
 var vrMenuElement = [
 			{
 				"nomer": "1",
-                "menu": "Добавить"
+                "menu": qsTr("Добавить")
 			},
 			{
 				"nomer": "2",
-				"menu": "Переименовать"
+                "menu": qsTr("Переименовать")
 			},
 			{
 				"nomer": "3",
-				"menu": "Удалить"
+                "menu": qsTr("Удалить")
 			},
             {
                 "nomer": "4",
-                "menu": "Сортировать"
+                "menu": qsTr("Сортировать")
             },
 			{
                 "nomer": "5",
-				"menu": "Выход"
+                "menu": qsTr("Выход")
 			}
 ]
 var vrMenuDannie = [
 			{
 				"nomer": "1",
-                "menu": "Добавить"
+                "menu": qsTr("Добавить")
 			},
 			{
 				"nomer": "2",
-				"menu": "Переименовать"
+                "menu": qsTr("Переименовать")
 			},
 			{
 				"nomer": "3",
-				"menu": "Удалить"
+                "menu": qsTr("Удалить")
 			},
             {
                 "nomer": "4",
-                "menu": "Сортировать"
+                "menu": qsTr("Сортировать")
             },
 			{
                 "nomer": "5",
-				"menu": "Выход"
+                "menu": qsTr("Выход")
 			}
 ]
 var vrMenuFileDialog = [
             {
                 "nomer": "1",
-                "menu": "Закрыть"
+                "menu": qsTr("Закрыть")
             }
 ]
 var vrMenuVihod = [
             {
                 "nomer": "1",
-                "menu": "Выход"
+                "menu": qsTr("Выход")
             }
 ]
 

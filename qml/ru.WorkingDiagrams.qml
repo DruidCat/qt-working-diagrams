@@ -24,6 +24,7 @@ Window {
         initialItem: pgStrSpisok
         //initialItem: pgStrMenu
         //initialItem: pgStrDannie
+
 		Stranica {//Меню
 		/////////////
 		///М Е Н Ю///
@@ -34,9 +35,8 @@ Window {
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
-			//clrRabOblasti: "darkslategray"
-			clrRabOblasti: "MidnightBlue"
-			textZagolovok: "МЕНЮ"
+            clrRabOblasti: "black"
+            textZagolovok: qsTr("МЕНЮ")
 			StrMenu {
 				id: tmMenu
 				ntWidth: pgStrMenu.ntWidth; ntCoff: pgStrMenu.ntCoff
@@ -73,7 +73,7 @@ Window {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "MidnightBlue"
-			textZagolovok: "Логи"
+            textZagolovok: qsTr("ЛОГИ")
 			StrDebug {
 				id: tmDebug
 				ntWidth: pgStrDebug.ntWidth; ntCoff: pgStrDebug.ntCoff
@@ -102,7 +102,7 @@ Window {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
-            textZagolovok: "ОБ АВТОРЕ ПРИЛОЖЕНИЯ"
+            textZagolovok: qsTr("ОБ АВТОРЕ ПРИЛОЖЕНИЯ")
             StrInstrukciya {
 				id: tmAvtor
                 strInstrukciya: "obavtore"
@@ -132,7 +132,7 @@ Window {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
-            textZagolovok: "ПЛАН"
+            textZagolovok: qsTr("ПЛАН")
             StrPlan {
                 id: tmPlan
                 ntWidth: pgStrPlan.ntWidth; ntCoff: pgStrPlan.ntCoff
@@ -176,12 +176,11 @@ Window {
 				onClickedMenu: {//Слот нажатия кнопки Меню.
 					stvStr.push(pgStrMenu)//Перейти на страницу Меню
 				}
-				onClickedSozdat: {
-
-				}
                 onClickedInfo: {
                     tmOpisanie.textTextEdit = cppqml.strTitulOpisanie;//Отправляем текст из бизнес логики.
-					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
+                    pgStrOpisanie.textToolbar = pgStrSpisok.textZagolovok
+                            + qsTr(". Для изменения описания нажмите иконку +.")
+                    stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 				onClickedSpisok: function(strSpisok) {
 					stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
@@ -223,12 +222,11 @@ Window {
 					stvStr.strOpisanie = "titul";//Показываем описание Титульной страницы.
 					stvStr.pop()//Назад страницу
 				}
-				onClickedSozdat: {
-
-				}
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;//Отправляем текст в бизнес логику.
-					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
+                    pgStrOpisanie.textToolbar = pgStrElement.textZagolovok
+                            + qsTr(". Для изменения описания нажмите иконку +.")
+                    stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onClickedElement: function(strElement) {//Слот сигнала нажатия на Элемент, вернув имя Элемента
 					stvStr.strOpisanie = "element";//Показываем описание Элемента.
@@ -240,7 +238,6 @@ Window {
                 }
 			}
 		}
-
 		Stranica {//Страница с Данными
 		/////////////////
 		///Д А Н Н Ы Е///
@@ -267,11 +264,14 @@ Window {
 					stvStr.pop()//Назад страницу
 				}
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
+                    pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
-					stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
+                    pgStrOpisanie.textToolbar = pgStrDannie.textZagolovok
+                            + qsTr(". Для изменения описания нажмите иконку +.")
+                    stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
                     pgStrDannie.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
@@ -289,8 +289,7 @@ Window {
             clrFona: root.clrFona
             clrTexta: root.clrKnopok
             clrRabOblasti: root.clrStranic
-            textZagolovok: "ПРОВОДНИК"
-            textToolbar:"ВЫБЕРИТЕ PDF ДОКУМЕНТ ДЛЯ ДОБАВЛЕНИЯ."
+            textZagolovok: qsTr("ПРОВОДНИК")
             StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
@@ -304,20 +303,16 @@ Window {
                 toolbarHeight: pgStrFileDialog.rctStrToolbar.height
                 onClickedNazad: {//Слот нажатия кнопки Назад.
                     stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
-                    //TODO вернуть Путь первоначальный.
                     stvStr.pop()//Назад страницу
                 }
                 onClickedZakrit: {
                     stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
-                    //TODO вернуть Путь первоначальный.
                     stvStr.pop()//Назад страницу
                 }
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
                     pgStrFileDialog.textZagolovok = strZagolovok;//Изменяем заголовок.
                 }
                 onClickedInfo: {
-                    //TODO Сделать описание.
-                    //tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
                     stvStr.push(pgStrFDInstrukciya);//Переключаемся на страницу Инструкция проводника.
                 }
             }
@@ -333,7 +328,7 @@ Window {
             clrFona: root.clrFona
             clrTexta: root.clrKnopok
             clrRabOblasti: "black"
-            textZagolovok: "ИНСТРУКЦИЯ ПО ПРОВОДНИКУ"
+            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО ПРОВОДНИКУ")
             StrInstrukciya {
                 id: tmFDInstrukciya
                 strInstrukciya: "fdinstrukciya"
@@ -366,8 +361,7 @@ Window {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: root.clrStranic
-			textZagolovok: "Описание"
-            textToolbar: "ДЛЯ ИЗМЕНЕНИЯ ОПИСАНИЯ НАЖМИТЕ ИКОНКУ +"
+            textZagolovok: qsTr("ОПИСАНИЕ")
             StrOpisanie {
 				id: tmOpisanie
 				ntWidth: pgStrOpisanie.ntWidth; ntCoff: pgStrOpisanie.ntCoff
@@ -384,9 +378,6 @@ Window {
 				strOpisanie: stvStr.strOpisanie//Передаём флаг Отображения конкретного Описания.
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.pop()//Назад страницу
-				}
-				onClickedSozdat: {
-
 				}
 			}
 		}

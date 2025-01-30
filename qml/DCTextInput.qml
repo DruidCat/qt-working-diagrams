@@ -23,7 +23,6 @@ Item {
 		anchors.fill: tmTextInput
 		color: "transparent"//Текст фона прозрачный.
 		clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
-        //TextInput {//Область текста.
         TextInput {//Область текста.
             id: txnTextInput
 			anchors.left: rctTextInput.left

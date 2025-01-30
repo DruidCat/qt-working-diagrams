@@ -99,8 +99,3 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
     strFileDialogJSON = strFileDialogJSON + "]";//Конец массива объектов.
     return strFileDialogJSON;
 }
-
-
-
-
-

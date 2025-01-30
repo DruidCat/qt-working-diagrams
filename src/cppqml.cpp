@@ -81,7 +81,7 @@ void DCCppQml::setStrTitul(QString& strTitulNovi) {//Переименовани�
 //---П Е Р Е И М Е Н О В А Н И Е   И М Е Н И   Т И Т У Л А---//
 ///////////////////////////////////////////////////////////////
 	if(m_pdcclass->isEmpty(strTitulNovi)){//Если пустая строка, то...
-		qdebug("Нельзя переименовывать на пустое имя титула.");
+        qdebug(tr("Нельзя переименовывать на пустое имя титула."));
 	}
 	else{
 		strTitulNovi = redaktorTexta(strTitulNovi);//Редактируем текст по стандартам приложения.
@@ -107,7 +107,7 @@ void DCCppQml::setStrTitulOpisanie(QString& strTitulOpisanieNovi) {//Переи�
     if(m_strTitulOpisanie != strTitulOpisanieNovi){//Если описание титулов не совпадают, то...
         if(m_pDataTitul->renTitulOpisanie(strTitulOpisanieNovi)){//Если описание Титула записалось успешно
             m_strTitulOpisanie = strTitulOpisanieNovi;
-            qdebug("Новоя запись в описании заголовка.");
+            qdebug(tr("Новоя запись в описании заголовка."));
             emit strTitulOpisanieChanged();//Излучаем сигнал об изменении аргумента.
         }
     }
@@ -146,7 +146,7 @@ void DCCppQml::setStrSpisokDB(QString& strSpisokNovi) {//Запись элеме
 		QStringList slsSpisok = m_pDataSpisok->polSpisok();//Получить список всех элементов Списка.
         for(int ntShag = 0; ntShag<slsSpisok.size(); ntShag++){//Проверка на одинаковые имена элементов
             if(slsSpisok[ntShag] == strSpisokNovi){
-				qdebug("Нельзя сохранять одинаковые элементы списка.");
+                qdebug(tr("Нельзя сохранять одинаковые элементы списка."));
 				return;
 			}
 		}
@@ -160,7 +160,7 @@ bool DCCppQml::renStrSpisokDB(QString strSpisok, QString strSpisokNovi){//Пер
 //---П Е Р Е И М Е Н О В А Т Ь   Э Л Е М Е Н Т   С П И С К А---//
 /////////////////////////////////////////////////////////////////
 	if(m_pdcclass->isEmpty(strSpisokNovi)){//Если пустая строка, то...
-		qdebug("Нельзя переименовывать на пустой элемент списка.");
+        qdebug(tr("Нельзя переименовывать на пустой элемент списка."));
 		return false;//Отмена.
 	}
 	else{
@@ -168,7 +168,7 @@ bool DCCppQml::renStrSpisokDB(QString strSpisok, QString strSpisokNovi){//Пер
 		QStringList slsSpisok = m_pDataSpisok->polSpisok();//Получить список всех элементов Списка.
         for(int ntShag = 0; ntShag<slsSpisok.size(); ntShag++){//Проверка на одинаковые имена элементов
             if(slsSpisok[ntShag] == strSpisokNovi){
-				qdebug("Нельзя переименовывать на одноимённый элемент списка.");
+                qdebug(tr("Нельзя переименовывать на одноимённый элемент списка."));
 				return false;//Отмена.
 			}
 		}
@@ -251,13 +251,13 @@ void DCCppQml::setStrElementDB(QString& strElementNovi) {//Запись Элем
 //---З А П И С Ь   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////
 	if(m_pdcclass->isEmpty(strElementNovi))//Если пустая строка, то...
-		qdebug("Нельзя сохранять пустой элемент.");
+        qdebug(tr("Нельзя сохранять пустой элемент."));
 	else{
 		strElementNovi = redaktorTexta(strElementNovi);//Редактируем текст по стандартам приложения.
         QStringList slsSpisok = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементов.
         for(int ntShag = 0; ntShag<slsSpisok.size(); ntShag++){//Проверка на одинаковые имена элементо
             if(slsSpisok[ntShag] == strElementNovi){
-				qdebug("Нельзя сохранять одинаковые элементы.");
+                qdebug(tr("Нельзя сохранять одинаковые элементы."));
 				return;
 			}
 		}
@@ -272,7 +272,7 @@ bool DCCppQml::renStrElementDB(QString strElement, QString strElementNovi) {//П
 //---П Е Р Е И М Е Н О В А Т Ь   Э Л Е М Е Н Т---//
 ///////////////////////////////////////////////////
     if(m_pdcclass->isEmpty(strElementNovi)) {//Если пустая строка, то...
-        qdebug("Нельзя переименовывать на пустой элемент списка.");
+        qdebug(tr("Нельзя переименовывать на пустой элемент списка."));
         return false;//Отмена.
     }
     else {
@@ -280,7 +280,7 @@ bool DCCppQml::renStrElementDB(QString strElement, QString strElementNovi) {//П
         QStringList slsElement = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементов.
         for(int ntShag = 0; ntShag<slsElement.size(); ntShag++){//Проверка на одинаковые имена элементов
             if(slsElement[ntShag] == strElementNovi) {
-                qdebug("Нельзя переименовывать на одноимённый элемент списка.");
+                qdebug(tr("Нельзя переименовывать на одноимённый элемент списка."));
                 return false;//Отмена.
             }
         }
@@ -333,7 +333,7 @@ void DCCppQml::setStrElementOpisanie(QString& strElementOpisanieNovi){//Изме
     if(strElementOpisanieNovi != m_strElementOpisanie){//Если Описания разные, то...
 		if(m_pDataElement->ustElementOpisanie(m_ullSpisokKod, m_ullElementKod, strElementOpisanieNovi)){
 			m_strElementOpisanie = strElementOpisanieNovi;//Новое описание присвоили.
-            qdebug("Новоя запись в описании элемента.");
+            qdebug(tr("Новоя запись в описании элемента."));
 			emit strElementOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}
@@ -413,19 +413,6 @@ void DCCppQml::slotDebug(QString strDebug){//Слот обрабатывающи
 //---С Л О Т   О Б Р А Б А Т Ы В А Ю Щ И Й   О Ш И Б К У---//
 /////////////////////////////////////////////////////////////
     setStrDebug(strDebug);//Отправляем в Q_PROPERTY ошибку.
-    /*
-	m_untDebugSec = 0;//Обнуляем счётчик секунд в любом случае.
-	if(strDebug == ""){//Стераем сообщение из Toolbar
-		m_pTimerDebug->stop();//Останавливаем таймер.
-		setStrDebug(strDebug);//Передаём ошибку на Q_PROPERTY
-	}
-	else{
-		QString strLog = QTime::currentTime().toString("HH:mm:ss");//В строку добавляем текущее время.
-		strLog = strLog + ": " + strDebug;//Добавляем двоеточие и само Сообщение.
-		m_pTimerDebug->start();//Запустить таймер.
-		setStrDebug(strLog);//Передаём ошибку на Q_PROPERTY
-	}
-    */
 }
 void DCCppQml::slotTimerDebug(){//Слот прерывания от таймена
 /////////////////////////////////////////////////////////

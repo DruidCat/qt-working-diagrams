@@ -62,13 +62,13 @@ QString DataSpisok::polSpisok(quint64 ullKod) {//Получить названи
 //---П О Л У Ч И Т Ь   Н А З В А Н И Е---//
 ///////////////////////////////////////////
 	if (ullKod <=0){//Если номер меньше или равен 0, то...
-		qdebug("DataSpisok::polSpisok(quint64): quint64 меньше или равен 0.");//Транслируем ошибку.
+        qdebug(tr("DataSpisok::polSpisok(quint64): quint64 меньше или равен 0."));//Транслируем ошибку.
 		return "";//Возвращаем пустую строку.
 	}
     QString strSpisok = m_pdbSpisok->SELECT("Код", QString::number(ullKod), "Список");
 	if(strSpisok.isEmpty()){//Если элемент списка пустой, то...
-		qdebug("DataSpisok::polSpisok(quint64): Код: "
-				+QString::number(ullKod)+" отсутствует, т.к. пустой элемент списка.");
+        qdebug(tr("DataSpisok::polSpisok(quint64): Код: ")
+                + QString::number(ullKod) + tr(" отсутствует, т.к. пустой элемент списка."));
 	}
     return strSpisok;
 }
@@ -85,10 +85,10 @@ bool DataSpisok::ustSpisok(QString strSpisok){//Записать в БД эле�
     quint64 ullKolichestvo = m_pdbSpisok->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
     if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание",
                               QStringList()<<QString::number(ullKolichestvo+1)<<strSpisok
-							  <<"Описание. Необходимо его редактировать.")){
+                              <<tr("Описание. Необходимо его редактировать."))){
 		return true;//Успех записи в БД.
 	}
-	qdebug("DataSpisok::ustSpisok(QString): Ошибка записи элемента Списка в БД.");
+    qdebug(("DataSpisok::ustSpisok(QString): Ошибка записи элемента Списка в БД."));
 	return false;//Ошибка записи в БД.
 }
 bool DataSpisok::renSpisok(QString strSpisok, QString strSpisokNovi){//Переименовать в БД элемент списка.
@@ -106,7 +106,7 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
     quint64 ullKolichestvo = m_pdbSpisok->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
         m_blSpisokPervi = true;//Флаг - это будет первый в списке.
-        return "[{\"kod\":\"0\",\"nomer\":\"0\",\"spisok\":\"Создайте новый элемент.\"}]";//Возвращаем строку.
+        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"spisok\":\"Создайте новый элемент.\"}]");//Возвращаем
 	}
     else
         m_blSpisokPervi = false;//Флаг - не первый в списке.
@@ -139,7 +139,7 @@ QString DataSpisok::polSpisokOpisanie(quint64 ullKod){//Полчить Опис�
 //---П О Л У Ч И Т Ь   О П И С А Н И Е   С П И С К А---//
 /////////////////////////////////////////////////////////
 	if (ullKod <=0){//Если номер меньше или равен 0, то...
-		qdebug("DataSpisok::polSpisokOpisanie(quint64): quint64 меньше или равен 0.");//ошибка
+        qdebug(tr("DataSpisok::polSpisokOpisanie(quint64): quint64 меньше или равен 0."));//ошибка
 		return "";//Возвращаем пустую строку.
 	}
     QString strSpisokOpisanie = m_pdbSpisok->SELECT("Код", QString::number(ullKod), "Описание");
@@ -152,7 +152,7 @@ bool DataSpisok::ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie){//
         if(m_pdbSpisok->UPDATE(QStringList()<<"Код"<<"Описание",
 							QStringList()<<QString::number(ullKod)<<strSpisokOpisanie))//Если успех записи
 			return true;
-		qdebug("DataSpisok::ustSpisokOpisanie(quint64, QString): ошибка записи Описания.");
+        qdebug(tr("DataSpisok::ustSpisokOpisanie(quint64, QString): ошибка записи Описания."));
 		return false;//Ошибка.
 }
 quint64 DataSpisok::polKod(QString strSpisok){//Получить Код по названию элемента списка.
@@ -160,13 +160,13 @@ quint64 DataSpisok::polKod(QString strSpisok){//Получить Код по н�
 //---П О Л У Ч И Т Ь   К О Д   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////////////////
 	if (m_pdcclass->isEmpty(strSpisok)){//Если это пустая строка, то...
-		qdebug("DataSpisok::polKod(QString): QString пустая строка.");//Транслируем ошибку.
+        qdebug(tr("DataSpisok::polKod(QString): QString пустая строка."));//Транслируем ошибку.
 		return 0;//Возвращаем пустую строку.
 	}
     QString strKod = m_pdbSpisok->SELECT("Список", strSpisok, "Код");
 	if(strKod.isEmpty()){//Если строка Кода пустая, то...
-		qdebug("DataSpisok::polKod(QString) - элемент Списка: "
-				+strSpisok+" отсутствует.");
+        qdebug(tr("DataSpisok::polKod(QString) - элемент Списка: ")
+                + strSpisok + tr(" отсутствует."));
 		return 0;
 	}
     return strKod.toULongLong();//Возвращаем код элемента строки.
