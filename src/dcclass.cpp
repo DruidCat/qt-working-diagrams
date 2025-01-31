@@ -1,4 +1,5 @@
 ﻿#include "dcclass.h"
+#include <QtDebug>
 
 DCClass::DCClass(QObject* proditel) : QObject(proditel){
 ///////////////////////////////
@@ -25,11 +26,29 @@ bool DCClass::isFolder(QString strTekst){//Если это [папка], то и
 //---Э Т О   П А П К А ?---//
 /////////////////////////////
     QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
+	int ntTekst = btrTekst.size();//Размер текста.
     if(!strTekst.isEmpty()){//Если cтрока не пустая, то...
-        if ((btrTekst[0] == '[')&&(btrTekst[btrTekst.size()-1] == ']'))//Если это [ и ], то..
-            return true;//Это [папка].
-    }
-    return false;//Не папка.
+		if(ntTekst > 2){//Если больше двух [x], если меньше, то это файл...
+        	if ((btrTekst[0] == '[')&&(btrTekst[ntTekst-1] == ']'))//Если это [ и ], то..
+				return true;
+		}
+	}
+	return false;
+}
+bool DCClass::isLabelFolder(QString strTekst){//Если это папка.lnk, то истина.
+/////////////////////////////////////////
+//---Э Т О   П А П К А   Я Р Л Ы К ?---//
+/////////////////////////////////////////
+	QByteArray btrTekst = strTekst.toLocal8Bit();//переводим строчку в QByteArray
+	int ntTekst = btrTekst.size();//Размер текста.
+    if(!strTekst.isEmpty()){//Если cтрока не пустая, то...
+		if(ntTekst > 4){//Если больше 4, то может быть x.lnk, если меньше, то папка обычная...
+        	if (btrTekst[ntTekst-4] == '.'){//Если это .lnk , то..
+				return true;
+			}
+		}
+	}
+	return false;
 }
 bool DCClass::isHideFolder(QString strTekst){//Если папка скрытая, то истина.
 /////////////////////////////////////////////
