@@ -43,8 +43,12 @@ bool DCClass::isLabelFolder(QString strTekst){//Если это папка.lnk, 
 	int ntTekst = btrTekst.size();//Размер текста.
     if(!strTekst.isEmpty()){//Если cтрока не пустая, то...
 		if(ntTekst > 4){//Если больше 4, то может быть x.lnk, если меньше, то папка обычная...
-        	if (btrTekst[ntTekst-4] == '.'){//Если это .lnk , то..
-				return true;
+        	if (btrTekst[ntTekst-4] == '.'){//это может быть .lnk , то..
+				if(((btrTekst[ntTekst-3]=='L')||(btrTekst[ntTekst-3]=='l'))
+						&&((btrTekst[ntTekst-2]=='N')||(btrTekst[ntTekst-2]=='n'))
+						&&((btrTekst[ntTekst-1]=='K')||(btrTekst[ntTekst-1]=='k'))){//Если это lnk, то...
+					return true;
+				}
 			}
 		}
 	}

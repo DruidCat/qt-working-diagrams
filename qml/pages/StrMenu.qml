@@ -66,7 +66,7 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-            text: qsTr("ЛОГИ")
+            text: qsTr("Логи")
 			bold: true
 			italic: true
 			onClicked: {
@@ -83,7 +83,7 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-            text: qsTr("ОБ АВТОРЕ")
+            text: qsTr("Об авторе")
 			bold: true
 			italic: true
 			onClicked: {
@@ -100,7 +100,7 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-            text: qsTr("УЧАСТКИ")
+            text: qsTr("Участки")
 			bold: true
 			italic: true
 			onClicked: {//Слот запускающий 
@@ -118,7 +118,7 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-            text: qsTr("ПЛАН")
+            text: qsTr("План")
 			bold: true
 			italic: true
 			onClicked: {//Слот запускающий 
@@ -151,7 +151,7 @@ Item {
             anchors.margins: tmMenu.ntCoff/2
             clrKnopki: "slategray"
             clrTexta: tmMenu.clrTexta
-            text: qsTr("ВЫХОД")
+            text: qsTr("Выход")
             bold: true
             italic: true
             onClicked: {//Слот запускающий
