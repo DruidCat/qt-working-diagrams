@@ -5,18 +5,27 @@
 DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 										m_strTitul(""),
 										m_strTitulOpisanie(""),
+
 										m_strSpisok(""),
 										m_strSpisokDB(""),
 										m_ullSpisokKod(0),
 										m_strSpisokOpisanie(""),
                                         m_blSpisokPervi(false),
+
                                         m_strElement(""),
 										m_strElementDB(""),
 										m_ullElementKod(0),
 										m_strElementOpisanie(""),
 										m_blElementPervi(false),
+
+                                        m_strDannie(""),
+                                        m_strDannieDB(""),
+                                        m_ullDannieKod(0),
+                                        m_blDanniePervi(false),
+
                                         m_strFileDialog(""),
                                         m_strFileDialogPut(""),
+
                                         m_strDebug("")
 {
 ///////////////////////////////
@@ -25,12 +34,14 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataTitul = new DataTitul("druidcat.dc", "druidcat", "druidcat");//Титул.
     m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");//Список.
     m_pDataElement = new DataElement("druidcat.dc", "druidcat", "druidcat");//Элементы.
+    m_pDataDannie = new DataDannie("druidcat.dc", "druidcat", "druidcat");//Данные.
     QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf";
     m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
     m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
     m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
- 	m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
+    m_pDataDannie->dbStart();//Записываем первоначальные данные в БД.
+    m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	connect(	m_pDataTitul,
 				SIGNAL(signalDebug(QString)),
 				this,
@@ -43,6 +54,10 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 				SIGNAL(signalDebug(QString)),
 				this,
 				SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    connect(	m_pDataDannie,
+                SIGNAL(signalDebug(QString)),
+                this,
+                SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
 	m_pTimerDebug = new QTimer();//Указатель на QTimer для Debug
 	m_pTimerDebug->setInterval(1000);//Интервал прерывания 1000 мс (1с).
 	m_untDebugSec = 0;//Обнуляем счётчик секунд.
@@ -61,6 +76,8 @@ DCCppQml::~DCCppQml(){//Деструктор.
     m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД обнуляем.
     delete m_pDataElement;//Удаляем указатель.
     m_pDataElement = nullptr;//Указатель на таблицу Элементов в БД обнуляем.
+    delete m_pDataDannie;//Удаляем указатель.
+    m_pDataDannie = nullptr;//Указатель на таблицу Данных в БД обнуляем.
     delete m_pFileDialog;//Удаляем указатель.
     m_pFileDialog = nullptr;//Указатель на Проводник в БД обнуляем.
 	delete m_pTimerDebug;//Удаляем указатель на таймер.
@@ -254,9 +271,9 @@ void DCCppQml::setStrElementDB(QString& strElementNovi) {//Запись Элем
         qdebug(tr("Нельзя сохранять пустой элемент."));
 	else{
 		strElementNovi = redaktorTexta(strElementNovi);//Редактируем текст по стандартам приложения.
-        QStringList slsSpisok = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементов.
-        for(int ntShag = 0; ntShag<slsSpisok.size(); ntShag++){//Проверка на одинаковые имена элементо
-            if(slsSpisok[ntShag] == strElementNovi){
+        QStringList slsElement = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементов.
+        for(int ntShag = 0; ntShag<slsElement.size(); ntShag++){//Проверка на одинаковые имена элементо
+            if(slsElement[ntShag] == strElementNovi){
                 qdebug(tr("Нельзя сохранять одинаковые элементы."));
 				return;
 			}
@@ -266,7 +283,6 @@ void DCCppQml::setStrElementDB(QString& strElementNovi) {//Запись Элем
 		}
     }
 }
-
 bool DCCppQml::renStrElementDB(QString strElement, QString strElementNovi) {//Переимен. Элемент
 ///////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Т Ь   Э Л Е М Е Н Т---//
@@ -291,7 +307,6 @@ bool DCCppQml::renStrElementDB(QString strElement, QString strElementNovi) {//П
     }
     return true;//Успех.
 }
-
 quint64 DCCppQml::ullElementKod(){//Возвращает Код Элемента.
 ///////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   К О Д   Э Л Е М Е Н Т А---//
@@ -337,6 +352,92 @@ void DCCppQml::setStrElementOpisanie(QString& strElementOpisanieNovi){//Изме
 			emit strElementOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}
+}
+QString DCCppQml::strDannie(){//Получить Данные.
+///////////////////////////////////////
+//---П О Л У Ч И Т Ь   Д А Н Н Ы Е---//
+///////////////////////////////////////
+    return m_strDannie;
+}
+void DCCppQml::setStrDannie(QString& strDannieNovi) {//Изменение Данных.
+/////////////////////////////////////////
+//---И З М Е Н Е Н И Е   Д А Н Н Ы Х---//
+/////////////////////////////////////////
+    if(strDannieNovi != m_strDannie){//Если Данные не равны выбранному до этого, то...
+        m_strDannie = strDannieNovi;//Приравниваем.
+        emit strDannieChanged();//Излучаем сигнал об изменении аргумента.
+    }
+}
+QString DCCppQml::strDannieDB() {//Возвратить JSON строку с Данными.
+/////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   J S O N   Д А Н Н Ы Е---//
+/////////////////////////////////////////////////
+    m_strDannieDB = m_pDataDannie->polDannieJSON(m_ullSpisokKod, m_ullElementKod);//Считываем строку JSON.
+    m_blDanniePervi = m_pDataDannie->polDanniePervi();//Первые Данные или нет? Строчка обязательна тут.
+    return m_strDannieDB;//И только после этого возвращаем её, это важно.
+}
+void DCCppQml::setStrDannieDB(QString& strDannieNovi) {//Запись Данных в БД.
+///////////////////////////////////
+//---З А П И С Ь   Д А Н Н Ы Х---//
+///////////////////////////////////
+    if(m_pdcclass->isEmpty(strDannieNovi))//Если пустая строка, то...
+        qdebug(tr("Нельзя сохранить пустые данные."));
+    else{
+        strDannieNovi = redaktorTexta(strDannieNovi);//Редактируем текст по стандартам приложения.
+        QStringList slsDannie = m_pDataDannie->polDannie(m_ullSpisokKod, m_ullElementKod);//Получить Данные
+        for(int ntShag = 0; ntShag<slsDannie.size(); ntShag++){//Проверка на одинаковые имена Данных
+            if(slsDannie[ntShag] == strDannieNovi){
+                qdebug(tr("Нельзя сохранять одинаковые данные."));
+                return;
+            }
+        }
+        if(m_pDataDannie->ustDannie(m_ullSpisokKod, m_ullElementKod, strDannieNovi)){//Если данные записались
+            emit strDannieDBChanged();//Излучаем сигнал об изменении списка Данных.
+        }
+    }
+}
+bool DCCppQml::renStrDannieDB(QString strDannie, QString strDannieNovi) {//Переименовать Данные.
+/////////////////////////////////////////////////
+//---П Е Р Е И М Е Н О В А Т Ь   Д А Н Н Ы Е---//
+/////////////////////////////////////////////////
+    if(m_pdcclass->isEmpty(strDannieNovi)) {//Если пустая строка, то...
+        qdebug(tr("Нельзя переименовывать на пустой элемент данных."));
+        return false;//Отмена.
+    }
+    else {
+        strDannieNovi = redaktorTexta(strDannieNovi);//Редактируем текст по стандартам приложения.
+        QStringList slsDannie = m_pDataDannie->polDannie(m_ullSpisokKod, m_ullElementKod);//получ список Данны
+        for(int ntShag = 0; ntShag<slsDannie.size(); ntShag++){//Проверка на одинаковые имена Данных.
+            if(slsDannie[ntShag] == strDannieNovi) {
+                qdebug(tr("Нельзя переименовывать на одноимённый элемент данных."));
+                return false;//Отмена.
+            }
+        }
+        if(m_pDataDannie->renDannie(m_ullSpisokKod, m_ullElementKod, strDannie, strDannieNovi))//Запись успешн
+            emit strDannieDBChanged();//Излучаем сигнал об изменении Данных в списке.
+        else//Если ошибка записи, то...
+            return false;//Отмена.
+    }
+    return true;//Успех.
+}
+quint64 DCCppQml::ullDannieKod(){//Возвращает Код Данных.
+///////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   К О Д   Д А Н Н Ы Х---//
+///////////////////////////////////////////////
+    return m_ullDannieKod;
+}
+void DCCppQml::setUllDannieKod(quint64 ullDannieKodNovi){//Изменить код Данных.
+///////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   К О Д   Д А Н Н Ы Х---//
+///////////////////////////////////////////////////
+    if (ullDannieKodNovi<=0)//Если номер меньше или равен 0, то...
+        qdebug("DCCppQml::setUllDannieKod(quint64): quint64 меньше или равен 0.");
+    else {//Иначе...
+        if (m_ullDannieKod != ullDannieKodNovi){//Если не равны параметры, то...
+            m_ullDannieKod = ullDannieKodNovi;
+            emit ullDannieKodChanged();//Сигнал о том, что код Данных изменился.
+        }
+    }
 }
 QString DCCppQml::strFileDialog() {//Возвратить JSON строку с папками и файлами.
 ///////////////////////////////////////////////

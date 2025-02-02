@@ -39,6 +39,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
 		src/cppqml.cpp \
+		src/datadannie.cpp \
 		src/dataelement.cpp \
 		src/dataspisok.cpp \
 		src/datatitul.cpp \
@@ -64,6 +65,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
 	src/cppqml.h \
+	src/datadannie.h \
 	src/dataelement.h \
 	src/dataspisok.h \
 	src/datatitul.h \

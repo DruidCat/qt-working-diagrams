@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+﻿cmake_minimum_required(VERSION 3.14)
 
 project(ru.WorkingDiagrams VERSION 0.1 LANGUAGES CXX)
 
@@ -17,6 +17,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql)
 set(PROJECT_SOURCES
 		src/cppqml.h
 		src/cppqml.cpp
+		src/datadannie.h
+		src/datadannie.cpp
 		src/dataelement.h
 		src/dataelement.cpp
 		src/dataspisok.h

@@ -9,16 +9,17 @@ class DataElement : public QObject {
     Q_OBJECT
 public:
     explicit	DataElement(QString strImyaDB, QString strLoginDB, QString strParolDB,
-					QObject* parent = nullptr);
+                    QObject* proditel = nullptr);
     ~			DataElement();//Деструктор.
 	bool 		dbStart();//Создать первоначальные Элементы.
 	QStringList	polElement(quint64 ullKod);//Получить полный список всех Элементов по Коду Списка.
 	bool 		ustElement(quint64 ullKod, QString strElement);//Записать в БД Элемент.
     bool 		renElement(quint64 ullKod, QString strElement, QString strElementNovi);//Переименовать элемент
     QString		polElementJSON(quint64 ullKod);//Получить JSON строчку Элементов.
-	QString 	polElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod);//Полчить Описание Элемента
+    QString 	polElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod);//Получить Описание Элемента
 	bool 		ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod, QString strElementOpisanie);
 	bool 		polElementPervi() { return m_blElementPervi; }//Вернуть состояние флага Первый Элемент?
+
 private:
     QString 	m_strImyaDB;//Имя БД
     QString 	m_strLoginDB;//Логин БД
@@ -29,10 +30,10 @@ private:
 	DCClass* 	m_pdcclass = nullptr;//Указатель на класс DCClass.
 
 private slots:
-	void qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
+    void		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
 
 signals:
-	void signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
+    void		signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
 						  
 };
 #endif // DATAELEMENT_H

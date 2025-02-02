@@ -100,7 +100,6 @@ bool DataElement::renElement(quint64 ullKod, QString strElement, QString strElem
         return true;//Успех
     return false;//Неудача
 }
-
 QString DataElement::polElementJSON(quint64 ullKod) {//Получить JSON строчку Элемента.
 ///////////////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   С Т Р О К У   Э Л Е М Е Н Т А---//

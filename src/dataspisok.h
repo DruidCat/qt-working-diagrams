@@ -9,7 +9,8 @@
 class DataSpisok : public QObject {
     Q_OBJECT
 public:
-    explicit	DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* parent = nullptr);
+    explicit	DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB,
+                           QObject* proditel = nullptr);//Конструктор
     ~			DataSpisok();//Деструктор.
     bool		dbStart();//Иннициализируем БД, и записываем в нёё данные, если она пустая.
     QString		polSpisok(quint64 ullKod);//Получить название элемента Списка по Коду.
