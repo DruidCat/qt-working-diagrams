@@ -89,6 +89,10 @@ function fnElementJSON () {//Функция чтения JSON запроса Э�
 	return JSON.parse(cppqml.strElementDB);//Читаем JSON запрос.
 }
 
+function fnDannieJSON () {//Функция чтения JSON запроса Документов из бизнес логики.
+	return JSON.parse(cppqml.strDannieDB);//Читаем JSON запрос.
+}
+
 function fnFileDialogJSON () {//Функция чтения JSON запроса каталога папок и файлов из бизнес логики.
     return JSON.parse(cppqml.strFileDialog);//Читаем JSON запрос.
 }
