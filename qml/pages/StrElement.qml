@@ -194,7 +194,7 @@ Item {
                             cppqml.strElement = strElement;//Присваиваем Элемент списка к свойству Q_PROPERTY
                             txnZagolovok.text = strElement;//Добавляем в строку выбранный Элемент списка.
                         }
-                        else {//Если НЕ ПЕРЕИМЕНОВАТЬ, то СОХРАНИТЬ...
+                        else {//Если НЕ ПЕРЕИМЕНОВАТЬ, то ПЕРЕЙТИ НА СТРАНИЦУ С ДАННЫМИ...
                             blPereimenovat = false;//Запрещено переименовывать
                             txnZagolovok.visible = false;//Отключаем создание Элемента.
                             menuElement.visible = false;//Делаем невидимым всплывающее меню.

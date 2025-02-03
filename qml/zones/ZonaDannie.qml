@@ -9,7 +9,7 @@ Item {
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
-    signal clicked(int ntNomer, var strDannie);//Сигнал клика на одном из элементов, передаёт номер и имя.
+    signal clicked(int ntNomer, var strDannie);//Сигнал клика на одном из Документов, передаёт номер и имя.
 
 	ListView {
 		id: lsvZona
@@ -53,13 +53,11 @@ Item {
 				lsvZona.model = JSDannie.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
 			}
 		}
-		/*
-		Connections {//Соединяем сигнал из C++ с действием в QML
+        Connections {//Соединяем сигнал из C++ с действием в QML, перерисовываем, в зависимости от Элемента.
 			target: cppqml;//Цель объект класса С++ DCCppQml
-			function onStrSpisokChanged(){//Слот Если изменился элемент Списка strSpisok (Q_PROPERTY), то...
+            function onStrElementChanged(){//Слот Если изменился Элемент strElement (Q_PROPERTY), то...
 				lsvZona.model = JSDannie.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
 			}
 		}
-		*/
 	}
 }

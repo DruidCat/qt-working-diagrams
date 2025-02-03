@@ -29,7 +29,7 @@ Item {
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть.
     signal clickedInfo();//Сигнал нажатич кнопки Инфо, где будет описание работы Файлового Диалога.
-    signal clickedPut (var strPut);//Сигнал излучающий путь к файлу.
+    signal clickedPutImya (var strPut, var strImya);//Сигнал излучающий путь и имя файла.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
@@ -123,9 +123,10 @@ Item {
                         else{//Если это file.pdf, то...
                             if(ntTip === 2){
                                 cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
-                                console.log(cppqml.strFileDialog);
-                                console.log(cppqml.strFileDialogPut);
-                                //TODO сделать тут запись файла в базу данных
+                                tmFileDialog.clickedPutImya (cppqml.strFileDialogPut, cppqml.strFileDialog);
+                                //TODO Сделать сравнение на одинаковые имена.
+                                //TODO Сделать удаление .pdf
+                                cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить название Элемента списка, и только потом..
                                 fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дом дерикторию! Сворачиваем, закрываем.
                             }
                         }

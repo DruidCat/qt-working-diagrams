@@ -312,6 +312,12 @@ Window {
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
                     pgStrFileDialog.textZagolovok = strZagolovok;//Изменяем заголовок.
                 }
+                onClickedPutImya: function (strPut, strImya){
+                    console.log(strPut);
+                    console.log(strImya);
+                    //TODO запись документа в БД, или транслировать это дальше для записи.
+                }
+
                 onClickedInfo: {
                     stvStr.push(pgStrFDInstrukciya);//Переключаемся на страницу Инструкция проводника.
                 }

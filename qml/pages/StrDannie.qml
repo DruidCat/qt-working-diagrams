@@ -53,12 +53,9 @@ Item {
     }
     function fnClickedOk(){//Функция переименования Данных.
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-//        if(blPereimenovat){//Если Переименовываем, то...
-//            cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text);//Переименовываем Элемент списка.
-//        }
-//        else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то Сохранить.
-//            cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
-//        }
+        if(blPereimenovat){//Если Переименовываем, то...
+            cppqml.renStrDannieDB(cppqml.strDannie, txnZagolovok.text);//Переименовываем имя Документа.
+        }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
@@ -197,10 +194,10 @@ Item {
                             blPereimenovat = false;//Запрещено переименовывать
                             txnZagolovok.visible = false;//Отключаем создание Элемента.
                             menuDannie.visible = false;//Делаем невидимым всплывающее меню.
-							//TODO Открыть файл к просмотру.
-                            //cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
-                            //cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPERTY
-                            //tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
+                            cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
+                            cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
+                            tmDannie.clickedDannie(strDannie);//Излучаем сигнал с именем Документа.
+                            //TODO Открыть файл к просмотру.
                         }
 					}
 				}
