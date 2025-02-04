@@ -17,6 +17,8 @@ public:
 	bool isLabelFolder(QString strTekst);//Если это папка.lnk, то истина.
     //---скрытая-папка?---//
     bool isHideFolder(QString strTekst);//Если папка скрытая, то истина.
+	//---базовое-имя---//
+	QString baseName(QString strTekst);//Вернуть имя файла без его разширения.
 	//---пробелы-в-начале-текста?---//
 	QString udalitPustotu(QString strTekst);//Удаляет пробелы вначале и в конце текста.
     QString udalitProbeli(QString strTekst);//Удаляем два и более пробела между словами.

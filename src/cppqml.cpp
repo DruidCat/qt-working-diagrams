@@ -384,6 +384,7 @@ void DCCppQml::setStrDannieDB(QString& strDannieNovi) {//Запись Данны
         qdebug(tr("Нельзя сохранить пустые данные."));
     else{
         strDannieNovi = redaktorTexta(strDannieNovi);//Редактируем текст по стандартам приложения.
+		strDannieNovi = m_pdcclass->baseName(strDannieNovi);//Убираем расширение из имени файла.
         QStringList slsDannie = m_pDataDannie->polDannie(m_ullSpisokKod, m_ullElementKod);//Получить Данные
         for(int ntShag = 0; ntShag<slsDannie.size(); ntShag++){//Проверка на одинаковые имена Данных
             if(slsDannie[ntShag] == strDannieNovi){

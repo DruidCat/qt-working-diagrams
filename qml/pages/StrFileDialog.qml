@@ -124,9 +124,7 @@ Item {
                             if(ntTip === 2){
                                 cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
                                 tmFileDialog.clickedPutImya (cppqml.strFileDialogPut, cppqml.strFileDialog);
-                                //TODO Сделать сравнение на одинаковые имена.
-                                //TODO Сделать удаление .pdf
-                                cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить название Элемента списка, и только потом..
+                                cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Документа, и потом..
                                 fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дом дерикторию! Сворачиваем, закрываем.
                             }
                         }
