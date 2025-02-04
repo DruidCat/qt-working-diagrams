@@ -47,9 +47,10 @@ The project has a standard application structure based on C++ and QML.
 ## Compatibility
 
 The project is compatible with:
-    * Windows 7, 8, 10, 11.
-    * GNU/Linux.
-    * Android.
+
+* Windows 7, 8, 10, 11.
+* GNU/Linux.
+* Android.
 
 ## How the app works
 
@@ -61,9 +62,9 @@ The project is compatible with:
 ## Screenshots
 
 ![screenshots](screenshots/ru.WorkingDiagrams.png)
-* snapshot of the Working Diagrams app.
+    snapshot of the Working Diagrams app.
 ![screenshots](screenshots/KnopkiQML.png)
-* a snapshot of the buttons located in (qml/bottons).
+    a snapshot of the buttons located in (qml/bottons).
 
 ## This document in Russia 
 

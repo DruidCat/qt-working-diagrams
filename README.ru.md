@@ -47,9 +47,10 @@ https://github.com/DruidCat/qt-working-diagrams
 ## Совместимость
 
 Проект совместим:
-    * Windows 7, 8, 10, 11.
-    * GNU/Linux.
-    * Android.
+
+* Windows 7, 8, 10, 11.
+* GNU/Linux.
+* Android.
 
 ## Работа приложения
 
@@ -61,9 +62,9 @@ https://github.com/DruidCat/qt-working-diagrams
 ## Снимки экранов
 
 ![screenshots](screenshots/ru.WorkingDiagrams.png)
-* снимок приложения Рабочие Схемы.
+    снимок приложения Рабочие Схемы.
 ![screenshots](screenshots/KnopkiQML.png)
-* снимок кнопок находящихся в (qml/bottons).
+    снимок кнопок находящихся в (qml/bottons).
 
 ## This document in English
 
