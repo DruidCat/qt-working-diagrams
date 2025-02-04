@@ -10,11 +10,10 @@ https://github.com/DruidCat/qt-working-diagrams
 
 ## Условия использования и участия
 
-Исходный код проекта предоставляется по [лицензии](LICENSE.GPLv3.md),
-которая обязывает раскрытие исходного кода.
+Исходный код проекта предоставляется по [лицензии](LICENSE.GPLv3.md), которая обязывает раскрытие исходного 
+кода.
 
-[Соглашение участника](CONTRIBUTING.md) регламентирует права,
-предоставляемые участниками компании «DruidCat».
+[Соглашение участника](CONTRIBUTING.md) регламентирует права, предоставляемые участниками компании «DruidCat».
 
 Информация об участниках указана в файле [AUTHORS](AUTHORS.md).
 
@@ -48,9 +47,9 @@ https://github.com/DruidCat/qt-working-diagrams
 ## Совместимость
 
 Проект совместим:
-    - Windows 7, 8, 10, 11.
-    - GNU/Linux.
-    - Android.
+    * Windows 7, 8, 10, 11.
+    * GNU/Linux.
+    * Android.
 
 ## Работа приложения
 
@@ -61,8 +60,10 @@ https://github.com/DruidCat/qt-working-diagrams
 
 ## Снимки экранов
 
-![screenshots](screenshots/ru.WorkingDiagrams.png) снимок приложения Рабочие Схемы.
-![screenshots](screenshots/KnopkiQML.png) снимок кнопок находящихся в (qml/bottons).
+![screenshots](screenshots/ru.WorkingDiagrams.png)
+* снимок приложения Рабочие Схемы.
+![screenshots](screenshots/KnopkiQML.png)
+* снимок кнопок находящихся в (qml/bottons).
 
 ## This document in English
 
