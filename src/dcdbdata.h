@@ -15,10 +15,12 @@ class DCDBData : public QObject{
 	Q_OBJECT
 
 public:
+	explicit DCDBData(const QString strDriver, const QString strImyaDB, const QString strImyaTablici,
+			const qint64 llntRazmer, QObject* proditel = nullptr);//Конструктор.
 	explicit DCDBData(const QString strImyaDB, const QString strImyaTablici, const qint64 llntRazmer,
             QObject* proditel = nullptr);//Конструктор.
-    explicit DCDBData(const QString strImyaDB,const qint64 llntRazmer,QObject* proditel = nullptr);
-	~DCDBData();//Деструктор.
+    explicit DCDBData(const QString strImyaDB, const qint64 llntRazmer, QObject* proditel = nullptr);
+	~		DCDBData();//Деструктор.
 	bool 	CREATE();//Метод создающий пустую таблицу в БД с выделенным местом под файл.
 	bool 	DROP();//Метод удаляющий таблицу в БД.
 	bool 	SELECT();//Метод проверяющий наличие таблицы в БД.
@@ -29,6 +31,8 @@ public:
 	QString baseName();//Возвращает имя записаного файла в БД.
 	QString	suffix();//Возвращаем расшинение записанного файла в БД.
 
+	void 	ustDriverDB(QString strDriver);									//Установить драйвер БД.
+	QString polDriverDB()					{return m_strDriver;}			//Получить имя драйвера БД.
 	void 	ustImyaTablici(QString  strImyaTablici)	{ m_strImyaTablici = strImyaTablici; }//Уст. имя таблицы
 	QString polImyaDB()						{ return m_strImyaDB; }			//Получить имя базы данных
 	QString polImyaTablici()				{ return m_strImyaTablici; }	//Получить имя таблицы
@@ -42,6 +46,7 @@ public:
 	uint 	getPort()						{ return m_untPort; }			//Получить порт для БД
 
 private:
+	QString m_strDriver;//Имя QSL драйвера.
 	static const uint m_untKolichestvoGraf = 1024;////Количество граф с данными равно 1 килобайт(НЕ ИЗМЕНЯТЬ!)
 	QString	m_strImyaDB;//Имя Базы данных, в котором будет лежать таблица с данными
 	QString	m_strImyaTablici;//Имя таблици, в которой будут лежать данные

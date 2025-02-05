@@ -1,35 +1,48 @@
 ﻿#include "dcdbdata.h"
 
+DCDBData::DCDBData(const QString strDriver, const QString strImyaDB, const QString strImyaTablici,
+		const qint64 llntRazmer, QObject* proditel) : QObject(proditel){//Конструктор.
+////////////////////////////////
+//---К О Н С Т Р У К Т О-Р----//
+////////////////////////////////
+	ustDriverDB(strDriver);//Имя SQL драйвера.
+	m_strImyaDB = strImyaDB;
+	m_strImyaTablici = strImyaTablici;
+	m_llntRazmer = llntRazmer * 1024;//Переводим в байты (тестно связан с параметром m_untKolichestvoGraf)
+}
 DCDBData::DCDBData(const QString strImyaDB, const QString strImyaTablici, const qint64 llntRazmer,
         QObject* proditel) : QObject(proditel){//Конструктор.
 ////////////////////////////////
 //---К О Н С Т Р У К Т О-Р----//
 ////////////////////////////////
+	m_strDriver = "";//Имя SQL драйвера. Необходимо определить методом.
 	m_strImyaDB = strImyaDB;
 	m_strImyaTablici = strImyaTablici;
 	m_llntRazmer = llntRazmer * 1024;//Переводим в байты (тестно связан с параметром m_untKolichestvoGraf)
 }
-
 DCDBData::DCDBData(const QString strImyaDB, const qint64 llntRazmer, QObject* proditel) : QObject(proditel){
 ////////////////////////////////
 //---К О Н С Т Р У К Т О-Р----//
 ////////////////////////////////
+	m_strDriver = "";//Имя SQL драйвера. Необходимо определить методом.
 	m_strImyaDB = strImyaDB;
 	m_strImyaTablici.clear();//Пустая строчка.
 	m_llntRazmer = llntRazmer * 1024;//Переводим в байты (тестно связан с параметром m_untKolichestvoGraf)
 }
-
 DCDBData::~DCDBData(){//Деструктор.
 /////////////////////////////
 //---Д Е С Т Р У К Т О Р---//
 /////////////////////////////
 
 }
-
 bool DCDBData::CREATE(){//Метод создающий пустую таблицу в БД с выделенным местом под файл.
 /////////////////////////////////////////////////////
 //---С О З Д А Т Ь   П У С Т У Ю   Т А Б Л И Ц У---//
 /////////////////////////////////////////////////////
+	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
+		qdebug(tr("Ошибка 015 в DCDBData::CREATE(): Имя драйвера SQL не указано."));
+		return false;//Возвращаем ошибку.
+	}
 	if(m_strImyaTablici.isEmpty()){//Если имя таблицы не задано, то...
 		qdebug(tr("Ошибка 014 в DCDBData::CREATE(): База данных ") + m_strImyaDB
 				+ tr(" не задано имя таблицы через метод ustImyaTablici(QString strImyaTablici)"));
@@ -38,7 +51,7 @@ bool DCDBData::CREATE(){//Метод создающий пустую табли�
 	bool blFlagZakritiya(true);//если ошибка в функции, закрываем БД.
 	static uint untCREATE(0);
 	{
-		QSqlDatabase sqlDB = QSqlDatabase::addDatabase("QPSQL", QString("dbdataCREATE%1").arg(++untCREATE));
+		QSqlDatabase sqlDB=QSqlDatabase::addDatabase(m_strDriver, QString("dbdataCREATE%1").arg(++untCREATE));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
 		sqlDB.setPort(m_untPort);
@@ -110,10 +123,14 @@ bool DCDBData::DROP(){//Метод удаляющий таблицу в БД.
 /////////////////
 //---D R O P---//
 /////////////////
+	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
+		qdebug(tr("Ошибка 072 в DCDBData::DROP(): Имя драйвера SQL не указано."));
+		return false;//Возвращаем ошибку.
+	}
 	bool blFlagZakritiya(true);//если ошибка в функции, закрываем БД.
 	static uint untDrop(0);
 	{
-		QSqlDatabase sqlDB = QSqlDatabase::addDatabase("QPSQL", QString("dbdataDROP%1").arg(++untDrop));
+		QSqlDatabase sqlDB = QSqlDatabase::addDatabase(m_strDriver, QString("dbdataDROP%1").arg(++untDrop));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
 		sqlDB.setPort(m_untPort);
@@ -147,10 +164,14 @@ bool DCDBData::SELECT(){//Метод проверяющий наличие та�
 /////////////////////
 //---S E L E C T---//
 /////////////////////
+	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
+		qdebug(tr("Ошибка 081 в DCDBData::SELECT(): Имя драйвера SQL не указано."));
+		return false;//Возвращаем ошибку.
+	}
 	bool blFlagZakritiya(true);//если ошибка в функции, закрываем БД.
 	static uint untSelect(0);
 	{
-		QSqlDatabase sqlDB = QSqlDatabase::addDatabase("QPSQL", QString("dbdataSELECT%1").arg(++untSelect));
+		QSqlDatabase sqlDB=QSqlDatabase::addDatabase(m_strDriver, QString("dbdataSELECT%1").arg(++untSelect));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
 		sqlDB.setPort(m_untPort);
@@ -178,11 +199,15 @@ bool DCDBData::write(QString strPut){//Метод записи Файла в б�
 ///////////////////
 //---W R I T E---//
 ///////////////////
+	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
+		qdebug(tr("Ошибка 025 в DCDBData::write(QString): Имя драйвера SQL не указано."));
+		return false;//Возвращаем ошибку.
+	}
 	bool blFlagZakritiya(true);//если ошибка в функции, закрываем БД.
 	static uint untWrite(0);
 	qint64 llntCRC(0);//Контрольна сумма.
 	{
-		QSqlDatabase sqlDB = QSqlDatabase::addDatabase("QPSQL", QString("dbdataWrite%1").arg(++untWrite));
+		QSqlDatabase sqlDB = QSqlDatabase::addDatabase(m_strDriver, QString("dbdataWrite%1").arg(++untWrite));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
 		sqlDB.setPort(m_untPort);
@@ -304,6 +329,10 @@ bool DCDBData::read(QString strPut){//Метод чтения файла из б
 /////////////////
 //---R E A D---//
 /////////////////
+	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
+		qdebug(tr("Ошибка 035 в DCDBData::read(QString): Имя драйвера SQL не указано."));
+		return false;//Возвращаем ошибку.
+	}
 	bool blFlagZakritiya(true);//если ошибка в функции, закрываем БД.
 	static uint untRead(0);
 	qint64 llntCRC(0);//Контрольная сумма.
@@ -317,7 +346,7 @@ bool DCDBData::read(QString strPut){//Метод чтения файла из б
 		blFlagZakritiya = false;//Ошибка
  	}
 	else{
-		QSqlDatabase sqlDB = QSqlDatabase::addDatabase("QPSQL", QString("dbdataRead%1").arg(++untRead));
+		QSqlDatabase sqlDB = QSqlDatabase::addDatabase(m_strDriver, QString("dbdataRead%1").arg(++untRead));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
 		sqlDB.setPort(m_untPort);
@@ -399,8 +428,13 @@ QDateTime DCDBData::lastModified(){//Возвращает данные по да
 	QDate odata(0, 0, 0);//Создаём объект даты
 	QTime otime(0, 0, 0);//Создаём объект времени
 	QDateTime odatetime(odata, otime);//Создаём объект даты и времени
+	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
+		qdebug(tr("Ошибка 042 в DCDBData::lastModified(): Имя драйвера SQL не указано."));
+		return odatetime;//Возвращаем нулевое время и дату.
+	}
 	{
-		QSqlDatabase sqlDB=QSqlDatabase::addDatabase("QPSQL", QString("dbdataModified%1").arg(++untModified));
+		QSqlDatabase sqlDB=QSqlDatabase::addDatabase(m_strDriver,
+				QString("dbdataModified%1").arg(++untModified));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
 		sqlDB.setPort(m_untPort);
@@ -427,7 +461,7 @@ QDateTime DCDBData::lastModified(){//Возвращает данные по да
 				}
 			}
 			else{
-				qdebug(tr("Ошибка 043 в DCDBData::lastModified(): В базе данных: ") + m_strImyaDB 
+				qdebug(tr("Ошибка 041 в DCDBData::lastModified(): В базе данных: ") + m_strImyaDB 
 						+ tr(", в таблице: ") + m_strImyaTablici
 						+ tr(" по причине: ") + sqlQuery.lastError().text());
 			}
@@ -443,10 +477,14 @@ QString DCDBData::baseName(){//Возвращает имя записаного 
 ///////////////////////////
 //---B A S E   N A M E---//
 ///////////////////////////
+	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
+		qdebug(tr("Ошибка 052 в DCDBData::baseName(): Имя драйвера SQL не указано."));
+		return "";//Возвращаем ошибку.
+	}
 	QByteArray btrImyaFaila;//Создаю байтовый массив, в котором будет хранится имя фаила
 	static uint untBase(0);
 	{
-		QSqlDatabase sqlDB = QSqlDatabase::addDatabase("QPSQL", QString("dbdataBase%1").arg(++untBase));
+		QSqlDatabase sqlDB = QSqlDatabase::addDatabase(m_strDriver, QString("dbdataBase%1").arg(++untBase));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
 		sqlDB.setPort(m_untPort);
@@ -472,7 +510,7 @@ QString DCDBData::baseName(){//Возвращает имя записаного 
 				}
 			}
 			else{
-				qdebug(tr("Ошибка 053 в DCDBData::baseName() В базе данных: ")+m_strImyaDB+tr(", в таблице: ")
+				qdebug(tr("Ошибка 051 в DCDBData::baseName() В базе данных: ")+m_strImyaDB+tr(", в таблице: ")
 						+ m_strImyaTablici + tr(" по причине: ") + sqlQuery.lastError().text());
 			}
 		}
@@ -486,10 +524,14 @@ QString	DCDBData::suffix(){//Возвращаем расшинение запи�
 /////////////////////
 //---S U F F I X---//
 /////////////////////
+	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
+		qdebug(tr("Ошибка 062 в DCDBData::suffix(): Имя драйвера SQL не указано."));
+		return "";//Возвращаем ошибку.
+	}
 	QByteArray btrSuffix("");//Массив байтов, в котором будет хранится разширение файла
 	static uint untSuffix(0);
 	{
-		QSqlDatabase sqlDB = QSqlDatabase::addDatabase("QPSQL", QString("dbdataSuffix%1").arg(++untSuffix));
+		QSqlDatabase sqlDB=QSqlDatabase::addDatabase(m_strDriver, QString("dbdataSuffix%1").arg(++untSuffix));
 		sqlDB.setDatabaseName(m_strImyaDB);
 		sqlDB.setHostName(m_strHostName);
 		sqlDB.setPort(m_untPort);
@@ -517,7 +559,7 @@ QString	DCDBData::suffix(){//Возвращаем расшинение запи�
 				}
 			}
 			else{
-				qdebug(tr("Ошибка 063 в DCDBData::suffix(): В базе данных: ")+m_strImyaDB+tr(", в таблице: ")
+				qdebug(tr("Ошибка 061 в DCDBData::suffix(): В базе данных: ")+m_strImyaDB+tr(", в таблице: ")
 						+ m_strImyaTablici + tr(" по причине: ") + sqlQuery.lastError().text());
 			}
 		}
@@ -525,4 +567,23 @@ QString	DCDBData::suffix(){//Возвращаем расшинение запи�
 	QSqlDatabase::removeDatabase(QString("dbdataSuffix%1").arg(untSuffix));//Закрываем открытую БД
 	QString strSuffix(btrSuffix);//Строчка, содержащая расшерение.
 	return strSuffix;
+}
+void DCDBData::ustDriverDB(QString strDriver){//Установить драйвер БД.
+///////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   И М Я   Д Р А Й В Е Р А---//
+///////////////////////////////////////////////////////
+	static QString sstrDriver;//Статическая переменная запоминающая имя драйвера.
+	if((strDriver == "QSQLITE")||(strDriver == "QPSQL")){//Если имя драйвера совпадает, то...
+		if(sstrDriver.isEmpty())//Если статическая переменная пустая, то...
+			sstrDriver = strDriver;//Инициализируем статическую переменную единственно правильным значением.
+		if(sstrDriver !=strDriver)//Если значение не равно статическому, то это попытка изменить Драйвер QSL.
+			qdebug(tr("Ошибка 091 в DCDBData::ustDriverDB(): Нельзя повторно менять драйвер SQL."));//Ошибка.
+		else//Если равны значения, значит это первичная иннициализация драйвера SQL.
+			m_strDriver = strDriver;//Присваиваем заданное значение.
+	}
+	else{//Если не совпадает, то...
+		qdebug(tr("Ошибка 090 в DCDBData::ustDriverDB(): Заданное имя драйвера SQL неизвестно."));//Конструк
+		if(sstrDriver.isEmpty())//Если статическая переменная пустая, то...
+			m_strDriver = "";//Это значит впервые задаём имя Драйвера и оно не верное, поэтому "".
+	}
 }
