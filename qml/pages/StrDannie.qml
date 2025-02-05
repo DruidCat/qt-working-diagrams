@@ -59,6 +59,7 @@ Item {
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
         blPereimenovat = false;//Запрещено переименовывать. НЕ УДАЛЯТЬ.
         menuDannie.visible = false;//Делаем невидимым меню.
         tmDannie.clickedSozdat();//Излучаем сигнал, что нужно запустить Файловый Диалог.

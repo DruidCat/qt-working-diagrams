@@ -57,6 +57,7 @@ Item {
     }
     function fnClickedZakrit(){
         cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.
+		tmFileDialog.signalZagolovok(qsTr("ПРОВОДНИК"));//Передаю имя папки назад [..].
         fnClickedEscape();//Меню сворачиваем
         tmFileDialog.clickedZakrit();//Излучаем сигнал закрытия проводника.
     }
