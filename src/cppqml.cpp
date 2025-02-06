@@ -31,10 +31,14 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
-    m_pDataTitul = new DataTitul("druidcat.dc", "druidcat", "druidcat");//Титул.
-    m_pDataSpisok = new DataSpisok("druidcat.dc", "druidcat", "druidcat");//Список.
-    m_pDataElement = new DataElement("druidcat.dc", "druidcat", "druidcat");//Элементы.
-    m_pDataDannie = new DataDannie("druidcat.dc", "druidcat", "druidcat");//Данные.
+	QString strImyaDB = "druidcat.dc";//Имя БД таблиц с титулом, списками, элементами, данными.
+	QString strImyaDBData = "druidcat.db";// Имя БД с файлами документов.
+	QString strLoginDB = "druidcat";//Логин входа в БД.
+	QString strParolDB = "druidcat";//Пароль входа в БД.
+    m_pDataTitul = new DataTitul(strImyaDB, strLoginDB, strParolDB);//Титул.
+    m_pDataSpisok = new DataSpisok(strImyaDB, strLoginDB, strParolDB);//Список.
+    m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB);//Элементы.
+    m_pDataDannie = new DataDannie(strImyaDB,strImyaDBData, strLoginDB, strParolDB);//Данные.
     QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf";
     m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
     m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
@@ -383,11 +387,11 @@ void DCCppQml::setStrDannieDB(QString& strDannieNovi) {//Запись Данны
     if(m_pdcclass->isEmpty(strDannieNovi))//Если пустая строка, то...
         qdebug(tr("Нельзя сохранить пустые данные."));
     else{
-        strDannieNovi = redaktorTexta(strDannieNovi);//Редактируем текст по стандартам приложения.
-		strDannieNovi = m_pdcclass->baseName(strDannieNovi);//Убираем расширение из имени файла.
+		QString strDannie = strDannieNovi = redaktorTexta(strDannieNovi);//Редактируем текст по стандартам приложения.
+		strDannie = m_pdcclass->baseName(strDannie);//Убираем расширение из имени файла.
         QStringList slsDannie = m_pDataDannie->polDannie(m_ullSpisokKod, m_ullElementKod);//Получить Данные
         for(int ntShag = 0; ntShag<slsDannie.size(); ntShag++){//Проверка на одинаковые имена Данных
-            if(slsDannie[ntShag] == strDannieNovi){
+            if(slsDannie[ntShag] == strDannie){
                 qdebug(tr("Нельзя сохранять одинаковые данные."));
                 return;
             }
@@ -461,6 +465,7 @@ QString DCCppQml::strFileDialogPut() {//Возвратить путь отобр
 //---П О Л У Ч И Т Ь   П У Т Ь   F I L E D I A L O G---//
 /////////////////////////////////////////////////////////
     m_strFileDialogPut = m_pFileDialog->polFileDialogPut();//Получить путь каталога.
+	m_pDataDannie->ustFileDialogPut(m_strFileDialogPut);//Задаём путь к каталогу, где лежит файл для записи.
     return m_strFileDialogPut;//Возвратить путь отображения содержимого папки.
 }
 void DCCppQml::setStrFileDialogPut(QString& strFileDialogPutNovi){//Записываем новый путь отображения папки.

@@ -1,13 +1,14 @@
 ﻿#include "datadannie.h"
 
-DataDannie::DataDannie(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* proditel)
-    : QObject{proditel}{
+DataDannie::DataDannie(QString strImyaDB, QString strImyaDBData, QString strLoginDB, QString strParolDB,
+		QObject* proditel) : QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
     m_pdcclass = new DCClass();//Мой класс с методами по работе с текстом.
     //Настройки соединения к БД Настроек.
     m_strImyaDB = strImyaDB;//Имя локальной базы данных.
+	m_strImyaDBData = strImyaDBData;//Имя локальной базы данных файов.
     m_strLoginDB = strLoginDB;//Логин локальной базы данных.
     m_strParolDB = strParolDB;//Пароль локальной базы данных.
     m_pdbDannie = new DCDB("QSQLITE", m_strImyaDB, "данные_0_0");//Таблица с данными по Подключ.
@@ -20,6 +21,7 @@ DataDannie::DataDannie(QString strImyaDB, QString strLoginDB, QString strParolDB
     if(!m_pdbDannie->CREATE(QStringList()<<"#Код"<<"Номер"<<"Данные"<<"Запись"))
         qdebug("DataDannie::DataDannie: ошибка создания таблицы данные_0_0.");
     m_blDanniePervi = false;//Не первый элемент в Данных.(false)
+	m_strFileDialogPut = "";//Путь к каталогу, где лежит файл для записи.
 }
 
 DataDannie::~DataDannie(){//Деструктор
@@ -76,6 +78,8 @@ bool DataDannie::ustDannie(quint64 ullKodSpisok, quint64 ullKodElement, QString 
 ///////////////////////////////////////
 //---З А П И С А Т Ь   Д А Н Н Ы Х---//
 ///////////////////////////////////////
+	QString strAbsolutPut = m_strFileDialogPut + "/" + strDannie;//Абсолютный путь с именем файла и разширение
+	strDannie = m_pdcclass->baseName(strDannie);//Убираем расширение из имени файла.
     m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullKodSpisok)+"_"+QString::number(ullKodElement));
     if(!m_pdbDannie->CREATE()){//Если таблица не создалась
         qdebug(tr("DataDannie::ustDannie(quint64,quint64,QString): ошибка создания таблицы данные_")
@@ -85,7 +89,11 @@ bool DataDannie::ustDannie(quint64 ullKodSpisok, quint64 ullKodElement, QString 
     quint64 ullKolichestvo = m_pdbDannie->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
     if(m_pdbDannie->INSERT(QStringList()<<"Номер"<<"Данные"<<"Запись",
                               QStringList()<<QString::number(ullKolichestvo+1)<<strDannie<<"0")){//0 файл.pdf
-        return true;//Успех записи в БД.
+		QString strImyaTablici("файл_"
+				+QString::number(ullKodSpisok)+"_"
+				+QString::number(ullKodElement)+"_"
+				+QString::number(ullKolichestvo+1));//Задаём Имя таблицы с файлом Документа.
+		return true;
     }
     qdebug(tr("DataDannie::ustDannie(quint64,quint64,QString): Ошибка записи Данных в БД."));
     return false;//Ошибка записи в БД.
@@ -138,6 +146,13 @@ QString DataDannie::polDannieJSON(quint64 ullKodSpisok, quint64 ullKodElement){/
     }
     strDannieJSON = strDannieJSON + "]";//Конец массива объектов.
     return strDannieJSON;
+}
+
+void DataDannie::ustFileDialogPut(QString strFileDialogPut){//Задать путь к каталогу, в котором файл записи.
+///////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   П У Т Ь   К   Ф А Й Л У---//
+///////////////////////////////////////////////////////
+	m_strFileDialogPut = strFileDialogPut;//Приравниваем пути.
 }
 void DataDannie::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////
