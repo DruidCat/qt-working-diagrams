@@ -11,6 +11,8 @@
         <file>qml/buttons/DCKnopkaPoisk.qml</file>
         <file>qml/buttons/DCKnopkaSozdat.qml</file>
         <file>qml/buttons/DCKnopkaZakrit.qml</file>
+        <file>qml/images/Qt_logo_2016.png</file>
+        <file>qml/images/ru.WorkingDiagrams.png</file>
         <file>qml/DCLogoTMK.qml</file>
         <file>qml/DCMenu.qml</file>
         <file>qml/DCTextEdit.qml</file>

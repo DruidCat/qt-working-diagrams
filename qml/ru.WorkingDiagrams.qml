@@ -54,8 +54,11 @@ Window {
 				onClickedLogi: {
 					stvStr.push(pgStrDebug)//Переходим на страницу Логи.
 				}
-				onClickedAvtor: {
-					stvStr.push(pgStrAvtor)//Переходим на страницу об Авторе.
+				onClickedWorkingDiagrams: {
+					stvStr.push(pgStrWorkingDiagrams)//Переходим на страницу об Рабочих Схемах.
+				}
+				onClickedQt: {
+					stvStr.push(pgStrQt)//Переходим на страницу об Qt.
 				}
                 onClickedPlan: {
                     stvStr.push(pgStrPlan)//Переходим на страницу Плана.
@@ -91,31 +94,64 @@ Window {
 				}
 			}
 		}
-		Stranica {//Автор
-		///////////////
-		///А В Т О Р///
-		///////////////
-			id: pgStrAvtor
+		Stranica {//Рабочие Схемы
+		/////////////////////////////
+		///О   П Р И Л О Ж Е Н И И///
+		/////////////////////////////
+			id: pgStrWorkingDiagrams
 			visible: false
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
-            textZagolovok: qsTr("ОБ АВТОРЕ ПРИЛОЖЕНИЯ")
+            textZagolovok: qsTr("О ПРИЛОЖЕНИИ")
             StrInstrukciya {
-				id: tmAvtor
-                strInstrukciya: "obavtore"
-                ntWidth: pgStrAvtor.ntWidth; ntCoff: pgStrAvtor.ntCoff
-				clrTexta: pgStrAvtor.clrTexta; clrFona: pgStrAvtor.clrRabOblasti
-				zagolovokX: pgStrAvtor.rctStrZagolovok.x; zagolovokY: pgStrAvtor.rctStrZagolovok.y
-				zagolovokWidth: pgStrAvtor.rctStrZagolovok.width
-				zagolovokHeight: pgStrAvtor.rctStrZagolovok.height
-				zonaX: pgStrAvtor.rctStrZona.x; zonaY: pgStrAvtor.rctStrZona.y
-				zonaWidth: pgStrAvtor.rctStrZona.width; zonaHeight: pgStrAvtor.rctStrZona.height
-				toolbarX: pgStrAvtor.rctStrToolbar.x; toolbarY: pgStrAvtor.rctStrToolbar.y
-				toolbarWidth: pgStrAvtor.rctStrToolbar.width; toolbarHeight: pgStrAvtor.rctStrToolbar.height
-				radiusTextEdit: pgStrAvtor.rctStrZona.radius//Радиус берём из настроек элемента qml
+				id: tmWorkingDiagrams
+                strInstrukciya: "oprilojenii"
+                ntWidth: pgStrWorkingDiagrams.ntWidth; ntCoff: pgStrWorkingDiagrams.ntCoff
+				clrTexta: pgStrWorkingDiagrams.clrTexta; clrFona: pgStrWorkingDiagrams.clrRabOblasti
+				zagolovokX: pgStrWorkingDiagrams.rctStrZagolovok.x;
+				zagolovokY: pgStrWorkingDiagrams.rctStrZagolovok.y
+				zagolovokWidth: pgStrWorkingDiagrams.rctStrZagolovok.width
+				zagolovokHeight: pgStrWorkingDiagrams.rctStrZagolovok.height
+				zonaX: pgStrWorkingDiagrams.rctStrZona.x; zonaY: pgStrWorkingDiagrams.rctStrZona.y
+				zonaWidth: pgStrWorkingDiagrams.rctStrZona.width;
+				zonaHeight: pgStrWorkingDiagrams.rctStrZona.height
+				toolbarX: pgStrWorkingDiagrams.rctStrToolbar.x; toolbarY: pgStrWorkingDiagrams.rctStrToolbar.y
+				toolbarWidth: pgStrWorkingDiagrams.rctStrToolbar.width;
+				toolbarHeight: pgStrWorkingDiagrams.rctStrToolbar.height
+				radiusTextEdit: pgStrWorkingDiagrams.rctStrZona.radius//Радиус берём из настроек элемента qml
+				onClickedNazad: {
+					stvStr.pop()//Назад страницу
+				}
+			}
+		}
+		Stranica {//Qt
+		/////////////
+		///О   Q T///
+		/////////////
+			id: pgStrQt
+			visible: false
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
+			clrRabOblasti: "black"
+            textZagolovok: qsTr("О Qt")
+            StrInstrukciya {
+				id: tmQt
+                strInstrukciya: "oqt"
+                ntWidth: pgStrQt.ntWidth; ntCoff: pgStrQt.ntCoff
+				clrTexta: pgStrQt.clrTexta; clrFona: pgStrQt.clrRabOblasti
+				zagolovokX: pgStrQt.rctStrZagolovok.x; zagolovokY: pgStrQt.rctStrZagolovok.y
+				zagolovokWidth: pgStrQt.rctStrZagolovok.width
+				zagolovokHeight: pgStrQt.rctStrZagolovok.height
+				zonaX: pgStrQt.rctStrZona.x; zonaY: pgStrQt.rctStrZona.y
+				zonaWidth: pgStrQt.rctStrZona.width; zonaHeight: pgStrQt.rctStrZona.height
+				toolbarX: pgStrQt.rctStrToolbar.x; toolbarY: pgStrQt.rctStrToolbar.y
+				toolbarWidth: pgStrQt.rctStrToolbar.width; toolbarHeight: pgStrQt.rctStrToolbar.height
+				radiusTextEdit: pgStrQt.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}

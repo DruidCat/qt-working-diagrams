@@ -26,8 +26,9 @@ Item {
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
-	signal clickedAvtor();//Сигнал нажатия кнопки Автор.
+	signal clickedWorkingDiagrams();//Сигнал нажатия кнопки об Рабочих Схемах.
     signal clickedPlan();//Сигнал нажатия кнопки План.
+    signal clickedQt();//Сигнал нажатия кнопки Об Qt.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             menuMenu.visible = false;//Делаем невидимым всплывающее меню.
@@ -83,12 +84,12 @@ Item {
 			anchors.margins: tmMenu.ntCoff/2
 			clrKnopki: "slategray"
 			clrTexta: tmMenu.clrTexta
-            text: qsTr("Об авторе")
+            text: qsTr("О приложении")
 			bold: true
 			italic: true
 			onClicked: {
                 menuMenu.visible = false;//Делаем невидимым меню.
-                tmMenu.clickedAvtor();//Сигнал нажатия кнопки об Авторе.
+                tmMenu.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
 			}
 		}
 		DCKnopkaOriginal {
@@ -143,9 +144,26 @@ Item {
 			}
 		}
         DCKnopkaOriginal {
-            id: knopkaVihod
+            id: knopkaQt
             ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
             anchors.top: knopkaPlan.bottom
+            anchors.left: tmZona.left
+            anchors.right: tmZona.right
+            anchors.margins: tmMenu.ntCoff/2
+            clrKnopki: "slategray"
+            clrTexta: tmMenu.clrTexta
+            text: qsTr("О Qt")
+            bold: true
+            italic: true
+            onClicked: {//Слот запускающий
+				menuMenu.visible = false;//Делаем невидимым меню.
+                tmMenu.clickedQt();//Сигнал нажатия кнопки об Qt.
+            }
+        }
+        DCKnopkaOriginal {
+            id: knopkaVihod
+            ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+            anchors.top: knopkaQt.bottom
             anchors.left: tmZona.left
             anchors.right: tmZona.right
             anchors.margins: tmMenu.ntCoff/2
