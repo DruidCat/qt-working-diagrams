@@ -2,6 +2,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext> //Библиотека соединяющая через контекст cpp с qml
 #include <QIcon>//Иконки.
+#include <QDebug>//Отладка.
 
 #include "cppqml.h"
 

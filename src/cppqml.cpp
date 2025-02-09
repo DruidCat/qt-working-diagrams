@@ -39,13 +39,6 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataSpisok = new DataSpisok(strImyaDB, strLoginDB, strParolDB);//Список.
     m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB);//Элементы.
     m_pDataDannie = new DataDannie(strImyaDB,strImyaDBData, strLoginDB, strParolDB);//Данные.
-    QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf";
-    m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
-    m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
-    m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
-    m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
-    m_pDataDannie->dbStart();//Записываем первоначальные данные в БД.
-    m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	connect(	m_pDataTitul,
 				SIGNAL(signalDebug(QString)),
 				this,
@@ -62,6 +55,13 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                 SIGNAL(signalDebug(QString)),
                 this,
                 SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf";
+    m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
+    m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
+    m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
+    m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
+    m_pDataDannie->dbStart();//Записываем первоначальные данные в БД.
+    m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	m_pTimerDebug = new QTimer();//Указатель на QTimer для Debug
 	m_pTimerDebug->setInterval(1000);//Интервал прерывания 1000 мс (1с).
 	m_untDebugSec = 0;//Обнуляем счётчик секунд.
@@ -387,7 +387,7 @@ void DCCppQml::setStrDannieDB(QString& strDannieNovi) {//Запись Данны
     if(m_pdcclass->isEmpty(strDannieNovi))//Если пустая строка, то...
         qdebug(tr("Нельзя сохранить пустые данные."));
     else{
-		QString strDannie = strDannieNovi = redaktorTexta(strDannieNovi);//Редактируем текст по стандартам приложения.
+		QString strDannie = redaktorTexta(strDannieNovi);//Редактируем текст по стандартам приложения.
 		strDannie = m_pdcclass->baseName(strDannie);//Убираем расширение из имени файла.
         QStringList slsDannie = m_pDataDannie->polDannie(m_ullSpisokKod, m_ullElementKod);//Получить Данные
         for(int ntShag = 0; ntShag<slsDannie.size(); ntShag++){//Проверка на одинаковые имена Данных
@@ -497,7 +497,7 @@ void DCCppQml::setStrDebug(QString& strDebugNovi){//Установить Нов�
         m_pTimerDebug->start();//Запустить таймер.
     }
 	m_strDebug = strDebugNovi;
-	qDebug()<<m_strDebug;//Пишем ошибку в отладочную консоль.
+	qWarning()<<m_strDebug;//Пишем ошибку в отладочную консоль.
     emit strDebugChanged();//Излучаем сигнал в qml с ошибкой.
 }
 QString DCCppQml::redaktorTexta(QString strTekst){//Редактор текста по стандартам Приложения.

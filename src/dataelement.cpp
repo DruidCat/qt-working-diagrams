@@ -17,9 +17,9 @@ DataElement::DataElement(QString strImyaDB, QString strLoginDB, QString strParol
 				SIGNAL(signalDebug(QString)),
 				this,
 				SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
-    if(!m_pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание"))//Если таблица не создалас
-		qdebug("DataElement::DataElement: ошибка создания таблицы элемент_0.");
-
+	//qdebug(); не работает, пока конструктор cppqml поностью не создастся.
+    if(!m_pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание"))//таблица не создалась,то
+		qWarning()<<tr("DataElement::DataElement: ошибка создания таблицы элемент_0.");
 	m_blElementPervi = false;//Не первый Элемент в Списке элементов.(false)
 }
 DataElement::~DataElement(){//Деструктор
@@ -35,19 +35,20 @@ bool DataElement::dbStart(){//Создать первоначальные Эле
 ///////////////////////////////////////////////////////////
 //---С О З Д А Т Ь   Т А Б Л И Ц У   Э Л Е М Е Н Т О В---//
 ///////////////////////////////////////////////////////////
+	//qdebug(); не работает, пока конструктор cppqml поностью не создастся.
     m_pdbElement->ustImyaTablici("элемент_0");
 	if(m_pdbElement->CREATE()){//Если таблица создалась, то
         if(!m_pdbElement->SELECT()){//если нет ни одной записи в БД, то...
             if(!m_pdbElement->INSERT(	QStringList()<<"Номер"<<"Элемент"<<"Описание",
                                         QStringList()<<"1"<<"druidcat@yandex.ru"<<"druidcat@yandex.ru")){
-                qdebug(tr("DataElement::DataElement: ошибка создания первоначальной записи в таблицу "
-                          " элемент_0."));
+                qWarning()<<tr("DataElement::DataElement: ошибка создания первоначальной записи в таблицу "
+						" элемент_0.");
                 return false;//Ошибка.
             }
         }
 	}
 	else{
-        qdebug(tr("DataElement::dbStart(quint64): ошибка создания таблицы элемент_0."));
+		qWarning()<<tr("DataElement::dbStart(quint64): ошибка создания таблицы элемент_0.");
 		return false;//Ошибка.
 	}
 	return true;

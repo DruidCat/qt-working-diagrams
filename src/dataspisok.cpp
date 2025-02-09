@@ -18,7 +18,9 @@ DataSpisok::DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB
 				SIGNAL(signalDebug(QString)),
 				this,
 				SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
-    m_pdbSpisok->CREATE(QStringList()<<"#Код"<<"Номер"<<"Список"<<"Описание");
+	//qdebug(); не работает, пока конструктор cppqml поностью не создастся.
+    if(!m_pdbSpisok->CREATE(QStringList()<<"#Код"<<"Номер"<<"Список"<<"Описание"))//таблица не создаась, то...
+		qWarning()<<tr("DataSpisok::DataSpisok: ошибка создания таблицы список.");
     m_blSpisokPervi = false;//Не первый Список в Списке.(false)
 }
 DataSpisok::~DataSpisok(){//Деструктор
@@ -34,27 +36,7 @@ bool DataSpisok::dbStart() {//Иннициализируем БД, и запис
 ///////////////////////////////////////////
 //---З А П И С Ы В А Е М   Д А Н Н Ы Е---//
 ///////////////////////////////////////////
-/*
-    QString strOpisanieFormovki = "Описание участка формовки.";
-	QString strOpisanieSvarki = "Описание участка сварки.";
-	QString strOpisanieOtdelki = "Описание участка отделки. Оборудование участка распологается со второго по четвёртый пролёт. Начало участки на 28 оси второго пролёта начинается на Транспорте 5. Оканчивается на 28 оси третьего пролёта Транспорта 9. Так же на Оси 47 есть перекатная телега с третьего в четвёртый пролёт. На участке много разнообразных акрегатов, это Транспорты 5, 6, 7, 8, 9. Это Экспандер 1 и 2, это агрегат шлифования сварочных швов. Также это две ультразвуковые остановки проверки качества сварочного шва.";
-    if(!m_pdbSpisok->SELECT()){//Если нет ни одной записи в таблице, то...
-        if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание",
-                              QStringList()<<"1"<<"ФОРМОВКА"<<strOpisanieFormovki)){
-            if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание",
-                                  QStringList()<<"2"<<"СВАРКА"<<strOpisanieSvarki)){
-                if(!m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание",
-                                       QStringList()<<"3"<<"ОТДЕЛКА"<<strOpisanieOtdelki)){
-                    return false;//Выход, ошибка.
-                }
-            }
-            else//В противном случае...
-                return false;//Выход, ошибка.
-        }
-        else//Если БД не отрылась, то...
-            return false;//Выход, ошибка.
-    }
-*/
+	//qdebug(); не работает, пока конструктор cppqml поностью не создастся.
     return true;//Выход, успех!
 }
 QString DataSpisok::polSpisok(quint64 ullKod) {//Получить название элемента Списка по Коду.
