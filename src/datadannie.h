@@ -20,7 +20,10 @@ public:
     QString		polDannieJSON(quint64 ullKodSpisok, quint64 ullKodElement);//Получить JSON строчку Данных.
     bool 		polDanniePervi() { return m_blDanniePervi; }//Вернуть состояние флага Первые Данные?
 	void 		ustFileDialogPut(QString strFileDialogPut);//Задать путь к каталогу, в котором файл записи.
-	bool 		copyDannie(QString strAbsolutPut, QString strImyaFaila);//Копируем файл в приложение.
+    QString 	polImyaFaila(qint64 ullSpisok, qint64 ullElement, qint64 ullDannie);//Получить имя файла.
+    bool  		estImyaFaila(QString strImyaFaila);//Есть такой файл в каталоге?
+    bool  		udalImyaFaila(QString strImyaFaila);//Удалить файл в каталоге.
+    bool 		copyDannie(QString strAbsolutPut, QString strImyaFaila);//Копируем файл в приложение.
 
 private:
     bool 		m_blDanniePervi;//Первый элемент в Данных.

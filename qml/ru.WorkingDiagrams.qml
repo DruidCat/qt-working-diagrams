@@ -349,8 +349,6 @@ Window {
                     pgStrFileDialog.textZagolovok = strZagolovok;//Изменяем заголовок.
                 }
                 onClickedPutImya: function (strPut, strImya){
-                    console.log(strPut);
-                    console.log(strImya);
                     //TODO запись документа в БД, или транслировать это дальше для записи.
                 }
 

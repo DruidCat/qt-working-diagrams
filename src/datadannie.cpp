@@ -106,8 +106,7 @@ bool DataDannie::ustDannie(quint64 ullKodSpisok, quint64 ullKodElement, QString 
         return false;//Не успех
     }
     quint64 ullKolichestvo = m_pdbDannie->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
-	QString strImyaFaila("файл_"+QString::number(ullKodSpisok)+"_"+QString::number(ullKodElement)+"_"
-			+QString::number(ullKolichestvo+1));//Задаём Имя таблицы с файлом Документа.
+    QString strImyaFaila(polImyaFaila(ullKodSpisok, ullKodElement, ullKolichestvo+1));//Задаём имя файла с Док
 	if(copyDannie(strAbsolutPut, strImyaFaila)){//Попируем файл в приложение, если успех, то...
 		if(m_pdbDannie->INSERT(QStringList()<<"Номер"<<"Данные"<<"Запись",
 					QStringList()<<QString::number(ullKolichestvo+1)<<strDannie<<strImyaFaila))
@@ -172,6 +171,53 @@ void DataDannie::ustFileDialogPut(QString strFileDialogPut){//Задать пу�
 ///////////////////////////////////////////////////////
 	m_strFileDialogPut = strFileDialogPut;//Приравниваем пути.
 }
+QString DataDannie::polImyaFaila(qint64 ullSpisok, qint64 ullElement, qint64 ullDannie){//Получить имя файла.
+/////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   И М Я   Ф А И Л А---//
+/////////////////////////////////////////////
+    uint ntImyaFaila = (ullSpisok*1000000)+(ullElement*1000)+ullDannie;
+    QString strImyaFaila = QString::number(ntImyaFaila);//Переменная, которая соберёт имя файла.
+    return strImyaFaila;
+}
+bool DataDannie::estImyaFaila(QString strImyaFaila){//Есть такой файл в каталоге?
+/////////////////////////////////////////
+//---Е С Т Ь   Т А К О Й   Ф А Й Л ?---//
+    /////////////////////////////////////////
+    /// \brief flImyaFaila
+
+    QString strPut = m_strFileDialogPut + QDir::separator() + strImyaFaila;
+    strPut = QDir::fromNativeSeparators(strPut);
+    qDebug()<<strPut;
+    QFile flImyaFaila(strPut);//Объект на файл в каталоге.
+    if(flImyaFaila.exists()){//Есть такой файл, то...
+        qDebug()<<"Асяся!";
+        return true;
+    }
+    return false;
+}
+bool DataDannie::udalImyaFaila(QString strImyaFaila){//Удалить файл в каталоге.
+/////////////////////////////////////////////
+//---У Д А Л И Т Ь   Т А К О Й   Ф А Й Л---//
+/////////////////////////////////////////////
+    QFile flImyaFaila(m_strFileDialogPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
+    if(flImyaFaila.exists()){//Есть такой файл, то...
+        if(flImyaFaila.isOpen()){//Если такой файл открыт, то...
+           qdebug(tr("Невозможно удалить файл ")+strImyaFaila+tr(", так как он открыт. Закройте его!"));
+           //TODO сигнал на закрытие основным приложением показ pdf файла.
+           return false;//Ошибка удаления файла.
+        }
+        else{
+            if(flImyaFaila.remove())//Если файл удалился, то...
+                return true;//Успех
+            else{
+                qdebug(tr("Невозможно удалить файл ")+strImyaFaila+".");
+                return false;//Ошибка.
+            }
+        }
+    }
+    qdebug(tr("Внимание, файл ")+strImyaFaila+tr(" был кем то удалён."));
+    return true;//успех, так как кем то удалённый файл не мешает алгоритму.
+}
 bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Копируем файл в приложение.
 ///////////////////////////////////////////
 //---К О П И Р О В А Т Ь   Д А Н Н Ы Е---//
@@ -179,7 +225,13 @@ bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Ко�
 	QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать.
 	if(flDannie.exists()){//Если данный файл существует, то...
 		if(!flDannie.isOpen()){//Если файл не открыт, то...
-			if(QFile::copy(strAbsolutPut, m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila)){
+            qDebug()<<strImyaFaila;
+            if(estImyaFaila(strImyaFaila)){//Если такой файл есть, то...
+                qDebug()<<"Ась!";
+                if(!udalImyaFaila(strImyaFaila))//Если файл не удалился, то...
+                    return false;//Ошибка удаления.
+            }
+            if(QFile::copy(strAbsolutPut, m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila)){
 				return true;
 			}
 			else
