@@ -182,24 +182,18 @@ QString DataDannie::polImyaFaila(qint64 ullSpisok, qint64 ullElement, qint64 ull
 bool DataDannie::estImyaFaila(QString strImyaFaila){//Есть такой файл в каталоге?
 /////////////////////////////////////////
 //---Е С Т Ь   Т А К О Й   Ф А Й Л ?---//
-    /////////////////////////////////////////
-    /// \brief flImyaFaila
-
-    QString strPut = m_strFileDialogPut + QDir::separator() + strImyaFaila;
-    strPut = QDir::fromNativeSeparators(strPut);
-    qDebug()<<strPut;
-    QFile flImyaFaila(strPut);//Объект на файл в каталоге.
-    if(flImyaFaila.exists()){//Есть такой файл, то...
-        qDebug()<<"Асяся!";
+/////////////////////////////////////////
+    //strPut = QDir::fromNativeSeparators(strPut);
+    QFile flImyaFaila(m_strWorkingDiagramsPut + "/" + strImyaFaila);//Объект на файл в каталоге.
+    if(flImyaFaila.exists())//Есть такой файл, то...
         return true;
-    }
     return false;
 }
 bool DataDannie::udalImyaFaila(QString strImyaFaila){//Удалить файл в каталоге.
 /////////////////////////////////////////////
 //---У Д А Л И Т Ь   Т А К О Й   Ф А Й Л---//
 /////////////////////////////////////////////
-    QFile flImyaFaila(m_strFileDialogPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
+    QFile flImyaFaila(m_strWorkingDiagramsPut+"/"+strImyaFaila);//Объект на файл в каталоге.
     if(flImyaFaila.exists()){//Есть такой файл, то...
         if(flImyaFaila.isOpen()){//Если такой файл открыт, то...
            qdebug(tr("Невозможно удалить файл ")+strImyaFaila+tr(", так как он открыт. Закройте его!"));
@@ -227,7 +221,6 @@ bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Ко�
 		if(!flDannie.isOpen()){//Если файл не открыт, то...
             qDebug()<<strImyaFaila;
             if(estImyaFaila(strImyaFaila)){//Если такой файл есть, то...
-                qDebug()<<"Ась!";
                 if(!udalImyaFaila(strImyaFaila))//Если файл не удалился, то...
                     return false;//Ошибка удаления.
             }
