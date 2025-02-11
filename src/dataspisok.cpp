@@ -1,7 +1,7 @@
 ﻿#include "dataspisok.h"
 
-DataSpisok::DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* proditel)
-    : QObject{proditel}{
+DataSpisok::DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB, quint64 ullSpisokMax,
+                       QObject* proditel) : QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
@@ -22,6 +22,9 @@ DataSpisok::DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB
     if(!m_pdbSpisok->CREATE(QStringList()<<"#Код"<<"Номер"<<"Список"<<"Описание"))//таблица не создаась, то...
 		qWarning()<<tr("DataSpisok::DataSpisok: ошибка создания таблицы список.");
     m_blSpisokPervi = false;//Не первый Список в Списке.(false)
+    m_ullSpisokMax = ullSpisokMax;//Максимальное количество элементов Списка.
+    if(m_ullSpisokMax > 999)//Если больше 999, то...
+        m_ullSpisokMax = 999;//то 999, больше нельзя, алгоритмя приложения не будут работать.
 }
 DataSpisok::~DataSpisok(){//Деструктор
 //////////////////////////////
@@ -65,11 +68,17 @@ bool DataSpisok::ustSpisok(QString strSpisok){//Записать в БД эле�
 //---З А П И С А Т Ь   Э Л Е М Е Н Т   С П И С К А---//
 ///////////////////////////////////////////////////////
     quint64 ullKolichestvo = m_pdbSpisok->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
-    if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание",
-                              QStringList()<<QString::number(ullKolichestvo+1)<<strSpisok
-                              <<tr("Описание. Необходимо его редактировать."))){
-		return true;//Успех записи в БД.
-	}
+    if(ullKolichestvo >= m_ullSpisokMax){//Если больше максимального количества, то...
+        qdebug(("Достигнуто максимальное количество элементов списка."));
+        return false;//Ошибка записи в БД.
+    }
+    else{//Если не максимальное количество, то...
+        if(m_pdbSpisok->INSERT(QStringList()<<"Номер"<<"Список"<<"Описание",
+                               QStringList()<<QString::number(ullKolichestvo+1)<<strSpisok
+                               <<tr("Описание. Необходимо его редактировать."))){//Запись в БД.
+            return true;//Успех записи в БД.
+        }
+    }
     qdebug(("DataSpisok::ustSpisok(QString): Ошибка записи элемента Списка в БД."));
 	return false;//Ошибка записи в БД.
 }

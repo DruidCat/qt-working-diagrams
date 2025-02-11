@@ -339,13 +339,11 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 /////////////////////
 	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
         qdebug(tr("Ошибка 024 в DCDB::INSERT(): Имя драйвера SQL не указано."));
-        qDebug()<<tr("Ошибка 024 в DCDB::INSERT(): Имя драйвера SQL не указано.");
         return false;//Возвращаем ошибку.
 	}
 	else{
 		if(m_strImyaDB.isEmpty()){//Если имя БД пустое, то...
             qdebug(tr("Ошибка 025 в DCDB::INSERT(): Имя базы данных SQL не указано."));
-            qDebug()<<tr("Ошибка 025 в DCDB::INSERT(): Имя базы данных SQL не указано.");
             return false;//Возвращаем ошибку.
 		}
 	}
@@ -359,8 +357,6 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 		if(!sqlDB.open(m_strUserName, m_strPassword)){//Если база не открылась, то...
 			qdebug(tr("Ошибка 020 в DCDB::INSERT(): База данных ") + m_strImyaDB 
 					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
-            qDebug()<<tr("Ошибка 020 в DCDB::INSERT(): База данных ") + m_strImyaDB
-                    + tr(" не открылась по причине: ") + sqlDB.lastError().text();
 
 			blFlagZakritiya = false;
 			emit signalSqlSoedinenie(false);//Сигнал отсутствия соединения к postgresql серверу.
@@ -375,9 +371,6 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
                 qdebug(tr("Ошибка 021 в DCDB::INSERT(): В базе данных ")+m_strImyaDB+tr(" с именем таблици: ")
                         +m_strImyaTablici+tr(" задано разное колличество Граф: ")+QString::number(untGrafi)
                         +tr(" и Колонок: ")+QString::number(untKolonki)+"!");
-                qDebug()<<tr("Ошибка 021 в DCDB::INSERT(): В базе данных ")+m_strImyaDB+tr(" с именем таблици: ")
-                        +m_strImyaTablici+tr(" задано разное колличество Граф: ")+QString::number(untGrafi)
-                        +tr(" и Колонок: ")+QString::number(untKolonki)+"!";
 				blFlagZakritiya = false;//Ошибка
 			}
 			else{
@@ -401,9 +394,6 @@ bool DCDB::INSERT(QStringList slsGrafi, QStringList slsKolonki){//Вставит
 		        qdebug(tr("Ошибка 023 в DCDB::INSERT(): В базе данных: ") + m_strImyaDB
 						+ tr(" не смог вставить данные: ") + strSqlKolonki + tr(", в таблицу: ")
 						+ m_strImyaTablici + " по причине: " + sqlQuery.lastError().text() +"!");
-                qDebug()<<tr("Ошибка 023 в DCDB::INSERT(): В базе данных: ") + m_strImyaDB
-                        + tr(" не смог вставить данные: ") + strSqlKolonki + tr(", в таблицу: ")
-                        + m_strImyaTablici + " по причине: " + sqlQuery.lastError().text() +"!";
 		        blFlagZakritiya = false;//Ошибка
 		    }
 		}
@@ -1319,7 +1309,7 @@ void DCDB::ustDriverDB(QString strDriver){//Установить драйвер 
 		if(sstrDriver.isEmpty())//Если статическая переменная пустая, то...
 			sstrDriver = strDriver;//Инициализируем статическую переменную единственно правильным значением.
 		if(sstrDriver !=strDriver)//Если значение не равно статическому, то это попытка изменить Драйвер QSL.
-			qdebug(tr("Ошибка 171 в DCDB::ustDriverDB(): Нельзя повторно менять драйвер SQL."));//Ошибка.
+            qDebug()<<tr("Ошибка 171 в DCDB::ustDriverDB(): Нельзя повторно менять драйвер SQL.");//Ошибка.
 		else//Если равны значения, значит это первичная иннициализация драйвера SQL.
 			m_strDriver = strDriver;//Присваиваем заданное значение.
 	}
@@ -1353,7 +1343,7 @@ void DCDB::ustImyaDB(QString strImyaDB){//Установить имя БД.
 		if(sstrImyaDB.isEmpty())//Если статическая переменная пустая, то...
 			sstrImyaDB = strImyaDB;//Инициализируем статическую переменную единственно правильным значением.
 		if(sstrImyaDB !=strImyaDB)//Если значение не равно статическому, то это попытка изменить Имя БД.
-			qdebug(tr("Ошибка 181 в DCDB::ustImyaDB(): Нельзя повторно менять имя БД."));//Ошибка.
+            qDebug()<<tr("Ошибка 181 в DCDB::ustImyaDB(): Нельзя повторно менять имя БД.");//Ошибка.
 		else//Если равны значения, значит это первичная иннициализация имени БД SQL.
 			m_strImyaDB = strImyaDB;
 	}
@@ -1364,8 +1354,8 @@ void DCDB::ustImyaTablici(QString  strImyaTablici){//Установить имя
 /////////////////////////////////////////////////////
 	if(m_strImyaTablici != strImyaTablici){//Если нет равенства таблиц, то...
 		if(strImyaTablici == ""){//Если пустое имя таблицы, то...
-			qdebug(tr("Ошибка 151 в DCDB::ustImyaTablici() В базе данных: ") + m_strImyaDB  
-					+ tr(" ошибка по причине пустого имени таблицы"));
+            qDebug()<<tr("Ошибка 151 в DCDB::ustImyaTablici() В базе данных: ") + m_strImyaDB
+                    + tr(" ошибка по причине пустого имени таблицы");
 		}
 		else{//Если нет, то...
 			SELECT(true, "", "", 0, 0);//Закрываем БД, делаем нулевой запрос.

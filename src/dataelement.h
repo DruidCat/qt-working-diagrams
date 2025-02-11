@@ -8,7 +8,7 @@
 class DataElement : public QObject {
     Q_OBJECT
 public:
-    explicit	DataElement(QString strImyaDB, QString strLoginDB, QString strParolDB,
+    explicit	DataElement(QString strImyaDB, QString strLoginDB, QString strParolDB, quint64 ullElementMax,
                     QObject* proditel = nullptr);
     ~			DataElement();//Деструктор.
 	bool 		dbStart();//Создать первоначальные Элементы.
@@ -26,6 +26,7 @@ private:
     QString 	m_strParolDB;//Пароль БД
 
 	bool 		m_blElementPervi;//Первый Элемент в Списке элементов.
+    quint64 	m_ullElementMax;//Максимальное количество Элементов.
 	DCDB*		m_pdbElement = nullptr;//Указатель на класс DCDB.
 	DCClass* 	m_pdcclass = nullptr;//Указатель на класс DCClass.
 

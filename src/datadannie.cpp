@@ -1,6 +1,6 @@
 ﻿#include "datadannie.h"
 DataDannie::DataDannie(QString strImyaDB, QString strImyaDBData, QString strLoginDB, QString strParolDB,
-		QObject* proditel) : QObject{proditel}{
+                       quint64 ullDannieMax, QObject* proditel) : QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
@@ -33,6 +33,9 @@ DataDannie::DataDannie(QString strImyaDB, QString strImyaDBData, QString strLogi
 			qWarning()<<tr("DataDannie::DataDannie: ошибка создания папки хранения документов.");
 	}
 	m_strWorkingDiagramsPut = odrWorkingDiagrams.path();//Присваеваем переменной каталог приложения.
+    m_ullDannieMax = ullDannieMax;//Приравниваем максимальное количество Данных.
+    if(m_ullDannieMax > 999)//Если больше 999, то...
+        m_ullDannieMax = 999;//то 999, больше нельзя, алгоритмя приложения не будут работать.
 }
 
 DataDannie::~DataDannie(){//Деструктор
@@ -106,13 +109,20 @@ bool DataDannie::ustDannie(quint64 ullKodSpisok, quint64 ullKodElement, QString 
         return false;//Не успех
     }
     quint64 ullKolichestvo = m_pdbDannie->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
-    QString strImyaFaila(polImyaFaila(ullKodSpisok, ullKodElement, ullKolichestvo+1));//Задаём имя файла с Док
-	if(copyDannie(strAbsolutPut, strImyaFaila)){//Попируем файл в приложение, если успех, то...
-		if(m_pdbDannie->INSERT(QStringList()<<"Номер"<<"Данные"<<"Запись",
-					QStringList()<<QString::number(ullKolichestvo+1)<<strDannie<<strImyaFaila))
-			return true;
+    if(ullKolichestvo >= m_ullDannieMax){//Если больше максимального количества, то...
+        qdebug(("Достигнуто максимальное количество документов в элементе."));
+        return false;//Ошибка записи в БД.
+    }
+    else{//Если не максимальное количество, то...
+        QString strImyaFaila(polImyaFaila(ullKodSpisok, ullKodElement, ullKolichestvo+1));//Задаём имя файла с Док
+        //TODO ТУТ ЗАПУСК АНИМАЦИИ КОПИРОВАНИЯ НУЖНО СДЕЛАТЬ.
+        if(copyDannie(strAbsolutPut, strImyaFaila)){//Попируем файл в приложение, если успех, то...
+            if(m_pdbDannie->INSERT(QStringList()<<"Номер"<<"Данные"<<"Запись",
+                        QStringList()<<QString::number(ullKolichestvo+1)<<strDannie<<strImyaFaila))//Запись
+                return true;//Успех записи
 
-	}
+        }
+    }
     qdebug(tr("DataDannie::ustDannie(quint64,quint64,QString): Ошибка записи Данных в БД."));
     return false;//Ошибка записи в БД.
 }
@@ -173,7 +183,7 @@ void DataDannie::ustFileDialogPut(QString strFileDialogPut){//Задать пу�
 }
 QString DataDannie::polImyaFaila(qint64 ullSpisok, qint64 ullElement, qint64 ullDannie){//Получить имя файла.
 /////////////////////////////////////////////
-//---П О Л У Ч И Т Ь   И М Я   Ф А И Л А---//
+//---П О Л У Ч И Т Ь   И М Я   Ф А Й Л А---//
 /////////////////////////////////////////////
     uint ntImyaFaila = (ullSpisok*1000000)+(ullElement*1000)+ullDannie;
     QString strImyaFaila = QString::number(ntImyaFaila);//Переменная, которая соберёт имя файла.
@@ -184,7 +194,7 @@ bool DataDannie::estImyaFaila(QString strImyaFaila){//Есть такой фай
 //---Е С Т Ь   Т А К О Й   Ф А Й Л ?---//
 /////////////////////////////////////////
     //strPut = QDir::fromNativeSeparators(strPut);
-    QFile flImyaFaila(m_strWorkingDiagramsPut + "/" + strImyaFaila);//Объект на файл в каталоге.
+    QFile flImyaFaila(m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
     if(flImyaFaila.exists())//Есть такой файл, то...
         return true;
     return false;
@@ -193,20 +203,14 @@ bool DataDannie::udalImyaFaila(QString strImyaFaila){//Удалить файл �
 /////////////////////////////////////////////
 //---У Д А Л И Т Ь   Т А К О Й   Ф А Й Л---//
 /////////////////////////////////////////////
-    QFile flImyaFaila(m_strWorkingDiagramsPut+"/"+strImyaFaila);//Объект на файл в каталоге.
+    QFile flImyaFaila(m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
     if(flImyaFaila.exists()){//Есть такой файл, то...
-        if(flImyaFaila.isOpen()){//Если такой файл открыт, то...
-           qdebug(tr("Невозможно удалить файл ")+strImyaFaila+tr(", так как он открыт. Закройте его!"));
-           //TODO сигнал на закрытие основным приложением показ pdf файла.
-           return false;//Ошибка удаления файла.
-        }
+        if(flImyaFaila.remove())//Если файл удалился, то...
+            return true;//Успех
         else{
-            if(flImyaFaila.remove())//Если файл удалился, то...
-                return true;//Успех
-            else{
-                qdebug(tr("Невозможно удалить файл ")+strImyaFaila+".");
-                return false;//Ошибка.
-            }
+            qdebug(tr("Невозможно удалить файл ")+strImyaFaila
+                   +tr(", так как он может быть открыт в другом приложении. Закройте его!"));
+            return false;//Ошибка.
         }
     }
     qdebug(tr("Внимание, файл ")+strImyaFaila+tr(" был кем то удалён."));
@@ -216,22 +220,16 @@ bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Ко�
 ///////////////////////////////////////////
 //---К О П И Р О В А Т Ь   Д А Н Н Ы Е---//
 ///////////////////////////////////////////
-	QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать.
+    QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать, расположенный...
 	if(flDannie.exists()){//Если данный файл существует, то...
-		if(!flDannie.isOpen()){//Если файл не открыт, то...
-            qDebug()<<strImyaFaila;
-            if(estImyaFaila(strImyaFaila)){//Если такой файл есть, то...
-                if(!udalImyaFaila(strImyaFaila))//Если файл не удалился, то...
-                    return false;//Ошибка удаления.
-            }
-            if(QFile::copy(strAbsolutPut, m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila)){
-				return true;
-			}
-			else
-				qdebug(tr("Ошибка копирования документа."));
-		}
-		else
-			qdebug(tr("Выбранный файл открыт в другом приложении, закройте его!"));
+        if(estImyaFaila(strImyaFaila)){//Если такой файл с таким же именем существует, то...
+            if(!udalImyaFaila(strImyaFaila))//Удаляем файл с таким же именем. Если файл не удалился, то...
+                return false;//Ошибка удаления.
+        }
+        if(flDannie.copy(m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila))//Копируем файл в ....
+            return true;//Успешное копирование.
+        else
+            qdebug(tr("Ошибка копирования документа."));
 	}
 	else
 		qdebug(tr("Выбранный файл отсутствует!"));

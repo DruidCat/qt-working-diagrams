@@ -35,10 +35,13 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 	QString strImyaDBData = "druidcat.db";// Имя БД с файлами документов.
 	QString strLoginDB = "druidcat";//Логин входа в БД.
 	QString strParolDB = "druidcat";//Пароль входа в БД.
+    quint64 ullSpisokMax = 999;//Максимальное количество Списков.
+    quint64 ullElementMax = 999;//Максимальное количество Элементов.
+    quint64 ullDannieMax = 999;//Максимальное количество Данных.
     m_pDataTitul = new DataTitul(strImyaDB, strLoginDB, strParolDB);//Титул.
-    m_pDataSpisok = new DataSpisok(strImyaDB, strLoginDB, strParolDB);//Список.
-    m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB);//Элементы.
-    m_pDataDannie = new DataDannie(strImyaDB,strImyaDBData, strLoginDB, strParolDB);//Данные.
+    m_pDataSpisok = new DataSpisok(strImyaDB, strLoginDB, strParolDB, ullSpisokMax);//Список.
+    m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
+    m_pDataDannie = new DataDannie(strImyaDB,strImyaDBData, strLoginDB, strParolDB, ullDannieMax);//Данные.
 	connect(	m_pDataTitul,
 				SIGNAL(signalDebug(QString)),
 				this,

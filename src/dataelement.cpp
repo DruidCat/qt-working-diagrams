@@ -1,7 +1,7 @@
 ﻿#include "dataelement.h"
 
-DataElement::DataElement(QString strImyaDB, QString strLoginDB, QString strParolDB, QObject* parent)
-	: QObject{parent}{
+DataElement::DataElement(QString strImyaDB, QString strLoginDB, QString strParolDB, quint64 ullElementMax,
+                         QObject* parent) : QObject{parent}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
@@ -21,6 +21,9 @@ DataElement::DataElement(QString strImyaDB, QString strLoginDB, QString strParol
     if(!m_pdbElement->CREATE(QStringList()<<"#Код"<<"Номер"<<"Элемент"<<"Описание"))//таблица не создалась,то
 		qWarning()<<tr("DataElement::DataElement: ошибка создания таблицы элемент_0.");
 	m_blElementPervi = false;//Не первый Элемент в Списке элементов.(false)
+    m_ullElementMax = ullElementMax;//Приравниваем максимальное количество Элементов.
+    if(m_ullElementMax > 999)//Если больше 999, то...
+        m_ullElementMax = 999;//то 999, больше нельзя, алгоритмя приложения не будут работать.
 }
 DataElement::~DataElement(){//Деструктор
 //////////////////////////////
@@ -84,11 +87,17 @@ bool DataElement::ustElement(quint64 ullKod, QString strElement){//Записа�
 		return false;//Не успех
 	}
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
-    if(m_pdbElement->INSERT(QStringList()<<"Номер"<<"Элемент"<<"Описание",
-                              QStringList()<<QString::number(ullKolichestvo+1)<<strElement
-                              <<tr("Описание. Необходимо его редактировать."))){
-		return true;//Успех записи в БД.
-	}
+    if(ullKolichestvo >= m_ullElementMax){//Если больше максимального количества, то...
+        qdebug(("Достигнуто максимальное количество элементов."));
+        return false;//Ошибка записи в БД.
+    }
+    else{//Если не максимальное количество, то...
+        if(m_pdbElement->INSERT(QStringList()<<"Номер"<<"Элемент"<<"Описание",
+                                  QStringList()<<QString::number(ullKolichestvo+1)<<strElement
+                                  <<tr("Описание. Необходимо его редактировать."))){//Запись Элемента в БД
+            return true;//Успех записи в БД.
+        }
+    }
     qdebug(tr("DataElement::ustElement(quint64, QString): Ошибка записи Элемента в БД."));
     return false;//Ошибка записи в БД.
 }

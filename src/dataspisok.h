@@ -9,7 +9,7 @@
 class DataSpisok : public QObject {
     Q_OBJECT
 public:
-    explicit	DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB,
+    explicit	DataSpisok(QString strImyaDB, QString strLoginDB, QString strParolDB, quint64 ullSpisokMax,
                            QObject* proditel = nullptr);//Конструктор
     ~			DataSpisok();//Деструктор.
     bool		dbStart();//Иннициализируем БД, и записываем в нёё данные, если она пустая.
@@ -29,6 +29,7 @@ private:
 	DCClass* 	m_pdcclass = nullptr;//Указатель на мой класс с методами.
 	
 	QStringList m_slsSpisok;//Переменная хранящая в себе прочитаный из БД список элементов Списка.
+    quint64 		m_ullSpisokMax;//Максимальное количество элементов Списка.
     QString 	m_strImyaDB;//Имя БД
     QString 	m_strLoginDB;//Логин БД
     QString 	m_strParolDB;//Пароль БД

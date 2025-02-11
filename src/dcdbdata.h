@@ -70,14 +70,25 @@ private slots:
 //---И Н С Т Р У К Ц И Я---//
 /////////////////////////////
 /*
+ *	explicit DCDBData(const QString strDriver, const QString strImyaDB, const QString strImyaTablici,
+ *		const qint64 llntRazmer, QObject* proditel = nullptr);//Конструктор.
+ *
+ * 1) strDriver			- имя Драйвера SQL:
+ * 						"QSQLITE" - SQLite
+ * 						"QPSQL" - PosgreSQL
+ * 2) strImyaDB			- имя БД с данными SQL
+ * 3) strImyaTablici	- имя таблици SQL, в которой будут хранится данные с данными.
+ * 4) llntRazmer		- размер данных в килобайтах, которые будут хранится в БД.
+ *
  * explicit DCDBData(const QString strImyaDB, const QString strImyaTablici, const qint64 llntRazmer,
  * 		QObject* proditel = nullptr);
  *
- * 1) strImyaDB			- имя БД с данными SQL
- * 2) strImyaTablici	- имя таблици SQL, в которой будут хранится данные с данными.
- * 3) llntRazmer		- размер данных в килобайтах, которые будут хранится в БД.
+ * Так как в этом конструкторе не указано имя драйвера, его можно объявить ОДИН раз через метод:
+ * void 	ustDriverDB(QString strDriver);//Установить драйвер БД.
+ *
  * ПРИМЕР:
  * DCDBData* pdcdbdata = new DCDBData("компания.dc", "логотип", 256);//Конструктор
+ * pdcdbdata->ustDriverDB("QPSQL");//Установить имя драйвера.
  * pdcdbdata->CREATE();//создать таблицу и заполнить её техническими данными.
  *
  * bool DCDBData::write(QString strPut);//Метод записи Файла в базу данных.
@@ -110,6 +121,7 @@ private slots:
  *  pdbFoto->ustImyaTablici("foto_01");
  *  pdbFoto->CREATE();
  *  pdbFoto->write("C:\foto_01.jpg");
+ *
  *  pdbFoto->ustImyaTablici("foto_02");
  *  pdbFoto->CREATE();
  *  pdbFoto->write("C:\foto_02.jpg");
