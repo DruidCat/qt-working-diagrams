@@ -190,6 +190,7 @@ Item {
 			border.width: tmSpisok.ntCoff/2//Бордюр при переименовании.
             clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
             DCLogoTMK {//Логотип до ZonaSpisok, чтоб не перекрывать список.
+                id: lgTMK
                 ntCoff: 16
                 anchors.centerIn: parent
                 clrLogo: tmSpisok.clrTexta

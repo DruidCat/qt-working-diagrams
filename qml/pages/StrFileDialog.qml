@@ -25,6 +25,7 @@ Item {
     property alias toolbarWidth: tmToolbar.width
     property alias toolbarHeight: tmToolbar.height
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
+    property bool blLogoTMK: false//Флаг, отвечает за изменение размера логотипа. Уменьшаем - false
     anchors.fill: parent//Растянется по Родителю.
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть.
@@ -98,7 +99,26 @@ Item {
             color: "transparent"
             border.width: tmElement.ntCoff/2//Бордюр при переименовании.
             clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+            Timer {
+                id: tmrLogoTMK
+                interval: 111
+                running: true
+                repeat: true
+                onTriggered: {
+                    if(tmFileDialog.blLogoTMK){//Если true, то...
+                        lgTMK.ntCoff++;
+                        if(lgTMK.ntCoff >= 16)
+                            tmFileDialog.blLogoTMK = false;
+                    }
+                    else{
+                        lgTMK.ntCoff--;
+                        if(lgTMK.ntCoff <= 1)
+                            tmFileDialog.blLogoTMK = true;
+                    }
+               }
+            }
             DCLogoTMK {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
+                id: lgTMK
                 ntCoff: 16
                 anchors.centerIn: parent
                 clrLogo: tmFileDialog.clrTexta
