@@ -1,6 +1,6 @@
 ﻿#include "datadannie.h"
 DataDannie::DataDannie(QString strImyaDB, QString strImyaDBData, QString strLoginDB, QString strParolDB,
-                       quint64 ullDannieMax, QObject* proditel) : QObject{proditel}{
+                       QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject* proditel) : QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
@@ -22,17 +22,7 @@ DataDannie::DataDannie(QString strImyaDB, QString strImyaDBData, QString strLogi
         qWarning()<<tr("DataDannie::DataDannie: ошибка создания таблицы данные_0_0.");
     m_blDanniePervi = false;//Не первый элемент в Данных.(false)
 	m_strFileDialogPut = "";//Путь к каталогу, где лежит файл для записи.	
-	QDir odrWorkingDiagrams = QDir::current();//Объект каталога приложения.
-	if(!odrWorkingDiagrams.cd("dcdata")){//Если перейти к это папке не получается, то...
-		if(odrWorkingDiagrams.mkdir("dcdata")){
-			if(!odrWorkingDiagrams.cd("dcdata"))
-				qWarning()<<tr("DataDannie::DataDannie: ошибка перехода в созданную папку хранения "
-						"документов!");
-		}
-		else
-			qWarning()<<tr("DataDannie::DataDannie: ошибка создания папки хранения документов.");
-	}
-	m_strWorkingDiagramsPut = odrWorkingDiagrams.path();//Присваеваем переменной каталог приложения.
+    m_strWorkingDiagramsPut = strWorkingDiagramsPut;//Присваеваем переменной каталог приложения.
     m_ullDannieMax = ullDannieMax;//Приравниваем максимальное количество Данных.
     if(m_ullDannieMax > 999)//Если больше 999, то...
         m_ullDannieMax = 999;//то 999, больше нельзя, алгоритмя приложения не будут работать.

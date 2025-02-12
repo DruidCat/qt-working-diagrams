@@ -85,7 +85,7 @@ private:
  * Конструктор.		DCDB(	const QString strDriver, const QString strImyaDB, const QString strImyaTablici,
  * 							QObject* proditel = nullptr);
  * 1) strDriver		- это SQL драйвер.										ПРИМЕР: "QPSQL" или "QSQLITE"
- * 2) strImyaDB - это имя Файла базы данных, включая его расширение.		ПРИМЕР: "компания.dc"
+ * 2) strImyaDB - это имя Файла базы данных, включая его расширение и путь.	ПРИМЕР: "/home/dc/компания.dc"
  * 3) strImyaTablici- это имя Таблицы, в которой будут хранится данный.		ПРИМЕР: "Работники"
  * ПРИМЕР:
  * DCDB* pdcdb = new DCDB("QPSQL", "компания.dc", "Работники");
@@ -101,6 +101,16 @@ private:
  * pdcdb->ustDriverDB("QPSQL");
  * pdcdb->ustImyaDB("компания.dc");
  * pdcdb->ustImyaTablici("Работники");
+ * pdcdb->CREATE(QStringList()<<"#Код"<<"Группа"<<"Описание");
+ *
+ * Создание нескольких БД с разным расположением c одинаковыми параметрами. И работать с ними по очереди.
+ * pdcdb->ustImyaDB("/home/druidcat/Documents/компания.dc");
+ * pdcdb->CREATE(QStringList()<<"#Код"<<"Группа"<<"Описание");
+ * А после менять расположение базы данных и её имя, и тем самым обращаться к другой базе данных.
+ * pdcdb->ustImyaDB("/home/druidcat/Download/druicat.dc");
+ * pdcdb->CREATE(QStringList()<<"#Код"<<"Группа"<<"Описание");
+ * После создания этих БД (CREATE), меняем имя и расположение БД, и работаем с ней, и так далее.
+ * pdcdb->ustImyaDB("/home/druidcat/Documents/компания.dc");
  *
  * Создание нескольких таблиц с одинаковыми параметрами.. 
  * Конструктор.		DCDB(	const QString strDriver, const QString strImyaDB, QWidget* proditel=nullptr);

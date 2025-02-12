@@ -10,7 +10,7 @@ class DataDannie : public QObject {
      Q_OBJECT
 public:
     explicit	DataDannie(QString strImyaDB, QString strImyaDBData, QString strLoginDB, QString strParolDB,
-                           quint64 ullDannieMax, QObject* proditel = nullptr);//Конструктор
+                           QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject* proditel = nullptr);
     ~			DataDannie();//Деструктор
     bool 		dbStart();//Создать первоначальные Данные.
 	void 		ustWorkingDiagrams(QString strWorkingDiagramsPut);//Задаём каталог хранения Документов.

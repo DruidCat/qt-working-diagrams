@@ -38,10 +38,28 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     quint64 ullSpisokMax = 999;//Максимальное количество Списков.
     quint64 ullElementMax = 999;//Максимальное количество Элементов.
     quint64 ullDannieMax = 999;//Максимальное количество Данных.
+    QString strKatalogDB = "dcdata";//Имя дериктория хранения данных
+
+    QDir odrWorkingDiagrams = QDir::current();//Объект каталога приложения.
+    if(!odrWorkingDiagrams.cd(strKatalogDB)){//Если перейти к это папке не получается, то...
+        if(odrWorkingDiagrams.mkdir(strKatalogDB)){//Создаём начальную дерикторию хранения данных
+            if(!odrWorkingDiagrams.cd(strKatalogDB))
+                qWarning()<<tr("DataDannie::DataDannie: ошибка перехода в созданную папку хранения "
+                        "документов!");
+        }
+        else
+            qWarning()<<tr("DataDannie::DataDannie: ошибка создания папки хранения документов.");
+    }
+    QString strWorkingDiagramsPut = odrWorkingDiagrams.path();//Присваеваем переменной каталог приложения.
+
+    strImyaDB = strWorkingDiagramsPut + QDir::separator() + strImyaDB;
+    strImyaDBData  = strWorkingDiagramsPut + QDir::separator() + strImyaDBData;
+
     m_pDataTitul = new DataTitul(strImyaDB, strLoginDB, strParolDB);//Титул.
     m_pDataSpisok = new DataSpisok(strImyaDB, strLoginDB, strParolDB, ullSpisokMax);//Список.
     m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
-    m_pDataDannie = new DataDannie(strImyaDB,strImyaDBData, strLoginDB, strParolDB, ullDannieMax);//Данные.
+    m_pDataDannie = new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strWorkingDiagramsPut,
+                                   ullDannieMax);//Данные.
 	connect(	m_pDataTitul,
 				SIGNAL(signalDebug(QString)),
 				this,

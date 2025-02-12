@@ -61,7 +61,8 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
         return m_strFileDialogImya;//Возвратим имя ФАЙЛА.
     }
     QStringList slsMaska = m_slsFileDialogMaska;//Задаём маску отображаемых разширений файлов.
-    QStringList slsPapki = m_pdrPut->entryList(QDir::Dirs);
+    //В список папки, без символьных ссылок, без папок [.]
+    QStringList slsPapki = m_pdrPut->entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDot);
     QStringList slsFaili = m_pdrPut->entryList(slsMaska, QDir::Files);
     QString strFileDialogJSON("");//Строка, собирающая JSON команду.
     quint64 ullKolichestvoPapok = slsPapki.size();//Количество папок.
@@ -70,22 +71,20 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
     //Где: 0 - назад в каталоге, 1 - папки, 2 - файл.pdf
     strFileDialogJSON = "[";//Начало массива объектов
     for (quint64 ullShag = 0; ullShag < ullKolichestvoPapok; ullShag++){//Цикл папок.
-        if(slsPapki[ullShag] != "."){//Если это не ".", то...
-            if(!m_pdcclass->isHideFolder(slsPapki[ullShag])){//Если не скрытая папка, то..
-            	if(!m_pdcclass->isLabelFolder(slsPapki[ullShag])){//Если не ярлык папка, то..
-					strFileDialogJSON = strFileDialogJSON + "{";//Открываем скобки.
-					if(slsPapki[ullShag] == "..")//Если это папка назад "..", то...
-						strFileDialogJSON = strFileDialogJSON + "\"tip\":\"0\",";//Папка назад.
-					else//Если нет, то папка
-						strFileDialogJSON = strFileDialogJSON + "\"tip\":\"1\",";//Папка
-					strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\"["	+ slsPapki[ullShag] + "]\"";
-					strFileDialogJSON = strFileDialogJSON + "}";//Конец списка объектов.
-					if (ullShag == (ullKolichestvoPapok-1)){//Если это последняя папка, то...
-						if(!ullKolichestvoFailov)//Если файлов в данной папке нет, то запятую не ставим.
-							break;//Выходим из цикла.
-					}
-					strFileDialogJSON = strFileDialogJSON + ",";//ставим запятую.
-				}
+        if(!m_pdcclass->isHideFolder(slsPapki[ullShag])){//Если не скрытая папка, то..
+            if(!m_pdcclass->isLabelFolder(slsPapki[ullShag])){//Если не ярлык папка, то..
+                strFileDialogJSON = strFileDialogJSON + "{";//Открываем скобки.
+                if(slsPapki[ullShag] == "..")//Если это папка назад "..", то...
+                    strFileDialogJSON = strFileDialogJSON + "\"tip\":\"0\",";//Папка назад.
+                else//Если нет, то папка
+                    strFileDialogJSON = strFileDialogJSON + "\"tip\":\"1\",";//Папка
+                strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\"["	+ slsPapki[ullShag] + "]\"";
+                strFileDialogJSON = strFileDialogJSON + "}";//Конец списка объектов.
+                if (ullShag == (ullKolichestvoPapok-1)){//Если это последняя папка, то...
+                    if(!ullKolichestvoFailov)//Если файлов в данной папке нет, то запятую не ставим.
+                        break;//Выходим из цикла.
+                }
+                strFileDialogJSON = strFileDialogJSON + ",";//ставим запятую.
             }
         }
     }
