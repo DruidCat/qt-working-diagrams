@@ -26,6 +26,8 @@ Item {
     property alias toolbarHeight: tmToolbar.height
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
     property bool blLogoTMK: false//Флаг, отвечает за изменение размера логотипа. Уменьшаем - false
+    property int ntLogoTMK: 16
+
     anchors.fill: parent//Растянется по Родителю.
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть.
@@ -102,12 +104,12 @@ Item {
             Timer {
                 id: tmrLogoTMK
                 interval: 111
-                running: true
+                running: false
                 repeat: true
                 onTriggered: {
                     if(tmFileDialog.blLogoTMK){//Если true, то...
                         lgTMK.ntCoff++;
-                        if(lgTMK.ntCoff >= 16)
+                        if(lgTMK.ntCoff >= tmFileDialog.ntLogoTMK)
                             tmFileDialog.blLogoTMK = false;
                     }
                     else{
@@ -119,7 +121,7 @@ Item {
             }
             DCLogoTMK {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
                 id: lgTMK
-                ntCoff: 16
+                ntCoff: tmFileDialog.ntLogoTMK
                 anchors.centerIn: parent
                 clrLogo: tmFileDialog.clrTexta
                 clrFona: tmFileDialog.clrFona
@@ -143,10 +145,12 @@ Item {
                         }
                         else{//Если это file.pdf, то...
                             if(ntTip === 2){
+                                tmFileDialog.signalZagolovok(qsTr("ИДЁТ КОПИРОВАНИЕ ДОКУМЕНТА"));//
                                 cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
                                 tmFileDialog.clickedPutImya (cppqml.strFileDialogPut, cppqml.strFileDialog);
+                                tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
                                 cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Документа, и потом..
-                                fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дом дерикторию! Сворачиваем, закрываем.
+                                //TODO ЗАБЛОКИРОВАТЬ ИНТЕРФЕЙС.
                             }
                         }
                     }
@@ -204,5 +208,21 @@ Item {
     }
     Component.onCompleted: {//Вызывается при завершении иннициализации компонента.
         tmFileDialog.strPutDom = cppqml.strFileDialogPut;//Запоминаем домашнюю деррикторию.
+    }
+    Connections {//Соединяем сигнал из C++ с действием в QML
+        target: cppqml;//Цель объект класса С++ DCCppQml
+        function onBlFileDialogCopyChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то.
+            if(cppqml.blFileDialogCopy){//Если успешное копирование файла, то...
+
+            }
+            else{//Если не успешное копирование, то...
+
+            }
+            //TODO РАЗБЛОКИРОВАТЬ ИНТЕРФЕЙС
+            tmrLogoTMK.running = false;//Останавливаем таймер анимации логотипа ТМК.
+            lgTMK.ntCoff = tmFileDialog.ntLogoTMK;//По умолчанию размер логотипа ТМК.
+            tmFileDialog.blLogoTMK = false;//Делаем флаг анимации логотипа ТМК на уменьш.
+            fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дом дерикторию! Сворачиваем, закрываем.
+        }
     }
 }

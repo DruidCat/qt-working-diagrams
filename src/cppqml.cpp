@@ -25,20 +25,22 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 
                                         m_strFileDialog(""),
                                         m_strFileDialogPut(""),
+                                        m_blFileDialogCopy(false),
 
                                         m_strDebug("")
 {
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
-	QString strImyaDB = "druidcat.dc";//Имя БД таблиц с титулом, списками, элементами, данными.
-	QString strImyaDBData = "druidcat.db";// Имя БД с файлами документов.
+    QString strImyaDB = "druidcat.db";//Имя БД таблиц с титулом, списками, элементами, данными.
+    QString strImyaDBData = "druiddat.db";// Имя БД с файлами документов.
 	QString strLoginDB = "druidcat";//Логин входа в БД.
 	QString strParolDB = "druidcat";//Пароль входа в БД.
     quint64 ullSpisokMax = 999;//Максимальное количество Списков.
     quint64 ullElementMax = 999;//Максимальное количество Элементов.
     quint64 ullDannieMax = 999;//Максимальное количество Данных.
-    QString strKatalogDB = "dcdata";//Имя дериктория хранения данных
+    QString strKatalogDB = "workingdata";//Имя дериктория хранения данных
+    QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf"<<"*.mkv";
 
     QDir odrWorkingDiagrams = QDir::current();//Объект каталога приложения.
     if(!odrWorkingDiagrams.cd(strKatalogDB)){//Если перейти к это папке не получается, то...
@@ -60,7 +62,8 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
     m_pDataDannie = new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strWorkingDiagramsPut,
                                    ullDannieMax);//Данные.
-	connect(	m_pDataTitul,
+    m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
+    connect(	m_pDataTitul,
 				SIGNAL(signalDebug(QString)),
 				this,
 				SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
@@ -76,8 +79,10 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                 SIGNAL(signalDebug(QString)),
                 this,
                 SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
-    QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf";
-    m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
+    connect(	m_pDataDannie,
+                SIGNAL(signalFileDialogCopy(bool)),
+                this,
+                SLOT(slotFileDialogCopy(bool)));//Связываем сигнал статуса скопированного документа в Проводни
     m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
     m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
@@ -534,7 +539,14 @@ void DCCppQml::qdebug(QString strDebug){//Передаёт ошибки в QML �
 /////////////////////
 //---Q D E B U G---//
 /////////////////////
-	slotDebug(strDebug);//Передаём ошибку в метод Q_PROPERTY обязательно через slotDebug() для времени.
+    slotDebug(strDebug);//Передаём ошибку в метод Q_PROPERTY обязательно через slotDebug() для времени.
+}
+void DCCppQml::slotFileDialogCopy(bool blStatusCopy){//Обрабатываем статус скопированного документа из Проводн
+///////////////////////////////////////////////////////////////////////////////////
+//---С Л О Т   С Т А Т У С А   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
+///////////////////////////////////////////////////////////////////////////////////
+    m_blFileDialogCopy = blStatusCopy;//Приравниваем.
+    emit blFileDialogCopyChanged();//Излучаем сигнал в QML об изменении статуса копирования Документа.
 }
 void DCCppQml::slotDebug(QString strDebug){//Слот обрабатывающий ошибку приходящую по сигналу.
 /////////////////////////////////////////////////////////////

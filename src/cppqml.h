@@ -85,6 +85,8 @@ class DCCppQml : public QObject {
                    READ strFileDialogPut
                    WRITE setStrFileDialogPut
                    NOTIFY strFileDialogPutChanged FINAL)
+    Q_PROPERTY(bool blFileDialogCopy
+                   READ blFileDialogCopy FINAL)
 
     Q_PROPERTY(QString strDebug
                    READ strDebug
@@ -134,6 +136,8 @@ public:
     void		setStrFileDialog(QString& strFileDialogNovi);//Изменение JSON запроса с папками и файлами.
     QString		strFileDialogPut();//Возвратить путь папки, содержимое которой нужно отобразить.
     void		setStrFileDialogPut(QString& strFileDialogPutNovi);//Изменение отображаемого пути папки.
+    bool 		blFileDialogCopy() { return m_blFileDialogCopy; }//Флаг Копирования Документа, инверсируется.
+
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//
@@ -161,9 +165,12 @@ signals:
 
     void strFileDialogChanged();//Сигнал о том, что изменился каталог папок и файлов.
     void strFileDialogPutChanged();//Сигнал о том, что изменился путь отображаемой папки.
+    void blFileDialogCopyChanged();//Сигнал о том, что скопировался файл или нет.
+
     void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
+    void slotFileDialogCopy(bool);//Слот обрабатывающий статус скопированного документа из Проводника.
 	void slotDebug(QString strDebug);//Слот обрабатывающий ошибку приходящую по сигналу.
 	void slotTimerDebug();//Слот прерывания от таймена Отладчика.
 
@@ -190,6 +197,8 @@ private:
 
     QString m_strFileDialog;//переменная записывающая каталог папок и файлов в Свойстве Q_PROPERTY
     QString m_strFileDialogPut;//переменная записывающая путь отображения папки Свойстве Q_PROPERTY
+    bool 	m_blFileDialogCopy;//Флаг Копирования Документа Инверсируется постоянно в Свойстве Q_PROPERTY.
+
     QString m_strDebug;//Текс ошибки.
 
     DataTitul* 		m_pDataTitul = nullptr;//Указатель на таблицу Титула в БД.

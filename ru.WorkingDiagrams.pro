@@ -38,6 +38,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000   # отключает все API, которые были устаревшими до Qt 6.0.0
 
 SOURCES += \
+		src/copydannie.cpp \
 		src/cppqml.cpp \
 		src/datadannie.cpp \
 		src/dataelement.cpp \
@@ -64,6 +65,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+	src/copydannie.h \
 	src/cppqml.h \
 	src/datadannie.h \
 	src/dataelement.h \

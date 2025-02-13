@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "copydannie.h"
 #include "dcdb.h"
 #include "dcclass.h"
 
@@ -30,19 +31,22 @@ private:
     quint64 	m_ullDannieMax;//Максимальное количество Документов в Элементе.
     DCDB* 		m_pdbDannie = nullptr;//Указатель на базу данных таблицы данных.
     DCClass* 	m_pdcclass = nullptr;//Указатель на мой класс с методами.
+    CopyDannie* m_pcopydannie = nullptr;//Указатель на поток копирования файла.
 
     QString 	m_strImyaDB;//Имя БД
     QString 	m_strImyaDBData;//Имя БД данных.
     QString 	m_strLoginDB;//Логин БД
     QString 	m_strParolDB;//Пароль БД
 	QString 	m_strFileDialogPut;//Путь к каталогу, в котором лежит файл для записи.
-	QString 	m_strWorkingDiagramsPut;//Каталог хранения документов.
+    QString 	m_strWorkingDiagramsPut;//Каталог хранения документов.
 
 private slots:
     void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
+    void 		slotCopyDannie(bool);//слот статуса скопированного документа true - скопирован, false - нет
 
 signals:
     void		signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
+    void  		signalFileDialogCopy(bool);//Сигнал статуса скопированного документа.
 
 };
 

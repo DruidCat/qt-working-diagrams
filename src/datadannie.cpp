@@ -5,6 +5,11 @@ DataDannie::DataDannie(QString strImyaDB, QString strImyaDBData, QString strLogi
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
     m_pdcclass = new DCClass();//Мой класс с методами по работе с текстом.
+    m_pcopydannie = new CopyDannie();//Класс потока копирования файла.
+    connect(	m_pcopydannie,
+                SIGNAL(signalCopyDannie(bool)),
+                this,
+                SLOT(slotCopyDannie(bool)));//Связываем сигнал статуса копирования документа.
     //Настройки соединения к БД Настроек.
     m_strImyaDB = strImyaDB;//Имя локальной базы данных.
 	m_strImyaDBData = strImyaDBData;//Имя локальной базы данных файов.
@@ -36,6 +41,8 @@ DataDannie::~DataDannie(){//Деструктор
     m_pdbDannie = nullptr;//Обнуляем указатель.
     delete m_pdcclass;//Удаляем указатель
     m_pdcclass = nullptr;//Обнуляем указатель.
+    delete m_pcopydannie;//Удаляем указатель
+    m_pcopydannie = nullptr;//Обнуляем указатель.
 }
 bool DataDannie::dbStart(){//Создать первоначальные Данные.
 ///////////////////////////////////////////////////////////
@@ -176,7 +183,7 @@ QString DataDannie::polImyaFaila(qint64 ullSpisok, qint64 ullElement, qint64 ull
 //---П О Л У Ч И Т Ь   И М Я   Ф А Й Л А---//
 /////////////////////////////////////////////
     uint ntImyaFaila = (ullSpisok*1000000)+(ullElement*1000)+ullDannie;
-    QString strImyaFaila = QString::number(ntImyaFaila);//Переменная, которая соберёт имя файла.
+    QString strImyaFaila = QString::number(ntImyaFaila) + ".dc";//Переменная, которая соберёт имя файла.
     return strImyaFaila;
 }
 bool DataDannie::estImyaFaila(QString strImyaFaila){//Есть такой файл в каталоге?
@@ -216,10 +223,15 @@ bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Ко�
             if(!udalImyaFaila(strImyaFaila))//Удаляем файл с таким же именем. Если файл не удалился, то...
                 return false;//Ошибка удаления.
         }
+        /*
         if(flDannie.copy(m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila))//Копируем файл в ....
             return true;//Успешное копирование.
         else
             qdebug(tr("Ошибка копирования документа."));
+        */
+        m_pcopydannie->ustPutiFailov(strAbsolutPut, m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila);
+        m_pcopydannie->start();
+        return true;
 	}
 	else
 		qdebug(tr("Выбранный файл отсутствует!"));
@@ -231,4 +243,10 @@ void DataDannie::qdebug(QString strDebug){//Метод отладки, излу�
 //---Q D E B U G---//
 /////////////////////
     emit signalDebug(strDebug);//Испускаем сигнал со строчкой Лог
+}
+void DataDannie::slotCopyDannie(bool blCopyStatus){//Слот получающий статус скопированного документа.
+///////////////////////////////////////////////////////////////////////////////////
+//---С Л О Т   С Т А Т У С А   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
+///////////////////////////////////////////////////////////////////////////////////
+    emit signalFileDialogCopy(blCopyStatus);//Отправляем статус скопированного документа.
 }

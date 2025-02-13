@@ -15,7 +15,9 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Sql)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql)
 
 set(PROJECT_SOURCES
-		src/cppqml.h
+        src/copydannie.h
+        src/copydannie.cpp
+        src/cppqml.h
 		src/cppqml.cpp
 		src/datadannie.h
 		src/datadannie.cpp
