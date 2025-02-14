@@ -25,17 +25,24 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
     property bool blPereimenovat: false//Переименовать, если true
+    property bool blUdalit: false//Удалить, если true
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedDannie(var strDannie);//Сигнал когда нажат один из элементов Данных.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
+    signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuDannie.visible = false;//Делаем невидимым всплывающее меню.
         tmDannie.blPereimenovat = false;//Запрещаем переименовывать.
+        tmDannie.blUdalit = false;//Запрещаем удалять.
+        //knopkaUdalitOk.visible = false;//Делаем невидимую кнопку Ок Удаления.
+        //knopkaUdalitOtmena.visible = false;//Делаем невидимую кнопку Отмена Удаления.
+        //knopkaNazad.visible = true;//Делаем кнопку видимой.
+        //knopkaSozdat.visible = true;//Делаем кнопку видимой.
     }
     focus: true//Не удалять, может Escape не работать.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -53,14 +60,39 @@ Item {
     }
     function fnClickedOk(){//Функция переименования Данных.
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-        if(blPereimenovat){//Если Переименовываем, то...
+        if(tmDannie.blPereimenovat){//Если Переименовываем, то...
             cppqml.renStrDannieDB(cppqml.strDannie, txnZagolovok.text);//Переименовываем имя Документа.
+        }
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
+    function fnUdalit(strKod, strImya){
+        //knopkaNazad.visible = false;//Делаем кнопку невидимой.
+        //knopkaSozdat.visible = false;//Делаем кнопку невидимой.
+        //knopkaUdalitOtmena.visible = true;//Делаем кнопку видимой.
+        //knopkaUdalitOk.visible = true;//Делаем кнопку видимой.
+        txuZagolovokUdalit.blVisible = true;
+        txuZagolovokUdalit.text = qsTr("УДАЛИТЬ: ")+strImya+"?";
+    }
+
+    function fnClickedUdalitOk(){//Функция Согласия на удаления Данных.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        if(tmDannie.blUdalit){//Если Режим Удалить Активирован, то...
+            cppqml.strDebug = qsTr("Успешное удаление документа.")
+            //cppqml.renStrDannieDB(cppqml.strDannie, txnZagolovok.text);//Переименовываем имя Документа.
+        }
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
+    function fnClickedUdalitOtmena(){//Функция Отмены удаления Данных.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        if(tmDannie.blUdalit){//Если Режим Удалить Активирован, то...
+            //cppqml.renStrDannieDB(cppqml.strDannie, txnZagolovok.text);//Переименовываем имя Документа.
         }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-        blPereimenovat = false;//Запрещено переименовывать. НЕ УДАЛЯТЬ.
+        tmDannie.blPereimenovat = false;//Запрещено переименовывать. НЕ УДАЛЯТЬ.
+        tmDannie.blUdalit = false;//Запрещено удалять. НЕ УДАЛЯТЬ.
         menuDannie.visible = false;//Делаем невидимым меню.
         tmDannie.clickedSozdat();//Излучаем сигнал, что нужно запустить Файловый Диалог.
     }
@@ -68,13 +100,18 @@ Item {
         fnClickedSozdat();//Функция обработки кнопки Создать.
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
-        blPereimenovat = true;
+        tmDannie.blPereimenovat = true;
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ДОКУМЕНТА");//Подсказка пользователю,что вводить нужн
         tmDannie.signalToolbar(qsTr("Выберите документ для его переименования."))
+    }
+    function fnMenuUdalit(){//Нажат пункт меню Удалить.
+        tmDannie.blUdalit = true;
+        tmDannie.signalToolbar(qsTr("Выберите документ для его удаления."))
     }
 
     Item {//Данные Заголовок
 		id: tmZagolovok
+
         DCKnopkaNazad {
 			id: knopkaNazad
             ntWidth: tmDannie.ntWidth
@@ -88,7 +125,7 @@ Item {
                 fnClickedEscape();//Функция нажатия кнопки Escape.
                 tmDannie.clickedNazad();
             }
-        }
+        } 
         DCKnopkaSozdat {
 			id: knopkaSozdat
             ntWidth: tmDannie.ntWidth
@@ -115,6 +152,21 @@ Item {
             onClicked: {
                 fnClickedOk();//Функция переименование данных.
             }
+        } 
+        DCTextUdalit {
+            id: txuZagolovokUdalit
+            anchors.top: tmZagolovok.top
+            anchors.bottom: tmZagolovok.bottom
+            anchors.left: knopkaNazad.right
+            anchors.right: knopkaSozdat.left
+
+            anchors.topMargin: tmDannie.ntCoff/4
+            anchors.bottomMargin: tmDannie.ntCoff/4
+            anchors.leftMargin: tmDannie.ntCoff/2
+            anchors.rightMargin: tmDannie.ntCoff/2
+
+            ntWidth: tmDannie.ntWidth
+            ntCoff: tmDannie.ntCoff
         }
 		Item {
 			id: tmTextInput
@@ -160,6 +212,9 @@ Item {
 	onBlPereimenovatChanged: {//Слот сигнала изменения property blPereimenovat (on...Changed)
         tmDannie.blPereimenovat ? rctZona.border.color = clrTexta : rctZona.border.color = "transparent";
 	}
+    onBlUdalitChanged: {//Слот сигнала изменения property blUdalit(on...Changed)
+        tmDannie.blUdalit? rctZona.border.color = "red" : rctZona.border.color = "transparent";
+    }
     Item {//Данные Зона
 		id: tmZona
 		Rectangle {
@@ -186,19 +241,26 @@ Item {
                         fnClickedSozdat();//Функция при нажатии кнопки Создать(Проводник).
 					}
 					else{//Если не первый элемент, то...
-                        if(blPereimenovat) {//Если ПЕРЕИМНОВАТЬ, то...
+                        if(tmDannie.blPereimenovat) {//Если ПЕРЕИМНОВАТЬ, то...
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strDannie = strDannie;//Присваиваем Документ к свойству Q_PROPERTY
                             txnZagolovok.text = strDannie;//Добавляем в строку выбранный Документ.
                         }
-                        else {//Если НЕ ПЕРЕИМЕНОВАТЬ, ТО ОТКРЫТЬ ФАЙЛ К ПРОСМОТРУ...
-                            blPereimenovat = false;//Запрещено переименовывать
-                            txnZagolovok.visible = false;//Отключаем создание Элемента.
-                            menuDannie.visible = false;//Делаем невидимым всплывающее меню.
-                            cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
-                            cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
-                            tmDannie.clickedDannie(strDannie);//Излучаем сигнал с именем Документа.
-                            //TODO Открыть файл к просмотру.
+                        else {//Если НЕ ПЕРЕИМЕНОВАТЬ, ТО ...
+                            if(tmDannie.blUdalit){//Если удалить, то...
+                                fnUdalit(ntKod, strDannie);
+                            }
+                            else{//Если НЕ УДАЛИТЬ, ТО ОТКРЫТЬ ФАЙЛ К ПРОСМОТРУ...
+                                tmDannie.blPereimenovat = false;//Запрещено переименовывать
+                                txnZagolovok.visible = false;//Отключаем создание Элемента.
+                                menuDannie.visible = false;//Делаем невидимым всплывающее меню.
+                                cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
+                                cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
+                                tmDannie.clickedDannie(strDannie);//Излучаем сигнал с именем Документа.
+                                //TODO Открыть файл к просмотру.
+                            }
+
+
                         }
 					}
 				}
@@ -223,6 +285,9 @@ Item {
                     if(ntNomer === 2){//Переименовать.
                         fnMenuPereimenovat();//Функция нажатия пункта меню Переименовать.
 					}
+                    if(ntNomer === 3){//Удалить.
+                        fnMenuUdalit();//Функция нажатия пункта меню Удалить.
+                    }
                     if(ntNomer === 5){//Выход
 						Qt.quit();//Закрыть приложение.
 					}
@@ -257,7 +322,8 @@ Item {
 			onClicked: {
                 txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
                 menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
-                blPereimenovat = false;//Запрещено переименовывать.
+                tmDannie.blPereimenovat = false;//Запрещено переименовывать.
+                tmDannie.blUdalit = false;//Запрещено удалять.
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             }
 		}

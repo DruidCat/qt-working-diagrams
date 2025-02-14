@@ -309,6 +309,9 @@ Window {
                             + qsTr(". Для изменения описания нажмите иконку +.")
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
+                onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
+                    pgStrDannie.textZagolovok = strZagolovok;//Изменяем заголовок.
+                }
                 onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
                     pgStrDannie.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }

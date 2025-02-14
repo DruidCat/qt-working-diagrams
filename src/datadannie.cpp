@@ -31,6 +31,7 @@ DataDannie::DataDannie(QString strImyaDB, QString strImyaDBData, QString strLogi
     m_ullDannieMax = ullDannieMax;//Приравниваем максимальное количество Данных.
     if(m_ullDannieMax > 999)//Если больше 999, то...
         m_ullDannieMax = 999;//то 999, больше нельзя, алгоритмя приложения не будут работать.
+    m_slsINSERT.clear();//Очищаем список данных для запроса записи в БД.
 }
 
 DataDannie::~DataDannie(){//Деструктор
@@ -98,7 +99,7 @@ bool DataDannie::ustDannie(quint64 ullKodSpisok, quint64 ullKodElement, QString 
 ///////////////////////////////////////
 	QString strAbsolutPut=m_strFileDialogPut+QDir::separator()+strDannie;//Абсолют путь с именем файла+разшире
 	strDannie = m_pdcclass->baseName(strDannie).toUpper();//Убираем расширение из имени файла, ЗАГЛАВНЫЙ ТЕКСТ
-
+    //Имя таблицы задаём тут, а записываем даные в таблицу в слоте slotCopyDannie(bool).
     m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullKodSpisok)+"_"+QString::number(ullKodElement));
     if(!m_pdbDannie->CREATE()){//Если таблица не создалась
         qdebug(tr("DataDannie::ustDannie(quint64,quint64,QString): ошибка создания таблицы данные_")
@@ -110,18 +111,11 @@ bool DataDannie::ustDannie(quint64 ullKodSpisok, quint64 ullKodElement, QString 
         qdebug(("Достигнуто максимальное количество документов в элементе."));
         return false;//Ошибка записи в БД.
     }
-    else{//Если не максимальное количество, то...
-        QString strImyaFaila(polImyaFaila(ullKodSpisok, ullKodElement, ullKolichestvo+1));//Задаём имя файла с Док
-        //TODO ТУТ ЗАПУСК АНИМАЦИИ КОПИРОВАНИЯ НУЖНО СДЕЛАТЬ.
-        if(copyDannie(strAbsolutPut, strImyaFaila)){//Попируем файл в приложение, если успех, то...
-            if(m_pdbDannie->INSERT(QStringList()<<"Номер"<<"Данные"<<"Запись",
-                        QStringList()<<QString::number(ullKolichestvo+1)<<strDannie<<strImyaFaila))//Запись
-                return true;//Успех записи
-
-        }
-    }
-    qdebug(tr("DataDannie::ustDannie(quint64,quint64,QString): Ошибка записи Данных в БД."));
-    return false;//Ошибка записи в БД.
+    QString strImyaFaila(polImyaFaila(ullKodSpisok, ullKodElement, ullKolichestvo+1));//Задаём имя файла с Док
+    m_slsINSERT.clear();//Очищаем список данных для запроса записи в БД.
+    m_slsINSERT = m_slsINSERT<<QString::number(ullKolichestvo+1)<<strDannie<<strImyaFaila;
+    //Если копирование документа успешно в отдельном потоке, то запись в БД будет в слоте slotCopyDannie(bool)
+    return copyDannie(strAbsolutPut, strImyaFaila);//Копируем Документ в отдельном потоке.
 }
 bool DataDannie::renDannie(quint64 ullKodSpisok,quint64 ullKodElement,QString strDannie,QString strDannieNovi){
  ////////////////////////////////////////////////
@@ -218,19 +212,13 @@ bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Ко�
 //---К О П И Р О В А Т Ь   Д А Н Н Ы Е---//
 ///////////////////////////////////////////
     QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать, расположенный...
-	if(flDannie.exists()){//Если данный файл существует, то...
+    if(flDannie.exists()){//Если данный файл существует, то...
         if(estImyaFaila(strImyaFaila)){//Если такой файл с таким же именем существует, то...
             if(!udalImyaFaila(strImyaFaila))//Удаляем файл с таким же именем. Если файл не удалился, то...
                 return false;//Ошибка удаления.
         }
-        /*
-        if(flDannie.copy(m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila))//Копируем файл в ....
-            return true;//Успешное копирование.
-        else
-            qdebug(tr("Ошибка копирования документа."));
-        */
         m_pcopydannie->ustPutiFailov(strAbsolutPut, m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila);
-        m_pcopydannie->start();
+        m_pcopydannie->start();//Запускаем поток и ждём сигнала о завершении копирования.
         return true;
 	}
 	else
@@ -248,5 +236,10 @@ void DataDannie::slotCopyDannie(bool blCopyStatus){//Слот получающи
 ///////////////////////////////////////////////////////////////////////////////////
 //---С Л О Т   С Т А Т У С А   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
 ///////////////////////////////////////////////////////////////////////////////////
-    emit signalFileDialogCopy(blCopyStatus);//Отправляем статус скопированного документа.
+    if(blCopyStatus){//Если копирование прошло успешно, то...
+        emit signalFileDialogCopy(m_pdbDannie->INSERT(QStringList()<<"Номер"<<"Данные"<<"Запись",
+                                                      m_slsINSERT));//Записываем в БД, и отсылаем сигнал 1или0
+    }
+    else
+        emit signalFileDialogCopy(blCopyStatus);//Отсылаем сигнал об ошибке копирования.
 }

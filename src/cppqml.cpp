@@ -40,7 +40,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     quint64 ullElementMax = 999;//Максимальное количество Элементов.
     quint64 ullDannieMax = 999;//Максимальное количество Данных.
     QString strKatalogDB = "workingdata";//Имя дериктория хранения данных
-    QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf"<<"*.mkv";
+    QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf"<<"*.m4b";
 
     QDir odrWorkingDiagrams = QDir::current();//Объект каталога приложения.
     if(!odrWorkingDiagrams.cd(strKatalogDB)){//Если перейти к это папке не получается, то...
@@ -422,9 +422,8 @@ void DCCppQml::setStrDannieDB(QString& strDannieNovi) {//Запись Данны
                 return;
             }
         }
-        if(m_pDataDannie->ustDannie(m_ullSpisokKod, m_ullElementKod, strDannieNovi)){//Если данные записались
-            emit strDannieDBChanged();//Излучаем сигнал об изменении списка Данных.
-        }
+        //Копируем Документ в Приложение, делаем запись в БД, а сигнал об этих действиях в slotFileDialogCopy
+        m_pDataDannie->ustDannie(m_ullSpisokKod, m_ullElementKod, strDannieNovi);//Записываем и копируем данны
     }
 }
 bool DCCppQml::renStrDannieDB(QString strDannie, QString strDannieNovi) {//Переименовать Данные.
@@ -546,6 +545,9 @@ void DCCppQml::slotFileDialogCopy(bool blStatusCopy){//Обрабатываем 
 //---С Л О Т   С Т А Т У С А   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
 ///////////////////////////////////////////////////////////////////////////////////
     m_blFileDialogCopy = blStatusCopy;//Приравниваем.
+    if(blStatusCopy){//Если успешно скопировались документы и записались данные, то...
+        emit strDannieDBChanged();//Излучаем сигнал об изменении списка Данных.
+    }
     emit blFileDialogCopyChanged();//Излучаем сигнал в QML об изменении статуса копирования Документа.
 }
 void DCCppQml::slotDebug(QString strDebug){//Слот обрабатывающий ошибку приходящую по сигналу.

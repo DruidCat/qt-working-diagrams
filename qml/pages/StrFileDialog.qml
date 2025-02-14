@@ -68,6 +68,7 @@ Item {
     Item {//Данные Заголовок
         id: tmZagolovok
         DCKnopkaNazad {
+            id: knopkaNazad
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -143,14 +144,19 @@ Item {
                             cppqml.strFileDialog = strFileDialog;//Присваиваем имя папки выбранной.
                             tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки.`
                         }
-                        else{//Если это file.pdf, то...
-                            if(ntTip === 2){
+                        else{
+                            if(ntTip === 2){//Если это file из Маски, то...
                                 tmFileDialog.signalZagolovok(qsTr("ИДЁТ КОПИРОВАНИЕ ДОКУМЕНТА"));//
+                                cppqml.strDebug = qsTr("Копирование.");//Делаем сообщение о копировании в Toolbar.
+                                knopkaNazad.visible= false//Делаем кнопку назад невидимой.
+                                knopkaZakrit.visible = false//Делаем кнопку закрыть невидимой.
+                                lsvZona.visible = false;//Делаем невидимую зону с Проводником.
+                                knopkaNastroiki.visible = false//Делаем кнопку настройки невидимой.
+                                knopkaInfo.visible = false//Делаем кнопку информации невидимой.
+                                tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
                                 cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
                                 tmFileDialog.clickedPutImya (cppqml.strFileDialogPut, cppqml.strFileDialog);
-                                tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
-                                cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Документа, и потом..
-                                //TODO ЗАБЛОКИРОВАТЬ ИНТЕРФЕЙС.
+                                cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Документа,и Документ
                             }
                         }
                     }
@@ -180,6 +186,7 @@ Item {
     Item {//Данные Тулбар
         id: tmToolbar
         DCKnopkaNastroiki {
+            id: knopkaNastroiki
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter
@@ -193,6 +200,7 @@ Item {
             }
         }
         DCKnopkaInfo {
+            id: knopkaInfo
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter
@@ -213,15 +221,19 @@ Item {
         target: cppqml;//Цель объект класса С++ DCCppQml
         function onBlFileDialogCopyChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то.
             if(cppqml.blFileDialogCopy){//Если успешное копирование файла, то...
-
+                cppqml.strDebug = qsTr("Успешное копирование документа.");//Сообщение в строку Toolbar.
             }
             else{//Если не успешное копирование, то...
-
+                cppqml.strDebug = qsTr("Ошибка копирования документа.");//Сообщение в строку Toolbar.
             }
-            //TODO РАЗБЛОКИРОВАТЬ ИНТЕРФЕЙС
             tmrLogoTMK.running = false;//Останавливаем таймер анимации логотипа ТМК.
             lgTMK.ntCoff = tmFileDialog.ntLogoTMK;//По умолчанию размер логотипа ТМК.
             tmFileDialog.blLogoTMK = false;//Делаем флаг анимации логотипа ТМК на уменьш.
+            knopkaNazad.visible= true//Делаем кнопку назад видимой.
+            knopkaZakrit.visible = true//Делаем кнопку закрыть видимой.
+            lsvZona.visible = true;//Делаем видимую зону с Проводником.
+            knopkaNastroiki.visible = true//Делаем кнопку настройки видимой.
+            knopkaInfo.visible = true//Делаем кнопку информации видимой.
             fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дом дерикторию! Сворачиваем, закрываем.
         }
     }

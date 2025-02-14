@@ -39,6 +39,7 @@ private:
     QString 	m_strParolDB;//Пароль БД
 	QString 	m_strFileDialogPut;//Путь к каталогу, в котором лежит файл для записи.
     QString 	m_strWorkingDiagramsPut;//Каталог хранения документов.
+    QStringList m_slsINSERT;//Строка, хранящая данные для Запроса записи в БД.
 
 private slots:
     void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
