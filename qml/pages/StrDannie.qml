@@ -25,7 +25,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
     property bool blPereimenovat: false//Переименовать, если true
-    property bool blUdalit: false//Удалить, если true
+    property bool blUdalit: false//Включить режим выбора удаляемого документа, если true
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
@@ -38,11 +38,8 @@ Item {
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuDannie.visible = false;//Делаем невидимым всплывающее меню.
         tmDannie.blPereimenovat = false;//Запрещаем переименовывать.
-        tmDannie.blUdalit = false;//Запрещаем удалять.
-        //knopkaUdalitOk.visible = false;//Делаем невидимую кнопку Ок Удаления.
-        //knopkaUdalitOtmena.visible = false;//Делаем невидимую кнопку Отмена Удаления.
-        //knopkaNazad.visible = true;//Делаем кнопку видимой.
-        //knopkaSozdat.visible = true;//Делаем кнопку видимой.
+        tmDannie.blUdalit = false;//Запрещаем выбирать документ для удаления.
+        txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
     }
     focus: true//Не удалять, может Escape не работать.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -65,34 +62,17 @@ Item {
         }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
-    function fnUdalit(strKod, strImya){
-        //knopkaNazad.visible = false;//Делаем кнопку невидимой.
-        //knopkaSozdat.visible = false;//Делаем кнопку невидимой.
-        //knopkaUdalitOtmena.visible = true;//Делаем кнопку видимой.
-        //knopkaUdalitOk.visible = true;//Делаем кнопку видимой.
-        txuZagolovokUdalit.blVisible = true;
-        txuZagolovokUdalit.text = qsTr("УДАЛИТЬ: ")+strImya+"?";
-    }
-
-    function fnClickedUdalitOk(){//Функция Согласия на удаления Данных.
-        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-        if(tmDannie.blUdalit){//Если Режим Удалить Активирован, то...
-            cppqml.strDebug = qsTr("Успешное удаление документа.")
-            //cppqml.renStrDannieDB(cppqml.strDannie, txnZagolovok.text);//Переименовываем имя Документа.
-        }
-        fnClickedEscape();//Функция нажатия кнопки Escape.
-    }
-    function fnClickedUdalitOtmena(){//Функция Отмены удаления Данных.
-        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-        if(tmDannie.blUdalit){//Если Режим Удалить Активирован, то...
-            //cppqml.renStrDannieDB(cppqml.strDannie, txnZagolovok.text);//Переименовываем имя Документа.
-        }
-        fnClickedEscape();//Функция нажатия кнопки Escape.
+    function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
+        tmDannie.blUdalit = false;//Запрещено выбирать элементы на удаление.
+        txuUdalit.blVisible = true;//Делаем видимый запрос на удаление.
+        txuUdalit.kod = strKod;//Код на удаление
+        txuUdalit.text = strImya;//Имя на удаление
+        cppqml.strDebug = qsTr("Удалить данный документ?");//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
         tmDannie.blPereimenovat = false;//Запрещено переименовывать. НЕ УДАЛЯТЬ.
-        tmDannie.blUdalit = false;//Запрещено удалять. НЕ УДАЛЯТЬ.
+        tmDannie.blUdalit = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
         menuDannie.visible = false;//Делаем невидимым меню.
         tmDannie.clickedSozdat();//Излучаем сигнал, что нужно запустить Файловый Диалог.
     }
@@ -105,7 +85,7 @@ Item {
         tmDannie.signalToolbar(qsTr("Выберите документ для его переименования."))
     }
     function fnMenuUdalit(){//Нажат пункт меню Удалить.
-        tmDannie.blUdalit = true;
+        tmDannie.blUdalit = true;//Включаем режим выбора удаляемого файла
         tmDannie.signalToolbar(qsTr("Выберите документ для его удаления."))
     }
 
@@ -154,11 +134,11 @@ Item {
             }
         } 
         DCTextUdalit {
-            id: txuZagolovokUdalit
+            id: txuUdalit
             anchors.top: tmZagolovok.top
             anchors.bottom: tmZagolovok.bottom
-            anchors.left: knopkaNazad.right
-            anchors.right: knopkaSozdat.left
+            anchors.left: tmZagolovok.left
+            anchors.right: tmZagolovok.right
 
             anchors.topMargin: tmDannie.ntCoff/4
             anchors.bottomMargin: tmDannie.ntCoff/4
@@ -167,6 +147,21 @@ Item {
 
             ntWidth: tmDannie.ntWidth
             ntCoff: tmDannie.ntCoff
+
+            clrFona: "orange"//Если не задать цвет, будет видно текст под надписью
+            clrTexta: "black"
+            clrKnopki: "black"
+            clrBorder: "black"
+            onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
+                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+                cppqml.strDebug = qsTr("Успешное удаление документа.");
+                //TODO удалить отладку
+                console.log(strKod);//Отладка
+            }
+            onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
+                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+                cppqml.strDebug = "";
+            }
         }
 		Item {
 			id: tmTextInput
@@ -252,6 +247,8 @@ Item {
                             }
                             else{//Если НЕ УДАЛИТЬ, ТО ОТКРЫТЬ ФАЙЛ К ПРОСМОТРУ...
                                 tmDannie.blPereimenovat = false;//Запрещено переименовывать
+                                tmDannie.blUdalit = false;//Запрещено выбирать документ на удаление.
+                                txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.
                                 txnZagolovok.visible = false;//Отключаем создание Элемента.
                                 menuDannie.visible = false;//Делаем невидимым всплывающее меню.
                                 cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
@@ -259,8 +256,6 @@ Item {
                                 tmDannie.clickedDannie(strDannie);//Излучаем сигнал с именем Документа.
                                 //TODO Открыть файл к просмотру.
                             }
-
-
                         }
 					}
 				}
@@ -324,6 +319,7 @@ Item {
                 menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
                 tmDannie.blPereimenovat = false;//Запрещено переименовывать.
                 tmDannie.blUdalit = false;//Запрещено удалять.
+                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             }
 		}
