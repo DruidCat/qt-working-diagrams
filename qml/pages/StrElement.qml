@@ -50,11 +50,14 @@ Item {
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
+    function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
     function fnClickedOk(){//Функция сохранения/переименования Элементов списка.
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-        if(blPereimenovat){//Если Переименовываем, то...
+        if(blPereimenovat)//Если Переименовываем, то...
             cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text);//Переименовываем Элемент списка.
-        }
         else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то Сохранить.
             cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
         }
@@ -92,6 +95,20 @@ Item {
 				tmElement.clickedNazad();//Сигнал Назад.
 			}
 		}
+        DCKnopkaZakrit {
+            id: knopkaZakrit
+            ntWidth: tmElement.ntWidth
+            ntCoff: tmElement.ntCoff
+            visible: false
+            anchors.verticalCenter: tmZagolovok.verticalCenter
+            anchors.left: tmZagolovok.left
+            anchors.margins: tmElement.ntCoff/2
+            clrKnopki: tmElement.clrTexta
+            clrFona: tmElement.clrFona
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+                fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
+            }
+        }
 		DCKnopkaSozdat {
 			id: knopkaSozdat
 			ntWidth: tmElement.ntWidth
@@ -142,13 +159,17 @@ Item {
 				textInput.maximumLength: 33
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
+                        knopkaNazad.visible = false;//Кнопка назад Невидимая.
                         knopkaSozdat.visible = false;//Конопка Создать Невидимая.
+                        knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
                         textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
                         textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 					}
                     else{//Если DCTextInput не видим, то...
+                        knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
+                        knopkaNazad.visible = true;//Кнопка назад видимая.
                         knopkaSozdat.visible = true;//Конопка Создать Видимая.
                         txnZagolovok.text = "";//Текст обнуляем вводимый.
                         knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
@@ -195,6 +216,7 @@ Item {
                             txnZagolovok.text = strElement;//Добавляем в строку выбранный Элемент списка.
                         }
                         else {//Если НЕ ПЕРЕИМЕНОВАТЬ, то ПЕРЕЙТИ НА СТРАНИЦУ С ДАННЫМИ...
+                            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                             blPereimenovat = false;//Запрещено переименовывать
                             txnZagolovok.visible = false;//Отключаем создание Элемента.
                             menuElement.visible = false;//Делаем невидимым всплывающее меню.

@@ -24,6 +24,7 @@ Item {
         id: rctTextUdalit
         anchors.fill: tmTextUdalit
         color: "transparent"
+        radius: tmTextUdalit.ntCoff/2
         visible: false
         DCKnopkaZakrit {//Кнопка Отмены удаления.
             id: knopkaUdalitOtmena

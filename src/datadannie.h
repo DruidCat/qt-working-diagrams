@@ -15,15 +15,16 @@ public:
     ~			DataDannie();//Деструктор
     bool 		dbStart();//Создать первоначальные Данные.
 	void 		ustWorkingDiagrams(QString strWorkingDiagramsPut);//Задаём каталог хранения Документов.
-    QStringList	polDannie(quint64 ullKodSpisok, quint64 ullKodElement);//Получить список всех Данных.
-    bool 		ustDannie(quint64 ullKodSpisok, quint64 ullKodElement, QString strDannie);//Записать в БД.
-    bool 		renDannie(quint64 ullKodSpisok,quint64 ullKodElement,QString strDannie,QString strDannieNovi);
-    QString		polDannieJSON(quint64 ullKodSpisok, quint64 ullKodElement);//Получить JSON строчку Данных.
+    QStringList	polDannie(quint64 ullSpisokKod, quint64 ullElementKod);//Получить список всех Данных.
+    bool 		ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strDannie);//Записать в БД.
+    bool 		renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString strDannie,QString strDannieNovi);
+    bool  		udalDannie(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod);//Удалить запись
+    QString		polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod);//Получить JSON строчку Данных.
     bool 		polDanniePervi() { return m_blDanniePervi; }//Вернуть состояние флага Первые Данные?
 	void 		ustFileDialogPut(QString strFileDialogPut);//Задать путь к каталогу, в котором файл записи.
-    QString 	polImyaFaila(qint64 ullSpisok, qint64 ullElement, qint64 ullDannie);//Получить имя файла.
+    QString 	polImyaFaila(qint64 ullSpisokKod,qint64 ullElementKod,qint64 ullDannieKod);//Получить имя файл
     bool  		estImyaFaila(QString strImyaFaila);//Есть такой файл в каталоге?
-    bool  		udalImyaFaila(QString strImyaFaila);//Удалить файл в каталоге.
+    bool  		udalFail(QString strImyaFaila);//Удалить файл в каталоге.
     bool 		copyDannie(QString strAbsolutPut, QString strImyaFaila);//Копируем файл в приложение.
 
 private:

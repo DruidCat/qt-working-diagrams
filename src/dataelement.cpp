@@ -56,14 +56,14 @@ bool DataElement::dbStart(){//Создать первоначальные Эле
 	}
 	return true;
 }
-QStringList	DataElement::polElement(quint64 ullKod){//Получить полный список всех Элементов.
+QStringList	DataElement::polElement(quint64 ullSpisokKod){//Получить полный список всех Элементов.
 ///////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   С П И С О К   Э Л Е М Е Н Т О В---//
 ///////////////////////////////////////////////////////////
 	QStringList slsElement;//Пустой список Элементов.
 	if(m_blElementPervi)//Если это первый записываемый элемент, то нет смысла перебирать все элементы...
 		return slsElement;//Возвращаем пустую строку.
-    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
         qdebug(tr("DataElement::polElement(quint64): quint64 = 0, всего PRIMARY KEY 0."));
@@ -76,14 +76,14 @@ QStringList	DataElement::polElement(quint64 ullKod){//Получить полн�
 	}
 	return slsElement;//Возвращаем полный список Элементов.
 }
-bool DataElement::ustElement(quint64 ullKod, QString strElement){//Записать в БД Элемент.
+bool DataElement::ustElement(quint64 ullSpisokKod, QString strElement){//Записать в БД Элемент.
 /////////////////////////////////////////
 //---З А П И С А Т Ь   Э Л Е М Е Н Т---//
 /////////////////////////////////////////
-    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));//Задаём имя таблицы, с которой работаем.
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));//Задаём имя таблицы
     if(!m_pdbElement->CREATE()){//Если таблица не создалась
         qdebug(tr("DataElement::ustElement(quint64, QString): ошибка создания таблицы элемент_")
-				+QString::number(ullKod)+".");
+                +QString::number(ullSpisokKod)+".");
 		return false;//Не успех
 	}
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
@@ -101,24 +101,24 @@ bool DataElement::ustElement(quint64 ullKod, QString strElement){//Записа�
     qdebug(tr("DataElement::ustElement(quint64, QString): Ошибка записи Элемента в БД."));
     return false;//Ошибка записи в БД.
 }
-bool DataElement::renElement(quint64 ullKod, QString strElement, QString strElementNovi) {//Переиме. элемент
+bool DataElement::renElement(quint64 ullSpisokKod, QString strElement, QString strElementNovi) {//Переиме.элем
  //////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Т Ь   Э Л Е М Е Н Т---//
 ///////////////////////////////////////////////////
-    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));//Задаём имя таблицы, с которой работаем.
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));//Задаём имя таблицы.
     if(m_pdbElement->UPDATE("Элемент", QStringList()<<strElement<<strElementNovi))//Перезаписываем данные в БД
         return true;//Успех
     return false;//Неудача
 }
-QString DataElement::polElementJSON(quint64 ullKod) {//Получить JSON строчку Элемента.
+QString DataElement::polElementJSON(quint64 ullSpisokKod) {//Получить JSON строчку Элемента.
 ///////////////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   С Т Р О К У   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////////////////////////////////
     QString strElementJSON("");//Строка, в которой будет собран JSON запрос.
-    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullKod));
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
     if(!m_pdbElement->CREATE()){//Если таблица не создалась. НЕ УДАЛЯТЬ ЭТО СОЗДАНИЕ ТАБЛИЦЫ.
         qdebug(tr("DataElement::polElementJSON(quint64): ошибка создания таблицы элемент_")
-				+QString::number(ullKod)+".");
+                +QString::number(ullSpisokKod)+".");
 		return "";//Не успех
 	}
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.

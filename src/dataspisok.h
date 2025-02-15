@@ -13,13 +13,13 @@ public:
                            QObject* proditel = nullptr);//Конструктор
     ~			DataSpisok();//Деструктор.
     bool		dbStart();//Иннициализируем БД, и записываем в нёё данные, если она пустая.
-    QString		polSpisok(quint64 ullKod);//Получить название элемента Списка по Коду.
+    QString		polSpisok(quint64 ullSpisokKod);//Получить название элемента Списка по Коду.
 	QStringList	polSpisok();//Получить полный список всех элементов Списка.
 	bool 		ustSpisok(QString strSpisok);//Записать в БД элемент списка.
 	bool 		renSpisok(QString strSpisok, QString strSpisokNovi);//Переименовать в БД элемент списка.
     QString		polSpisokJSON();//Получить JSON строчку Списка
-	QString 	polSpisokOpisanie(quint64 ullKod);//Полчить Описание элемента Списка по Коду.
-	bool 		ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie);//Записать в БД описание списка
+    QString 	polSpisokOpisanie(quint64 ullSpisokKod);//Полчить Описание элемента Списка по Коду.
+    bool 		ustSpisokOpisanie(quint64 ullSpisokKod, QString strSpisokOpisanie);//Записать в БД описание списка
 	quint64 	polKod(QString strSpisok);//Получить Код по названию элемента списка.
     bool 		polSpisokPervi() { return m_blSpisokPervi; }//Вернуть состояние флага Первый Список?
 

@@ -398,6 +398,17 @@ void DCCppQml::setStrDannie(QString& strDannieNovi) {//Изменение Дан
         emit strDannieChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
+bool DCCppQml::delStrDannie(QString strDannieKod){//Удалить данные по коду
+/////////////////////////////////////
+//---У Д А Л И Т Ь   Д А Н Н Ы Е---//
+/////////////////////////////////////
+    if(m_pDataDannie->udalDannie(m_ullSpisokKod, m_ullElementKod, strDannieKod.toULongLong())){//Если удаление
+        emit strDannieDBChanged();//Излучаем сигнал, чтоб обновился списик Данных, после удаления.
+        return true;//Успех удаления записи из БД и Документа.
+    }
+    return false;//Ошибка удаления записи из БД и Документа.
+
+}
 QString DCCppQml::strDannieDB() {//Возвратить JSON строку с Данными.
 /////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   Д А Н Н Ы Е---//

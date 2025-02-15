@@ -55,11 +55,14 @@ Item {
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
+    function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
     function fnClickedOk(){//Функция переименования Данных.
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-        if(tmDannie.blPereimenovat){//Если Переименовываем, то...
+        if(tmDannie.blPereimenovat)//Если Переименовываем, то...
             cppqml.renStrDannieDB(cppqml.strDannie, txnZagolovok.text);//Переименовываем имя Документа.
-        }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
@@ -106,6 +109,20 @@ Item {
                 tmDannie.clickedNazad();
             }
         } 
+        DCKnopkaZakrit {
+            id: knopkaZakrit
+            ntWidth: tmDannie.ntWidth
+            ntCoff: tmDannie.ntCoff
+            visible: false
+            anchors.verticalCenter: tmZagolovok.verticalCenter
+            anchors.left: tmZagolovok.left
+            anchors.margins: tmDannie.ntCoff/2
+            clrKnopki: tmDannie.clrTexta
+            clrFona: tmDannie.clrFona
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+                fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
+            }
+        }
         DCKnopkaSozdat {
 			id: knopkaSozdat
             ntWidth: tmDannie.ntWidth
@@ -154,9 +171,10 @@ Item {
             clrBorder: "black"
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
-                cppqml.strDebug = qsTr("Успешное удаление документа.");
-                //TODO удалить отладку
-                console.log(strKod);//Отладка
+                if(cppqml.delStrDannie(strKod))//Запускаю метод удаление записи из БД и самого Документа.
+                    cppqml.strDebug = qsTr("Успешное удаление документа.");
+                else
+                    cppqml.strDebug = qsTr("Ошибка при удалении.");
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
@@ -186,13 +204,17 @@ Item {
 				textInput.maximumLength: 33
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
+                        knopkaNazad.visible = false;//Кнопка назад Невидимая.
                         knopkaSozdat.visible = false;//Конопка Создать Невидимая.
+                        knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
                         textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
                         textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 					}
                     else{//Если DCTextInput не видим, то...
+                        knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
+                        knopkaNazad.visible = true;//Кнопка назад видимая.
                         knopkaSozdat.visible = true;//Конопка Создать Видимая.
                         txnZagolovok.text = "";//Текст обнуляем вводимый.
                         knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
@@ -246,6 +268,7 @@ Item {
                                 fnUdalit(ntKod, strDannie);
                             }
                             else{//Если НЕ УДАЛИТЬ, ТО ОТКРЫТЬ ФАЙЛ К ПРОСМОТРУ...
+                                cppqml.strDebug = "";
                                 tmDannie.blPereimenovat = false;//Запрещено переименовывать
                                 tmDannie.blUdalit = false;//Запрещено выбирать документ на удаление.
                                 txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.

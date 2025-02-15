@@ -73,14 +73,14 @@ void DataDannie::ustWorkingDiagrams(QString strWorkingDiagramsPut){//Задаё�
 /////////////////////////////////////////////////////////////////////////////////////
 	m_strWorkingDiagramsPut = strWorkingDiagramsPut;//Приравниваем пути
 }
-QStringList	DataDannie::polDannie(quint64 ullKodSpisok, quint64 ullKodElement){//Получить список всех Данных.
+QStringList	DataDannie::polDannie(quint64 ullSpisokKod, quint64 ullElementKod){//Получить список всех Данных.
 /////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   С П И С О К   Д А Н Н Ы Х---//
 /////////////////////////////////////////////////////
     QStringList slsDannie;//Пустой список Данных.
     if(m_blDanniePervi)//Если это первый записываемые данные, то нет смысла перебирать все данные...
         return slsDannie;//Возвращаем пустую строку.
-    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullKodSpisok)+"_"+QString::number(ullKodElement));
+    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
     quint64 ullKolichestvo = m_pdbDannie->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
     if (!ullKolichestvo){//Если ноль, то...
         qdebug(tr("DataElement::polDannie(quint64,qint64): quint64 = 0, всего PRIMARY KEY 0."));
@@ -93,17 +93,17 @@ QStringList	DataDannie::polDannie(quint64 ullKodSpisok, quint64 ullKodElement){/
     }
     return slsDannie;//Возвращаем полный список Элементов.
 }
-bool DataDannie::ustDannie(quint64 ullKodSpisok, quint64 ullKodElement, QString strDannie){//Записать в БД.
+bool DataDannie::ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strDannie){//Записать в БД.
 ///////////////////////////////////////
 //---З А П И С А Т Ь   Д А Н Н Ы Х---//
 ///////////////////////////////////////
 	QString strAbsolutPut=m_strFileDialogPut+QDir::separator()+strDannie;//Абсолют путь с именем файла+разшире
 	strDannie = m_pdcclass->baseName(strDannie).toUpper();//Убираем расширение из имени файла, ЗАГЛАВНЫЙ ТЕКСТ
     //Имя таблицы задаём тут, а записываем даные в таблицу в слоте slotCopyDannie(bool).
-    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullKodSpisok)+"_"+QString::number(ullKodElement));
+    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
     if(!m_pdbDannie->CREATE()){//Если таблица не создалась
         qdebug(tr("DataDannie::ustDannie(quint64,quint64,QString): ошибка создания таблицы данные_")
-                + QString::number(ullKodSpisok) + "_"+QString::number(ullKodElement) + ".");
+                + QString::number(ullSpisokKod) + "_"+QString::number(ullElementKod) + ".");
         return false;//Не успех
     }
     quint64 ullKolichestvo = m_pdbDannie->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
@@ -111,31 +111,44 @@ bool DataDannie::ustDannie(quint64 ullKodSpisok, quint64 ullKodElement, QString 
         qdebug(("Достигнуто максимальное количество документов в элементе."));
         return false;//Ошибка записи в БД.
     }
-    QString strImyaFaila(polImyaFaila(ullKodSpisok, ullKodElement, ullKolichestvo+1));//Задаём имя файла с Док
+    QString strImyaFaila(polImyaFaila(ullSpisokKod, ullElementKod, ullKolichestvo+1));//Задаём имя файла с Док
     m_slsINSERT.clear();//Очищаем список данных для запроса записи в БД.
     m_slsINSERT = m_slsINSERT<<QString::number(ullKolichestvo+1)<<strDannie<<strImyaFaila;
     //Если копирование документа успешно в отдельном потоке, то запись в БД будет в слоте slotCopyDannie(bool)
     return copyDannie(strAbsolutPut, strImyaFaila);//Копируем Документ в отдельном потоке.
 }
-bool DataDannie::renDannie(quint64 ullKodSpisok,quint64 ullKodElement,QString strDannie,QString strDannieNovi){
+bool DataDannie::renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString strDannie,QString strDannieNovi){
  ////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Т Ь   Д А Н Н Ы Е---//
 /////////////////////////////////////////////////
-    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullKodSpisok)+"_"+QString::number(ullKodElement));
+    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
     if(m_pdbDannie->UPDATE("Данные", QStringList()<<strDannie<<strDannieNovi))//Перезаписываем данные в БД
         return true;//Успех
     return false;//Неудача
 }
+bool DataDannie::udalDannie(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod){//Удалить запись
+///////////////////////////////////////////////////////////
+//---У Д А Л И Т Ь   Д А Н Н Ы Е   И   Д О К У М Е Н Т---//
+///////////////////////////////////////////////////////////
+    QString strImyaFaila(polImyaFaila(ullSpisokKod, ullElementKod, ullDannieKod));//Задаём имя файла с Докумен
+    if(udalFail(strImyaFaila)){//Если файл удалился, то...
+        m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"
+                                    +QString::number(ullElementKod));//Задаём имя таблицы, в которой удалять
+        if(m_pdbDannie->DELETE("Код", QString::number(ullDannieKod)))//Удаляем данные в БД
+            return true;//Успех
+    }
+    return false;//Ошибка удаления файла или элемента БД.
+}
 
-QString DataDannie::polDannieJSON(quint64 ullKodSpisok, quint64 ullKodElement){//Получить JSON строчку Данных.
+QString DataDannie::polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod){//Получить JSON строчку Данных.
 ///////////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   С Т Р О К У   Д А Н Н Ы Х---//
 ///////////////////////////////////////////////////////////////
     QString strDannieJSON("");//Строка, в которой будет собран JSON запрос.
-    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullKodSpisok)+"_"+QString::number(ullKodElement));
+    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
     if(!m_pdbDannie->CREATE()){//Если таблица не создалась. НЕ УДАЛЯТЬ ЭТО СОЗДАНИЕ ТАБЛИЦЫ.
         qdebug(tr("DataDannie::polDannieJSON(quint64,quint64): ошибка создания таблицы данные_")
-                +QString::number(ullKodSpisok)+"_"+QString::number(ullKodElement)+".");
+                +QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod)+".");
         return "";//Не успех
     }
     quint64 ullKolichestvo = m_pdbDannie->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
@@ -172,11 +185,11 @@ void DataDannie::ustFileDialogPut(QString strFileDialogPut){//Задать пу�
 ///////////////////////////////////////////////////////
 	m_strFileDialogPut = strFileDialogPut;//Приравниваем пути.
 }
-QString DataDannie::polImyaFaila(qint64 ullSpisok, qint64 ullElement, qint64 ullDannie){//Получить имя файла.
+QString DataDannie::polImyaFaila(qint64 ullSpisokKod, qint64 ullElementKod, qint64 ullDannieKod){//Имя файла.
 /////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   И М Я   Ф А Й Л А---//
 /////////////////////////////////////////////
-    uint ntImyaFaila = (ullSpisok*1000000)+(ullElement*1000)+ullDannie;
+    uint ntImyaFaila = (ullSpisokKod*1000000)+(ullElementKod*1000)+ullDannieKod;
     QString strImyaFaila = QString::number(ntImyaFaila) + ".dc";//Переменная, которая соберёт имя файла.
     return strImyaFaila;
 }
@@ -184,13 +197,12 @@ bool DataDannie::estImyaFaila(QString strImyaFaila){//Есть такой фай
 /////////////////////////////////////////
 //---Е С Т Ь   Т А К О Й   Ф А Й Л ?---//
 /////////////////////////////////////////
-    //strPut = QDir::fromNativeSeparators(strPut);
     QFile flImyaFaila(m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
     if(flImyaFaila.exists())//Есть такой файл, то...
         return true;
     return false;
 }
-bool DataDannie::udalImyaFaila(QString strImyaFaila){//Удалить файл в каталоге.
+bool DataDannie::udalFail(QString strImyaFaila){//Удалить файл в каталоге.
 /////////////////////////////////////////////
 //---У Д А Л И Т Ь   Т А К О Й   Ф А Й Л---//
 /////////////////////////////////////////////
@@ -214,7 +226,7 @@ bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Ко�
     QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать, расположенный...
     if(flDannie.exists()){//Если данный файл существует, то...
         if(estImyaFaila(strImyaFaila)){//Если такой файл с таким же именем существует, то...
-            if(!udalImyaFaila(strImyaFaila))//Удаляем файл с таким же именем. Если файл не удалился, то...
+            if(!udalFail(strImyaFaila))//Удаляем файл с таким же именем. Если файл не удалился, то...
                 return false;//Ошибка удаления.
         }
         m_pcopydannie->ustPutiFailov(strAbsolutPut, m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila);

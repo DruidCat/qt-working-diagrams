@@ -42,18 +42,18 @@ bool DataSpisok::dbStart() {//Иннициализируем БД, и запис
 	//qdebug(); не работает, пока конструктор cppqml поностью не создастся.
     return true;//Выход, успех!
 }
-QString DataSpisok::polSpisok(quint64 ullKod) {//Получить название элемента Списка по Коду.
+QString DataSpisok::polSpisok(quint64 ullSpisokKod) {//Получить название элемента Списка по Коду.
 ///////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Н А З В А Н И Е---//
 ///////////////////////////////////////////
-	if (ullKod <=0){//Если номер меньше или равен 0, то...
+    if (ullSpisokKod <=0){//Если номер меньше или равен 0, то...
         qdebug(tr("DataSpisok::polSpisok(quint64): quint64 меньше или равен 0."));//Транслируем ошибку.
 		return "";//Возвращаем пустую строку.
 	}
-    QString strSpisok = m_pdbSpisok->SELECT("Код", QString::number(ullKod), "Список");
+    QString strSpisok = m_pdbSpisok->SELECT("Код", QString::number(ullSpisokKod), "Список");
 	if(strSpisok.isEmpty()){//Если элемент списка пустой, то...
         qdebug(tr("DataSpisok::polSpisok(quint64): Код: ")
-                + QString::number(ullKod) + tr(" отсутствует, т.к. пустой элемент списка."));
+                + QString::number(ullSpisokKod) + tr(" отсутствует, т.к. пустой элемент списка."));
 	}
     return strSpisok;
 }
@@ -125,23 +125,23 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
     strSpisokJSON = strSpisokJSON + "]";//Конец массива объектов.
     return strSpisokJSON;
 }
-QString DataSpisok::polSpisokOpisanie(quint64 ullKod){//Полчить Описание элемента Списка по Коду.
+QString DataSpisok::polSpisokOpisanie(quint64 ullSpisokKod){//Полчить Описание элемента Списка по Коду.
 /////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   О П И С А Н И Е   С П И С К А---//
 /////////////////////////////////////////////////////////
-	if (ullKod <=0){//Если номер меньше или равен 0, то...
+    if (ullSpisokKod <=0){//Если номер меньше или равен 0, то...
         qdebug(tr("DataSpisok::polSpisokOpisanie(quint64): quint64 меньше или равен 0."));//ошибка
 		return "";//Возвращаем пустую строку.
 	}
-    QString strSpisokOpisanie = m_pdbSpisok->SELECT("Код", QString::number(ullKod), "Описание");
+    QString strSpisokOpisanie = m_pdbSpisok->SELECT("Код", QString::number(ullSpisokKod), "Описание");
     return strSpisokOpisanie;
 }
-bool DataSpisok::ustSpisokOpisanie(quint64 ullKod, QString strSpisokOpisanie){//Записать в БД описание списк
+bool DataSpisok::ustSpisokOpisanie(quint64 ullSpisokKod, QString strSpisokOpisanie){//Записать в БД описание
 /////////////////////////////////////////////////////////
 //---З А П И С А Т Ь   О П И С А Н И Е   С П И С К А---//
 /////////////////////////////////////////////////////////
         if(m_pdbSpisok->UPDATE(QStringList()<<"Код"<<"Описание",
-							QStringList()<<QString::number(ullKod)<<strSpisokOpisanie))//Если успех записи
+                            QStringList()<<QString::number(ullSpisokKod)<<strSpisokOpisanie))//Если успех запи
 			return true;
         qdebug(tr("DataSpisok::ustSpisokOpisanie(quint64, QString): ошибка записи Описания."));
 		return false;//Ошибка.

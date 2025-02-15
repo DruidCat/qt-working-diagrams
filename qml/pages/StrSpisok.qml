@@ -55,6 +55,10 @@ Item {
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
+    function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
 	function fnClickedOk(){//Функция сохранения/переименования элемента Списка.
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
         if(blZagolovok){//Если изменить имя заголовка, то...
@@ -62,9 +66,8 @@ Item {
             tmSpisok.signalZagolovok(txnZagolovok.text);//Отображаем Заголовок
         }
         else{//В ином случае...
-            if(blPereimenovat){//Если Переименовываем, то...
-                cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text);//Переименовываем элемент Списка.
-            }
+            if(blPereimenovat)//Если Переименовываем, то...
+                cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text)//Переименовываем элемент Списка
             else{//иначе...
                 cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
             }
@@ -111,6 +114,20 @@ Item {
 				tmSpisok.clickedMenu();//Сигнал Меню
             }
 		}
+        DCKnopkaZakrit {
+            id: knopkaZakrit
+            ntWidth: tmSpisok.ntWidth
+            ntCoff: tmSpisok.ntCoff
+            visible: false
+            anchors.verticalCenter: tmZagolovok.verticalCenter
+            anchors.left: tmZagolovok.left
+            anchors.margins: tmSpisok.ntCoff/2
+            clrKnopki: tmSpisok.clrTexta
+            clrFona: tmSpisok.clrFona
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+                fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
+            }
+        }
 		DCKnopkaSozdat {
             id: knopkaSozdat
 			ntWidth: tmSpisok.ntWidth
@@ -161,15 +178,21 @@ Item {
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
 				textInput.maximumLength: 33
                 onVisibleChanged: {//Если видимость DCTextInput изменился, то...
-					txnZagolovok.visible ? knopkaOk.visible = true : knopkaOk.visible = false; 
-					txnZagolovok.visible ? knopkaSozdat.visible = false : knopkaSozdat.visible = true; 
-					if(txnZagolovok.visible == false){//Если DCTextInput не видим, то...
-						txnZagolovok.text = "";//Текст обнуляем вводимый.
-                        knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
-					}
-					else{
+                    if(txnZagolovok.visible){//Если DCTextInput видим, то...
+                        knopkaMenu.visible = false;//Кнопка Меню Невидимая.
+                        knopkaSozdat.visible = false;//Конопка Создать Невидимая.
+                        knopkaZakrit.visible = true;//Кнопка закрыть Видимая
+                        knopkaOk.visible = true;//Кнопка Ок Видимая.
                         textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
                         textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+                    }
+                    else{//Если DCTextInput не видим, то...
+                        knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
+                        knopkaOk.visible = false;//Кнопка Ок Невидимая.
+                        knopkaMenu.visible = true;//Кнопка Меню видимая.
+                        knopkaSozdat.visible = true;//Конопка Создать Видимая.
+                        txnZagolovok.text = "";//Текст обнуляем вводимый.
+                        knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
                     }
 				}
 				onClickedEnter: {//Если нажата Enter, то такое же действие, как и при нажатии кнопки Ок.
@@ -213,7 +236,8 @@ Item {
                             cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
                             txnZagolovok.text = strSpisok;//Добавляем в строку выбранный элемент Списка.
                         }
-                        else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то СОХРАНИТЬ...
+                        else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то перейти к Элементу...
+                            cppqml.strDebug = "";
                             blPereimenovat = false;//Запрещено переименовывать.
                             txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                             menuSpisok.visible = false;//Делаем невидимым меню.

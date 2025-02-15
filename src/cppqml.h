@@ -125,6 +125,7 @@ public:
 
     QString		strDannie();//Возвратить Данные.
     void		setStrDannie(QString& strDannieNovi);//Измененит Данные.
+    Q_INVOKABLE bool delStrDannie(QString strDannieKod);//Удалить Данные по коду.
     QString		strDannieDB();//Возвратить JSON строку Данных.
     void		setStrDannieDB(QString& strDannieNovi);//Изменение JSON запроса Данных.
     Q_INVOKABLE bool renStrDannieDB(QString strDannie, QString strDannieNovi);//Переименоваовать Данные.
