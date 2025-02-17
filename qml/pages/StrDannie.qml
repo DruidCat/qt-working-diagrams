@@ -25,6 +25,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
+    property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого документа, если true
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
@@ -37,6 +38,7 @@ Item {
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuDannie.visible = false;//Делаем невидимым всплывающее меню.
+        tmDannie.blPereimenovat = false;//Запрещаем выбор переименовывания.
         tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         tmDannie.blUdalitVibor = false;//Запрещаем выбирать документ для удаления.
         txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
@@ -44,24 +46,24 @@ Item {
     focus: true//Не удалять, может Escape не работать.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+            tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: tmDannie
         onClicked: {
-            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+            tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
-        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedOk(){//Функция переименования Данных.
-        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-        if(tmDannie.blPereimenovatVibor)//Если разрешаем выбор элементов для переименовывания.
+        tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+        if(tmDannie.blPereimenovat)//Если запрос на переименовывание.
             cppqml.renStrDannieDB(cppqml.strDannie, txnZagolovok.text);//Переименовываем имя Документа.
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
@@ -70,10 +72,10 @@ Item {
         txuUdalit.blVisible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
-        cppqml.strDebug = qsTr("Удалить данный документ?");//Делаем предупреждение в Toolbar.
+        tmDannie.signalToolbar(qsTr("Удалить данный документ?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
-        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
         tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         tmDannie.blUdalitVibor = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
         menuDannie.visible = false;//Делаем невидимым меню.
@@ -172,13 +174,13 @@ Item {
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
                 if(cppqml.delStrDannie(strKod))//Запускаю метод удаление записи из БД и самого Документа.
-                    cppqml.strDebug = qsTr("Успешное удаление документа.");
+                    tmDannie.signalToolbar(qsTr("Успешное удаление документа"));
                 else
                     cppqml.strDebug = qsTr("Ошибка при удалении.");
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
-                cppqml.strDebug = "";
+                tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
 		Item {
@@ -259,9 +261,12 @@ Item {
 					}
 					else{//Если не первый элемент, то...
                         if(tmDannie.blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания
+                            tmDannie.blPereimenovat = true;//Переименование (отмена)...(ок)
+                            tmDannie.signalToolbar(qsTr("Переименуйте выбранный документ."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strDannie = strDannie;//Присваиваем Документ к свойству Q_PROPERTY
                             txnZagolovok.text = strDannie;//Добавляем в строку выбранный Документ.
+                            tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
                         }
                         else {//Если не выбор элементов переименования, то ...
                             if(tmDannie.blUdalitVibor){//Если удалить, то...
@@ -269,7 +274,7 @@ Item {
                             }
                             else{//Если не выбор элемента на удаление, то открыть файл к просмотру...
                                 cppqml.strDebug = "";
-                                tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переимен.
+                                tmDannie.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
                                 tmDannie.blUdalitVibor = false;//Запрещено выбирать документ на удаление.
                                 txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.
                                 txnZagolovok.visible = false;//Отключаем создание Элемента.
@@ -340,10 +345,11 @@ Item {
 			onClicked: {
                 txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
                 menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
+                tmDannie.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
                 tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
                 tmDannie.blUdalitVibor = false;//Запрещено удалять.
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
-                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+                tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}
     }
