@@ -3,6 +3,7 @@
 #include <QDebug>
 
 DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
+                                        m_untNastroikiMaxLength(33),
 										m_strTitul(""),
 										m_strTitulOpisanie(""),
 
@@ -417,15 +418,15 @@ QString DCCppQml::strDannieDB() {//Возвратить JSON строку с Д�
     m_blDanniePervi = m_pDataDannie->polDanniePervi();//Первые Данные или нет? Строчка обязательна тут.
     return m_strDannieDB;//И только после этого возвращаем её, это важно.
 }
-void DCCppQml::setStrDannieDB(QString& strDannieNovi) {//Запись Данных в БД.
+void DCCppQml::setStrDannieDB(QString& strImyaFaila) {//Запись Данных в БД.
 ///////////////////////////////////
 //---З А П И С Ь   Д А Н Н Ы Х---//
 ///////////////////////////////////
-    if(m_pdcclass->isEmpty(strDannieNovi))//Если пустая строка, то...
+    if(m_pdcclass->isEmpty(strImyaFaila))//Если пустая строка, то...
         qdebug(tr("Нельзя сохранить пустые данные."));
     else{
-		QString strDannie = redaktorTexta(strDannieNovi);//Редактируем текст по стандартам приложения.
-		strDannie = m_pdcclass->baseName(strDannie);//Убираем расширение из имени файла.
+        QString strDannie = m_pdcclass->baseName(strImyaFaila);//Убираем расширение из имени файла.
+        strDannie = redaktorTexta(strDannie);//Редактируем текст по стандартам приложения.
         QStringList slsDannie = m_pDataDannie->polDannie(m_ullSpisokKod, m_ullElementKod);//Получить Данные
         for(int ntShag = 0; ntShag<slsDannie.size(); ntShag++){//Проверка на одинаковые имена Данных
             if(slsDannie[ntShag] == strDannie){
@@ -434,7 +435,7 @@ void DCCppQml::setStrDannieDB(QString& strDannieNovi) {//Запись Данны
             }
         }
         //Копируем Документ в Приложение, делаем запись в БД, а сигнал об этих действиях в slotFileDialogCopy
-        m_pDataDannie->ustDannie(m_ullSpisokKod, m_ullElementKod, strDannieNovi);//Записываем и копируем данны
+        m_pDataDannie->ustDannie(m_ullSpisokKod, m_ullElementKod, strImyaFaila, strDannie);//Копируем,записыва
     }
 }
 bool DCCppQml::renStrDannieDB(QString strDannie, QString strDannieNovi) {//Переименовать Данные.
@@ -543,6 +544,7 @@ QString DCCppQml::redaktorTexta(QString strTekst){//Редактор текст�
 	strTekst = strTekst.toUpper();//Делаем все буквы в строке заглавные.
 	strTekst = m_pdcclass->udalitProbeli(strTekst);//Удаляем 2 и более пробелов между словами.
 	strTekst = m_pdcclass->udalitPustotu(strTekst);//Удаляем пробелы по краям, если есть.
+    strTekst.truncate(m_untNastroikiMaxLength);//Обрезаем текс на максимальную длину в настройках приложения.
 	return strTekst;//Возвращаем отредактированный текст.
 }
 void DCCppQml::qdebug(QString strDebug){//Передаёт ошибки в QML через Q_PROPERTY.

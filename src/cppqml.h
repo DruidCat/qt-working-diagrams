@@ -15,6 +15,10 @@
 
 class DCCppQml : public QObject {
     Q_OBJECT
+    Q_PROPERTY(uint untNastroikiMaxLength
+                    READ untNastroikiMaxLength
+                    NOTIFY untNastroikiMaxLengthChanged FINAL)
+
     Q_PROPERTY(QString strTitul
                    READ strTitul
                    WRITE setStrTitul
@@ -96,6 +100,8 @@ public:
     explicit	DCCppQml(QObject* proditel = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
 	//---Методы Q_PROPERTY---//
+    uint 		untNastroikiMaxLength() { return m_untNastroikiMaxLength; }//Максимальная длина строки текста
+
     QString		strTitul();//Получить имя Титула.
     void		setStrTitul(QString& strTitulNovi);//Изменение имени Титула.
     QString		strTitulOpisanie();//Возвращает Описание имени Титула. 
@@ -147,6 +153,8 @@ public:
 	void 		qdebug(QString strDebug);//Передаёт ошибки в QML через Q_PROPERTY.
 
 signals:
+    void untNastroikiMaxLengthChanged();//Сигнал о том, что максимальная длина текста изменилась.
+
     void strTitulChanged();//Сигнал о том, что имя Титула изменилось.
     void strTitulOpisanieChanged();//Сигнал, что описание Титула изменилось.
 
@@ -176,6 +184,8 @@ public	slots:
 	void slotTimerDebug();//Слот прерывания от таймена Отладчика.
 
 private:
+    uint	m_untNastroikiMaxLength;//Максимальная длина строки текста в Свойстве Q_PROPERTY
+
     QString m_strTitul;//аргумент элемента имени Титула в Свойстве Q_PROPERTY
     QString m_strTitulOpisanie;//аргумент описания титула в Свойстве Q_PROPERTY
 

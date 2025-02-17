@@ -32,7 +32,6 @@ Item {
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть.
     signal clickedInfo();//Сигнал нажатич кнопки Инфо, где будет описание работы Файлового Диалога.
-    signal clickedPutImya (var strPut, var strImya);//Сигнал излучающий путь и имя файла.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
@@ -155,7 +154,6 @@ Item {
                                 knopkaInfo.visible = false//Делаем кнопку информации невидимой.
                                 tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
                                 cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
-                                tmFileDialog.clickedPutImya (cppqml.strFileDialogPut, cppqml.strFileDialog);
                                 cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Документа,и Документ
                             }
                         }

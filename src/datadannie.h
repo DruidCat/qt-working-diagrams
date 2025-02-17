@@ -16,7 +16,7 @@ public:
     bool 		dbStart();//Создать первоначальные Данные.
 	void 		ustWorkingDiagrams(QString strWorkingDiagramsPut);//Задаём каталог хранения Документов.
     QStringList	polDannie(quint64 ullSpisokKod, quint64 ullElementKod);//Получить список всех Данных.
-    bool 		ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strDannie);//Записать в БД.
+    bool 		ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail, QString strDannie);
     bool 		renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString strDannie,QString strDannieNovi);
     bool  		udalDannie(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod);//Удалить запись
     QString		polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod);//Получить JSON строчку Данных.

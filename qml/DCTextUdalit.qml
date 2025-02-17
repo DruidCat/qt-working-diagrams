@@ -59,7 +59,7 @@ Item {
                 font.pixelSize: tmTextUdalit.ntWidth*tmTextUdalit.ntCoff//размер шрифта текста.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: qsTr("УДАЛИТЬ: ")+tmTextUdalit.text+"?"
+                text: qsTr("УДАЛИТЬ:")+tmTextUdalit.text+"?"
             }
         }
         DCKnopkaOk{//Кнопка подтверждения удаления.

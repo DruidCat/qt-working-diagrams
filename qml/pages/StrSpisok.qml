@@ -25,7 +25,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctZona.radius//Радиус Зоны рабочей
-    property bool blPereimenovat: false//Переименовать элемент Списка, если true
+    property bool blPereimenovatVibor: false//Выбрать элемент пеименования, если true
     property bool blZagolovok: false//Переименовать Заголовок, если true
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedMenu();//Сигнал нажатия кнопки Меню. 
@@ -38,7 +38,7 @@ Item {
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuSpisok.visible = false;//Делаем невидимым всплывающее меню.
-        tmSpisok.blPereimenovat = false;//Запрещаем переименовывать.
+        tmSpisok.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         tmSpisok.blZagolovok = false;//Запрещаем изменять заголовок.
     }
     focus: true
@@ -66,7 +66,7 @@ Item {
             tmSpisok.signalZagolovok(txnZagolovok.text);//Отображаем Заголовок
         }
         else{//В ином случае...
-            if(blPereimenovat)//Если Переименовываем, то...
+            if(blPereimenovatVibor)//Если разрешён выбор элементов для переименовывания.
                 cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text)//Переименовываем элемент Списка
             else{//иначе...
                 cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
@@ -75,7 +75,7 @@ Item {
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
-        blPereimenovat = false;//Запрещено переименовывать. НЕ УДАЛЯТЬ.
+        blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         menuSpisok.visible = false;//Делаем невидимым меню.
         txnZagolovok.visible = true;//Режим создания элемента Списка.
         txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ СПИСКА";//Подсказка пользователю, что вводить нужно.
@@ -85,7 +85,7 @@ Item {
         fnClickedSozdat();//Функция обработки кнопки Создать.
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
-        blPereimenovat = true;
+        blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ СПИСКА");//Подсказка пользователю, что вводить нужно.
         tmSpisok.signalToolbar(qsTr("Выберите список для его переименования."))
     }
@@ -176,7 +176,7 @@ Item {
 				clrFona: "SlateGray"
 				radius: tmSpisok.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
-				textInput.maximumLength: 33
+                textInput.maximumLength: cppqml.untNastroikiMaxLength
                 onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видим, то...
                         knopkaMenu.visible = false;//Кнопка Меню Невидимая.
@@ -201,8 +201,8 @@ Item {
 			}
 		}
     }
-    onBlPereimenovatChanged: {//Слот сигнала изменения property blPereimenovat (on...Changed)
-   		tmSpisok.blPereimenovat ? rctZona.border.color = clrTexta : rctZona.border.color = "transparent";
+    onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
+        tmSpisok.blPereimenovatVibor ? rctZona.border.color = clrTexta : rctZona.border.color = "transparent";
 	}
 	Item {//Список Рабочей Зоны
         id: tmZona
@@ -231,14 +231,14 @@ Item {
                         fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
                     }
                     else{//Если не первый элемент, то...
-                        if(blPereimenovat){//Если ПЕРЕИМНОВАТЬ, то...
+                        if(blPereimenovatVibor){//Если разрешён выбор элементов для переименовывания.
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
                             txnZagolovok.text = strSpisok;//Добавляем в строку выбранный элемент Списка.
                         }
-                        else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то перейти к Элементу...
+                        else{//Если не выбор элемента на переименование, то перейти к Элементу...
                             cppqml.strDebug = "";
-                            blPereimenovat = false;//Запрещено переименовывать.
+                            blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
                             txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                             menuSpisok.visible = false;//Делаем невидимым меню.
                             cppqml.ullSpisokKod = ntKod;//Присваиваем Код списка к свойству Q_PROPERTY
@@ -306,7 +306,7 @@ Item {
                 txnZagolovok.textInput.forceActiveFocus();//ОБЯЗАТЕЛЬНАЯ СТРОКА, чтоб работало нажатие Escape.
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;
-                blPereimenovat = false;//Запрещено переименовывать.
+                blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
             }
 		}

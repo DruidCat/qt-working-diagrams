@@ -93,12 +93,11 @@ QStringList	DataDannie::polDannie(quint64 ullSpisokKod, quint64 ullElementKod){/
     }
     return slsDannie;//Возвращаем полный список Элементов.
 }
-bool DataDannie::ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strDannie){//Записать в БД.
+bool DataDannie::ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail, QString strDannie){
 ///////////////////////////////////////
 //---З А П И С А Т Ь   Д А Н Н Ы Х---//
 ///////////////////////////////////////
-	QString strAbsolutPut=m_strFileDialogPut+QDir::separator()+strDannie;//Абсолют путь с именем файла+разшире
-	strDannie = m_pdcclass->baseName(strDannie).toUpper();//Убираем расширение из имени файла, ЗАГЛАВНЫЙ ТЕКСТ
+    QString strAbsolutPut=m_strFileDialogPut+QDir::separator()+strFail;//Абсолют путь с именем файла+разшире
     //Имя таблицы задаём тут, а записываем даные в таблицу в слоте slotCopyDannie(bool).
     m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
     if(!m_pdbDannie->CREATE()){//Если таблица не создалась
