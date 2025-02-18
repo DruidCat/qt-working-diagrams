@@ -7,8 +7,10 @@ Item {
     id: tmZona
     property int ntWidth: 2
     property int ntCoff: 8
-    property color clrTexta: "orange"
+    property color clrPapki: "orange"
+    property color clrFaila: "yellow"
     property color clrFona: "SlateGray"
+
     signal clicked(int ntNomer, var strFileData);//Сигнал клика на одном из элементов, передаёт номер и имя.
 
     ListView {
@@ -26,11 +28,17 @@ Item {
                 color: maZona.containsPress
                        ? Qt.darker(tmZona.clrFona, 1.3) : tmZona.clrFona
                 Text {
-                    color: maZona.containsPress
-                           ? Qt.darker(tmZona.clrTexta, 1.3) : tmZona.clrTexta
+                    text: {//Пишем функцию на JS для цвета текста папки или файла.
+                        var strModel = modelData.filedialog;//Считываем модель с именем папки или файла.
+                        cppqml.strFileDialogModel = strModel;//Отправляем в бизнес логику.
+                        if(cppqml.strFileDialogModel === "0")//Если 0-папка
+                            color = tmZona.clrPapki;//Задаём цвет текста модели для папки.
+                        else//Если 1-файл.
+                            color = tmZona.clrFaila;//Задаём цвет текста модели для файла.
+                        return strModel;//вернуть в переменную text значение модели для отображения.
+                    }
                     anchors.horizontalCenter: rctZona.horizontalCenter
                     anchors.verticalCenter: rctZona.verticalCenter
-                    text: modelData.filedialog
                     font.pixelSize: rctZona.height-tmZona.ntCoff
                 }
                 MouseArea {//Создаём MA для каждого элемента каталога.

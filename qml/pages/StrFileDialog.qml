@@ -11,6 +11,7 @@ Item {
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
+    property color clrFaila: "yellow"//Цвет файлов в проводнике.
     property color clrFona: "black"
     property alias zagolovokX: tmZagolovok.x
     property alias zagolovokY: tmZagolovok.y
@@ -131,7 +132,8 @@ Item {
                 ntWidth: tmFileDialog.ntWidth
                 ntCoff: tmFileDialog.ntCoff
                 anchors.fill: rctZona
-                clrTexta: tmFileDialog.clrTexta
+                clrPapki: tmFileDialog.clrTexta//Цвет папок в проводнике.
+                clrFaila: tmFileDialog.clrFaila//Цвет файлов в проводнике
                 clrFona: "SlateGray"
                 onClicked: function(ntTip, strFileDialog) {//Слот нажатия на один из Элементов Проводника.
                     if(!ntTip){//Если Тип = 0, это нажатие кнопки Назад

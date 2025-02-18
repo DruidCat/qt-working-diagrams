@@ -12,7 +12,8 @@ Item {
     property int ntCoff: 8
     property color clrTexta: "orange"
 	property color clrFona: "black"
-	property alias zagolovokX: tmZagolovok.x
+    property color clrFaila: "yellow"
+    property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
 	property alias zagolovokHeight: tmZagolovok.height
@@ -253,7 +254,7 @@ Item {
 				ntWidth: tmDannie.ntWidth
 				ntCoff: tmDannie.ntCoff
 				anchors.fill: rctZona
-				clrTexta: tmDannie.clrTexta
+                clrTexta: tmDannie.clrFaila//Цвет файлов
 				clrFona: "SlateGray"
                 onClicked: function(ntKod, strDannie) {//Слот нажатия на один из Документов списка.
 					if(cppqml.blDanniePervi){//Если это первый Документ, то...

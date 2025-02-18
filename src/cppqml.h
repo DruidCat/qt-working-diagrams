@@ -20,82 +20,86 @@ class DCCppQml : public QObject {
                     NOTIFY untNastroikiMaxLengthChanged FINAL)
 
     Q_PROPERTY(QString strTitul
-                   READ strTitul
-                   WRITE setStrTitul
-                   NOTIFY strTitulChanged FINAL)
+                    READ strTitul
+                    WRITE setStrTitul
+                    NOTIFY strTitulChanged FINAL)
     Q_PROPERTY(QString strTitulOpisanie
-                   READ strTitulOpisanie
-                   WRITE setStrTitulOpisanie
-                   NOTIFY strTitulOpisanieChanged FINAL)
+                    READ strTitulOpisanie
+                    WRITE setStrTitulOpisanie
+                    NOTIFY strTitulOpisanieChanged FINAL)
 
     Q_PROPERTY(QString strSpisok
-                   READ strSpisok
-                   WRITE setStrSpisok
-                   NOTIFY strSpisokChanged FINAL)
+                    READ strSpisok
+                    WRITE setStrSpisok
+                    NOTIFY strSpisokChanged FINAL)
     Q_PROPERTY(QString strSpisokDB
-                   READ strSpisokDB
-                   WRITE setStrSpisokDB
-                   NOTIFY strSpisokDBChanged FINAL)
+                    READ strSpisokDB
+                    WRITE setStrSpisokDB
+                    NOTIFY strSpisokDBChanged FINAL)
     Q_PROPERTY(quint64 ullSpisokKod
-                   READ ullSpisokKod
-                   WRITE setUllSpisokKod
-                   NOTIFY ullSpisokKodChanged FINAL)
+                    READ ullSpisokKod
+                    WRITE setUllSpisokKod
+                    NOTIFY ullSpisokKodChanged FINAL)
     Q_PROPERTY(QString strSpisokOpisanie
-                   READ strSpisokOpisanie
-                   WRITE setStrSpisokOpisanie
-                   NOTIFY strSpisokOpisanieChanged FINAL)
+                    READ strSpisokOpisanie
+                    WRITE setStrSpisokOpisanie
+                    NOTIFY strSpisokOpisanieChanged FINAL)
     Q_PROPERTY(bool blSpisokPervi
-                   READ blSpisokPervi FINAL)
+                    READ blSpisokPervi FINAL)
 
     Q_PROPERTY(QString strElement
-                   READ strElement
-                   WRITE setStrElement
-                   NOTIFY strElementChanged FINAL)
+                    READ strElement
+                    WRITE setStrElement
+                    NOTIFY strElementChanged FINAL)
     Q_PROPERTY(QString strElementDB
-                   READ strElementDB
-                   WRITE setStrElementDB
-                   NOTIFY strElementDBChanged FINAL)
+                    READ strElementDB
+                    WRITE setStrElementDB
+                    NOTIFY strElementDBChanged FINAL)
     Q_PROPERTY(quint64 ullElementKod
-                   READ ullElementKod
-                   WRITE setUllElementKod
-                   NOTIFY ullElementKodChanged FINAL)
+                    READ ullElementKod
+                    WRITE setUllElementKod
+                    NOTIFY ullElementKodChanged FINAL)
     Q_PROPERTY(QString strElementOpisanie
-                   READ strElementOpisanie
-                   WRITE setStrElementOpisanie
-                   NOTIFY strElementOpisanieChanged FINAL)
+                    READ strElementOpisanie
+                    WRITE setStrElementOpisanie
+                    NOTIFY strElementOpisanieChanged FINAL)
     Q_PROPERTY(bool blElementPervi
-                   READ blElementPervi FINAL)
+                    READ blElementPervi FINAL)
 
     Q_PROPERTY(QString strDannie
-                   READ strDannie
-                   WRITE setStrDannie
-                   NOTIFY strDannieChanged FINAL)
+                    READ strDannie
+                    WRITE setStrDannie
+                    NOTIFY strDannieChanged FINAL)
     Q_PROPERTY(QString strDannieDB
-                   READ strDannieDB
-                   WRITE setStrDannieDB
-                   NOTIFY strDannieDBChanged FINAL)
+                    READ strDannieDB
+                    WRITE setStrDannieDB
+                    NOTIFY strDannieDBChanged FINAL)
     Q_PROPERTY(quint64 ullDannieKod
-                   READ ullDannieKod
-                   WRITE setUllDannieKod
-                   NOTIFY ullDannieKodChanged FINAL)
+                    READ ullDannieKod
+                    WRITE setUllDannieKod
+                    NOTIFY ullDannieKodChanged FINAL)
     Q_PROPERTY(bool blDanniePervi
-                   READ blDanniePervi FINAL)
+                    READ blDanniePervi FINAL)
 
     Q_PROPERTY(QString strFileDialog
-                   READ strFileDialog
-                   WRITE setStrFileDialog
-                   NOTIFY strFileDialogChanged FINAL)
+                    READ strFileDialog
+                    WRITE setStrFileDialog
+                    NOTIFY strFileDialogChanged FINAL)
     Q_PROPERTY(QString strFileDialogPut
-                   READ strFileDialogPut
-                   WRITE setStrFileDialogPut
-                   NOTIFY strFileDialogPutChanged FINAL)
+                    READ strFileDialogPut
+                    WRITE setStrFileDialogPut
+                    NOTIFY strFileDialogPutChanged FINAL)
+    Q_PROPERTY(QString strFileDialogModel
+                    READ strFileDialogModel
+                    WRITE setStrFileDialogModel
+                    NOTIFY strFileDialogModelChanged FINAL)
     Q_PROPERTY(bool blFileDialogCopy
-                   READ blFileDialogCopy FINAL)
+                    READ blFileDialogCopy FINAL)
 
     Q_PROPERTY(QString strDebug
-                   READ strDebug
-                   WRITE setStrDebug
-                   NOTIFY strDebugChanged FINAL)
+                    READ strDebug
+                    WRITE setStrDebug
+                    NOTIFY strDebugChanged FINAL)
 public:
     explicit	DCCppQml(QObject* proditel = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
@@ -143,6 +147,8 @@ public:
     void		setStrFileDialog(QString& strFileDialogNovi);//Изменение JSON запроса с папками и файлами.
     QString		strFileDialogPut();//Возвратить путь папки, содержимое которой нужно отобразить.
     void		setStrFileDialogPut(QString& strFileDialogPutNovi);//Изменение отображаемого пути папки.
+    QString 	strFileDialogModel() { return m_strFileDialogModel; }//Возвращаем 0-папка или 1-файл.
+    void  		setStrFileDialogModel(QString& strFileDialogImya);//Принимаем папку или файл.
     bool 		blFileDialogCopy() { return m_blFileDialogCopy; }//Флаг Копирования Документа, инверсируется.
 
     QString		strDebug();//Возвращает ошибку.
@@ -175,6 +181,7 @@ signals:
     void strFileDialogChanged();//Сигнал о том, что изменился каталог папок и файлов.
     void strFileDialogPutChanged();//Сигнал о том, что изменился путь отображаемой папки.
     void blFileDialogCopyChanged();//Сигнал о том, что скопировался файл или нет.
+    void strFileDialogModelChanged();//Сигнал о том, что изменилась на 0-папка или 1-файл
 
     void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
@@ -208,6 +215,7 @@ private:
 
     QString m_strFileDialog;//переменная записывающая каталог папок и файлов в Свойстве Q_PROPERTY
     QString m_strFileDialogPut;//переменная записывающая путь отображения папки Свойстве Q_PROPERTY
+    QString m_strFileDialogModel;//Переменная хранящая 0-папка или 1-файл в Свойстве Q_PROPERTY.
     bool 	m_blFileDialogCopy;//Флаг Копирования Документа Инверсируется постоянно в Свойстве Q_PROPERTY.
 
     QString m_strDebug;//Текс ошибки.

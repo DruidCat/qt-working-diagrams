@@ -26,6 +26,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 
                                         m_strFileDialog(""),
                                         m_strFileDialogPut(""),
+                                        m_strFileDialogModel(""),
                                         m_blFileDialogCopy(false),
 
                                         m_strDebug("")
@@ -170,10 +171,9 @@ void DCCppQml::setStrSpisok(QString& strSpisokNovi) {//Изменение эле
 ///////////////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   Э Л Е М Е Н Т А   С П И С К А---//
 ///////////////////////////////////////////////////////////
-	if(strSpisokNovi != m_strSpisok){//Если элемент списка не равен выбранному до этого, то...
+    if(strSpisokNovi != m_strSpisok)//Если элемент списка не равен выбранному до этого, то...
 		m_strSpisok = strSpisokNovi;//Приравниваем.
-		emit strSpisokChanged();//Излучаем сигнал об изменении аргумента.
-	}
+    emit strSpisokChanged();//Излучаем сигнал об изменении аргумента. ТУТ этот сигнал. Не важно изменение.
 }
 QString DCCppQml::strSpisokDB() {//Возвратить JSON строку Списка.
 /////////////////////////////////////////////////
@@ -281,10 +281,9 @@ void DCCppQml::setStrElement(QString& strElementNovi) {//Изменение эл
 /////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   Э Л Е М Е Н Т А---//
 /////////////////////////////////////////////
-	if(strElementNovi != m_strElement){//Если элемент не равен выбранному до этого, то...
+    if(strElementNovi != m_strElement)//Если элемент не равен выбранному до этого, то...
 		m_strElement = strElementNovi;//Приравниваем.
-		emit strElementChanged();//Излучаем сигнал об изменении аргумента.
-	}
+    emit strElementChanged();//Излучаем сигнал об изменении аргумента. ТУТ эта строка, не важно изменение.
 }
 QString DCCppQml::strElementDB() {//Возвратить JSON строку Элементов.
 ///////////////////////////////////////////////////////
@@ -353,7 +352,7 @@ void DCCppQml::setUllElementKod(quint64 ullElementKodNovi){//Изменить к
 	else {//Иначе...
 		if (m_ullElementKod != ullElementKodNovi){//Если не равны параметры, то...
 			m_ullElementKod = ullElementKodNovi;
-			emit ullElementKodChanged();//Сигнал о том, что код Элемента изменился.
+            emit ullElementKodChanged();//Сигнал о том, что код Элемента изменился.
 		}
 	}
 }
@@ -514,6 +513,15 @@ void DCCppQml::setStrFileDialogPut(QString& strFileDialogPutNovi){//Записы
         m_strFileDialogPut = strFileDialogPut();//Изменяем путь переменной.
         emit strFileDialogPutChanged();//Излучаем сигнал об изменении аргумента.
     }
+}
+void DCCppQml::setStrFileDialogModel(QString &strFileDialogImya){//Принимаем папку или файл.
+/////////////////////////////////////
+//---П А П К А   И Л И   Ф А Й Л---//
+/////////////////////////////////////
+    if((strFileDialogImya.front() == '[')&&(strFileDialogImya.back() == ']'))//Если папка это, то...
+        m_strFileDialogModel = "0";//возвращаем 0-папка
+    else//Иначе...
+        m_strFileDialogModel = "1";//возвращаем 1-файл
 }
 QString DCCppQml::strDebug(){//Возвращает ошибку.
 ///////////////////////////////////////////////////

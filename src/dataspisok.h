@@ -29,7 +29,7 @@ private:
 	DCClass* 	m_pdcclass = nullptr;//Указатель на мой класс с методами.
 	
 	QStringList m_slsSpisok;//Переменная хранящая в себе прочитаный из БД список элементов Списка.
-    quint64 		m_ullSpisokMax;//Максимальное количество элементов Списка.
+    quint64 	m_ullSpisokMax;//Максимальное количество элементов Списка.
     QString 	m_strImyaDB;//Имя БД
     QString 	m_strLoginDB;//Логин БД
     QString 	m_strParolDB;//Пароль БД

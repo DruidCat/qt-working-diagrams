@@ -67,7 +67,7 @@ Item {
 			txdZona.text = qsTr("
 				<html>
 					<body>
-<p><center>.<img src = \"images/ru.WorkingDiagrams.png\"></center></p>
+<p><center><font color=\"black\">.<img src = \"images/ru.WorkingDiagrams.png\">.</font></center></p>
 <p><center>Приложение: <b>РАБОЧИЕ СХЕМЫ.</b></center></p>
 <p><center>Версия: <b>v0.33</b></center></p>
 <p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>

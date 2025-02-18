@@ -8,7 +8,8 @@ Page {
 	property int ntCoff: 8
 	property color clrFona: "transparent"
 	property color clrTexta: "grey"
-	property color clrRabOblasti: "lightblue"
+    property color clrFaila: "yellow"
+    property color clrRabOblasti: "lightblue"
 	property alias textZagolovok:  txtStrZagolovok.text
 	property alias textToolbar: txtStrToolbar.text
 	property alias rctStrZagolovok: rctStrZagolovok

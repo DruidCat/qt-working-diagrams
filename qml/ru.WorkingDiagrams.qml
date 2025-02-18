@@ -15,6 +15,7 @@ Window {
 	property int ntCoff: 8
 	property color clrKnopok: "orange"
 	property color clrFona: "grey"
+    property color clrFaila: "yellow"
 	property color clrStranic: "black"
 
 	StackView {
@@ -284,10 +285,12 @@ Window {
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
+            clrFaila: root.clrFaila
 			clrRabOblasti: root.clrStranic
 			StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
 				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
 				clrTexta: pgStrDannie.clrTexta; clrFona: pgStrDannie.clrRabOblasti
+                clrFaila: pgStrDannie.clrFaila
 				zagolovokX: pgStrDannie.rctStrZagolovok.x; zagolovokY: pgStrDannie.rctStrZagolovok.y
 				zagolovokWidth: pgStrDannie.rctStrZagolovok.width;
 				zagolovokHeight: pgStrDannie.rctStrZagolovok.height
@@ -327,11 +330,13 @@ Window {
             ntCoff: root.ntCoff
             clrFona: root.clrFona
             clrTexta: root.clrKnopok
+            clrFaila: root.clrFaila
             clrRabOblasti: root.clrStranic
             textZagolovok: qsTr("ПРОВОДНИК")
             StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
+                clrFaila: pgStrFileDialog.clrFaila;
                 zagolovokX: pgStrFileDialog.rctStrZagolovok.x; zagolovokY: pgStrFileDialog.rctStrZagolovok.y
                 zagolovokWidth: pgStrFileDialog.rctStrZagolovok.width;
                 zagolovokHeight: pgStrFileDialog.rctStrZagolovok.height

@@ -51,13 +51,13 @@ Item {
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrElementDBChanged(){//Слот Если изменился Элемент в strElementDB (Q_PROPERTY), то...
 				lsvZona.model = JSElement.fnElementJSON();//Перегружаем модель ListView с новыми данными.
-			}
-		}
+            }
+        }
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrSpisokChanged(){//Слот Если изменился элемент Списка strSpisok (Q_PROPERTY), то...
 				lsvZona.model = JSElement.fnElementJSON();//Перегружаем модель ListView с новыми данными.
-			}
-		}
+            }
+        }
 	}
 }
