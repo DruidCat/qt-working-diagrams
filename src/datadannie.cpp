@@ -125,7 +125,7 @@ bool DataDannie::renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString st
         return true;//Успех
     return false;//Неудача
 }
-bool DataDannie::udalDannie(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod){//Удалить запись
+bool DataDannie::udalDannieDB(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod){//Удалить запис
 ///////////////////////////////////////////////////////////
 //---У Д А Л И Т Ь   Д А Н Н Ы Е   И   Д О К У М Е Н Т---//
 ///////////////////////////////////////////////////////////
@@ -189,7 +189,7 @@ QString DataDannie::polImyaFaila(qint64 ullSpisokKod, qint64 ullElementKod, qint
 //---П О Л У Ч И Т Ь   И М Я   Ф А Й Л А---//
 /////////////////////////////////////////////
     uint ntImyaFaila = (ullSpisokKod*1000000)+(ullElementKod*1000)+ullDannieKod;
-    QString strImyaFaila = QString::number(ntImyaFaila) + ".dc";//Переменная, которая соберёт имя файла.
+    QString strImyaFaila = QString("%1").arg(ntImyaFaila, 9, 10, QLatin1Char('0')) + ".dc";//соберём имя файла
     return strImyaFaila;
 }
 bool DataDannie::estImyaFaila(QString strImyaFaila){//Есть такой файл в каталоге?
@@ -217,6 +217,30 @@ bool DataDannie::udalFail(QString strImyaFaila){//Удалить файл в к�
     }
     qdebug(tr("Внимание, файл ")+strImyaFaila+tr(" был кем то удалён."));
     return true;//успех, так как кем то удалённый файл не мешает алгоритму.
+}
+bool DataDannie::udalDannieFaili(quint64 ullSpisokKod, quint64 ullElementKod){//Удалить все файлы Элемента.
+/////////////////////////////////////////////////////
+//---У Д А Л И Т Ь   Ф А Й Л Ы   Э Л Е М Е Н Т А---//
+/////////////////////////////////////////////////////
+    QDir odrPut(m_strWorkingDiagramsPut);//Создаём объект Дериктории с папкой, где хранятся Документы.
+    QStringList slsFaili = odrPut.entryList(QStringList()<<"*.dc", QDir::Files);//Задаём маску файлов
+    QStringList slsFailiSort;//Отстортированные файлы по заданым параметрам.
+    int ntRazmer = slsFaili.size();//Количество элементов в списке.
+    for(int ntShag = 0; ntShag<ntRazmer; ntShag++){//Цикл перебора списка на наличие нужных Документов.
+        QString strFail = slsFaili[ntShag];//Строка с файлом.
+        if((strFail.mid(0, 3).toULongLong()==ullSpisokKod)&&(strFail.mid(3, 3).toULongLong()==ullElementKod)){
+            if(!udalFail(strFail))//Если файл не удалился, то...
+                return false;//Ошибка удаления.
+        }
+    }
+    return true;//Успешное удалене файлов Элемента
+}
+
+bool DataDannie::udalDannieTablicu(quint64 ullSpisokKod, quint64 ullElementKod){//Удалить таблицу Данных.
+/////////////////////////////////////////////////////
+//---У Д А Л И Т Ь   Т А Б Л И Ц У   Д А Н Н Ы Х---//
+/////////////////////////////////////////////////////
+    return true;//Успешное удаление таблицы данных.
 }
 bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Копируем файл в приложение.
 ///////////////////////////////////////////

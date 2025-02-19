@@ -60,10 +60,9 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
     if(!m_strFileDialogImya.isEmpty()){//Если Имя файла не постая строка, то...
         return m_strFileDialogImya;//Возвратим имя ФАЙЛА.
     }
-    QStringList slsMaska = m_slsFileDialogMaska;//Задаём маску отображаемых разширений файлов.
     //В список папки, без символьных ссылок, без папок [.]
     QStringList slsPapki = m_pdrPut->entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDot);
-    QStringList slsFaili = m_pdrPut->entryList(slsMaska, QDir::Files);
+    QStringList slsFaili = m_pdrPut->entryList(m_slsFileDialogMaska, QDir::Files);//Задаём маску файлов
     QString strFileDialogJSON("");//Строка, собирающая JSON команду.
     quint64 ullKolichestvoPapok = slsPapki.size();//Количество папок.
     quint64 ullKolichestvoFailov = slsFaili.size();//Количество файлов.

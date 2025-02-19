@@ -27,6 +27,7 @@ Item {
 	property alias radiusZona: rctZona.radius//Радиус Зоны рабочей
     property bool blPereimenovatVibor: false//Выбрать элемент пеименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
+    property bool blUdalitVibor: false//Включить режим выбора удаляемого Списка, если true
     property bool blZagolovok: false//Переименовать Заголовок, если true
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedMenu();//Сигнал нажатия кнопки Меню. 
@@ -41,6 +42,8 @@ Item {
         menuSpisok.visible = false;//Делаем невидимым всплывающее меню.
         tmSpisok.blPereimenovat = false;//Запрещаем выбор переименовывания.
         tmSpisok.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        tmSpisok.blUdalitVibor = false;//Запрещаем выбирать Список для удаления.
+        txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
         tmSpisok.blZagolovok = false;//Запрещаем изменять заголовок.
     }
     focus: true
@@ -76,9 +79,17 @@ Item {
         }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
+    function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного Списка.
+        tmSpisok.blUdalitVibor = false;//Запрещено выбирать Список на удаление.
+        txuUdalit.blVisible = true;//Делаем видимый запрос на удаление.
+        txuUdalit.kod = strKod;//Код на удаление
+        txuUdalit.text = strImya;//Имя на удаление
+        tmSpisok.signalToolbar(qsTr("Удалить данный список?"));//Делаем предупреждение в Toolbar.
+    }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
         tmSpisok.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        tmSpisok.blUdalitVibor = false;//Запрещено выбирать Список на удаление. НЕ УДАЛЯТЬ.
         menuSpisok.visible = false;//Делаем невидимым меню.
         txnZagolovok.visible = true;//Режим создания элемента Списка.
         txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ СПИСКА";//Подсказка пользователю, что вводить нужно.
@@ -91,6 +102,10 @@ Item {
         tmSpisok.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ СПИСКА");//Подсказка пользователю, что вводить нужно.
         tmSpisok.signalToolbar(qsTr("Выберите список для его переименования."))
+    }
+    function fnMenuUdalit(){//Нажат пункт меню Удалить.
+        tmSpisok.blUdalitVibor = true;//Включаем режим выбора удаляемого Списка.
+        tmSpisok.signalToolbar(qsTr("Выберите список для его удаления."))
     }
     function fnMenuZagolovok(){//Нажат пункт меню Изменить Заголовок.
         blZagolovok = true;//Изменить заголовок.
@@ -159,6 +174,37 @@ Item {
                 fnClickedOk();//Нажимаем на Ок(Сохранить/Переименовать), чтоб не изменять в нескольких местах.
             }
 		}
+        DCTextUdalit {
+            id: txuUdalit
+            anchors.top: tmZagolovok.top
+            anchors.bottom: tmZagolovok.bottom
+            anchors.left: tmZagolovok.left
+            anchors.right: tmZagolovok.right
+
+            anchors.topMargin: tmSpisok.ntCoff/4
+            anchors.bottomMargin: tmSpisok.ntCoff/4
+            anchors.leftMargin: tmSpisok.ntCoff/2
+            anchors.rightMargin: tmSpisok.ntCoff/2
+
+            ntWidth: tmSpisok.ntWidth
+            ntCoff: tmSpisok.ntCoff
+
+            clrFona: "orange"//Если не задать цвет, будет видно текст под надписью
+            clrTexta: "black"
+            clrKnopki: "black"
+            clrBorder: "black"
+            onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
+                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+                if(cppqml.delStrSpisok(strKod))//Запускаю метод удаление Списка из БД, Элементов и  Документов
+                    tmSpisok.signalToolbar(qsTr("Успешное удаление списка."));
+                else
+                    cppqml.strDebug = qsTr("Ошибка при удалении.");
+            }
+            onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
+                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+                tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+            }
+        }
 		Item {
             id: tmTextInput
 			anchors.top: tmZagolovok.top
@@ -207,6 +253,9 @@ Item {
     onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
         tmSpisok.blPereimenovatVibor ? rctZona.border.color = clrTexta : rctZona.border.color = "transparent";
 	}
+    onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
+        tmSpisok.blUdalitVibor? rctZona.border.color = "red" : rctZona.border.color = "transparent";
+    }
 	Item {//Список Рабочей Зоны
         id: tmZona
         Rectangle {
@@ -242,14 +291,21 @@ Item {
                             txnZagolovok.text = strSpisok;//Добавляем в строку выбранный элемент Списка.
                             tmSpisok.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
                         }
-                        else{//Если не выбор элемента на переименование, то перейти к Элементу...
-                            cppqml.strDebug = "";
-                            tmSpisok.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
-                            txnZagolovok.visible = false;//Отключаем создание Элемента списка.
-                            menuSpisok.visible = false;//Делаем невидимым меню.
-                            cppqml.ullSpisokKod = ntKod;//Присваиваем Код списка к свойству Q_PROPERTY
-                            cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
-                            tmSpisok.clickedSpisok(strSpisok);//Излучаем сигнал с именем элемента Списка.
+                        else {//Если не выбор Списка переименования, то ...
+                            if(tmSpisok.blUdalitVibor){//Если удалить, то...
+                                fnUdalit(ntKod, strSpisok);//Функция удаления выбранного Списка.
+                            }
+                            else{//Если не выбор элемента на переименование, то перейти к Элементу...
+                                cppqml.strDebug = "";
+                                tmSpisok.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
+                                tmSpisok.blUdalitVibor = false;//Запрещено выбирать Список на удаление.
+                                txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.
+                                txnZagolovok.visible = false;//Отключаем создание Элемента списка.
+                                menuSpisok.visible = false;//Делаем невидимым меню.
+                                cppqml.ullSpisokKod = ntKod;//Присваиваем Код списка к свойству Q_PROPERTY
+                                cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
+                                tmSpisok.clickedSpisok(strSpisok);//Излучаем сигнал с именем элемента Списка.
+                            }
                         }
                     }
 				}
@@ -274,6 +330,9 @@ Item {
                     if(ntNomer === 2){//Переименовать.
                         fnMenuPereimenovat();//Функция нажатия пункта меню Переименовать.
 					}
+                    if(ntNomer === 3){//Удалить.
+                        fnMenuUdalit();//Функция нажатия пункта меню Удалить.
+                    }
                     if(ntNomer === 5){//Изменить Заголовок.
                         fnMenuZagolovok();//Функция нажатия пункта меню Изменить Заголовок.
                     }
@@ -314,6 +373,8 @@ Item {
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;
                 tmSpisok.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
                 tmSpisok.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+                tmSpisok.blUdalitVibor = false;//Запрещено удалять.
+                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
                 tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}

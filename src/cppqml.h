@@ -113,6 +113,7 @@ public:
 
     QString		strSpisok();//Получить элемента Списка.
     void		setStrSpisok (QString& strSpisokNovi);//Изменение элемента списка.
+    Q_INVOKABLE bool delStrSpisok(QString strSpisokKod);//Удалить Список по коду.
     QString		strSpisokDB();//Возвратить JSON строку Списка.
     void		setStrSpisokDB(QString& strSpisokNovi);//Изменение JSON запроса Списка.
 	Q_INVOKABLE bool renStrSpisokDB(QString strSpisok, QString strSpisokNovi);//Переимен. элемент Списка
@@ -124,6 +125,7 @@ public:
 
     QString		strElement();//Возвратить элемент.
     void		setStrElement(QString& strElementNovi);//Измененит Элемент.
+    Q_INVOKABLE bool delStrElement(QString strElementKod);//Удалить Элемент по коду.
     QString		strElementDB();//Возвратить JSON строку элемента.
     void		setStrElementDB(QString& strElementNovi);//Изменение JSON запроса Элемента.
     Q_INVOKABLE bool renStrElementDB(QString strElement, QString strElementNovi);//Переимен. Элемент списка

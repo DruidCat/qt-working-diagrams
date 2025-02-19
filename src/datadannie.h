@@ -18,13 +18,15 @@ public:
     QStringList	polDannie(quint64 ullSpisokKod, quint64 ullElementKod);//Получить список всех Данных.
     bool 		ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail, QString strDannie);
     bool 		renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString strDannie,QString strDannieNovi);
-    bool  		udalDannie(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod);//Удалить запись
+    bool  		udalDannieDB(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod);//Удалить запись
     QString		polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod);//Получить JSON строчку Данных.
     bool 		polDanniePervi() { return m_blDanniePervi; }//Вернуть состояние флага Первые Данные?
 	void 		ustFileDialogPut(QString strFileDialogPut);//Задать путь к каталогу, в котором файл записи.
     QString 	polImyaFaila(qint64 ullSpisokKod,qint64 ullElementKod,qint64 ullDannieKod);//Получить имя файл
     bool  		estImyaFaila(QString strImyaFaila);//Есть такой файл в каталоге?
     bool  		udalFail(QString strImyaFaila);//Удалить файл в каталоге.
+    bool  		udalDannieFaili(quint64 ullSpisokKod, quint64 ullElementKod);//Удалить все файлы Элемента.
+    bool  		udalDannieTablicu(quint64 ullSpisokKod, quint64 ullElementKod);//Удалить таблицу Данных.
     bool 		copyDannie(QString strAbsolutPut, QString strImyaFaila);//Копируем файл в приложение.
 
 private:

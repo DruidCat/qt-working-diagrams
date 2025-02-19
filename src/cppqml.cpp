@@ -175,6 +175,14 @@ void DCCppQml::setStrSpisok(QString& strSpisokNovi) {//Изменение эле
 		m_strSpisok = strSpisokNovi;//Приравниваем.
     emit strSpisokChanged();//Излучаем сигнал об изменении аргумента. ТУТ этот сигнал. Не важно изменение.
 }
+
+bool DCCppQml::delStrSpisok(QString strSpisokKod){//Удалить Список по коду.
+/////////////////////////////////////
+//---У Д А Л И Т Ь   С П И С О К---//
+/////////////////////////////////////
+
+    return true;//Успешное удаление Списка.
+}
 QString DCCppQml::strSpisokDB() {//Возвратить JSON строку Списка.
 /////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   С П И С К А---//
@@ -284,6 +292,23 @@ void DCCppQml::setStrElement(QString& strElementNovi) {//Изменение эл
     if(strElementNovi != m_strElement)//Если элемент не равен выбранному до этого, то...
 		m_strElement = strElementNovi;//Приравниваем.
     emit strElementChanged();//Излучаем сигнал об изменении аргумента. ТУТ эта строка, не важно изменение.
+}
+
+bool DCCppQml::delStrElement(QString strElementKod){//Удалить Элемент по коду.
+///////////////////////////////////////
+//---У Д А Л И Т Ь   Э Л Е М Е Н Т---//
+///////////////////////////////////////
+    quint64 ullElementKod =  strElementKod.toULongLong();//Преобразуем строку в число.
+    if(m_pDataDannie->udalDannieFaili(m_ullSpisokKod, ullElementKod)){//Если удалили файлы Элем.
+        if(m_pDataDannie->udalDannieTablicu(m_ullSpisokKod, ullElementKod)){//Удаляем таблицу Элемента, успех.
+            return true;//Успешное удаление.
+        }
+        else//Если удаление таблицы не совершено, то...
+            qdebug(tr("Ошибка удаления таблицы выбранного элемента."));
+    }
+    else//Если удаление Документов элемента не совершено, то...
+        qdebug(tr("Ошибка удаления данных выбранного элемента."));
+    return false;//Ошибка удаления.
 }
 QString DCCppQml::strElementDB() {//Возвратить JSON строку Элементов.
 ///////////////////////////////////////////////////////
@@ -402,7 +427,7 @@ bool DCCppQml::delStrDannie(QString strDannieKod){//Удалить данные 
 /////////////////////////////////////
 //---У Д А Л И Т Ь   Д А Н Н Ы Е---//
 /////////////////////////////////////
-    if(m_pDataDannie->udalDannie(m_ullSpisokKod, m_ullElementKod, strDannieKod.toULongLong())){//Если удаление
+    if(m_pDataDannie->udalDannieDB(m_ullSpisokKod, m_ullElementKod, strDannieKod.toULongLong())){//Если удален
         emit strDannieDBChanged();//Излучаем сигнал, чтоб обновился списик Данных, после удаления.
         return true;//Успех удаления записи из БД и Документа.
     }

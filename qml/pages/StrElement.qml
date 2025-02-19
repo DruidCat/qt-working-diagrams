@@ -26,6 +26,7 @@ Item {
 	property alias toolbarHeight: tmToolbar.height
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
+    property bool blUdalitVibor: false//Включить режим выбора удаляемого Элемента, если true
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
@@ -38,6 +39,8 @@ Item {
         menuElement.visible = false;//Делаем невидимым всплывающее меню.
         tmElement.blPereimenovat = false;//Запрещаем выбор переименовывания.
         tmElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        tmElement.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
+        txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
     }
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
@@ -65,9 +68,17 @@ Item {
         }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
+    function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
+        tmElement.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
+        txuUdalit.blVisible = true;//Делаем видимый запрос на удаление.
+        txuUdalit.kod = strKod;//Код на удаление
+        txuUdalit.text = strImya;//Имя на удаление
+        tmElement.signalToolbar(qsTr("Удалить данный элемент?"));//Делаем предупреждение в Toolbar.
+    }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
         tmElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        tmElement.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
         menuElement.visible = false;//Делаем невидимым меню.
         txnZagolovok.visible = true;//Режим создания элемента Списка.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
@@ -80,6 +91,10 @@ Item {
         tmElement.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
         tmElement.signalToolbar(qsTr("Выберите элемент для его переименования."));
+    }
+    function fnMenuUdalit(){//Нажат пункт меню Удалить.
+        tmElement.blUdalitVibor = true;//Включаем режим выбора удаляемого Элемента
+        tmElement.signalToolbar(qsTr("Выберите элемент для его удаления."))
     }
 
 	Item {//Элементы Заголовок
@@ -139,6 +154,37 @@ Item {
 				fnClickedOk();//Функция сохранения данных.
 			}
 		}
+        DCTextUdalit {
+            id: txuUdalit
+            anchors.top: tmZagolovok.top
+            anchors.bottom: tmZagolovok.bottom
+            anchors.left: tmZagolovok.left
+            anchors.right: tmZagolovok.right
+
+            anchors.topMargin: tmElement.ntCoff/4
+            anchors.bottomMargin: tmElement.ntCoff/4
+            anchors.leftMargin: tmElement.ntCoff/2
+            anchors.rightMargin: tmElement.ntCoff/2
+
+            ntWidth: tmElement.ntWidth
+            ntCoff: tmElement.ntCoff
+
+            clrFona: "orange"//Если не задать цвет, будет видно текст под надписью
+            clrTexta: "black"
+            clrKnopki: "black"
+            clrBorder: "black"
+            onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
+                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+                if(cppqml.delStrElement(strKod))//Запускаю метод удаление Элемента из БД и их Документов.
+                    tmElement.signalToolbar(qsTr("Успешное удаление элемента."));
+                else
+                    cppqml.strDebug = qsTr("Ошибка при удалении.");
+            }
+            onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
+                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+                tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+            }
+        }
 		Item {
 			id: tmTextInput
 			anchors.top: tmZagolovok.top
@@ -187,6 +233,9 @@ Item {
     onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
         tmElement.blPereimenovatVibor ? rctZona.border.color=clrTexta : rctZona.border.color="transparent";
     }
+    onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
+        tmElement.blUdalitVibor? rctZona.border.color = "red" : rctZona.border.color = "transparent";
+    }
 	Item {//Список Рабочей Зоны
 		id: tmZona
 		Rectangle {
@@ -219,16 +268,23 @@ Item {
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strElement = strElement;//Присваиваем Элемент списка к свойству Q_PROPERTY
                             txnZagolovok.text = strElement;//Добавляем в строку выбранный Элемент списка.
-                            tmElement.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
+                            tmElement.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименовани
                         }
-                        else {//Если не режим выбора элементов Переименования, то перейти к Данным...
-                            cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                            tmElement.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
-                            txnZagolovok.visible = false;//Отключаем создание Элемента.
-                            menuElement.visible = false;//Делаем невидимым всплывающее меню.
-                            cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
-                            cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPERTY
-                            tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
+                        else {//Если не выбор элементов переименования, то ...
+                            if(tmElement.blUdalitVibor){//Если удалить, то...
+                                fnUdalit(ntKod, strElement);//Функция удаления
+                            }
+                            else {//Если не режим выбора элементов Переименования, то перейти к Данным...
+                                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+                                tmElement.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
+                                tmElement.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
+                                txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.
+                                txnZagolovok.visible = false;//Отключаем создание Элемента.
+                                menuElement.visible = false;//Делаем невидимым всплывающее меню.
+                                cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
+                                cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPE
+                                tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
+                            }
                         }
 					}
 				}
@@ -253,6 +309,9 @@ Item {
                     if(ntNomer === 2){//Переименовать.
                         fnMenuPereimenovat();//Функция нажатия пункта меню Переименовать.
 					}
+                    if(ntNomer === 3){//Удалить.
+                        fnMenuUdalit();//Функция нажатия пункта меню Удалить.
+                    }
                     if(ntNomer === 5){//Выход
 						Qt.quit();//Закрыть приложение.
 					}
@@ -288,6 +347,8 @@ Item {
                 menuElement.visible ? menuElement.visible = false : menuElement.visible = true;
                 tmElement.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
                 tmElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+                tmElement.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
+                txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.
                 tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}
