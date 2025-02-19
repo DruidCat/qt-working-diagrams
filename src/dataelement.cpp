@@ -110,6 +110,24 @@ bool DataElement::renElement(quint64 ullSpisokKod, QString strElement, QString s
         return true;//Успех
     return false;//Неудача
 }
+bool DataElement::udalElementDB(quint64 ullSpisokKod,quint64 ullElementKod){//Удалить в БД запись Элемента
+///////////////////////////////////////////////////////
+//---У Д А Л И Т Ь   З А П И С Ь   Э Л Е М Е Н Т А---//
+///////////////////////////////////////////////////////
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));//Имя таблицы, в которой удалять.
+    if(m_pdbElement->DELETE("Код", QString::number(ullElementKod)))//Удаляем данные в БД
+        return true;//Успех
+    return false;//Ошибка удаления файла или элемента БД.
+}
+bool DataElement::udalElementTablicu(quint64 ullSpisokKod){//Удалить Таблицу Элемента.
+/////////////////////////////////////////////////////////
+//---У Д А Л И Т Ь   Т А Б Л И Ц У   Э Л Е М Е Н Т А---//
+/////////////////////////////////////////////////////////
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
+    if(!m_pdbElement->DROP())//Если таблица не удалилась, то...
+        return false;//Ошибка удаления таблицы.
+    return true;//Успешное удаление таблицы.
+}
 QString DataElement::polElementJSON(quint64 ullSpisokKod) {//Получить JSON строчку Элемента.
 ///////////////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   С Т Р О К У   Э Л Е М Е Н Т А---//
@@ -168,13 +186,29 @@ bool DataElement::ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod
         qdebug(tr("DataElement::ustElementOpisanie(quint64,quint64,QString): quint64 меньше или равен 0."));
 		return false;//Возвращаем ошибку.
 	}
-   m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
     if(m_pdbElement->UPDATE(QStringList()<<"Код"<<"Описание",
 						QStringList()<<QString::number(ullElementKod)<<strElementOpisanie)){//Успех записи, то
 		return true;//Успех
 	}
     qdebug(tr("DataElement::ustElementOpisanie(quint64,quint64,QString): ошибка записи Описания."));
-	return false;//Ошибка.
+    return false;//Ошибка.
+}
+QStringList DataElement::polElementKodi(quint64 ullSpisokKod){//Получить все Коды в таблице Элемент_ullSpisokKod
+///////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   С П И С О К   К О Д О В---//
+///////////////////////////////////////////////////
+    QStringList slsKod;//Коди строк в таблице.
+    QString strNomer;//Переменная, в которую будет читаться номер из БД.
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
+    quint64 ullKolichestvo = m_pdbElement->SELECTPK();//Получаем полное количество созданных когда то строк.
+    for(quint64 ullShag = 1; ullShag<=ullKolichestvo; ullShag++){//Перебираем все строки в таблице.
+        strNomer = m_pdbElement->SELECT("Код", QString::number(ullShag), "Номер");//Считываем номер из таблицы
+        if(!strNomer.isEmpty()){//Если не пустая строка, значит строка существует.
+            slsKod = slsKod << QString::number(ullShag);//Записываем этот код в список.
+        }
+    }
+    return slsKod;
 }
 void DataElement::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////

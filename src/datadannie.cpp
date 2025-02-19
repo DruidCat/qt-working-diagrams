@@ -138,7 +138,6 @@ bool DataDannie::udalDannieDB(quint64 ullSpisokKod,quint64 ullElementKod,quint64
     }
     return false;//Ошибка удаления файла или элемента БД.
 }
-
 QString DataDannie::polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod){//Получить JSON строчку Данных.
 ///////////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   J S O N   С Т Р О К У   Д А Н Н Ы Х---//
@@ -224,7 +223,6 @@ bool DataDannie::udalDannieFaili(quint64 ullSpisokKod, quint64 ullElementKod){//
 /////////////////////////////////////////////////////
     QDir odrPut(m_strWorkingDiagramsPut);//Создаём объект Дериктории с папкой, где хранятся Документы.
     QStringList slsFaili = odrPut.entryList(QStringList()<<"*.dc", QDir::Files);//Задаём маску файлов
-    QStringList slsFailiSort;//Отстортированные файлы по заданым параметрам.
     int ntRazmer = slsFaili.size();//Количество элементов в списке.
     for(int ntShag = 0; ntShag<ntRazmer; ntShag++){//Цикл перебора списка на наличие нужных Документов.
         QString strFail = slsFaili[ntShag];//Строка с файлом.
@@ -235,11 +233,13 @@ bool DataDannie::udalDannieFaili(quint64 ullSpisokKod, quint64 ullElementKod){//
     }
     return true;//Успешное удалене файлов Элемента
 }
-
 bool DataDannie::udalDannieTablicu(quint64 ullSpisokKod, quint64 ullElementKod){//Удалить таблицу Данных.
 /////////////////////////////////////////////////////
 //---У Д А Л И Т Ь   Т А Б Л И Ц У   Д А Н Н Ы Х---//
 /////////////////////////////////////////////////////
+    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
+    if(!m_pdbDannie->DROP())//Если таблица не удалилась, то...
+        return false;//Ошибка удаления таблицы.
     return true;//Успешное удаление таблицы данных.
 }
 bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Копируем файл в приложение.

@@ -15,9 +15,12 @@ public:
     QStringList	polElement(quint64 ullSpisokKod);//Получить полный список всех Элементов по Коду Списка.
     bool 		ustElement(quint64 ullSpisokKod, QString strElement);//Записать в БД Элемент.
     bool 		renElement(quint64 ullSpisokKod, QString strElement, QString strElementNovi);//Переименовать.
+    bool 		udalElementDB(quint64 ullSpisokKod,quint64 ullElementKod);//Удалить в БД запись Элемента
+    bool 		udalElementTablicu(quint64 ullSpisokKod);//Удалить Таблицу Элемента.
     QString		polElementJSON(quint64 ullSpisokKod);//Получить JSON строчку Элементов.
     QString 	polElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod);//Получить Описание Элемента
 	bool 		ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod, QString strElementOpisanie);
+    QStringList polElementKodi(quint64 ullSpisokKod);//Получить все Коды в таблице Элемент_ullSpisokKod
 	bool 		polElementPervi() { return m_blElementPervi; }//Вернуть состояние флага Первый Элемент?
 
 private:
