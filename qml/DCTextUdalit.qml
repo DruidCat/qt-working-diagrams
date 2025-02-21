@@ -54,13 +54,54 @@ Item {
             clip: true//Обрезаем всё что больше этого прямоугольника.
             Text {
                 id: txtTextUdalit
-                anchors.fill: rctText
+				anchors.horizontalCenter: rctText.horizontalCenter
+				anchors.verticalCenter: rctText.verticalCenter
                 color: tmTextUdalit.clrTexta
                 font.pixelSize: tmTextUdalit.ntWidth*tmTextUdalit.ntCoff//размер шрифта текста.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 text: qsTr("УДАЛИТЬ:")+tmTextUdalit.text+"?"
-            }
+				onTextChanged: {//Если текст изменился, то...
+					if(rctText.width > txtTextUdalit.width){//Если длина строки больше длины текста, то...
+					for(let ltShag=txtTextUdalit.font.pixelSize;
+												ltShag<tmTextUdalit.ntWidth*tmTextUdalit.ntCoff; ltShag++){
+							if(txtTextUdalit.width < rctText.width){//Если длина текста меньше динны строки
+								txtTextUdalit.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+								if(txtTextUdalit.width > rctText.width){//Но, если переборщили
+									txtTextUdalit.font.pixelSize--;//То уменьшаем размер шрифта и...
+									return;//Выходим из увеличения шрифта.
+								}
+							}
+						}
+					}
+					else{//Если длина строки меньше длины текста, то...
+						for(let ltShag = txtTextUdalit.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения 
+							if(txtTextUdalit.width > rctText.width)//Если текст дилиннее строки, то...
+								txtTextUdalit.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						}
+					}
+				}
+			}
+			onWidthChanged: {//Если длина строки измениасть, то...
+				if(rctText.width > txtTextUdalit.width){//Если длина строки больше длины текста, то...
+				for(let ltShag=txtTextUdalit.font.pixelSize;
+												ltShag<tmTextUdalit.ntWidth*tmTextUdalit.ntCoff; ltShag++){
+						if(txtTextUdalit.width < rctText.width){//Если длина текста меньше динны строки
+							txtTextUdalit.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+							if(txtTextUdalit.width > rctText.width){//Но, если переборщили
+								txtTextUdalit.font.pixelSize--;//То уменьшаем размер шрифта и...
+								return;//Выходим из увеличения шрифта.
+							}
+						}
+					}
+				}
+				else{//Если длина строки меньше длины текста, то...
+					for(let ltShag = txtTextUdalit.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения 
+						if(txtTextUdalit.width > rctText.width)//Если текст дилиннее строки, то...
+							txtTextUdalit.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+					}
+				}
+			}
         }
         DCKnopkaOk{//Кнопка подтверждения удаления.
             id: knopkaUdalitOk

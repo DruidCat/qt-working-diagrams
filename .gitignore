@@ -5,8 +5,7 @@
 /build/ru.WorkingDiagrams_autogen
 /build/CMakeCache.txt
 /build/cmake_install.cmake
-/build/dcdata/
-/build/druidcat.dc
+/build/workingdata/
 /build/ru.WorkingDiagrams
 
 # This file is used to ignore files which are generated

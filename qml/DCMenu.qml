@@ -27,6 +27,7 @@ Item {
                 color: maMenu.containsPress
 					   ? Qt.darker(tmMenu.clrFona, 1.3) : tmMenu.clrFona
 				Text {
+					id: txtText
 					color: maMenu.containsPress
 						   ? Qt.darker(tmMenu.clrTexta, 1.3) : tmMenu.clrTexta
 					anchors.horizontalCenter: rctMenu.horizontalCenter
@@ -39,6 +40,25 @@ Item {
 					anchors.fill: rctMenu
 					onClicked: {
 						tmMenu.clicked(modelData.nomer, modelData.menu)
+					}
+				}
+				onWidthChanged: {//Если длина строки изменилась, то...
+					if(rctMenu.width > txtText.width){//Если длина строки больше длины текста, то...
+						for(let ltShag=txtText.font.pixelSize; ltShag<rctMenu.height-tmMenu.ntCoff; ltShag++){
+							if(txtText.width < rctMenu.width){//Если длина текста меньше динны строки
+								txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+								if(txtText.width > rctMenu.width){//Но, если переборщили
+									txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+									return;//Выходим из увеличения шрифта.
+								}
+							}
+						}
+					}
+					else{//Если длина строки меньше длины текста, то...
+						for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения 
+							if(txtText.width > rctMenu.width)//Если текст дилиннее строки, то...
+								txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						}
 					}
 				}
 			}

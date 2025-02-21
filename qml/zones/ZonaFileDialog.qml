@@ -28,48 +28,35 @@ Item {
                 color: maZona.containsPress
                        ? Qt.darker(tmZona.clrFona, 1.3) : tmZona.clrFona
                 TextMetrics {
-                    id: txtText
-                    elide: Text.ElideMiddle
-                    elideWidth: rctZona.width+rctZona.width/2
+                    id: txmText
+                    elide: Text.ElideMiddle//Обрезаем текст с середины, ставя точки... (Dru..Cat)
+                    elideWidth: rctZona.width//Максимальная длина обезания текста.
                     text: {//Пишем функцию на JS для цвета текста папки или файла.
                         var strModel = modelData.filedialog;//Считываем модель с именем папки или файла.
                         cppqml.strFileDialogModel = strModel;//Отправляем в бизнес логику.
                         if(cppqml.strFileDialogModel === "0")//Если 0-папка
-                            txt.color = tmZona.clrPapki;//Задаём цвет текста модели для папки.
+                            txtText.color = tmZona.clrPapki;//Задаём цвет текста модели для папки.
                         else//Если 1-файл.
-                            txt.color = tmZona.clrFaila;//Задаём цвет текста модели для файла.
+                            txtText.color = tmZona.clrFaila;//Задаём цвет текста модели для файла.
                         return strModel;//вернуть в переменную text значение модели для отображения.
                     }
-                    //anchors.horizontalCenter: rctZona.horizontalCenter
-                    //anchors.verticalCenter: rctZona.verticalCenter
-                        /*
-                    font.pixelSize: {
-                        //console.log(txtText.text);
-                        //console.log("Длина строки: "+rctZona.width);
-                        //console.log("Высота строки и коэффициент: "+rctZona.height + " и "+ tmZona.ntCoff);
-                        //console.log("Длина текста в символах: "+txtText.text.length);
-                        if(rctZona.width/txtText.text.length>=rctZona.height)
-                            return rctZona.height
-                        else
-                            return rctZona.width/txtText.text.length
-                        return rctZona.height-tmZona.ntCoff
-                    }
-                            */
-
                 }
                 Text{
-                    id: txt
+                    id: txtText
                     anchors.horizontalCenter: rctZona.horizontalCenter
                     anchors.verticalCenter: rctZona.verticalCenter
-                    text: txtText.elidedText
+                    text: txmText.elidedText//Отображаем текст уже обрезанный по длине с точками по середине.
                 }
                 MouseArea {//Создаём MA для каждого элемента каталога.
                     id: maZona
                     anchors.fill: rctZona
                     onClicked: {//При клике на Элемент
-                        tmZona.clicked(modelData.tip, modelData.filedialog);//Излучаем сигнал с типом и именем.
+                        tmZona.clicked(modelData.tip, modelData.filedialog);//Излучаем сигнал с типом и именем
                     }
                 }
+				onWidthChanged:{//Длина прямоугольника строки изменилась.
+					txmText.elideWidth = rctZona.width//Задаём ограничение текста по границе длины строки.
+				}
             }
         }
         anchors.fill: tmZona
