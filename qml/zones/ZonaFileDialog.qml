@@ -27,19 +27,41 @@ Item {
                 clip: true//Обрезаем лишний текст в прямоугольнике.
                 color: maZona.containsPress
                        ? Qt.darker(tmZona.clrFona, 1.3) : tmZona.clrFona
-                Text {
+                TextMetrics {
+                    id: txtText
+                    elide: Text.ElideMiddle
+                    elideWidth: rctZona.width+rctZona.width/2
                     text: {//Пишем функцию на JS для цвета текста папки или файла.
                         var strModel = modelData.filedialog;//Считываем модель с именем папки или файла.
                         cppqml.strFileDialogModel = strModel;//Отправляем в бизнес логику.
                         if(cppqml.strFileDialogModel === "0")//Если 0-папка
-                            color = tmZona.clrPapki;//Задаём цвет текста модели для папки.
+                            txt.color = tmZona.clrPapki;//Задаём цвет текста модели для папки.
                         else//Если 1-файл.
-                            color = tmZona.clrFaila;//Задаём цвет текста модели для файла.
+                            txt.color = tmZona.clrFaila;//Задаём цвет текста модели для файла.
                         return strModel;//вернуть в переменную text значение модели для отображения.
                     }
+                    //anchors.horizontalCenter: rctZona.horizontalCenter
+                    //anchors.verticalCenter: rctZona.verticalCenter
+                        /*
+                    font.pixelSize: {
+                        //console.log(txtText.text);
+                        //console.log("Длина строки: "+rctZona.width);
+                        //console.log("Высота строки и коэффициент: "+rctZona.height + " и "+ tmZona.ntCoff);
+                        //console.log("Длина текста в символах: "+txtText.text.length);
+                        if(rctZona.width/txtText.text.length>=rctZona.height)
+                            return rctZona.height
+                        else
+                            return rctZona.width/txtText.text.length
+                        return rctZona.height-tmZona.ntCoff
+                    }
+                            */
+
+                }
+                Text{
+                    id: txt
                     anchors.horizontalCenter: rctZona.horizontalCenter
                     anchors.verticalCenter: rctZona.verticalCenter
-                    font.pixelSize: rctZona.height-tmZona.ntCoff
+                    text: txtText.elidedText
                 }
                 MouseArea {//Создаём MA для каждого элемента каталога.
                     id: maZona
