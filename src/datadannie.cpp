@@ -275,6 +275,8 @@ void DataDannie::slotCopyDannie(bool blCopyStatus){//Слот получающи
         emit signalFileDialogCopy(m_pdbDannie->INSERT(QStringList()<<"Номер"<<"Данные"<<"Запись",
                                                       m_slsINSERT));//Записываем в БД, и отсылаем сигнал 1или0
     }
-    else
+    else{
+		qdebug(tr("Ошибка записи в базу данных."));
         emit signalFileDialogCopy(blCopyStatus);//Отсылаем сигнал об ошибке копирования.
+	}
 }

@@ -23,8 +23,6 @@ Window {
 		property string strOpisanie: "titul"
 		anchors.fill: parent
         initialItem: pgStrSpisok
-        //initialItem: pgStrMenu
-        //initialItem: pgStrDannie
 
 		Stranica {//Меню
 		/////////////
@@ -89,7 +87,7 @@ Window {
 				zonaWidth: pgStrDebug.rctStrZona.width; zonaHeight: pgStrDebug.rctStrZona.height
 				toolbarX: pgStrDebug.rctStrToolbar.x; toolbarY: pgStrDebug.rctStrToolbar.y
 				toolbarWidth: pgStrDebug.rctStrToolbar.width; toolbarHeight: pgStrDebug.rctStrToolbar.height
-				radiusTextEdit: pgStrDebug.rctStrZona.radius//Радиус берём из настроек элемента qml
+				radiusZona: pgStrDebug.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
@@ -122,7 +120,7 @@ Window {
 				toolbarX: pgStrWorkingDiagrams.rctStrToolbar.x; toolbarY: pgStrWorkingDiagrams.rctStrToolbar.y
 				toolbarWidth: pgStrWorkingDiagrams.rctStrToolbar.width;
 				toolbarHeight: pgStrWorkingDiagrams.rctStrToolbar.height
-				radiusTextEdit: pgStrWorkingDiagrams.rctStrZona.radius//Радиус берём из настроек элемента qml
+				radiusZona: pgStrWorkingDiagrams.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
@@ -152,7 +150,7 @@ Window {
 				zonaWidth: pgStrQt.rctStrZona.width; zonaHeight: pgStrQt.rctStrZona.height
 				toolbarX: pgStrQt.rctStrToolbar.x; toolbarY: pgStrQt.rctStrToolbar.y
 				toolbarWidth: pgStrQt.rctStrToolbar.width; toolbarHeight: pgStrQt.rctStrToolbar.height
-				radiusTextEdit: pgStrQt.rctStrZona.radius//Радиус берём из настроек элемента qml
+				radiusZona: pgStrQt.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
@@ -181,6 +179,7 @@ Window {
                 zonaWidth: pgStrPlan.rctStrZona.width; zonaHeight: pgStrPlan.rctStrZona.height
                 toolbarX: pgStrPlan.rctStrToolbar.x; toolbarY: pgStrPlan.rctStrToolbar.y
                 toolbarWidth: pgStrPlan.rctStrToolbar.width; toolbarHeight: pgStrPlan.rctStrToolbar.height
+				radiusZona: pgStrPlan.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
@@ -359,6 +358,9 @@ Window {
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
                     pgStrFileDialog.textZagolovok = strZagolovok;//Изменяем заголовок.
                 }
+				onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrFileDialog.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
+                }
                 onClickedInfo: {
                     stvStr.push(pgStrFDInstrukciya);//Переключаемся на страницу Инструкция проводника.
                 }
@@ -391,7 +393,7 @@ Window {
                 toolbarX: pgStrFDInstrukciya.rctStrToolbar.x; toolbarY: pgStrFDInstrukciya.rctStrToolbar.y
                 toolbarWidth: pgStrFDInstrukciya.rctStrToolbar.width;
                 toolbarHeight: pgStrFDInstrukciya.rctStrToolbar.height
-                radiusTextEdit: pgStrFDInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
+                radiusZona: pgStrFDInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
                 onClickedNazad: {
                     stvStr.pop()//Назад страницу
                 }
@@ -421,7 +423,7 @@ Window {
 				toolbarX: pgStrOpisanie.rctStrToolbar.x; toolbarY: pgStrOpisanie.rctStrToolbar.y
 				toolbarWidth: pgStrOpisanie.rctStrToolbar.width
 				toolbarHeight: pgStrOpisanie.rctStrToolbar.height
-				radiusTextEdit: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
+				radiusZona: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
 				strOpisanie: stvStr.strOpisanie//Передаём флаг Отображения конкретного Описания.
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.pop()//Назад страницу

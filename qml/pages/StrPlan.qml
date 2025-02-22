@@ -23,6 +23,7 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
+	property alias radiusZona: rctZona.radius
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
@@ -43,6 +44,11 @@ Item {
     Item {//Данные Зона
 		id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+		Rectangle {
+			id: rctZona
+			anchors.fill: tmZona
+			color: "transparent"
+		}
     }
     Item {//Данные Тулбар
 		id: tmToolbar

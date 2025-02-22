@@ -23,7 +23,7 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-	property alias radiusTextEdit: txdZona.radius
+	property alias radiusZona: txdZona.radius
 	property alias textTextEdit: txdZona.text
 	property string strOpisanie: "titul"
 	anchors.fill: parent//Растянется по Родителю.

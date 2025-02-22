@@ -23,7 +23,7 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-	property alias radiusTextEdit: txdZona.radius
+	property alias radiusZona: txdZona.radius
 	property string strDebug: ""//Глобальная переменная, в ней собирается строка со всеми Сообщениями.
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
