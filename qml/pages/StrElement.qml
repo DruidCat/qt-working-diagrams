@@ -24,6 +24,7 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
+	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого Элемента, если true
@@ -229,20 +230,13 @@ Item {
 				}
 			}
 		}
-	}
-    onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
-        tmElement.blPereimenovatVibor ? rctZona.border.color=clrTexta : rctZona.border.color="transparent";
-    }
-    onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
-        tmElement.blUdalitVibor? rctZona.border.color = "red" : rctZona.border.color = "transparent";
-    }
+	} 
 	Item {//Список Рабочей Зоны
 		id: tmZona
 		Rectangle {
 			id: rctZona
 			anchors.fill: tmZona
 			color: "transparent"
-			border.width: tmElement.ntCoff/2//Бордюр при переименовании.
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
             DCLogoTMK {//Логотип до ZonaElement, чтоб не перекрывать список.
                 ntCoff: 16
@@ -317,8 +311,20 @@ Item {
 					}
 				}
 			}
+			Rectangle{//Это Рамка поверх логотипа и списков для переименования и удаления.
+				id: rctBorder
+				anchors.fill: rctZona
+				color: "transparent"
+				border.width: tmElement.ntCoff/2//Бордюр при переименовании и удалении.
+			}
 		}
 	}
+	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
+        tmElement.blPereimenovatVibor ? rctBorder.border.color=clrTexta:rctBorder.border.color="transparent";
+    }
+    onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
+        tmElement.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
+    }
 	Item {//Состава Тулбар
 		id: tmToolbar
 		DCKnopkaInfo {

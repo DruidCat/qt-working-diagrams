@@ -255,6 +255,7 @@ Window {
 				toolbarX: pgStrElement.rctStrToolbar.x; toolbarY: pgStrElement.rctStrToolbar.y
 				toolbarWidth: pgStrElement.rctStrToolbar.width
 				toolbarHeight: pgStrElement.rctStrToolbar.height
+				radiusZona: pgStrElement.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.strOpisanie = "titul";//Показываем описание Титульной страницы.
 					stvStr.pop()//Назад страницу
@@ -298,6 +299,7 @@ Window {
 				zonaWidth: pgStrDannie.rctStrZona.width; zonaHeight: pgStrDannie.rctStrZona.height
 				toolbarX: pgStrDannie.rctStrToolbar.x; toolbarY: pgStrDannie.rctStrToolbar.y
 				toolbarWidth: pgStrDannie.rctStrToolbar.width; toolbarHeight: pgStrDannie.rctStrToolbar.height
+				radiusZona: pgStrDannie.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
 					stvStr.pop()//Назад страницу
@@ -345,6 +347,7 @@ Window {
                 toolbarX: pgStrFileDialog.rctStrToolbar.x; toolbarY: pgStrFileDialog.rctStrToolbar.y
                 toolbarWidth: pgStrFileDialog.rctStrToolbar.width;
                 toolbarHeight: pgStrFileDialog.rctStrToolbar.height
+				radiusZona: pgStrFileDialog.rctStrZona.radius//Радиус берём из настроек элемента qml
                 onClickedNazad: {//Слот нажатия кнопки Назад.
                     stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
                     stvStr.pop()//Назад страницу

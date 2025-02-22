@@ -25,6 +25,7 @@ Item {
     property alias toolbarY: tmToolbar.y
     property alias toolbarWidth: tmToolbar.width
     property alias toolbarHeight: tmToolbar.height
+	property alias radiusZona: rctZona.radius//Радиус Зоны рабочей
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
     property bool blLogoTMK: false//Флаг, отвечает за изменение размера логотипа. Уменьшаем - false
     property int ntLogoTMK: 16
