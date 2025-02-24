@@ -22,6 +22,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_strDannie(""),
                                         m_strDannieDB(""),
                                         m_ullDannieKod(0),
+										m_strDannieUrl(""),
                                         m_blDanniePervi(false),
 
                                         m_strFileDialog(""),
@@ -540,6 +541,16 @@ void DCCppQml::setUllDannieKod(quint64 ullDannieKodNovi){//Изменить ко
             emit ullDannieKodChanged();//Сигнал о том, что код Данных изменился.
         }
     }
+}
+QString DCCppQml::strDannieUrl(){//Возвратить имя файла.
+/////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   И М Я   Ф А Й Л А---//
+/////////////////////////////////////////////
+	m_strDannieUrl = 	"file://"
+						+m_pDataDannie->polWorkingDiagrams()
+						+QDir::separator()
+						+m_pDataDannie->polImyaFaila(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod);
+	return m_strDannieUrl;
 }
 QString DCCppQml::strFileDialog() {//Возвратить JSON строку с папками и файлами.
 ///////////////////////////////////////////////

@@ -78,7 +78,9 @@ class DCCppQml : public QObject {
                     READ ullDannieKod
                     WRITE setUllDannieKod
                     NOTIFY ullDannieKodChanged FINAL)
-    Q_PROPERTY(bool blDanniePervi
+    Q_PROPERTY(QString strDannieUrl
+                    READ strDannieUrl FINAL)
+	Q_PROPERTY(bool blDanniePervi
                     READ blDanniePervi FINAL)
 
     Q_PROPERTY(QString strFileDialog
@@ -143,6 +145,7 @@ public:
     Q_INVOKABLE bool renStrDannieDB(QString strDannie, QString strDannieNovi);//Переименоваовать Данные.
     quint64		ullDannieKod();//Возвращает Код Данных.
     void		setUllDannieKod(quint64 ullDannieKodNovi);//Изменить Код Данных.
+	QString 	strDannieUrl();//Возвращаем Url путь с именем файла.
     bool 		blDanniePervi() { return m_blDanniePervi; }//Возвращает флаг Первые Данные?
 
     QString		strFileDialog();//Возвратить JSON строку с папками и файлами.
@@ -213,6 +216,7 @@ private:
     QString m_strDannie;//переменная записывающая Данные в Свойстве Q_PROPERTY
     QString m_strDannieDB;//аргумент JSON запроса Данных в Свойстве Q_PROPERTY
     quint64	m_ullDannieKod;//Код Данных в Свойстве Q_PROPERTY.
+	QString m_strDannieUrl;//Url путь с именем файла в Свойстве Q_PROPERTY.
     bool 	m_blDanniePervi;//Флаг Первые Данные? в Свойстве Q_PROPERTY.
 
     QString m_strFileDialog;//переменная записывающая каталог папок и файлов в Свойстве Q_PROPERTY

@@ -15,6 +15,7 @@ public:
     ~			DataDannie();//Деструктор
     bool 		dbStart();//Создать первоначальные Данные.
 	void 		ustWorkingDiagrams(QString strWorkingDiagramsPut);//Задаём каталог хранения Документов.
+	QString 	polWorkingDiagrams(void){ return m_strWorkingDiagramsPut; }//Получить путь к каталогу файлов
     QStringList	polDannie(quint64 ullSpisokKod, quint64 ullElementKod);//Получить список всех Данных.
     bool 		ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail, QString strDannie);
     bool 		renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString strDannie,QString strDannieNovi);

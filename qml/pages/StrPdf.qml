@@ -54,24 +54,29 @@ Item {
 	}
 	Item {
 		id: tmZona
-		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.	
+		PdfDocument {//Класс, который возвращает данные о Pdf Документе.
+			id: pdfDoc
+		}
+		Connections {//Соединяем сигнал из C++ с действием в QML
+			target: cppqml;//Цель объект класса С++ DCCppQml
+			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
+				pdfDoc.source = cppqml.strDannieUrl;
+				cppqml.strDebug = pdfDoc.error
+			}
+		}
+		PdfMultiPageView{
+			id:pmpDoc
+			anchors.fill: tmZona
+			document: pdfDoc
+		}
 		Rectangle {
 			id: rctZona
 			anchors.fill: tmZona
 			color: "transparent"
-			border.color: "red"
+			border.color: tmPdf.clrTexta
 			border.width: 3
 		}
-		PdfDocument {
-			id: pdfDoc
-			source: "file:///home/druidcat/git/qt-working-diagrams/build/workingdata/001001001.dc"
-		}
-		PdfMultiPageView{
-			id:pmpDoc
-			anchors.fill: rctZona
-			document: pdfDoc
-		}
-
         DCMenu {//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
             visible: false//Невидимое меню.
@@ -106,10 +111,5 @@ Item {
                 menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость
             }
         }
-	}
-	Component.onCompleted: {
-		//pmpDoc.scaleToPage(rctZona.contentItem.width, rctZona.contentItem.height)
-		cppqml.strDebug = pdfDoc.error
-		cppqml.strDebug = pdfDoc.pageCount
 	}
 }

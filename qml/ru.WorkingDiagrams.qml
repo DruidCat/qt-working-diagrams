@@ -319,7 +319,7 @@ Window {
                 onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
                     pgStrDannie.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
-				onClickedDannie: function(ntKod, strDannie){//Слот сигнала нажатия на Данные в списке.
+				onClickedDannie: function(strDannie){//Слот сигнала нажатия на Данные в списке.
 					pgStrPdf.textZagolovok = strDannie;//Делаем заголовок с именем Данных.
 					stvStr.push(pgStrPdf);//Переходим на страницу отображения Pdf документа.
 				}
