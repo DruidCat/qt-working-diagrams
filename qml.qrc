@@ -17,6 +17,7 @@
         <file>qml/DCMenu.qml</file>
         <file>qml/DCTextEdit.qml</file>
         <file>qml/DCTextInput.qml</file>
+        <file>qml/DCTextUdalit.qml</file>
         <file>qml/PathViewSpisok.qml</file>
         <file>qml/pages/Stranica.qml</file>
         <file>qml/pages/StrInstrukciya.qml</file>
@@ -25,6 +26,7 @@
         <file>qml/pages/StrElement.qml</file>
         <file>qml/pages/StrMenu.qml</file>
         <file>qml/pages/StrOpisanie.qml</file>
+        <file>qml/pages/StrPdf.qml</file>
         <file>qml/pages/StrSpisok.qml</file>
         <file>qml/pages/StrPlan.qml</file>
         <file>qml/zones/ZonaDannie.qml</file>
@@ -37,6 +39,5 @@
         <file>icons/128x128/ru.WorkingDiagrams.png</file>
         <file>icons/172x172/ru.WorkingDiagrams.png</file>
         <file>icons/86x86/ru.WorkingDiagrams.png</file>
-        <file>qml/DCTextUdalit.qml</file>
     </qresource>
 </RCC>

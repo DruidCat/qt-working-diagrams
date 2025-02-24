@@ -319,6 +319,38 @@ Window {
                 onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
                     pgStrDannie.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
+				onClickedDannie: function(ntKod, strDannie){//Слот сигнала нажатия на Данные в списке.
+					pgStrPdf.textZagolovok = strDannie;//Делаем заголовок с именем Данных.
+					stvStr.push(pgStrPdf);//Переходим на страницу отображения Pdf документа.
+				}
+			}
+		}
+		Stranica {//Просмотр PDF документов.
+		///////////
+		///P D F///
+		///////////
+			id: pgStrPdf
+			visible: false
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
+            clrRabOblasti: "black"
+            textZagolovok: qsTr("PDF")
+			StrPdf{
+				id: tmPdf
+				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
+				clrTexta: pgStrPdf.clrTexta; clrFona: pgStrPdf.clrRabOblasti
+				zagolovokX: pgStrPdf.rctStrZagolovok.x; zagolovokY: pgStrPdf.rctStrZagolovok.y
+				zagolovokWidth: pgStrPdf.rctStrZagolovok.width
+				zagolovokHeight: pgStrPdf.rctStrZagolovok.height
+				zonaX: pgStrPdf.rctStrZona.x; zonaY: pgStrPdf.rctStrZona.y
+				zonaWidth: pgStrPdf.rctStrZona.width; zonaHeight: pgStrPdf.rctStrZona.height
+				toolbarX: pgStrPdf.rctStrToolbar.x; toolbarY: pgStrPdf.rctStrToolbar.y
+				toolbarWidth: pgStrPdf.rctStrToolbar.width; toolbarHeight: pgStrPdf.rctStrToolbar.height
+				onClickedNazad: {
+					stvStr.pop()//Назад страницу
+				}
 			}
 		}
         Stranica {//Страница Файловым Диалогом

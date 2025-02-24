@@ -19,7 +19,8 @@ QMAKE_TARGET_COPYRIGHT = DruidCat
 # Добавляем библиотеки сюда.
 QT += \
 	quick \
-	sql
+	sql \
+	pdf
 
 CONFIG += c++11
 

@@ -33,7 +33,7 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
-	signal clickedDannie(var strDannie);//Сигнал когда нажат один из элементов Данных.
+	signal clickedDannie(var ntKod, var strDannie);//Сигнал когда нажат один из элементов Данных.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 
@@ -276,7 +276,7 @@ Item {
                                 menuDannie.visible = false;//Делаем невидимым всплывающее меню.
                                 cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
                                 cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
-                                tmDannie.clickedDannie(strDannie);//Излучаем сигнал с именем Документа.
+                                tmDannie.clickedDannie(ntKod, strDannie);//сигнал с кодом и именем Документа.
                                 //TODO Открыть файл к просмотру.
                             }
                         }
