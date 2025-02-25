@@ -31,7 +31,7 @@ The project has a standard application structure based on C++ and QML.
 * Catalog **[icons](icons)** contains app icons for supported screen resolutions.
 * Catalog **[qml](qml)** directory contains the QML source code and user interface resources.
     * Catalog **[buttons](qml/buttons)** directory contains the app's buttons.
-	* Catalog **[buttons](qml/methods)** directory contains the app's methods.
+	* Catalog **[methods](qml/methods)** directory contains the app's methods.
     * Catalog **[pages](qml/pages)** contains application pages (Menu, List, Items, Data, Explorer).
     * Catalog **[zones](qml/zones)** contains the main page zones (List, Items, Data, Explorer).
     * File **[ru.WorkingDiagrams.qml](qml/ru.WorkingDiagrams.qml)**
