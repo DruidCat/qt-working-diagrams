@@ -68,7 +68,7 @@ Item {
 			txdZona.text = qsTr("
 				<html>
 					<body>
-<p><center><font color=\"black\">.<img src = \"/qml/images/ru.WorkingDiagrams.png\">.</font></center></p>
+<p><center><font color=\"black\">.<img src = \"/images/ru.WorkingDiagrams.png\">.</font></center></p>
 <p><center>Приложение: <b>РАБОЧИЕ СХЕМЫ.</b></center></p>
 <p><center>Версия: <b>v0.33</b></center></p>
 <p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
@@ -115,7 +115,7 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 				txdZona.text = qsTr("
 					<html>
 						<body>
-<p><center><img src = \"/qml/images/Qt_logo_2016.png\"></center></p>
+<p><center><img src = \"/images/Qt_logo_2016.png\"></center></p>
 <p>This program uses Qt version 5.15.16.</p>
 <p>Qt is a C++ toolkit for cross-platform application development.</p>
 <p>Qt provides single-source portability across all major desktop operating systems. It is also available \

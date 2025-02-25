@@ -1,5 +1,11 @@
 <RCC>
     <qresource prefix="/">
+        <file>icons/108x108/ru.WorkingDiagrams.png</file>
+        <file>icons/128x128/ru.WorkingDiagrams.png</file>
+        <file>icons/172x172/ru.WorkingDiagrams.png</file>
+        <file>icons/86x86/ru.WorkingDiagrams.png</file>
+        <file>images/Qt_logo_2016.png</file>
+        <file>images/ru.WorkingDiagrams.png</file>
         <file>qml/ru.WorkingDiagrams.qml</file>
         <file>qml/buttons/DCKnopkaInfo.qml</file>
         <file>qml/buttons/DCKnopkaKruglaya.qml</file>
@@ -14,8 +20,6 @@
         <file>qml/buttons/DCKnopkaSozdat.qml</file>
         <file>qml/buttons/DCKnopkaVpered.qml</file>
         <file>qml/buttons/DCKnopkaZakrit.qml</file>
-        <file>qml/images/Qt_logo_2016.png</file>
-        <file>qml/images/ru.WorkingDiagrams.png</file>
         <file>qml/methods/DCLogoTMK.qml</file>
         <file>qml/methods/DCMenu.qml</file>
         <file>qml/methods/DCTextEdit.qml</file>
@@ -38,9 +42,5 @@
         <file>js/DCFunkciiJS.js</file>
         <file>qml/pages/StrFileDialog.qml</file>
         <file>qml/zones/ZonaFileDialog.qml</file>
-        <file>icons/108x108/ru.WorkingDiagrams.png</file>
-        <file>icons/128x128/ru.WorkingDiagrams.png</file>
-        <file>icons/172x172/ru.WorkingDiagrams.png</file>
-        <file>icons/86x86/ru.WorkingDiagrams.png</file>
     </qresource>
 </RCC>
