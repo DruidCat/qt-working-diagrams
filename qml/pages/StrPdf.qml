@@ -5,6 +5,7 @@ import QtQuick.Pdf 5.15
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
+import "qrc:/qml/methods"//Импортируем методы написанные мной. 
 //Страница просмотра PDF документов.
 Item {
 	id: tmPdf
@@ -24,6 +25,7 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
+	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
@@ -51,6 +53,19 @@ Item {
                 tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
 			}
 		}
+		DCKnopkaPoisk{
+            id: knopkaPoisk
+            ntWidth: tmPdf.ntWidth
+            ntCoff: tmPdf.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter
+			anchors.right: tmZagolovok.right
+            anchors.margins: tmPdf.ntCoff/2
+            clrKnopki: tmPdf.clrTexta
+            clrFona: tmPdf.clrFona
+            onClicked: {//Слот сигнала clicked кнопки Поиск.
+                //fnClickedPoisk();//Функция обрабатывающая кнопку Поиск.
+            }
+        }
 	}
 	Item {
 		id: tmZona
@@ -71,11 +86,11 @@ Item {
 			document: pdfDoc
 		}
 		Rectangle {
-			id: rctZona
+			id: rctBorder
 			anchors.fill: tmZona
 			color: "transparent"
 			border.color: tmPdf.clrTexta
-			border.width: 3
+			border.width: tmPdf.ntCoff/2//Бордюр при переименовании и удалении.
 		}
         DCMenu {//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu

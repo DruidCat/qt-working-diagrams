@@ -215,7 +215,7 @@ Window {
                 onClickedInfo: {
                     tmOpisanie.textTextEdit = cppqml.strTitulOpisanie;//Отправляем текст из бизнес логики.
                     pgStrOpisanie.textToolbar = pgStrSpisok.textZagolovok
-                            + qsTr(". Для изменения описания нажмите иконку +.")
+                            + qsTr(". Для изменения описания нажмите иконку (+).")
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 				onClickedSpisok: function(strSpisok) {
@@ -262,7 +262,7 @@ Window {
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;//Отправляем текст в бизнес логику.
                     pgStrOpisanie.textToolbar = pgStrElement.textZagolovok
-                            + qsTr(". Для изменения описания нажмите иконку +.")
+                            + qsTr(". Для изменения описания нажмите иконку (+).")
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onClickedElement: function(strElement) {//Слот сигнала нажатия на Элемент, вернув имя Элемента
@@ -310,7 +310,7 @@ Window {
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
                     pgStrOpisanie.textToolbar = pgStrDannie.textZagolovok
-                            + qsTr(". Для изменения описания нажмите иконку +.")
+                            + qsTr(". Для изменения описания нажмите иконку (+).")
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
@@ -348,6 +348,7 @@ Window {
 				zonaWidth: pgStrPdf.rctStrZona.width; zonaHeight: pgStrPdf.rctStrZona.height
 				toolbarX: pgStrPdf.rctStrToolbar.x; toolbarY: pgStrPdf.rctStrToolbar.y
 				toolbarWidth: pgStrPdf.rctStrToolbar.width; toolbarHeight: pgStrPdf.rctStrToolbar.height
+				radiusZona: pgStrPdf.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}

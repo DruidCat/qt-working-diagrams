@@ -4,6 +4,7 @@ import QtQuick.Controls 2.14
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
+import "qrc:/qml/methods"//Импортируем методы написанные мной. 
 //Страница отображающая Меню.
 Item {
 	id: tmMenu
@@ -42,7 +43,7 @@ Item {
 
 	Item {
 		id: tmZagolovok
-		DCKnopkaNazad {
+		DCKnopkaVpered{
 			ntWidth: tmMenu.ntWidth
 			ntCoff: tmMenu.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter

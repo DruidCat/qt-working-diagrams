@@ -4,21 +4,24 @@
         <file>qml/buttons/DCKnopkaInfo.qml</file>
         <file>qml/buttons/DCKnopkaKruglaya.qml</file>
         <file>qml/buttons/DCKnopkaMenu.qml</file>
+        <file>qml/buttons/DCKnopkaMinus.qml</file>
         <file>qml/buttons/DCKnopkaNastroiki.qml</file>
         <file>qml/buttons/DCKnopkaNazad.qml</file>
         <file>qml/buttons/DCKnopkaOk.qml</file>
         <file>qml/buttons/DCKnopkaOriginal.qml</file>
+        <file>qml/buttons/DCKnopkaPlus.qml</file>
         <file>qml/buttons/DCKnopkaPoisk.qml</file>
         <file>qml/buttons/DCKnopkaSozdat.qml</file>
+        <file>qml/buttons/DCKnopkaVpered.qml</file>
         <file>qml/buttons/DCKnopkaZakrit.qml</file>
         <file>qml/images/Qt_logo_2016.png</file>
         <file>qml/images/ru.WorkingDiagrams.png</file>
-        <file>qml/DCLogoTMK.qml</file>
-        <file>qml/DCMenu.qml</file>
-        <file>qml/DCTextEdit.qml</file>
-        <file>qml/DCTextInput.qml</file>
-        <file>qml/DCTextUdalit.qml</file>
-        <file>qml/PathViewSpisok.qml</file>
+        <file>qml/methods/DCLogoTMK.qml</file>
+        <file>qml/methods/DCMenu.qml</file>
+        <file>qml/methods/DCTextEdit.qml</file>
+        <file>qml/methods/DCTextInput.qml</file>
+        <file>qml/methods/DCTextUdalit.qml</file>
+        <file>qml/methods/PathViewSpisok.qml</file>
         <file>qml/pages/Stranica.qml</file>
         <file>qml/pages/StrInstrukciya.qml</file>
         <file>qml/pages/StrDannie.qml</file>

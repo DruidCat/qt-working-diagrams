@@ -4,6 +4,7 @@ import QtQuick.Controls 2.14
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
+import "qrc:/qml/methods"//Импортируем методы написанные мной. 
 //Страница с отладочной информацией.
 Item {
     id: tmDebug
