@@ -77,6 +77,7 @@ Item {
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
 				pdfDoc.source = cppqml.strDannieUrl;
+				spbPdfPage.numberMax = pdfDoc.pageCount-1;//Задаём максимальное количество страниц в DCSpinBox
 				cppqml.strDebug = pdfDoc.error
 			}
 		}
@@ -84,6 +85,9 @@ Item {
 			id:pmpDoc
 			anchors.fill: tmZona
 			document: pdfDoc
+			onCurrentPageChanged: {
+				spbPdfPage.number = pmpDoc.currentPage + 1
+			}
 		}
 		Rectangle {
 			id: rctBorder
@@ -126,5 +130,23 @@ Item {
                 menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость
             }
         }
+		DCSpinBox {
+			id: spbPdfPage
+			ntWidth: tmPdf.ntWidth
+			ntCoff: tmPdf.ntCoff
+			anchors.centerIn: tmToolbar
+			visible: true
+			clrTexta: tmPdf.clrTexta
+			clrFona: tmPdf.clrFona 
+			radius: tmPdf.ntCoff/2
+			numberMin: 1
+			number: 1
+			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
+			//spinBox.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+			onClicked: function(number){
+				cppqml.strDebug = number;
+				pmpDoc.goToPage(number-1);
+			}
+		}
 	}
 }

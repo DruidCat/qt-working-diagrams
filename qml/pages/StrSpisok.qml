@@ -92,7 +92,7 @@ Item {
         tmSpisok.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         tmSpisok.blUdalitVibor = false;//Запрещено выбирать Список на удаление. НЕ УДАЛЯТЬ.
         menuSpisok.visible = false;//Делаем невидимым меню.
-        txnZagolovok.visible = true;//Режим создания элемента Списка.
+       	txnZagolovok.visible = true;//Режим создания элемента Списка.
         txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ СПИСКА";//Подсказка пользователю, что вводить нужно.
         tmSpisok.signalToolbar(qsTr("Создайте новый список."))
     }
@@ -216,6 +216,7 @@ Item {
             anchors.bottomMargin: tmSpisok.ntCoff/4
             anchors.leftMargin: tmSpisok.ntCoff/2
             anchors.rightMargin: tmSpisok.ntCoff/2
+			
 			DCTextInput {
                 id: txnZagolovok
 				ntWidth: tmSpisok.ntWidth
