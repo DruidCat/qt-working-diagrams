@@ -77,7 +77,7 @@ Item {
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
 				pdfDoc.source = cppqml.strDannieUrl;
-				spbPdfPage.to = pdfDoc.pageCount-1;//Задаём максимальное количество страниц в DCSpinBox
+				spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
 				cppqml.strDebug = pdfDoc.error
 			}
 		}
