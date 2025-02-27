@@ -46,7 +46,7 @@ Item {
 			//cursorPosition: text.length;//Курсор в конец текста
 			cursorVisible: true//Курсор сделать видимым
 			Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-				if(event.key === 16777220){//Код 16777220 - Enter
+				if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
 					tmTextInput.clickedEnter();//Излучаем сигнал о том, что нажат Enter.
 					event.accepted = true;//Enter не использовался в качестве сочетания клавишь с другими клав
 				}
