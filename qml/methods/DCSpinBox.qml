@@ -14,38 +14,76 @@ Item {
     property alias italic: txnSpinBox.font.italic
     property int  ntWidth: 2
     property int ntCoff: 8
-	property int number: 0
-	property int numberMin: -32767
-	property int numberMax: 32767
-	signal clicked(var ntNomer);//Сигнал нажатия кнопок [-],[+],Escape, Enter с передачей номера.
+	property int value: 0
+	property int from: 0//Задаём значение по умолчанию.
+	property int to: 32767//Задаём значение по умолчанию.
+	signal clicked(var ntValue);//Сигнал нажатия кнопок [-],[+],Enter с передачей номера.
 
-	onNumberChanged:{//Если значение номера пришло из вне или из нутри метода, то...
-		if(number < numberMin){
-			number = numberMin;
+	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
+		if(value < from){
+			value = from;
 		}
-		if(number > numberMax){
-			number = numberMax;
+		if(value > to){
+			value = to;
 		}
-		txnSpinBox.text = number;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
+		txnSpinBox.text = value;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
+	}
+	onFromChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
+		if(from < 0){//С отрицательными числами DCSpinBox не работает.
+			from = 0;//Задаём значение по умолчанию.
+			console.log(qsTr("DCSpinBox.qml::from(int): from - задано отрицательное значение."));
+			if(to < 0){//Если при этом to отрицательное число, то...
+				to = 32767;//Задаём значение по умолчанию.
+				console.log(qsTr("DCSpinBox.qml::from(int): to - задано отрицательное значение."));
+			}
+		}
+		else{//Если это не отрицательное значение, то...
+			if(from > to){
+				from = 0;//Задаём значение по умолчанию.
+				to = 32767;//Задаём значение по умолчанию.
+				console.log(qsTr("DCSpinBox.qml::from(int): from > to."));
+			}
+		}
+	}
+	onToChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
+		if(to < 0){//С отрицательными числами DCSpinBox не работает.
+			to = 32767;//Задаём значение по умолчанию.
+			console.log(qsTr("DCSpinBox.qml::to(int): to - задано отрицательное значение."));
+			if(from < 0){//Если при этом from отрицательное число, то...
+				from = 0;//Задаём значение по умолчанию.
+				console.log(qsTr("DCSpinBox.qml::to(int): from - задано отрицательное значение."));
+			}
+		}
+		else{//Если это не отрицательное значение, то...
+			if(to < from){
+				from = 0;//Задаём значение по умолчанию.
+				to = 32767;//Задаём значение по умолчанию.
+				console.log(qsTr("DCSpinBox.qml::to(int): to < from."));
+			}
+		}
 	}
 	function fnClickedEscape (){//Функция нажатия Escape.
-		txnSpinBox.text = tmSpinBox.number;//Отображаем последнее значение.
+		txnSpinBox.text = tmSpinBox.value;//Отображаем последнее значение.
 	}
 	function fnClickedEnter(){//Функция нажатия Enter/
-		tmSpinBox.number = txnSpinBox.text;//Приравниваем обязательно.
-		tmSpinBox.clicked(txnSpinBox.text);//Отправляем сигнал со значением.
+		if(txnSpinBox.text){//Если не пустая строка, то...
+			tmSpinBox.value = txnSpinBox.text;//Приравниваем обязательно.
+			tmSpinBox.clicked(txnSpinBox.text);//Отправляем сигнал со значением.
+		}
+		else//Если пустая строка, пользователь удалил число, то...
+			fnClickedEscape();//Функция нажатия Escape, запонить пустое значение последним значением.
 	}
 	function fnClickedMinus(){//Функция нажатия кнопки минус.
 		if(txnSpinBox.text){//Если не пустая строка, то...
-			if(tmSpinBox.number != txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
-				tmSpinBox.number = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
-				tmSpinBox.clicked(tmSpinBox.number);//Вернём сигнал с номером SpinBox
+			if(tmSpinBox.value != txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
+				tmSpinBox.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
+				tmSpinBox.clicked(tmSpinBox.value);//Вернём сигнал с номером SpinBox
 			}
 			else{//Если есть равенство, значит изменение идёт через + или -
-				if(tmSpinBox.number != tmSpinBox.numberMin){//Если нет равенства с минимальным значением, то..
-					tmSpinBox.number = tmSpinBox.number - 1;//Уменьшаем.
-					//О отображение number в txnSpinBox.text произойдет в слоте onNumberChanged
-					tmSpinBox.clicked(tmSpinBox.number);//Вернём сигнал с номером SpinBox
+				if(tmSpinBox.value != tmSpinBox.from){//Если нет равенства с минимальным значением, то..
+					tmSpinBox.value = tmSpinBox.value - 1;//Уменьшаем.
+					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
+					tmSpinBox.clicked(tmSpinBox.value);//Вернём сигнал с номером SpinBox
 				}
 			}
 		}
@@ -55,15 +93,15 @@ Item {
 	}
 	function fnClickedPlus(){//Функция нажатиякнопки плюс.
 		if(txnSpinBox.text){//Если не пустая строка, то...
-			if(tmSpinBox.number != txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
-				tmSpinBox.number = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
-				tmSpinBox.clicked(tmSpinBox.number);//Вернём сигнал с номером SpinBox
+			if(tmSpinBox.value != txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
+				tmSpinBox.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
+				tmSpinBox.clicked(tmSpinBox.value);//Вернём сигнал с номером SpinBox
 			}
 			else{//Если есть равенство, значит изменение идёт через + или -
-				if(tmSpinBox.number != tmSpinBox.numberMax){//Если нет равенства с максимальным значением, то.
-					tmSpinBox.number = tmSpinBox.number + 1;//Увеличиваем.
-					//О отображение number в txnSpinBox.text произойдет в слоте onNumberChanged
-					tmSpinBox.clicked(tmSpinBox.number);//Вернём сигнал с номером SpinBox
+				if(tmSpinBox.value != tmSpinBox.to){//Если нет равенства с максимальным значением, то.
+					tmSpinBox.value = tmSpinBox.value + 1;//Увеличиваем.
+					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
+					tmSpinBox.clicked(tmSpinBox.value);//Вернём сигнал с номером SpinBox
 				}
 			}
 		}
@@ -109,7 +147,7 @@ Item {
 				validator: RegExpValidator {//Чтоб не было букв.
 					regExp: /[0-9]+/
 				}
-				text: tmSpinBox.number
+				text: tmSpinBox.value
 				font.pixelSize: tmSpinBox.ntWidth*tmSpinBox.ntCoff//размер шрифта текста.
 				readOnly: false//Можно редактировать. 
 				focus: true//Фокус на TextInput
@@ -134,31 +172,31 @@ Item {
 					}
 				}
 				onTextChanged: {//Если текст меняет пользователь вручную или кнопками.
-					var ntNumber = txnSpinBox.text;//Приравниваем значение.
+					var ntValue = txnSpinBox.text;//Приравниваем значение.
 					if(text){//Если не пустая строка, эта важная строка, чтоб можно было вводить число.
-						if(ntNumber > tmSpinBox.numberMax){//Если пользователь вводит число больше заданного
-							if(tmSpinBox.number != tmSpinBox.numberMax){//Если нет равенства, то...
-								tmSpinBox.number = tmSpinBox.numberMax;//Выставляем максимальное значение.
-								//О отображение number в txnSpinBox.text произойдет в слоте onNumberChanged
-								clicked(tmSpinBox.number);//Отправляем сигнал с максимальным номером.
+						if(ntValue > tmSpinBox.to){//Если пользователь вводит число больше заданного
+							if(tmSpinBox.value != tmSpinBox.to){//Если нет равенства, то...
+								tmSpinBox.value = tmSpinBox.to;//Выставляем максимальное значение.
+								text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,приравнив
+								clicked(tmSpinBox.value);//Отправляем сигнал с максимальным номером.
 							}
 							else{
-								if(ntNumber > tmSpinBox.numberMax){
-									tmSpinBox.number = tmSpinBox.numberMax;//Выставляем максимальное значение.
-									//Отображение number в txnSpinBox.text произойдет в слоте onNumberChanged
+								if(ntValue > tmSpinBox.to){
+									tmSpinBox.value = tmSpinBox.to;//Выставляем максимальное значение.
+									text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,прирав
 								}
 							}
 						}
-						if(ntNumber < tmSpinBox.numberMin){//Если пользователь вводит число меньше заданного
-							if(tmSpinBox.number != tmSpinBox.numberMin){//Если нет равенства, то...
-								tmSpinBox.number = tmSpinBox.numberMin;//Выставляем минимальное значение.
-								//Отображение number в txnSpinBox.text произойдет в слоте onNumberChanged
-								clicked(tmSpinBox.number);//Отправляем сигнал с минимальным номером.
+						if(ntValue < tmSpinBox.from){//Если пользователь вводит число меньше заданного
+							if(tmSpinBox.value != tmSpinBox.from){//Если нет равенства, то...
+								tmSpinBox.value = tmSpinBox.from;//Выставляем минимальное значение.
+								text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,приравнив
+								clicked(tmSpinBox.value);//Отправляем сигнал с минимальным номером.
 							}
 							else{
-								if(ntNumber < tmSpinBox.numberMin){
-									tmSpinBox.number = tmSpinBox.numberMin;//Выставляем минимальное значение.
-									//Отображение number в txnSpinBox.text произойдет в слоте onNumberChanged
+								if(ntValue < tmSpinBox.from){
+									tmSpinBox.value = tmSpinBox.from;//Выставляем минимальное значение.
+									text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,прирав
 								}
 							}
 						}

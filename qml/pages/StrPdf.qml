@@ -77,7 +77,7 @@ Item {
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
 				pdfDoc.source = cppqml.strDannieUrl;
-				spbPdfPage.numberMax = pdfDoc.pageCount-1;//Задаём максимальное количество страниц в DCSpinBox
+				spbPdfPage.to = pdfDoc.pageCount-1;//Задаём максимальное количество страниц в DCSpinBox
 				cppqml.strDebug = pdfDoc.error
 			}
 		}
@@ -86,7 +86,7 @@ Item {
 			anchors.fill: tmZona
 			document: pdfDoc
 			onCurrentPageChanged: {
-				spbPdfPage.number = pmpDoc.currentPage + 1
+				spbPdfPage.value = pmpDoc.currentPage + 1
 			}
 		}
 		Rectangle {
@@ -139,13 +139,12 @@ Item {
 			clrTexta: tmPdf.clrTexta
 			clrFona: tmPdf.clrFona 
 			radius: tmPdf.ntCoff/2
-			numberMin: 1
-			number: 1
+			from: 1
+			value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
-			//spinBox.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
-			onClicked: function(number){
-				cppqml.strDebug = number;
-				pmpDoc.goToPage(number-1);
+			onClicked: function(ntValue){
+				cppqml.strDebug = "StrPdf146 "+ntValue;
+				pmpDoc.goToPage(ntValue-1);
 			}
 		}
 	}
