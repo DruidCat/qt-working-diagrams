@@ -33,6 +33,15 @@ Item {
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             menuMenu.visible = false;//Делаем невидимым всплывающее меню.
         }
+		if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Стрека вниз" или "Page Down",то.
+			//pmpDoc.forwardEnabled;
+			//pmpDoc.forward();
+        }
+		if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Стрека вверх" или "Page Up", то.
+			//pmpDoc.backEnabled;
+			//pmpDoc.back();
+		}
+		//cppqml.strDebug = event.key;
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: tmPdf
@@ -77,7 +86,10 @@ Item {
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
 				pdfDoc.source = cppqml.strDannieUrl;
+				spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
 				spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
+				//TODO сделать запоминание открытых страниц по url или по ИмяФайла, и передавать в goToPage
+				pmpDoc.goToPage(0);//Переходим на первую страницу.
 				cppqml.strDebug = pdfDoc.error
 			}
 		}
@@ -86,6 +98,7 @@ Item {
 			anchors.fill: tmZona
 			document: pdfDoc
 			onCurrentPageChanged: {
+				//TODO тут запоминать номер страницы.
 				spbPdfPage.value = pmpDoc.currentPage + 1
 			}
 		}
@@ -142,10 +155,16 @@ Item {
 			from: 1
 			value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
-			onClicked: function(ntValue){
-				cppqml.strDebug = "StrPdf146 "+ntValue;
-				pmpDoc.goToPage(ntValue-1);
+			/*
+			onClicked: function(value){
+				cppqml.strDebug = "StrPdf146 "+value;
+				pmpDoc.goToPage(value-1);
 			}
+			*/
+		   onValueModified:{
+				pmpDoc.goToPage(value-1)
+				//TODO тут запоминать номер страницы.
+		   }
 		}
 	}
 }

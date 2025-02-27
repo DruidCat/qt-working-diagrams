@@ -17,8 +17,8 @@ Item {
 	property int value: 0
 	property int from: 0//Задаём значение по умолчанию.
 	property int to: 32767//Задаём значение по умолчанию.
-	signal clicked(var ntValue);//Сигнал нажатия кнопок [-],[+],Enter с передачей номера.
-
+	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
+	//onValueModified: console.log(value)
 	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
 		if(value < from){
 			value = from;
@@ -68,7 +68,7 @@ Item {
 	function fnClickedEnter(){//Функция нажатия Enter/
 		if(txnSpinBox.text){//Если не пустая строка, то...
 			tmSpinBox.value = txnSpinBox.text;//Приравниваем обязательно.
-			tmSpinBox.clicked(txnSpinBox.text);//Отправляем сигнал со значением.
+			tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 		}
 		else//Если пустая строка, пользователь удалил число, то...
 			fnClickedEscape();//Функция нажатия Escape, запонить пустое значение последним значением.
@@ -77,13 +77,13 @@ Item {
 		if(txnSpinBox.text){//Если не пустая строка, то...
 			if(tmSpinBox.value != txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
 				tmSpinBox.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
-				tmSpinBox.clicked(tmSpinBox.value);//Вернём сигнал с номером SpinBox
+				tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 			}
 			else{//Если есть равенство, значит изменение идёт через + или -
 				if(tmSpinBox.value != tmSpinBox.from){//Если нет равенства с минимальным значением, то..
 					tmSpinBox.value = tmSpinBox.value - 1;//Уменьшаем.
 					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
-					tmSpinBox.clicked(tmSpinBox.value);//Вернём сигнал с номером SpinBox
+					tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 				}
 			}
 		}
@@ -95,13 +95,13 @@ Item {
 		if(txnSpinBox.text){//Если не пустая строка, то...
 			if(tmSpinBox.value != txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
 				tmSpinBox.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
-				tmSpinBox.clicked(tmSpinBox.value);//Вернём сигнал с номером SpinBox
+				tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 			}
 			else{//Если есть равенство, значит изменение идёт через + или -
 				if(tmSpinBox.value != tmSpinBox.to){//Если нет равенства с максимальным значением, то.
 					tmSpinBox.value = tmSpinBox.value + 1;//Увеличиваем.
 					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
-					tmSpinBox.clicked(tmSpinBox.value);//Вернём сигнал с номером SpinBox
+					tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 				}
 			}
 		}
@@ -155,7 +155,7 @@ Item {
 				//cursorPosition: text.length;//Курсор в конец текста
 				cursorVisible: true//Курсор сделать видимым
 				Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-					if(event.key === 16777220){//Код 16777220 - Enter
+					if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
 						fnClickedEnter();//Функция нажатия Enter.
 						event.accepted = true;//Enter не использовался в сочетании клавишь с другими клавишами
 					}
@@ -178,7 +178,7 @@ Item {
 							if(tmSpinBox.value != tmSpinBox.to){//Если нет равенства, то...
 								tmSpinBox.value = tmSpinBox.to;//Выставляем максимальное значение.
 								text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,приравнив
-								clicked(tmSpinBox.value);//Отправляем сигнал с максимальным номером.
+								tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном SpinBox.
 							}
 							else{
 								if(ntValue > tmSpinBox.to){
@@ -191,7 +191,7 @@ Item {
 							if(tmSpinBox.value != tmSpinBox.from){//Если нет равенства, то...
 								tmSpinBox.value = tmSpinBox.from;//Выставляем минимальное значение.
 								text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,приравнив
-								clicked(tmSpinBox.value);//Отправляем сигнал с минимальным номером.
+								tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном SpinBox.
 							}
 							else{
 								if(ntValue < tmSpinBox.from){
