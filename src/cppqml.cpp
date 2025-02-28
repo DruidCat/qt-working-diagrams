@@ -453,10 +453,8 @@ void DCCppQml::setStrDannie(QString& strDannieNovi) {//Изменение Дан
 /////////////////////////////////////////
 //---И З М Е Н Е Н И Е   Д А Н Н Ы Х---//
 /////////////////////////////////////////
-    if(strDannieNovi != m_strDannie){//Если Данные не равны выбранному до этого, то...
-        m_strDannie = strDannieNovi;//Приравниваем.
-        emit strDannieChanged();//Излучаем сигнал об изменении аргумента.
-    }
+	m_strDannie = strDannieNovi;//Приравниваем.
+	emit strDannieChanged();//Излучаем сигнал об изменении аргумента.
 }
 bool DCCppQml::delStrDannie(QString strDannieKod){//Удалить данные по коду
 /////////////////////////////////////

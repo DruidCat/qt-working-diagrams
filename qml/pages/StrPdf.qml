@@ -26,6 +26,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
+    property int ntLogoTMK: 16
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
@@ -34,11 +35,10 @@ Item {
             menuMenu.visible = false;//Делаем невидимым всплывающее меню.
         }
 		if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Стрека вниз" или "Page Down",то.
-			//pmpDoc.forwardEnabled;
 			//pmpDoc.forward();
+			
         }
 		if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Стрека вверх" или "Page Up", то.
-			//pmpDoc.backEnabled;
 			//pmpDoc.back();
 		}
 		//cppqml.strDebug = event.key;
@@ -59,6 +59,8 @@ Item {
 			clrKnopki: tmPdf.clrTexta
 			onClicked: {
                 menuMenu.visible = false;//Делаем невидимым меню.
+				pmpDoc.visible = false;//Делаем невидимым pdf документ.
+				spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
 				cppqml.strDannieStr = pmpDoc.currentPage;//Записываем в БД номер открытой страницы.
                 tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
 			}
@@ -80,6 +82,30 @@ Item {
 	Item {
 		id: tmZona
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.	
+		Timer {//Таймер необходим, чтоб pdf документ успел отрендериться, и можно было выставить страницу.
+			id: tmrLogoTMK
+			interval: 111
+			running: false
+			repeat: true
+			onTriggered: {
+				lgTMK.ntCoff++;
+				if(lgTMK.ntCoff >= tmPdf.ntLogoTMK){
+					running = false;//выключаем таймер.
+					cppqml.strDebug = cppqml.strDannieStr;
+					pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
+					//TODO отцентровать документ по длине высоте окна. Это важно!
+					spbPdfPage.visible = true;//Делаем видимым DCSpinBox
+					pmpDoc.visible = true;//Делаем видимым pdf документ.
+				}
+			}
+		}
+		DCLogoTMK {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
+			id: lgTMK
+			ntCoff: tmPdf.ntLogoTMK
+			anchors.centerIn: tmZona
+			clrLogo: tmPdf.clrTexta
+			clrFona: tmPdf.clrFona
+		}
 		PdfDocument {//Класс, который возвращает данные о Pdf Документе.
 			id: pdfDoc
 		}
@@ -89,19 +115,21 @@ Item {
 				pdfDoc.source = cppqml.strDannieUrl;
 				spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
 				spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
-				cppqml.strDebug = cppqml.strDannieStr;
-				pmpDoc.goToPage(cppqml.strDannieStr);//Переходим на страницу записанную в БД.
-				cppqml.strDebug = pdfDoc.error
+				lgTMK.ntCoff = 11;//Задаём размер логотипа.
+				tmrLogoTMK.running = true;//включаем таймер.
+				//cppqml.strDebug = pdfDoc.error
 			}
 		}
 		PdfMultiPageView{
 			id:pmpDoc
 			anchors.fill: tmZona
 			document: pdfDoc
+			visible: false
 			onCurrentPageChanged: {
 				spbPdfPage.value = pmpDoc.currentPage + 1
 			}
 		}
+		
 		Rectangle {
 			id: rctBorder
 			anchors.fill: tmZona
@@ -148,7 +176,7 @@ Item {
 			ntWidth: tmPdf.ntWidth
 			ntCoff: tmPdf.ntCoff
 			anchors.centerIn: tmToolbar
-			visible: true
+			visible: false 
 			clrTexta: tmPdf.clrTexta
 			clrFona: tmPdf.clrFona 
 			radius: tmPdf.ntCoff/2
