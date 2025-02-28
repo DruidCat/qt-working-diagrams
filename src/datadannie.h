@@ -21,6 +21,8 @@ public:
     bool 		renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString strDannie,QString strDannieNovi);
     bool  		udalDannieDB(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod);//Удалить запись
     QString		polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod);//Получить JSON строчку Данных.
+	bool 		ustDannieStr(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod, QString strStr);
+	QString 	polDannieStr(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod);//Номер Страницы
     bool 		polDanniePervi() { return m_blDanniePervi; }//Вернуть состояние флага Первые Данные?
 	void 		ustFileDialogPut(QString strFileDialogPut);//Задать путь к каталогу, в котором файл записи.
     QString 	polImyaFaila(qint64 ullSpisokKod,qint64 ullElementKod,qint64 ullDannieKod);//Получить имя файл

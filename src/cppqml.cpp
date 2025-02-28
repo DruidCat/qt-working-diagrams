@@ -22,6 +22,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_strDannie(""),
                                         m_strDannieDB(""),
                                         m_ullDannieKod(0),
+                                        m_strDannieStr(""),
 										m_strDannieUrl(""),
                                         m_blDanniePervi(false),
 
@@ -540,6 +541,24 @@ void DCCppQml::setUllDannieKod(quint64 ullDannieKodNovi){//Изменить ко
             m_ullDannieKod = ullDannieKodNovi;
             emit ullDannieKodChanged();//Сигнал о том, что код Данных изменился.
         }
+    }
+}
+QString	DCCppQml::strDannieStr(){//Возвратить номер страницы Документа из БД.
+/////////////////////////////////////////////////////////////
+//---В О З В Р А Т И Т Ь   Н О М Е Р   Д О К У М Е Н Т А---//
+/////////////////////////////////////////////////////////////
+	m_strDannieStr = m_pDataDannie->polDannieStr(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod);//Номер стр.
+	return m_strDannieStr;//Возвращаем номер страницы Документа.
+}
+void DCCppQml::setStrDannieStr(QString& strDannieStrNovi){//Изменение номера страницы Документа.
+/////////////////////////////////////////////////////////
+//---И З М Е Н И Т Ь   Н О М Е Р   Д О К У М Е Н Т А---//
+/////////////////////////////////////////////////////////
+    if(strDannieStrNovi != m_strDannieStr){//Если Данные не равны выбранному до этого, то...
+		if(m_pDataDannie->ustDannieStr(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod, strDannieStrNovi)){
+        	m_strDannieStr = strDannieStrNovi;//Приравниваем.
+        	emit strDannieStrChanged();//Излучаем сигнал об изменении аргумента.
+		}
     }
 }
 QString DCCppQml::strDannieUrl(){//Возвратить имя файла.

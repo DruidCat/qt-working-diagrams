@@ -78,6 +78,10 @@ class DCCppQml : public QObject {
                     READ ullDannieKod
                     WRITE setUllDannieKod
                     NOTIFY ullDannieKodChanged FINAL)
+	Q_PROPERTY(QString strDannieStr
+                    READ strDannieStr
+                    WRITE setStrDannieStr
+                    NOTIFY strDannieStrChanged FINAL)
     Q_PROPERTY(QString strDannieUrl
                     READ strDannieUrl FINAL)
 	Q_PROPERTY(bool blDanniePervi
@@ -145,6 +149,8 @@ public:
     Q_INVOKABLE bool renStrDannieDB(QString strDannie, QString strDannieNovi);//Переименоваовать Данные.
     quint64		ullDannieKod();//Возвращает Код Данных.
     void		setUllDannieKod(quint64 ullDannieKodNovi);//Изменить Код Данных.
+    QString		strDannieStr();//Возвратить номер страницы Документа из БД.
+    void		setStrDannieStr(QString& strDannieStrNovi);//Изменение номера страницы Документа.
 	QString 	strDannieUrl();//Возвращаем Url путь с именем файла.
     bool 		blDanniePervi() { return m_blDanniePervi; }//Возвращает флаг Первые Данные?
 
@@ -182,6 +188,7 @@ signals:
     void strDannieChanged();//Сигнал о том, что записан новые Данные.
     void strDannieDBChanged();//Сигнал о том, что записаны Данные в БД.
     void ullDannieKodChanged();//Сигнал, что Код выбранных Данных изменился.
+    void strDannieStrChanged();//Сигнал о том, что номер страницы Документа записан в БД.
 
     void strFileDialogChanged();//Сигнал о том, что изменился каталог папок и файлов.
     void strFileDialogPutChanged();//Сигнал о том, что изменился путь отображаемой папки.
@@ -216,6 +223,7 @@ private:
     QString m_strDannie;//переменная записывающая Данные в Свойстве Q_PROPERTY
     QString m_strDannieDB;//аргумент JSON запроса Данных в Свойстве Q_PROPERTY
     quint64	m_ullDannieKod;//Код Данных в Свойстве Q_PROPERTY.
+    QString m_strDannieStr;//Номер страницы Документа в Свойстве Q_PROPERTY
 	QString m_strDannieUrl;//Url путь с именем файла в Свойстве Q_PROPERTY.
     bool 	m_blDanniePervi;//Флаг Первые Данные? в Свойстве Q_PROPERTY.
 

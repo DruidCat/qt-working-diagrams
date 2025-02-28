@@ -1,6 +1,7 @@
 ﻿#include "datadannie.h"
-DataDannie::DataDannie(QString strImyaDB, QString strImyaDBData, QString strLoginDB, QString strParolDB,
-                       QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject* proditel) : QObject{proditel}{
+DataDannie::DataDannie(	QString strImyaDB, QString strImyaDBData, QString strLoginDB, QString strParolDB,
+                       	QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject* proditel)
+						: QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
@@ -22,8 +23,8 @@ DataDannie::DataDannie(QString strImyaDB, QString strImyaDBData, QString strLogi
                 SIGNAL(signalDebug(QString)),
                 this,
                 SLOT(qdebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
-	//qdebug(); не работает, пока конструктор cppqml поностью не создастся.
-	if(!m_pdbDannie->CREATE(QStringList()<<"#Код"<<"Номер"<<"Данные"<<"Запись"))
+	//qdebug(); не работает, пока конструктор cppqml полностью не создастся.
+	if(!m_pdbDannie->CREATE(QStringList()<<"#Код"<<"Номер"<<"Данные"<<"Страница"))
         qWarning()<<tr("DataDannie::DataDannie: ошибка создания таблицы данные_0_0.");
     m_blDanniePervi = false;//Не первый элемент в Данных.(false)
 	m_strFileDialogPut = "";//Путь к каталогу, где лежит файл для записи.	
@@ -53,8 +54,8 @@ bool DataDannie::dbStart(){//Создать первоначальные Дан�
     m_pdbDannie->ustImyaTablici("данные_0_0");
     if(m_pdbDannie->CREATE()){//Если таблица создалась, то
         if(!m_pdbDannie->SELECT()){//если нет ни одной записи в БД, то...
-            if(!m_pdbDannie->INSERT(	QStringList()<<"Номер"<<"Данные"<<"Запись",
-                                        QStringList()<<"1"<<"druidcat@yandex.ru"<<"1")){
+            if(!m_pdbDannie->INSERT(	QStringList()<<"Номер"<<"Данные"<<"Страница",
+                                        QStringList()<<"1"<<"druidcat@yandex.ru"<<"0")){
                 qWarning()<<tr("DataDannie::DataDannie: ошибка создания первоначальной записи в таблицу"
                           " данные_0_0.");
                 return false;//Ошибка.
@@ -112,7 +113,8 @@ bool DataDannie::ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString 
     }
     QString strImyaFaila(polImyaFaila(ullSpisokKod, ullElementKod, ullKolichestvo+1));//Задаём имя файла с Док
     m_slsINSERT.clear();//Очищаем список данных для запроса записи в БД.
-    m_slsINSERT = m_slsINSERT<<QString::number(ullKolichestvo+1)<<strDannie<<strImyaFaila;
+	//Страница 0 - это 1 страница, нумерация по принципу массива.
+    m_slsINSERT = m_slsINSERT<<QString::number(ullKolichestvo+1)<<strDannie<<"0";
     //Если копирование документа успешно в отдельном потоке, то запись в БД будет в слоте slotCopyDannie(bool)
     return copyDannie(strAbsolutPut, strImyaFaila);//Копируем Документ в отдельном потоке.
 }
@@ -176,6 +178,30 @@ QString DataDannie::polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod){/
     }
     strDannieJSON = strDannieJSON + "]";//Конец массива объектов.
     return strDannieJSON;
+}
+bool DataDannie::ustDannieStr(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod,QString strStr){
+/////////////////////////////////////////////////////////
+//---С О Х Р А Н И Т Ь   Н О М Е Р   С Т Р А Н И Ц Ы---//
+/////////////////////////////////////////////////////////
+    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
+	if(!m_pdbDannie->UPDATE(QStringList()<<"Код"<<"Страница",
+							QStringList()<<QString::number(ullDannieKod)<<strStr)){
+		qdebug(tr("Ошибка записи номера страницы документа в БД."));
+		return false;//Ошибка записи в БД.
+	}
+	return true;//Успешная запись в БД.
+}
+QString	DataDannie::polDannieStr(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod){
+///////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   Н О М Е Р   С Т Р А Н И Ц Ы---//
+///////////////////////////////////////////////////////
+    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
+	QString strDannieStr = m_pdbDannie->SELECT("Код", QString::number(ullDannieKod), "Страница");
+	if(strDannieStr.isEmpty()){//Если произошла ошибка чтения из БД, или запись в БД пустая строка, то...
+		strDannieStr = "0";//Первая страница по умолчанию [0].
+		qdebug(tr("Ошибка чтения номера страницы документа из БД."));
+	}
+	return strDannieStr;//Возвращаем номер страницы документа.
 }
 void DataDannie::ustFileDialogPut(QString strFileDialogPut){//Задать путь к каталогу, в котором файл записи.
 ///////////////////////////////////////////////////////
@@ -272,7 +298,7 @@ void DataDannie::slotCopyDannie(bool blCopyStatus){//Слот получающи
 //---С Л О Т   С Т А Т У С А   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
 ///////////////////////////////////////////////////////////////////////////////////
     if(blCopyStatus){//Если копирование прошло успешно, то...
-        emit signalFileDialogCopy(m_pdbDannie->INSERT(QStringList()<<"Номер"<<"Данные"<<"Запись",
+        emit signalFileDialogCopy(m_pdbDannie->INSERT(QStringList()<<"Номер"<<"Данные"<<"Страница",
                                                       m_slsINSERT));//Записываем в БД, и отсылаем сигнал 1или0
     }
     else{

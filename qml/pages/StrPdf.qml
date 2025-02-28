@@ -59,6 +59,7 @@ Item {
 			clrKnopki: tmPdf.clrTexta
 			onClicked: {
                 menuMenu.visible = false;//Делаем невидимым меню.
+				cppqml.strDannieStr = pmpDoc.currentPage;//Записываем в БД номер открытой страницы.
                 tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
 			}
 		}
@@ -88,8 +89,8 @@ Item {
 				pdfDoc.source = cppqml.strDannieUrl;
 				spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
 				spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
-				//TODO сделать запоминание открытых страниц по url или по ИмяФайла, и передавать в goToPage
-				pmpDoc.goToPage(0);//Переходим на первую страницу.
+				cppqml.strDebug = cppqml.strDannieStr;
+				pmpDoc.goToPage(cppqml.strDannieStr);//Переходим на страницу записанную в БД.
 				cppqml.strDebug = pdfDoc.error
 			}
 		}
@@ -98,7 +99,6 @@ Item {
 			anchors.fill: tmZona
 			document: pdfDoc
 			onCurrentPageChanged: {
-				//TODO тут запоминать номер страницы.
 				spbPdfPage.value = pmpDoc.currentPage + 1
 			}
 		}
@@ -155,16 +155,9 @@ Item {
 			from: 1
 			value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
-			/*
-			onClicked: function(value){
-				cppqml.strDebug = "StrPdf146 "+value;
-				pmpDoc.goToPage(value-1);
-			}
-			*/
-		   onValueModified:{
+			onValueModified:{//Если значение измениловь в DCSpinBox...
 				pmpDoc.goToPage(value-1)
-				//TODO тут запоминать номер страницы.
-		   }
+			}
 		}
 	}
 }
