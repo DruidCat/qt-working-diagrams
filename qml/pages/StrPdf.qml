@@ -34,12 +34,22 @@ Item {
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             menuMenu.visible = false;//Делаем невидимым всплывающее меню.
         }
-		if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Стрека вниз" или "Page Down",то.
-			//pmpDoc.forward();
+		if(event.key === 16777237){//Если нажата "Стрека вниз"
+
+		}
+		if(event.key === 16777235){//Если нажата "Стрека вверх"
+
+		}
+		if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
+			var ntStr = pmpDoc.currentPage + 1;
+			if(ntStr < pdfDoc.pageCount)
+				pmpDoc.goToPage(ntStr);
 			
         }
-		if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Стрека вверх" или "Page Up", то.
-			//pmpDoc.back();
+		if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
+			var ntStr = pmpDoc.currentPage - 1;//-1 страница
+			if(ntStr >= 0)//Если больше 0, то листаем к началу документа.
+				pmpDoc.goToPage(ntStr);//На -1 страницу.
 		}
 		//cppqml.strDebug = event.key;
     }
@@ -93,6 +103,7 @@ Item {
 					running = false;//выключаем таймер.
 					cppqml.strDebug = cppqml.strDannieStr;
 					pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
+					spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
 					//TODO отцентровать документ по длине высоте окна. Это важно!
 					spbPdfPage.visible = true;//Делаем видимым DCSpinBox
 					pmpDoc.visible = true;//Делаем видимым pdf документ.
