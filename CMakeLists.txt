@@ -13,12 +13,21 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Sql Pdf)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql Pdf)
-# find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql)
-# if(NOT Qt6_FOUND) # Если нет Qt6, то ...
-#	find_package(Qt5 REQUIRED COMPONENTS Pdf) # Добавляем библиотеку Pdf, в Qt6 её не нужно добавлять.
-# endif()
+# Закоментированны строки, которые были в начальном варианте.
+# find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Sql Pdf)
+# find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql Pdf)
+
+# Удалить Qt5 или Qt6 в зависимости от версии Qt, под которую будет собираться проект.
+find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core Quick Sql Pdf Core5Compat)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql)
+
+if(Qt5_FOUND) # Если Qt5, то ...
+	find_package(Qt5 REQUIRED COMPONENTS Pdf) # Добавляем библиотеку Pdf, в Qt6 её не нужно добавлять.
+endif()
+
+if(Qt6_FOUND) # Если Qt6, то ...
+	find_package(Qt6 REQUIRED COMPONENTS Core5Compat) # Добавляем библиотеку Core5Compat.
+endif()
 
 set(PROJECT_SOURCES
         src/copydannie.h
@@ -71,11 +80,16 @@ endif()
 target_link_libraries(${EXECUTABLE_NAME}
   PRIVATE 	Qt${QT_VERSION_MAJOR}::Core
   			Qt${QT_VERSION_MAJOR}::Quick
-			Qt${QT_VERSION_MAJOR}::Sql
-			Qt${QT_VERSION_MAJOR}::Pdf)
-# if(NOT Qt6_FOUND) # Если нет Qt6, то добавляем библиотеку Pdf, в Qt6 её не нужно добавлять.
-#	target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt::Pdf)
-# endif()
+			Qt${QT_VERSION_MAJOR}::Sql)
+			# Qt${QT_VERSION_MAJOR}::Pdf)
+
+if(Qt5_FOUND) # Если Qt5, то добавляем библиотеку Pdf, в Qt6 её не нужно добавлять.
+	target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Pdf)
+endif()
+
+if(Qt6_FOUND) # Если Qt6, то добавляем библиотеку Core5Compat.
+	target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core5Compat)
+endif()
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

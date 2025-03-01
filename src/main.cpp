@@ -3,12 +3,14 @@
 #include <QQmlContext> //Библиотека соединяющая через контекст cpp с qml
 #include <QIcon>//Иконки.
 #include <QDebug>//Отладка.
+#include <QTextCodec>//Для Qt6.
 
 #include "cppqml.h"
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+	//TODO В Qt6 закоментировать данную строку.
+	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
 
