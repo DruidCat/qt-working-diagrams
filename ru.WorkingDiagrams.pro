@@ -81,11 +81,15 @@ DISTFILES += \
 	AUTHORS.md \
 	CODE_OF_CONDUCT.md \
 	CONTRIBUTING.md \
-	LICENSE.BSD-3-Clause.md \
+	LICENSE.GPLv3.md \
 	README.md \
 	README.ru.md \
 	TODO.txt \
+	images/ru.WorkingDiagrams.png \
+	images/Qt_logo_2016.png \
 	screenshots/KnopkiQML.png \
     screenshots/ru.WorkingDiagrams.png \
+	Qt5_AltLinux.txt \
+	Qt6_AltLinux.txt \
 	vim.txt \
 	CMakeLists.txt

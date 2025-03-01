@@ -7,6 +7,8 @@
 /build/cmake_install.cmake
 /build/workingdata/
 /build/ru.WorkingDiagrams
+/build/.qt/
+/build/.qt_plugins/
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------

@@ -1,0 +1,8 @@
+Qt5Quick Qt5Pdf
+
+Если собрать из репозитория AltLinux Qt5.15, не будет работать Qt5Quick и PDF, не хватает библиотек:
+
+qt5-declarative-devel
+qt5-quickcontrols2-devel
+qt5-webengine-devel
+libqt5-pdf
