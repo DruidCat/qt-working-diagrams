@@ -26,9 +26,16 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
     property int ntLogoTMK: 16
+	property bool blError: false//true - ошибка, закрываем страницу.
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
+	onWidthChanged:{
+		//pmpDoc.resetScale();
+	}
+	onHeightChanged:{
+		//pmpDoc.resetScale();
+	}
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             menuMenu.visible = false;//Делаем невидимым всплывающее меню.
@@ -56,7 +63,13 @@ Item {
         anchors.fill: tmPdf
         onClicked: menuMenu.visible = false
     }
-
+	function fnNazad(){//Функция Выхода со страницы, не путать с fnClickedNazad()
+		menuMenu.visible = false;//Делаем невидимым меню.
+		pmpDoc.visible = false;//Делаем невидимым pdf документ.
+		spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
+		pdfScale.visible = false;//Делаем невидимым DCScale
+		tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
+	}
 	Item {
 		id: tmZagolovok
 		DCKnopkaNazad {
@@ -67,12 +80,8 @@ Item {
 			anchors.margins: tmPdf.ntCoff/2
 			clrKnopki: tmPdf.clrTexta
 			onClicked: {
-                menuMenu.visible = false;//Делаем невидимым меню.
-				pmpDoc.visible = false;//Делаем невидимым pdf документ.
-				spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
-				pdfScale.visible = false;//Делаем невидимым DCScale
 				cppqml.strDannieStr = pmpDoc.currentPage;//Записываем в БД номер открытой страницы.
-                tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
+        		fnNazad();//Выходим со страницы.        
 			}
 		}
 		DCKnopkaPoisk{
@@ -101,19 +110,20 @@ Item {
 				lgTMK.ntCoff++;
 				if(lgTMK.ntCoff >= tmPdf.ntLogoTMK){
 					running = false;//выключаем таймер.
-					//cppqml.strDebug = cppqml.strDannieStr;
+					if(tmPdf.blError){//Если был сигнал об ошибке, то...
+						cppqml.strDebug = qsTr("Ошибка открытия документа: ") + pdfDoc.error;
+						fnNazad();//Выходим со страницы.
+					}
 					pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
 					spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
-					var imW = tmZona.childrenRect.width;
-					var imH = tmZona.childrenRect.height;
-					console.error (imW + " " + imH)
-					console.error(pdfDoc.pagePointSize(cppqml.strDannieStr));
+					console.error(pdfDoc.pagePointSize(cppqml.strDannieStr));//Размер Страницы
+					//var imW = tmZona.childrenRect.width;
+					//var imH = tmZona.childrenRect.height;
+					//console.error (imW + " " + imH)
 					//TODO отцентровать документ по длине высоте окна. Это важно!
-					var scale = pmpDoc.renderScale;
-					console.error(scale);
-					//pmpDoc.scaleToWidth(690, 778);
+					//cppqml.strDebug = cppqml.strDannieStr;
 					//pmpDoc.resetScale();//Не в ошибку.
-					pmpDoc.renderScale = pdfScale.value/100;//Отображаем в заданом value/100  масштабе
+					//pmpDoc.renderScale = pdfScale.value/100;//Отображаем в заданом value/100  масштабе
 					spbPdfPage.visible = true;//Делаем видимым DCSpinBox
 					pdfScale.visible = true;//Делаем видимым DCScale
 					pmpDoc.visible = true;//Делаем видимым pdf документ.
@@ -129,6 +139,13 @@ Item {
 		}
 		PdfDocument {//Класс, который возвращает данные о Pdf Документе.
 			id: pdfDoc
+			onStatusChanged:{//Если статус status изменился, то...
+				if(status === PdfDocument.Error)//enum, если статус Ошибка, то...
+					tmPdf.blError = true;//Ошибка.	
+				else//Если не ошибка, то...
+					tmPdf.blError = false;//Не Ошибка. Сбрасывает флаг при повторном открытии.
+					
+			}
 		}
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
@@ -138,7 +155,6 @@ Item {
 				spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
 				lgTMK.ntCoff = 11;//Задаём размер логотипа.
 				tmrLogoTMK.running = true;//включаем таймер.
-				//cppqml.strDebug = pdfDoc.error
 			}
 		}
 		PdfMultiPageView{
