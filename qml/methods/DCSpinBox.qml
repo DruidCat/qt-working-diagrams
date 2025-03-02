@@ -18,7 +18,7 @@ Item {
 	property int from: 0//Задаём значение по умолчанию.
 	property int to: 32767//Задаём значение по умолчанию.
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
-	//onValueModified: console.log(value)
+	//onValueModified: console.error(value)
 	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
 		if(value < from){
 			value = from;
@@ -31,34 +31,34 @@ Item {
 	onFromChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
 		if(from < 0){//С отрицательными числами DCSpinBox не работает.
 			from = 0;//Задаём значение по умолчанию.
-			console.log(qsTr("DCSpinBox.qml::from(int): from - задано отрицательное значение."));
+			console.error(qsTr("DCSpinBox.qml::from(int): from - задано отрицательное значение."));
 			if(to < 0){//Если при этом to отрицательное число, то...
 				to = 32767;//Задаём значение по умолчанию.
-				console.log(qsTr("DCSpinBox.qml::from(int): to - задано отрицательное значение."));
+				console.error(qsTr("DCSpinBox.qml::from(int): to - задано отрицательное значение."));
 			}
 		}
 		else{//Если это не отрицательное значение, то...
 			if(from > to){
 				from = 0;//Задаём значение по умолчанию.
 				to = 32767;//Задаём значение по умолчанию.
-				console.log(qsTr("DCSpinBox.qml::from(int): from > to."));
+				console.error(qsTr("DCSpinBox.qml::from(int): from > to."));
 			}
 		}
 	}
 	onToChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
 		if(to < 0){//С отрицательными числами DCSpinBox не работает.
 			to = 32767;//Задаём значение по умолчанию.
-			console.log(qsTr("DCSpinBox.qml::to(int): to - задано отрицательное значение."));
+			console.error(qsTr("DCSpinBox.qml::to(int): to - задано отрицательное значение."));
 			if(from < 0){//Если при этом from отрицательное число, то...
 				from = 0;//Задаём значение по умолчанию.
-				console.log(qsTr("DCSpinBox.qml::to(int): from - задано отрицательное значение."));
+				console.error(qsTr("DCSpinBox.qml::to(int): from - задано отрицательное значение."));
 			}
 		}
 		else{//Если это не отрицательное значение, то...
 			if(to < from){
 				from = 0;//Задаём значение по умолчанию.
 				to = 32767;//Задаём значение по умолчанию.
-				console.log(qsTr("DCSpinBox.qml::to(int): to < from."));
+				console.error(qsTr("DCSpinBox.qml::to(int): to < from."));
 			}
 		}
 	}
@@ -171,7 +171,7 @@ Item {
 					if(event.key === Qt.Key_Escape){
 						fnClickedEscape();//функция нажатия Escape
 					}
-					//console.log(event.key);
+					//console.error(event.key);
 				}
 				onFocusChanged: {//Если фокус изменился...
 					if(!text){//Если пустая строчка, то...
