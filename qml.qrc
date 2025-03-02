@@ -22,6 +22,7 @@
         <file>qml/buttons/DCKnopkaZakrit.qml</file>
         <file>qml/methods/DCLogoTMK.qml</file>
         <file>qml/methods/DCMenu.qml</file>
+        <file>qml/methods/DCScale.qml</file>
         <file>qml/methods/DCSpinBox.qml</file>
         <file>qml/methods/DCTextEdit.qml</file>
         <file>qml/methods/DCTextInput.qml</file>

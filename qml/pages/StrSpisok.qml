@@ -365,7 +365,7 @@ Item {
                 fnClickedEscape();//Функция нажатия кнопки Escape.
                 tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
             }
-		}
+		}	
         DCKnopkaNastroiki {
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff

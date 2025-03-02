@@ -71,6 +71,7 @@ Item {
                 menuMenu.visible = false;//Делаем невидимым меню.
 				pmpDoc.visible = false;//Делаем невидимым pdf документ.
 				spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
+				pdfScale.visible = false;//Делаем невидимым DCScale
 				cppqml.strDannieStr = pmpDoc.currentPage;//Записываем в БД номер открытой страницы.
                 tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
 			}
@@ -101,11 +102,20 @@ Item {
 				lgTMK.ntCoff++;
 				if(lgTMK.ntCoff >= tmPdf.ntLogoTMK){
 					running = false;//выключаем таймер.
-					cppqml.strDebug = cppqml.strDannieStr;
+					//cppqml.strDebug = cppqml.strDannieStr;
 					pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
 					spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
+					var imW = tmZona.childrenRect.width;
+					var imH = tmZona.childrenRect.height;
+					console.error (imW + " " + imH)
 					//TODO отцентровать документ по длине высоте окна. Это важно!
+					var scale = pmpDoc.renderScale;
+					console.error(scale);
+					//pmpDoc.scaleToWidth(690, 778);
+					//pmpDoc.resetScale();//Не в ошибку.
+					pmpDoc.renderScale = pdfScale.value/100;//Отображаем в заданом value/100  масштабе
 					spbPdfPage.visible = true;//Делаем видимым DCSpinBox
+					pdfScale.visible = true;//Делаем видимым DCScale
 					pmpDoc.visible = true;//Делаем видимым pdf документ.
 				}
 			}
@@ -196,6 +206,25 @@ Item {
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
 			onValueModified:{//Если значение измениловь в DCSpinBox...
 				pmpDoc.goToPage(value-1)
+			}
+		}
+		DCScale{
+			id: pdfScale
+			ntWidth: tmPdf.ntWidth
+			ntCoff: tmPdf.ntCoff
+			anchors.verticalCenter: tmToolbar.verticalCenter
+			anchors.right: tmToolbar.right
+			visible: true
+			clrTexta: tmPdf.clrTexta
+			clrFona: tmPdf.clrFona 
+			radius: tmPdf.ntCoff/2
+			from: 25
+			to: 200
+			value: 100
+			step: 25
+			scale.cursorVisible: true;//Делаем курсор видимым обязательно.
+			onValueModified:{//Если значение измениловь в DCScale...
+				pmpDoc.renderScale = value/100;//Масштаб 1 - это оригинальный масштаб, 0.5 - это на 50% меньше
 			}
 		}
 	}
