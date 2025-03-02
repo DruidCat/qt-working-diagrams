@@ -8,6 +8,7 @@ Item{
     property int ntCoff: 8
     property color clrKnopki: "grey"
     property color clrFona: "transparent"
+	property bool border: true
 
     width: ntWidth*ntCoff
     height: width
@@ -17,9 +18,6 @@ Item{
     Rectangle {
         id: rctKnopkaMinus
         anchors.fill: tmKnopkaMinus
-
-        border.color: maKnopkaMinus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        border.width: tmKnopkaMinus.width/8/4
 
         color: maKnopkaMinus.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
         radius: tmKnopkaMinus.width/4
@@ -33,6 +31,12 @@ Item{
             color: maKnopkaMinus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaMinus.width/4
         }
+	}
+	Component.onCompleted: {
+		if(tmKnopkaMinus.border){
+			rctKnopkaMinus.border.color = maKnopkaMinus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        	rctKnopkaMinus.border.width = tmKnopkaMinus.width/8/4;
+		}
 	}
     MouseArea {
         id: maKnopkaMinus
