@@ -17,6 +17,7 @@ Item {
 	property int value: 0
 	property int from: 0//Задаём значение по умолчанию.
 	property int to: 32767//Задаём значение по умолчанию.
+	property int stepSize: 1//Шаг увеличения и уменьшения value
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
 	//onValueModified: console.error(value)
 	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
@@ -62,6 +63,12 @@ Item {
 			}
 		}
 	}
+	onStepSizeChanged: {
+		if(stepSize < 1){
+			stepSize = 1;
+			console.error(qsTr("DCSpinBox.qml::stepSize(int): значение меньше 1."));
+		}
+	}
 	function fnClickedEscape (){//Функция нажатия Escape.
 		txnSpinBox.text = tmSpinBox.value;//Отображаем последнее значение.
 	}
@@ -81,7 +88,7 @@ Item {
 			}
 			else{//Если есть равенство, значит изменение идёт через + или -
 				if(tmSpinBox.value != tmSpinBox.from){//Если нет равенства с минимальным значением, то..
-					tmSpinBox.value = tmSpinBox.value - 1;//Уменьшаем.
+					tmSpinBox.value = tmSpinBox.value - tmSpinBox.stepSize;//Уменьшаем.
 					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
 					tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 				}
@@ -99,7 +106,7 @@ Item {
 			}
 			else{//Если есть равенство, значит изменение идёт через + или -
 				if(tmSpinBox.value != tmSpinBox.to){//Если нет равенства с максимальным значением, то.
-					tmSpinBox.value = tmSpinBox.value + 1;//Увеличиваем.
+					tmSpinBox.value = tmSpinBox.value + tmSpinBox.stepSize;//Увеличиваем.
 					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
 					tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 				}

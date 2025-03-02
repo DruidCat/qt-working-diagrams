@@ -17,7 +17,7 @@ Item {
 	property int value: 0
 	property int from: 0//Задаём значение по умолчанию.
 	property int to: 32767//Задаём значение по умолчанию.
-	property int step: 1
+	property int stepSize: 1
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
 	//onValueModified: console.error(value)
 	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
@@ -63,16 +63,22 @@ Item {
 			}
 		}
 	}
+	onStepSizeChanged: {
+		if(stepSize < 1){
+			stepSize = 1;
+			console.error(qsTr("DCScale.qml::stepSize(int): значение меньше 1."));
+		}
+	}
 	function fnClickedMinus(){//Функция нажатия кнопки минус.
 		if(tmScale.value > tmScale.from){//Если нет равенства с минимальным значением, то..
-			tmScale.value = tmScale.value - tmScale.step;//Уменьшаем.
+			tmScale.value = tmScale.value - tmScale.stepSize;//Уменьшаем.
 			//А отображение value в txnScale.text произойдет в слоте onValueChanged
 			tmScale.valueModified();//Отправляем Сигнал, как в оригинальном  виджете Scale.
 		}
 	}
 	function fnClickedPlus(){//Функция нажатия кнопки плюс.
 		if(tmScale.value < tmScale.to){//Если нет равенства с максимальным значением, то.
-			tmScale.value = tmScale.value + tmScale.step;//Увеличиваем.
+			tmScale.value = tmScale.value + tmScale.stepSize;//Увеличиваем.
 			//А отображение value в txnScale.text произойдет в слоте onValueChanged
 			tmScale.valueModified();//Отправляем Сигнал, как в оригинальном  виджете Scale.
 		}
