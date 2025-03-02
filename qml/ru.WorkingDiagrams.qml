@@ -348,7 +348,6 @@ Window {
 				zonaWidth: pgStrPdf.rctStrZona.width; zonaHeight: pgStrPdf.rctStrZona.height
 				toolbarX: pgStrPdf.rctStrToolbar.x; toolbarY: pgStrPdf.rctStrToolbar.y
 				toolbarWidth: pgStrPdf.rctStrToolbar.width; toolbarHeight: pgStrPdf.rctStrToolbar.height
-				radiusZona: pgStrPdf.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}

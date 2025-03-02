@@ -25,7 +25,6 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
     property int ntLogoTMK: 16
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
@@ -108,6 +107,7 @@ Item {
 					var imW = tmZona.childrenRect.width;
 					var imH = tmZona.childrenRect.height;
 					console.error (imW + " " + imH)
+					console.error(pdfDoc.pagePointSize(cppqml.strDannieStr));
 					//TODO отцентровать документ по длине высоте окна. Это важно!
 					var scale = pmpDoc.renderScale;
 					console.error(scale);
@@ -156,7 +156,7 @@ Item {
 			anchors.fill: tmZona
 			color: "transparent"
 			border.color: tmPdf.clrTexta
-			border.width: tmPdf.ntCoff/2//Бордюр при переименовании и удалении.
+			border.width: tmPdf.ntCoff/4//Бордюр при переименовании и удалении.
 		}
         DCMenu {//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
@@ -221,7 +221,7 @@ Item {
 			from: 25
 			to: 200
 			value: 100
-			step: 25
+			stepSize: 25
 			scale.cursorVisible: true;//Делаем курсор видимым обязательно.
 			onValueModified:{//Если значение измениловь в DCScale...
 				pmpDoc.renderScale = value/100;//Масштаб 1 - это оригинальный масштаб, 0.5 - это на 50% меньше
