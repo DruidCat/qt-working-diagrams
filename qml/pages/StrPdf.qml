@@ -26,25 +26,30 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
     property int ntLogoTMK: 16
+	property bool blStartWidth: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие.
+	property bool blStartHeight: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие
 	property bool blError: false//true - ошибка, закрываем страницу.
+	property bool blScale: false//true - включили изменение масштаба.
+	property bool blSizeApp: false//true - размер окна приложения изменился.
+	property int ntStrValue: 0//Переменная, которая сохраняет значение страницы при переключении страниц на 0.
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
-	onWidthChanged:{
-		spbPdfPage.visible = false;//Делаем видимым DCSpinBox
-		pdfScale.visible = false;//Делаем видимым DCScale
-		pmpDoc.visible = false;//Делаем видимым pdf документ.
-		lgTMK.ntCoff = 11;//Задаём размер логотипа.
-		tmrLogoTMK.running = true;//Таймер запустить.
-		//pmpDoc.resetScale();
+	onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
+		if(tmPdf.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
+			tmPdf.blStartWidth = false;//Взводим флаг на оброботку размера.
+		else{
+			tmPdf.blSizeApp = true;//Размер окна изменился.
+			fnTimerStart();//Запускаем таймер.
+		}
 	}
-	onHeightChanged:{
-		spbPdfPage.visible = false;//Делаем видимым DCSpinBox
-		pdfScale.visible = false;//Делаем видимым DCScale
-		pmpDoc.visible = false;//Делаем видимым pdf документ.
-		lgTMK.ntCoff = 11;//Задаём размер логотипа.
-		tmrLogoTMK.running = true;//Таймер запустить.
-		//pmpDoc.resetScale();
+	onHeightChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
+		if(tmPdf.blStartHeight)//Окно открылось, не обрабатываем сигнал об изменении..
+			tmPdf.blStartHeight = false;//Взводим флаг на оброботку размера.
+		else{
+			tmPdf.blSizeApp = true;//Размер окна изменился.
+			fnTimerStart();//Запускаем таймер.	
+		}
 	}
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
@@ -73,11 +78,21 @@ Item {
         anchors.fill: tmPdf
         onClicked: menuMenu.visible = false
     }
+	function fnTimerStart(){//Функция старта таймера.
+		if(!tmrLogoTMK.running){//Если таймер еще не запускался, то...
+			pmpDoc.visible = false;//Делаем невидимым pdf документ.
+			tmPdf.ntStrValue = spbPdfPage.value;//Сохраняем номер страницы.
+			pmpDoc.goToPage(-1);//Переключаемся на страницу -1 (0 нельзя), чтоб потом переключиться на нужную.
+		}
+		lgTMK.ntCoff = 11;//Задаём размер логотипа.
+		tmrLogoTMK.running = true;//Таймер запустить.
+		console.error("Таймер взводится.");
+	}
 	function fnNazad(){//Функция Выхода со страницы, не путать с fnClickedNazad()
-		menuMenu.visible = false;//Делаем невидимым меню.
 		pmpDoc.visible = false;//Делаем невидимым pdf документ.
-		spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
-		pdfScale.visible = false;//Делаем невидимым DCScale
+		menuMenu.visible = false;//Делаем невидимым меню.
+		tmPdf.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
+		tmPdf.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
 		tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
 	}
 	Item {
@@ -124,19 +139,53 @@ Item {
 						cppqml.strDebug = qsTr("Ошибка открытия документа: ") + pdfDoc.error;
 						fnNazad();//Выходим со страницы.
 					}
-					pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
-					spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
-					console.error(pdfDoc.pagePointSize(cppqml.strDannieStr));//Размер Страницы
-					//var imW = tmZona.childrenRect.width;
-					//var imH = tmZona.childrenRect.height;
-					//console.error (imW + " " + imH)
-					//TODO отцентровать документ по длине высоте окна. Это важно!
-					//cppqml.strDebug = cppqml.strDannieStr;
-					//pmpDoc.resetScale();//Не в ошибку.
-					//pmpDoc.renderScale = pdfScale.value/100;//Отображаем в заданом value/100  масштабе
+					else{//Если не было сигнала об ошибке, то...
+						if(tmPdf.blSizeApp){//Изменились размеры приожения.
+							tmPdf.blSizeApp = false;//Обнуляем флаг.
+							pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
+							spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
+							tmPdf.ntStrValue = 0;//Обнуляем.
+							console.error("148: Timer Size");
+						}
+						else{
+							if(tmPdf.blScale){//Если выбран режим масштабирования, то...
+								tmPdf.blScale = false;//Обнуляем флаг.
+								//pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
+								//spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
+								tmPdf.ntStrValue = 0;//Обнуляем.
+								console.error("155: Timer Scale");
+							}
+							else{
+								pmpDoc.resetScale();//Выставляет масштаб 1 к 1, работает, проверил.
+								pdfScale.value = pmpDoc.renderScale*100;//выставляем значение в DCScale
+								pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
+								spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6. НЕ УДАЛЯТЬ!
+								console.error("155: Timer Показ страницы");
+								//TODO отцентровать документ по длине высоте окна. Это важно!
+								//console.error(pdfDoc.pagePointSize(cppqml.strDannieStr));//Размер Страницы
+								//var imW = tmZona.childrenRect.width;
+								//var imH = tmZona.childrenRect.height;
+								//console.error (imW + " " + imH)
+								//cppqml.strDebug = cppqml.strDannieStr;
+								//pmpDoc.resetScale();//Выставляет масштаб 1, работает, проверил.
+							}
+						}
+					}
+					pmpDoc.visible = true;//Делаем видимым pdf документ.
+				}
+			}
+			onRunningChanged: {//Если running поменялся, то...
+				if(running){//Если запустился таймер, то...
+					knopkaPoisk.visible = false;//Делаем нивидимым кнопку поиска.
+					knopkaMenu.visible = false;//Делаем невидимым кнопку меню.
+					spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
+					pdfScale.visible = false;//Делаем невидимым DCScale
+				}
+				else{//Если таймер выключен, то...
+					knopkaPoisk.visible = true;//Делаем видимым кнопку поиска.
+					knopkaMenu.visible = true;//Делаем видимым кнопку меню.
 					spbPdfPage.visible = true;//Делаем видимым DCSpinBox
 					pdfScale.visible = true;//Делаем видимым DCScale
-					pmpDoc.visible = true;//Делаем видимым pdf документ.
 				}
 			}
 		}
@@ -154,8 +203,8 @@ Item {
 					tmPdf.blError = true;//Ошибка.	
 				else//Если не ошибка, то...
 					tmPdf.blError = false;//Не Ошибка. Сбрасывает флаг при повторном открытии.
-					
 			}
+			
 		}
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
@@ -163,11 +212,12 @@ Item {
 				pdfDoc.source = cppqml.strDannieUrl;
 				spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
 				spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
-				lgTMK.ntCoff = 11;//Задаём размер логотипа.
-				tmrLogoTMK.running = true;//включаем таймер.
+				tmPdf.blStartWidth = true;//Стартуем, блокируем первое изменение размеров окна.
+				tmPdf.blStartHeight = true;//Стартуем, блокируем первое изменение размеров окна.
+				fnTimerStart();//Запускаем таймер.	
 			}
 		}
-		PdfMultiPageView{
+		PdfMultiPageView{//PdfScrollablePageView
 			id:pmpDoc
 			anchors.fill: tmZona
 			document: pdfDoc
@@ -175,8 +225,14 @@ Item {
 			onCurrentPageChanged: {
 				spbPdfPage.value = pmpDoc.currentPage + 1
 			}
+			
 		}
-		
+		PdfNavigationStack{
+			id: pnsDoc
+			onCurrentZoomChanged:{
+				console.error("Zoom");
+			}
+		}
 		Rectangle {
 			id: rctBorder
 			anchors.fill: tmZona
@@ -207,6 +263,7 @@ Item {
     Item {//Тулбар
 		id: tmToolbar
         DCKnopkaNastroiki {//Кнопка Меню.
+			id: knopkaMenu
             ntWidth: tmPdf.ntWidth
             ntCoff: tmPdf.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter
@@ -250,8 +307,12 @@ Item {
 			stepSize: 25
 			scale.cursorVisible: true;//Делаем курсор видимым обязательно.
 			onValueModified:{//Если значение измениловь в DCScale...
+				console.error("299: pdfScale");
+				//tmPdf.blScale = true;//Масштаб изменился.
+				//fnTimerStart();//Запускаем таймер.
 				pmpDoc.renderScale = value/100;//Масштаб 1 - это оригинальный масштаб, 0.5 - это на 50% меньше
 			}
 		}
 	}
 }
+
