@@ -31,9 +31,19 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
 	onWidthChanged:{
+		spbPdfPage.visible = false;//Делаем видимым DCSpinBox
+		pdfScale.visible = false;//Делаем видимым DCScale
+		pmpDoc.visible = false;//Делаем видимым pdf документ.
+		lgTMK.ntCoff = 11;//Задаём размер логотипа.
+		tmrLogoTMK.running = true;//Таймер запустить.
 		//pmpDoc.resetScale();
 	}
 	onHeightChanged:{
+		spbPdfPage.visible = false;//Делаем видимым DCSpinBox
+		pdfScale.visible = false;//Делаем видимым DCScale
+		pmpDoc.visible = false;//Делаем видимым pdf документ.
+		lgTMK.ntCoff = 11;//Задаём размер логотипа.
+		tmrLogoTMK.running = true;//Таймер запустить.
 		//pmpDoc.resetScale();
 	}
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
