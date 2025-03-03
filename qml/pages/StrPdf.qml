@@ -119,7 +119,36 @@ Item {
             clrKnopki: tmPdf.clrTexta
             clrFona: tmPdf.clrFona
             onClicked: {//Слот сигнала clicked кнопки Поиск.
+				pssPassword.blVisible = true;
                 //fnClickedPoisk();//Функция обрабатывающая кнопку Поиск.
+            }
+        }
+		DCPassword{
+            id: pssPassword
+            anchors.top: tmZagolovok.top
+            anchors.bottom: tmZagolovok.bottom
+            anchors.left: tmZagolovok.left
+            anchors.right: tmZagolovok.right
+
+            anchors.topMargin: tmPdf.ntCoff/4
+            anchors.bottomMargin: tmPdf.ntCoff/4
+            anchors.leftMargin: tmPdf.ntCoff/2
+            anchors.rightMargin: tmPdf.ntCoff/2
+
+            ntWidth: tmPdf.ntWidth
+            ntCoff: tmPdf.ntCoff
+
+            clrFona: "black"
+            clrFonaPass: "orange"
+            clrTexta: "black"
+            clrKnopki: "yellow"
+            clrBorder: "yellow"
+			placeholderText: qsTr("ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА")
+            onClickedOk: function (strPassword)  {//Слот нажатия кнопки Ок
+				pssPassword.blVisible = false;
+            }
+            onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
+				pssPassword.blVisible = false;
             }
         }
 	}
@@ -156,7 +185,7 @@ Item {
 								console.error("155: Timer Scale");
 							}
 							else{
-								pmpDoc.resetScale();//Выставляет масштаб 1 к 1, работает, проверил.
+								pmpDoc.resetScale();//Выставляет масштаб 1 к 1, при открытии документа.
 								pdfScale.value = pmpDoc.renderScale*100;//выставляем значение в DCScale
 								pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
 								spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6. НЕ УДАЛЯТЬ!
@@ -167,7 +196,6 @@ Item {
 								//var imH = tmZona.childrenRect.height;
 								//console.error (imW + " " + imH)
 								//cppqml.strDebug = cppqml.strDannieStr;
-								//pmpDoc.resetScale();//Выставляет масштаб 1, работает, проверил.
 							}
 						}
 					}
