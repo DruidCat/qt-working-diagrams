@@ -89,11 +89,66 @@ Item {
 		tmrLogoTMK.running = true;//Таймер запустить.
 		console.error("Таймер взводится.");
 	}
+	function fnPdfOtkrit(){//Функция открытия Pdf документа.
+		//console.error(cppqml.strDannieUrl);
+		pdfDoc.source = cppqml.strDannieUrl;
+		spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
+		spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox	
+		fnTimerStart();//Запускаем таймер.
+	}
+	function fnPdfPokaz(){
+		tmrLogoTMK.running = false;//выключаем таймер.
+		if(tmPdf.blError){//Если был сигнал об ошибке, то...
+			if(pssPassword.blVisible){//Если поле пароля видимо, значит, вводим пароль.
+				knopkaPoisk.visible = false;//Делаем нивидимым кнопку поиска.
+				knopkaMenu.visible = false;//Делаем невидимым кнопку меню.
+				spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
+				pdfScale.visible = false;//Делаем невидимым DCScale
+			}
+			else{//Если не видимое, значит это какая то ошибка.
+				cppqml.strDebug = qsTr("Ошибка открытия документа: ") + pdfDoc.error;
+				fnNazad();//Выходим со страницы.
+			}
+		}
+		else{//Если не было сигнала об ошибке, то...
+			if(tmPdf.blSizeApp){//Изменились размеры приложения.
+				tmPdf.blSizeApp = false;//Обнуляем флаг.
+				pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
+				spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
+				tmPdf.ntStrValue = 0;//Обнуляем.
+				console.error("148: Timer Size");
+			}
+			else{
+				if(tmPdf.blScale){//Если выбран режим масштабирования, то...
+					tmPdf.blScale = false;//Обнуляем флаг.
+					//pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
+					//spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
+					tmPdf.ntStrValue = 0;//Обнуляем.
+					console.error("155: Timer Scale");
+				}
+				else{
+					pmpDoc.resetScale();//Выставляет масштаб 1 к 1, при открытии документа.
+					pdfScale.value = pmpDoc.renderScale*100;//выставляем значение в DCScale
+					pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
+					spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6. НЕ УДАЛЯТЬ!
+					console.error("155: Timer Показ страницы");
+					//TODO отцентровать документ по длине высоте окна. Это важно!
+					//console.error(pdfDoc.pagePointSize(cppqml.strDannieStr));//Размер Страницы
+					//var imW = tmZona.childrenRect.width;
+					//var imH = tmZona.childrenRect.height;
+					//console.error (imW + " " + imH)
+					//cppqml.strDebug = cppqml.strDannieStr;
+				}
+			}
+		}
+		pmpDoc.visible = true;//Делаем видимым pdf документ.
+	}
 	function fnNazad(){//Функция Выхода со страницы, не путать с fnClickedNazad()
 		pmpDoc.visible = false;//Делаем невидимым pdf документ.
 		menuMenu.visible = false;//Делаем невидимым меню.
 		tmPdf.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
 		tmPdf.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
+		pdfDoc.source = "";//Обязательная строчка, она что то обнуляет, после запароленного файла.
 		tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
 	}
 	Item {
@@ -146,11 +201,24 @@ Item {
             clrBorder: "yellow"
 			placeholderText: qsTr("ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА")
             onClickedOk: function (strPassword)  {//Слот нажатия кнопки Ок
-				pssPassword.blVisible = false;
+				pdfDoc.password = strPassword;//Передаём пароль в документ.
+				pssPassword.blVisible = false;//И только потом делаем невидимым поле ввода.
+				fnPdfOtkrit();
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
 				pssPassword.blVisible = false;
+				fnNazad();//Закрываем окно с pdf документом.
             }
+			onBlVisibleChanged: {//Если видимость изменилась, то...
+				if(pssPassword.blVisible){
+					password = "";//Обнуляем вводимый пароль в TextInput.
+					textInput.readOnly = false;//разрешаем редактировать.
+				}
+				else{
+					password = "";//Обнуляем вводимый пароль в TextInput.
+					textInput.readOnly = true;//запрещаем редактировать.
+				}
+			}
         }
 	}
 	Item {
@@ -164,43 +232,7 @@ Item {
 			onTriggered: {
 				lgTMK.ntCoff++;
 				if(lgTMK.ntCoff >= tmPdf.ntLogoTMK){
-					running = false;//выключаем таймер.
-					if(tmPdf.blError){//Если был сигнал об ошибке, то...
-						cppqml.strDebug = qsTr("Ошибка открытия документа: ") + pdfDoc.error;
-						fnNazad();//Выходим со страницы.
-					}
-					else{//Если не было сигнала об ошибке, то...
-						if(tmPdf.blSizeApp){//Изменились размеры приожения.
-							tmPdf.blSizeApp = false;//Обнуляем флаг.
-							pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
-							spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
-							tmPdf.ntStrValue = 0;//Обнуляем.
-							console.error("148: Timer Size");
-						}
-						else{
-							if(tmPdf.blScale){//Если выбран режим масштабирования, то...
-								tmPdf.blScale = false;//Обнуляем флаг.
-								//pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
-								//spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
-								tmPdf.ntStrValue = 0;//Обнуляем.
-								console.error("155: Timer Scale");
-							}
-							else{
-								pmpDoc.resetScale();//Выставляет масштаб 1 к 1, при открытии документа.
-								pdfScale.value = pmpDoc.renderScale*100;//выставляем значение в DCScale
-								pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
-								spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6. НЕ УДАЛЯТЬ!
-								console.error("155: Timer Показ страницы");
-								//TODO отцентровать документ по длине высоте окна. Это важно!
-								//console.error(pdfDoc.pagePointSize(cppqml.strDannieStr));//Размер Страницы
-								//var imW = tmZona.childrenRect.width;
-								//var imH = tmZona.childrenRect.height;
-								//console.error (imW + " " + imH)
-								//cppqml.strDebug = cppqml.strDannieStr;
-							}
-						}
-					}
-					pmpDoc.visible = true;//Делаем видимым pdf документ.
+					fnPdfPokaz();//Показываем pdf документ.	
 				}
 			}
 			onRunningChanged: {//Если running поменялся, то...
@@ -228,23 +260,22 @@ Item {
 		PdfDocument {//Класс, который возвращает данные о Pdf Документе.
 			id: pdfDoc
 			onStatusChanged:{//Если статус status изменился, то...
-                if(pdfDoc.status === PdfDocument.Error)//enum, если статус Ошибка, то...
+				if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
 					tmPdf.blError = true;//Ошибка.	
+				}
 				else//Если не ошибка, то...
 					tmPdf.blError = false;//Не Ошибка. Сбрасывает флаг при повторном открытии.
 			}
-			
+			onPasswordRequired: {//Если пришёл сигнал passwordRequire запроса пароля в pdf документе, то...
+				pssPassword.blVisible = true;//Делаем видимым поле ввода пароля.
+			}	
 		}
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
-                console.error(cppqml.strDannieUrl);
-				pdfDoc.source = cppqml.strDannieUrl;
-				spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
-				spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
 				tmPdf.blStartWidth = true;//Стартуем, блокируем первое изменение размеров окна.
 				tmPdf.blStartHeight = true;//Стартуем, блокируем первое изменение размеров окна.
-				fnTimerStart();//Запускаем таймер.	
+				fnPdfOtkrit();//Функция открытия Pdf документа.	
 			}
 		}
 		PdfMultiPageView{//PdfScrollablePageView
