@@ -18,7 +18,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql Pdf)
 
 # Удалить Qt5 или Qt6 в зависимости от версии Qt, под которую будет собираться проект.
-find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core Quick Sql Pdf Core5Compat)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Quick Sql Pdf Core5Compat)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql)
 
 if(Qt5_FOUND) # Если Qt5, то ...
@@ -102,6 +102,9 @@ set_target_properties(${EXECUTABLE_NAME} PROPERTIES
 install(TARGETS ${EXECUTABLE_NAME}
     BUNDLE DESTINATION .
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+set_property(	TARGET ${EXECUTABLE_NAME}
+                PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
 
 if(QT_VERSION_MAJOR EQUAL 6)
 	qt_import_qml_plugins(${EXECUTABLE_NAME})

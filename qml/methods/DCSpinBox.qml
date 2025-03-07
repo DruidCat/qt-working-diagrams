@@ -152,18 +152,18 @@ Item {
 				horizontalAlignment: TextInput.AlignHCenter
 				verticalAlignment: TextInput.AlignVCenter
 				//TODO Qt6 интерфейс. Закоментировать не нужный.
-				/*
+
 				validator: RegularExpressionValidator {//Чтоб не было букв.
 					regularExpression: /[0-9]+/
 				}
-				*/
+
 				//TODO Qt5 Интерфейс. Закоментировать не нужный.
-				
-				validator: RegExpValidator {//Чтоб не было букв.
+                /*
+                validator: RegExpValidator {//Чтоб не было букв.
 					regExp: /[0-9]+/
 				}
-
-				text: tmSpinBox.value
+                */
+                text: tmSpinBox.value
 				font.pixelSize: tmSpinBox.ntWidth*tmSpinBox.ntCoff//размер шрифта текста.
 				readOnly: false//Можно редактировать. 
 				focus: true//Фокус на TextInput

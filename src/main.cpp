@@ -10,7 +10,7 @@
 int main(int argc, char *argv[])
 {
 	//TODO В Qt6 закоментировать данную строку.
-	QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+    //QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
 

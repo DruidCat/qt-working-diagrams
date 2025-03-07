@@ -1,7 +1,8 @@
-import QtQuick 2.14
+﻿import QtQuick 2.14
 import QtQuick.Window 2.14
 import QtQuick.Controls 2.14
-import QtQuick.Pdf 5.15
+//import QtQuick.Pdf 5.15
+import QtQuick.Pdf
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
@@ -227,7 +228,7 @@ Item {
 		PdfDocument {//Класс, который возвращает данные о Pdf Документе.
 			id: pdfDoc
 			onStatusChanged:{//Если статус status изменился, то...
-				if(status === PdfDocument.Error)//enum, если статус Ошибка, то...
+                if(pdfDoc.status === PdfDocument.Error)//enum, если статус Ошибка, то...
 					tmPdf.blError = true;//Ошибка.	
 				else//Если не ошибка, то...
 					tmPdf.blError = false;//Не Ошибка. Сбрасывает флаг при повторном открытии.
@@ -237,6 +238,7 @@ Item {
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
+                console.error(cppqml.strDannieUrl);
 				pdfDoc.source = cppqml.strDannieUrl;
 				spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
 				spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
@@ -254,12 +256,6 @@ Item {
 				spbPdfPage.value = pmpDoc.currentPage + 1
 			}
 			
-		}
-		PdfNavigationStack{
-			id: pnsDoc
-			onCurrentZoomChanged:{
-				console.error("Zoom");
-			}
 		}
 		Rectangle {
 			id: rctBorder
@@ -343,4 +339,3 @@ Item {
 		}
 	}
 }
-

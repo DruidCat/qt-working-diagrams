@@ -52,14 +52,16 @@ Item {
         onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedNazad(){//Функция нажатия кнопки Назад или клика папки [..]
+        /*
         if(cppqml.strFileDialogPut === tmFileDialog.strPutDom){//Если каталог совпадает с домашним, то...
             fnClickedZakrit();//Закрываем проводник.
         }
         else{//Противном случае...
+        */
             cppqml.strFileDialog = "[..]";//Назад в папке.
             fnClickedEscape();//Меню сворачиваем
             tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
-        }
+        //}
     }
     function fnClickedZakrit(){
         cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.

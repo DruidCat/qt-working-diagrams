@@ -66,8 +66,9 @@ Item{
 		id: maKnopkaNazad
 		width: tmKnopkaNazad.width
 		height:  width
-		onClicked: {
-			tmKnopkaNazad.clicked();
+        //onPressed: {
+        onClicked: {
+            tmKnopkaNazad.clicked();
 		}
 	}
 }
