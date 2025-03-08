@@ -1,8 +1,7 @@
-﻿import QtQuick 2.14
-import QtQuick.Window 2.14
-import QtQuick.Controls 2.14
-//import QtQuick.Pdf 5.15
-import QtQuick.Pdf
+﻿import QtQuick //2.14
+import QtQuick.Window //2.14
+import QtQuick.Controls //2.14
+import QtQuick.Pdf //5.15
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
@@ -63,15 +62,15 @@ Item {
 
 		}
 		if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
-			var ntStr = pmpDoc.currentPage + 1;
-			if(ntStr < pdfDoc.pageCount)
-				pmpDoc.goToPage(ntStr);
+            var ntStrDown = pmpDoc.currentPage + 1;
+            if(ntStrDown < pdfDoc.pageCount)
+                pmpDoc.goToPage(ntStrDown);
 			
         }
 		if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
-			var ntStr = pmpDoc.currentPage - 1;//-1 страница
-			if(ntStr >= 0)//Если больше 0, то листаем к началу документа.
-				pmpDoc.goToPage(ntStr);//На -1 страницу.
+            var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
+            if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+                pmpDoc.goToPage(ntStrUp);//На -1 страницу.
 		}
 		//cppqml.strDebug = event.key;
     }
@@ -90,7 +89,7 @@ Item {
 		console.error("Таймер взводится.");
 	}
 	function fnPdfOtkrit(){//Функция открытия Pdf документа.
-		//console.error(cppqml.strDannieUrl);
+        console.error(cppqml.strDannieUrl);
 		pdfDoc.source = cppqml.strDannieUrl;
 		spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
 		spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox	
@@ -148,7 +147,7 @@ Item {
 		menuMenu.visible = false;//Делаем невидимым меню.
 		tmPdf.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
 		tmPdf.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
-		pdfDoc.source = "";//Обязательная строчка, она что то обнуляет, после запароленного файла.
+        pdfDoc.source = "file:///";//Обязательная пустой Url, он что то обнуляет, после запароленного файла.
 		tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
 	}
 	Item {

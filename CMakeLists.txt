@@ -28,36 +28,45 @@ endif()
 if(Qt6_FOUND) # Если Qt6, то ...
 	find_package(Qt6 REQUIRED COMPONENTS Core5Compat) # Добавляем библиотеку Core5Compat.
 endif()
-
+# Создаём переменную PROJECT_SOURCES и добавляем в неё файлы *.cpp и *.h
 set(PROJECT_SOURCES
         src/copydannie.h
         src/copydannie.cpp
         src/cppqml.h
-		src/cppqml.cpp
-		src/datadannie.h
-		src/datadannie.cpp
-		src/dataelement.h
-		src/dataelement.cpp
-		src/dataspisok.h
-		src/dataspisok.cpp
-		src/datatitul.h
-		src/datatitul.cpp
-		src/dcclass.h
-		src/dcclass.cpp
-		src/dcdb.h
-		src/dcdb.cpp
-		src/dcdbdata.h
-		src/dcdbdata.cpp
-		src/dcfiledialog.h
-		src/dcfiledialog.cpp
-		src/main.cpp
-		qml.qrc
+        src/cppqml.cpp
+        src/datadannie.h
+        src/datadannie.cpp
+        src/dataelement.h
+        src/dataelement.cpp
+        src/dataspisok.h
+        src/dataspisok.cpp
+        src/datatitul.h
+        src/datatitul.cpp
+        src/dcclass.h
+        src/dcclass.cpp
+        src/dcdb.h
+        src/dcdb.cpp
+        src/dcdbdata.h
+        src/dcdbdata.cpp
+        src/dcfiledialog.h
+        src/dcfiledialog.cpp
+        src/main.cpp
+        qml.qrc
 )
-
+# Создаём переменную DATA_FILE, и добавляем в неё файлы, которые не участвуют в создании кода.
+# set(DATA_FILE ${PROJECT_SOURCE_DIR}/TODO.txt)
+set(DATA_FILE
+        .gitignore
+        TODO.txt
+        vim.txt
+)
+# add_executable() собирает переменные объявленные выше с файлами С++, стронними файлами под именем проекта.
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-	qt_add_executable(${EXECUTABLE_NAME}
+        # Добавляем все файлы ${PROJECT_SOURCES}, ${DATA_FILE} в проект ${EXECUTABLE_NAME}
+        qt_add_executable(${EXECUTABLE_NAME}
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+        ${DATA_FILE}
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ru.WorkingDiagrams APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
@@ -65,20 +74,22 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 # For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
 else()
     if(ANDROID)
-		add_library(${EXECUTABLE_NAME} SHARED
+            add_library(${EXECUTABLE_NAME} SHARED
             ${PROJECT_SOURCES}
+            ${DATA_FILE}
         )
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
 		add_executable(${EXECUTABLE_NAME}
-          ${PROJECT_SOURCES}
+                ${PROJECT_SOURCES}
+                ${DATA_FILE}
         )
     endif()
 endif()
 
 target_link_libraries(${EXECUTABLE_NAME}
-  PRIVATE 	Qt${QT_VERSION_MAJOR}::Core
+        PRIVATE 	Qt${QT_VERSION_MAJOR}::Core
   			Qt${QT_VERSION_MAJOR}::Quick
 			Qt${QT_VERSION_MAJOR}::Sql)
 			# Qt${QT_VERSION_MAJOR}::Pdf)

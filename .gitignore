@@ -17,6 +17,8 @@
 /build/Android_Qt_6_8_2_PATH_android_arm64_v8a_Clang_arm64_v8a-Release/
 /build/Android_Qt_6_8_2_PATH_android_armv7_Clang_armeabi_v7a-Debug/
 /build/Desktop_Qt_6_8_2_MinGW_64_bit-Debug/
+/build/Android_Qt_6_8_2_Clang_armeabi_v7a-Debug/
+/build/Android_Qt_6_8_2_Clang_armeabi_v7a-Release/
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------

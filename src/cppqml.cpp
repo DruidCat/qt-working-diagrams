@@ -559,15 +559,16 @@ void DCCppQml::setStrDannieStr(QString& strDannieStrNovi){//Изменение �
 		}
     }
 }
-QString DCCppQml::strDannieUrl(){//Возвратить имя файла.
+QString DCCppQml::strDannieUrl(){//Возвратить Url файла.
 /////////////////////////////////////////////
-//---П О Л У Ч И Т Ь   И М Я   Ф А Й Л А---//
+//---П О Л У Ч И Т Ь   U R L   Ф А Й Л А---//
 /////////////////////////////////////////////
-	m_strDannieUrl = 	"file://"
-						+m_pDataDannie->polWorkingDiagrams()
-						+QDir::separator()
-						+m_pDataDannie->polImyaFaila(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod);
-	return m_strDannieUrl;
+    QString strDannieUrl = 	m_pDataDannie->polWorkingDiagrams()
+                            +QDir::separator()
+                            +m_pDataDannie->polImyaFaila(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod);//Собираем путь к файлу.
+    QUrl rlDannieUrl = QUrl::fromUserInput(strDannieUrl);//Переводим в формат Url адреса.
+    m_strDannieUrl = rlDannieUrl.toString();//Перефодим адресс Url в строку.
+    return m_strDannieUrl;//Возращаем Url адресс в виде строки.
 }
 QString DCCppQml::strFileDialog() {//Возвратить JSON строку с папками и файлами.
 ///////////////////////////////////////////////
