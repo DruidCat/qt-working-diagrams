@@ -122,7 +122,7 @@ Item {
 		anchors.fill: tmSpinBox
 		color: tmSpinBox.clrFona 
 
-		DCKnopkaMinus{//Кнопка минус.
+        DCKnopkaMinus{//@disable-check M300//Кнопка минус.
 			id: knopkaMinus
 			ntWidth: tmSpinBox.ntWidth
 			ntCoff: tmSpinBox.ntCoff
@@ -220,7 +220,7 @@ Item {
 				}
 			}
 		}
-        DCKnopkaPlus {//Кнопка плюс.
+        DCKnopkaPlus {//@disable-check M300//Кнопка плюс.
 			id: knopkaPlus
 			ntWidth: tmSpinBox.ntWidth
 			ntCoff: tmSpinBox.ntCoff

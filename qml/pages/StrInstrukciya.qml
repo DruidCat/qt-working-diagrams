@@ -4,7 +4,7 @@
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной. 
+import "qrc:/qml/methods"//Импортируем методы написанные мной.
 //Страница с отображением инструкций
 Item {
     id: tmInstrukciya
@@ -31,7 +31,7 @@ Item {
 
     Item {//Данные Заголовок
 		id: tmZagolovok
-        DCKnopkaNazad {
+        DCKnopkaNazad {//@disable-check M300
             ntWidth: tmInstrukciya.ntWidth
             ntCoff: tmInstrukciya.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -46,7 +46,7 @@ Item {
     Item {//Данные Зона
 		id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-		DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
+        DCTextEdit {//@disable-check M300//Модуль просмотра текста, прокрутки и редактирования.
 			id: txdZona
             ntWidth: tmInstrukciya.ntWidth
             ntCoff: tmInstrukciya.ntCoff

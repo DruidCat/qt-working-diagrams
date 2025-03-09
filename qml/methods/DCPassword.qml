@@ -26,7 +26,7 @@ Item {
         color: "transparent"
         radius: tmPassword.ntCoff/2
         visible: false
-        DCKnopkaZakrit {//Кнопка Отмены удаления.
+        DCKnopkaZakrit {//@disable-check M300//Кнопка Отмены удаления.
             id: knopkaOtmena
             ntWidth: tmPassword.ntWidth
             ntCoff: tmPassword.ntCoff
@@ -90,7 +90,7 @@ Item {
 				}
 			}
 		}
-		DCKnopkaOk{//Кнопка подтверждения пароля.
+        DCKnopkaOk{//@disable-check M300//Кнопка подтверждения пароля.
             id: knopkaOk
             ntWidth: tmPassword.ntWidth
             ntCoff: tmPassword.ntCoff

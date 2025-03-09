@@ -4,7 +4,7 @@
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной. 
+import "qrc:/qml/methods"//Импортируем методы написанные мной.
 //Страница отображающая Меню.
 Item {
 	id: tmMenu
@@ -43,7 +43,7 @@ Item {
 
 	Item {
 		id: tmZagolovok
-		DCKnopkaVpered{
+        DCKnopkaVpered{//@disable-check M300
 			ntWidth: tmMenu.ntWidth
 			ntCoff: tmMenu.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -59,7 +59,7 @@ Item {
 	Item {
 		id: tmZona
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-		DCKnopkaOriginal {
+        DCKnopkaOriginal {//@disable-check M300
 			id: knopkaLogi
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
 			anchors.top: tmZona.top
@@ -76,7 +76,7 @@ Item {
                 tmMenu.clickedLogi();//Сигнал нажатия кнопки Логи.
 			}
 		}
-		DCKnopkaOriginal {
+        DCKnopkaOriginal {//@disable-check M300
 			id: knopkaAvtor
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
 			anchors.top: knopkaLogi.bottom
@@ -93,7 +93,7 @@ Item {
                 tmMenu.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
 			}
 		}
-		DCKnopkaOriginal {
+        DCKnopkaOriginal {//@disable-check M300
 			id: knopkaSpisok
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
 			anchors.top: knopkaAvtor.bottom
@@ -111,7 +111,7 @@ Item {
 				pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
 			}
 		}
-		DCKnopkaOriginal {
+        DCKnopkaOriginal {//@disable-check M300
             id: knopkaPlan
 			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
 			anchors.top: knopkaSpisok.bottom
@@ -128,7 +128,7 @@ Item {
                 tmMenu.clickedPlan();//Сигнал нажатия кнопки План.
 			}
 		}
-		PathViewSpisok {
+        PathViewSpisok {//@disable-check M300
 			id: pvSpisok
 			visible: false
 			ntWidth: tmMenu.ntWidth
@@ -144,7 +144,7 @@ Item {
 				knopkaSpisok.text = strSpisok;
 			}
 		}
-        DCKnopkaOriginal {
+        DCKnopkaOriginal {//@disable-check M300
             id: knopkaQt
             ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
             anchors.top: knopkaPlan.bottom
@@ -161,7 +161,7 @@ Item {
                 tmMenu.clickedQt();//Сигнал нажатия кнопки об Qt.
             }
         }
-        DCKnopkaOriginal {
+        DCKnopkaOriginal {//@disable-check M300
             id: knopkaVihod
             ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
             anchors.top: knopkaQt.bottom
@@ -177,7 +177,7 @@ Item {
                 Qt.quit();//Закрыть приложение.
             }
         }
-        DCMenu {//Меню отображается в Рабочей Зоне приложения.
+        DCMenu {//@disable-check M300//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
             visible: false//Невидимое меню.
             ntWidth: tmMenu.ntWidth
@@ -199,7 +199,7 @@ Item {
 	}
     Item {//Тулбар
 		id: tmToolbar
-        DCKnopkaNastroiki {//Кнопка Меню.
+        DCKnopkaNastroiki {//@disable-check M300//Кнопка Меню.
             ntWidth: tmMenu.ntWidth
             ntCoff: tmMenu.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter

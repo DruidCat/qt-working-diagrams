@@ -4,7 +4,7 @@
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной. 
+import "qrc:/qml/methods"//Импортируем методы написанные мной.
 import "qrc:/qml/zones"//Импортируем зону списка.
 //Страниц отображающая Список, первый, главный экран со Списком чего либо.
 Item {
@@ -118,7 +118,7 @@ Item {
     }
     Item {//Спискок Заголовка
         id: tmZagolovok
-        DCKnopkaMenu {
+        DCKnopkaMenu {//@disable-check M300
             id: knopkaMenu
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
@@ -133,7 +133,7 @@ Item {
 				tmSpisok.clickedMenu();//Сигнал Меню
             }
 		}
-        DCKnopkaZakrit {
+        DCKnopkaZakrit {//@disable-check M300
             id: knopkaZakrit
             ntWidth: tmSpisok.ntWidth
             ntCoff: tmSpisok.ntCoff
@@ -147,7 +147,7 @@ Item {
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
-		DCKnopkaSozdat {
+        DCKnopkaSozdat {//@disable-check M300
             id: knopkaSozdat
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
@@ -161,7 +161,7 @@ Item {
                 fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
             }
 		}
-		DCKnopkaOk{
+        DCKnopkaOk{//@disable-check M300
             id: knopkaOk
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
@@ -175,7 +175,7 @@ Item {
                 fnClickedOk();//Нажимаем на Ок(Сохранить/Переименовать), чтоб не изменять в нескольких местах.
             }
 		}
-        DCTextUdalit {
+        DCTextUdalit {//@disable-check M300
             id: txuUdalit
             anchors.top: tmZagolovok.top
             anchors.bottom: tmZagolovok.bottom
@@ -217,7 +217,7 @@ Item {
             anchors.leftMargin: tmSpisok.ntCoff/2
             anchors.rightMargin: tmSpisok.ntCoff/2
 			
-			DCTextInput {
+            DCTextInput {//@disable-check M300
                 id: txnZagolovok
 				ntWidth: tmSpisok.ntWidth
 				ntCoff: tmSpisok.ntCoff
@@ -262,14 +262,14 @@ Item {
 			anchors.fill: tmZona
 			color: "transparent"
             clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-            DCLogoTMK {//Логотип до ZonaSpisok, чтоб не перекрывать список.
+            DCLogoTMK {//@disable-check M300//Логотип до ZonaSpisok, чтоб не перекрывать список.
                 id: lgTMK
                 ntCoff: 16
                 anchors.centerIn: parent
                 clrLogo: tmSpisok.clrTexta
                 clrFona: tmSpisok.clrFona
             }
-			ZonaSpisok {
+            ZonaSpisok {//@disable-check M300
                 id: lsvZona
 				ntWidth: tmSpisok.ntWidth
 				ntCoff: tmSpisok.ntCoff
@@ -308,7 +308,7 @@ Item {
                     }
 				}
 			}	
-			DCMenu {
+            DCMenu {//@disable-check M300
                 id: menuSpisok
 				visible: false//Невидимое меню. 
 				ntWidth: tmSpisok.ntWidth
@@ -355,7 +355,7 @@ Item {
     }
 	Item {//Список Тулбара
         id: tmToolbar
-        DCKnopkaInfo {
+        DCKnopkaInfo {//@disable-check M300
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
@@ -369,7 +369,7 @@ Item {
                 tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
             }
 		}	
-        DCKnopkaNastroiki {
+        DCKnopkaNastroiki {//@disable-check M300
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter

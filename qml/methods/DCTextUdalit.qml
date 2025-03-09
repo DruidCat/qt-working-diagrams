@@ -26,7 +26,7 @@ Item {
         color: "transparent"
         radius: tmTextUdalit.ntCoff/2
         visible: false
-        DCKnopkaZakrit {//Кнопка Отмены удаления.
+        DCKnopkaZakrit {//@disable-check M300//Кнопка Отмены удаления.
             id: knopkaUdalitOtmena
             ntWidth: tmTextUdalit.ntWidth
             ntCoff: tmTextUdalit.ntCoff
@@ -103,7 +103,7 @@ Item {
 				}
 			}
         }
-        DCKnopkaOk{//Кнопка подтверждения удаления.
+        DCKnopkaOk{//@disable-check M300//Кнопка подтверждения удаления.
             id: knopkaUdalitOk
             ntWidth: tmTextUdalit.ntWidth
             ntCoff: tmTextUdalit.ntCoff

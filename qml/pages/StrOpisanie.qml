@@ -4,7 +4,7 @@
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной. 
+import "qrc:/qml/methods"//Импортируем методы написанные мной.
 //Страница отображающая Описание чего либо.
 Item {
 	id: tmOpisanie
@@ -50,7 +50,7 @@ Item {
 	}
 	Item {
 		id: tmZagolovok
-		DCKnopkaNazad {
+        DCKnopkaNazad {//@disable-check M300
 			ntWidth: tmOpisanie.ntWidth
 			ntCoff: tmOpisanie.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -65,7 +65,7 @@ Item {
 				tmOpisanie.clickedNazad();//Сигнал, что кнопка Назад нажата.
 			}
 		}
-		DCKnopkaSozdat {
+        DCKnopkaSozdat {//@disable-check M300
 			id: knopkaSozdat
 			ntWidth: tmOpisanie.ntWidth
 			ntCoff: tmOpisanie.ntCoff
@@ -85,7 +85,7 @@ Item {
 				tmOpisanie.clickedSozdat();//Излучаем сигнал Создать
 			}
 		}
-		DCKnopkaOk {
+        DCKnopkaOk {//@disable-check M300
 			id: knopkaOk
 			ntWidth: tmOpisanie.ntWidth
 			ntCoff: tmOpisanie.ntCoff
@@ -103,7 +103,7 @@ Item {
 	Item {
 		id: tmZona
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-		DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
+        DCTextEdit {//@disable-check M300//Модуль просмотра текста, прокрутки и редактирования.
 			id: txdZona
 			ntWidth: tmOpisanie.ntWidth
 			ntCoff: tmOpisanie.ntCoff

@@ -4,7 +4,7 @@
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной. 
+import "qrc:/qml/methods"//Импортируем методы написанные мной.
 import "qrc:/qml/zones"//Импортируем зону файлового диалога.
 //Страница с отображением каталога папок и файлов
 Item {
@@ -72,7 +72,7 @@ Item {
 
     Item {//Данные Заголовок
         id: tmZagolovok
-        DCKnopkaNazad {
+        DCKnopkaNazad {//@disable-check M300
             id: knopkaNazad
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
@@ -84,7 +84,7 @@ Item {
                 fnClickedNazad();//Функция клика Назад.
             }
         }
-        DCKnopkaZakrit {
+        DCKnopkaZakrit {//@disable-check M300
             id: knopkaZakrit
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
@@ -125,14 +125,14 @@ Item {
                     }
                }
             }
-            DCLogoTMK {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
+            DCLogoTMK {//@disable-check M300//Логотип до ZonaFileDialog, чтоб не перекрывать список.
                 id: lgTMK
                 ntCoff: tmFileDialog.ntLogoTMK
                 anchors.centerIn: parent
                 clrLogo: tmFileDialog.clrTexta
                 clrFona: tmFileDialog.clrFona
             }
-            ZonaFileDialog {
+            ZonaFileDialog {//@disable-check M300
                 id: lsvZona
                 ntWidth: tmFileDialog.ntWidth
                 ntCoff: tmFileDialog.ntCoff
@@ -167,7 +167,7 @@ Item {
                     }
                 }
             }
-            DCMenu {
+            DCMenu {//@disable-check M300
                 id: menuFileDialog
                 visible: false//Невидимое меню.
                 ntWidth: tmFileDialog.ntWidth
@@ -190,7 +190,7 @@ Item {
     }
     Item {//Данные Тулбар
         id: tmToolbar
-        DCKnopkaNastroiki {
+        DCKnopkaNastroiki {//@disable-check M300
             id: knopkaNastroiki
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
@@ -203,7 +203,7 @@ Item {
                 menuFileDialog.visible ? menuFileDialog.visible = false : menuFileDialog.visible = true;
             }
         }
-        DCKnopkaInfo {
+        DCKnopkaInfo {//@disable-check M300
             id: knopkaInfo
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff

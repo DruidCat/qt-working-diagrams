@@ -29,7 +29,7 @@ Item {
 
     Item {//Данные Заголовок
 		id: tmZagolovok
-        DCKnopkaNazad {
+        DCKnopkaNazad {//@disable-check M300
             ntWidth: tmSvet.ntWidth
             ntCoff: tmSvet.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter

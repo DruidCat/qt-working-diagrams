@@ -5,7 +5,7 @@ import QtQuick.Pdf //5.15
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной. 
+import "qrc:/qml/methods"//Импортируем методы написанные мной.
 //Страница просмотра PDF документов.
 Item {
 	id: tmPdf
@@ -152,7 +152,7 @@ Item {
 	}
 	Item {
 		id: tmZagolovok
-		DCKnopkaNazad {
+        DCKnopkaNazad {//@disable-check M300
 			ntWidth: tmPdf.ntWidth
 			ntCoff: tmPdf.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -164,7 +164,7 @@ Item {
         		fnNazad();//Выходим со страницы.        
 			}
 		}
-		DCKnopkaPoisk{
+        DCKnopkaPoisk{//@disable-check M300
             id: knopkaPoisk
             ntWidth: tmPdf.ntWidth
             ntCoff: tmPdf.ntCoff
@@ -178,7 +178,7 @@ Item {
                 //fnClickedPoisk();//Функция обрабатывающая кнопку Поиск.
             }
         }
-		DCPassword{
+        DCPassword{//@disable-check M300
             id: pssPassword
             anchors.top: tmZagolovok.top
             anchors.bottom: tmZagolovok.bottom
@@ -251,7 +251,7 @@ Item {
 				}
 			}
 		}
-		DCLogoTMK {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
+        DCLogoTMK {//@disable-check M300//Логотип до ZonaFileDialog, чтоб не перекрывать список.
 			id: lgTMK
 			ntCoff: tmPdf.ntLogoTMK
 			anchors.centerIn: tmZona
@@ -296,7 +296,7 @@ Item {
 			border.color: tmPdf.clrTexta
 			border.width: tmPdf.ntCoff/4//Бордюр при переименовании и удалении.
 		}
-        DCMenu {//Меню отображается в Рабочей Зоне приложения.
+        DCMenu {//@disable-check M300//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
             visible: false//Невидимое меню.
             ntWidth: tmPdf.ntWidth
@@ -318,7 +318,7 @@ Item {
 	}
     Item {//Тулбар
 		id: tmToolbar
-        DCKnopkaNastroiki {//Кнопка Меню.
+        DCKnopkaNastroiki {//@disable-check M300//Кнопка Меню.
 			id: knopkaMenu
             ntWidth: tmPdf.ntWidth
             ntCoff: tmPdf.ntCoff
@@ -331,7 +331,7 @@ Item {
                 menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость
             }
         }
-		DCSpinBox {
+        DCSpinBox {//@disable-check M300
 			id: spbPdfPage
 			ntWidth: tmPdf.ntWidth
 			ntCoff: tmPdf.ntCoff
@@ -347,7 +347,7 @@ Item {
 				pmpDoc.goToPage(value-1)
 			}
 		}
-		DCScale{
+        DCScale{//@disable-check M300
 			id: pdfScale
 			ntWidth: tmPdf.ntWidth
 			ntCoff: tmPdf.ntCoff

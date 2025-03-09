@@ -4,7 +4,7 @@
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной. 
+import "qrc:/qml/methods"//Импортируем методы написанные мной.
 import "qrc:/qml/zones"//Импортируем зону элементов.
 //Страница отображающая Элементы Списка.
 Item {
@@ -101,7 +101,7 @@ Item {
 
 	Item {//Элементы Заголовок
 		id: tmZagolovok
-		DCKnopkaNazad {
+        DCKnopkaNazad {//@disable-check M300
 			id: knopkaNazad
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
@@ -115,7 +115,7 @@ Item {
 				tmElement.clickedNazad();//Сигнал Назад.
 			}
 		}
-        DCKnopkaZakrit {
+        DCKnopkaZakrit {//@disable-check M300
             id: knopkaZakrit
             ntWidth: tmElement.ntWidth
             ntCoff: tmElement.ntCoff
@@ -129,7 +129,7 @@ Item {
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
-		DCKnopkaSozdat {
+        DCKnopkaSozdat {//@disable-check M300
 			id: knopkaSozdat
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
@@ -142,7 +142,7 @@ Item {
                 fnClickedSozdat();//Функция при нажатии кнопки Создать.
             }
 		}
-		DCKnopkaOk{
+        DCKnopkaOk{//@disable-check M300
 			id: knopkaOk
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
@@ -156,7 +156,7 @@ Item {
 				fnClickedOk();//Функция сохранения данных.
 			}
 		}
-        DCTextUdalit {
+        DCTextUdalit {//@disable-check M300
             id: txuUdalit
             anchors.top: tmZagolovok.top
             anchors.bottom: tmZagolovok.bottom
@@ -197,7 +197,7 @@ Item {
 			anchors.bottomMargin: tmElement.ntCoff/4
 			anchors.leftMargin: tmElement.ntCoff/2
 			anchors.rightMargin: tmElement.ntCoff/2
-			DCTextInput {
+            DCTextInput {//@disable-check M300
 				id: txnZagolovok
 				ntWidth: tmElement.ntWidth
 				ntCoff: tmElement.ntCoff
@@ -242,13 +242,13 @@ Item {
 			anchors.fill: tmZona
 			color: "transparent"
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-            DCLogoTMK {//Логотип до ZonaElement, чтоб не перекрывать список.
+            DCLogoTMK {//@disable-check M300 Логотип
                 ntCoff: 16
                 anchors.centerIn: parent
                 clrLogo: tmElement.clrTexta
                 clrFona: tmElement.clrFona
             }
-			ZonaElement {
+            ZonaElement {//@disable-check M300
 				id: lsvZona
 				ntWidth: tmElement.ntWidth
 				ntCoff: tmElement.ntCoff
@@ -287,7 +287,7 @@ Item {
 					}
 				}
 			}	
-			DCMenu {
+            DCMenu {//@disable-check M300
 				id: menuElement
 				visible: false//Невидимое меню. 
 				ntWidth: tmElement.ntWidth
@@ -331,7 +331,7 @@ Item {
     }
 	Item {//Состава Тулбар
 		id: tmToolbar
-		DCKnopkaInfo {
+        DCKnopkaInfo {//@disable-check M300
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
@@ -344,7 +344,7 @@ Item {
 				tmElement.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
 			}
 		}
-		DCKnopkaNastroiki {
+        DCKnopkaNastroiki {//@disable-check M300
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter

@@ -4,7 +4,7 @@
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной. 
+import "qrc:/qml/methods"//Импортируем методы написанные мной.
 import "qrc:/qml/zones"//Импортируем зону Данных.
 //Страница с Данными, где отображаются сами документы в виде списка.
 Item {
@@ -100,7 +100,7 @@ Item {
     Item {//Данные Заголовок
 		id: tmZagolovok
 
-        DCKnopkaNazad {
+        DCKnopkaNazad {//@disable-check M300
 			id: knopkaNazad
             ntWidth: tmDannie.ntWidth
             ntCoff: tmDannie.ntCoff
@@ -114,7 +114,7 @@ Item {
                 tmDannie.clickedNazad();
             }
         } 
-        DCKnopkaZakrit {
+        DCKnopkaZakrit {//@disable-check M300
             id: knopkaZakrit
             ntWidth: tmDannie.ntWidth
             ntCoff: tmDannie.ntCoff
@@ -128,7 +128,7 @@ Item {
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
-        DCKnopkaSozdat {
+        DCKnopkaSozdat {//@disable-check M300
 			id: knopkaSozdat
             ntWidth: tmDannie.ntWidth
             ntCoff: tmDannie.ntCoff
@@ -141,7 +141,7 @@ Item {
                 fnClickedSozdat();//Функция нажатия кнопки Создать.
             }
         }
-        DCKnopkaOk{
+        DCKnopkaOk{//@disable-check M300
             id: knopkaOk
             ntWidth: tmDannie.ntWidth
             ntCoff: tmDannie.ntCoff
@@ -155,7 +155,7 @@ Item {
                 fnClickedOk();//Функция переименование данных.
             }
         } 
-        DCTextUdalit {
+        DCTextUdalit {//@disable-check M300
             id: txuUdalit
             anchors.top: tmZagolovok.top
             anchors.bottom: tmZagolovok.bottom
@@ -196,7 +196,7 @@ Item {
 			anchors.bottomMargin: tmDannie.ntCoff/4
 			anchors.leftMargin: tmDannie.ntCoff/2
 			anchors.rightMargin: tmDannie.ntCoff/2
-			DCTextInput {
+            DCTextInput {//@disable-check M300
 				id: txnZagolovok
 				ntWidth: tmDannie.ntWidth
 				ntCoff: tmDannie.ntCoff
@@ -241,13 +241,13 @@ Item {
 			anchors.fill: tmZona
 			color: "transparent"
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-            DCLogoTMK {//Логотип до ZonaDannie, чтоб не перекрывать Документы.
+            DCLogoTMK {//@disable-check M300//Логотип до ZonaDannie, чтоб не перекрывать Документы.
                 ntCoff: 16
                 anchors.centerIn: parent
                 clrLogo: tmElement.clrTexta
                 clrFona: tmElement.clrFona
             }
-			ZonaDannie {
+            ZonaDannie {//@disable-check M300
 				id: lsvZona
 				ntWidth: tmDannie.ntWidth
 				ntCoff: tmDannie.ntCoff
@@ -287,7 +287,7 @@ Item {
 					}
 				}
 			}
-			DCMenu {
+            DCMenu {//@disable-check M300
 				id: menuDannie
 				visible: false//Невидимое меню. 
 				ntWidth: tmDannie.ntWidth
@@ -331,7 +331,7 @@ Item {
     }
     Item {//Данные Тулбар
 		id: tmToolbar
-        DCKnopkaInfo {
+        DCKnopkaInfo {//@disable-check M300
             ntWidth: tmDannie.ntWidth
             ntCoff: tmDannie.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
@@ -345,7 +345,7 @@ Item {
                 tmDannie.clickedInfo();
             }
         }
-		DCKnopkaNastroiki {
+        DCKnopkaNastroiki {//@disable-check M300
 			ntWidth: tmDannie.ntWidth
 			ntCoff: tmDannie.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
