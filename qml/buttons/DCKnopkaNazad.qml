@@ -1,5 +1,5 @@
 ﻿import QtQuick //2.14
-import QtQuick.Window //2.14
+//import QtQuick.Window //2.14
 
 Item{
 	id: tmKnopkaNazad

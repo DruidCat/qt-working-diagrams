@@ -1,5 +1,5 @@
-﻿import QtQuick 2.14
-import QtQuick.Window 2.14
+﻿import QtQuick //2.14
+//import QtQuick.Window //2.14
 import "qrc:/qml/buttons"//Импортируем кнопки
 //DCPassword - ШАБЛОН ДЛЯ РАБОТЫ С ВВОДОМ ПАРОЛЕЙ.
 Item {

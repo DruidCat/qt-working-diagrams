@@ -1,6 +1,5 @@
-﻿import QtQuick 2.14
-import QtQuick.Window 2.14
-import QtQuick.Controls 2.14
+﻿import QtQuick //2.14
+import QtQuick.Controls //2.14 Для Page
 //СТРАНИЦА - шаблон страницы программы с Заголовком, Зоной и Тулбаром.
 Page {
 	id: pgStr

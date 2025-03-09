@@ -1,6 +1,6 @@
-﻿import QtQuick 2.14
-import QtQuick.Window 2.14
-import QtQuick.Controls 2.14
+﻿import QtQuick //2.14
+//import QtQuick.Window //2.14
+//import QtQuick.Controls //2.14
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки

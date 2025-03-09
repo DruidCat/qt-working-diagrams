@@ -1,5 +1,5 @@
-﻿import QtQuick 2.14
-import QtQuick.Window 2.14
+﻿import QtQuick //2.14
+//import QtQuick.Window //2.14
 import "qrc:/qml/buttons"//Импортируем кнопки
 //DCScale - ШАБЛОН ДЛЯ РАБОТЫ С ЧИСЛАМИ И ИХ УВЕЛИЧЕНИЕМ И УМЕНЬШЕНИЕМ КНОПКАМИ [+] И [-].
 Item {

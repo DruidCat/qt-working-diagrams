@@ -1,5 +1,5 @@
-﻿import QtQuick 2.14
-import QtQuick.Window 2.14
+﻿import QtQuick //2.14
+//import QtQuick.Window //2.14
 //DCMenu - ШАБЛОН ВСПЛЫВАЮЩЕГО МЕНЮ НАСТРОЕК.
 import "qrc:/js/DCFunkciiJS.js" as JSMenu
 
