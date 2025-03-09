@@ -223,7 +223,8 @@ Item {
 				ntCoff: tmSpisok.ntCoff
 				anchors.fill: tmTextInput
 				visible: false
-				clrTexta: tmSpisok.clrTexta
+                textInput.readOnly: true;//Запрещено редактировать.
+                clrTexta: tmSpisok.clrTexta
 				clrFona: "SlateGray"
 				radius: tmSpisok.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.

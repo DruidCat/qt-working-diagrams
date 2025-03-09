@@ -203,7 +203,8 @@ Item {
 				ntCoff: tmElement.ntCoff
 				anchors.fill: tmTextInput
 				visible: false
-				clrTexta: tmElement.clrTexta
+                textInput.readOnly: true;//Запрещено редактировать.
+                clrTexta: tmElement.clrTexta
 				clrFona: "SlateGray"
 				radius: tmElement.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.

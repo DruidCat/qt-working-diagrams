@@ -202,7 +202,8 @@ Item {
 				ntCoff: tmDannie.ntCoff
 				anchors.fill: tmTextInput
 				visible: false
-				clrTexta: tmDannie.clrTexta
+                textInput.readOnly: true;//Запрещено редактировать.
+                clrTexta: tmDannie.clrTexta
 				clrFona: "SlateGray"
 				radius: tmDannie.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
