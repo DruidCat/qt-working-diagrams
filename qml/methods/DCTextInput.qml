@@ -74,6 +74,7 @@ Item {
             Text {//Текст, подсказывающий пользователю, что нужно вводить.
                 id: txtTextInput
                 anchors.fill: txnTextInput
+                font.pixelSize: tmTextInput.ntWidth*tmTextInput.ntCoff//размер шрифта текста.
                 text: ""//По умолчанию нет надписи.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter

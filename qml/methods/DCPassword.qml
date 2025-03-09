@@ -83,7 +83,8 @@ Item {
 					id: txtTextInput
 					anchors.fill: txnTextInput
 					text: ""//По умолчанию нет надписи.
-					horizontalAlignment: Text.AlignHCenter
+                    font.pixelSize: tmPassword.ntWidth*tmPassword.ntCoff//размер шрифта текста.
+                    horizontalAlignment: Text.AlignHCenter
 					verticalAlignment: Text.AlignVCenter
 					color: "#aaa"//Светло серый цвет по умолчанию.
 					visible: !txnTextInput.text

@@ -131,6 +131,7 @@ Item {
 					pmpDoc.goToPage(cppqml.strDannieStr);//Выставляем страницу из БД.
 					spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6. НЕ УДАЛЯТЬ!
 					console.error("155: Timer Показ страницы");
+                    //pmpDoc.scaleToWidth(tmZona.childrenRect.width, tmZona.childrenRect.height)
 					//TODO отцентровать документ по длине высоте окна. Это важно!
 					//console.error(pdfDoc.pagePointSize(cppqml.strDannieStr));//Размер Страницы
 					//var imW = tmZona.childrenRect.width;
