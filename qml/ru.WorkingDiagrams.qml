@@ -11,7 +11,7 @@ Window {
 	visible: true
 	color: "grey"
     title: qsTr("Рабочий Список от druidcat@yandex.ru")
-    property int ntWidth: 2
+    property int ntWidth: 4
 	property int ntCoff: 8
 	property color clrKnopok: "orange"
 	property color clrFona: "grey"
