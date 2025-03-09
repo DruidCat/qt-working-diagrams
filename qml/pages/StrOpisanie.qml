@@ -108,7 +108,8 @@ Item {
 			ntWidth: tmOpisanie.ntWidth
 			ntCoff: tmOpisanie.ntCoff
 			readOnly: true//Запрещено редактировать текст
-			radius: tmOpisanie.ntCoff/4//Радиус возьмём из настроек элемента qml через property
+            textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
+            radius: tmOpisanie.ntCoff/4//Радиус возьмём из настроек элемента qml через property
 			clrFona: tmOpisanie.clrFona//Цвет фона рабочей области
 			clrTexta: tmOpisanie.clrTexta//Цвет текста
 			clrBorder: tmOpisanie.clrTexta//Цвет бардюра при редактировании текста.

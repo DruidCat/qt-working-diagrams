@@ -1,6 +1,6 @@
-﻿import QtQuick 2.14
-import QtQuick.Window 2.14
-import QtQuick.Controls 2.14
+﻿import QtQuick //2.14
+import QtQuick.Window //2.14
+import QtQuick.Controls //2.14
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
@@ -51,6 +51,7 @@ Item {
             ntWidth: tmInstrukciya.ntWidth
             ntCoff: tmInstrukciya.ntCoff
 			readOnly: true//Запрещено редактировать текст
+            textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
             text: 	""//По умолчанию пустая строка.
             radius: tmInstrukciya.ntCoff/4//Радиус возьмём из настроек элемента qml через property
             clrFona: tmInstrukciya.clrFona//Цвет фона рабочей области
