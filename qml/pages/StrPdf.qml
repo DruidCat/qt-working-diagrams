@@ -193,6 +193,8 @@ Item {
             ntWidth: tmPdf.ntWidth
             ntCoff: tmPdf.ntCoff
 
+            textInput.readOnly: true//запрещаем редактировать.
+
             clrFona: "black"
             clrFonaPass: "orange"
             clrTexta: "black"
