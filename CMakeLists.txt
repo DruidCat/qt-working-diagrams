@@ -13,6 +13,8 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(RES_FILES "${PROJECT_SOURCE_DIR}/icons/ico/ru.WorkingDiagrams.rc")
+
 # Закоментированны строки, которые были в начальном варианте.
 # find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Sql Pdf)
 # find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql Pdf)
@@ -67,7 +69,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         					MANUAL_FINALIZATION
         					${PROJECT_SOURCES}
         					${DATA_FILE}
-							ru.WorkingDiagrams.rc
+                            ${RES_FILES}
     	)
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ru.WorkingDiagrams APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
