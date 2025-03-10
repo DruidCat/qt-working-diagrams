@@ -63,11 +63,12 @@ set(DATA_FILE
 # add_executable() собирает переменные объявленные выше с файлами С++, стронними файлами под именем проекта.
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         # Добавляем все файлы ${PROJECT_SOURCES}, ${DATA_FILE} в проект ${EXECUTABLE_NAME}
-        qt_add_executable(${EXECUTABLE_NAME}
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-        ${DATA_FILE}
-    )
+        qt_add_executable(	${EXECUTABLE_NAME}
+        					MANUAL_FINALIZATION
+        					${PROJECT_SOURCES}
+        					${DATA_FILE}
+							ru.WorkingDiagrams.rc
+    	)
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET ru.WorkingDiagrams APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
 #                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
@@ -75,24 +76,24 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 else()
     if(ANDROID)
             add_library(${EXECUTABLE_NAME} SHARED
-            ${PROJECT_SOURCES}
-            ${DATA_FILE}
-        )
+            			${PROJECT_SOURCES}
+            			${DATA_FILE}
+        	)
 # Define properties for Android with Qt 5 after find_package() calls as:
 #    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
     else()
-		add_executable(${EXECUTABLE_NAME}
-                ${PROJECT_SOURCES}
-                ${DATA_FILE}
+		add_executable(	${EXECUTABLE_NAME}
+						${PROJECT_SOURCES}
+						${DATA_FILE}
         )
     endif()
 endif()
 
 target_link_libraries(${EXECUTABLE_NAME}
         PRIVATE 	Qt${QT_VERSION_MAJOR}::Core
-  			Qt${QT_VERSION_MAJOR}::Quick
-			Qt${QT_VERSION_MAJOR}::Sql)
-			# Qt${QT_VERSION_MAJOR}::Pdf)
+  					Qt${QT_VERSION_MAJOR}::Quick
+					Qt${QT_VERSION_MAJOR}::Sql)
+					# Qt${QT_VERSION_MAJOR}::Pdf)
 
 if(Qt5_FOUND) # Если Qt5, то добавляем библиотеку Pdf, в Qt6 её не нужно добавлять.
 	target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Pdf)
