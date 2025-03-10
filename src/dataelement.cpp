@@ -194,20 +194,23 @@ bool DataElement::ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod
     qdebug(tr("DataElement::ustElementOpisanie(quint64,quint64,QString): ошибка записи Описания."));
     return false;//Ошибка.
 }
-QStringList DataElement::polElementKodi(quint64 ullSpisokKod){//Получить все Коды в таблице Элемент_ullSpisokKod
+QStringList DataElement::polElementKodi(quint64 ullSpisokKod){//Получить Коды в таблице Элемент_ullSpisokKod
 ///////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   С П И С О К   К О Д О В---//
 ///////////////////////////////////////////////////
     QStringList slsKod;//Коди строк в таблице.
     QString strNomer;//Переменная, в которую будет читаться номер из БД.
-    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));
-    quint64 ullKolichestvo = m_pdbElement->SELECTPK();//Получаем полное количество созданных когда то строк.
-    for(quint64 ullShag = 1; ullShag<=ullKolichestvo; ullShag++){//Перебираем все строки в таблице.
-        strNomer = m_pdbElement->SELECT("Код", QString::number(ullShag), "Номер");//Считываем номер из таблицы
-        if(!strNomer.isEmpty()){//Если не пустая строка, значит строка существует.
-            slsKod = slsKod << QString::number(ullShag);//Записываем этот код в список.
-        }
-    }
+	QString strImyaTablici = "элемент_" + QString::number(ullSpisokKod);//Имя таблицы
+	if(m_pdbElement->SELECT(strImyaTablici)){
+		m_pdbElement->ustImyaTablici(strImyaTablici);
+		quint64 ullKolichestvo = m_pdbElement->SELECTPK();//Получаем полное количество созданных когда то строк.
+		for(quint64 ullShag = 1; ullShag<=ullKolichestvo; ullShag++){//Перебираем все строки в таблице.
+			strNomer = m_pdbElement->SELECT("Код", QString::number(ullShag), "Номер");//Считываем номер из таблицы
+			if(!strNomer.isEmpty()){//Если не пустая строка, значит строка существует.
+				slsKod = slsKod << QString::number(ullShag);//Записываем этот код в список.
+			}
+		}
+	}
     return slsKod;
 }
 void DataElement::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог

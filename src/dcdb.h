@@ -26,6 +26,7 @@ public:
 	bool 	UPDATE(QString strGrafa, QString strGrafaParametri, QStringList slsKolonki);//Переименовать данны
 	bool 	DELETE(QString strGrafa, QString strKolonka);//Удалить данные.
 	QString SELECT(QString strGrafa, QString strKolonka, QString strChitaemayaGrafa);//Читаем данные из БД.
+	bool 	SELECT(QString strImyaTablici);//Проверяет, есть такая таблица?
 	quint64 SELECT(void);//Подсчёт количества строк в БД.
 	quint64 SELECT(QString strGrafa, QString strKolonka);//Считаем совпадения в БД
 	quint64 SELECT(QStringList slsGrafi, QStringList slsKolonki);//Считаем совпадения в БД
@@ -165,6 +166,10 @@ private:
  * Читаем данные из БД.		QString SELECT(QString strGrafa, QString strKolonka, QString strChitaemayaGrafa);
  * ПРИМЕР:
  * QString strImya = pdcdb->SELECT("Фамилия", "Иванов", "Имя");
+ *
+ * Проверяем, есть таблица?	bool SELECT(strImyaTablici);
+ * ПРИМЕР:
+ * bool blFlag = pdcdb->SELECT("группа_1");
  *
  * Количества строк в БД.	quint64 SELECT(void);
  * ПРИМЕР:

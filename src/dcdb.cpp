@@ -780,6 +780,42 @@ bool DCDB::DELETE(QString strGrafa, QString strKolonka){//Удалить дан�
 	QSqlDatabase::removeDatabase(QString("dbDELETE%1").arg(untDELETE));//Закрываем открытую БД
 	return blFlagZakritiya;
 }
+
+bool DCDB::SELECT(QString strImyaTablici){//Проверяет, есть такая таблица?
+/////////////////////
+//---S E L E C T---//
+/////////////////////
+	if(m_strDriver.isEmpty()){//Если пустая строка, то ошибка.
+		qdebug(tr("Ошибка 191 в DCDB::SELECT(QString): Имя драйвера SQL не указано."));
+		return false;//Возвращаем ошибку.
+	}
+	bool blFlagZakritiya(true);//если ошибка в функции, закрываем БД.
+	static uint untSELECT_0(0);
+	{
+		QSqlDatabase sqlDB=QSqlDatabase::addDatabase(m_strDriver, QString("dbSELECT_0%1").arg(++untSELECT_0));
+		sqlDB.setDatabaseName(m_strImyaDB);
+		sqlDB.setHostName(m_strHostName);
+		sqlDB.setPort(m_untPort);
+		if(!sqlDB.open(m_strUserName, m_strPassword)){//Если база не открылась, то...
+			signalSqlSoedinenie(false);//Сигнал соединения к postrgesql серверу.
+			qdebug(tr("Ошибка 190 в DCDB::SELECT(QString): База данных ") + m_strImyaDB
+					+ tr(" не открылась по причине: ") + sqlDB.lastError().text());
+			blFlagZakritiya = false;
+		}
+		else{//В противном случае...
+			signalSqlSoedinenie(true);//Сигнал соединения к postrgesql серверу.
+			QSqlQuery sqlQuery(sqlDB);//Создаем объект запроса
+			///////////////////////////////////////////
+			/////П Р О В Е Р И Т Ь   Т А Б Л И Ц У/////
+			///////////////////////////////////////////
+			if(!sqlQuery.exec("SELECT * FROM " + strImyaTablici + ";"))//Если нет ТАБЛИЦЫ с заданным именем,то
+				blFlagZakritiya = false;//Нет таблицы
+		}
+	}
+	QSqlDatabase::removeDatabase(QString("dbSELECT_0%1").arg(untSELECT_0));//Закрываем открытую БД
+	return blFlagZakritiya;//Возращаем результат.
+}
+
 QString DCDB::SELECT(QString strGrafa, QString strKolonka, QString strChitaemayaGrafa){//Читаем данные из БД.
 /////////////////////
 //---S E L E C T---//
