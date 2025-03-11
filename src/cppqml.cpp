@@ -461,7 +461,7 @@ bool DCCppQml::delStrDannie(QString strDannieKod){//Удалить данные 
 //---У Д А Л И Т Ь   Д А Н Н Ы Е---//
 /////////////////////////////////////
     if(m_pDataDannie->udalDannieDB(m_ullSpisokKod, m_ullElementKod, strDannieKod.toULongLong())){//Если удален
-        emit strDannieDBChanged();//Излучаем сигнал, чтоб обновился списик Данных, после удаления.
+        emit strDannieDBChanged();//Излучаем сигнал, чтоб обновился список Данных, после удаления.
         return true;//Успех удаления записи из БД и Документа.
     }
     return false;//Ошибка удаления записи из БД и Документа.
@@ -563,11 +563,17 @@ QString DCCppQml::strDannieUrl(){//Возвратить Url файла.
 /////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   U R L   Ф А Й Л А---//
 /////////////////////////////////////////////
-    QString strDannieUrl = 	m_pDataDannie->polWorkingDiagrams()
-                            +QDir::separator()
-                            +m_pDataDannie->polImyaFaila(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod);//Собираем путь к файлу.
-    QUrl rlDannieUrl = QUrl::fromUserInput(strDannieUrl);//Переводим в формат Url адреса.
-    m_strDannieUrl = rlDannieUrl.toString();//Перефодим адресс Url в строку.
+    QString strImyaFaila = m_pDataDannie->polImyaFaila(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod);
+    if(!strImyaFaila.isEmpty()){//ЭТО ВАЖНАЯ СТРОКА. Если не пустая строка, то...
+        if(m_pDataDannie->estImyaFaila(strImyaFaila)){//Если есть такой файл, то...
+            QString strDannieUrl = m_pDataDannie->polWorkingDiagrams() + QDir::separator() + strImyaFaila;
+            QUrl rlDannieUrl = QUrl::fromUserInput(strDannieUrl);//Переводим в формат Url адреса.
+            m_strDannieUrl = rlDannieUrl.toString();//Перефодим адресс Url в строку.
+            return m_strDannieUrl;//Возращаем Url адресс в виде строки.
+        }
+    }
+    delStrDannie(QString::number(m_ullDannieKod));//Удаляем строку несущуествующий Данных из БД.
+    m_strDannieUrl = "file:///";//Возвращаем не пустой путь "", чтоб вызвать ошибку в Qml.
     return m_strDannieUrl;//Возращаем Url адресс в виде строки.
 }
 QString DCCppQml::strFileDialog() {//Возвратить JSON строку с папками и файлами.

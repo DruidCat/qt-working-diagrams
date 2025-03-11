@@ -89,8 +89,9 @@ Item {
 		console.error("Таймер взводится.");
 	}
 	function fnPdfOtkrit(){//Функция открытия Pdf документа.
-        console.error(cppqml.strDannieUrl);
-		pdfDoc.source = cppqml.strDannieUrl;
+        var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
+        //console.error("93: Url: " + strPdfUrl);
+        pdfDoc.source = strPdfUrl;
 		spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
 		spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox	
 		fnTimerStart();//Запускаем таймер.

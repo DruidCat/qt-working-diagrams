@@ -5,7 +5,7 @@
 #include <QTime>
 #include <QTimer>
 
-#include "dcdb.h"
+#include "dcdb.h"// IWYU pragma: keep //Подавляет предупреждение от clang.
 #include "dcclass.h"
 #include "datatitul.h"
 #include "dataspisok.h"
