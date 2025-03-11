@@ -176,7 +176,17 @@ Item {
             clrKnopki: tmPdf.clrTexta
             clrFona: tmPdf.clrFona
             onClicked: {//Слот сигнала clicked кнопки Поиск.
-				pssPassword.blVisible = true;
+				if(pmpDoc.renderScale === 1){//Если масштаб 1:1, то...
+					var imW = tmZona.childrenRect.width;
+					var imH = tmZona.childrenRect.height;
+					pmpDoc.scaleToWidth(imW, imH);//Масштаб по ширине страницы.
+					//pmpDoc.scaleToPage(imW, imH);//масштаб по высоте страницы.
+					pdfScale.value = pmpDoc.renderScale*100
+				}
+				else{
+					pmpDoc.resetScale();//Сброс масштаба на 1:1
+					pdfScale.value = 100;
+				}
                 //fnClickedPoisk();//Функция обрабатывающая кнопку Поиск.
             }
         }
@@ -281,7 +291,7 @@ Item {
 				fnPdfOtkrit();//Функция открытия Pdf документа.	
 			}
 		}
-		PdfMultiPageView{//PdfScrollablePageView
+		PdfMultiPageView{
 			id:pmpDoc
 			anchors.fill: tmZona
 			document: pdfDoc
@@ -291,6 +301,17 @@ Item {
 			}
 			
 		}
+		/*
+		PdfScrollablePageView{
+			id: pspDoc
+			anchors.fill: tmZona
+			document: pdfDoc
+			visible: false
+			onCurrentPageChanged: {
+				spbPdfPage.value = pmpDoc.currentPage + 1
+			}
+		}
+		*/
 		Rectangle {
 			id: rctBorder
 			anchors.fill: tmZona
@@ -368,7 +389,21 @@ Item {
 				console.error("299: pdfScale");
 				//tmPdf.blScale = true;//Масштаб изменился.
 				//fnTimerStart();//Запускаем таймер.
-				pmpDoc.renderScale = value/100;//Масштаб 1 - это оригинальный масштаб, 0.5 - это на 50% меньше
+				/*
+				if(pdfScale.value !== 100){//Если не 100 масштаб (1:1), то переходим на режим одной страницы.
+					pmpDoc.visible = false;
+					pspDoc.visible = true;
+					pspDoc.goToPage(spbPdfPage.value-1)
+					console.error(value);
+					//Масштаб 1 - это оригинальный масштаб, 0.5 - это на 50% меньше
+					pspDoc.renderScale = pdfScale.value/100;
+				}
+				else{
+					pspDoc.visible = false;
+					pmpDoc.visible = true;
+				}
+				*/
+				pmpDoc.renderScale = pdfScale.value/100;
 			}
 		}
 	}
