@@ -36,6 +36,7 @@ Item {
     property real pdfDocHeight: 0//Максимальная высота страницы документа
     property bool blDocVert: true;//true - вертикальный документ, false - горизонтальный документ.
     property int  ntDocPage: -1;//Номер страницы из БД.
+    property string strPdfUrl: "file:///"
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
@@ -43,7 +44,8 @@ Item {
 		if(tmPdf.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
 			tmPdf.blStartWidth = false;//Взводим флаг на оброботку размера.
 		else{
-			tmPdf.blSizeApp = true;//Размер окна изменился.
+            tmPdf.blScale = true;//Масштабирование запускаем под изменённое окно приложение.
+            tmPdf.blSizeApp = true;//Размер окна изменился.
 			fnTimerStart();//Запускаем таймер.
 		}
 	}
@@ -51,7 +53,8 @@ Item {
 		if(tmPdf.blStartHeight)//Окно открылось, не обрабатываем сигнал об изменении..
 			tmPdf.blStartHeight = false;//Взводим флаг на оброботку размера.
 		else{
-			tmPdf.blSizeApp = true;//Размер окна изменился.
+            tmPdf.blScale = true;//Масштабирование запускаем под изменённое окно приложение.
+            tmPdf.blSizeApp = true;//Размер окна изменился.
 			fnTimerStart();//Запускаем таймер.	
 		}
 	}
@@ -84,17 +87,15 @@ Item {
     }
 	function fnTimerStart(){//Функция старта таймера.
 		if(!tmrLogoTMK.running){//Если таймер еще не запускался, то...
-			pmpDoc.visible = false;//Делаем невидимым pdf документ.
-			tmPdf.ntStrValue = spbPdfPage.value;//Сохраняем номер страницы.
-			pmpDoc.goToPage(-1);//Переключаемся на страницу -1 (0 нельзя), чтоб потом переключиться на нужную.
+            pmpDoc.visible = false;//Делаем невидимым pdf документ.
+            tmPdf.ntStrValue = spbPdfPage.value;//Сохраняем номер страницы.
+            pmpDoc.goToPage(-1);//Переключаемся на страницу -1 (0 нельзя), чтоб потом переключиться на нужную.
 		}
 		lgTMK.ntCoff = 11;//Задаём размер логотипа.
 		tmrLogoTMK.running = true;//Таймер запустить.
 		console.error("Таймер взводится.");
 	}
 	function fnPdfOtkrit(){//Функция открытия Pdf документа.
-        var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
-        //console.error("93: Url: " + strPdfUrl);
         pdfDoc.source = strPdfUrl;
 
         pdfDocHeight = pdfDoc.pagePointSize(ntDocPage).height;//Высота страницы.
@@ -110,8 +111,6 @@ Item {
 	}
 	function fnPdfPokaz(){
 		tmrLogoTMK.running = false;//выключаем таймер.
-        var widthRect = tmZona.childrenRect.width;
-        var heightRect = tmZona.childrenRect.height;
 		if(tmPdf.blError){//Если был сигнал об ошибке, то...
 			if(pssPassword.blVisible){//Если поле пароля видимо, значит, вводим пароль.
 				knopkaPoisk.visible = false;//Делаем нивидимым кнопку поиска.
@@ -125,42 +124,42 @@ Item {
 			}
 		}
 		else{//Если не было сигнала об ошибке, то...
-			if(tmPdf.blSizeApp){//Изменились размеры приложения.
-				tmPdf.blSizeApp = false;//Обнуляем флаг.
-
-                if(blDocVert)//Если вертикальная страница, то...
-                    pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
-                else//Если горизонтальная страница, то...
-                    pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
-                pdfScale.value = pmpDoc.renderScale*100;//выставляем значение масштаба в DCScale
-				pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
-
-				spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
-				tmPdf.ntStrValue = 0;//Обнуляем.
-				console.error("148: Timer Size");
-			}
-			else{
-				if(tmPdf.blScale){//Если выбран режим масштабирования, то...
-					tmPdf.blScale = false;//Обнуляем флаг.
-					//pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
-					//spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
-					tmPdf.ntStrValue = 0;//Обнуляем.
-					console.error("155: Timer Scale");
-				}
-				else{
-                    if(blDocVert)//Если вертикальная страница, то...
-                        pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
-                    else//Если горизонтальная страница, то...
-                        pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
-                    pdfScale.value = pmpDoc.renderScale*100;//выставляем значение масштаба в DCScale
-                    pmpDoc.goToPage(ntDocPage);//Выставляем страницу из БД.
-					spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6. НЕ УДАЛЯТЬ!
-					console.error("155: Timer Показ страницы");
-				}
+            fnScale();//Выставляем масштаб по ширине или по высоте в зависимости от размера документа.
+            if(tmPdf.blSizeApp){//Изменились размеры приложения.
+                if(tmPdf.blScale){
+                    tmPdf.blScale = false;
+                    pdfDoc.source = "file:///"
+                    pdfDoc.source = strPdfUrl;
+                    console.error("Первый")
+                    fnTimerStart();
+                }
+                else{
+                    tmPdf.blSizeApp = false;//Обнуляем флаг.
+                    pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из переменной.
+                    spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
+                    tmPdf.ntStrValue = 0;//Обнуляем.
+                    console.error("Второй")
+                    pmpDoc.visible = true;//Делаем видимым pdf документ.
+                }
             }
+            else{//Если это первое открытие документа, то...
+                pmpDoc.goToPage(ntDocPage);//Выставляем страницу из БД.
+                spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6. НЕ УДАЛЯТЬ!
+                pmpDoc.visible = true;//Делаем видимым pdf документ.
+            }
+            console.error("155: Timer Показ страницы");
 		}
-		pmpDoc.visible = true;//Делаем видимым pdf документ.
 	}
+    function fnScale(){
+        var widthRect = tmZona.childrenRect.width;
+        var heightRect = tmZona.childrenRect.height;
+        if(blDocVert)//Если вертикальная страница, то...
+            pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
+        else//Если горизонтальная страница, то...
+            pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
+        pdfScale.value = pmpDoc.renderScale*100;//выставляем значение масштаба в DCScale
+    }
+
 	function fnNazad(){//Функция Выхода со страницы, не путать с fnClickedNazad()
 		pmpDoc.visible = false;//Делаем невидимым pdf документ.
 		menuMenu.visible = false;//Делаем невидимым меню.
@@ -235,7 +234,7 @@ Item {
             onClickedOk: function (strPassword)  {//Слот нажатия кнопки Ок
 				pdfDoc.password = strPassword;//Передаём пароль в документ.
 				pssPassword.blVisible = false;//И только потом делаем невидимым поле ввода.
-				fnPdfOtkrit();
+                fnPdfOtkrit();
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
 				pssPassword.blVisible = false;
@@ -308,7 +307,8 @@ Item {
 				tmPdf.blStartWidth = true;//Стартуем, блокируем первое изменение размеров окна.
 				tmPdf.blStartHeight = true;//Стартуем, блокируем первое изменение размеров окна.
                 ntDocPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
-				fnPdfOtkrit();//Функция открытия Pdf документа.	
+                strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
+                fnPdfOtkrit();//Функция открытия Pdf документа.
 			}
 		}
 		PdfMultiPageView{
@@ -406,23 +406,6 @@ Item {
 			stepSize: 25
 			scale.cursorVisible: true;//Делаем курсор видимым обязательно.
 			onValueModified:{//Если значение измениловь в DCScale...
-				console.error("299: pdfScale");
-				//tmPdf.blScale = true;//Масштаб изменился.
-				//fnTimerStart();//Запускаем таймер.
-				/*
-				if(pdfScale.value !== 100){//Если не 100 масштаб (1:1), то переходим на режим одной страницы.
-					pmpDoc.visible = false;
-					pspDoc.visible = true;
-					pspDoc.goToPage(spbPdfPage.value-1)
-					console.error(value);
-					//Масштаб 1 - это оригинальный масштаб, 0.5 - это на 50% меньше
-					pspDoc.renderScale = pdfScale.value/100;
-				}
-				else{
-					pspDoc.visible = false;
-					pmpDoc.visible = true;
-				}
-				*/
 				pmpDoc.renderScale = pdfScale.value/100;
 			}
 		}
