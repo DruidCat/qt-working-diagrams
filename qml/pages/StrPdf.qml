@@ -58,12 +58,6 @@ Item {
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             menuMenu.visible = false;//Делаем невидимым всплывающее меню.
         }
-		if(event.key === 16777237){//Если нажата "Стрека вниз"
-
-		}
-		if(event.key === 16777235){//Если нажата "Стрека вверх"
-
-		}
 		if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
             var ntStrDown = pmpDoc.currentPage + 1;
             if(ntStrDown < pdfDoc.pageCount)
@@ -84,17 +78,18 @@ Item {
 	function fnTimerStart(){//Функция старта таймера.
 		if(!tmrLogoTMK.running){//Если таймер еще не запускался, то...
             pmpDoc.visible = false;//Делаем невидимым pdf документ.
+            pmpDoc.document = pdfDocPustoi;
+            pmpDoc.document = pdfDoc;
             tmPdf.ntStrValue = spbPdfPage.value;//Сохраняем номер страницы.
             pmpDoc.goToPage(-1);//Переключаемся на страницу -1 (0 нельзя), чтоб потом переключиться на нужную.
 		}
 		lgTMK.ntCoff = 11;//Задаём размер логотипа.
 		tmrLogoTMK.running = true;//Таймер запустить.
-		console.error("Таймер взводится.");
 	}
 	function fnPdfOtkrit(){//Функция открытия Pdf документа.
         var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
         //console.error("93: Url: " + strPdfUrl);
-        pdfDoc.source = strPdfUrl;
+        pdfDoc.source = strPdfUrl; 
 
         pdfDocHeight = pdfDoc.pagePointSize(ntDocPage).height;//Высота страницы.
         pdfDocWidth = pdfDoc.pagePointSize(ntDocPage).width;//Ширина страницы.
@@ -134,17 +129,20 @@ Item {
                 spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6. НЕ УДАЛЯТЬ!
             }
             pmpDoc.visible = true;//Делаем видимым pdf документ.
-            console.error("155: Timer Показ страницы");
         }
 	}
     function fnScale(){
         var widthRect = tmZona.childrenRect.width;
         var heightRect = tmZona.childrenRect.height;
-        if(blDocVert)//Если вертикальная страница, то...
+        if(blDocVert){//Если вертикальная страница, то...
             pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
-        else//Если горизонтальная страница, то...
+        }
+        else{//Если горизонтальная страница, то...
             pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
-        pdfScale.value = pmpDoc.renderScale*100;//выставляем значение масштаба в DCScale
+        }
+        var ntScale = pmpDoc.renderScale*100;//Чтоб несколько раз не вызывать, так быстрее.
+        pdfScale.from = ntScale;//Выставляем минимальное значение масштаба по уст. масштабу документа.
+        pdfScale.value = ntScale;//И только после pdfScale.from выставляем значение масштаба в DCScale
     }
 
 	function fnNazad(){//Функция Выхода со страницы, не путать с fnClickedNazad()
@@ -179,19 +177,6 @@ Item {
             clrKnopki: tmPdf.clrTexta
             clrFona: tmPdf.clrFona
             onClicked: {//Слот сигнала clicked кнопки Поиск.
-				if(pmpDoc.renderScale === 1){//Если масштаб 1:1, то...
-                    var widthRect = tmZona.childrenRect.width;
-                    var heightRect = tmZona.childrenRect.height;
-                    if(blDocVert)
-                        pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
-                    else
-                        pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
-					pdfScale.value = pmpDoc.renderScale*100
-				}
-				else{
-					pmpDoc.resetScale();//Сброс масштаба на 1:1
-					pdfScale.value = 100;
-				}
                 //fnClickedPoisk();//Функция обрабатывающая кнопку Поиск.
             }
         }
@@ -288,6 +273,10 @@ Item {
 				pssPassword.blVisible = true;//Делаем видимым поле ввода пароля.
 			}	
 		}
+        PdfDocument {//Класс, который возвращает данные о Pdf Документе.
+            id: pdfDocPustoi
+            source: "file:///";
+        }
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
@@ -301,7 +290,7 @@ Item {
 			id:pmpDoc
 			anchors.fill: tmZona
 			document: pdfDoc
-			visible: false
+            visible: false
 			onCurrentPageChanged: {
 				spbPdfPage.value = pmpDoc.currentPage + 1
 			}

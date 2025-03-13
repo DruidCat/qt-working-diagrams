@@ -21,12 +21,12 @@ Item {
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
 	//onValueModified: console.error(value)
 	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
-		if(value < from){
+        if(value < from){
 			value = from;
 		}
 		if(value > to){
 			value = to;
-		}
+        }
 		txnScale.text = value;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
 	}
 	onFromChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
