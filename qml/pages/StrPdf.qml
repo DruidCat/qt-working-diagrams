@@ -29,14 +29,12 @@ Item {
 	property bool blStartWidth: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие.
 	property bool blStartHeight: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие
 	property bool blError: false//true - ошибка, закрываем страницу.
-	property bool blScale: false//true - включили изменение масштаба.
 	property bool blSizeApp: false//true - размер окна приложения изменился.
 	property int ntStrValue: 0//Переменная, которая сохраняет значение страницы при переключении страниц на 0.
     property real pdfDocWidth: 0//Максимальная ширина страницы документа
     property real pdfDocHeight: 0//Максимальная высота страницы документа
     property bool blDocVert: true;//true - вертикальный документ, false - горизонтальный документ.
     property int  ntDocPage: -1;//Номер страницы из БД.
-    property string strPdfUrl: "file:///"
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
@@ -44,7 +42,6 @@ Item {
 		if(tmPdf.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
 			tmPdf.blStartWidth = false;//Взводим флаг на оброботку размера.
 		else{
-            tmPdf.blScale = true;//Масштабирование запускаем под изменённое окно приложение.
             tmPdf.blSizeApp = true;//Размер окна изменился.
 			fnTimerStart();//Запускаем таймер.
 		}
@@ -53,7 +50,6 @@ Item {
 		if(tmPdf.blStartHeight)//Окно открылось, не обрабатываем сигнал об изменении..
 			tmPdf.blStartHeight = false;//Взводим флаг на оброботку размера.
 		else{
-            tmPdf.blScale = true;//Масштабирование запускаем под изменённое окно приложение.
             tmPdf.blSizeApp = true;//Размер окна изменился.
 			fnTimerStart();//Запускаем таймер.	
 		}
@@ -96,6 +92,8 @@ Item {
 		console.error("Таймер взводится.");
 	}
 	function fnPdfOtkrit(){//Функция открытия Pdf документа.
+        var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
+        //console.error("93: Url: " + strPdfUrl);
         pdfDoc.source = strPdfUrl;
 
         pdfDocHeight = pdfDoc.pagePointSize(ntDocPage).height;//Высота страницы.
@@ -126,29 +124,18 @@ Item {
 		else{//Если не было сигнала об ошибке, то...
             fnScale();//Выставляем масштаб по ширине или по высоте в зависимости от размера документа.
             if(tmPdf.blSizeApp){//Изменились размеры приложения.
-                if(tmPdf.blScale){
-                    tmPdf.blScale = false;
-                    pdfDoc.source = "file:///"
-                    pdfDoc.source = strPdfUrl;
-                    console.error("Первый")
-                    fnTimerStart();
-                }
-                else{
-                    tmPdf.blSizeApp = false;//Обнуляем флаг.
-                    pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из переменной.
-                    spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
-                    tmPdf.ntStrValue = 0;//Обнуляем.
-                    console.error("Второй")
-                    pmpDoc.visible = true;//Делаем видимым pdf документ.
-                }
+                tmPdf.blSizeApp = false;//Обнуляем флаг.
+                pmpDoc.goToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
+                spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
+                tmPdf.ntStrValue = 0;//Обнуляем.
             }
-            else{//Если это первое открытие документа, то...
+            else{
                 pmpDoc.goToPage(ntDocPage);//Выставляем страницу из БД.
                 spbPdfPage.value = pmpDoc.currentPage + 1//Эта строчка для Qt6. НЕ УДАЛЯТЬ!
-                pmpDoc.visible = true;//Делаем видимым pdf документ.
             }
+            pmpDoc.visible = true;//Делаем видимым pdf документ.
             console.error("155: Timer Показ страницы");
-		}
+        }
 	}
     function fnScale(){
         var widthRect = tmZona.childrenRect.width;
@@ -307,7 +294,6 @@ Item {
 				tmPdf.blStartWidth = true;//Стартуем, блокируем первое изменение размеров окна.
 				tmPdf.blStartHeight = true;//Стартуем, блокируем первое изменение размеров окна.
                 ntDocPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
-                strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
                 fnPdfOtkrit();//Функция открытия Pdf документа.
 			}
 		}
@@ -406,7 +392,7 @@ Item {
 			stepSize: 25
 			scale.cursorVisible: true;//Делаем курсор видимым обязательно.
 			onValueModified:{//Если значение измениловь в DCScale...
-				pmpDoc.renderScale = pdfScale.value/100;
+                pmpDoc.renderScale = pdfScale.value/100;
 			}
 		}
 	}
