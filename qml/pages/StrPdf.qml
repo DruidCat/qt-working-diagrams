@@ -150,7 +150,8 @@ Item {
 		menuMenu.visible = false;//Делаем невидимым меню.
 		tmPdf.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
 		tmPdf.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
-        pdfDoc.source = "file:///";//Обязательная пустой Url, он что то обнуляет, после запароленного файла.
+		//Обязательная пустой Url, он что то обнуляет, после запароленного файла.
+        pdfDoc.source = "qrc:///workingdata/000000000.dc";
 		tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
 	}
 	Item {
@@ -275,7 +276,7 @@ Item {
 		}
         PdfDocument {//Класс, который возвращает данные о Pdf Документе.
             id: pdfDocPustoi
-            source: "file:///";
+            source: "qrc:///workingdata/000000000.dc";
         }
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml

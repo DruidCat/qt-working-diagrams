@@ -6,6 +6,7 @@
         <file>icons/86x86/ru.WorkingDiagrams.png</file>
         <file>images/Qt_logo_2016.png</file>
         <file>images/ru.WorkingDiagrams.png</file>
+        <file>js/DCFunkciiJS.js</file>
         <file>qml/ru.WorkingDiagrams.qml</file>
         <file>qml/buttons/DCKnopkaInfo.qml</file>
         <file>qml/buttons/DCKnopkaKruglaya.qml</file>
@@ -34,6 +35,7 @@
         <file>qml/pages/StrDannie.qml</file>
         <file>qml/pages/StrDebug.qml</file>
         <file>qml/pages/StrElement.qml</file>
+        <file>qml/pages/StrFileDialog.qml</file>
         <file>qml/pages/StrMenu.qml</file>
         <file>qml/pages/StrOpisanie.qml</file>
         <file>qml/pages/StrPdf.qml</file>
@@ -41,9 +43,8 @@
         <file>qml/pages/StrPlan.qml</file>
         <file>qml/zones/ZonaDannie.qml</file>
         <file>qml/zones/ZonaElement.qml</file>
-        <file>qml/zones/ZonaSpisok.qml</file>
-        <file>js/DCFunkciiJS.js</file>
-        <file>qml/pages/StrFileDialog.qml</file>
         <file>qml/zones/ZonaFileDialog.qml</file>
+        <file>qml/zones/ZonaSpisok.qml</file>
+        <file>workingdata/000000000.dc</file>
     </qresource>
 </RCC>
