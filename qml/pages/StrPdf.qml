@@ -27,8 +27,9 @@ Item {
 	property alias toolbarHeight: tmToolbar.height
     property int ntLogoTMK: 16
 	property bool blPdfOpen: false;//true - когда pdf документ открывается.
-	property bool blPdfScale: false;//true - когда в pdf документе задали изменение масштаба.
-	property bool blStartWidth: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие.
+    property bool blPdfPustoi: false;//true - когда пустой pdf документ открывается.
+    property bool blPdfScale: false;//true - когда в pdf документе задали изменение масштаба.
+    property bool blStartWidth: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие.
 	property bool blStartHeight: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие
 	property bool blError: false//true - ошибка, закрываем страницу.
 	property bool blSizeApp: false//true - размер окна приложения изменился.
@@ -104,30 +105,38 @@ Item {
 		spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox	
     }
 	function fnPdfDocStatus() {//Статус после открытия документа pdf.
-		console.error("110:fnPdfDocStatus: URL: " + pdfDoc.source)
-		console.error("111:fnPdfDocStatus: " + pdfDoc.status);
 		if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
-            console.error("113:fnPdfDocStatus Error ");
+            console.error("109:fnPdfDocStatus Error ");
+            tmPdf.blPdfScale = false;//
             tmPdf.blError = true;//Ошибка.
+            if(tmPdf.blPdfPustoi){//Если открывается пустой pdf документ.
+                tmPdf.blPdfPustoi = false;//Сбрасываем флаг.
+                tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
+            }
 		}
 		else{//Если не ошибка, то...
 			tmPdf.blError = false;//Не Ошибка. Сбрасывает флаг при повторном открытии.
 			if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
 				tmPdf.blPdfOpen = true;//Документ открылся.	
                 pssPassword.blVisible = false;//Документ открылся, невидимым поле ввода пароля делаем тут.
-                console.error("121:fnPdfDocStatus Ready");
+                console.error("122:fnPdfDocStatus Ready");
+                if(tmPdf.blPdfPustoi){//Если открывается пустой pdf документ.
+                    tmPdf.blPdfPustoi = false;//Сбрасываем флаг.
+                    tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
+                }
 			}
 		}
 	}
 
 	function fnPdfPageStatus(){//Статус рендеринга страницы открываемой.
         if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
-            console.error("128:Статус рендера страницы: "+ pmpDoc.currentPage +" Загрузка.");
+            console.error("133:Статус рендера страницы: "+ pmpDoc.currentPage +" Загрузка.");
 		}
 
         if(pmpDoc.currentPageRenderingStatus === Image.Ready){//Статус рендеринга страницы ОТКРЫТ.
-            console.error("132:Статус рендера страницы: "+ pmpDoc.currentPage +" Открыт.");
+            console.error("137:Статус рендера страницы: "+ pmpDoc.currentPage +" Открыт.");
             if(tmPdf.blPdfOpen){//Если это рендер самой первой страницы после открытия pdf документа, то.
+                console.error("139: RenderPage Ready. blPdfScale: " + tmPdf.blPdfScale);
                 if(!tmPdf.blPdfScale){//Если стартового масштабирование не было, то...
                     tmPdf.blPdfScale = true;//Активируем флаг, что началось первичное масштабирование.
                     fnScale();//Выставляем масштаб в зависимости от формата pdf документа.
@@ -136,7 +145,7 @@ Item {
                     tmPdf.blPdfOpen = false;//сбрасываем флаг открытия документа.
                     tmPdf.blPdfScale = false;//Сбрасываем флаг масштабирование первичного.
                     if(tmPdf.ntPdfPage){//Если это не 0(1) страница (то она и так уже открылась), то goToPage
-                        console.error("141:Timer tmrGoToPage start");
+                        console.error("148:Timer tmrGoToPage start");
                         tmrGoToPage.running = true;//запускаем таймер, перед переходом на страницу
                     }
                 }
@@ -144,7 +153,7 @@ Item {
             else{//Если это не первый рендер страницы, то...
             }
             pmpDoc.visible = true;//Делаем видимым документ.
-		}
+        }
 	}
 	function fnPdfGoToPage(ntPage){//Функция обрабатывающая переход на новую страницу документа.
         console.error("154:fnPdfGoToPage Номер страницы: " + ntPage);
@@ -190,6 +199,7 @@ Item {
         }
 	}
     function fnScale(){
+        console.error("193:fnScale")
         var widthRect = tmZona.childrenRect.width;
         var heightRect = tmZona.childrenRect.height;
         if(blDocVert){//Если вертикальная страница, то...
@@ -209,10 +219,9 @@ Item {
 		tmPdf.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
         //Обязательная пустой Url, он что то обнуляет, после запароленного файла. И не только.
         tmPdf.ntPdfPage = 0;//Открываем первую страницу в пустом файле.
-        tmPdf.blPdfScale = true;//Чтоб не обрабатывалось первоначальное масштабирование при открытии.
+        tmPdf.blPdfPustoi = true;//Открываем пустой pdf документ.
         pdfDoc.source = "qrc:///workingdata/000000000.dc";
-		tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
-	}
+    }
 	Item {
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
@@ -338,6 +347,8 @@ Item {
 				tmPdf.blStartWidth = true;//Стартуем, блокируем первое изменение размеров окна.
 				tmPdf.blStartHeight = true;//Стартуем, блокируем первое изменение размеров окна.
                 ntPdfPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
+                pmpDoc.document = pdfDocPustoi;//Переключаюсь на пустую сцену, чтоб обнулить прошлую сцену.
+                pmpDoc.document = pdfDoc;//переключаемся на работую и обнулённую сцену.
                 fnPdfOtkrit();//Функция открытия Pdf документа.
 			}
 		}
