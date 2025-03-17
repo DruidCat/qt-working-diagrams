@@ -106,9 +106,11 @@ Item {
 	function fnPdfDocStatus() {//Статус после открытия документа pdf.
 		if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
             console.error("112:fnPdfDocStatus Error ");
+            if(pssPassword.blVisible)//Если надпись ввода пароля видна, значит пароль неверный.
+                cppqml.strDebug = qsTr("Введён неверный пароль.");
+
             tmPdf.blPdfScale = false;//
             tmPdf.blError = true;//Ошибка.
-            pssPassword.password = "";//Обнуляем вводимый пароль в TextInput, так как он неверный.
             if(tmPdf.blPdfPustoi){//Если открывается пустой pdf документ.
                 tmPdf.blPdfPustoi = false;//Сбрасываем флаг.
                 tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
@@ -117,7 +119,8 @@ Item {
 		else{//Если не ошибка, то...
 			tmPdf.blError = false;//Не Ошибка. Сбрасывает флаг при повторном открытии.
 			if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
-				tmPdf.blPdfOpen = true;//Документ открылся.	
+                tmPdf.blPdfOpen = true;//Документ открылся.
+                cppqml.strDebug = "";//Документ открыт, в тулбар не должно быть никаких надписей.
                 pssPassword.blVisible = false;//Документ открылся, невидимым поле ввода пароля делаем тут.
                 console.error("125:fnPdfDocStatus Ready");
                 if(tmPdf.blPdfPustoi){//Если открывается пустой pdf документ.
@@ -125,8 +128,8 @@ Item {
                     tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
                 }
 			}
-		}
-	}
+		} 
+    }
 
 	function fnPdfPageStatus(){//Статус рендеринга страницы открываемой.
         if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
@@ -311,23 +314,25 @@ Item {
             clrTexta: "black"
             clrKnopki: "yellow"
             clrBorder: "yellow"
-			placeholderText: qsTr("ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА")
+            placeholderTextTrue: qsTr("ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА")
+            placeholderTextFalse: qsTr("НЕВЕРНЫЙ ПАРОЛЬ ДОКУМЕНТА")
             onClickedOk: function (strPassword)  {//Слот нажатия кнопки Ок
 				pdfDoc.password = strPassword;//Передаём пароль в документ.
+                pssPassword.password = "";//Обнуляем вводимый пароль в TextInput.
+                pssPassword.passTrue = false;//Делаем крассным, если пароль верный, никто не увидит.
                 fnPdfOtkrit();
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
-				pssPassword.blVisible = false;
-				fnNazad();//Закрываем окно с pdf документом.
+                pssPassword.blVisible = false;//Делаем невидимым виджет
+                pssPassword.password = "";//Обнуляем вводимый пароль в TextInput.
+                fnNazad();//Закрываем окно с pdf документом.
             }
 			onBlVisibleChanged: {//Если видимость изменилась, то...
 				if(pssPassword.blVisible){
-					password = "";//Обнуляем вводимый пароль в TextInput.
                     spbPdfPage.spinBox.readOnly = true;//запрещаем редактировать для Android.
                     textInput.readOnly = false;//разрешаем редактировать.
 				}
 				else{
-                    password = "";//Обнуляем вводимый пароль в TextInput.
                     spbPdfPage.spinBox.readOnly = false;//разрешаем редактировать для Android.
                     textInput.readOnly = true;//запрещаем редактировать.
 				}
@@ -394,6 +399,7 @@ Item {
                 tmPdf.blError = false;//нет ошибки открытия pdf документа.
                 tmPdf.blSizeApp = false;//размер окна приложения не изменился.
                 tmPdf.ntPdfPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
+                pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
 
                 //pmpDoc.document = pdfDocPustoi;//Переключаюсь на пустую сцену, чтоб обнулить прошлую сцену.
                 //pmpDoc.document = pdfDoc;//переключаемся на работую и обнулённую сцену.

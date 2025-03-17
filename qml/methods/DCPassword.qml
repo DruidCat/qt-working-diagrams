@@ -9,13 +9,15 @@ Item {
     property alias radius: rctTextInput.radius//Радиус рабочей зоны
     property alias clrFona: rctPassword.color //цвет текста
     property alias clrFonaPass: rctTextInput.color //цвет текста
-    property alias clrTexta: txnTextInput.color //цвет текста
+    property bool passTrue: true;//false - пароль неверный.
+    property color clrTexta: "black"//цвет текста
     property color clrKnopki: "yellow"//цвет Кнопок
     property alias clrBorder: rctTextInput.border.color//цвет границы
     property alias blVisible: rctPassword.visible//Видимость объекта.
     property int  ntWidth: 2
     property int ntCoff: 8
-    property alias placeholderText: txtTextInput.text//Текст в строке, подсказывающий, что нужно вводить юзеру
+    property string placeholderTextTrue: ""//Текст в строке, подсказывающий, что нужно вводить юзеру
+    property string placeholderTextFalse: ""//Текст в строке,подсказывающий,что нужно вводить юзеру при ошибке
     property alias clrPlaceHolderText: txtTextInput.color//Цвет текста подсказки
 	signal clickedOk(var strPassword);//Сигнал нажатия Enter
 	signal clickedOtmena();//Сигнал нажатия Escape
@@ -57,7 +59,7 @@ Item {
 				anchors.left: rctTextInput.left
 				anchors.right: rctTextInput.right
 				anchors.verticalCenter: rctTextInput.verticalCenter
-				color: "black"//цвет текста
+                color: tmPassword.passTrue ? clrTexta : "#9c3a3a"//Заданный цвет текста или серо красный.
 				horizontalAlignment: TextInput.AlignHCenter
 				verticalAlignment: TextInput.AlignVCenter
 				echoMode: TextInput.Password
@@ -72,7 +74,7 @@ Item {
 				Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
 					if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
 						tmPassword.clickedOk(txnTextInput.text);//Излучаем сигнал о том, что нажат Enter.
-						event.accepted = true;//Enter не использовался в качестве сочетания клавишь с другими клав
+                        event.accepted = true;//Enter не использовался в сочетания клавишь с другими клавишами
 					}
 					if(event.key === Qt.Key_Escape){
 						tmPassword.clickedOtmena();//Излучаем сигнал о том, что нажат Ecape
@@ -82,11 +84,11 @@ Item {
 				Text {//Текст, подсказывающий пользователю, что нужно вводить.
 					id: txtTextInput
 					anchors.fill: txnTextInput
-					text: ""//По умолчанию нет надписи.
+                    text: tmPassword.passTrue ? tmPassword.placeholderTextTrue : placeholderTextFalse
                     font.pixelSize: tmPassword.ntWidth*tmPassword.ntCoff//размер шрифта текста.
                     horizontalAlignment: Text.AlignHCenter
 					verticalAlignment: Text.AlignVCenter
-					color: "#aaa"//Светло серый цвет по умолчанию.
+                    color: tmPassword.passTrue ? "#aaa" : "#9c3a3a"//Светло серый цвет или серо красный
 					visible: !txnTextInput.text
 				}
 			}
