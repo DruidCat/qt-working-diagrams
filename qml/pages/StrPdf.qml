@@ -34,9 +34,7 @@ Item {
 	property bool blStartHeight: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие
 	property bool blError: false//true - ошибка, закрываем страницу.
 	property bool blSizeApp: false//true - размер окна приложения изменился.
-	property int ntStrValue: 0//Переменная, которая сохраняет значение страницы при переключении страниц на 0.
-    property real pdfDocWidth: 0//Максимальная ширина страницы документа
-    property real pdfDocHeight: 0//Максимальная высота страницы документа
+    //Расчитываемые при открытии pdf документа.
     property bool blDocVert: true;//true - вертикальный документ, false - горизонтальный документ.
     property int  ntPdfPage: 0;//Номер страницы из БД.
     anchors.fill: parent//Растянется по Родителю.
@@ -84,7 +82,7 @@ Item {
             pmpDoc.visible = false;//Делаем невидимым pdf документ.
             pmpDoc.document = pdfDocPustoi;
             pmpDoc.document = pdfDoc;
-            tmPdf.ntStrValue = spbPdfPage.value;//Сохраняем номер страницы.
+            tmPdf.ntPdfPage = spbPdfPage.value;//Сохраняем номер страницы.
             fnPdfGoToPage(-1);//Переключаемся на страницу -1 (0 нельзя), чтоб потом переключиться на нужную.
 		}
 		lgTMK.ntCoff = 11;//Задаём размер логотипа.
@@ -96,10 +94,8 @@ Item {
         //console.error("96: Url: " + strPdfUrl);
         pdfDoc.source = strPdfUrl; 
 
-        pdfDocHeight = pdfDoc.pagePointSize(ntPdfPage).height;//Высота страницы.
-        pdfDocWidth = pdfDoc.pagePointSize(ntPdfPage).width;//Ширина страницы.
-        console.error("101: fnPdfOtkrit: pdfHeight: " + pdfDocHeight + " pdfWidth: " + pdfDocWidth)
-        if(pdfDocHeight >= pdfDocWidth)//Расчитываем, вертикальный или горизонтальный документ.
+        //Расчитываем, вертикальный или горизонтальный документ.
+        if(pdfDoc.pagePointSize(ntPdfPage).height >= pdfDoc.pagePointSize(ntPdfPage).width)
             blDocVert = true;
         else
             blDocVert = false;
@@ -233,9 +229,9 @@ Item {
             fnScale();//Выставляем масштаб по ширине или по высоте в зависимости от размера документа.
             if(tmPdf.blSizeApp){//Изменились размеры приложения.
                 tmPdf.blSizeApp = false;//Обнуляем флаг.
-                fnPdfGoToPage(tmPdf.ntStrValue - 1);//Выставляем страницу из БД.
-                spbPdfPage.value = tmPdf.ntStrValue;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
-                tmPdf.ntStrValue = 0;//Обнуляем.
+                fnPdfGoToPage(tmPdf.ntPdfPage - 1);//Выставляем страницу из БД.
+                spbPdfPage.value = tmPdf.ntPdfPage;//Эта строчка для Qt6 нужна. НЕ УДАЛЯТЬ!
+                tmPdf.ntPdfPage = 0;//Обнуляем.
             }
             else{
                 fnPdfGoToPage(ntPdfPage);//Выставляем страницу из БД.
@@ -388,9 +384,17 @@ Item {
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
+                //Первоначальная иннициализация флагов.
+                tmPdf.blLogoTMK = false;//логотип на уменьшение.
+                tmPdf.blPdfOpen = false;//pdf документ ещё не открыт.
+                tmPdf.blPdfPustoi = false;//пустой pdf документ ещё не открыт.
+                tmPdf.blPdfScale = false;//в pdf документе не задали изменение масштаба.
 				tmPdf.blStartWidth = true;//Стартуем, блокируем первое изменение размеров окна.
 				tmPdf.blStartHeight = true;//Стартуем, блокируем первое изменение размеров окна.
-                ntPdfPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
+                tmPdf.blError = false;//нет ошибки открытия pdf документа.
+                tmPdf.blSizeApp = false;//размер окна приложения не изменился.
+                tmPdf.ntPdfPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
+
                 //pmpDoc.document = pdfDocPustoi;//Переключаюсь на пустую сцену, чтоб обнулить прошлую сцену.
                 //pmpDoc.document = pdfDoc;//переключаемся на работую и обнулённую сцену.
                 fnPdfOtkrit();//Функция открытия Pdf документа.
