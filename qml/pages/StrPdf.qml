@@ -112,6 +112,7 @@ Item {
             console.error("112:fnPdfDocStatus Error ");
             tmPdf.blPdfScale = false;//
             tmPdf.blError = true;//Ошибка.
+            pssPassword.password = "";//Обнуляем вводимый пароль в TextInput, так как он неверный.
             if(tmPdf.blPdfPustoi){//Если открывается пустой pdf документ.
                 tmPdf.blPdfPustoi = false;//Сбрасываем флаг.
                 tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
@@ -330,7 +331,7 @@ Item {
                     textInput.readOnly = false;//разрешаем редактировать.
 				}
 				else{
-					password = "";//Обнуляем вводимый пароль в TextInput.
+                    password = "";//Обнуляем вводимый пароль в TextInput.
                     spbPdfPage.spinBox.readOnly = false;//разрешаем редактировать для Android.
                     textInput.readOnly = true;//запрещаем редактировать.
 				}
