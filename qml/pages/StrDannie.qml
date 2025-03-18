@@ -30,6 +30,7 @@ Item {
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого документа, если true
+	property string strDannieRen: "";//Переменная хранит имя Документа, который нужно переименовать
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
@@ -67,7 +68,7 @@ Item {
     function fnClickedOk(){//Функция переименования Данных.
         tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
         if(tmDannie.blPereimenovat)//Если запрос на переименовывание.
-            cppqml.renStrDannieDB(cppqml.strDannie, txnZagolovok.text);//Переименовываем имя Документа.
+            cppqml.renStrDannieDB(strDannieRen, txnZagolovok.text);//Переименовываем имя Документа.
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
@@ -263,7 +264,7 @@ Item {
                             tmDannie.blPereimenovat = true;//Переименование (отмена)...(ок)
                             tmDannie.signalToolbar(qsTr("Переименуйте выбранный документ."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
-                            cppqml.strDannie = strDannie;//Присваиваем Документ к свойству Q_PROPERTY
+                            strDannieRen = strDannie;//Присваиваем переменной имя Документа.
                             txnZagolovok.text = strDannie;//Добавляем в строку выбранный Документ.
                             tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
                         }
