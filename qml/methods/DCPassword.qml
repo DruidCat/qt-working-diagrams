@@ -56,9 +56,7 @@ Item {
 			clip: true//Обрезаем текст, который выходит за границы этого прямоугольника.
 			TextInput {//Область текста.
 				id: txnTextInput
-				anchors.left: rctTextInput.left
-				anchors.right: rctTextInput.right
-				anchors.verticalCenter: rctTextInput.verticalCenter
+				anchors.centerIn: rctTextInput
                 color: tmPassword.passTrue ? clrTexta : "#9c3a3a"//Заданный цвет текста или серо красный.
 				horizontalAlignment: TextInput.AlignHCenter
 				verticalAlignment: TextInput.AlignVCenter
@@ -139,6 +137,28 @@ Item {
 						}
 					}
 				}
+				if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
+					if(txnTextInput.visible){//Если Пароль становится видимой, то...
+						if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста
+							for(let ltShag = txnTextInput.font.pixelSize;
+											ltShag < rctTextInput.height-tmPassword.ntCoff; ltShag++){
+								if(txnTextInput.width < rctTextInput.width){//длина текста<динны строк
+									txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+									if(txnTextInput.width > rctTextInput.width){//Но, если переборщили
+										txnTextInput.font.pixelSize--;//То уменьшаем размер шрифта и..
+										return;//Выходим из увеличения шрифта.
+									}
+								}
+							}
+						}
+						else{//Если длина строки меньше длины текста, то...
+							for(let ltShag = txnTextInput.font.pixelSize; ltShag > 0; ltShag--){
+								if(txnTextInput.width > rctTextInput.width)//текст дилиннее строки,то.
+									txnTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+							}
+						}
+					}
+				}
 			}
 		}
         DCKnopkaOk{//@disable-check M300//Кнопка подтверждения пароля.
@@ -175,6 +195,30 @@ Item {
 					for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){
 						if(txtTextInput.width > rctTextInput.width)//текст дилиннее строки,то.
 							txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+					}
+				}
+			}
+		}
+	}
+	onPasswordChanged: {//Если вводится пароль, то...
+		if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
+			if(txnTextInput.visible){//Если Пароль становится видимой, то...
+				if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста
+					for(let ltShag = txnTextInput.font.pixelSize;
+									ltShag < rctTextInput.height-tmPassword.ntCoff; ltShag++){
+						if(txnTextInput.width < rctTextInput.width){//длина текста<динны строк
+							txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+							if(txnTextInput.width > rctTextInput.width){//Но, если переборщили
+								txnTextInput.font.pixelSize--;//То уменьшаем размер шрифта и..
+								return;//Выходим из увеличения шрифта.
+							}
+						}
+					}
+				}
+				else{//Если длина строки меньше длины текста, то...
+					for(let ltShag = txnTextInput.font.pixelSize; ltShag > 0; ltShag--){
+						if(txnTextInput.width > rctTextInput.width)//текст дилиннее строки,то.
+							txnTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
 					}
 				}
 			}
