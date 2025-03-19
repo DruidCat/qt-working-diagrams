@@ -25,9 +25,7 @@ Item {
 		clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
         TextInput {//Область текста.
             id: txnTextInput
-			anchors.left: rctTextInput.left
-			anchors.right: rctTextInput.right
-			anchors.verticalCenter: rctTextInput.verticalCenter
+			anchors.centerIn: rctTextInput
 			color: "black"//цвет текста
 			horizontalAlignment: TextInput.AlignHCenter
 			verticalAlignment: TextInput.AlignVCenter
@@ -130,6 +128,28 @@ Item {
 				}
 			}
 		}
+		if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
+			if(txnTextInput.visible){//Если текст становится видимым, то...
+				if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста,то
+					for(let ltShag = txnTextInput.font.pixelSize;
+									ltShag < rctTextInput.height-tmTextInput.ntCoff; ltShag++){
+						if(txnTextInput.width < rctTextInput.width){//длина текста < динны строки
+							txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+							if(txnTextInput.width > rctTextInput.width){//Но, если переборщили
+								txnTextInput.font.pixelSize--;//То уменьшаем размер шрифта и...
+								return;//Выходим из увеличения шрифта.
+							}
+						}
+					}
+				}
+				else{//Если длина строки меньше длины текста, то...
+					for(let ltShag = txnTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
+						if(txnTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
+							txnTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+					}
+				}
+			}
+		}
 	}
 	onPlaceholderTextChanged: {//Если изменилcя текст подсказки, то...
 		if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
@@ -150,6 +170,30 @@ Item {
 					for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
 						if(txtTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
 							txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+					}
+				}
+			}
+		}
+	}
+	onTextChanged: {//Если изменилcя вводимый текст, то...
+		if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
+			if(txnTextInput.visible){//Если текст становится видимым, то...
+				if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста,то
+					for(let ltShag = txnTextInput.font.pixelSize;
+									ltShag < rctTextInput.height-tmTextInput.ntCoff; ltShag++){
+						if(txnTextInput.width < rctTextInput.width){//длина текста < динны строки
+							txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+							if(txnTextInput.width > rctTextInput.width){//Но, если переборщили
+								txnTextInput.font.pixelSize--;//То уменьшаем размер шрифта и...
+								return;//Выходим из увеличения шрифта.
+							}
+						}
+					}
+				}
+				else{//Если длина строки меньше длины текста, то...
+					for(let ltShag = txnTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
+						if(txnTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
+							txnTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
 					}
 				}
 			}
