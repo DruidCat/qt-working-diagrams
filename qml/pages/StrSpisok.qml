@@ -367,7 +367,7 @@ Item {
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
             onClicked: {//Слот сигнала clicked кнопки Создать.
-                fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
+				txnZagolovok.visible ? fnClickedZakrit() : fnClickedSozdat()
             }
 		}
         DCKnopkaNastroiki {//@disable-check M300
