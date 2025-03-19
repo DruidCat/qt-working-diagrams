@@ -92,8 +92,8 @@ Item {
         tmSpisok.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         tmSpisok.blUdalitVibor = false;//Запрещено выбирать Список на удаление. НЕ УДАЛЯТЬ.
         menuSpisok.visible = false;//Делаем невидимым меню.
-       	txnZagolovok.visible = true;//Режим создания элемента Списка.
-        txnZagolovok.placeholderText = "ВВЕДИТЕ ИМЯ СПИСКА";//Подсказка пользователю, что вводить нужно.
+        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ СПИСКА");//Подсказка пользователю, что вводить нужно.
+       	txnZagolovok.visible = true;//Режим создания элемента Списка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
         tmSpisok.signalToolbar(qsTr("Создайте новый список."))
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
@@ -112,8 +112,8 @@ Item {
         blZagolovok = true;//Изменить заголовок.
         menuSpisok.visible = false;//Делаем невидимым меню.
         txnZagolovok.text = cppqml.strTitul;//Добавляем в строку Заголовок, для более понятного редактирования
-        txnZagolovok.visible = true;//Режим отображения текстового редактора Заголовка.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЗАГОЛОВКА");//Подсказка пользователю,что вводить нужн
+        txnZagolovok.visible = true;//Показ текстового редактора Заголовка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
         tmSpisok.signalToolbar(qsTr("Измените имя заголовка списка."));
     }
     Item {//Спискок Заголовка

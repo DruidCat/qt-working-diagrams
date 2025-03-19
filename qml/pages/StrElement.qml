@@ -82,8 +82,8 @@ Item {
         tmElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         tmElement.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
         menuElement.visible = false;//Делаем невидимым меню.
-        txnZagolovok.visible = true;//Режим создания элемента Списка.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
+        txnZagolovok.visible = true;//Режим создания элемента Списка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
         tmElement.signalToolbar(qsTr("Создайте новый элемент."));
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.

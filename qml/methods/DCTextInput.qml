@@ -73,14 +73,62 @@ Item {
             }
             Text {//Текст, подсказывающий пользователю, что нужно вводить.
                 id: txtTextInput
-                anchors.fill: txnTextInput
+				anchors.centerIn: txnTextInput//Обязательно по центру, иначе масштабирование не будет работать
                 font.pixelSize: tmTextInput.ntWidth*tmTextInput.ntCoff//размер шрифта текста.
                 text: ""//По умолчанию нет надписи.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: "#aaa"//Светло серый цвет по умолчанию.
                 visible: !txnTextInput.text
+				onVisibleChanged: {//Если изменилась видимость, то...
+					if(text){//(Защита от пустого текста) Если не пустой текст, то...
+						if(visible){//Если подсказка становится видимой, то...
+							if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
+								for(let ltShag = txtTextInput.font.pixelSize;
+												ltShag < rctTextInput.height-tmTextInput.ntCoff; ltShag++){
+									if(txtTextInput.width < rctTextInput.width){//длина текста < динны строки
+										txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+										if(txtTextInput.width > rctTextInput.width){//Но, если переборщили
+											txtTextInput.font.pixelSize--;//То уменьшаем размер шрифта и...
+											return;//Выходим из увеличения шрифта.
+										}
+									}
+								}
+							}
+							else{//Если длина строки меньше длины текста, то...
+								for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
+									if(txtTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
+										txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+								}
+							}
+						}
+					}
+				}
             }
 		}
     }
+	onWidthChanged: {//Если изменилась ширина прямоугольника, то...
+		if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
+			if(txtTextInput.visible){//Если подсказка становится видимой, то...
+				if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
+					for(let ltShag = txtTextInput.font.pixelSize;
+									ltShag < rctTextInput.height-tmTextInput.ntCoff; ltShag++){
+						if(txtTextInput.width < rctTextInput.width){//длина текста < динны строки
+							txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+							if(txtTextInput.width > rctTextInput.width){//Но, если переборщили
+								txtTextInput.font.pixelSize--;//То уменьшаем размер шрифта и...
+								return;//Выходим из увеличения шрифта.
+							}
+						}
+					}
+				}
+				else{//Если длина строки меньше длины текста, то...
+					for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
+						if(txtTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
+							txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+					}
+				}
+			}
+		}
+	}
 }
