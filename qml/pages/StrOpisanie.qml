@@ -30,7 +30,28 @@ Item {
 	anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
-    function fnClickedOk(){
+
+	function fnClickedOtmena(){//Отмена редакрирования
+		knopkaOtmena.visible = false;//делаем невидимой кнопку Отмена.
+		knopkaOk.visible = false;//делаем невидимой кнопку Ок.
+		knopkaSozdat.visible = true;//делаем видимой кнопку Создать.
+		txdZona.readOnly = true;//запрещаем редактировать текст.	
+		if(strOpisanie == "titul"){//Если Титул, то...
+			txdZona.text = cppqml.strTitulOpisanie;//Загружаем текст из бизнес логики.
+		}
+		else{
+			if(strOpisanie == "spisok"){//Если Список, то...
+				txdZona.text = cppqml.strSpisokOpisanie;//Загружаем текст из бизнес логики.
+			}
+			else{
+				if(strOpisanie == "element"){//Если Элемент, то...
+					txdZona.text = cppqml.strElementOpisanie;//Загружаем текст из бизнес логики.
+                }
+			}
+		}
+	}
+    function fnClickedOk(){//Сохранение редакрированного описания.
+		knopkaOtmena.visible = false;//Делаем невидимой кнопку Отмена.
 		knopkaOk.visible = false;//Делаем невидимой кнопку Ок.
 		knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
 		txdZona.readOnly = true;//Запрещаем редактировать текст.
@@ -47,7 +68,7 @@ Item {
                 }
 			}
 		}
-	}
+	}	
 	Item {
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
@@ -58,33 +79,27 @@ Item {
 			anchors.margins: tmOpisanie.ntCoff/2
 			clrKnopki: tmOpisanie.clrTexta
 			onClicked: {
-                //fnClickedOk();//Нажатие кнопки Ок. Если строку расскоментировать, сохранение будет текста.
-                knopkaOk.visible = false;//Делаем невидимой кнопку Ок.
-                knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
-                txdZona.readOnly = true;//Запрещаем редактировать текст.
+				knopkaOtmena.visible = false;//делаем невидимой кнопку Отмена.
+				knopkaOk.visible = false;//делаем невидимой кнопку Ок.
+				knopkaSozdat.visible = true;//делаем видимой кнопку Создать.
+				txdZona.readOnly = true;//запрещаем редактировать текст.
 				tmOpisanie.clickedNazad();//Сигнал, что кнопка Назад нажата.
 			}
-		}
-        DCKnopkaSozdat {//@disable-check M300
-			id: knopkaSozdat
-			ntWidth: tmOpisanie.ntWidth
-			ntCoff: tmOpisanie.ntCoff
-			anchors.verticalCenter: tmZagolovok.verticalCenter
-			anchors.right: tmZagolovok.right
-			anchors.margins: tmOpisanie.ntCoff/2
-			visible: true 
-			clrKnopki: tmOpisanie.clrTexta
-			clrFona: tmOpisanie.clrFona
-			onClicked: {
-				txdZona.readOnly = false;//Разрешить редактировать.
-				txdZona.textEdit.cursorPosition = txdZona.text.length;//Курсор в конец текста
-				txdZona.textEdit.focus = true;//Сфокусироваться на области ввода
-				txdZona.textEdit.cursorVisible = true;//Курсор сделать видимым
-				visible = false//Делаем невидимой кнопку Создать.
-				knopkaOk.visible = true;//Делаем видимой кнопку Ок
-				tmOpisanie.clickedSozdat();//Излучаем сигнал Создать
-			}
-		}
+		} 
+		DCKnopkaZakrit {//@disable-check M300
+            id: knopkaOtmena
+            ntWidth: tmOpisanie.ntWidth
+            ntCoff: tmOpisanie.ntCoff
+            visible: false
+            anchors.verticalCenter: tmZagolovok.verticalCenter
+            anchors.left: tmZagolovok.left
+            anchors.margins: tmOpisanie.ntCoff/2
+            clrKnopki: tmOpisanie.clrTexta
+            clrFona: tmOpisanie.clrFona
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+                fnClickedOtmena();//Функция обрабатывающая кнопку Отмена.
+            }
+        }
         DCKnopkaOk {//@disable-check M300
 			id: knopkaOk
 			ntWidth: tmOpisanie.ntWidth
@@ -136,5 +151,26 @@ Item {
 	}
 	Item {
 		id: tmToolbar
+		DCKnopkaSozdat {//@disable-check M300
+			id: knopkaSozdat
+			ntWidth: tmOpisanie.ntWidth
+			ntCoff: tmOpisanie.ntCoff
+			anchors.verticalCenter: tmToolbar.verticalCenter
+			anchors.left: tmToolbar.left
+			anchors.margins: tmOpisanie.ntCoff/2
+			visible: true 
+			clrKnopki: tmOpisanie.clrTexta
+			clrFona: tmOpisanie.clrFona
+			onClicked: {
+				txdZona.readOnly = false;//Разрешить редактировать.
+				txdZona.textEdit.cursorPosition = txdZona.text.length;//Курсор в конец текста
+				txdZona.textEdit.focus = true;//Сфокусироваться на области ввода
+				txdZona.textEdit.cursorVisible = true;//Курсор сделать видимым
+				visible = false//Делаем невидимой кнопку Создать.
+				knopkaOtmena.visible = true;//делаем видимой кнопку Отмена.
+				knopkaOk.visible = true;//Делаем видимой кнопку Ок
+				tmOpisanie.clickedSozdat();//Излучаем сигнал Создать
+			}
+		}
 	}
 }

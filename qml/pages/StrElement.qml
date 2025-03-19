@@ -129,19 +129,21 @@ Item {
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
-        DCKnopkaSozdat {//@disable-check M300
-			id: knopkaSozdat
+		DCKnopkaInfo {//@disable-check M300
+			id: knopkaInfo
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
-			anchors.right: tmZagolovok.right
+			visible: true
 			anchors.verticalCenter: tmZagolovok.verticalCenter
+			anchors.right: tmZagolovok.right
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
-			clrFona: tmElement.clrFona
-            onClicked: {//Слот сигнала clicked кнопки Создать.
-                fnClickedSozdat();//Функция при нажатии кнопки Создать.
-            }
-		}
+			onClicked: {//Слот клика кнопки Инфо
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+                fnClickedEscape();//Функция нажатия кнопки Escape.
+				tmElement.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
+			}
+		} 
         DCKnopkaOk{//@disable-check M300
 			id: knopkaOk
 			ntWidth: tmElement.ntWidth
@@ -192,7 +194,7 @@ Item {
 			anchors.top: tmZagolovok.top
 			anchors.bottom: tmZagolovok.bottom
 			anchors.left: knopkaNazad.right
-			anchors.right: knopkaSozdat.left
+			anchors.right: knopkaInfo.left
 			anchors.topMargin: tmElement.ntCoff/4
 			anchors.bottomMargin: tmElement.ntCoff/4
 			anchors.leftMargin: tmElement.ntCoff/2
@@ -213,7 +215,7 @@ Item {
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
 						textInput.readOnly = false;//Можно редактировать.
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
-                        knopkaSozdat.visible = false;//Конопка Создать Невидимая.
+                        knopkaInfo.visible = false;//Конопка Информации Невидимая.
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
                         textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
@@ -224,9 +226,9 @@ Item {
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
                         knopkaNazad.visible = true;//Кнопка назад видимая.
-                        knopkaSozdat.visible = true;//Конопка Создать Видимая.
+                        knopkaInfo.visible = true;//Конопка Информация Видимая.
                         txnZagolovok.text = "";//Текст обнуляем вводимый.
-                        knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
+                        knopkaInfo.focus = true;//Фокус на кнопке Информация, чтоб не работал Enter.
 					}
 				}
 				onClickedEnter: {//слот нажатия кнопки Enter.
@@ -330,25 +332,25 @@ Item {
         tmElement.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
     }
 	Item {//Состава Тулбар
-		id: tmToolbar
-        DCKnopkaInfo {//@disable-check M300
+		id: tmToolbar 
+		DCKnopkaSozdat {//@disable-check M300
+			id: knopkaSozdat
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
-			anchors.right: tmToolbar.right
+			anchors.left: tmToolbar.left
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
-			onClicked: {//Слот клика кнопки Инфо
-                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                fnClickedEscape();//Функция нажатия кнопки Escape.
-				tmElement.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
-			}
+			clrFona: tmElement.clrFona
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+                fnClickedSozdat();//Функция при нажатии кнопки Создать.
+            }
 		}
         DCKnopkaNastroiki {//@disable-check M300
 			ntWidth: tmElement.ntWidth
 			ntCoff: tmElement.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
-			anchors.left: tmToolbar.left
+			anchors.right: tmToolbar.right
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
 			clrFona: tmElement.clrFona

@@ -195,7 +195,7 @@ Item {
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter
-            anchors.left: tmToolbar.left
+            anchors.right: tmToolbar.right
             anchors.margins: tmFileDialog.ntCoff/2
             clrKnopki: tmFileDialog.clrTexta
             clrFona: tmFileDialog.clrFona
@@ -209,7 +209,7 @@ Item {
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter
-            anchors.right: tmToolbar.right
+            anchors.left: tmToolbar.left
             anchors.margins: tmFileDialog.ntCoff/2
             clrKnopki: tmFileDialog.clrTexta
             clrFona: tmFileDialog.clrFona

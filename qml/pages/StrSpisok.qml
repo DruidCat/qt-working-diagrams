@@ -147,8 +147,8 @@ Item {
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
-        DCKnopkaSozdat {//@disable-check M300
-            id: knopkaSozdat
+		DCKnopkaInfo {//@disable-check M300
+			id: knopkaInfo
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			visible: true
@@ -157,10 +157,12 @@ Item {
 			anchors.margins: tmSpisok.ntCoff/2
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona
-            onClicked: {//Слот сигнала clicked кнопки Создать.
-                fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
+			onClicked: {
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+                fnClickedEscape();//Функция нажатия кнопки Escape.
+                tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
             }
-		}
+		} 
         DCKnopkaOk{//@disable-check M300
             id: knopkaOk
 			ntWidth: tmSpisok.ntWidth
@@ -211,7 +213,7 @@ Item {
 			anchors.top: tmZagolovok.top
 			anchors.bottom: tmZagolovok.bottom
 			anchors.left: knopkaMenu.right
-			anchors.right: knopkaSozdat.left
+			anchors.right: knopkaInfo.left
             anchors.topMargin: tmSpisok.ntCoff/4
             anchors.bottomMargin: tmSpisok.ntCoff/4
             anchors.leftMargin: tmSpisok.ntCoff/2
@@ -233,7 +235,7 @@ Item {
                     if(txnZagolovok.visible){//Если DCTextInput видим, то...
 						textInput.readOnly = false;//Можно редактировать.
                         knopkaMenu.visible = false;//Кнопка Меню Невидимая.
-                        knopkaSozdat.visible = false;//Конопка Создать Невидимая.
+                        knopkaInfo.visible = false;//Конопка Информация Невидимая.
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
                         textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
@@ -244,9 +246,9 @@ Item {
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
                         knopkaMenu.visible = true;//Кнопка Меню видимая.
-                        knopkaSozdat.visible = true;//Конопка Создать Видимая.
+                        knopkaInfo.visible = true;//Конопка Информация Видимая.
                         txnZagolovok.text = "";//Текст обнуляем вводимый.
-                        knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
+                        knopkaInfo.focus = true;//Фокус на кнопке Информация, чтоб не работал Enter.
                     }
 				}
 				onClickedEnter: {//Если нажата Enter, то такое же действие, как и при нажатии кнопки Ок.
@@ -354,26 +356,25 @@ Item {
         tmSpisok.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
     }
 	Item {//Список Тулбара
-        id: tmToolbar
-        DCKnopkaInfo {//@disable-check M300
-			ntWidth: tmSpisok.ntWidth
-			ntCoff: tmSpisok.ntCoff
-			anchors.verticalCenter: tmToolbar.verticalCenter
-			anchors.right: tmToolbar.right
-			anchors.margins: tmSpisok.ntCoff/2
-			clrKnopki: tmSpisok.clrTexta
-			clrFona: tmSpisok.clrFona
-			onClicked: {
-                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                fnClickedEscape();//Функция нажатия кнопки Escape.
-                tmSpisok.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
-            }
-		}	
-        DCKnopkaNastroiki {//@disable-check M300
+        id: tmToolbar	
+		DCKnopkaSozdat {//@disable-check M300
+            id: knopkaSozdat
 			ntWidth: tmSpisok.ntWidth
 			ntCoff: tmSpisok.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.left: tmToolbar.left
+			anchors.margins: tmSpisok.ntCoff/2
+			clrKnopki: tmSpisok.clrTexta
+			clrFona: tmSpisok.clrFona
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+                fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
+            }
+		}
+        DCKnopkaNastroiki {//@disable-check M300
+			ntWidth: tmSpisok.ntWidth
+			ntCoff: tmSpisok.ntCoff
+			anchors.verticalCenter: tmToolbar.verticalCenter
+			anchors.right: tmToolbar.right
 			anchors.margins: tmSpisok.ntCoff/2
 			clrKnopki: tmSpisok.clrTexta
 			clrFona: tmSpisok.clrFona

@@ -129,19 +129,22 @@ Item {
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
-        DCKnopkaSozdat {//@disable-check M300
-			id: knopkaSozdat
+		DCKnopkaInfo {//@disable-check M300
+			id: knopkaInfo
             ntWidth: tmDannie.ntWidth
             ntCoff: tmDannie.ntCoff
+			visible: true
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
             anchors.margins: tmDannie.ntCoff/2
             clrKnopki: tmDannie.clrTexta
 			clrFona: tmDannie.clrFona
             onClicked: {
-                fnClickedSozdat();//Функция нажатия кнопки Создать.
+                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+                fnClickedEscape();//Функция нажатия кнопки Escape.
+                tmDannie.clickedInfo();
             }
-        }
+        } 
         DCKnopkaOk{//@disable-check M300
             id: knopkaOk
             ntWidth: tmDannie.ntWidth
@@ -192,7 +195,7 @@ Item {
 			anchors.top: tmZagolovok.top
 			anchors.bottom: tmZagolovok.bottom
 			anchors.left: knopkaNazad.right
-			anchors.right: knopkaSozdat.left
+			anchors.right: knopkaInfo.left
 			anchors.topMargin: tmDannie.ntCoff/4
 			anchors.bottomMargin: tmDannie.ntCoff/4
 			anchors.leftMargin: tmDannie.ntCoff/2
@@ -213,7 +216,7 @@ Item {
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
 						textInput.readOnly = false;//Можно редактировать.
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
-                        knopkaSozdat.visible = false;//Конопка Создать Невидимая.
+                        knopkaInfo.visible = false;//Конопка Информация Невидимая.
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
                         textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
@@ -224,9 +227,9 @@ Item {
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
                         knopkaNazad.visible = true;//Кнопка назад видимая.
-                        knopkaSozdat.visible = true;//Конопка Создать Видимая.
+                        knopkaInfo.visible = true;//Конопка Информация Видимая.
                         txnZagolovok.text = "";//Текст обнуляем вводимый.
-                        knopkaSozdat.focus = true;//Фокус на кнопке Создать, чтоб не работал Enter.
+                        knopkaInfo.focus = true;//Фокус на кнопке Информация, чтоб не работал Enter.
 					}
 				}
 				onClickedEnter: {//слот нажатия кнопки Enter.
@@ -331,26 +334,25 @@ Item {
         tmDannie.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
     }
     Item {//Данные Тулбар
-		id: tmToolbar
-        DCKnopkaInfo {//@disable-check M300
+		id: tmToolbar 
+		DCKnopkaSozdat {//@disable-check M300
+			id: knopkaSozdat
             ntWidth: tmDannie.ntWidth
             ntCoff: tmDannie.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
-			anchors.right: tmToolbar.right
+			anchors.left: tmToolbar.left
             anchors.margins: tmDannie.ntCoff/2
             clrKnopki: tmDannie.clrTexta
 			clrFona: tmDannie.clrFona
             onClicked: {
-                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                fnClickedEscape();//Функция нажатия кнопки Escape.
-                tmDannie.clickedInfo();
+                fnClickedSozdat();//Функция нажатия кнопки Создать.
             }
         }
         DCKnopkaNastroiki {//@disable-check M300
 			ntWidth: tmDannie.ntWidth
 			ntCoff: tmDannie.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
-			anchors.left: tmToolbar.left
+			anchors.right: tmToolbar.right
 			anchors.margins: tmDannie.ntCoff/2
 			clrKnopki: tmDannie.clrTexta
 			clrFona: tmDannie.clrFona
