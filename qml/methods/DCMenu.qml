@@ -5,7 +5,7 @@ import "qrc:/js/DCFunkciiJS.js" as JSMenu
 
 Item {
 	id: tmMenu
-	property int ntWidth: 2
+    property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
@@ -18,7 +18,7 @@ Item {
 			id: cmpMenu
 			Rectangle {
 				id: rctMenu
-				width: lsvMenu.width
+                width: lsvMenu.width
 				height: tmMenu.ntWidth*tmMenu.ntCoff+tmMenu.ntCoff
 				radius: (width/(tmMenu.ntWidth*tmMenu.ntCoff))/tmMenu.ntCoff
 				border.width: 1
@@ -28,13 +28,31 @@ Item {
 					   ? Qt.darker(tmMenu.clrFona, 1.3) : tmMenu.clrFona
 				Text {
 					id: txtText
-					color: maMenu.containsPress
-						   ? Qt.darker(tmMenu.clrTexta, 1.3) : tmMenu.clrTexta
-					anchors.horizontalCenter: rctMenu.horizontalCenter
+                    color: maMenu.containsPress ? Qt.darker(tmMenu.clrTexta, 1.3) : tmMenu.clrTexta
+                    anchors.left: rctMenu.left
 					anchors.verticalCenter: rctMenu.verticalCenter
-					text: modelData.menu
+                    text: modelData.menu
                     font.pixelSize: rctMenu.height-tmMenu.ntCoff
-				}
+                }
+                Component.onCompleted: {//Когда текст нарисовался, расчитываю его длину.
+                    if(rctMenu.width > txtText.width){//Если длина строки больше длины текста, то...
+                        for(let ltShag=txtText.font.pixelSize; ltShag<rctMenu.height-tmMenu.ntCoff; ltShag++){
+                            if(txtText.width < rctMenu.width){//Если длина текста меньше динны строки
+                                txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                                if(txtText.width > rctMenu.width){//Но, если переборщили
+                                    txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                                    return;//Выходим из увеличения шрифта.
+                                }
+                            }
+                        }
+                    }
+                    else{//Если длина строки меньше длины текста, то...
+                        for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                            if(txtText.width > rctMenu.width)//Если текст дилиннее строки, то...
+                                txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                        }
+                    }
+                }
 				MouseArea {
 					id: maMenu
 					anchors.fill: rctMenu
@@ -66,8 +84,8 @@ Item {
 		anchors.fill: tmMenu
 		anchors.topMargin:tmMenu.ntCoff
 		anchors.bottomMargin:tmMenu.ntCoff
-		anchors.leftMargin:tmMenu.ntCoff/2
-		anchors.rightMargin:tmMenu.width/2
+        anchors.leftMargin:tmMenu.width/2//Отступ отлевого края половина длины экрана.
+        anchors.rightMargin:tmMenu.ntCoff/2//Отступ от правого края пол коэффициента
         opacity: 0.9//Прозрачность.
 		interactive: false//Запретить листать.
 
