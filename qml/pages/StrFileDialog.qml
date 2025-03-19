@@ -199,6 +199,7 @@ Item {
             anchors.margins: tmFileDialog.ntCoff/2
             clrKnopki: tmFileDialog.clrTexta
             clrFona: tmFileDialog.clrFona
+            blVert: true//Вертикольное исполнение
             onClicked: {
                 menuFileDialog.visible ? menuFileDialog.visible = false : menuFileDialog.visible = true;
             }

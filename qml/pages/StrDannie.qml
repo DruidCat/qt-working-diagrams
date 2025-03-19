@@ -354,6 +354,7 @@ Item {
 			anchors.margins: tmDannie.ntCoff/2
 			clrKnopki: tmDannie.clrTexta
 			clrFona: tmDannie.clrFona
+            blVert: true//Вертикольное исполнение
 			onClicked: {
                 txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
                 menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;

@@ -8,6 +8,7 @@ Item {
 	property int ntCoff: 8
 	property color clrKnopki: "grey"
 	property color clrFona: "transparent"
+    property bool blVert: false//true - вертикально точки расположены.
 
 	width: ntWidth*ntCoff
 	height: width
@@ -21,7 +22,8 @@ Item {
 
 		Rectangle{
 			id: rctKnopkaLevo
-			width: rctKnopkaNastroiki.width/4
+            visible: blVert ? false : true
+            width: rctKnopkaNastroiki.width/4
 			height: rctKnopkaNastroiki.width/4
 			anchors.verticalCenter: rctKnopkaNastroiki.verticalCenter
 			anchors.left: rctKnopkaNastroiki.left
@@ -42,7 +44,8 @@ Item {
 
 		Rectangle{
 			id: rctKnopkaPravo
-			width: rctKnopkaNastroiki.width/4
+            visible: blVert ? false : true
+            width: rctKnopkaNastroiki.width/4
 			height: rctKnopkaNastroiki.width/4
 			anchors.verticalCenter: rctKnopkaNastroiki.verticalCenter
 			anchors.right: rctKnopkaNastroiki.right
@@ -50,6 +53,29 @@ Item {
 			color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
 			radius: rctKnopkaNastroiki.width/2//Круг
 		}
+
+        Rectangle{
+            id: rctKnopkaVerh
+            visible: blVert ? true : false
+            width: rctKnopkaNastroiki.width/4
+            height: rctKnopkaNastroiki.width/4
+            anchors.horizontalCenter: rctKnopkaNastroiki.horizontalCenter
+            anchors.top: rctKnopkaNastroiki.top
+
+            color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            radius: rctKnopkaNastroiki.width/2//Круг
+        }
+        Rectangle{
+            id: rctKnopkaNiz
+            visible: blVert ? true : false
+            width: rctKnopkaNastroiki.width/4
+            height: rctKnopkaNastroiki.width/4
+            anchors.horizontalCenter: rctKnopkaNastroiki.horizontalCenter
+            anchors.bottom: rctKnopkaNastroiki.bottom
+
+            color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            radius: rctKnopkaNastroiki.width/2//Круг
+        }
 	}
 
 	MouseArea {

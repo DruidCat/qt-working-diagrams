@@ -352,7 +352,8 @@ Item {
 			anchors.margins: tmElement.ntCoff/2
 			clrKnopki: tmElement.clrTexta
 			clrFona: tmElement.clrFona
-			onClicked: {
+            blVert: true//Вертикольное исполнение
+            onClicked: {
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuElement.visible ? menuElement.visible = false : menuElement.visible = true;
                 tmElement.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).

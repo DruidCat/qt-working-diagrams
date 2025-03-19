@@ -207,6 +207,7 @@ Item {
             anchors.margins: tmMenu.ntCoff/2
             clrKnopki: tmMenu.clrTexta
             clrFona: tmMenu.clrFona
+            blVert: true//Вертикольное исполнение
             onClicked: {//Слот сигнала нажатия на кнопку Меню.
                 menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость
             }
