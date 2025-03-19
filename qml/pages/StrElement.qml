@@ -79,6 +79,7 @@ Item {
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+		txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
         tmElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         tmElement.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
         menuElement.visible = false;//Делаем невидимым меню.

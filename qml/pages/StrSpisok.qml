@@ -89,6 +89,7 @@ Item {
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
+		txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
         tmSpisok.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         tmSpisok.blUdalitVibor = false;//Запрещено выбирать Список на удаление. НЕ УДАЛЯТЬ.
         menuSpisok.visible = false;//Делаем невидимым меню.

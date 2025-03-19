@@ -80,6 +80,7 @@ Item {
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+		txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
         tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         tmDannie.blUdalitVibor = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
         menuDannie.visible = false;//Делаем невидимым меню.
