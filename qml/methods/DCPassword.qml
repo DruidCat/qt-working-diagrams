@@ -83,13 +83,61 @@ Item {
 				}
 				Text {//Текст, подсказывающий пользователю, что нужно вводить.
 					id: txtTextInput
-					anchors.fill: txnTextInput
+					anchors.centerIn: txnTextInput
                     text: tmPassword.passTrue ? tmPassword.placeholderTextTrue : placeholderTextFalse
                     font.pixelSize: tmPassword.ntWidth*tmPassword.ntCoff//размер шрифта текста.
                     horizontalAlignment: Text.AlignHCenter
 					verticalAlignment: Text.AlignVCenter
                     color: tmPassword.passTrue ? "#aaa" : "#9c3a3a"//Светло серый цвет или серо красный
 					visible: !txnTextInput.text
+					onVisibleChanged: {//Если изменилась видимость, то...
+						if(text){//(Защита от пустого текста) Если не пустой текст, то...
+							if(visible){//Если подсказка становится видимой, то...
+								if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста
+									for(let ltShag = txtTextInput.font.pixelSize;
+													ltShag < rctTextInput.height-tmPassword.ntCoff; ltShag++){
+										if(txtTextInput.width < rctTextInput.width){//длина текста<динны строк
+											txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+											if(txtTextInput.width > rctTextInput.width){//Но, если переборщили
+												txtTextInput.font.pixelSize--;//То уменьшаем размер шрифта и..
+												return;//Выходим из увеличения шрифта.
+											}
+										}
+									}
+								}
+								else{//Если длина строки меньше длины текста, то...
+									for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){
+										if(txtTextInput.width > rctTextInput.width)//текст дилиннее строки,то.
+											txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+									}
+								}
+							}
+						}
+					}	
+				}
+			}
+			onWidthChanged: {//Если если изменилась ширина прямоугольника, то...
+				if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
+					if(txtTextInput.visible){//Если подсказка становится видимой, то...
+						if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста
+							for(let ltShag = txtTextInput.font.pixelSize;
+											ltShag < rctTextInput.height-tmPassword.ntCoff; ltShag++){
+								if(txtTextInput.width < rctTextInput.width){//длина текста<динны строк
+									txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+									if(txtTextInput.width > rctTextInput.width){//Но, если переборщили
+										txtTextInput.font.pixelSize--;//То уменьшаем размер шрифта и..
+										return;//Выходим из увеличения шрифта.
+									}
+								}
+							}
+						}
+						else{//Если длина строки меньше длины текста, то...
+							for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){
+								if(txtTextInput.width > rctTextInput.width)//текст дилиннее строки,то.
+									txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+							}
+						}
+					}
 				}
 			}
 		}
@@ -107,5 +155,29 @@ Item {
                 tmPassword.clickedOk(password);//Сигнал подтверждения Пароля.
             }
         }
+	}
+	onPassTrueChanged: {//Если изменился флаг правильного пароля или нет, то...
+		if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
+			if(txtTextInput.visible){//Если подсказка становится видимой, то...
+				if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста
+					for(let ltShag = txtTextInput.font.pixelSize;
+									ltShag < rctTextInput.height-tmPassword.ntCoff; ltShag++){
+						if(txtTextInput.width < rctTextInput.width){//длина текста<динны строк
+							txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+							if(txtTextInput.width > rctTextInput.width){//Но, если переборщили
+								txtTextInput.font.pixelSize--;//То уменьшаем размер шрифта и..
+								return;//Выходим из увеличения шрифта.
+							}
+						}
+					}
+				}
+				else{//Если длина строки меньше длины текста, то...
+					for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){
+						if(txtTextInput.width > rctTextInput.width)//текст дилиннее строки,то.
+							txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+					}
+				}
+			}
+		}
 	}
 }
