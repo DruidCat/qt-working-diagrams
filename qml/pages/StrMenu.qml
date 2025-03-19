@@ -188,7 +188,7 @@ Item {
             anchors.margins: tmMenu.ntCoff
             clrTexta: tmMenu.clrTexta
             clrFona: "SlateGray"
-            imyaMenu: "vihod"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
+            imyaMenu: "vihod"//Глянь в DCMenu все варианты меню в слоте окончательной отрисовки.
             onClicked: function(ntNomer, strMenu) {//Слот сигнала клика по пункту меню.
                 menuMenu.visible = false;//Делаем невидимым меню.
                 if(ntNomer === 1){//Выход
@@ -203,7 +203,7 @@ Item {
             ntWidth: tmMenu.ntWidth
             ntCoff: tmMenu.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter
-            anchors.left: tmToolbar.left
+            anchors.right: tmToolbar.right
             anchors.margins: tmMenu.ntCoff/2
             clrKnopki: tmMenu.clrTexta
             clrFona: tmMenu.clrFona
