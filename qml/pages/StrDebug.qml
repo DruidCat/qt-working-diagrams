@@ -51,7 +51,9 @@ Item {
 			ntWidth: tmDebug.ntWidth
 			ntCoff: tmDebug.ntCoff
 			readOnly: true//Запрещено редактировать текст
-			radius: tmDebug.ntCoff/4//Радиус возьмём из настроек элемента qml через property
+            textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
+            pixelSize: tmDebug.ntWidth/2*tmDebug.ntCoff//размер шрифта текста в два раза меньше.
+            radius: tmDebug.ntCoff/4//Радиус возьмём из настроек элемента qml через property
 			clrFona: tmDebug.clrFona//Цвет фона рабочей области
 			clrTexta: tmDebug.clrTexta//Цвет текста
 			clrBorder: tmDebug.clrTexta//Цвет бардюра при редактировании текста.
