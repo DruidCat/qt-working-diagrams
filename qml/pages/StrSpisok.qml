@@ -47,7 +47,7 @@ Item {
         txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
         tmSpisok.blZagolovok = false;//Запрещаем изменять заголовок.
     }
-    focus: true
+    focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -240,6 +240,7 @@ Item {
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
                         textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
+                        textInput.focus = true;//Фокусируемся для Android экранной клавиатуры.
                         textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
                     }
                     else{//Если DCTextInput не видим, то...
@@ -381,7 +382,7 @@ Item {
 			clrFona: tmSpisok.clrFona
             blVert: true//Вертикольное исполнение
             onClicked: {
-                txnZagolovok.textInput.forceActiveFocus();//ОБЯЗАТЕЛЬНАЯ СТРОКА, чтоб работало нажатие Escape.
+                //txnZagolovok.textInput.forceActiveFocus();//ОБЯЗАТЕЛЬНАЯ СТРОКА, чтоб работало нажатие Escape.
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;
                 tmSpisok.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).

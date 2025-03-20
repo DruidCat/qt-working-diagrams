@@ -44,6 +44,7 @@ Item {
         tmElement.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
         txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
     }
+    focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -220,6 +221,7 @@ Item {
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
                         textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
+                        textInput.focus = true;//Фокусируемся для Android экранной клавиатуры.
                         textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 					}
                     else{//Если DCTextInput не видим, то...
