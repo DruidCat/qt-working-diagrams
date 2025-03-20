@@ -26,20 +26,26 @@ Item {
                 clip: true//Обрезаем лишний текст в прямоугольнике.
                 color: maMenu.containsPress
 					   ? Qt.darker(tmMenu.clrFona, 1.3) : tmMenu.clrFona
+                Rectangle {
+                    id: rctText
+                    anchors.fill: rctMenu
+                    anchors.margins: tmMenu.ntCoff/2
+                    color: "transparent"
+                }
 				Text {
 					id: txtText
                     color: maMenu.containsPress ? Qt.darker(tmMenu.clrTexta, 1.3) : tmMenu.clrTexta
-                    anchors.left: rctMenu.left
-					anchors.verticalCenter: rctMenu.verticalCenter
+                    anchors.left: rctText.left
+                    anchors.verticalCenter: rctText.verticalCenter
                     text: modelData.menu
-                    font.pixelSize: rctMenu.height-tmMenu.ntCoff
+                    font.pixelSize: rctText.height-tmMenu.ntCoff
                 }
                 Component.onCompleted: {//Когда текст нарисовался, расчитываю его длину.
-                    if(rctMenu.width > txtText.width){//Если длина строки больше длины текста, то...
-                        for(let ltShag=txtText.font.pixelSize; ltShag<rctMenu.height-tmMenu.ntCoff; ltShag++){
-                            if(txtText.width < rctMenu.width){//Если длина текста меньше динны строки
+                    if(rctText.width > txtText.width){//Если длина строки больше длины текста, то...
+                        for(let ltShag=txtText.font.pixelSize; ltShag<rctText.height-tmMenu.ntCoff; ltShag++){
+                            if(txtText.width < rctText.width){//Если длина текста меньше динны строки
                                 txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                                if(txtText.width > rctMenu.width){//Но, если переборщили
+                                if(txtText.width > rctText.width){//Но, если переборщили
                                     txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
                                     return;//Выходим из увеличения шрифта.
                                 }
@@ -48,7 +54,7 @@ Item {
                     }
                     else{//Если длина строки меньше длины текста, то...
                         for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                            if(txtText.width > rctMenu.width)//Если текст дилиннее строки, то...
+                            if(txtText.width > rctText.width)//Если текст дилиннее строки, то...
                                 txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
                         }
                     }
@@ -61,11 +67,11 @@ Item {
 					}
 				}
 				onWidthChanged: {//Если длина строки изменилась, то...
-					if(rctMenu.width > txtText.width){//Если длина строки больше длины текста, то...
-						for(let ltShag=txtText.font.pixelSize; ltShag<rctMenu.height-tmMenu.ntCoff; ltShag++){
-							if(txtText.width < rctMenu.width){//Если длина текста меньше динны строки
+                    if(rctText.width > txtText.width){//Если длина строки больше длины текста, то...
+                        for(let ltShag=txtText.font.pixelSize; ltShag<rctText.height-tmMenu.ntCoff; ltShag++){
+                            if(txtText.width < rctText.width){//Если длина текста меньше динны строки
 								txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-								if(txtText.width > rctMenu.width){//Но, если переборщили
+                                if(txtText.width > rctText.width){//Но, если переборщили
 									txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
 									return;//Выходим из увеличения шрифта.
 								}
@@ -74,7 +80,7 @@ Item {
 					}
 					else{//Если длина строки меньше длины текста, то...
 						for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения 
-							if(txtText.width > rctMenu.width)//Если текст дилиннее строки, то...
+                            if(txtText.width > rctText.width)//Если текст дилиннее строки, то...
 								txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
 						}
 					}
