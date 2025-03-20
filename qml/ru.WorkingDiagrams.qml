@@ -99,7 +99,7 @@ Window {
 		/////////////////////////////
 			id: pgStrWorkingDiagrams
 			visible: false
-			ntWidth: root.ntWidth
+            ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
@@ -132,7 +132,7 @@ Window {
 		/////////////
 			id: pgStrQt
 			visible: false
-			ntWidth: root.ntWidth
+            ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
@@ -437,7 +437,7 @@ Window {
 		/////////////////////
 			id: pgStrOpisanie
 			visible: false
-			ntWidth: root.ntWidth
+            ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok

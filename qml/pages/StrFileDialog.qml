@@ -52,16 +52,14 @@ Item {
         onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedNazad(){//Функция нажатия кнопки Назад или клика папки [..]
-        /*
         if(cppqml.strFileDialogPut === tmFileDialog.strPutDom){//Если каталог совпадает с домашним, то...
             fnClickedZakrit();//Закрываем проводник.
         }
         else{//Противном случае...
-        */
             cppqml.strFileDialog = "[..]";//Назад в папке.
             fnClickedEscape();//Меню сворачиваем
             tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
-        //}
+        }
     }
     function fnClickedZakrit(){
         cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.
@@ -84,18 +82,18 @@ Item {
                 fnClickedNazad();//Функция клика Назад.
             }
         }
-        DCKnopkaZakrit {//@disable-check M300
-            id: knopkaZakrit
+        DCKnopkaInfo {//@disable-check M300
+            id: knopkaInfo
             ntWidth: tmFileDialog.ntWidth
             ntCoff: tmFileDialog.ntCoff
-            visible: true
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.right: tmZagolovok.right
             anchors.margins: tmFileDialog.ntCoff/2
             clrKnopki: tmFileDialog.clrTexta
             clrFona: tmFileDialog.clrFona
-            onClicked: {//Слот сигнала clicked кнопки Создать.
-                fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
+            onClicked: {
+                fnClickedEscape();//Меню сворачиваем
+                tmFileDialog.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
             }
         }
     }
@@ -190,6 +188,20 @@ Item {
     }
     Item {//Данные Тулбар
         id: tmToolbar
+        DCKnopkaZakrit {//@disable-check M300
+            id: knopkaZakrit
+            ntWidth: tmFileDialog.ntWidth
+            ntCoff: tmFileDialog.ntCoff
+            visible: true
+            anchors.verticalCenter: tmToolbar.verticalCenter
+            anchors.left: tmToolbar.left
+            anchors.margins: tmFileDialog.ntCoff/2
+            clrKnopki: tmFileDialog.clrTexta
+            clrFona: tmFileDialog.clrFona
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+                fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
+            }
+        }
         DCKnopkaNastroiki {//@disable-check M300
             id: knopkaNastroiki
             ntWidth: tmFileDialog.ntWidth
@@ -203,21 +215,7 @@ Item {
             onClicked: {
                 menuFileDialog.visible ? menuFileDialog.visible = false : menuFileDialog.visible = true;
             }
-        }
-        DCKnopkaInfo {//@disable-check M300
-            id: knopkaInfo
-            ntWidth: tmFileDialog.ntWidth
-            ntCoff: tmFileDialog.ntCoff
-            anchors.verticalCenter: tmToolbar.verticalCenter
-            anchors.left: tmToolbar.left
-            anchors.margins: tmFileDialog.ntCoff/2
-            clrKnopki: tmFileDialog.clrTexta
-            clrFona: tmFileDialog.clrFona
-            onClicked: {
-                fnClickedEscape();//Меню сворачиваем
-                tmFileDialog.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
-            }
-        }
+        } 
     }
     Component.onCompleted: {//Вызывается при завершении иннициализации компонента.
         tmFileDialog.strPutDom = cppqml.strFileDialogPut;//Запоминаем домашнюю деррикторию.
