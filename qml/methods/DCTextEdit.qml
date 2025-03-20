@@ -12,6 +12,7 @@ Item {
     property color clrBorder: "transparent"//Цвет границы области текста.
     property alias bold: txdTextEdit.font.bold//Жирный текст.
     property alias italic: txdTextEdit.font.italic//Наклонный текст.
+    property real pixelSize: tmTextEdit.ntWidth*tmTextEdit.ntCoff//размер шрифта текста.
     property int  ntWidth: 2
     property int ntCoff: 8
     anchors.fill: parent//Растягиваем область по родителю.
@@ -58,7 +59,7 @@ Item {
 				textFormat: TextEdit.AutoText//Формат текста АВТОМАТИЧЕСКИ определяется. Предпочтителен HTML4.
                 color: "black"//цвет текста
                 text: ""
-                font.pixelSize: tmTextEdit.ntWidth*tmTextEdit.ntCoff//размер шрифта текста.
+                font.pixelSize: tmTextEdit.pixelSize//размер шрифта текста.
                 wrapMode: TextEdit.Wrap//Текст в конце строки переносим на новую строку.
                 readOnly: true
                 focus: true//Фокус на TextEdit

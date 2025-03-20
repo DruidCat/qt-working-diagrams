@@ -52,6 +52,7 @@ Item {
             ntCoff: tmInstrukciya.ntCoff
 			readOnly: true//Запрещено редактировать текст
             textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
+            pixelSize: tmInstrukciya.ntWidth/2*tmInstrukciya.ntCoff//размер шрифта текста в два раза меньше.
             text: 	""//По умолчанию пустая строка.
             radius: tmInstrukciya.ntCoff/4//Радиус возьмём из настроек элемента qml через property
             clrFona: tmInstrukciya.clrFona//Цвет фона рабочей области
