@@ -55,126 +55,140 @@ Item {
                 tmMenu.clickedNazad();//Сигнал нажатия кнопки Назад.
 			}
 		}
-	}
-	Item {
-		id: tmZona
-		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-        DCKnopkaOriginal {//@disable-check M300
-			id: knopkaLogi
-			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-			anchors.top: tmZona.top
-			anchors.left: tmZona.left
-			anchors.right: tmZona.right
-			anchors.margins: tmMenu.ntCoff/2
-			clrKnopki: "slategray"
-			clrTexta: tmMenu.clrTexta
-            text: qsTr("Логи")
-			bold: true
-			italic: true
-			onClicked: {
-                menuMenu.visible = false;//Делаем невидимым меню.
-                tmMenu.clickedLogi();//Сигнал нажатия кнопки Логи.
-			}
-		}
-        DCKnopkaOriginal {//@disable-check M300
-			id: knopkaAvtor
-			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-			anchors.top: knopkaLogi.bottom
-			anchors.left: tmZona.left
-			anchors.right: tmZona.right
-			anchors.margins: tmMenu.ntCoff/2
-			clrKnopki: "slategray"
-			clrTexta: tmMenu.clrTexta
-            text: qsTr("О приложении")
-			bold: true
-			italic: true
-			onClicked: {
-                menuMenu.visible = false;//Делаем невидимым меню.
-                tmMenu.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
-			}
-		}
-        DCKnopkaOriginal {//@disable-check M300
-			id: knopkaSpisok
-			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-			anchors.top: knopkaAvtor.bottom
-			anchors.left: tmZona.left
-			anchors.right: tmZona.right
-			anchors.margins: tmMenu.ntCoff/2
-			clrKnopki: "slategray"
-			clrTexta: tmMenu.clrTexta
-            text: qsTr("Участки")
-			bold: true
-			italic: true
-			onClicked: {//Слот запускающий 
-                menuMenu.visible = false;//Делаем невидимым меню.
-                //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
-				pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
-			}
-		}
-        DCKnopkaOriginal {//@disable-check M300
-            id: knopkaPlan
-			ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-			anchors.top: knopkaSpisok.bottom
-			anchors.left: tmZona.left
-			anchors.right: tmZona.right
-			anchors.margins: tmMenu.ntCoff/2
-			clrKnopki: "slategray"
-			clrTexta: tmMenu.clrTexta
-            text: qsTr("План")
-			bold: true
-			italic: true
-			onClicked: {//Слот запускающий 
-                menuMenu.visible = false;//Делаем невидимым меню.
-                tmMenu.clickedPlan();//Сигнал нажатия кнопки План.
-			}
-		}
-        PathViewSpisok {//@disable-check M300
-			id: pvSpisok
-			visible: false
-			ntWidth: tmMenu.ntWidth
-			ntCoff: tmMenu.ntCoff
-			anchors.left: tmZona.left
-			anchors.right: tmZona.right
-			anchors.bottom: tmZona.bottom
-			anchors.margins: tmMenu.ntCoff
-			clrTexta: tmMenu.clrTexta
-			clrFona: "SlateGray"
-			onSSpisok: function(strSpisok) {
-				pvSpisok.visible = false;
-				knopkaSpisok.text = strSpisok;
-			}
-		}
-        DCKnopkaOriginal {//@disable-check M300
-            id: knopkaQt
-            ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-            anchors.top: knopkaPlan.bottom
-            anchors.left: tmZona.left
-            anchors.right: tmZona.right
-            anchors.margins: tmMenu.ntCoff/2
-            clrKnopki: "slategray"
-            clrTexta: tmMenu.clrTexta
-            text: qsTr("О Qt")
-            bold: true
-            italic: true
-            onClicked: {//Слот запускающий
-				menuMenu.visible = false;//Делаем невидимым меню.
-                tmMenu.clickedQt();//Сигнал нажатия кнопки об Qt.
+	} 
+    Item {
+        id: tmZona
+        clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+        Flickable {//Рабочая Зона скроллинга
+            id: flZona
+            anchors.fill: tmZona//Расстягиваемся по всей рабочей зоне
+            contentWidth: tmZona.width//Ширина контента, который будет вложен равен ширине Рабочей Зоны
+            contentHeight: (tmMenu.ntWidth*tmMenu.ntCoff+8+tmMenu.ntCoff)*6//6 - количество кнопок.
+
+            Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
+                id: rctZona
+                width: tmZona.width
+                height: flZona.contentHeight
+                color: "transparent"
+
+                DCKnopkaOriginal {//@disable-check M300
+                    id: knopkaLogi
+                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    anchors.top: rctZona.top
+                    anchors.left: rctZona.left
+                    anchors.right: rctZona.right
+                    anchors.margins: tmMenu.ntCoff/2
+                    clrKnopki: "slategray"
+                    clrTexta: tmMenu.clrTexta
+                    text: qsTr("Логи")
+                    bold: true
+                    italic: true
+                    onClicked: {
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        tmMenu.clickedLogi();//Сигнал нажатия кнопки Логи.
+                    }
+                }
+                DCKnopkaOriginal {//@disable-check M300
+                    id: knopkaAvtor
+                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    anchors.top: knopkaLogi.bottom
+                    anchors.left: rctZona.left
+                    anchors.right: rctZona.right
+                    anchors.margins: tmMenu.ntCoff/2
+                    clrKnopki: "slategray"
+                    clrTexta: tmMenu.clrTexta
+                    text: qsTr("О приложении")
+                    bold: true
+                    italic: true
+                    onClicked: {
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        tmMenu.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
+                    }
+                }
+                DCKnopkaOriginal {//@disable-check M300
+                    id: knopkaSpisok
+                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    anchors.top: knopkaAvtor.bottom
+                    anchors.left: rctZona.left
+                    anchors.right: rctZona.right
+                    anchors.margins: tmMenu.ntCoff/2
+                    clrKnopki: "slategray"
+                    clrTexta: tmMenu.clrTexta
+                    text: qsTr("Участки")
+                    bold: true
+                    italic: true
+                    onClicked: {//Слот запускающий
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
+                        pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
+                    }
+                }
+                DCKnopkaOriginal {//@disable-check M300
+                    id: knopkaPlan
+                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    anchors.top: knopkaSpisok.bottom
+                    anchors.left: rctZona.left
+                    anchors.right: rctZona.right
+                    anchors.margins: tmMenu.ntCoff/2
+                    clrKnopki: "slategray"
+                    clrTexta: tmMenu.clrTexta
+                    text: qsTr("План")
+                    bold: true
+                    italic: true
+                    onClicked: {//Слот запускающий
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        tmMenu.clickedPlan();//Сигнал нажатия кнопки План.
+                    }
+                }
+                DCKnopkaOriginal {//@disable-check M300
+                    id: knopkaQt
+                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    anchors.top: knopkaPlan.bottom
+                    anchors.left: rctZona.left
+                    anchors.right: rctZona.right
+                    anchors.margins: tmMenu.ntCoff/2
+                    clrKnopki: "slategray"
+                    clrTexta: tmMenu.clrTexta
+                    text: qsTr("О Qt")
+                    bold: true
+                    italic: true
+                    onClicked: {//Слот запускающий
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        tmMenu.clickedQt();//Сигнал нажатия кнопки об Qt.
+                    }
+                }
+                DCKnopkaOriginal {//@disable-check M300
+                    id: knopkaVihod
+                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    anchors.top: knopkaQt.bottom
+                    anchors.left: rctZona.left
+                    anchors.right: rctZona.right
+                    anchors.margins: tmMenu.ntCoff/2
+                    clrKnopki: "slategray"
+                    clrTexta: tmMenu.clrTexta
+                    text: qsTr("Выход")
+                    bold: true
+                    italic: true
+                    onClicked: {//Слот запускающий
+                        Qt.quit();//Закрыть приложение.
+                    }
+                }
             }
         }
-        DCKnopkaOriginal {//@disable-check M300
-            id: knopkaVihod
-            ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-            anchors.top: knopkaQt.bottom
+        PathViewSpisok {//@disable-check M300
+            id: pvSpisok
+            visible: false
+            ntWidth: tmMenu.ntWidth
+            ntCoff: tmMenu.ntCoff
             anchors.left: tmZona.left
             anchors.right: tmZona.right
-            anchors.margins: tmMenu.ntCoff/2
-            clrKnopki: "slategray"
+            anchors.bottom: tmZona.bottom
+            anchors.margins: tmMenu.ntCoff
             clrTexta: tmMenu.clrTexta
-            text: qsTr("Выход")
-            bold: true
-            italic: true
-            onClicked: {//Слот запускающий
-                Qt.quit();//Закрыть приложение.
+            clrFona: "SlateGray"
+            onSSpisok: function(strSpisok) {
+                pvSpisok.visible = false;
+                knopkaSpisok.text = strSpisok;
             }
         }
         DCMenu {//@disable-check M300//Меню отображается в Рабочей Зоне приложения.
