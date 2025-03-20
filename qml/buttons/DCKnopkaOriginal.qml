@@ -43,7 +43,6 @@ Item {
 		MouseArea {
 			id: maKnopkaOriginal
 			anchors.fill: rctKnopkaOriginal
-
 			onClicked: {
 				tmKnopkaOriginal.clicked();
 			}

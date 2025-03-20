@@ -80,8 +80,7 @@ Item {
 
 	MouseArea {
 		id: maKnopkaNastroiki
-		width: tmKnopkaNastroiki.width
-		height:  width
+        anchors.fill: rctKnopkaNastroiki
 		onClicked: {
 			tmKnopkaNastroiki.clicked();
 		}

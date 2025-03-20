@@ -44,7 +44,6 @@ Item{
 			anchors.fill: rctKnopkaKruglaya
 			onClicked: {
 				tmKnopkaKruglaya.clicked();
-				//console.debug(txtKnopkaKruglaya.text.length)
 			}
 		}
 	}

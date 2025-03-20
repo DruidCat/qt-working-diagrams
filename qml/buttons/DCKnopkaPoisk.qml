@@ -65,8 +65,7 @@ Item {
     }
     MouseArea {
         id: maKnopkaPoisk
-        width: tmKnopkaPoisk.width
-        height:  width
+        anchors.fill: rctKnopkaPoisk
         onClicked: {
 			tmKnopkaPoisk.clicked();
         }

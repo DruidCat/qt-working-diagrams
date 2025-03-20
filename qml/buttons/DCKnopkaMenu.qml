@@ -55,8 +55,7 @@ Item{
 
 	MouseArea {
 		id: maKnopkaMenu
-		width: tmKnopkaMenu.width
-        height:  width
+        anchors.fill: rctKnopkaMenu
         onClicked: {
 			tmKnopkaMenu.clicked();
 		}

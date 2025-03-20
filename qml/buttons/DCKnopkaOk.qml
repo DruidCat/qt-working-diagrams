@@ -116,8 +116,7 @@ Item{
 
 	MouseArea {
 		id: maKnopkaOk
-		width: tmKnopkaOk.width
-		height: width
+        anchors.fill: tmKnopkaOk
 		onClicked: {
 			tmKnopkaOk.clicked();
 		}

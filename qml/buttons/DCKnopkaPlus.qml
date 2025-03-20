@@ -49,8 +49,7 @@ Item{
 	}
     MouseArea {
         id: maKnopkaPlus
-        width: tmKnopkaPlus.width
-        height: width
+        anchors.fill: rctKnopkaPlus
         onClicked: {
             tmKnopkaPlus.clicked();
         }
