@@ -345,6 +345,7 @@ Item {
             anchors.margins: tmDannie.ntCoff/2
             clrKnopki: tmDannie.clrTexta
 			clrFona: tmDannie.clrFona
+            blKrug: false//Не круглая кнопка.
             onClicked: {
                 fnClickedSozdat();//Функция нажатия кнопки Создать.
             }
