@@ -74,7 +74,7 @@ Item {
 <p><center>Приложение: <b>РАБОЧИЕ СХЕМЫ.</b></center></p>
 <p><center>Версия: <b>v0.33</b></center></p>
 <p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
-<p><center>Приложение скомпилированно с <b>Qt версии 5.15.16</b></centers></p>
+<p><center>Приложение скомпилированно с <b>Qt версии 6.8.2</b></centers></p>
 <p><center>Лицензия: <b>GPLv3</b></centers></p>
 <p><center>Git URL: <a href=\"https://github.com/DruidCat/qt-working-diagrams\">\
 github.com/DruidCat/qt-working-diagrams</a></center></p>
@@ -118,7 +118,7 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 					<html>
 						<body>
 <p><center><img src = \"/images/Qt_logo_2016.png\"></center></p>
-<p>This program uses Qt version 5.15.16.</p>
+<p>This program uses Qt version 6.8.2.</p>
 <p>Qt is a C++ toolkit for cross-platform application development.</p>
 <p>Qt provides single-source portability across all major desktop operating systems. It is also available \
 for embedded Linux and other embedded and mobile operating systems.</p>
@@ -130,7 +130,7 @@ otherwise cannot comply with the terms of GNU (L)GPL.</p>
 <p>Qt licensed under GNU (L)GPL is appropriate for the development of Qt applications provided you can \
 comply with the terms and conditions of the respective licenses.</p>
 <p>Please see <a href=\"http://qt.io/licensing/\">qt.io/licensing</a> for an overview of Qt licensing.</p>
-<p>Copyright (C) 2023 The Qt Company Ltd and other contributors.</p>
+<p>Copyright (C) 2024 The Qt Company Ltd and other contributors.</p>
 <p>Qt and the Qt logo are trademarks of The Qt Company Ltd.</p>
 <p>Qt is The Qt Company Ltd product developed as an open source project. \
 See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
