@@ -1,5 +1,6 @@
 ﻿#include "cppqml.h"
 
+#include <QTextCodec>//Для Qt6.
 #include <QDebug>
 
 DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
@@ -137,7 +138,16 @@ void DCCppQml::setStrTitul(QString& strTitulNovi) {//Переименовани�
 	else{
 		strTitulNovi = redaktorTexta(strTitulNovi);//Редактируем текст по стандартам приложения.
 		if(m_strTitul != strTitulNovi){//Если имена титулов не совпадают, то...
-			if(m_pDataTitul->renTitul(strTitulNovi))//Если имя Титула записалось успешно, то...
+            qDebug()<<"Титул из windows:" + strTitulNovi;
+            //QTextCodec* codec1251=QTextCodec::codecForName("Windows-1251");
+            //QString textUnicode = codec1251->toUnicode(strTitulNovi.toLocal8Bit());
+
+            QByteArray btrTekst = strTitulNovi.toUtf8();//переводим строчку в QByteArray
+            int ntTekst = btrTekst.size();//Количество символов в тексте.
+            for(int ntShag = 0; ntShag < ntTekst; ntShag++){//Цикл подсчёта точки расширения.
+                    qDebug()<<static_cast<uchar>(btrTekst[ntShag]);
+            }
+            if(m_pDataTitul->renTitul(strTitulNovi))//Если имя Титула записалось успешно, то...
 				emit strTitulChanged();//Излучаем сигнал об изменении аргумента.
 		}
 	}

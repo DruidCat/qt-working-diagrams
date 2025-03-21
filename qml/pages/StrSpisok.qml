@@ -68,6 +68,7 @@ Item {
 	function fnClickedOk(){//Функция сохранения/переименования элемента Списка.
         tmSpisok.signalToolbar("");//Делаем пустую строку в Toolbar.
         if(blZagolovok){//Если изменить имя заголовка, то...
+            console.error("qml: " +txnZagolovok.text);
             cppqml.strTitul = txnZagolovok.text;//Переименовываем Заголовок Списка.
             tmSpisok.signalZagolovok(txnZagolovok.text);//Отображаем Заголовок
         }
