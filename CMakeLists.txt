@@ -20,15 +20,11 @@ set(RES_FILES "${PROJECT_SOURCE_DIR}/icons/ico/ru.WorkingDiagrams.rc")
 # find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql Pdf)
 
 # Удалить Qt5 или Qt6 в зависимости от версии Qt, под которую будет собираться проект.
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Quick Sql Pdf Core5Compat)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Quick Sql Pdf)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql)
 
 if(Qt5_FOUND) # Если Qt5, то ...
 	find_package(Qt5 REQUIRED COMPONENTS Pdf) # Добавляем библиотеку Pdf, в Qt6 её не нужно добавлять.
-endif()
-
-if(Qt6_FOUND) # Если Qt6, то ...
-	find_package(Qt6 REQUIRED COMPONENTS Core5Compat) # Добавляем библиотеку Core5Compat.
 endif()
 # Создаём переменную PROJECT_SOURCES и добавляем в неё файлы *.cpp и *.h
 set(PROJECT_SOURCES
@@ -102,10 +98,6 @@ target_link_libraries(${EXECUTABLE_NAME}
 
 if(Qt5_FOUND) # Если Qt5, то добавляем библиотеку Pdf, в Qt6 её не нужно добавлять.
 	target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Pdf)
-endif()
-
-if(Qt6_FOUND) # Если Qt6, то добавляем библиотеку Core5Compat.
-	target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Core5Compat)
 endif()
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES

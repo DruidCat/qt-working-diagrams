@@ -3,7 +3,7 @@
 #include <QQmlContext> //Библиотека соединяющая через контекст cpp с qml
 #include <QIcon>//Иконки.
 #include <QDebug>//Отладка.
-#include <QTextCodec>//Для Qt6.
+//#include <QTextCodec>//Для Qt6.
 #include <QQuickWindow>
 
 #include "cppqml.h"
