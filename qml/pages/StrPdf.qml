@@ -170,24 +170,29 @@ Item {
         pmpDoc.document = pdfDoc;//Выставляем рабочую сцену.
         if(!ntPdfPage){//Если 0 страница, то рендер будет мгновенный, поэтому...
 			tmPdf.blScale = true;//масштабировать не нужно, сразу на страницу.
-            fnScale();//Выставляем масштаб по ширине или по высоте в зависимости от размера документа.
+            fnScale(false);//Выставляем масштаб по ширине или по высоте в зависимости от размера документа.
         }
     }
-    function fnScale(){//Функция первоначального масштабирования в зависимости от формата pdf документа.
-        console.error("177:fnScale");
-        //pmpDoc.document = pdfDocPustoi;//Переключаюсь на пустую сцену, чтоб обнулить прошлую сцену.
-        //pmpDoc.document = pdfDoc;//переключаемся на работую и обнулённую сцену.
-        var widthRect = tmZona.childrenRect.width;
-        var heightRect = tmZona.childrenRect.height;
-        if(blDocVert){//Если вертикальная страница, то...
-            pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
-        }
-        else{//Если горизонтальная страница, то...
-            pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
-        }
-        var ntScale = pmpDoc.renderScale*100;//Чтоб несколько раз не вызывать, так быстрее.
-        pdfScale.from = ntScale;//Выставляем минимальное значение масштаба по уст. масштабу документа.
-        pdfScale.value = ntScale;//И только после pdfScale.from выставляем значение масштаба в DCScale
+    function fnScale(blScaleSize){//Функция первоначального масштабирования в зависимости от формата pdf документа.
+        console.error("177:fnScale: " + blScaleSize);
+		if(blScaleSize){//Если выбрано масштабирование ручное от пользователя, то...
+			tmrLogo.running = true;//Замускаем таймер анимации логотипа
+			pmpDoc.renderScale = pdfScale.value/100;//Выставляем масштаб из виджета
+			tmrGoToPage.running = true;//Запускаем таймер перехода на страницу после масштабирования.
+		}
+		else{//Если масштабирование автоматическое, то...
+			var widthRect = tmZona.childrenRect.width;
+			var heightRect = tmZona.childrenRect.height;
+			if(blDocVert){//Если вертикальная страница, то...
+				pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
+			}
+			else{//Если горизонтальная страница, то...
+				pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
+			}
+			var ntScale = pmpDoc.renderScale*100;//Чтоб несколько раз не вызывать, так быстрее.
+			pdfScale.from = ntScale;//Выставляем минимальное значение масштаба по уст. масштабу документа.
+			pdfScale.value = ntScale;//И только после pdfScale.from выставляем значение масштаба в DCScale
+		}
     }
     function fnNazad(){//Функция Выхода со страницы, не путать с fnClickedNazad()
         tmPdf.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
@@ -204,7 +209,7 @@ Item {
         repeat:	false
         onTriggered: {
             console.error("206:Timer tmrScale stop");
-            fnScale();//Выставляем масштаб в зависимости от формата pdf документа.
+            fnScale(false);//Выставляем масштаб в зависимости от формата pdf документа.
         }
     }
 	Timer {//Таймер необходим, чтоб pdf документ успел отрендериться, и можно было выставить страницу.
@@ -474,7 +479,7 @@ Item {
 			stepSize: 25
 			scale.cursorVisible: true;//Делаем курсор видимым обязательно.
 			onValueModified:{//Если значение измениловь в DCScale...
-                pmpDoc.renderScale = pdfScale.value/100;
+				fnScale(true);//Масштабируем документ по значению value этого виджета.
 			}	
 		}
 	}
