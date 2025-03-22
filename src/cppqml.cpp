@@ -143,7 +143,7 @@ void DCCppQml::setStrTitul(QString& strTitulNovi) {//Переименовани�
             for(int ntShag = 0; ntShag < ntDlina; ++ntShag) {
                 qDebug()<< ushTitul[ntShag];
             }
-            qDebug()<<(QStringConverter::availableCodecs());
+            //qDebug()<<(QStringConverter::availableCodecs());//Под линукс не работает.
             if(m_pDataTitul->renTitul(strTitulNovi))//Если имя Титула записалось успешно, то...
 				emit strTitulChanged();//Излучаем сигнал об изменении аргумента.
 		}
