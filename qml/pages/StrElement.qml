@@ -208,6 +208,7 @@ Item {
 				anchors.fill: tmTextInput
 				visible: false
                 textInput.readOnly: true;//Запрещено редактировать.
+				blSqlProtect: true//Активируем Sql защиту от ввода нежелательных символов для запроса Sql.
                 clrTexta: tmElement.clrTexta
 				clrFona: "SlateGray"
 				radius: tmElement.ntCoff/2

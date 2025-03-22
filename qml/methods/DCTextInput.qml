@@ -10,6 +10,7 @@ Item {
     property alias clrTexta: txnTextInput.color //цвет текста
     property alias bold: txnTextInput.font.bold
     property alias italic: txnTextInput.font.italic
+	property bool blSqlProtect: false//true - защита от Sql инъекция, прещён ввод определённых символов
     property int  ntWidth: 2
     property int ntCoff: 8
     property alias placeholderText: txtTextInput.text//Текст в строке, подсказывающий, что нужно вводить юзеру
@@ -29,23 +30,21 @@ Item {
 			color: "black"//цвет текста
 			horizontalAlignment: TextInput.AlignHCenter
 			verticalAlignment: TextInput.AlignVCenter
-
+			
 			//TODO Qt6 интерфейс. Закоментировать не нужный.
 
 			validator: RegularExpressionValidator {//Чтоб не было SQL инъекции, запрещены символы ';*%_?\
                 //regularExpression: /[0-9a-zA-Zа-яА-ЯёЁ ~`!@#№$^:&<>,./"(){}|=+-]+/
                 //Если код начинается с ^ [^.....] то это запретить вводить и перечисляются символы.\\ - это \
-				regularExpression: /[^';*%_\\?]+/
+				regularExpression: blSqlProtect ? /[^';*%_\\?]+/ : /.*/
             }
 
 			//TODO Qt5 Интерфейс. Закоментировать не нужный.
-            /*
-            validator: RegExpValidator {//Чтоб не было SQL инъекции, запрещены символы ';*%_?\
+            //validator: RegExpValidator {//Чтоб не было SQL инъекции, запрещены символы ';*%_?\
                 //regExp: /[0-9a-zA-Zа-яА-ЯёЁ ~`!@#№$^:&<>,./"(){}|=+-]+/
                 //Если код начинается с ^ [^.....] то это запретить вводить и перечисляются символы.\\ - это \
-                regExp: /[^';*%_\\?]+/
-            }
-            */
+                //regExp: blSqlProtect ? /[^';*%_\\?]+/ : /.*/
+            //}
             text: ""
             font.pixelSize: tmTextInput.ntWidth*tmTextInput.ntCoff//размер шрифта текста.
 			//font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
@@ -63,8 +62,8 @@ Item {
 				if(event.key === Qt.Key_Escape){
 					tmTextInput.clickedEscape();//Излучаем сигнал о том, что нажат Ecape
 				}
-                if((event.key === 63)||(event.key === 39)||(event.key === 59)||(event.key === 42)
-                   ||(event.key === 37)||(event.key === 95)||(event.key === 92)){
+                if(blSqlProtect&&((event.key === 63)||(event.key === 39)||(event.key === 59)||(event.key === 42)
+                   ||(event.key === 37)||(event.key === 95)||(event.key === 92))){
                     cppqml.strDebug = "Нельза использовать данные символы ? ' ; * % _ \\ ";
                 }
                 //console.log(event.key);
@@ -198,5 +197,5 @@ Item {
 				}
 			}
 		}
-	}
+	}	
 }
