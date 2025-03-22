@@ -55,7 +55,8 @@ Item {
 	}
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-
+			if(txnZagolovok.visible)//Если строка ввода запроса на поиск видима, то...
+				fnClickedZakrit();//Закрываем эту строку
         }
 		if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
             var ntStrDown = pmpDoc.currentPage + 1;
@@ -285,9 +286,23 @@ Item {
             }
         }
     } 
+	function fnClickedPoisk(){//Функция обрабатывающая кнопку Поиск.
+        txnZagolovok.placeholderText = qsTr("ПОИСК");//Подсказка пользователю,что вводить нужно
+        txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
+		console.error("Открываем запрос на поиск");
+	}
+	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
+		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+		console.error("Закрыть");
+	}
+	function fnClickedOk(){//Функция отправить запрос на поиск
+		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+		console.error("Тут я поиском займусь");
+	}
 	Item {
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
+			id: knopkaNazad
 			ntWidth: tmPdf.ntWidth
 			ntCoff: tmPdf.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -298,7 +313,84 @@ Item {
 				cppqml.strDannieStr = pmpDoc.currentPage;//Записываем в БД номер открытой страницы.
         		fnNazad();//Выходим со страницы.        
 			}
-		}
+		}	
+		DCKnopkaZakrit {//@disable-check M300
+            id: knopkaZakrit
+            ntWidth: tmPdf.ntWidth
+            ntCoff: tmPdf.ntCoff
+            visible: false
+            anchors.verticalCenter: tmZagolovok.verticalCenter
+            anchors.left: tmZagolovok.left
+            anchors.margins: tmPdf.ntCoff/2
+            clrKnopki: tmPdf.clrTexta
+            clrFona: tmPdf.clrFona
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+                fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
+            }
+        }
+		Item {
+			id: tmTextInput
+			anchors.top: tmZagolovok.top
+			anchors.bottom: tmZagolovok.bottom
+			anchors.left: knopkaNazad.right
+			anchors.right: knopkaPoisk.left
+			anchors.topMargin: tmPdf.ntCoff/4
+			anchors.bottomMargin: tmPdf.ntCoff/4
+			anchors.leftMargin: tmPdf.ntCoff/2
+			anchors.rightMargin: tmPdf.ntCoff/2
+            DCTextInput {//@disable-check M300
+				id: txnZagolovok
+				ntWidth: tmPdf.ntWidth
+				ntCoff: tmPdf.ntCoff
+				anchors.fill: tmTextInput
+				visible: false
+                textInput.readOnly: true;//Запрещено редактировать.
+                clrTexta: tmPdf.clrTexta
+				clrFona: "SlateGray"
+				radius: tmPdf.ntCoff/2
+				blSqlProtect: false//Отключаем защиту от Sql инъекций, вводить можно любой текст.
+				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
+                textInput.maximumLength: cppqml.untNastroikiMaxLength
+				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
+                    if(txnZagolovok.visible){//Если DCTextInput видимый, то...
+						textInput.readOnly = false;//Можно редактировать.
+                        knopkaNazad.visible = false;//Кнопка назад Невидимая.
+                        knopkaPoisk.visible = false;//Конопка Поиск Невидимая.
+                        knopkaZakrit.visible = true;//Кнопка закрыть Видимая
+                        knopkaOk.visible = true;//Кнопка Ок Видимая.
+                        textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
+                        textInput.focus = true;//Фокусируемся для Android экранной клавиатуры.
+                        textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+					}
+                    else{//Если DCTextInput не видим, то...
+						textInput.readOnly = true;//Запрещено редактировать.
+                        knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
+                        knopkaOk.visible = false;//Кнопка Ок Невидимая.
+                        knopkaNazad.visible = true;//Кнопка назад видимая.
+                        knopkaPoisk.visible = true;//Конопка Поиск Видимая.
+                        txnZagolovok.text = "";//Текст обнуляем вводимый.
+                        knopkaPoisk.focus = true;//Фокус на кнопке Информация, чтоб не работал Enter.
+					}
+				}
+				onClickedEnter: {//слот нажатия кнопки Enter.
+					fnClickedOk();//Функция отправить запрос на поиск
+				}
+			}
+		}	
+		DCKnopkaOk{//@disable-check M300
+			id: knopkaOk
+			ntWidth: tmPdf.ntWidth
+			ntCoff: tmPdf.ntCoff
+			visible: false
+			anchors.verticalCenter: tmZagolovok.verticalCenter
+			anchors.right: tmZagolovok.right
+			anchors.margins: tmPdf.ntCoff/2
+			clrKnopki: tmPdf.clrTexta
+			clrFona: tmPdf.clrFona
+			onClicked: {
+				fnClickedOk();//Функция отправить запрос на поиск
+			}
+		}	
         DCKnopkaPoisk{//@disable-check M300
             id: knopkaPoisk
             ntWidth: tmPdf.ntWidth
@@ -309,12 +401,7 @@ Item {
             clrKnopki: tmPdf.clrTexta
             clrFona: tmPdf.clrFona
             onClicked: {//Слот сигнала clicked кнопки Поиск.
-				console.error("Источник " + pdfDoc.source)
-				console.error("Статус рендера страницы " + pmpDoc.currentPageRenderingStatus)
-				console.error("номер страницы " + pmpDoc.currentPage)
-				console.error("масштаб страницы " + pmpDoc.renderScale)
-				tmrLogo.running = false;	
-                //fnClickedPoisk();//Функция обрабатывающая кнопку Поиск.
+                fnClickedPoisk();//Функция обрабатывающая кнопку Поиск.
             }
         }
         DCPassword{//@disable-check M300
