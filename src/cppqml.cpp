@@ -127,7 +127,7 @@ QString DCCppQml::strTitul() {//Получить имя Титула.
 	m_strTitul = strTitul;
     return m_strTitul;
 }
-void DCCppQml::setStrTitul(QString& strTitulNovi) {//Переименование имени Титула.
+void DCCppQml::setStrTitul(const QString& strTitulNovi) {//Переименование имени Титула.
 ///////////////////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Н И Е   И М Е Н И   Т И Т У Л А---//
 ///////////////////////////////////////////////////////////////
@@ -135,15 +135,8 @@ void DCCppQml::setStrTitul(QString& strTitulNovi) {//Переименовани�
         qdebug(tr("Нельзя переименовывать на пустое имя титула."));
 	}
 	else{
-		strTitulNovi = redaktorTexta(strTitulNovi);//Редактируем текст по стандартам приложения.
+        //TODO strTitulNovi = redaktorTexta(strTitulNovi);//Редактируем текст по стандартам приложения.
 		if(m_strTitul != strTitulNovi){//Если имена титулов не совпадают, то...
-            qDebug()<<"Титул из windows:" + strTitulNovi;
-            const ushort* ushTitul = strTitulNovi.utf16();
-            int ntDlina = strTitulNovi.length();
-            for(int ntShag = 0; ntShag < ntDlina; ++ntShag) {
-                qDebug()<< ushTitul[ntShag];
-            }
-            //qDebug()<<(QStringConverter::availableCodecs());//Под линукс не работает.
             if(m_pDataTitul->renTitul(strTitulNovi))//Если имя Титула записалось успешно, то...
 				emit strTitulChanged();//Излучаем сигнал об изменении аргумента.
 		}

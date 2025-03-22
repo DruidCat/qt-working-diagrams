@@ -113,7 +113,7 @@ public:
     uint 		untNastroikiMaxLength() { return m_untNastroikiMaxLength; }//Максимальная длина строки текста
 
     QString		strTitul();//Получить имя Титула.
-    void		setStrTitul(QString& strTitulNovi);//Изменение имени Титула.
+    void		setStrTitul(const QString& strTitulNovi);//Изменение имени Титула.
     QString		strTitulOpisanie();//Возвращает Описание имени Титула. 
     void		setStrTitulOpisanie(QString& strOpisanieNovi);//Изменить описание титула.
 
