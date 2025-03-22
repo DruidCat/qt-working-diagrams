@@ -296,8 +296,9 @@ Item {
 		console.error("Закрыть");
 	}
 	function fnClickedOk(){//Функция отправить запрос на поиск
+		pskPoisk.text = txnZagolovok.text;//текст присваиваем.
+		pskPoisk.blVisible = true;//Делаем видимым режим поиска
 		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
-		console.error("Тут я поиском займусь");
 	}
 	Item {
 		id: tmZagolovok
@@ -366,10 +367,13 @@ Item {
 						textInput.readOnly = true;//Запрещено редактировать.
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
-                        knopkaNazad.visible = true;//Кнопка назад видимая.
-                        knopkaPoisk.visible = true;//Конопка Поиск Видимая.
-                        txnZagolovok.text = "";//Текст обнуляем вводимый.
-                        knopkaPoisk.focus = true;//Фокус на кнопке Информация, чтоб не работал Enter.
+						if(!pskPoisk.blVisible){//Если не открыли Режим поиска, то...
+							console.error("Режим поиск невидимый");
+							knopkaNazad.visible = true;//Кнопка назад видимая.
+							knopkaPoisk.visible = true;//Конопка Поиск Видимая.
+							knopkaPoisk.focus = true;//Фокус на кнопке Информация, чтоб не работал Enter.
+                        	txnZagolovok.text = "";//Текст обнуляем вводимый.
+						}
 					}
 				}
 				onClickedEnter: {//слот нажатия кнопки Enter.
@@ -391,6 +395,42 @@ Item {
 				fnClickedOk();//Функция отправить запрос на поиск
 			}
 		}	
+		DCPoisk {//@disable-check M300
+            id: pskPoisk
+            anchors.top: tmZagolovok.top
+            anchors.bottom: tmZagolovok.bottom
+            anchors.left: tmZagolovok.left
+            anchors.right: tmZagolovok.right
+
+            anchors.topMargin: tmPdf.ntCoff/4
+            anchors.bottomMargin: tmPdf.ntCoff/4
+            anchors.leftMargin: tmPdf.ntCoff/2
+            anchors.rightMargin: tmPdf.ntCoff/2
+
+            ntWidth: tmPdf.ntWidth
+            ntCoff: tmPdf.ntCoff
+
+            clrFona: "black"//Если не задать цвет, будет видно текст под надписью
+            clrTexta: "yellow"
+            clrKnopki: "yellow"
+            clrBorder: "orange"
+            onClickedNext: function (strKod) {//Слот нажатия кнопки Следующего поиска
+
+			}
+			onClickedPrevious: function (strKod) {//Слот нажатия кнопки Предыдущего поиска
+
+            }
+            onClickedZakrit: {//Слот нажатия кнопки Отмены режима поиска. 
+                pskPoisk.blVisible = false;//Делаем невидимый режим Поиска, и только после этого...
+				txnZagolovok.textInput.readOnly = true;//Запрещено редактировать.
+                knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
+                knopkaOk.visible = false;//Кнопка Ок Невидимая.
+				knopkaNazad.visible = true;//Кнопка назад видимая.
+				knopkaPoisk.visible = true;//Конопка Поиск Видимая.
+				knopkaPoisk.focus = true;//Фокус на кнопке поиск, чтоб не работал Enter.
+                txnZagolovok.text = "";//Текст обнуляем вводимый.
+            }
+        }
         DCKnopkaPoisk{//@disable-check M300
             id: knopkaPoisk
             ntWidth: tmPdf.ntWidth
