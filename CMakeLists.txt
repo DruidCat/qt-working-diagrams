@@ -87,8 +87,10 @@ else()
     endif()
 endif()
 
-# Это новая политика вышедшая с Qt6.6 для Android: https://doc.qt.io/qt-6/qt-cmake-policy-qtp0002.html
-qt_policy(SET QTP0002 NEW)
+if(ANDROID)
+	# Это новая политика вышедшая с Qt6.6 для Android: https://doc.qt.io/qt-6/qt-cmake-policy-qtp0002.html
+	qt_policy(SET QTP0002 NEW)
+endif()
 
 target_link_libraries(${EXECUTABLE_NAME}
         PRIVATE 	Qt${QT_VERSION_MAJOR}::Core
