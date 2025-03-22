@@ -344,7 +344,7 @@ Item {
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.left: tmToolbar.left
             anchors.margins: tmDannie.ntCoff/2
-            clrKnopki: tmDannie.clrTexta
+            clrKnopki: tmDannie.clrFaila//Цвет файлов
 			clrFona: tmDannie.clrFona
             blKrug: false//Не круглая кнопка.
             onClicked: {
