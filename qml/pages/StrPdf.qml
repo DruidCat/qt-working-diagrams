@@ -174,7 +174,7 @@ Item {
             fnScale(false);//Выставляем масштаб по ширине или по высоте в зависимости от размера документа.
         }
     }
-    function fnScale(blScaleSize){//Функция первоначального масштабирования в зависимости от формата pdf документа.
+    function fnScale(blScaleSize){//Функция первоначального масштабирования в зависимости от формата pdf док.
         console.error("177:fnScale: " + blScaleSize);
 		if(blScaleSize){//Если выбрано масштабирование ручное от пользователя, то...
 			tmrLogo.running = true;//Замускаем таймер анимации логотипа
@@ -350,7 +350,6 @@ Item {
 				clrFona: "SlateGray"
 				radius: tmPdf.ntCoff/2
 				blSqlProtect: false//Отключаем защиту от Sql инъекций, вводить можно любой текст.
-				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
