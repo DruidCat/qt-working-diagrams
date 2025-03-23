@@ -306,7 +306,6 @@ Item {
 			pskPoisk.blVisible = true;//Делаем видимым режим поиска
 			txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
 		}
-		
 	}
 	Item {
 		id: tmZagolovok
@@ -466,7 +465,7 @@ Item {
             ntWidth: tmPdf.ntWidth
             ntCoff: tmPdf.ntCoff
 
-            textInput.readOnly: true//запрещаем редактировать.
+			blVisible: false//Невидимый виджет.
 
             clrFona: "black"
             clrFonaPass: "orange"
@@ -489,14 +488,14 @@ Item {
 			onBlVisibleChanged: {//Если видимость изменилась, то...
 				if(pssPassword.blVisible){
                     spbPdfPage.spinBox.readOnly = true;//запрещаем редактировать для Android.
-                    textInput.readOnly = false;//разрешаем редактировать.
-					textInput.focus = true;//обязательно.
-					textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+                    //textInput.readOnly = false;//разрешаем редактировать.
+					//textInput.focus = true;//обязательно.
+					//textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 				}
 				else{
                     spbPdfPage.spinBox.readOnly = false;//разрешаем редактировать для Android.
-                    textInput.readOnly = true;//запрещаем редактировать.
-					textInput.focus = false;//обязательно
+                    //textInput.readOnly = true;//запрещаем редактировать.
+					//textInput.focus = false;//обязательно
 				}
 			}
         }
