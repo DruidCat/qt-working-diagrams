@@ -21,12 +21,34 @@ Item {
     signal clickedPrevious(var strKod);//Сигнал на предыдущий элемент поиска.
     signal clickedZakrit();//Сигнал на отмену поиска.
 
+	function fnClickedVniz() {//Функция обрабатывающая следующий поиск.
+		tmPoisk.clickedNext(tmPoisk.kod);//Сигнал следующего поиска.
+	}
+	function fnClickedVverh() {//Функция обрабатывающая предыдущий поиск.
+		tmPoisk.clickedPrevious(tmPoisk.kod);//Сигнал предыдущего поиска.
+	}
+	function fnClickedZakrit() {//Функция закрытия виджета.
+		tmPoisk.clickedZakrit();//Запускаем сигнал Отмены поиска.
+	}
+
     Rectangle {//Основной прямоугольник.
         id: rctPoisk
         anchors.fill: tmPoisk
         color: "transparent"
         radius: tmPoisk.ntCoff/2
         visible: false
+		focus: blVisible ? true : false //Если видимый виджет, то фокусируемся, чтоб кнопки работали. ВАЖНО!
+
+		Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+			if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
+				fnClickedVniz();//функция следующего поиска.
+				event.accepted = true;//Enter не использовался в сочетания клавишь с другими клавишами
+			}
+			if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
+				fnClickedZakrit();//Функция закрытия виджета.
+			}
+			//console.log(event.key);
+		}
         DCKnopkaZakrit {//@disable-check M300//Кнопка Отмены поиска.
             id: knopkaZakrit
             ntWidth: tmPoisk.ntWidth
@@ -36,7 +58,7 @@ Item {
             anchors.margins: tmPoisk.ntCoff/2
             clrKnopki: tmPoisk.clrKnopki
             onClicked: {
-                tmPoisk.clickedZakrit();//Запускаем сигнал Отмены поиска.
+				fnClickedZakrit();//Функция закрытия виджета.
             }
         }
         Rectangle {
@@ -61,7 +83,7 @@ Item {
                 font.pixelSize: tmPoisk.ntWidth*tmPoisk.ntCoff//размер шрифта текста.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: tmPoisk.text
+                text: tmPoisk.text	
 				onTextChanged: {//Если текст изменился, то...
 					if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
 					for(let ltShag=txtPoisk.font.pixelSize; ltShag<tmPoisk.ntWidth*tmPoisk.ntCoff; ltShag++){
@@ -112,7 +134,7 @@ Item {
             anchors.margins: tmPoisk.ntCoff/2
             clrKnopki: tmPoisk.clrKnopki
             onClicked: {
-                tmPoisk.clickedPrevious(tmPoisk.kod);//Сигнал предыдущего поиска.
+				fnClickedVverh();//Функция обрабатывающая предыдущий поиск.
             }
         }
         DCKnopkaVniz{//@disable-check M300//Кнопка следующего поиска.
@@ -124,7 +146,7 @@ Item {
             anchors.margins: tmPoisk.ntCoff/2
             clrKnopki: tmPoisk.clrKnopki
             onClicked: {
-                tmPoisk.clickedNext(tmPoisk.kod);//Сигнал следующего поиска.
+				fnClickedVniz();//Функция обрабатывающая следующий поиск.
             }
         }
     }
