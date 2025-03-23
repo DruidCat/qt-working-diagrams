@@ -1362,7 +1362,7 @@ void DCDB::ustImyaDB(QString strImyaDB){//Установить имя БД и п
 	bool blPusto = true;//Пусто..
 	static QString sstrImyaDB;//Статическая переменная запоминающая имя БД.
 	if(!strImyaDB.isEmpty()){//Если строчка не пустая а содежжит символы, то...
-		QByteArray btrImyaDB = strImyaDB.toLocal8Bit();//переводим строчку в QByteArray
+        QByteArray btrImyaDB = strImyaDB.toUtf8();//переводим строчку в QByteArray
         for(int ntShag = 0; ntShag < btrImyaDB.size(); ntShag++){//Перебераем по символам строчку.
             if(btrImyaDB[ntShag] != ' '){//Если это не пробел, то...
 				blPusto = false;//Строка не пустая.

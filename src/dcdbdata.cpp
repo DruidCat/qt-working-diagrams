@@ -278,10 +278,10 @@ bool DCDBData::write(QString strPut){//Метод записи Файла в б�
 						/////////////////////////////////////////////////////
 						int ntASCII(0);//В этой переменной будет переводиться символы в число
 						QString strImyaFaila = flnFile.baseName();//Узнаём имя файла, без разширения.
-						QByteArray btrImyaFaila = strImyaFaila.toLocal8Bit();//переводим строчку в QByteArray
+                        QByteArray btrImyaFaila = strImyaFaila.toUtf8();//переводим строчку в QByteArray
 						int ntRazmerImeniFaila = btrImyaFaila.size();//Узнаём размер имени файла
 						QString strSuffix = flnFile.completeSuffix();//Узнаём Полное разширение файла
-						QByteArray btrSuffix = strSuffix.toLocal8Bit();//переводим строчку в QByteArray
+                        QByteArray btrSuffix = strSuffix.toUtf8();//переводим строчку в QByteArray
 						int ntRazmerSuffixa = btrSuffix.size();//Узнаём размер суффикса
 						QString strZapros = " \"Данные_7\" = '"+QString::number(ntRazmerImeniFaila)+"',"
 							+ " \"Данные_8\" = '"+QString::number(ntRazmerSuffixa)+"',";
