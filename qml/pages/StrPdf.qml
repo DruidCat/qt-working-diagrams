@@ -303,7 +303,7 @@ Item {
 		}
 		else{
 			pskPoisk.text = txnZagolovok.text;//текст присваиваем.
-			pskPoisk.blVisible = true;//Делаем видимым режим поиска
+			pskPoisk.visible = true;//Делаем видимым режим поиска
 			txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
 		}
 	}
@@ -373,7 +373,7 @@ Item {
 						textInput.readOnly = true;//Запрещено редактировать.
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
-						if(!pskPoisk.blVisible){//Если не открыли Режим поиска, то...
+						if(!pskPoisk.visible){//Если не открыли Режим поиска, то...
 							console.error("Режим поиск невидимый");
 							knopkaNazad.visible = true;//Кнопка назад видимая.
 							knopkaPoisk.visible = true;//Конопка Поиск Видимая.
@@ -416,7 +416,7 @@ Item {
             ntWidth: tmPdf.ntWidth
             ntCoff: tmPdf.ntCoff
 
-			blVisible: false//Невидимый виджет.
+			visible: false//Невидимый виджет.
 
             clrFona: "black"//Если не задать цвет, будет видно текст под надписью
             clrTexta: "yellow"
@@ -429,7 +429,7 @@ Item {
 
             }
             onClickedZakrit: {//Слот нажатия кнопки Отмены режима поиска. 
-                pskPoisk.blVisible = false;//Делаем невидимый режим Поиска, и только после этого...
+                pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
 				txnZagolovok.textInput.readOnly = true;//Запрещено редактировать.
                 knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                 knopkaOk.visible = false;//Кнопка Ок Невидимая.

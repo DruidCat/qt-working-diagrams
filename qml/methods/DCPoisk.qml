@@ -11,7 +11,6 @@ Item {
     property alias clrTexta: txtPoisk.color//цвет текста
     property color clrKnopki: "red"//цвет Кнопок
     property alias clrBorder: rctText.border.color//цвет границы
-    property bool blVisible: true//Видимый виджет
     property string kod: ""//Код элемента поиска
     property string text: "" //элемент поиска
     property alias bold: txtPoisk.font.bold
@@ -37,7 +36,7 @@ Item {
         color: "transparent"
         radius: root.ntCoff/2
 		visible: {
-			if(root.blVisible){//Если видимый виджет, то...
+			if(root.visible){//Если видимый виджет, то...
 				focus = true;//Фокусируемся.
 				forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 				return true;//Видимый
