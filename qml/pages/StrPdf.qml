@@ -287,7 +287,8 @@ Item {
         }
     } 
 	function fnClickedPoisk(){//Функция обрабатывающая кнопку Поиск.
-        txnZagolovok.placeholderText = qsTr("ПОИСК");//Подсказка пользователю,что вводить нужно
+        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю,что вводить нужно
+ 		txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
         txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
 		console.error("Открываем запрос на поиск");
 	}
@@ -296,9 +297,17 @@ Item {
 		console.error("Закрыть");
 	}
 	function fnClickedOk(){//Функция отправить запрос на поиск
-		pskPoisk.text = txnZagolovok.text;//текст присваиваем.
-		pskPoisk.blVisible = true;//Делаем видимым режим поиска
-		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+		if(cppqml.isPdfPoisk(txnZagolovok.text)){//Если пустой запрос с кучей пробелов, то...
+			txnZagolovok.text = "";//Делаем поле запроса на поиск полностью пустым.
+ 			txnZagolovok.placeholderColor = "#9c3a3a";//Серо красный цвет.
+        	txnZagolovok.placeholderText = qsTr("ПУСТОЙ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
+		}
+		else{
+			pskPoisk.text = txnZagolovok.text;//текст присваиваем.
+			pskPoisk.blVisible = true;//Делаем видимым режим поиска
+			txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+		}
+		
 	}
 	Item {
 		id: tmZagolovok

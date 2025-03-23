@@ -18,7 +18,7 @@ Item {
     property int ntCoff: 8
     property string placeholderTextTrue: ""//Текст в строке, подсказывающий, что нужно вводить юзеру
     property string placeholderTextFalse: ""//Текст в строке,подсказывающий,что нужно вводить юзеру при ошибке
-    property alias clrPlaceHolderText: txtTextInput.color//Цвет текста подсказки
+    property alias placeholderColor: txtTextInput.color//Цвет текста подсказки
 	signal clickedOk(var strPassword);//Сигнал нажатия Enter
 	signal clickedOtmena();//Сигнал нажатия Escape
 

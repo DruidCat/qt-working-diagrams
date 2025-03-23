@@ -667,6 +667,12 @@ void DCCppQml::slotFileDialogCopy(bool blStatusCopy){//Обрабатываем 
     }
     emit blFileDialogCopyChanged();//Излучаем сигнал в QML об изменении статуса копирования Документа.
 }
+bool DCCppQml::isPdfPoisk(const QString strPoisk){//Пустой запрос на поиск?
+///////////////////////////////////////////////////
+//---П У С Т О Й   З А П Р О С   П О И С К А ?---//
+///////////////////////////////////////////////////
+	return m_pdcclass->isEmpty(strPoisk);//Вернёт true или false.
+}
 void DCCppQml::slotDebug(QString strDebug){//Слот обрабатывающий ошибку приходящую по сигналу.
 /////////////////////////////////////////////////////////////
 //---С Л О Т   О Б Р А Б А Т Ы В А Ю Щ И Й   О Ш И Б К У---//

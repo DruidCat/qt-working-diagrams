@@ -162,6 +162,8 @@ public:
     void  		setStrFileDialogModel(const QString& strFileDialogImya);//Принимаем папку или файл.
     bool 		blFileDialogCopy() { return m_blFileDialogCopy; }//Флаг Копирования Документа, инверсируется.
 
+    Q_INVOKABLE bool isPdfPoisk(const QString strPoisk);//Пустой запрос на поиск?
+
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//

@@ -14,7 +14,7 @@ Item {
     property int  ntWidth: 2
     property int ntCoff: 8
     property alias placeholderText: txtTextInput.text//Текст в строке, подсказывающий, что нужно вводить юзеру
-    property alias clrPlaceHolderText: txtTextInput.color//Цвет текста подсказки
+    property alias placeholderColor: txtTextInput.color//Цвет текста подсказки
     anchors.fill: parent
 	signal clickedEnter();//Сигнал нажатия Enter
 	signal clickedEscape();//Сигнал нажатия Escape
