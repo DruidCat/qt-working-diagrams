@@ -273,13 +273,11 @@ Item {
         }
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
-                knopkaPoisk.visible = true;//Делаем нивидимым кнопку поиска.
                 spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
                 pdfScale.visible = false;//Делаем невидимым DCScale
                 pmpDoc.visible = false;//Делаем отображение сцены невидимой.
             }
             else{//Если таймер выключен, то...
-                knopkaPoisk.visible = true;//Делаем видимым кнопку поиска.
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
                 pmpDoc.visible = true;//Делаем отображение сцены видимой.
@@ -491,10 +489,13 @@ Item {
 				if(pssPassword.blVisible){
                     spbPdfPage.spinBox.readOnly = true;//запрещаем редактировать для Android.
                     textInput.readOnly = false;//разрешаем редактировать.
+					textInput.focus = true;//обязательно.
+					textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 				}
 				else{
                     spbPdfPage.spinBox.readOnly = false;//разрешаем редактировать для Android.
                     textInput.readOnly = true;//запрещаем редактировать.
+					textInput.focus = false;//обязательно
 				}
 			}
         }
