@@ -3,7 +3,7 @@
 import "qrc:/qml/buttons"//Импортируем кнопки
 //Шаблон DCPoisk.qml - состоит из области, которая показывает искать в pdf документе.
 Item {
-    id: tmPoisk
+    id: root
     property int  ntWidth: 2
     property int ntCoff: 8
     property alias radius: rctPoisk.radius//Радиус зоны отображения виджета поиска.
@@ -11,7 +11,7 @@ Item {
     property alias clrTexta: txtPoisk.color//цвет текста
     property color clrKnopki: "red"//цвет Кнопок
     property alias clrBorder: rctText.border.color//цвет границы
-    property alias blVisible: rctPoisk.visible//Видимость объекта.
+    property bool blVisible: true//Видимый виджет
     property string kod: ""//Код элемента поиска
     property string text: "" //элемент поиска
     property alias bold: txtPoisk.font.bold
@@ -22,23 +22,31 @@ Item {
     signal clickedZakrit();//Сигнал на отмену поиска.
 
 	function fnClickedVniz() {//Функция обрабатывающая следующий поиск.
-		tmPoisk.clickedNext(tmPoisk.kod);//Сигнал следующего поиска.
+		root.clickedNext(root.kod);//Сигнал следующего поиска.
 	}
 	function fnClickedVverh() {//Функция обрабатывающая предыдущий поиск.
-		tmPoisk.clickedPrevious(tmPoisk.kod);//Сигнал предыдущего поиска.
+		root.clickedPrevious(root.kod);//Сигнал предыдущего поиска.
 	}
 	function fnClickedZakrit() {//Функция закрытия виджета.
-		tmPoisk.clickedZakrit();//Запускаем сигнал Отмены поиска.
+		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
 	}
 
     Rectangle {//Основной прямоугольник.
         id: rctPoisk
-        anchors.fill: tmPoisk
+        anchors.fill: root
         color: "transparent"
-        radius: tmPoisk.ntCoff/2
-        visible: false
-		focus: blVisible ? true : false //Если видимый виджет, то фокусируемся, чтоб кнопки работали. ВАЖНО!
-
+        radius: root.ntCoff/2
+		visible: {
+			if(root.blVisible){//Если видимый виджет, то...
+				focus = true;//Фокусируемся.
+				forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+				return true;//Видимый
+			}
+			else{//Если невидимый виджет, то...
+				focus = false;//Не фокусируемся.
+				return false;//Невидимый
+			}
+		}
 		Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
 			if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
 				fnClickedVniz();//функция следующего поиска.
@@ -51,12 +59,12 @@ Item {
 		}
         DCKnopkaZakrit {//@disable-check M300//Кнопка Отмены поиска.
             id: knopkaZakrit
-            ntWidth: tmPoisk.ntWidth
-            ntCoff: tmPoisk.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: rctPoisk.verticalCenter
             anchors.left:rctPoisk.left
-            anchors.margins: tmPoisk.ntCoff/2
-            clrKnopki: tmPoisk.clrKnopki
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrKnopki
             onClicked: {
 				fnClickedZakrit();//Функция закрытия виджета.
             }
@@ -67,26 +75,26 @@ Item {
             anchors.bottom: rctPoisk.bottom
             anchors.left: knopkaZakrit.right
             anchors.right: knopkaVverh.left
-            anchors.leftMargin: tmPoisk.ntCoff/2
-            anchors.rightMargin: tmPoisk.ntCoff/2
+            anchors.leftMargin: root.ntCoff/2
+            anchors.rightMargin: root.ntCoff/2
 
             color: "transparent"
             border.color: "transparent"
-            border.width: tmPoisk.ntCoff/8
-            radius: tmPoisk.ntCoff/2
+            border.width: root.ntCoff/8
+            radius: root.ntCoff/2
             clip: true//Обрезаем всё что больше этого прямоугольника.
             Text {
                 id: txtPoisk
 				anchors.horizontalCenter: rctText.horizontalCenter
 				anchors.verticalCenter: rctText.verticalCenter
-                color: tmPoisk.clrTexta
-                font.pixelSize: tmPoisk.ntWidth*tmPoisk.ntCoff//размер шрифта текста.
+                color: root.clrTexta
+                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: tmPoisk.text	
+                text: root.text	
 				onTextChanged: {//Если текст изменился, то...
 					if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
-					for(let ltShag=txtPoisk.font.pixelSize; ltShag<tmPoisk.ntWidth*tmPoisk.ntCoff; ltShag++){
+					for(let ltShag=txtPoisk.font.pixelSize; ltShag<root.ntWidth*root.ntCoff; ltShag++){
 							if(txtPoisk.width < rctText.width){//Если длина текста меньше динны строки
 								txtPoisk.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 								if(txtPoisk.width > rctText.width){//Но, если переборщили
@@ -107,7 +115,7 @@ Item {
 			onWidthChanged: {//Если длина строки измениасть, то...
 				if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
 				for(let ltShag=txtPoisk.font.pixelSize;
-												ltShag<tmPoisk.ntWidth*tmPoisk.ntCoff; ltShag++){
+												ltShag<root.ntWidth*root.ntCoff; ltShag++){
 						if(txtPoisk.width < rctText.width){//Если длина текста меньше динны строки
 							txtPoisk.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 							if(txtPoisk.width > rctText.width){//Но, если переборщили
@@ -127,24 +135,24 @@ Item {
         }
 		DCKnopkaVverh{//@disable-check M300//Кнопка предыдущего поиска
             id: knopkaVverh
-            ntWidth: tmPoisk.ntWidth
-            ntCoff: tmPoisk.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: rctPoisk.verticalCenter
             anchors.right: knopkaVniz.left
-            anchors.margins: tmPoisk.ntCoff/2
-            clrKnopki: tmPoisk.clrKnopki
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrKnopki
             onClicked: {
 				fnClickedVverh();//Функция обрабатывающая предыдущий поиск.
             }
         }
         DCKnopkaVniz{//@disable-check M300//Кнопка следующего поиска.
             id: knopkaVniz
-            ntWidth: tmPoisk.ntWidth
-            ntCoff: tmPoisk.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: rctPoisk.verticalCenter
             anchors.right: rctPoisk.right
-            anchors.margins: tmPoisk.ntCoff/2
-            clrKnopki: tmPoisk.clrKnopki
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrKnopki
             onClicked: {
 				fnClickedVniz();//Функция обрабатывающая следующий поиск.
             }

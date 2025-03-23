@@ -416,6 +416,8 @@ Item {
             ntWidth: tmPdf.ntWidth
             ntCoff: tmPdf.ntCoff
 
+			blVisible: false//Невидимый виджет.
+
             clrFona: "black"//Если не задать цвет, будет видно текст под надписью
             clrTexta: "yellow"
             clrKnopki: "yellow"
