@@ -114,52 +114,52 @@ public:
 
     QString		strTitul();//Получить имя Титула.
     void		setStrTitul(const QString& strTitulNovi);//Изменение имени Титула.
-    QString		strTitulOpisanie();//Возвращает Описание имени Титула. 
-    void		setStrTitulOpisanie(QString& strOpisanieNovi);//Изменить описание титула.
+    QString		strTitulOpisanie();//Возвращает Описание имени Титула.
+    void		setStrTitulOpisanie(const QString& strOpisanieNovi);//Изменить описание титула.
 
     QString		strSpisok();//Получить элемента Списка.
-    void		setStrSpisok (QString& strSpisokNovi);//Изменение элемента списка.
+    void		setStrSpisok (const QString& strSpisokNovi);//Изменение элемента списка.
     Q_INVOKABLE bool delStrSpisok(QString strSpisokKod);//Удалить Список по коду.
     QString		strSpisokDB();//Возвратить JSON строку Списка.
-    void		setStrSpisokDB(QString& strSpisokNovi);//Изменение JSON запроса Списка.
+    void		setStrSpisokDB(const QString& strSpisokNovi);//Изменение JSON запроса Списка.
 	Q_INVOKABLE bool renStrSpisokDB(QString strSpisok, QString strSpisokNovi);//Переимен. элемент Списка
     quint64		ullSpisokKod();//Возвращает Код элемента Списка.
-    void		setUllSpisokKod(quint64 ullSpisokKodNovi);//Изменить Код списка.
+    void		setUllSpisokKod(const quint64 ullSpisokKodNovi);//Изменить Код списка.
     QString		strSpisokOpisanie();//Возвращает Описание элемента Списка
-    void		setStrSpisokOpisanie(QString& strOpisanieNovi);//Изменить описание списка.
+    void		setStrSpisokOpisanie(const QString& strOpisanieNovi);//Изменить описание списка.
     bool 		blSpisokPervi() { return m_blSpisokPervi; }//Возвращает флаг Первый в Списке?
 
     QString		strElement();//Возвратить элемент.
-    void		setStrElement(QString& strElementNovi);//Измененит Элемент.
+    void		setStrElement(const QString& strElementNovi);//Измененит Элемент.
     Q_INVOKABLE bool delStrElement(QString strElementKod);//Удалить Элемент по коду.
     QString		strElementDB();//Возвратить JSON строку элемента.
-    void		setStrElementDB(QString& strElementNovi);//Изменение JSON запроса Элемента.
+    void		setStrElementDB(const QString& strElementNovi);//Изменение JSON запроса Элемента.
     Q_INVOKABLE bool renStrElementDB(QString strElement, QString strElementNovi);//Переимен. Элемент списка
     quint64		ullElementKod();//Возвращает Код Элемента.
-    void		setUllElementKod(quint64 ullElementKodNovi);//Изменить Код Элемента.
+    void		setUllElementKod(const quint64 ullElementKodNovi);//Изменить Код Элемента.
     QString		strElementOpisanie();//Возвращает Описание Элемента
-    void		setStrElementOpisanie(QString& strOpisanieNovi);//Изменить описание Элемента.
+    void		setStrElementOpisanie(const QString& strOpisanieNovi);//Изменить описание Элемента.
     bool 		blElementPervi() { return m_blElementPervi; }//Возвращает флаг Первый Элемент?
 
     QString		strDannie();//Возвратить Данные.
-    void		setStrDannie(QString& strDannieNovi);//Измененит Данные.
+    void		setStrDannie(const QString& strDannieNovi);//Измененит Данные.
     Q_INVOKABLE bool delStrDannie(QString strDannieKod);//Удалить Данные по коду.
     QString		strDannieDB();//Возвратить JSON строку Данных.
-    void		setStrDannieDB(QString& strDannieNovi);//Изменение JSON запроса Данных.
+    void		setStrDannieDB(const QString& strDannieNovi);//Изменение JSON запроса Данных.
     Q_INVOKABLE bool renStrDannieDB(QString strDannie, QString strDannieNovi);//Переименоваовать Данные.
     quint64		ullDannieKod();//Возвращает Код Данных.
-    void		setUllDannieKod(quint64 ullDannieKodNovi);//Изменить Код Данных.
+    void		setUllDannieKod(const quint64 ullDannieKodNovi);//Изменить Код Данных.
     QString		strDannieStr();//Возвратить номер страницы Документа из БД.
-    void		setStrDannieStr(QString& strDannieStrNovi);//Изменение номера страницы Документа.
+    void		setStrDannieStr(const QString& strDannieStrNovi);//Изменение номера страницы Документа.
 	QString 	strDannieUrl();//Возвращаем Url путь с именем файла.
     bool 		blDanniePervi() { return m_blDanniePervi; }//Возвращает флаг Первые Данные?
 
     QString		strFileDialog();//Возвратить JSON строку с папками и файлами.
-    void		setStrFileDialog(QString& strFileDialogNovi);//Изменение JSON запроса с папками и файлами.
+    void		setStrFileDialog(const QString& strFileDialogNovi);//Изменение JSON запроса с папками и файлами.
     QString		strFileDialogPut();//Возвратить путь папки, содержимое которой нужно отобразить.
-    void		setStrFileDialogPut(QString& strFileDialogPutNovi);//Изменение отображаемого пути папки.
+    void		setStrFileDialogPut(const QString& strFileDialogPutNovi);//Изменение отображаемого пути папки.
     QString 	strFileDialogModel() { return m_strFileDialogModel; }//Возвращаем 0-папка или 1-файл.
-    void  		setStrFileDialogModel(QString& strFileDialogImya);//Принимаем папку или файл.
+    void  		setStrFileDialogModel(const QString& strFileDialogImya);//Принимаем папку или файл.
     bool 		blFileDialogCopy() { return m_blFileDialogCopy; }//Флаг Копирования Документа, инверсируется.
 
     QString		strDebug();//Возвращает ошибку.

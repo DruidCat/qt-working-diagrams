@@ -135,9 +135,9 @@ void DCCppQml::setStrTitul(const QString& strTitulNovi) {//Переименов�
         qdebug(tr("Нельзя переименовывать на пустое имя титула."));
 	}
 	else{
-        //TODO strTitulNovi = redaktorTexta(strTitulNovi);//Редактируем текст по стандартам приложения.
-		if(m_strTitul != strTitulNovi){//Если имена титулов не совпадают, то...
-            if(m_pDataTitul->renTitul(strTitulNovi))//Если имя Титула записалось успешно, то...
+        QString strTitulRed = redaktorTexta(strTitulNovi);//Редактируем текст по стандартам приложения.
+        if(m_strTitul != strTitulRed){//Если имена титулов не совпадают, то...
+            if(m_pDataTitul->renTitul(strTitulRed))//Если имя Титула записалось успешно, то...
 				emit strTitulChanged();//Излучаем сигнал об изменении аргумента.
 		}
 	}
@@ -150,14 +150,14 @@ QString DCCppQml::strTitulOpisanie() {//Получить описание Тит
 	m_strTitulOpisanie = strTitulOpisanie;
     return m_strTitulOpisanie;
 }
-void DCCppQml::setStrTitulOpisanie(QString& strTitulOpisanieNovi) {//Переименование описание Титула.
+void DCCppQml::setStrTitulOpisanie(const QString& strTitulOpisanieNovi) {//Переименование описание Титула.
 /////////////////////////////////////////////////////////////////////
 //---П Е Р Е И М Е Н О В А Н И Е   О П И С А Н И Е   Т И Т У Л А---//
 /////////////////////////////////////////////////////////////////////
-    strTitulOpisanieNovi = m_pdcclass->sql_encode(strTitulOpisanieNovi);//Удаляем sql инекции.
-    if(m_strTitulOpisanie != strTitulOpisanieNovi){//Если описание титулов не совпадают, то...
-        if(m_pDataTitul->renTitulOpisanie(strTitulOpisanieNovi)){//Если описание Титула записалось успешно
-            m_strTitulOpisanie = strTitulOpisanieNovi;
+    QString strTitulOpisanieRed = m_pdcclass->sql_encode(strTitulOpisanieNovi);//Удаляем sql инекции.
+    if(m_strTitulOpisanie != strTitulOpisanieRed){//Если описание титулов не совпадают, то...
+        if(m_pDataTitul->renTitulOpisanie(strTitulOpisanieRed)){//Если описание Титула записалось успешно
+            m_strTitulOpisanie = strTitulOpisanieRed;
             qdebug(tr("Новоя запись в описании заголовка."));
             emit strTitulOpisanieChanged();//Излучаем сигнал об изменении аргумента.
         }
@@ -169,7 +169,7 @@ QString DCCppQml::strSpisok() {//Получить элемента Списка.
 ///////////////////////////////////////////////////////
     return m_strSpisok;
 }
-void DCCppQml::setStrSpisok(QString& strSpisokNovi) {//Изменение элемента списка.
+void DCCppQml::setStrSpisok(const QString& strSpisokNovi) {//Изменение элемента списка.
 ///////////////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   Э Л Е М Е Н Т А   С П И С К А---//
 ///////////////////////////////////////////////////////////
@@ -222,22 +222,22 @@ QString DCCppQml::strSpisokDB() {//Возвратить JSON строку Спи
     m_blSpisokPervi = m_pDataSpisok->polSpisokPervi();//Первый в списке или нет? Строчка обязательна тут.
     return m_strSpisokDB;//И только после этого возвращаем её, это важно.
 }
-void DCCppQml::setStrSpisokDB(QString& strSpisokNovi) {//Запись элемента Списка в БД.
+void DCCppQml::setStrSpisokDB(const QString& strSpisokNovi) {//Запись элемента Списка в БД.
 /////////////////////////////////////////////////////
 //---З А П И С Ь   Э Л Е М Е Н Т А   С П И С К А---//
 /////////////////////////////////////////////////////
 	if(m_pdcclass->isEmpty(strSpisokNovi))//Если пустая строка, то...
 		qdebug("Нельзя сохранять пустые элементы списка.");
 	else{
-		strSpisokNovi = redaktorTexta(strSpisokNovi);//Редактируем текст по стандартам приложения.
+        QString strSpisokRed = redaktorTexta(strSpisokNovi);//Редактируем текст по стандартам приложения.
 		QStringList slsSpisok = m_pDataSpisok->polSpisok();//Получить список всех элементов Списка.
         for(int ntShag = 0; ntShag<slsSpisok.size(); ntShag++){//Проверка на одинаковые имена элементов
-            if(slsSpisok[ntShag] == strSpisokNovi){
+            if(slsSpisok[ntShag] == strSpisokRed){
                 qdebug(tr("Нельзя сохранять одинаковые элементы списка."));
 				return;
 			}
 		}
-		if(m_pDataSpisok->ustSpisok(strSpisokNovi)){//Если элемент списка записался успешно, то...
+        if(m_pDataSpisok->ustSpisok(strSpisokRed)){//Если элемент списка записался успешно, то...
         	emit strSpisokDBChanged();//Излучаем сигнал об изменении аргумента.
 		}
 	}
@@ -272,7 +272,7 @@ quint64 DCCppQml::ullSpisokKod(){//Возвращает Код элемента 
 ///////////////////////////////////////////////
 	return m_ullSpisokKod;
 }
-void DCCppQml::setUllSpisokKod(quint64 ullSpisokKodNovi){//Изменить код списка.
+void DCCppQml::setUllSpisokKod(const quint64 ullSpisokKodNovi){//Изменить код списка.
 ///////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   К О Д   С П И С К А---//
 ///////////////////////////////////////////////////
@@ -297,14 +297,14 @@ QString DCCppQml::strSpisokOpisanie(){//Возвращает Описание э
 	}
 	return m_strSpisokOpisanie;//Возвращаем считаное или не считаное из БД Описание.
 }
-void DCCppQml::setStrSpisokOpisanie(QString& strSpisokOpisanieNovi){//Изменить описание списка.
+void DCCppQml::setStrSpisokOpisanie(const QString& strSpisokOpisanieNovi){//Изменить описание списка.
 ///////////////////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   О П И С А Н И Я   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////////////////////////////
-    strSpisokOpisanieNovi = m_pdcclass->sql_encode(strSpisokOpisanieNovi);//Удаляем sql инекции.
-    if(strSpisokOpisanieNovi != m_strSpisokOpisanie){//Если Описания разные, то...
-		if(m_pDataSpisok->ustSpisokOpisanie(m_ullSpisokKod, strSpisokOpisanieNovi)){//Записалось Описание,то
-			m_strSpisokOpisanie = strSpisokOpisanieNovi;//Новое описание присвоили.
+    QString strSpisokOpisanieRed = m_pdcclass->sql_encode(strSpisokOpisanieNovi);//Удаляем sql инекции.
+    if(strSpisokOpisanieRed != m_strSpisokOpisanie){//Если Описания разные, то...
+        if(m_pDataSpisok->ustSpisokOpisanie(m_ullSpisokKod, strSpisokOpisanieRed)){//Записалось Описание,то
+            m_strSpisokOpisanie = strSpisokOpisanieRed;//Новое описание присвоили.
             qdebug("Новоя запись в описании списка.");
 			emit strSpisokOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
@@ -316,7 +316,7 @@ QString DCCppQml::strElement() {//Получить элемент.
 /////////////////////////////////////////
     return m_strElement;
 }
-void DCCppQml::setStrElement(QString& strElementNovi) {//Изменение элемента.
+void DCCppQml::setStrElement(const QString& strElementNovi) {//Изменение элемента.
 /////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   Э Л Е М Е Н Т А---//
 /////////////////////////////////////////////
@@ -353,22 +353,22 @@ QString DCCppQml::strElementDB() {//Возвратить JSON строку Эл�
 	m_blElementPervi = m_pDataElement->polElementPervi();//Первый элемент или нет? Строчка обязательна тут.
     return m_strElementDB;//И только после этого возвращаем её, это важно.
 }
-void DCCppQml::setStrElementDB(QString& strElementNovi) {//Запись Элемента в БД.
+void DCCppQml::setStrElementDB(const QString& strElementNovi) {//Запись Элемента в БД.
 ///////////////////////////////////////
 //---З А П И С Ь   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////
 	if(m_pdcclass->isEmpty(strElementNovi))//Если пустая строка, то...
         qdebug(tr("Нельзя сохранять пустой элемент."));
 	else{
-		strElementNovi = redaktorTexta(strElementNovi);//Редактируем текст по стандартам приложения.
+        QString strElementRed = redaktorTexta(strElementNovi);//Редактируем текст по стандартам приложения.
         QStringList slsElement = m_pDataElement->polElement(m_ullSpisokKod);//Получить список всех Элементов.
         for(int ntShag = 0; ntShag<slsElement.size(); ntShag++){//Проверка на одинаковые имена элементо
-            if(slsElement[ntShag] == strElementNovi){
+            if(slsElement[ntShag] == strElementRed){
                 qdebug(tr("Нельзя сохранять одинаковые элементы."));
 				return;
 			}
 		}
-		if(m_pDataElement->ustElement(m_ullSpisokKod, strElementNovi)){//Если элемент списка записался успешно
+        if(m_pDataElement->ustElement(m_ullSpisokKod, strElementRed)){//Если элемент списка записался успешно
         	emit strElementDBChanged();//Излучаем сигнал об изменении списка Элементов.
 		}
     }
@@ -403,7 +403,7 @@ quint64 DCCppQml::ullElementKod(){//Возвращает Код Элемента
 ///////////////////////////////////////////////////
 	return m_ullElementKod;
 }
-void DCCppQml::setUllElementKod(quint64 ullElementKodNovi){//Изменить код Элемента.
+void DCCppQml::setUllElementKod(const quint64 ullElementKodNovi){//Изменить код Элемента.
 ///////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   К О Д   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////////////////////
@@ -430,14 +430,14 @@ QString DCCppQml::strElementOpisanie(){//Возвращает Описание �
 	}
 	return m_strElementOpisanie;//Возвращаем считаное или не считаное из БД Описание.
 }
-void DCCppQml::setStrElementOpisanie(QString& strElementOpisanieNovi){//Изменить описание Элемента.
+void DCCppQml::setStrElementOpisanie(const QString& strElementOpisanieNovi){//Изменить описание Элемента.
 ///////////////////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   О П И С А Н И Я   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////////////////////////////
-    strElementOpisanieNovi = m_pdcclass->sql_encode(strElementOpisanieNovi);//Удаляем sql инекции.
-    if(strElementOpisanieNovi != m_strElementOpisanie){//Если Описания разные, то...
-		if(m_pDataElement->ustElementOpisanie(m_ullSpisokKod, m_ullElementKod, strElementOpisanieNovi)){
-			m_strElementOpisanie = strElementOpisanieNovi;//Новое описание присвоили.
+    QString strElementOpisanieRed = m_pdcclass->sql_encode(strElementOpisanieNovi);//Удаляем sql инекции.
+    if(strElementOpisanieRed != m_strElementOpisanie){//Если Описания разные, то...
+        if(m_pDataElement->ustElementOpisanie(m_ullSpisokKod, m_ullElementKod, strElementOpisanieRed)){
+            m_strElementOpisanie = strElementOpisanieRed;//Новое описание присвоили.
             qdebug(tr("Новоя запись в описании элемента."));
 			emit strElementOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
@@ -449,7 +449,7 @@ QString DCCppQml::strDannie(){//Получить Данные.
 ///////////////////////////////////////
     return m_strDannie;
 }
-void DCCppQml::setStrDannie(QString& strDannieNovi) {//Изменение Данных.
+void DCCppQml::setStrDannie(const QString& strDannieNovi) {//Изменение Данных.
 /////////////////////////////////////////
 //---И З М Е Н Е Н И Е   Д А Н Н Ы Х---//
 /////////////////////////////////////////
@@ -475,7 +475,7 @@ QString DCCppQml::strDannieDB() {//Возвратить JSON строку с Д�
     m_blDanniePervi = m_pDataDannie->polDanniePervi();//Первые Данные или нет? Строчка обязательна тут.
     return m_strDannieDB;//И только после этого возвращаем её, это важно.
 }
-void DCCppQml::setStrDannieDB(QString& strImyaFaila) {//Запись Данных в БД.
+void DCCppQml::setStrDannieDB(const QString& strImyaFaila) {//Запись Данных в БД.
 ///////////////////////////////////
 //---З А П И С Ь   Д А Н Н Ы Х---//
 ///////////////////////////////////
@@ -528,7 +528,7 @@ quint64 DCCppQml::ullDannieKod(){//Возвращает Код Данных.
 ///////////////////////////////////////////////
     return m_ullDannieKod;
 }
-void DCCppQml::setUllDannieKod(quint64 ullDannieKodNovi){//Изменить код Данных.
+void DCCppQml::setUllDannieKod(const quint64 ullDannieKodNovi){//Изменить код Данных.
 ///////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   К О Д   Д А Н Н Ы Х---//
 ///////////////////////////////////////////////////
@@ -548,7 +548,7 @@ QString	DCCppQml::strDannieStr(){//Возвратить номер страни�
 	m_strDannieStr = m_pDataDannie->polDannieStr(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod);//Номер стр.
 	return m_strDannieStr;//Возвращаем номер страницы Документа.
 }
-void DCCppQml::setStrDannieStr(QString& strDannieStrNovi){//Изменение номера страницы Документа.
+void DCCppQml::setStrDannieStr(const QString& strDannieStrNovi){//Изменение номера страницы Документа.
 /////////////////////////////////////////////////////////
 //---И З М Е Н И Т Ь   Н О М Е Р   Д О К У М Е Н Т А---//
 /////////////////////////////////////////////////////////
@@ -583,7 +583,7 @@ QString DCCppQml::strFileDialog() {//Возвратить JSON строку с �
     m_strFileDialog = m_pFileDialog->polSpisokJSON();//Возвратить список папок и файлов в JSON. Или имя файла.
     return m_strFileDialog;//Возвратить список папок и файлов в формате JSON. Или Имя выбранного файла.
 }
-void DCCppQml::setStrFileDialog(QString& strFileDialogNovi) {//Изменение JSON запроса с папками и файлами.
+void DCCppQml::setStrFileDialog(const QString& strFileDialogNovi) {//Изменение JSON запроса с папками и файлам
 /////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   F I L E D I A L O G---//
 /////////////////////////////////////////////////
@@ -600,7 +600,7 @@ QString DCCppQml::strFileDialogPut() {//Возвратить путь отобр
 	m_pDataDannie->ustFileDialogPut(m_strFileDialogPut);//Задаём путь к каталогу, где лежит файл для записи.
     return m_strFileDialogPut;//Возвратить путь отображения содержимого папки.
 }
-void DCCppQml::setStrFileDialogPut(QString& strFileDialogPutNovi){//Записываем новый путь отображения папки.
+void DCCppQml::setStrFileDialogPut(const QString& strFileDialogPutNovi){//Запис. новый путь отображения папки.
 ///////////////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   П У Т Ь   F I L E D I A L O G---//
 ///////////////////////////////////////////////////////////
@@ -610,7 +610,7 @@ void DCCppQml::setStrFileDialogPut(QString& strFileDialogPutNovi){//Записы
         emit strFileDialogPutChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
-void DCCppQml::setStrFileDialogModel(QString &strFileDialogImya){//Принимаем папку или файл.
+void DCCppQml::setStrFileDialogModel(const QString &strFileDialogImya){//Принимаем папку или файл.
 /////////////////////////////////////
 //---П А П К А   И Л И   Ф А Й Л---//
 /////////////////////////////////////
