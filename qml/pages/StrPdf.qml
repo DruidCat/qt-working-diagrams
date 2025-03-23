@@ -8,7 +8,7 @@ import "qrc:/qml/buttons"//Импортируем кнопки
 import "qrc:/qml/methods"//Импортируем методы написанные мной.
 //Страница просмотра PDF документов.
 Item {
-	id: tmPdf
+	id: root
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -42,14 +42,14 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
 	onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
-		if(tmPdf.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
-			tmPdf.blStartWidth = false;//Взводим флаг на оброботку размера.
+		if(root.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
+			root.blStartWidth = false;//Взводим флаг на оброботку размера.
 		else
             fnTimerAppSize();//Запускаем таймер.
 	}
 	onHeightChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
-		if(tmPdf.blStartHeight)//Окно открылось, не обрабатываем сигнал об изменении..
-			tmPdf.blStartHeight = false;//Взводим флаг на оброботку размера.
+		if(root.blStartHeight)//Окно открылось, не обрабатываем сигнал об изменении..
+			root.blStartHeight = false;//Взводим флаг на оброботку размера.
 		else
             fnTimerAppSize();//Запускаем таймер.
 	}
@@ -72,7 +72,7 @@ Item {
 		//cppqml.strDebug = event.key;
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: tmPdf
+        anchors.fill: root
         //onClicked:
     }	
 	function fnPdfOtkrit(){//Функция открытия Pdf документа.
@@ -90,31 +90,31 @@ Item {
     }
     function fnPdfDocStatus() {//Статус после открытия документа pdf.
 		console.error("91:fnPdfDocStatus: " + pdfDoc.status);
-        if(tmPdf.blPustoi){//Если открывается пустой pdf документ. Именно тут вызываем. ЭТО ВАЖНО!
-            tmPdf.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
-            tmPdf.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
-            if(!tmPdf.blError){//Если не был взведён флаг, то...
-                tmPdf.blError = true;//Взводим флаг для Статуса ошибки, чтоб таймер ошибки не взводился.
+        if(root.blPustoi){//Если открывается пустой pdf документ. Именно тут вызываем. ЭТО ВАЖНО!
+            root.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
+            root.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
+            if(!root.blError){//Если не был взведён флаг, то...
+                root.blError = true;//Взводим флаг для Статуса ошибки, чтоб таймер ошибки не взводился.
 				console.error("97:fnPdfDocStatus: перехожу к Данным сворачия проигрыватель.");
-                tmPdf.clickedNazad();//Сигнал нажатия кнопки Назад.
+                root.clickedNazad();//Сигнал нажатия кнопки Назад.
             }
         }
         else{//Если это не пустой документ, обрабатываем статусы.
             if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
                 console.error("103:fnPdfDocStatus Error. ");
-                if(!tmPdf.blError)//Если не был взведён флаг, то...
+                if(!root.blError)//Если не был взведён флаг, то...
                     tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
             }
             else{//Если не ошибка, то...
                 if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
-					if(tmPdf.blPustoi){//Если открылся пустой документ, то...
-                    	tmPdf.blOpen = false;//Документ не нужно в прерывании обрабатывать.
-						tmPdf.blPustoi = false;//сбрасываем флаг.
+					if(root.blPustoi){//Если открылся пустой документ, то...
+                    	root.blOpen = false;//Документ не нужно в прерывании обрабатывать.
+						root.blPustoi = false;//сбрасываем флаг.
 					}
 					else//Если это рабочий документ, то...
-                    	tmPdf.blOpen = true;//Документ открылся.
+                    	root.blOpen = true;//Документ открылся.
                     cppqml.strDebug = "";//Документ открыт, в тулбар не должно быть никаких надписей.
-                    pssPassword.blVisible = false;//Документ открылся, невидимым поле ввода пароля делаем тут.
+                    pssPassword.visible = false;//Документ открылся, невидимым поле ввода пароля делаем тут.
                     console.error("117:fnPdfDocStatus Ready");
                 }
             }
@@ -126,16 +126,16 @@ Item {
 		}
         if(pmpDoc.currentPageRenderingStatus === Image.Ready){//Статус рендеринга страницы ОТКРЫТ.
             console.error("127:Статус рендера страницы: "+ pmpDoc.currentPage +" Открыт.");
-            if(tmPdf.blOpen){//Если это рендер страницы после открытия документа, то.
-                console.error("129:RenderPage Ready. blScale: " + tmPdf.blScale);
-                if(!tmPdf.blScale){//Если стартового масштабирование не было, то...
-                    tmPdf.blScale = true;//Активируем флаг, что началось первичное масштабирование.
+            if(root.blOpen){//Если это рендер страницы после открытия документа, то.
+                console.error("129:RenderPage Ready. blScale: " + root.blScale);
+                if(!root.blScale){//Если стартового масштабирование не было, то...
+                    root.blScale = true;//Активируем флаг, что началось первичное масштабирование.
                     console.error("132:Timer tmrScale start");
                     tmrScale.running = true;//запускаем таймер, перед переходом на страницу
                 }
                 else{//Если первичное масштабирование произошло, то...
-                    tmPdf.blOpen = false;//сбрасываем флаг открытия документа.
-                    tmPdf.blScale = false;//Сбрасываем флаг масштабирование первичного.
+                    root.blOpen = false;//сбрасываем флаг открытия документа.
+                    root.blScale = false;//Сбрасываем флаг масштабирование первичного.
                     console.error("138:Timer tmrGoToPage start");
                     tmrGoToPage.running = true;//запускаем таймер, перед переходом на страницу
                 }
@@ -145,16 +145,16 @@ Item {
 	function fnPdfGoToPage(ntPage){//Функция обрабатывающая переход на новую страницу документа.
         console.error("145:fnPdfGoToPage Номер страницы: " + ntPage);
         pmpDoc.goToLocation(ntPage, Qt.point(0, 0), pmpDoc.renderScale);//Переходим на страницу.
-		tmPdf.blSize = false;//Готов к изменению размера приложения.
+		root.blSize = false;//Готов к изменению размера приложения.
         tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
-        tmPdf.blLogoTMK = false;//Делаем флаг анимации логотипа ТМК на уменьшение.
+        root.blLogoTMK = false;//Делаем флаг анимации логотипа ТМК на уменьшение.
         lgTMK.ntCoff = ntLogoTMK;//Задаём размер логотипа.
     }
     function fnTimerAppSize(){//Функция старта таймера при изменении размеров приложения пользователем.
-		if(!tmPdf.blSize){//Принимаю размеры приложения, пока не запустится обработкик показа документа.
+		if(!root.blSize){//Принимаю размеры приложения, пока не запустится обработкик показа документа.
 			if(!tmrAppSize.running){//Если таймер еще не запускался, то...
 				console.error("155:fnTimerAppSize. running");
-				tmPdf.ntPdfPage = spbPdfPage.value - 1;//Сохраняем номер страницы.
+				root.ntPdfPage = spbPdfPage.value - 1;//Сохраняем номер страницы.
 				tmrLogo.running = true;//Запуск основного таймера.
 				console.error("158:fnTimerAppSize. pdfDocPustoi");
 				pmpDoc.document = pdfDocPustoi;
@@ -163,14 +163,14 @@ Item {
 		}
     }
     function fnAppSize(){//Функция показывает документ после изменения размера приложения.
-		tmPdf.blOpen = true;//Только тут задаю этот флаг отрисовки документа.
-		tmPdf.blSize = true;//Открываем документ, игнорируя изменения размера приложения.
-        tmPdf.blScale = false;//Масштабирования еще не было.
+		root.blOpen = true;//Только тут задаю этот флаг отрисовки документа.
+		root.blSize = true;//Открываем документ, игнорируя изменения размера приложения.
+        root.blScale = false;//Масштабирования еще не было.
         tmrAppSize.running = false;//выключаем таймер.
         console.error("169:fnAppSize. pdfDoc");
         pmpDoc.document = pdfDoc;//Выставляем рабочую сцену.
         if(!ntPdfPage){//Если 0 страница, то рендер будет мгновенный, поэтому...
-			tmPdf.blScale = true;//масштабировать не нужно, сразу на страницу.
+			root.blScale = true;//масштабировать не нужно, сразу на страницу.
             fnScale(false);//Выставляем масштаб по ширине или по высоте в зависимости от размера документа.
         }
     }
@@ -196,10 +196,10 @@ Item {
 		}
     }
     function fnNazad(){//Функция Выхода со страницы, не путать с fnClickedNazad()
-        tmPdf.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
-        tmPdf.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
+        root.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
+        root.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
         //Обязательная пустой Url, он что то обнуляет, после запароленного файла. И не только.
-        tmPdf.blPustoi = true;//Открываем пустой pdf документ, чтоб не проходить все стадии в прерывании стр.
+        root.blPustoi = true;//Открываем пустой pdf документ, чтоб не проходить все стадии в прерывании стр.
 		pdfDoc.password = "";//Передаём пароль в документ. НЕ УДАЛЯТЬ! ЭТО ОБНУЛЕНИЕ ПАРОЛЯ ПЕРЕД НОВЫМ ДОК.
         console.error("197:fnNazad. pdfDoc.source = qrc:///000000000.dc");
         pdfDoc.source = "qrc:///workingdata/000000000.dc";
@@ -241,17 +241,17 @@ Item {
         repeat:	false
         onTriggered: {
             console.error("236:Timer tmrError stop");
-            if(tmPdf.blPassword){//Если был запрос на пароль, то...
-                tmPdf.blPassword = false;//Сбрасываем флаг.
+            if(root.blPassword){//Если был запрос на пароль, то...
+                root.blPassword = false;//Сбрасываем флаг.
                 if(!pssPassword.passTrue)//Если пароль введён неверно, то...
                     cppqml.strDebug = qsTr("Введён неверный пароль.");
             }
             else{//Если не было запроса на пароль, то это ошибка обычная...
                 cppqml.strDebug = qsTr("Ошибка открытия документа: ") + pdfDoc.error;
-                tmPdf.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
-                tmPdf.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
+                root.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
+                root.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
                 tmrLogo.running = false;//Останавливаем таймер главной анимации.
-                tmPdf.clickedNazad();//Закрываем страницу.
+                root.clickedNazad();//Закрываем страницу.
             }
         }
     }
@@ -261,15 +261,15 @@ Item {
         running: false
         repeat: true
         onTriggered: {
-            if(tmPdf.blLogoTMK){//Если true, то...
+            if(root.blLogoTMK){//Если true, то...
                 lgTMK.ntCoff++;
-                if(lgTMK.ntCoff >= tmPdf.ntLogoTMK)
-                    tmPdf.blLogoTMK = false;
+                if(lgTMK.ntCoff >= root.ntLogoTMK)
+                    root.blLogoTMK = false;
             }
             else{
                 lgTMK.ntCoff--;
                 if(lgTMK.ntCoff <= 1)
-                    tmPdf.blLogoTMK = true;
+                    root.blLogoTMK = true;
             }
         }
         onRunningChanged: {//Если таймер изменился, то...
@@ -311,12 +311,12 @@ Item {
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
 			id: knopkaNazad
-			ntWidth: tmPdf.ntWidth
-			ntCoff: tmPdf.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left: tmZagolovok.left
-			anchors.margins: tmPdf.ntCoff/2
-			clrKnopki: tmPdf.clrTexta
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
 			onClicked: {
 				cppqml.strDannieStr = pmpDoc.currentPage;//Записываем в БД номер открытой страницы.
         		fnNazad();//Выходим со страницы.        
@@ -324,14 +324,14 @@ Item {
 		}	
 		DCKnopkaZakrit {//@disable-check M300
             id: knopkaZakrit
-            ntWidth: tmPdf.ntWidth
-            ntCoff: tmPdf.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.left: tmZagolovok.left
-            anchors.margins: tmPdf.ntCoff/2
-            clrKnopki: tmPdf.clrTexta
-            clrFona: tmPdf.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
@@ -342,20 +342,20 @@ Item {
 			anchors.bottom: tmZagolovok.bottom
 			anchors.left: knopkaNazad.right
 			anchors.right: knopkaPoisk.left
-			anchors.topMargin: tmPdf.ntCoff/4
-			anchors.bottomMargin: tmPdf.ntCoff/4
-			anchors.leftMargin: tmPdf.ntCoff/2
-			anchors.rightMargin: tmPdf.ntCoff/2
+			anchors.topMargin: root.ntCoff/4
+			anchors.bottomMargin: root.ntCoff/4
+			anchors.leftMargin: root.ntCoff/2
+			anchors.rightMargin: root.ntCoff/2
             DCTextInput {//@disable-check M300
 				id: txnZagolovok
-				ntWidth: tmPdf.ntWidth
-				ntCoff: tmPdf.ntCoff
+				ntWidth: root.ntWidth
+				ntCoff: root.ntCoff
 				anchors.fill: tmTextInput
 				visible: false
                 textInput.readOnly: true;//Запрещено редактировать.
-                clrTexta: tmPdf.clrTexta
+                clrTexta: root.clrTexta
 				clrFona: "SlateGray"
-				radius: tmPdf.ntCoff/2
+				radius: root.ntCoff/2
 				blSqlProtect: false//Отключаем защиту от Sql инъекций, вводить можно любой текст.
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
@@ -389,14 +389,14 @@ Item {
 		}	
 		DCKnopkaOk{//@disable-check M300
 			id: knopkaOk
-			ntWidth: tmPdf.ntWidth
-			ntCoff: tmPdf.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			visible: false
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-			anchors.margins: tmPdf.ntCoff/2
-			clrKnopki: tmPdf.clrTexta
-			clrFona: tmPdf.clrFona
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
+			clrFona: root.clrFona
 			onClicked: {
 				fnClickedOk();//Функция отправить запрос на поиск
 			}
@@ -408,13 +408,13 @@ Item {
             anchors.left: tmZagolovok.left
             anchors.right: tmZagolovok.right
 
-            anchors.topMargin: tmPdf.ntCoff/4
-            anchors.bottomMargin: tmPdf.ntCoff/4
-            anchors.leftMargin: tmPdf.ntCoff/2
-            anchors.rightMargin: tmPdf.ntCoff/2
+            anchors.topMargin: root.ntCoff/4
+            anchors.bottomMargin: root.ntCoff/4
+            anchors.leftMargin: root.ntCoff/2
+            anchors.rightMargin: root.ntCoff/2
 
-            ntWidth: tmPdf.ntWidth
-            ntCoff: tmPdf.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 
 			visible: false//Невидимый виджет.
 
@@ -441,13 +441,13 @@ Item {
         }
         DCKnopkaPoisk{//@disable-check M300
             id: knopkaPoisk
-            ntWidth: tmPdf.ntWidth
-            ntCoff: tmPdf.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-            anchors.margins: tmPdf.ntCoff/2
-            clrKnopki: tmPdf.clrTexta
-            clrFona: tmPdf.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             onClicked: {//Слот сигнала clicked кнопки Поиск.
                 fnClickedPoisk();//Функция обрабатывающая кнопку Поиск.
             }
@@ -459,15 +459,15 @@ Item {
             anchors.left: tmZagolovok.left
             anchors.right: tmZagolovok.right
 
-            anchors.topMargin: tmPdf.ntCoff/4
-            anchors.bottomMargin: tmPdf.ntCoff/4
-            anchors.leftMargin: tmPdf.ntCoff/2
-            anchors.rightMargin: tmPdf.ntCoff/2
+            anchors.topMargin: root.ntCoff/4
+            anchors.bottomMargin: root.ntCoff/4
+            anchors.leftMargin: root.ntCoff/2
+            anchors.rightMargin: root.ntCoff/2
 
-            ntWidth: tmPdf.ntWidth
-            ntCoff: tmPdf.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 
-			blVisible: false//Невидимый виджет.
+			visible: false//Невидимый виджет.
 
             clrFona: "black"
             clrFonaPass: "orange"
@@ -483,21 +483,16 @@ Item {
                 fnPdfOtkrit();
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
-                pssPassword.blVisible = false;//Делаем невидимым виджет
+                pssPassword.visible = false;//Делаем невидимым виджет
                 pssPassword.password = "";//Обнуляем вводимый пароль в TextInput.
                 fnNazad();//Закрываем окно с pdf документом.
             }
-			onBlVisibleChanged: {//Если видимость изменилась, то...
-				if(pssPassword.blVisible){
+			onVisibleChanged: {//Если видимость изменилась, то...
+				if(pssPassword.visible){
                     spbPdfPage.spinBox.readOnly = true;//запрещаем редактировать для Android.
-                    //textInput.readOnly = false;//разрешаем редактировать.
-					//textInput.focus = true;//обязательно.
-					//textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 				}
 				else{
                     spbPdfPage.spinBox.readOnly = false;//разрешаем редактировать для Android.
-                    //textInput.readOnly = true;//запрещаем редактировать.
-					//textInput.focus = false;//обязательно
 				}
 			}
         }
@@ -508,10 +503,10 @@ Item {
 
         DCLogoTMK {//@disable-check M300//Логотип до ZonaFileDialog, чтоб не перекрывать список.
 			id: lgTMK
-			ntCoff: tmPdf.ntLogoTMK
+			ntCoff: root.ntLogoTMK
 			anchors.centerIn: tmZona
-			clrLogo: tmPdf.clrTexta
-			clrFona: tmPdf.clrFona
+			clrLogo: root.clrTexta
+			clrFona: root.clrFona
 		}
 		PdfDocument {//Класс, который возвращает данные о Pdf Документе.
 			id: pdfDoc
@@ -520,8 +515,8 @@ Item {
 			}
 			onPasswordRequired: {//Если пришёл сигнал passwordRequire запроса пароля в pdf документе, то...
                 console.error("379: Запрашиваю пароль.")
-                tmPdf.blPassword = true;//Запрашиваю пароль.
-				pssPassword.blVisible = true;//Делаем видимым поле ввода пароля.
+                root.blPassword = true;//Запрашиваю пароль.
+				pssPassword.visible = true;//Делаем видимым поле ввода пароля.
 			}	
 		}
         PdfDocument {//Класс, который возвращает данные о Pdf Документе.
@@ -532,20 +527,20 @@ Item {
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
                 //Первоначальная иннициализация флагов.
-				tmPdf.blStartHeight = true;//Стартуем, блокируем первое изменение размеров окна.
-				tmPdf.blStartWidth = true;//Стартуем, блокируем первое изменение размеров окна.
+				root.blStartHeight = true;//Стартуем, блокируем первое изменение размеров окна.
+				root.blStartWidth = true;//Стартуем, блокируем первое изменение размеров окна.
 
                 pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
-                tmPdf.blOpen = false;//pdf документ ещё не открыт.
-				tmPdf.blSize = false;//Готов к изменению размера приложения.
-                tmPdf.blScale = false;//в pdf документе не задали изменение масштаба.
+                root.blOpen = false;//pdf документ ещё не открыт.
+				root.blSize = false;//Готов к изменению размера приложения.
+                root.blScale = false;//в pdf документе не задали изменение масштаба.
 
-                tmPdf.blLogoTMK = false;//логотип на уменьшение.
-                tmPdf.blPustoi = false;//пустой pdf документ ещё не открыт.
-                tmPdf.blError = false;//флаг не взведён в Статусе пустого документа.
-                tmPdf.blPassword = false;//pdf документ не запрашиваем пароль.
+                root.blLogoTMK = false;//логотип на уменьшение.
+                root.blPustoi = false;//пустой pdf документ ещё не открыт.
+                root.blError = false;//флаг не взведён в Статусе пустого документа.
+                root.blPassword = false;//pdf документ не запрашиваем пароль.
 
-                tmPdf.ntPdfPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
+                root.ntPdfPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
 
                 fnPdfOtkrit();//Функция открытия Pdf документа.
 			}
@@ -577,23 +572,23 @@ Item {
 			id: rctBorder
 			anchors.fill: tmZona
 			color: "transparent"
-			border.color: tmPdf.clrTexta
-			border.width: tmPdf.ntCoff/4//Бордюр при переименовании и удалении.
+			border.color: root.clrTexta
+			border.width: root.ntCoff/4//Бордюр при переименовании и удалении.
 		}
 	}
     Item {//Тулбар
 		id: tmToolbar
         DCSpinBox {//@disable-check M300
 			id: spbPdfPage
-			ntWidth: tmPdf.ntWidth
-			ntCoff: tmPdf.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			visible: false 
             anchors.verticalCenter: tmToolbar.verticalCenter
             anchors.left: tmToolbar.left
-            anchors.margins: tmPdf.ntCoff/2
-			clrTexta: tmPdf.clrTexta
-			clrFona: tmPdf.clrFona 
-			radius: tmPdf.ntCoff/2
+            anchors.margins: root.ntCoff/2
+			clrTexta: root.clrTexta
+			clrFona: root.clrFona 
+			radius: root.ntCoff/2
 			from: 1
 			value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
@@ -603,14 +598,14 @@ Item {
 		}
         DCScale{//@disable-check M300
 			id: pdfScale
-			ntWidth: tmPdf.ntWidth
-			ntCoff: tmPdf.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.right: tmToolbar.right
 			visible: true
-			clrTexta: tmPdf.clrTexta
-			clrFona: tmPdf.clrFona 
-			radius: tmPdf.ntCoff/2
+			clrTexta: root.clrTexta
+			clrFona: root.clrFona 
+			radius: root.ntCoff/2
 			from: 25
 			to: 200
 			value: 100

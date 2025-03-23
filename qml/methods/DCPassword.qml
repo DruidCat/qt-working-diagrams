@@ -13,7 +13,6 @@ Item {
     property color clrTexta: "black"//цвет текста
     property color clrKnopki: "yellow"//цвет Кнопок
     property alias clrBorder: rctTextInput.border.color//цвет границы
-    property bool blVisible: true//Видимый виджет
     property int  ntWidth: 2
     property int ntCoff: 8
     property string placeholderTextTrue: ""//Текст в строке, подсказывающий, что нужно вводить юзеру
@@ -28,7 +27,7 @@ Item {
         color: "transparent"
         radius: root.ntCoff/2
 		visible: {
-			if(root.blVisible){//Если видимый виджет, то...
+			if(root.visible){//Если видимый виджет, то...
 				txnTextInput.readOnly = false;//Можно редактировать.
 				txnTextInput.focus = true;//Фокусируемся.
 				txnTextInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
