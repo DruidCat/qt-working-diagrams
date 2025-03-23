@@ -2,7 +2,7 @@
 //import QtQuick.Window //2.14
 //DCTextInput - ШАБЛОН ДЛЯ РАБОТЫ СО СТРОКОЙ ТЕКСТА. (33 БУКВЫ, работает ESCAPE и ENTER)
 Item {
-    id: tmTextInput
+    id: root
     property alias text: txnTextInput.text //Текст
 	property alias textInput: txnTextInput//Передаём в виде свойства весь объект TextInput
     property alias radius: rctTextInput.radius//Радиус рабочей зоны
@@ -21,9 +21,22 @@ Item {
 
     Rectangle {
         id: rctTextInput
-		anchors.fill: tmTextInput
+		anchors.fill: root
 		color: "transparent"//Текст фона прозрачный.
 		clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
+		visible: {
+			if(root.visible){//Если видимый виджет, то...
+				txnTextInput.readOnly = false;//Можно редактировать.
+				txnTextInput.focus = true;//Фокусируемся.
+				txnTextInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+				return true;//Видимый
+			}
+			else{//Если невидимый виджет, то...
+				txnTextInput.readOnly = true;//Нельзя редактировать.
+				txnTextInput.focus = false;//Не фокусируемся.
+				return false;//Невидимый
+			}
+		}
         TextInput {//Область текста.
             id: txnTextInput
 			anchors.centerIn: rctTextInput
@@ -46,21 +59,21 @@ Item {
                 //regExp: blSqlProtect ? /[^';*%_\\?]+/ : /.*/
             //}
             text: ""
-            font.pixelSize: tmTextInput.ntWidth*tmTextInput.ntCoff//размер шрифта текста.
+            font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
 			//font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
 			maximumLength: 33//Максимальная длина ввода текста.
-			readOnly: false//Можно редактировать. 
-            focus: true//Фокус на TextInput
+			readOnly: true//нельзя редактировать. 
+            focus: false//Фокус не на TextInput
 			selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
 			//cursorPosition: text.length;//Курсор в конец текста
 			cursorVisible: true//Курсор сделать видимым
 			Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
 				if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
-					tmTextInput.clickedEnter();//Излучаем сигнал о том, что нажат Enter.
+					root.clickedEnter();//Излучаем сигнал о том, что нажат Enter.
 					event.accepted = true;//Enter не использовался в качестве сочетания клавишь с другими клав
 				}
 				if(event.key === Qt.Key_Escape){
-					tmTextInput.clickedEscape();//Излучаем сигнал о том, что нажат Ecape
+					root.clickedEscape();//Излучаем сигнал о том, что нажат Ecape
 				}
                 if(blSqlProtect&&((event.key === 63)||(event.key === 39)||(event.key === 59)||(event.key === 42)
                    ||(event.key === 37)||(event.key === 95)||(event.key === 92))){
@@ -71,7 +84,7 @@ Item {
             Text {//Текст, подсказывающий пользователю, что нужно вводить.
                 id: txtTextInput
 				anchors.centerIn: txnTextInput//Обязательно по центру, иначе масштабирование не будет работать
-                font.pixelSize: tmTextInput.ntWidth*tmTextInput.ntCoff//размер шрифта текста.
+                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                 text: ""//По умолчанию нет надписи.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -82,7 +95,7 @@ Item {
 						if(visible){//Если подсказка становится видимой, то...
 							if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
 								for(let ltShag = txtTextInput.font.pixelSize;
-												ltShag < rctTextInput.height-tmTextInput.ntCoff; ltShag++){
+												ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 									if(txtTextInput.width < rctTextInput.width){//длина текста < динны строки
 										txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 										if(txtTextInput.width > rctTextInput.width){//Но, если переборщили
@@ -109,7 +122,7 @@ Item {
 			if(txtTextInput.visible){//Если подсказка становится видимой, то...
 				if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
 					for(let ltShag = txtTextInput.font.pixelSize;
-									ltShag < rctTextInput.height-tmTextInput.ntCoff; ltShag++){
+									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 						if(txtTextInput.width < rctTextInput.width){//длина текста < динны строки
 							txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 							if(txtTextInput.width > rctTextInput.width){//Но, если переборщили
@@ -131,7 +144,7 @@ Item {
 			if(txnTextInput.visible){//Если текст становится видимым, то...
 				if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста,то
 					for(let ltShag = txnTextInput.font.pixelSize;
-									ltShag < rctTextInput.height-tmTextInput.ntCoff; ltShag++){
+									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 						if(txnTextInput.width < rctTextInput.width){//длина текста < динны строки
 							txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 							if(txnTextInput.width > rctTextInput.width){//Но, если переборщили
@@ -155,7 +168,7 @@ Item {
 			if(txtTextInput.visible){//Если подсказка становится видимой, то...
 				if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
 					for(let ltShag = txtTextInput.font.pixelSize;
-									ltShag < rctTextInput.height-tmTextInput.ntCoff; ltShag++){
+									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 						if(txtTextInput.width < rctTextInput.width){//длина текста < динны строки
 							txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 							if(txtTextInput.width > rctTextInput.width){//Но, если переборщили
@@ -179,7 +192,7 @@ Item {
 			if(txnTextInput.visible){//Если текст становится видимым, то...
 				if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста,то
 					for(let ltShag = txnTextInput.font.pixelSize;
-									ltShag < rctTextInput.height-tmTextInput.ntCoff; ltShag++){
+									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 						if(txnTextInput.width < rctTextInput.width){//длина текста < динны строки
 							txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 							if(txnTextInput.width > rctTextInput.width){//Но, если переборщили

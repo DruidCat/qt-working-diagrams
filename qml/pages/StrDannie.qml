@@ -8,7 +8,7 @@ import "qrc:/qml/methods"//Импортируем методы написанн�
 import "qrc:/qml/zones"//Импортируем зону Данных.
 //Страница с Данными, где отображаются сами документы в виде списка.
 Item {
-    id: tmDannie
+    id: root
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -42,61 +42,61 @@ Item {
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuDannie.visible = false;//Делаем невидимым всплывающее меню.
-        tmDannie.blPereimenovat = false;//Запрещаем выбор переименовывания.
-        tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        tmDannie.blUdalitVibor = false;//Запрещаем выбирать документ для удаления.
+        root.blPereimenovat = false;//Запрещаем выбор переименовывания.
+        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        root.blUdalitVibor = false;//Запрещаем выбирать документ для удаления.
         txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
     }
     focus: true//Не удалять, может Escape не работать.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+            root.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: tmDannie
+        anchors.fill: root
         onClicked: {
-            tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+            root.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
-        tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+        root.signalToolbar("");//Делаем пустую строку в Toolbar.
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedOk(){//Функция переименования Данных.
-        tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
-        if(tmDannie.blPereimenovat)//Если запрос на переименовывание.
+        root.signalToolbar("");//Делаем пустую строку в Toolbar.
+        if(root.blPereimenovat)//Если запрос на переименовывание.
             cppqml.renStrDannieDB(strDannieRen, txnZagolovok.text);//Переименовываем имя Документа.
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
-        tmDannie.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
+        root.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
         txuUdalit.blVisible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
-        tmDannie.signalToolbar(qsTr("Удалить данный документ?"));//Делаем предупреждение в Toolbar.
+        root.signalToolbar(qsTr("Удалить данный документ?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
-        tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+        root.signalToolbar("");//Делаем пустую строку в Toolbar.
 		txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
-        tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        tmDannie.blUdalitVibor = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
+        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        root.blUdalitVibor = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
         menuDannie.visible = false;//Делаем невидимым меню.
-        tmDannie.clickedSozdat();//Излучаем сигнал, что нужно запустить Файловый Диалог.
+        root.clickedSozdat();//Излучаем сигнал, что нужно запустить Файловый Диалог.
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
         fnClickedSozdat();//Функция обработки кнопки Создать.
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
-        tmDannie.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
+        root.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ДОКУМЕНТА");//Подсказка пользователю,что вводить нужн
-        tmDannie.signalToolbar(qsTr("Выберите документ для его переименования."))
+        root.signalToolbar(qsTr("Выберите документ для его переименования."))
     }
     function fnMenuUdalit(){//Нажат пункт меню Удалить.
-        tmDannie.blUdalitVibor = true;//Включаем режим выбора удаляемого файла
-        tmDannie.signalToolbar(qsTr("Выберите документ для его удаления."))
+        root.blUdalitVibor = true;//Включаем режим выбора удаляемого файла
+        root.signalToolbar(qsTr("Выберите документ для его удаления."))
     }
 
     Item {//Данные Заголовок
@@ -104,58 +104,58 @@ Item {
 
         DCKnopkaNazad {//@disable-check M300
 			id: knopkaNazad
-            ntWidth: tmDannie.ntWidth
-            ntCoff: tmDannie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left:tmZagolovok.left
-            anchors.margins: tmDannie.ntCoff/2
-            clrKnopki: tmDannie.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
             onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
-                tmDannie.clickedNazad();
+                root.clickedNazad();
             }
         } 
         DCKnopkaZakrit {//@disable-check M300
             id: knopkaZakrit
-            ntWidth: tmDannie.ntWidth
-            ntCoff: tmDannie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.left: tmZagolovok.left
-            anchors.margins: tmDannie.ntCoff/2
-            clrKnopki: tmDannie.clrTexta
-            clrFona: tmDannie.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
 		DCKnopkaInfo {//@disable-check M300
 			id: knopkaInfo
-            ntWidth: tmDannie.ntWidth
-            ntCoff: tmDannie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			visible: true
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-            anchors.margins: tmDannie.ntCoff/2
-            clrKnopki: tmDannie.clrTexta
-			clrFona: tmDannie.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+			clrFona: root.clrFona
             onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
-                tmDannie.clickedInfo();
+                root.clickedInfo();
             }
         } 
         DCKnopkaOk{//@disable-check M300
             id: knopkaOk
-            ntWidth: tmDannie.ntWidth
-            ntCoff: tmDannie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.right: tmZagolovok.right
-            anchors.margins: tmDannie.ntCoff/2
-            clrKnopki: tmDannie.clrTexta
-            clrFona: tmDannie.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             onClicked: {
                 fnClickedOk();//Функция переименование данных.
             }
@@ -167,13 +167,13 @@ Item {
             anchors.left: tmZagolovok.left
             anchors.right: tmZagolovok.right
 
-            anchors.topMargin: tmDannie.ntCoff/4
-            anchors.bottomMargin: tmDannie.ntCoff/4
-            anchors.leftMargin: tmDannie.ntCoff/2
-            anchors.rightMargin: tmDannie.ntCoff/2
+            anchors.topMargin: root.ntCoff/4
+            anchors.bottomMargin: root.ntCoff/4
+            anchors.leftMargin: root.ntCoff/2
+            anchors.rightMargin: root.ntCoff/2
 
-            ntWidth: tmDannie.ntWidth
-            ntCoff: tmDannie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 
             clrFona: "orange"//Если не задать цвет, будет видно текст под надписью
             clrTexta: "black"
@@ -182,13 +182,13 @@ Item {
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
                 if(cppqml.delStrDannie(strKod))//Запускаю метод удаление записи из БД и самого Документа.
-                    tmDannie.signalToolbar(qsTr("Успешное удаление документа"));
+                    root.signalToolbar(qsTr("Успешное удаление документа"));
                 else
                     cppqml.strDebug = qsTr("Ошибка при удалении.");
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
-                tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+                root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
 		Item {
@@ -197,36 +197,30 @@ Item {
 			anchors.bottom: tmZagolovok.bottom
 			anchors.left: knopkaNazad.right
 			anchors.right: knopkaInfo.left
-			anchors.topMargin: tmDannie.ntCoff/4
-			anchors.bottomMargin: tmDannie.ntCoff/4
-			anchors.leftMargin: tmDannie.ntCoff/2
-			anchors.rightMargin: tmDannie.ntCoff/2
+			anchors.topMargin: root.ntCoff/4
+			anchors.bottomMargin: root.ntCoff/4
+			anchors.leftMargin: root.ntCoff/2
+			anchors.rightMargin: root.ntCoff/2
             DCTextInput {//@disable-check M300
 				id: txnZagolovok
-				ntWidth: tmDannie.ntWidth
-				ntCoff: tmDannie.ntCoff
+				ntWidth: root.ntWidth
+				ntCoff: root.ntCoff
 				anchors.fill: tmTextInput
 				visible: false
-                textInput.readOnly: true;//Запрещено редактировать.
 				blSqlProtect: true//Активируем Sql защиту от ввода нежелательных символов для запроса Sql.
-                clrTexta: tmDannie.clrTexta
+                clrTexta: root.clrTexta
 				clrFona: "SlateGray"
-				radius: tmDannie.ntCoff/2
+				radius: root.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
-						textInput.readOnly = false;//Можно редактировать.
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
                         knopkaInfo.visible = false;//Конопка Информация Невидимая.
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
-                        textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
-                        textInput.focus = true;//Фокусируемся для Android экранной клавиатуры.
-                        textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 					}
                     else{//Если DCTextInput не видим, то...
-						textInput.readOnly = true;//Запрещено редактировать.
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
                         knopkaNazad.visible = true;//Кнопка назад видимая.
@@ -256,39 +250,39 @@ Item {
             }
             ZonaDannie {//@disable-check M300
 				id: lsvZona
-				ntWidth: tmDannie.ntWidth
-				ntCoff: tmDannie.ntCoff
+				ntWidth: root.ntWidth
+				ntCoff: root.ntCoff
 				anchors.fill: rctZona
-                clrTexta: tmDannie.clrFaila//Цвет файлов
+                clrTexta: root.clrFaila//Цвет файлов
 				clrFona: "SlateGray"
                 onClicked: function(ntKod, strDannie) {//Слот нажатия на один из Документов списка.
 					if(cppqml.blDanniePervi){//Если это первый Документ, то...
                         fnClickedSozdat();//Функция при нажатии кнопки Создать(Проводник).
 					}
 					else{//Если не первый элемент, то...
-                        if(tmDannie.blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания
-                            tmDannie.blPereimenovat = true;//Переименование (отмена)...(ок)
-                            tmDannie.signalToolbar(qsTr("Переименуйте выбранный документ."));
+                        if(root.blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания
+                            root.blPereimenovat = true;//Переименование (отмена)...(ок)
+                            root.signalToolbar(qsTr("Переименуйте выбранный документ."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             strDannieRen = strDannie;//Присваиваем переменной имя Документа.
                             txnZagolovok.text = strDannie;//Добавляем в строку выбранный Документ.
-                            tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
+                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
                         }
                         else {//Если не выбор элементов переименования, то ...
-                            if(tmDannie.blUdalitVibor){//Если удалить, то...
+                            if(root.blUdalitVibor){//Если удалить, то...
                                 fnUdalit(ntKod, strDannie);
                             }
                             else{//Если не выбор элемента на удаление, то открыть файл к просмотру...
                                 cppqml.strDebug = "";
-                                tmDannie.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
-                                tmDannie.blUdalitVibor = false;//Запрещено выбирать документ на удаление.
+                                root.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
+                                root.blUdalitVibor = false;//Запрещено выбирать документ на удаление.
                                 txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.
                                 txnZagolovok.visible = false;//Отключаем создание Элемента.
                                 menuDannie.visible = false;//Делаем невидимым всплывающее меню.
                                 cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
                                 cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
 								//Открываем Pdf документ.
-                                tmDannie.clickedDannie(strDannie);//сигнал с кодом и именем Документа.
+                                root.clickedDannie(strDannie);//сигнал с кодом и именем Документа.
                             }
                         }
 					}
@@ -297,13 +291,13 @@ Item {
             DCMenu {//@disable-check M300
 				id: menuDannie
 				visible: false//Невидимое меню. 
-				ntWidth: tmDannie.ntWidth
-				ntCoff: tmDannie.ntCoff
+				ntWidth: root.ntWidth
+				ntCoff: root.ntCoff
 				anchors.left: rctZona.left
 				anchors.right: rctZona.right
 				anchors.bottom: rctZona.bottom
-				anchors.margins: tmDannie.ntCoff
-				clrTexta: tmDannie.clrTexta
+				anchors.margins: root.ntCoff
+				clrTexta: root.clrTexta
 				clrFona: "SlateGray"
 				imyaMenu: "dannie"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
@@ -326,49 +320,49 @@ Item {
 				id: rctBorder
 				anchors.fill: rctZona
 				color: "transparent"
-				border.width: tmDannie.ntCoff/2//Бордюр при переименовании и удалении.
+				border.width: root.ntCoff/2//Бордюр при переименовании и удалении.
 			}
 		}
     }
 	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
-        tmDannie.blPereimenovatVibor ? rctBorder.border.color=clrTexta : rctBorder.border.color="transparent";
+        root.blPereimenovatVibor ? rctBorder.border.color=clrTexta : rctBorder.border.color="transparent";
 	}
     onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
-        tmDannie.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
+        root.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
     }
     Item {//Данные Тулбар
 		id: tmToolbar 
 		DCKnopkaSozdat {//@disable-check M300
 			id: knopkaSozdat
-            ntWidth: tmDannie.ntWidth
-            ntCoff: tmDannie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.left: tmToolbar.left
-            anchors.margins: tmDannie.ntCoff/2
-            clrKnopki: tmDannie.clrFaila//Цвет файлов
-			clrFona: tmDannie.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrFaila//Цвет файлов
+			clrFona: root.clrFona
             blKrug: false//Не круглая кнопка.
             onClicked: {
                 fnClickedSozdat();//Функция нажатия кнопки Создать.
             }
         }
         DCKnopkaNastroiki {//@disable-check M300
-			ntWidth: tmDannie.ntWidth
-			ntCoff: tmDannie.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.right: tmToolbar.right
-			anchors.margins: tmDannie.ntCoff/2
-			clrKnopki: tmDannie.clrTexta
-			clrFona: tmDannie.clrFona
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
+			clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
 			onClicked: {
                 txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
                 menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
-                tmDannie.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
-                tmDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-                tmDannie.blUdalitVibor = false;//Запрещено удалять.
+                root.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
+                root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+                root.blUdalitVibor = false;//Запрещено удалять.
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
-                tmDannie.signalToolbar("");//Делаем пустую строку в Toolbar.
+                root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}
     }

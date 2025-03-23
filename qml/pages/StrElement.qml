@@ -8,7 +8,7 @@ import "qrc:/qml/methods"//Импортируем методы написанн�
 import "qrc:/qml/zones"//Импортируем зону элементов.
 //Страница отображающая Элементы Списка.
 Item {
-	id: tmElement
+	id: root
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -39,32 +39,32 @@ Item {
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuElement.visible = false;//Делаем невидимым всплывающее меню.
-        tmElement.blPereimenovat = false;//Запрещаем выбор переименовывания.
-        tmElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        tmElement.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
+        root.blPereimenovat = false;//Запрещаем выбор переименовывания.
+        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        root.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
         txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
     }
     focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+            root.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: tmElement
+        anchors.fill: root
         onClicked: {
-            tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+            root.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
-        tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+        root.signalToolbar("");//Делаем пустую строку в Toolbar.
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedOk(){//Функция сохранения/переименования Элементов списка.
-        tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
-        if(tmElement.blPereimenovat)//Если запрос на переименовывание.
+        root.signalToolbar("");//Делаем пустую строку в Toolbar.
+        if(root.blPereimenovat)//Если запрос на переименовывание.
             cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text);//Переименовываем Элемент списка.
         else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то Сохранить.
             cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
@@ -72,90 +72,90 @@ Item {
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
-        tmElement.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
+        root.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
         txuUdalit.blVisible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
-        tmElement.signalToolbar(qsTr("Удалить данный элемент?"));//Делаем предупреждение в Toolbar.
+        root.signalToolbar(qsTr("Удалить данный элемент?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
-        tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+        root.signalToolbar("");//Делаем пустую строку в Toolbar.
 		txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
-        tmElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        tmElement.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
+        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        root.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
         menuElement.visible = false;//Делаем невидимым меню.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
         txnZagolovok.visible = true;//Режим создания элемента Списка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
-        tmElement.signalToolbar(qsTr("Создайте новый элемент."));
+        root.signalToolbar(qsTr("Создайте новый элемент."));
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
         fnClickedSozdat();//Функция обработки кнопки Создать.
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
-        tmElement.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
+        root.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
-        tmElement.signalToolbar(qsTr("Выберите элемент для его переименования."));
+        root.signalToolbar(qsTr("Выберите элемент для его переименования."));
     }
     function fnMenuUdalit(){//Нажат пункт меню Удалить.
-        tmElement.blUdalitVibor = true;//Включаем режим выбора удаляемого Элемента
-        tmElement.signalToolbar(qsTr("Выберите элемент для его удаления."))
+        root.blUdalitVibor = true;//Включаем режим выбора удаляемого Элемента
+        root.signalToolbar(qsTr("Выберите элемент для его удаления."))
     }
 
 	Item {//Элементы Заголовок
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
 			id: knopkaNazad
-			ntWidth: tmElement.ntWidth
-			ntCoff: tmElement.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			anchors.left: tmZagolovok.left
 			anchors.verticalCenter: tmZagolovok.verticalCenter
-			anchors.margins: tmElement.ntCoff/2
-			clrKnopki: tmElement.clrTexta
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
 			onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
-				tmElement.clickedNazad();//Сигнал Назад.
+				root.clickedNazad();//Сигнал Назад.
 			}
 		}
         DCKnopkaZakrit {//@disable-check M300
             id: knopkaZakrit
-            ntWidth: tmElement.ntWidth
-            ntCoff: tmElement.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.left: tmZagolovok.left
-            anchors.margins: tmElement.ntCoff/2
-            clrKnopki: tmElement.clrTexta
-            clrFona: tmElement.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
 		DCKnopkaInfo {//@disable-check M300
 			id: knopkaInfo
-			ntWidth: tmElement.ntWidth
-			ntCoff: tmElement.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			visible: true
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-			anchors.margins: tmElement.ntCoff/2
-			clrKnopki: tmElement.clrTexta
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
 			onClicked: {//Слот клика кнопки Инфо
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
-				tmElement.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
+				root.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
 			}
 		} 
         DCKnopkaOk{//@disable-check M300
 			id: knopkaOk
-			ntWidth: tmElement.ntWidth
-			ntCoff: tmElement.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			visible: false
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-			anchors.margins: tmElement.ntCoff/2
-			clrKnopki: tmElement.clrTexta
-			clrFona: tmElement.clrFona
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
+			clrFona: root.clrFona
 			onClicked: {
 				fnClickedOk();//Функция сохранения данных.
 			}
@@ -167,13 +167,13 @@ Item {
             anchors.left: tmZagolovok.left
             anchors.right: tmZagolovok.right
 
-            anchors.topMargin: tmElement.ntCoff/4
-            anchors.bottomMargin: tmElement.ntCoff/4
-            anchors.leftMargin: tmElement.ntCoff/2
-            anchors.rightMargin: tmElement.ntCoff/2
+            anchors.topMargin: root.ntCoff/4
+            anchors.bottomMargin: root.ntCoff/4
+            anchors.leftMargin: root.ntCoff/2
+            anchors.rightMargin: root.ntCoff/2
 
-            ntWidth: tmElement.ntWidth
-            ntCoff: tmElement.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 
             clrFona: "orange"//Если не задать цвет, будет видно текст под надписью
             clrTexta: "black"
@@ -182,13 +182,13 @@ Item {
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
                 if(cppqml.delStrElement(strKod))//Запускаю метод удаление Элемента из БД и их Документов.
-                    tmElement.signalToolbar(qsTr("Успешное удаление элемента."));
+                    root.signalToolbar(qsTr("Успешное удаление элемента."));
                 else
                     cppqml.strDebug = qsTr("Ошибка при удалении.");
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
                 txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
-                tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+                root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
 		Item {
@@ -197,36 +197,30 @@ Item {
 			anchors.bottom: tmZagolovok.bottom
 			anchors.left: knopkaNazad.right
 			anchors.right: knopkaInfo.left
-			anchors.topMargin: tmElement.ntCoff/4
-			anchors.bottomMargin: tmElement.ntCoff/4
-			anchors.leftMargin: tmElement.ntCoff/2
-			anchors.rightMargin: tmElement.ntCoff/2
+			anchors.topMargin: root.ntCoff/4
+			anchors.bottomMargin: root.ntCoff/4
+			anchors.leftMargin: root.ntCoff/2
+			anchors.rightMargin: root.ntCoff/2
             DCTextInput {//@disable-check M300
 				id: txnZagolovok
-				ntWidth: tmElement.ntWidth
-				ntCoff: tmElement.ntCoff
+				ntWidth: root.ntWidth
+				ntCoff: root.ntCoff
 				anchors.fill: tmTextInput
 				visible: false
-                textInput.readOnly: true;//Запрещено редактировать.
 				blSqlProtect: true//Активируем Sql защиту от ввода нежелательных символов для запроса Sql.
-                clrTexta: tmElement.clrTexta
+                clrTexta: root.clrTexta
 				clrFona: "SlateGray"
-				radius: tmElement.ntCoff/2
+				radius: root.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
-						textInput.readOnly = false;//Можно редактировать.
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
                         knopkaInfo.visible = false;//Конопка Информации Невидимая.
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
-                        textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
-                        textInput.focus = true;//Фокусируемся для Android экранной клавиатуры.
-                        textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 					}
                     else{//Если DCTextInput не видим, то...
-						textInput.readOnly = true;//Запрещено редактировать.
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
                         knopkaNazad.visible = true;//Кнопка назад видимая.
@@ -251,15 +245,15 @@ Item {
             DCLogoTMK {//@disable-check M300 Логотип
                 ntCoff: 16
                 anchors.centerIn: parent
-                clrLogo: tmElement.clrTexta
-                clrFona: tmElement.clrFona
+                clrLogo: root.clrTexta
+                clrFona: root.clrFona
             }
             ZonaElement {//@disable-check M300
 				id: lsvZona
-				ntWidth: tmElement.ntWidth
-				ntCoff: tmElement.ntCoff
+				ntWidth: root.ntWidth
+				ntCoff: root.ntCoff
 				anchors.fill: rctZona
-				clrTexta: tmElement.clrTexta
+				clrTexta: root.clrTexta
 				clrFona: "SlateGray"
                 onClicked: function(ntKod, strElement) {//Слот нажатия на один из Элементов списка.
 					if(cppqml.blElementPervi){//Если это первый элемент, то...
@@ -267,27 +261,27 @@ Item {
 					}
 					else{//Если не первый элемент, то...
                         if(blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания, то...
-                            tmElement.blPereimenovat = true;//Переименование (отмена)...(ок)
-                            tmElement.signalToolbar(qsTr("Переименуйте выбранный элемент."));
+                            root.blPereimenovat = true;//Переименование (отмена)...(ок)
+                            root.signalToolbar(qsTr("Переименуйте выбранный элемент."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strElement = strElement;//Присваиваем Элемент списка к свойству Q_PROPERTY
                             txnZagolovok.text = strElement;//Добавляем в строку выбранный Элемент списка.
-                            tmElement.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименовани
+                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименовани
                         }
                         else {//Если не выбор элементов переименования, то ...
-                            if(tmElement.blUdalitVibor){//Если удалить, то...
+                            if(root.blUdalitVibor){//Если удалить, то...
                                 fnUdalit(ntKod, strElement);//Функция удаления
                             }
                             else {//Если не режим выбора элементов Переименования, то перейти к Данным...
                                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                                tmElement.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
-                                tmElement.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
+                                root.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
+                                root.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
                                 txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.
                                 txnZagolovok.visible = false;//Отключаем создание Элемента.
                                 menuElement.visible = false;//Делаем невидимым всплывающее меню.
                                 cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
                                 cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPE
-                                tmElement.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
+                                root.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
                             }
                         }
 					}
@@ -296,13 +290,13 @@ Item {
             DCMenu {//@disable-check M300
 				id: menuElement
 				visible: false//Невидимое меню. 
-				ntWidth: tmElement.ntWidth
-				ntCoff: tmElement.ntCoff
+				ntWidth: root.ntWidth
+				ntCoff: root.ntCoff
 				anchors.left: rctZona.left
 				anchors.right: rctZona.right
 				anchors.bottom: rctZona.bottom
-				anchors.margins: tmElement.ntCoff
-				clrTexta: tmElement.clrTexta
+				anchors.margins: root.ntCoff
+				clrTexta: root.clrTexta
 				clrFona: "SlateGray"
 				imyaMenu: "element"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
@@ -325,48 +319,48 @@ Item {
 				id: rctBorder
 				anchors.fill: rctZona
 				color: "transparent"
-				border.width: tmElement.ntCoff/2//Бордюр при переименовании и удалении.
+				border.width: root.ntCoff/2//Бордюр при переименовании и удалении.
 			}
 		}
 	}
 	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
-        tmElement.blPereimenovatVibor ? rctBorder.border.color=clrTexta:rctBorder.border.color="transparent";
+        root.blPereimenovatVibor ? rctBorder.border.color=clrTexta:rctBorder.border.color="transparent";
     }
     onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
-        tmElement.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
+        root.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
     }
 	Item {//Состава Тулбар
 		id: tmToolbar 
 		DCKnopkaSozdat {//@disable-check M300
 			id: knopkaSozdat
-			ntWidth: tmElement.ntWidth
-			ntCoff: tmElement.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.left: tmToolbar.left
-			anchors.margins: tmElement.ntCoff/2
-			clrKnopki: tmElement.clrTexta
-			clrFona: tmElement.clrFona
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
+			clrFona: root.clrFona
             onClicked: {//Слот сигнала clicked кнопки Создать.
 				txnZagolovok.visible ? fnClickedZakrit() : fnClickedSozdat()
             }
 		}
         DCKnopkaNastroiki {//@disable-check M300
-			ntWidth: tmElement.ntWidth
-			ntCoff: tmElement.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.right: tmToolbar.right
-			anchors.margins: tmElement.ntCoff/2
-			clrKnopki: tmElement.clrTexta
-			clrFona: tmElement.clrFona
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
+			clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
             onClicked: {
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuElement.visible ? menuElement.visible = false : menuElement.visible = true;
-                tmElement.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
-                tmElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-                tmElement.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
+                root.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
+                root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+                root.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
                 txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.
-                tmElement.signalToolbar("");//Делаем пустую строку в Toolbar.
+                root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}
 	}

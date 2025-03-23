@@ -352,7 +352,6 @@ Item {
 				ntCoff: root.ntCoff
 				anchors.fill: tmTextInput
 				visible: false
-                textInput.readOnly: true;//Запрещено редактировать.
                 clrTexta: root.clrTexta
 				clrFona: "SlateGray"
 				radius: root.ntCoff/2
@@ -360,17 +359,12 @@ Item {
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
-						textInput.readOnly = false;//Можно редактировать.
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
                         knopkaPoisk.visible = false;//Конопка Поиск Невидимая.
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
-                        textInput.cursorVisible = true;//Делаем курсор видимым обязательно.
-                        textInput.focus = true;//Фокусируемся для Android экранной клавиатуры.
-                        textInput.forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
 					}
                     else{//Если DCTextInput не видим, то...
-						textInput.readOnly = true;//Запрещено редактировать.
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
 						if(!pskPoisk.visible){//Если не открыли Режим поиска, то...
@@ -430,7 +424,6 @@ Item {
             }
             onClickedZakrit: {//Слот нажатия кнопки Отмены режима поиска. 
                 pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
-				txnZagolovok.textInput.readOnly = true;//Запрещено редактировать.
                 knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                 knopkaOk.visible = false;//Кнопка Ок Невидимая.
 				knopkaNazad.visible = true;//Кнопка назад видимая.
