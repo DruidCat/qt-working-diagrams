@@ -46,6 +46,7 @@ Item {
         root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         root.blUdalitVibor = false;//Запрещаем выбирать документ для удаления.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+        lsvZona.enabled = true;//Делаем кликабельную Зону.
     }
     focus: true//Не удалять, может Escape не работать.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -76,6 +77,7 @@ Item {
         txuUdalit.visible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
+        lsvZona.enabled = false;//Делаем не кликабельную Зону.
         root.signalToolbar(qsTr("Удалить данный документ?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
@@ -84,6 +86,8 @@ Item {
         root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         root.blUdalitVibor = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
         menuDannie.visible = false;//Делаем невидимым меню.
+        txnZagolovok.visible = false;//Отключаем переименование Докумена.
+        lsvZona.enabled = true;//Делаем кликабельную Зону.
         root.clickedSozdat();//Излучаем сигнал, что нужно запустить Файловый Диалог.
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
@@ -183,6 +187,7 @@ Item {
             clrBorder: "black"
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                lsvZona.enabled = true;//Делаем кликабельную Зону.
                 if(cppqml.delStrDannie(strKod))//Запускаю метод удаление записи из БД и самого Документа.
                     root.signalToolbar(qsTr("Успешное удаление документа"));
                 else
@@ -190,6 +195,7 @@ Item {
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                lsvZona.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
@@ -269,6 +275,7 @@ Item {
                             strDannieRen = strDannie;//Присваиваем переменной имя Документа.
                             txnZagolovok.text = strDannie;//Добавляем в строку выбранный Документ.
                             root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
+                            lsvZona.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...
                             if(root.blUdalitVibor){//Если удалить, то...
@@ -364,6 +371,7 @@ Item {
                 root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
                 root.blUdalitVibor = false;//Запрещено удалять.
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                lsvZona.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}

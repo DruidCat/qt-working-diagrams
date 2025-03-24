@@ -46,6 +46,7 @@ Item {
         root.blUdalitVibor = false;//Запрещаем выбирать Список для удаления.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         root.blZagolovok = false;//Запрещаем изменять заголовок.
+        lsvZona.enabled = true;//Делаем кликабельную Зону.
     }
     focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -85,6 +86,7 @@ Item {
         txuUdalit.visible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
+        lsvZona.enabled = false;//Делаем не кликабельную Зону.
         root.signalToolbar(qsTr("Удалить данный список?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
@@ -95,6 +97,7 @@ Item {
         menuSpisok.visible = false;//Делаем невидимым меню.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ СПИСКА");//Подсказка пользователю, что вводить нужно.
        	txnZagolovok.visible = true;//Режим создания элемента Списка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
+        lsvZona.enabled = false;//Делаем не кликабельную Зону.
         root.signalToolbar(qsTr("Создайте новый список."))
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
@@ -115,6 +118,7 @@ Item {
         txnZagolovok.text = cppqml.strTitul;//Добавляем в строку Заголовок, для более понятного редактирования
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЗАГОЛОВКА");//Подсказка пользователю,что вводить нужн
         txnZagolovok.visible = true;//Показ текстового редактора Заголовка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
+        lsvZona.enabled = false;//Делаем не кликабельную Зону.
         root.signalToolbar(qsTr("Измените имя заголовка списка."));
     }
     Item {//Спискок Заголовка
@@ -201,6 +205,7 @@ Item {
             clrBorder: "black"
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                lsvZona.enabled = true;//Делаем кликабельную Зону.
                 if(cppqml.delStrSpisok(strKod))//Запускаю метод удаление Списка из БД, Элементов и  Документов
                     root.signalToolbar(qsTr("Успешное удаление списка."));
                 else
@@ -208,6 +213,7 @@ Item {
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                lsvZona.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
@@ -289,6 +295,7 @@ Item {
                             cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
                             txnZagolovok.text = strSpisok;//Добавляем в строку выбранный элемент Списка.
                             root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
+                            lsvZona.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор Списка переименования, то ...
                             if(root.blUdalitVibor){//Если удалить, то...
@@ -385,6 +392,7 @@ Item {
                 root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
                 root.blUdalitVibor = false;//Запрещено удалять.
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                lsvZona.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}

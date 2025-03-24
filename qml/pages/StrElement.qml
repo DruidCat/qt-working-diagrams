@@ -43,6 +43,7 @@ Item {
         root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         root.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+        lsvZona.enabled = true;//Делаем кликабельную Зону.
     }
     focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -76,6 +77,7 @@ Item {
         txuUdalit.visible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
+        lsvZona.enabled = false;//Делаем не кликабельную Зону.
         root.signalToolbar(qsTr("Удалить данный элемент?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
@@ -86,6 +88,7 @@ Item {
         menuElement.visible = false;//Делаем невидимым меню.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
         txnZagolovok.visible = true;//Режим создания элемента Списка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
+        lsvZona.enabled = false;//Делаем не кликабельную Зону.
         root.signalToolbar(qsTr("Создайте новый элемент."));
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
@@ -183,6 +186,7 @@ Item {
             clrBorder: "black"
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                lsvZona.enabled = true;//Делаем кликабельную Зону.
                 if(cppqml.delStrElement(strKod))//Запускаю метод удаление Элемента из БД и их Документов.
                     root.signalToolbar(qsTr("Успешное удаление элемента."));
                 else
@@ -190,6 +194,7 @@ Item {
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                lsvZona.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
@@ -269,6 +274,7 @@ Item {
                             cppqml.strElement = strElement;//Присваиваем Элемент списка к свойству Q_PROPERTY
                             txnZagolovok.text = strElement;//Добавляем в строку выбранный Элемент списка.
                             root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименовани
+                            lsvZona.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...
                             if(root.blUdalitVibor){//Если удалить, то...
@@ -362,6 +368,7 @@ Item {
                 root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
                 root.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
                 txuUdalit.visible = false;//Убираем запрос на удаление, если он есть.
+                lsvZona.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}
