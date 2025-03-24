@@ -31,18 +31,18 @@ Item{
             color: maKnopkaMinus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaMinus.width/4
         }
+        MouseArea {
+            id: maKnopkaMinus
+            anchors.fill: rctKnopkaMinus
+            onClicked: {
+                tmKnopkaMinus.clicked();
+            }
+        }
 	}
 	Component.onCompleted: {
 		if(tmKnopkaMinus.border){
 			rctKnopkaMinus.border.color = maKnopkaMinus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
         	rctKnopkaMinus.border.width = tmKnopkaMinus.width/8/4;
 		}
-	}
-    MouseArea {
-        id: maKnopkaMinus
-        anchors.fill: rctKnopkaMinus
-        onClicked: {
-            tmKnopkaMinus.clicked();
-        }
-    }
+	} 
 }

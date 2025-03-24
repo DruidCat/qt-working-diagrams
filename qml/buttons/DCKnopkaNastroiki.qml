@@ -76,13 +76,12 @@ Item {
             color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaNastroiki.width/2//Круг
         }
-	}
-
-	MouseArea {
-		id: maKnopkaNastroiki
-        anchors.fill: rctKnopkaNastroiki
-		onClicked: {
-			tmKnopkaNastroiki.clicked();
-		}
-	}
+        MouseArea {
+            id: maKnopkaNastroiki
+            anchors.fill: rctKnopkaNastroiki
+            onClicked: {
+                tmKnopkaNastroiki.clicked();
+            }
+        }
+	}	
 }

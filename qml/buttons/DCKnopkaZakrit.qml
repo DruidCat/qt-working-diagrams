@@ -69,7 +69,6 @@ Item{
             color: maKnopkaZakrit.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaZakrit.width/4
         }
-
         Rectangle {
             id: rctNizLevo
             width: rctKnopkaZakrit.width/4
@@ -82,13 +81,12 @@ Item{
             color: maKnopkaZakrit.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaZakrit.width/4
         }
-
-    }
-    MouseArea {
-        id: maKnopkaZakrit
-        anchors.fill: rctKnopkaZakrit
-        onClicked: {
-            tmKnopkaZakrit.clicked();
+        MouseArea {
+            id: maKnopkaZakrit
+            anchors.fill: rctKnopkaZakrit
+            onClicked: {
+                tmKnopkaZakrit.clicked();
+            }
         }
-    }
+    } 
 }

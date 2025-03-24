@@ -60,13 +60,12 @@ Item{
 			color: maKnopkaVniz.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
 			radius: rctKnopkaVniz.width/4
 		}
-	}
-
-	MouseArea {
-		id: maKnopkaVniz
-        anchors.fill: rctKnopkaVniz
-        onClicked: {
-            tmKnopkaVniz.clicked();
-		}
-	}
+        MouseArea {
+            id: maKnopkaVniz
+            anchors.fill: rctKnopkaVniz
+            onClicked: {
+                tmKnopkaVniz.clicked();
+            }
+        }
+	}	
 }

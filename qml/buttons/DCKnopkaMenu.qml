@@ -50,14 +50,13 @@ Item{
 
 			color: maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
 			radius: rctKnopkaMenu.width/4
-		}
-	}
-
-	MouseArea {
-		id: maKnopkaMenu
-        anchors.fill: rctKnopkaMenu
-        onClicked: {
-			tmKnopkaMenu.clicked();
-		}
-	}
+        }
+        MouseArea {
+            id: maKnopkaMenu
+            anchors.fill: rctKnopkaMenu
+            onClicked: {
+                tmKnopkaMenu.clicked();
+            }
+        }
+	}	
 }
