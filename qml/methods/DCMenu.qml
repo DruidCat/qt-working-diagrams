@@ -4,7 +4,7 @@
 import "qrc:/js/DCFunkciiJS.js" as JSMenu
 
 Item {
-	id: tmMenu
+    id: root
     property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrTexta: "orange"
@@ -14,35 +14,43 @@ Item {
 
     ListView {
 		id: lsvMenu
+        focus: {
+           if(root.visible){//Если виджет видимый, то...
+                forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+                return true;
+           }
+           else//Если виджет не видимый, то...
+                return false;
+        }
 		Component {
 			id: cmpMenu
 			Rectangle {
 				id: rctMenu
                 width: lsvMenu.width
-				height: tmMenu.ntWidth*tmMenu.ntCoff+tmMenu.ntCoff
-				radius: (width/(tmMenu.ntWidth*tmMenu.ntCoff))/tmMenu.ntCoff
+                height: root.ntWidth*root.ntCoff+root.ntCoff
+                radius: (width/(root.ntWidth*root.ntCoff))/root.ntCoff
 				border.width: 1
-				border.color: Qt.darker(tmMenu.clrFona, 1.3)
+                border.color: Qt.darker(root.clrFona, 1.3)
                 clip: true//Обрезаем лишний текст в прямоугольнике.
                 color: maMenu.containsPress
-					   ? Qt.darker(tmMenu.clrFona, 1.3) : tmMenu.clrFona
+                       ? Qt.darker(root.clrFona, 1.3) : root.clrFona
                 Rectangle {
                     id: rctText
                     anchors.fill: rctMenu
-                    anchors.margins: tmMenu.ntCoff/2
+                    anchors.margins: root.ntCoff/2
                     color: "transparent"
                 }
 				Text {
 					id: txtText
-                    color: maMenu.containsPress ? Qt.darker(tmMenu.clrTexta, 1.3) : tmMenu.clrTexta
+                    color: maMenu.containsPress ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
                     anchors.left: rctText.left
                     anchors.verticalCenter: rctText.verticalCenter
                     text: modelData.menu
-                    font.pixelSize: rctText.height-tmMenu.ntCoff
+                    font.pixelSize: rctText.height-root.ntCoff
                 }
                 Component.onCompleted: {//Когда текст нарисовался, расчитываю его длину.
                     if(rctText.width > txtText.width){//Если длина строки больше длины текста, то...
-                        for(let ltShag=txtText.font.pixelSize; ltShag<rctText.height-tmMenu.ntCoff; ltShag++){
+                        for(let ltShag=txtText.font.pixelSize; ltShag<rctText.height-root.ntCoff; ltShag++){
                             if(txtText.width < rctText.width){//Если длина текста меньше динны строки
                                 txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
                                 if(txtText.width > rctText.width){//Но, если переборщили
@@ -63,12 +71,12 @@ Item {
 					id: maMenu
 					anchors.fill: rctMenu
 					onClicked: {
-						tmMenu.clicked(modelData.nomer, modelData.menu)
+                        root.clicked(modelData.nomer, modelData.menu)
 					}
 				}
 				onWidthChanged: {//Если длина строки изменилась, то...
                     if(rctText.width > txtText.width){//Если длина строки больше длины текста, то...
-                        for(let ltShag=txtText.font.pixelSize; ltShag<rctText.height-tmMenu.ntCoff; ltShag++){
+                        for(let ltShag=txtText.font.pixelSize; ltShag<rctText.height-root.ntCoff; ltShag++){
                             if(txtText.width < rctText.width){//Если длина текста меньше динны строки
 								txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
                                 if(txtText.width > rctText.width){//Но, если переборщили
@@ -87,11 +95,11 @@ Item {
 				}
 			}
 		}
-		anchors.fill: tmMenu
-		anchors.topMargin:tmMenu.ntCoff
-		anchors.bottomMargin:tmMenu.ntCoff
-        anchors.leftMargin:tmMenu.width/2//Отступ отлевого края половина длины экрана.
-        anchors.rightMargin:tmMenu.ntCoff/2//Отступ от правого края пол коэффициента
+        anchors.fill: root
+        anchors.topMargin:root.ntCoff
+        anchors.bottomMargin:root.ntCoff
+        anchors.leftMargin:root.width/2//Отступ отлевого края половина длины экрана.
+        anchors.rightMargin:root.ntCoff/2//Отступ от правого края пол коэффициента
         opacity: 0.9//Прозрачность.
 		interactive: false//Запретить листать.
 
@@ -118,6 +126,6 @@ Item {
                 }
             }
 		}
-		tmMenu.height = lsvMenu.count*(ntWidth*ntCoff+ntCoff)+ntCoff;//Выставляем высоту под размер меню.
+        root.height = lsvMenu.count*(ntWidth*ntCoff+ntCoff)+ntCoff;//Выставляем высоту под размер меню.
 	}
 }
