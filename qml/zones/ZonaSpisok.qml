@@ -9,6 +9,7 @@ Item {
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
+    property bool enabled: true
 	signal clicked(int ntNomer, var strSpisok);
 
 	ListView {
@@ -56,6 +57,7 @@ Item {
 				MouseArea {
 					id: maZona
                     anchors.fill: rctZona
+                    enabled: root.enabled ? true : false
                     onClicked: {
                         root.clicked(modelData.kod, modelData.spisok)
                     }
@@ -92,16 +94,5 @@ Item {
                 lsvZona.model = JSSpisok.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
 			}
         }
-        /*
-        MouseArea {
-            id: maLSVZona
-            anchors.fill: lsvZona
-            z: 1
-            propagateComposedEvents: true
-            onClicked: {
-                console.error("Клик.");
-            }
-        }
-        */
 	}
 }
