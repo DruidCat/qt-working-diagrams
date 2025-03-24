@@ -2,7 +2,7 @@
 //import QtQuick.Window //2.14
 //DCTextEdit - ШАБЛОН РАБОТЫ С ТЕКСТОМ НА СТРАНИЦЕ (ЛИСТАТЬ, РЕДАКТИРОВАТЬ, ВЫДЕЛЯТЬ).
 Item {
-    id: tmTextEdit
+    id: root
     property alias text: txdTextEdit.text //Текст
     property alias readOnly: txdTextEdit.readOnly//читать Только текст. (false - можно изменять)
 	property alias textEdit: txdTextEdit//Передаём в виде свойства весь объект TextEdit
@@ -12,32 +12,24 @@ Item {
     property color clrBorder: "transparent"//Цвет границы области текста.
     property alias bold: txdTextEdit.font.bold//Жирный текст.
     property alias italic: txdTextEdit.font.italic//Наклонный текст.
-    property real pixelSize: tmTextEdit.ntWidth*tmTextEdit.ntCoff//размер шрифта текста.
+    property real pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
     property int  ntWidth: 2
     property int ntCoff: 8
-    anchors.fill: parent//Растягиваем область по родителю.
-
-    function fnCvetGranici(){//Функция выставляющая цвет границы в зависимости от параметра readOnly.
-        if(tmTextEdit.readOnly)//Если толькоЧтение истина, то...
-            rctTextEdit.border.color = "transparent";//То граница прозрачная.
-        else//Если режим редактирования, то...
-            rctTextEdit.border.color = clrBorder;//То выставляем цвет из настройки property
-    }
-
-    onReadOnlyChanged: {//Слот изменения property readOnly, автоматический создаётся от сигнала (on...Changed)
-        fnCvetGranici();//Функция выставляющая цвет границы в зависимости от параметра readOnly.
-	}
+    anchors.fill: parent
+    //TODO Чета этот код не работает, нужно его логировать. Видимо из-за fnEnsureVisible
+    //width: Screen.desktopAvailableWidth//ВАЖНО, экранная клавиатура работает корректно с размером приложения.
+    height: Screen.desktopAvailableHeight//ВАЖНО,экранная клавиатура работает корректно с размером приложени
 
     Rectangle {
         id: rctTextEdit
-        anchors.fill: tmTextEdit
+        anchors.fill: root
 		color: "transparent"//Цвет фона прозрачный.
-		border.color: tmTextEdit.clrBorder
-		border.width: tmTextEdit.ntCoff/2
+        border.color: root.clrBorder
+        border.width: root.ntCoff/2
         Flickable {//Перелистывание
             id: flcListat
             anchors.fill: rctTextEdit
-            anchors.margins: tmTextEdit.ntCoff//Отступ, чтоб текст не налазил на бардюр.
+            anchors.margins: root.ntCoff//Отступ, чтоб текст не налазил на бардюр.
             contentWidth: txdTextEdit.paintedWidth//Общая длина листания = длине всего текста
             contentHeight: txdTextEdit.paintedHeight//Общая высота листания = высоте всего текста
             interactive: true//Перелистывание активировать.
@@ -59,18 +51,23 @@ Item {
 				textFormat: TextEdit.AutoText//Формат текста АВТОМАТИЧЕСКИ определяется. Предпочтителен HTML4.
                 color: "black"//цвет текста
                 text: ""
-                font.pixelSize: tmTextEdit.pixelSize//размер шрифта текста.
+                font.pixelSize: root.pixelSize//размер шрифта текста.
                 wrapMode: TextEdit.Wrap//Текст в конце строки переносим на новую строку.
                 readOnly: true
-                focus: true//Фокус на TextEdit
+                focus: {
+                    if(root.readOnly){//Если запрещено редактировать, то...
+                        rctTextEdit.border.color = "transparent";//То граница прозрачная.
+                        return false;//разфокусируемся.
+                    }
+                    else{//Если разрешено редактировать, то...
+                        rctTextEdit.border.color = clrBorder;//То выставляем цвет из настройки property
+                        return true;//фокусируемся.
+                    }
+                }
                 selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
                 onCursorRectangleChanged: flcListat.fnEnsureVisible(cursorRectangle)
             }
         }
-    }
-
-    Component.onCompleted: {//Вызывается при завершении иннициализации компонента, выставляется цвет границы.
-        fnCvetGranici();//Функция выставляющая цвет границы в зависимости от параметра readOnly.
     }
 }
 //Любые пробелы и табы в тексте отобразятся в приложении.

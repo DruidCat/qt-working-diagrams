@@ -7,7 +7,7 @@ import "qrc:/qml/buttons"//Импортируем кнопки
 import "qrc:/qml/methods"//Импортируем методы написанные мной.
 //Страница отображающая Описание чего либо.
 Item {
-	id: tmOpisanie
+    id: root
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -27,15 +27,12 @@ Item {
 	property alias radiusZona: txdZona.radius
 	property alias textTextEdit: txdZona.text
 	property string strOpisanie: "titul"
-	anchors.fill: parent//Растянется по Родителю.
+    anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 
 	function fnClickedOtmena(){//Отмена редакрирования
-		knopkaOtmena.visible = false;//делаем невидимой кнопку Отмена.
-		knopkaOk.visible = false;//делаем невидимой кнопку Ок.
-		knopkaSozdat.visible = true;//делаем видимой кнопку Создать.
-		txdZona.readOnly = true;//запрещаем редактировать текст.	
+        txdZona.readOnly = true;//запрещаем редактировать текст.
 		if(strOpisanie == "titul"){//Если Титул, то...
 			txdZona.text = cppqml.strTitulOpisanie;//Загружаем текст из бизнес логики.
 		}
@@ -51,10 +48,7 @@ Item {
 		}
 	}
     function fnClickedOk(){//Сохранение редакрированного описания.
-		knopkaOtmena.visible = false;//Делаем невидимой кнопку Отмена.
-		knopkaOk.visible = false;//Делаем невидимой кнопку Ок.
-		knopkaSozdat.visible = true;//Делаем видимой кнопку Создать.
-		txdZona.readOnly = true;//Запрещаем редактировать текст.
+        txdZona.readOnly = true;//Запрещаем редактировать текст.
 		if(strOpisanie == "titul"){//Если Титул, то...
 			cppqml.strTitulOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
 		}
@@ -72,44 +66,41 @@ Item {
 	Item {
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
-			ntWidth: tmOpisanie.ntWidth
-			ntCoff: tmOpisanie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left: tmZagolovok.left
-			anchors.margins: tmOpisanie.ntCoff/2
-			clrKnopki: tmOpisanie.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
 			onClicked: {
-				knopkaOtmena.visible = false;//делаем невидимой кнопку Отмена.
-				knopkaOk.visible = false;//делаем невидимой кнопку Ок.
-				knopkaSozdat.visible = true;//делаем видимой кнопку Создать.
-				txdZona.readOnly = true;//запрещаем редактировать текст.
-				tmOpisanie.clickedNazad();//Сигнал, что кнопка Назад нажата.
+                txdZona.readOnly = true;//запрещаем редактировать текст.
+                root.clickedNazad();//Сигнал, что кнопка Назад нажата.
 			}
 		} 
 		DCKnopkaZakrit {//@disable-check M300
             id: knopkaOtmena
-            ntWidth: tmOpisanie.ntWidth
-            ntCoff: tmOpisanie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.left: tmZagolovok.left
-            anchors.margins: tmOpisanie.ntCoff/2
-            clrKnopki: tmOpisanie.clrTexta
-            clrFona: tmOpisanie.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedOtmena();//Функция обрабатывающая кнопку Отмена.
             }
         }
         DCKnopkaOk {//@disable-check M300
 			id: knopkaOk
-			ntWidth: tmOpisanie.ntWidth
-			ntCoff: tmOpisanie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-			anchors.margins: tmOpisanie.ntCoff/2
+            anchors.margins: root.ntCoff/2
 			visible: false 
-			clrKnopki: tmOpisanie.clrTexta
-			clrFona: tmOpisanie.clrFona
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
 			onClicked: {
 				fnClickedOk();//Нажата кнопка Ок.
 			}
@@ -120,15 +111,30 @@ Item {
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
         DCTextEdit {//@disable-check M300//Модуль просмотра текста, прокрутки и редактирования.
 			id: txdZona
-			ntWidth: tmOpisanie.ntWidth
-			ntCoff: tmOpisanie.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			readOnly: true//Запрещено редактировать текст
             textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
-            radius: tmOpisanie.ntCoff/4//Радиус возьмём из настроек элемента qml через property
-			clrFona: tmOpisanie.clrFona//Цвет фона рабочей области
-			clrTexta: tmOpisanie.clrTexta//Цвет текста
-			clrBorder: tmOpisanie.clrTexta//Цвет бардюра при редактировании текста.
-			italic: true//Текст курсивом.
+            radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
+            clrFona: root.clrFona//Цвет фона рабочей области
+            clrTexta: root.clrTexta//Цвет текста
+            clrBorder: root.clrTexta//Цвет бардюра при редактировании текста.
+            italic: true//Текст курсивом.
+            onReadOnlyChanged: {
+                if(readOnly){//Если запрещено редактировать, то...
+                    txdZona.textEdit.cursorVisible = false;//Курсор сделаем не видимым
+                    knopkaOtmena.visible = false;//делаем невидимой кнопку Отмена.
+                    knopkaOk.visible = false;//делаем невидимой кнопку Ок.
+                    knopkaSozdat.visible = true;//делаем видимой кнопку Создать.
+                }
+                else{
+                    txdZona.textEdit.cursorVisible = true;//Курсор сделае видимым
+                    txdZona.textEdit.cursorPosition = txdZona.text.length;//Курсор в конец текста
+                    knopkaSozdat.visible = false//Делаем невидимой кнопку Создать.
+                    knopkaOtmena.visible = true;//делаем видимой кнопку Отмена.
+                    knopkaOk.visible = true;//Делаем видимой кнопку Ок
+                }
+            }
 		}
         Connections {//Соединяем сигнал из C++ с действием в QML
             target: cppqml;//Цель объект класса С++ DCCppQml
@@ -152,25 +158,19 @@ Item {
 	Item {
 		id: tmToolbar
 		DCKnopkaSozdat {//@disable-check M300
-			id: knopkaSozdat
-			ntWidth: tmOpisanie.ntWidth
-			ntCoff: tmOpisanie.ntCoff
+            id: knopkaSozdat
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.left: tmToolbar.left
-			anchors.margins: tmOpisanie.ntCoff/2
+            anchors.margins: root.ntCoff/2
 			visible: true 
-			clrKnopki: tmOpisanie.clrTexta
-			clrFona: tmOpisanie.clrFona
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
 			onClicked: {
 				txdZona.readOnly = false;//Разрешить редактировать.
-				txdZona.textEdit.cursorPosition = txdZona.text.length;//Курсор в конец текста
-				txdZona.textEdit.focus = true;//Сфокусироваться на области ввода
-				txdZona.textEdit.cursorVisible = true;//Курсор сделать видимым
-				visible = false//Делаем невидимой кнопку Создать.
-				knopkaOtmena.visible = true;//делаем видимой кнопку Отмена.
-				knopkaOk.visible = true;//Делаем видимой кнопку Ок
-				tmOpisanie.clickedSozdat();//Излучаем сигнал Создать
-			}
+                root.clickedSozdat();//Излучаем сигнал Создать
+            }
 		}
 	}
 }
