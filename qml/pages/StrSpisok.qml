@@ -44,7 +44,7 @@ Item {
         root.blPereimenovat = false;//Запрещаем выбор переименовывания.
         root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         root.blUdalitVibor = false;//Запрещаем выбирать Список для удаления.
-        txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+        txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         root.blZagolovok = false;//Запрещаем изменять заголовок.
     }
     focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
@@ -82,14 +82,14 @@ Item {
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного Списка.
         root.blUdalitVibor = false;//Запрещено выбирать Список на удаление.
-        txuUdalit.blVisible = true;//Делаем видимый запрос на удаление.
+        txuUdalit.visible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
         root.signalToolbar(qsTr("Удалить данный список?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
-		txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+        txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         root.blUdalitVibor = false;//Запрещено выбирать Список на удаление. НЕ УДАЛЯТЬ.
         menuSpisok.visible = false;//Делаем невидимым меню.
@@ -193,19 +193,21 @@ Item {
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 
+            visible: false//Невидимый виджет
+
             clrFona: "orange"//Если не задать цвет, будет видно текст под надписью
             clrTexta: "black"
             clrKnopki: "black"
             clrBorder: "black"
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
-                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+                txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 if(cppqml.delStrSpisok(strKod))//Запускаю метод удаление Списка из БД, Элементов и  Документов
                     root.signalToolbar(qsTr("Успешное удаление списка."));
                 else
                     cppqml.strDebug = qsTr("Ошибка при удалении.");
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
-                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+                txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
@@ -296,7 +298,7 @@ Item {
                                 cppqml.strDebug = "";
                                 root.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
                                 root.blUdalitVibor = false;//Запрещено выбирать Список на удаление.
-                                txuUdalit.blVisible = false;//Убираем запрос на удаление, если он есть.
+                                txuUdalit.visible = false;//Убираем запрос на удаление, если он есть.
                                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                                 menuSpisok.visible = false;//Делаем невидимым меню.
                                 cppqml.ullSpisokKod = ntKod;//Присваиваем Код списка к свойству Q_PROPERTY
@@ -383,7 +385,7 @@ Item {
                 root.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
                 root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
                 root.blUdalitVibor = false;//Запрещено удалять.
-                txuUdalit.blVisible = false;//Делаем невидимый запрос на удаление.
+                txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}

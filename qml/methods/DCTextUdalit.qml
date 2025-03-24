@@ -3,7 +3,7 @@
 import "qrc:/qml/buttons"//Импортируем кнопки
 //Шаблон DCTextUdalit.qml - состоит из области, которая показывает текст удалённого документа.
 Item {
-    id: tmTextUdalit
+    id: root
     property int  ntWidth: 2
     property int ntCoff: 8
     property alias radius: rctTextUdalit.radius//Радиус зоны отображения удаляемого документа.
@@ -11,7 +11,6 @@ Item {
     property alias clrTexta: txtTextUdalit.color//цвет текста
     property color clrKnopki: "red"//цвет Кнопок
     property alias clrBorder: rctText.border.color//цвет границы
-    property alias blVisible: rctTextUdalit.visible//Видимость объекта.
     property string kod: ""//Код удаляемого элемента
     property string text: "" //Имя элемента на удаление
     property alias bold: txtTextUdalit.font.bold
@@ -19,52 +18,70 @@ Item {
     property alias textUdalit: txtTextUdalit//Передаём в виде свойства весь объект Text
     signal clickedUdalit(var strKod);//Сигнал на удаление вместе с кодом удаляемого эдемента.
     signal clickedOtmena();//Сигнал на отмену удаления.
-
+    function fnClickedZakrit(){//Функция Закрытия виджета.
+        root.clickedOtmena();//Запускаем сигнал Отмены удаления.
+    }
     Rectangle {//Основной прямоугольник.
         id: rctTextUdalit
-        anchors.fill: tmTextUdalit
+        anchors.fill: root
         color: "transparent"
-        radius: tmTextUdalit.ntCoff/2
-        visible: false
+        radius: root.ntCoff/2
+        visible: {
+            if(root.visible){//Если виджет видимый, то...
+                focus = true;//Фокусируемся на виджете
+                forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+                return true;//Видимый виджет
+            }
+            else{//Если виджет видимый, то...
+                focus =  false;//Не фокусируемся на виджете.
+                return false;//невидимый виджет
+            }
+        }
+        Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+            if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
+                fnClickedZakrit();//Функция закрытия виджета.
+            }
+            //console.log(event.key);
+        }
         DCKnopkaZakrit {//@disable-check M300//Кнопка Отмены удаления.
-            id: knopkaUdalitOtmena
-            ntWidth: tmTextUdalit.ntWidth
-            ntCoff: tmTextUdalit.ntCoff
+            id: knopkaOtmena
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: rctTextUdalit.verticalCenter
             anchors.left:rctTextUdalit.left
-            anchors.margins: tmTextUdalit.ntCoff/2
-            clrKnopki: tmTextUdalit.clrKnopki
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrKnopki
             onClicked: {
-                tmTextUdalit.clickedOtmena();//Запускаем сигнал Отмены удаления.
+                fnClickedZakrit();//Функция Закрытия виджета.
             }
         }
         Rectangle {
             id: rctText
             anchors.top: rctTextUdalit.top
             anchors.bottom: rctTextUdalit.bottom
-            anchors.left: knopkaUdalitOtmena.right
-            anchors.right: knopkaUdalitOk.left
-            anchors.leftMargin: tmTextUdalit.ntCoff/2
-            anchors.rightMargin: tmTextUdalit.ntCoff/2
+            anchors.left: knopkaOtmena.right
+            anchors.right: knopkaOk.left
+            anchors.leftMargin: root.ntCoff/2
+            anchors.rightMargin: root.ntCoff/2
 
             color: "transparent"
             border.color: "transparent"
-            border.width: tmTextUdalit.ntCoff/8
-            radius: tmTextUdalit.ntCoff/2
+            border.width: root.ntCoff/8
+            radius: root.ntCoff/2
             clip: true//Обрезаем всё что больше этого прямоугольника.
             Text {
                 id: txtTextUdalit
 				anchors.horizontalCenter: rctText.horizontalCenter
 				anchors.verticalCenter: rctText.verticalCenter
-                color: tmTextUdalit.clrTexta
-                font.pixelSize: tmTextUdalit.ntWidth*tmTextUdalit.ntCoff//размер шрифта текста.
+                color: root.clrTexta
+                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: qsTr("УДАЛИТЬ:")+tmTextUdalit.text+"?"
+                text: qsTr("УДАЛИТЬ:")+root.text+"?"
 				onTextChanged: {//Если текст изменился, то...
 					if(rctText.width > txtTextUdalit.width){//Если длина строки больше длины текста, то...
 					for(let ltShag=txtTextUdalit.font.pixelSize;
-												ltShag<tmTextUdalit.ntWidth*tmTextUdalit.ntCoff; ltShag++){
+                                                ltShag<root.ntWidth*root.ntCoff; ltShag++){
 							if(txtTextUdalit.width < rctText.width){//Если длина текста меньше динны строки
 								txtTextUdalit.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 								if(txtTextUdalit.width > rctText.width){//Но, если переборщили
@@ -85,7 +102,7 @@ Item {
 			onWidthChanged: {//Если длина строки измениасть, то...
 				if(rctText.width > txtTextUdalit.width){//Если длина строки больше длины текста, то...
 				for(let ltShag=txtTextUdalit.font.pixelSize;
-												ltShag<tmTextUdalit.ntWidth*tmTextUdalit.ntCoff; ltShag++){
+                                                ltShag<root.ntWidth*root.ntCoff; ltShag++){
 						if(txtTextUdalit.width < rctText.width){//Если длина текста меньше динны строки
 							txtTextUdalit.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 							if(txtTextUdalit.width > rctText.width){//Но, если переборщили
@@ -104,15 +121,15 @@ Item {
 			}
         }
         DCKnopkaOk{//@disable-check M300//Кнопка подтверждения удаления.
-            id: knopkaUdalitOk
-            ntWidth: tmTextUdalit.ntWidth
-            ntCoff: tmTextUdalit.ntCoff
+            id: knopkaOk
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: rctTextUdalit.verticalCenter
             anchors.right: rctTextUdalit.right
-            anchors.margins: tmTextUdalit.ntCoff/2
-            clrKnopki: tmTextUdalit.clrKnopki
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrKnopki
             onClicked: {
-                tmTextUdalit.clickedUdalit(tmTextUdalit.kod);//Сигнал удаления с кодом удаляемого Элемента.
+                root.clickedUdalit(root.kod);//Сигнал удаления с кодом удаляемого Элемента.
             }
         }
     }
