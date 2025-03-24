@@ -6,9 +6,25 @@ import "pages"//Импортируем Страницы программы.
 
 Window {
 	id: root
-    width: 480
-    height: 640
-	visible: true
+    width: {
+        var vrWidth = Screen.desktopAvailableWidth;
+        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))
+            return vrWidth;
+        else
+            return vrWidth/2;
+    }
+    height: {
+        var vrHeight = Screen.desktopAvailableHeight
+        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))
+            return vrHeight;
+        else
+            return vrHeight/2;
+    }
+
+    minimumWidth: 480
+    minimumHeight: 640
+
+    visible: true
 	color: "grey"
     title: qsTr("Рабочий Список от druidcat@yandex.ru")
     property int ntWidth: 4
