@@ -1,11 +1,15 @@
-﻿#include "dcfiledialog.h"
+﻿#include <QStandardPaths>
+#include "dcfiledialog.h"
 
 DCFileDialog::DCFileDialog(QStringList slsFileDialogMaska, QObject* proditel):QObject(proditel){//Конструктор.
 ////////////////////////////////
 //---К О Н С Т Р У К Т О-Р----//
 ////////////////////////////////
     m_pdcclass = new DCClass();//Указатель на класс по работе с текстом.
-    m_pdrPut = new QDir (QDir::home());//Путь дериктории, который необходимо отобразить.
+    QStringList slsHomePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);//Документы
+    QString strHomePath = slsHomePath.first();
+    m_pdrPut = new QDir (strHomePath);//Путь дериктории, который необходимо отобразить.
+    //m_pdrPut = new QDir (QDir::home());//Путь дериктории, который необходимо отобразить.
     m_strFileDialogImya.clear();//Пустое имя.
     m_strFileDialogPut = m_strFileDialogPutDom = m_pdrPut->absolutePath();//Иннициализируем пути по умолчанию.
     m_slsFileDialogMaska = slsFileDialogMaska;//Задаём параметр маски отображения разширений файлов.
