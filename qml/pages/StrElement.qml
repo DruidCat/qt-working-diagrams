@@ -103,7 +103,9 @@ Item {
         root.blUdalitVibor = true;//Включаем режим выбора удаляемого Элемента
         root.signalToolbar(qsTr("Выберите элемент для его удаления."))
     }
-
+    function fnMenuSort(){//Функция нажатия пункта меню Сортировать.
+        cppqml.strDebug = "Данный функционал в стадии разработки.";//Сообщение в Toolbar.
+    }
 	Item {//Элементы Заголовок
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
@@ -317,6 +319,9 @@ Item {
 					}
                     if(ntNomer === 3){//Удалить.
                         fnMenuUdalit();//Функция нажатия пункта меню Удалить.
+                    }
+                    if(ntNomer === 4){//Сортировать.
+                        fnMenuSort();//Функция нажатия пункта меню Сортировать.
                     }
                     if(ntNomer === 5){//Выход
 						Qt.quit();//Закрыть приложение.

@@ -112,6 +112,9 @@ Item {
         root.blUdalitVibor = true;//Включаем режим выбора удаляемого Списка.
         root.signalToolbar(qsTr("Выберите список для его удаления."))
     }
+    function fnMenuSort(){//Функция нажатия пункта меню Сортировать.
+        cppqml.strDebug = "Данный функционал в стадии разработки.";//Сообщение в Toolbar.
+    }
     function fnMenuZagolovok(){//Нажат пункт меню Изменить Заголовок.
         blZagolovok = true;//Изменить заголовок.
         menuSpisok.visible = false;//Делаем невидимым меню.
@@ -338,6 +341,9 @@ Item {
 					}
                     if(ntNomer === 3){//Удалить.
                         fnMenuUdalit();//Функция нажатия пункта меню Удалить.
+                    }
+                    if(ntNomer === 4){//Сортировать.
+                        fnMenuSort();//Функция нажатия пункта меню Сортировать.
                     }
                     if(ntNomer === 5){//Изменить Заголовок.
                         fnMenuZagolovok();//Функция нажатия пункта меню Изменить Заголовок.
