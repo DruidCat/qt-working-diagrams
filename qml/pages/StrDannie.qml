@@ -1,4 +1,6 @@
 ﻿import QtQuick //2.14
+import Qt.labs.platform
+//import QtDesktopServices
 //import QtQuick.Window //2.14
 //import QtQuick.Controls //2.14
 
@@ -27,6 +29,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
+    property bool pdfViewer: false//true - включить собственный pdf просмотрщик.
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого документа, если true
@@ -291,7 +294,10 @@ Item {
                                 cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
                                 cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
 								//Открываем Pdf документ.
-                                root.clickedDannie(strDannie);//сигнал с кодом и именем Документа.
+                                if(root.pdfViewer)//Если настройка настроена на собственный pdf просмотрщик,то
+                                    root.clickedDannie(strDannie);//сигнал с кодом и именем Документа.
+                                else//Если на сторонний просмотщик pdf документов, то...
+                                    Qt.openUrlExternally(cppqml.strDannieUrl);//Открываем pdf в стороннем app.
                             }
                         }
 					}

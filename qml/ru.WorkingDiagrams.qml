@@ -7,22 +7,23 @@ import "pages"//Импортируем Страницы программы.
 Window {
 	id: root
     width: {
-        var vrWidth = Screen.desktopAvailableWidth;
-        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))
-            return vrWidth;
-        else
-            return vrWidth/2;
+        var vrWidth = Screen.desktopAvailableWidth;//Расчитываем доступную ширину экрана
+        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
+            return vrWidth;//Масимально возможная ширина.
+        else{
+            return vrWidth/2;//Половина ширины экрана.
+        }
     }
     height: {
-        var vrHeight = Screen.desktopAvailableHeight
-        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))
-            return vrHeight;
-        else
-            return vrHeight/2;
+        var vrHeight = Screen.desktopAvailableHeight//Расчитываем доступную высоту экрана
+        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
+            return vrHeight;//Масимально возможная ширина.
+        else{
+            return (vrHeight/4)*3;//Половина высоты экрана.
+        }
     }
-
-    minimumWidth: 480
-    minimumHeight: 640
+    //minimumWidth: 480
+    //minimumHeight: 640
 
     visible: true
 	color: "grey"
@@ -33,6 +34,7 @@ Window {
 	property color clrFona: "grey"
     property color clrFaila: "yellow"
 	property color clrStranic: "black"
+    property bool pdfViewer: true//Отключить pdf просмоторщик.
 
 	StackView {
 		id: stvStr
@@ -74,10 +76,13 @@ Window {
 				}
 				onClickedQt: {
 					stvStr.push(pgStrQt)//Переходим на страницу об Qt.
-				}
+                }
                 onClickedPlan: {
                     stvStr.push(pgStrPlan)//Переходим на страницу Плана.
 				}
+                onPdfViewerChanged: {//Если флаг настройки pdf Проигрывателя изменился, то...
+                    root.pdfViewer = pdfViewer;//Приравниваем флаг настройки.
+                }
 			}
 		}
 		Stranica {//Debug
@@ -315,6 +320,7 @@ Window {
 				toolbarX: pgStrDannie.rctStrToolbar.x; toolbarY: pgStrDannie.rctStrToolbar.y
 				toolbarWidth: pgStrDannie.rctStrToolbar.width; toolbarHeight: pgStrDannie.rctStrToolbar.height
 				radiusZona: pgStrDannie.rctStrZona.radius//Радиус берём из настроек элемента qml
+                pdfViewer: root.pdfViewer
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
 					stvStr.pop()//Назад страницу
@@ -364,6 +370,7 @@ Window {
 				zonaWidth: pgStrPdf.rctStrZona.width; zonaHeight: pgStrPdf.rctStrZona.height
 				toolbarX: pgStrPdf.rctStrToolbar.x; toolbarY: pgStrPdf.rctStrToolbar.y
 				toolbarWidth: pgStrPdf.rctStrToolbar.width; toolbarHeight: pgStrPdf.rctStrToolbar.height
+                pdfViewer: root.pdfViewer
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}

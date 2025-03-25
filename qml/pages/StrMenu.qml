@@ -6,8 +6,9 @@ import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
 import "qrc:/qml/methods"//Импортируем методы написанные мной.
 //Страница отображающая Меню.
+
 Item {
-	id: tmMenu
+    id: root
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -24,7 +25,8 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-	anchors.fill: parent//Растянется по Родителю.
+    property bool pdfViewer: false//true - включен собственный просмотрщик.
+    anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	signal clickedWorkingDiagrams();//Сигнал нажатия кнопки об Рабочих Схемах.
@@ -37,22 +39,22 @@ Item {
     }
 
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: tmMenu
+        anchors.fill: root
         onClicked: menuMenu.visible = false
     }
 
 	Item {
 		id: tmZagolovok
         DCKnopkaVpered{//@disable-check M300
-			ntWidth: tmMenu.ntWidth
-			ntCoff: tmMenu.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left: tmZagolovok.left
-			anchors.margins: tmMenu.ntCoff/2
-			clrKnopki: tmMenu.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
 			onClicked: {
                 menuMenu.visible = false;//Делаем невидимым меню.
-                tmMenu.clickedNazad();//Сигнал нажатия кнопки Назад.
+                root.clickedNazad();//Сигнал нажатия кнопки Назад.
 			}
 		}
 	} 
@@ -63,7 +65,7 @@ Item {
             id: flZona
             anchors.fill: tmZona//Расстягиваемся по всей рабочей зоне
             contentWidth: tmZona.width//Ширина контента, который будет вложен равен ширине Рабочей Зоны
-            contentHeight: (tmMenu.ntWidth*tmMenu.ntCoff+8+tmMenu.ntCoff)*6//6 - количество кнопок.
+            contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*6//6 - количество кнопок.
 
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
                 id: rctZona
@@ -73,47 +75,47 @@ Item {
 
                 DCKnopkaOriginal {//@disable-check M300
                     id: knopkaLogi
-                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: rctZona.top
                     anchors.left: rctZona.left
                     anchors.right: rctZona.right
-                    anchors.margins: tmMenu.ntCoff/2
+                    anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"
-                    clrTexta: tmMenu.clrTexta
+                    clrTexta: root.clrTexta
                     text: qsTr("Логи")
                     bold: true
                     italic: true
                     onClicked: {
                         menuMenu.visible = false;//Делаем невидимым меню.
-                        tmMenu.clickedLogi();//Сигнал нажатия кнопки Логи.
+                        root.clickedLogi();//Сигнал нажатия кнопки Логи.
                     }
                 }
                 DCKnopkaOriginal {//@disable-check M300
                     id: knopkaAvtor
-                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaLogi.bottom
                     anchors.left: rctZona.left
                     anchors.right: rctZona.right
-                    anchors.margins: tmMenu.ntCoff/2
+                    anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"
-                    clrTexta: tmMenu.clrTexta
+                    clrTexta: root.clrTexta
                     text: qsTr("О приложении")
                     bold: true
                     italic: true
                     onClicked: {
                         menuMenu.visible = false;//Делаем невидимым меню.
-                        tmMenu.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
+                        root.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
                     }
                 }
                 DCKnopkaOriginal {//@disable-check M300
                     id: knopkaSpisok
-                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaAvtor.bottom
                     anchors.left: rctZona.left
                     anchors.right: rctZona.right
-                    anchors.margins: tmMenu.ntCoff/2
+                    anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"
-                    clrTexta: tmMenu.clrTexta
+                    clrTexta: root.clrTexta
                     text: qsTr("Участки")
                     bold: true
                     italic: true
@@ -125,47 +127,64 @@ Item {
                 }
                 DCKnopkaOriginal {//@disable-check M300
                     id: knopkaPlan
-                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaSpisok.bottom
                     anchors.left: rctZona.left
                     anchors.right: rctZona.right
-                    anchors.margins: tmMenu.ntCoff/2
+                    anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"
-                    clrTexta: tmMenu.clrTexta
+                    clrTexta: root.clrTexta
                     text: qsTr("План")
                     bold: true
                     italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
-                        tmMenu.clickedPlan();//Сигнал нажатия кнопки План.
+                        root.clickedPlan();//Сигнал нажатия кнопки План.
                     }
                 }
                 DCKnopkaOriginal {//@disable-check M300
                     id: knopkaQt
-                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
+                    ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaPlan.bottom
                     anchors.left: rctZona.left
                     anchors.right: rctZona.right
-                    anchors.margins: tmMenu.ntCoff/2
+                    anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"
-                    clrTexta: tmMenu.clrTexta
+                    clrTexta: root.clrTexta
                     text: qsTr("О Qt")
                     bold: true
                     italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
-                        tmMenu.clickedQt();//Сигнал нажатия кнопки об Qt.
+                        root.clickedQt();//Сигнал нажатия кнопки об Qt.
+                    }
+                }
+                DCKnopkaOriginal {//@disable-check M300
+                    id: knopkaPdfViewer
+                    ntHeight: root.ntWidth*root.ntCoff+8
+                    anchors.top: knopkaQt.bottom
+                    anchors.left: rctZona.left
+                    anchors.right: rctZona.right
+                    anchors.margins: root.ntCoff/2
+                    clrKnopki: "slategray"
+                    clrTexta: root.clrTexta
+                    text: root.pdfViewer ? qsTr("PdfViewer: вкл.") : qsTr("PdfViewer: выкл.")
+                    bold: true
+                    italic: true
+                    onClicked: {//Слот запускающий
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
                     }
                 }
                 DCKnopkaOriginal {//@disable-check M300
                     id: knopkaVihod
-                    ntHeight: tmMenu.ntWidth*tmMenu.ntCoff+8
-                    anchors.top: knopkaQt.bottom
+                    ntHeight: root.ntWidth*root.ntCoff+8
+                    anchors.top: knopkaPdfViewer.bottom
                     anchors.left: rctZona.left
                     anchors.right: rctZona.right
-                    anchors.margins: tmMenu.ntCoff/2
+                    anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"
-                    clrTexta: tmMenu.clrTexta
+                    clrTexta: root.clrTexta
                     text: qsTr("Выход")
                     bold: true
                     italic: true
@@ -178,13 +197,13 @@ Item {
         PathViewSpisok {//@disable-check M300
             id: pvSpisok
             visible: false
-            ntWidth: tmMenu.ntWidth
-            ntCoff: tmMenu.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.left: tmZona.left
             anchors.right: tmZona.right
             anchors.bottom: tmZona.bottom
-            anchors.margins: tmMenu.ntCoff
-            clrTexta: tmMenu.clrTexta
+            anchors.margins: root.ntCoff
+            clrTexta: root.clrTexta
             clrFona: "SlateGray"
             onSSpisok: function(strSpisok) {
                 pvSpisok.visible = false;
@@ -194,13 +213,13 @@ Item {
         DCMenu {//@disable-check M300//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
             visible: false//Невидимое меню.
-            ntWidth: tmMenu.ntWidth
-            ntCoff: tmMenu.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.left: tmZona.left
             anchors.right: tmZona.right
             anchors.bottom: tmZona.bottom
-            anchors.margins: tmMenu.ntCoff
-            clrTexta: tmMenu.clrTexta
+            anchors.margins: root.ntCoff
+            clrTexta: root.clrTexta
             clrFona: "SlateGray"
             imyaMenu: "vihod"//Глянь в DCMenu все варианты меню в слоте окончательной отрисовки.
             onClicked: function(ntNomer, strMenu) {//Слот сигнала клика по пункту меню.
@@ -214,13 +233,13 @@ Item {
     Item {//Тулбар
 		id: tmToolbar
         DCKnopkaNastroiki {//@disable-check M300//Кнопка Меню.
-            ntWidth: tmMenu.ntWidth
-            ntCoff: tmMenu.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter
             anchors.right: tmToolbar.right
-            anchors.margins: tmMenu.ntCoff/2
-            clrKnopki: tmMenu.clrTexta
-            clrFona: tmMenu.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
             onClicked: {//Слот сигнала нажатия на кнопку Меню.
                 menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость
