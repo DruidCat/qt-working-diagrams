@@ -25,19 +25,20 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
+    property bool pdfViewer: false//true - собственный просмотщик pdf документов.
     property int ntLogoTMK: 16
-    property bool blLogoTMK: false;//true - логотип на увеличение.
-    property bool blOpen: false;//true - когда pdf документ открывается.
-    property bool blSize: false;//true - когда pdf документ изменяет размер при масштабе приложения.
-    property bool blPustoi: false;//true - когда пустой pdf документ открывается.
-    property bool blScale: false;//true - когда в pdf документе масштабирование произошло.
+    property bool blLogoTMK: false//true - логотип на увеличение.
+    property bool blOpen: false//true - когда pdf документ открывается.
+    property bool blSize: false//true - когда pdf документ изменяет размер при масштабе приложения.
+    property bool blScale: false//true - когда в pdf документе масштабирование произошло.
     property bool blError: false//true - взведён флаг в Статусе документа, чтоб не взводить таймер ошибки.
-    property bool blPassword: false;//true - когда в pdf документе запрашиваем пароль.
+    property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
     property bool blStartWidth: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие.
 	property bool blStartHeight: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие
-    //Расчитываемые при открытии pdf документа.
-    property bool blDocVert: true;//true - вертикальный документ, false - горизонтальный документ.
-    property int  ntPdfPage: 0;//Номер страницы из БД.
+    //Расчитываемые при открытии/закрытии pdf документа.
+    property bool blDocVert: true//true - вертикальный документ, false - горизонтальный документ.
+    property int  ntPdfPage: 0//Номер страницы из БД.
+    property string strPdfPosledni: ""//Путь, который принадлежал предыдущему документу.
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
@@ -76,9 +77,15 @@ Item {
         //onClicked:
     }	
 	function fnPdfOtkrit(){//Функция открытия Pdf документа.
-        tmrLogo.running = true;//включаем таймер, и тем самым не показываем документ и кнопки.
         var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
-        console.error("80: Url: " + strPdfUrl);
+        if(strPdfUrl === strPdfPosledni){//Если открывается тот же документ, то...
+            tmrLogo.running = false;//выключаем таймер, и тем самым показываем документ и кнопки.
+        }
+        else{//Если открывается другой документ, то...
+            tmrLogo.running = true;//включаем таймер, и тем самым не показываем документ и кнопки.
+        }
+        strPdfPosledni = strPdfUrl;//Запоминаем путь открываемого документа.
+        //console.error("80: Url: " + strPdfUrl);
         pdfDoc.source = strPdfUrl;
         //Расчитываем, вертикальный или горизонтальный документ.
         if(pdfDoc.pagePointSize(ntPdfPage).height >= pdfDoc.pagePointSize(ntPdfPage).width)
@@ -86,37 +93,21 @@ Item {
         else
             blDocVert = false;
         spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
-		spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox	
+        spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
     }
     function fnPdfDocStatus() {//Статус после открытия документа pdf.
 		console.error("91:fnPdfDocStatus: " + pdfDoc.status);
-        if(root.blPustoi){//Если открывается пустой pdf документ. Именно тут вызываем. ЭТО ВАЖНО!
-            root.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
-            root.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
-            if(!root.blError){//Если не был взведён флаг, то...
-                root.blError = true;//Взводим флаг для Статуса ошибки, чтоб таймер ошибки не взводился.
-				console.error("97:fnPdfDocStatus: перехожу к Данным сворачия проигрыватель.");
-                root.clickedNazad();//Сигнал нажатия кнопки Назад.
-            }
+        if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
+            console.error("103:fnPdfDocStatus Error. ");
+            if(!root.blError)//Если не был взведён флаг, то...
+                tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
         }
-        else{//Если это не пустой документ, обрабатываем статусы.
-            if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
-                console.error("103:fnPdfDocStatus Error. ");
-                if(!root.blError)//Если не был взведён флаг, то...
-                    tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
-            }
-            else{//Если не ошибка, то...
-                if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
-					if(root.blPustoi){//Если открылся пустой документ, то...
-                    	root.blOpen = false;//Документ не нужно в прерывании обрабатывать.
-						root.blPustoi = false;//сбрасываем флаг.
-					}
-					else//Если это рабочий документ, то...
-                    	root.blOpen = true;//Документ открылся.
-                    cppqml.strDebug = "";//Документ открыт, в тулбар не должно быть никаких надписей.
-                    pssPassword.visible = false;//Документ открылся, невидимым поле ввода пароля делаем тут.
-                    console.error("117:fnPdfDocStatus Ready");
-                }
+        else{//Если не ошибка, то...
+            if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
+                root.blOpen = true;//Документ открылся.
+                cppqml.strDebug = "";//Документ открыт, в тулбар не должно быть никаких надписей.
+                pssPassword.visible = false;//Документ открылся, невидимым поле ввода пароля делаем тут.
+                console.error("117:fnPdfDocStatus Ready");
             }
         }
     }
@@ -155,7 +146,7 @@ Item {
 			if(!tmrAppSize.running){//Если таймер еще не запускался, то...
 				console.error("155:fnTimerAppSize. running");
 				root.ntPdfPage = spbPdfPage.value - 1;//Сохраняем номер страницы.
-				tmrLogo.running = true;//Запуск основного таймера.
+                tmrLogo.running = true;//Запуск основного таймера.
 				console.error("158:fnTimerAppSize. pdfDocPustoi");
 				pmpDoc.document = pdfDocPustoi;
 			}
@@ -198,11 +189,11 @@ Item {
     function fnNazad(){//Функция Выхода со страницы, не путать с fnClickedNazad()
         root.blStartWidth = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
         root.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
-        //Обязательная пустой Url, он что то обнуляет, после запароленного файла. И не только.
-        root.blPustoi = true;//Открываем пустой pdf документ, чтоб не проходить все стадии в прерывании стр.
 		pdfDoc.password = "";//Передаём пароль в документ. НЕ УДАЛЯТЬ! ЭТО ОБНУЛЕНИЕ ПАРОЛЯ ПЕРЕД НОВЫМ ДОК.
-        console.error("197:fnNazad. pdfDoc.source = qrc:///000000000.dc");
-        pdfDoc.source = "qrc:///workingdata/000000000.dc";
+        root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
+        console.error("211:fnNazad. закрываем pdf документ null.");
+        //Обязательная null Url, он обнуляет и закрывает документ, после запароленного файла. И не только.
+        pdfDoc.source = null;//"qrc:///workingdata/000000000.dc";
     }
     Timer {//Таймер необходим, чтоб pdf документ успел отрендериться, и можно было масштабировать документ.
         id: tmrScale
@@ -529,18 +520,22 @@ Item {
                 root.blScale = false;//в pdf документе не задали изменение масштаба.
 
                 root.blLogoTMK = false;//логотип на уменьшение.
-                root.blPustoi = false;//пустой pdf документ ещё не открыт.
                 root.blError = false;//флаг не взведён в Статусе пустого документа.
                 root.blPassword = false;//pdf документ не запрашиваем пароль.
 
                 root.ntPdfPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
 
-                fnPdfOtkrit();//Функция открытия Pdf документа.
+                //Если отключен запуск анимации, то эти строки необходимы.
+                spbPdfPage.visible = true;//Делаем видимым DCSpinBox
+                pdfScale.visible = true;//Делаем видимым DCScale
+                pmpDoc.visible = true;//Делаем отображение сцены видимой.
+                if(root.pdfViewer)//Если выбран в настройках собственный просмотрщик, то...
+                    fnPdfOtkrit();//Функция открытия Pdf документа.
 			}
 		}
 		PdfMultiPageView{
-			id:pmpDoc
-			anchors.fill: tmZona
+            id:pmpDoc
+            anchors.fill: tmZona
 			document: pdfDoc
             visible: false
 			onCurrentPageChanged: {//Если страница документа изменилась, то...
