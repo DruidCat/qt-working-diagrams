@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
     app.setWindowIcon(QIcon(":/icons/86x86/ru.WorkingDiagrams.png"));//Выставляем иконку приложения.
-    //Устанавливаем кодировку UTF-8 во всём проекте и в БД в первую очередь.
+    //Qt5 Устанавливаем кодировку UTF-8 во всём проекте и в БД. В Qt6 UTF8 по умолчанию.
     //QTextCodec* ptxcCodec = QTextCodec::codecForName("UTF-8");
     //QTextCodec::setCodecForLocale(ptxcCodec);
     QLocale::setDefault(QLocale(QLocale::Russian, QLocale::Russia));//Настройка локали на кирилицу.

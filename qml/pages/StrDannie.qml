@@ -1,9 +1,4 @@
-﻿import QtQuick //2.14
-import Qt.labs.platform
-//import QtDesktopServices
-//import QtQuick.Window //2.14
-//import QtQuick.Controls //2.14
-
+﻿import QtQuick //2.15
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
 import "qrc:/qml/methods"//Импортируем методы написанные мной.

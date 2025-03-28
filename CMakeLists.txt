@@ -15,11 +15,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(RES_FILES "${PROJECT_SOURCE_DIR}/icons/ico/ru.WorkingDiagrams.rc")
 
-# Закоментированны строки, которые были в начальном варианте.
-# find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Quick Sql Pdf)
-# find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql Pdf)
-
-# Удалить Qt5 или Qt6 в зависимости от версии Qt, под которую будет собираться проект.
+# Установить Qt5 или Qt6 в зависимости от версии Qt, под которую будет собираться проект.
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Quick Sql Pdf)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick Sql)
 
@@ -83,6 +79,7 @@ else()
 		add_executable(	${EXECUTABLE_NAME}
 						${PROJECT_SOURCES}
 						${DATA_FILE}
+						${RES_FILES}
         )
     endif()
 endif()
@@ -96,7 +93,6 @@ target_link_libraries(${EXECUTABLE_NAME}
         PRIVATE 	Qt${QT_VERSION_MAJOR}::Core
   					Qt${QT_VERSION_MAJOR}::Quick
 					Qt${QT_VERSION_MAJOR}::Sql)
-					# Qt${QT_VERSION_MAJOR}::Pdf)
 
 if(Qt5_FOUND) # Если Qt5, то добавляем библиотеку Pdf, в Qt6 её не нужно добавлять.
 	target_link_libraries(${EXECUTABLE_NAME} PRIVATE Qt${QT_VERSION_MAJOR}::Pdf)

@@ -1,6 +1,6 @@
-﻿import QtQuick //2.14
-//import QtQuick.Window //2.14
-import QtQuick.Controls //2.14 для StackView
+﻿import QtQuick //2.15
+import QtQuick.Controls //2.15 //StackView
+//import QtQuick.Window //2.15 //Qt5
 
 import "pages"//Импортируем Страницы программы.
 

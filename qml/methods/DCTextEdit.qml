@@ -1,5 +1,4 @@
-﻿import QtQuick //2.14
-//import QtQuick.Window //2.14
+﻿import QtQuick //2.15
 //DCTextEdit - ШАБЛОН РАБОТЫ С ТЕКСТОМ НА СТРАНИЦЕ (ЛИСТАТЬ, РЕДАКТИРОВАТЬ, ВЫДЕЛЯТЬ).
 Item {
     id: root
