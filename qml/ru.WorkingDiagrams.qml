@@ -34,7 +34,7 @@ Window {
 	property color clrFona: "grey"
     property color clrFaila: "yellow"
 	property color clrStranic: "black"
-    property bool pdfViewer: true//Отключить pdf просмоторщик.
+    property bool pdfViewer: true//false - Отключить pdf просмоторщик.
 
 	StackView {
 		id: stvStr

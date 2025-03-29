@@ -1,4 +1,5 @@
 ﻿#include "datadannie.h"
+
 DataDannie::DataDannie(	QString strImyaDB, QString strImyaDBData, QString strLoginDB, QString strParolDB,
                        	QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject* proditel)
 						: QObject{proditel}{
@@ -214,7 +215,7 @@ QString DataDannie::polImyaFaila(qint64 ullSpisokKod, qint64 ullElementKod, qint
 //---П О Л У Ч И Т Ь   И М Я   Ф А Й Л А---//
 /////////////////////////////////////////////
     uint ntImyaFaila = (ullSpisokKod*1000000)+(ullElementKod*1000)+ullDannieKod;
-    QString strImyaFaila = QString("%1").arg(ntImyaFaila, 9, 10, QLatin1Char('0')) + ".dc";//соберём имя файла
+    QString strImyaFaila = QString("%1").arg(ntImyaFaila, 9, 10, QLatin1Char('0'))+".pdf";//соберём имя файла
     return strImyaFaila;
 }
 bool DataDannie::estImyaFaila(QString strImyaFaila){//Есть такой файл в каталоге?
@@ -248,7 +249,7 @@ bool DataDannie::udalDannieFaili(quint64 ullSpisokKod, quint64 ullElementKod){//
 //---У Д А Л И Т Ь   Ф А Й Л Ы   Э Л Е М Е Н Т А---//
 /////////////////////////////////////////////////////
     QDir odrPut(m_strWorkingDiagramsPut);//Создаём объект Дериктории с папкой, где хранятся Документы.
-    QStringList slsFaili = odrPut.entryList(QStringList()<<"*.dc", QDir::Files);//Задаём маску файлов
+    QStringList slsFaili = odrPut.entryList(QStringList()<<"*.pdf", QDir::Files);//Задаём маску файлов
     int ntRazmer = slsFaili.size();//Количество элементов в списке.
     for(int ntShag = 0; ntShag<ntRazmer; ntShag++){//Цикл перебора списка на наличие нужных Документов.
         QString strFail = slsFaili[ntShag];//Строка с файлом.
