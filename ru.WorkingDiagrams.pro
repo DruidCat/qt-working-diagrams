@@ -56,7 +56,8 @@ SOURCES += \
 RESOURCES += qml.qrc
 
 # Дополнительный путь импорта, используемый для разрешения QML-модулей в модели кода Qt Creator
-QML_IMPORT_PATH =
+# это лоадер qmlcompat для Qt5 и Qt6, чтоб не прописывать в QML версии импортируемх библиотек.
+QML_IMPORT_PATH += $$PWD/qmlcompat
 
 # Дополнительный путь импорта, используемый для разрешения модулей QML только для Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =

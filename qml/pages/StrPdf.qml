@@ -24,6 +24,8 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
+    property bool blPageStatusLoad: false//true - когда необходимо отследить изменение загружаемого файла.
+    property bool blPageStatusReady: false//true - когда необходимо отследить изменение загруженого файла.
     property int ntLogoTMK: 16
     property bool blLogoTMK: false//true - логотип на увеличение.
     property bool blOpen: false//true - когда pdf документ открывается.
@@ -110,10 +112,13 @@ Item {
         }
     }
 	function fnPdfPageStatus(){//Статус рендеринга страницы открываемой.
+		console.error("115:fnPdfPageStatus. Ниже должен последовать статус.")
         if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
+			blPageStatusLoad = false;//Сбрасываем флаг, тем самым документ начал грузиться.
             console.error("124:Статус рендера страницы: "+ pmpDoc.currentPage +" Загрузка.");
 		}
         if(pmpDoc.currentPageRenderingStatus === Image.Ready){//Статус рендеринга страницы ОТКРЫТ.
+			blPageStatusReady = false;//Сбрасываем флаг, тем самым документ загрузился.
             console.error("127:Статус рендера страницы: "+ pmpDoc.currentPage +" Открыт.");
             if(root.blOpen){//Если это рендер страницы после открытия документа, то.
                 console.error("129:RenderPage Ready. blScale: " + root.blScale);
@@ -191,7 +196,7 @@ Item {
         root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
         console.error("211:fnNazad. закрываем pdf документ null.");
         //Обязательная null Url, он обнуляет и закрывает документ, после запароленного файла. И не только.
-        pdfDoc.source = null;//"qrc:///workingdata/000000000.dc";
+        pdfDoc.source = null;//Обнуляем указатель nullptr
     }
     Timer {//Таймер необходим, чтоб pdf документ успел отрендериться, и можно было масштабировать документ.
         id: tmrScale
@@ -516,6 +521,9 @@ Item {
                 root.blOpen = false;//pdf документ ещё не открыт.
 				root.blSize = false;//Готов к изменению размера приложения.
                 root.blScale = false;//в pdf документе не задали изменение масштаба.
+
+    			root.blPageStatusLoad = false;//true - когда необходимо отследить изменение загружаемого файла
+    			root.blPageStatusReady = false;//true - когда необходимо отследить изменение загруженого файла
 
                 root.blLogoTMK = false;//логотип на уменьшение.
                 root.blError = false;//флаг не взведён в Статусе пустого документа.

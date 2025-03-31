@@ -51,6 +51,7 @@ set(DATA_FILE
         TODO.txt
         vim.txt
 )
+# Три строчки - это лоадер qmlcompat для Qt5 и Qt6, чтоб не прописывать в QML версии импортируемх библиотек.
 # add_executable() собирает переменные объявленные выше с файлами С++, стронними файлами под именем проекта.
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         # Добавляем все файлы ${PROJECT_SOURCES}, ${DATA_FILE} в проект ${EXECUTABLE_NAME}
