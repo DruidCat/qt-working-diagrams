@@ -33,6 +33,7 @@ Item {
     property bool blScale: false//true - когда в pdf документе масштабирование произошло.
     property bool blError: false//true - взведён флаг в Статусе документа, чтоб не взводить таймер ошибки.
     property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
+    property bool blClose: false//true - закрываем документ.
     property bool blStartWidth: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие.
 	property bool blStartHeight: false//true - пришёл сигнал открывать документ с ссылкой на него или закрытие
     //Расчитываемые при открытии/закрытии pdf документа.
@@ -78,6 +79,7 @@ Item {
 	function fnPdfOtkrit(){//Функция открытия Pdf документа.
         var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
         //console.error("80: Url: " + strPdfUrl);
+        root.blClose = false;//Не закрываем документ.
 		ldrDoc.active = true;//Активируем Loader.
 		tmrLogo.running = true;//включаем таймер  и тем самым не показываем документ и кнопки
         pdfDoc.source = strPdfUrl;//Добавляем ссылку на документ.
@@ -95,7 +97,7 @@ Item {
 		console.error("95:fnPdfDocStatus: " + pdfDoc.status);
         if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
             console.error("97:fnPdfDocStatus Error. ");
-			if(pdfDoc.source != ""){//Если путь не пустой, то...
+            if(pdfDoc.source !== ""){//Если путь не пустой, то...
 				if(!root.blError){//Если не был взведён флаг, то...
 					console.error("100: TimerError Start");
 					tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
@@ -112,7 +114,7 @@ Item {
         }
     }
 	function fnPdfPageStatus(){//Статус рендеринга страницы открываемой.
-		console.error("115:fnPdfPageStatus. Ниже должен последовать статус.")
+        console.error("115:fnPdfPageStatus.vvv")
         if(ldrDoc.item.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
 			blPageStatusLoad = false;//Сбрасываем флаг, тем самым документ начал грузиться.
             console.error("118:Статус рендера страницы: "+ ldrDoc.item.currentPage +" Загрузка.");
@@ -200,10 +202,10 @@ Item {
         root.blStartHeight = true;//При закрытии окна этим флагом нивелируем обработку сигнала.
 		pdfDoc.password = "";//Передаём пароль в документ. НЕ УДАЛЯТЬ! ЭТО ОБНУЛЕНИЕ ПАРОЛЯ ПЕРЕД НОВЫМ ДОК.
         root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
-        console.error("197:fnNazad. закрываем pdf документ null.");
-        //Обязательная null Url, он обнуляет и закрывает документ, после запароленного файла. И не только.
-        pdfDoc.source = ""//null;//Обнуляем указатель nullptr
-		ldrDoc.active = false;
+        console.error("197:fnNazad. закрываем pdf документ пустой URL.");
+        root.blClose = true;//закрываем документ обнуляя Сомпонент cmpDoc. САМАЯ ВАЖНАЯ СТРОКА.
+        pdfDoc.source = "";//Обнуляем документ, так же важно для закрытия запароленного документа.
+        ldrDoc.active = false;//Обнуляем загрузчик Loader.
 		Qt.callLater(fnGarbageCollector);//Принудительно вызываем сборщик мусора
     }
     Timer {//Таймер необходим, чтоб pdf документ успел отрендериться, и можно было масштабировать документ.
@@ -519,7 +521,8 @@ Item {
 		Loader {//Загрузчик, который будет выделять и удалять память под каждый открытый документ.
 			id: ldrDoc
 			anchors.fill: tmZona//Растягиваем его до рабочей зоны.
-			sourceComponent: pdfDoc.source ? cmpDoc : null//ВАЖНАЯ СТРОКА, без неё ничего не работает.
+            //sourceComponent: pdfDoc.source ? cmpDoc : null//ВАЖНАЯ СТРОКА, без неё ничего не работает.
+            sourceComponent: root.blClose ? null : cmpDoc//ВАЖНАЯ СТРОКА, без неё ничего не работает.
 			active: false//Поумолчанию не активен
 		}
 		Component {//Компонет, который добавится в Загрузчик.
