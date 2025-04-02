@@ -23,6 +23,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
     property bool pdfViewer: true//true - включен собственный просмотрщик.
+    property bool appRedaktor: true//true - включен Редактор приложения.
     anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
@@ -173,10 +174,27 @@ Item {
                         root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
                     }
                 }
+				DCKnopkaOriginal {//@disable-check M300
+                    id: knopkaRedaktor
+                    ntHeight: root.ntWidth*root.ntCoff+8
+                    anchors.top: knopkaPdfViewer.bottom
+                    anchors.left: rctZona.left
+                    anchors.right: rctZona.right
+                    anchors.margins: root.ntCoff/2
+                    clrKnopki: "slategray"
+                    clrTexta: root.clrTexta
+                    text: root.appRedaktor ? qsTr("Редактор : вкл.") : qsTr("Редактор: выкл.")
+                    bold: true
+                    italic: true
+                    onClicked: {//Слот запускающий
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
+                    }
+                }
                 DCKnopkaOriginal {//@disable-check M300
                     id: knopkaVihod
                     ntHeight: root.ntWidth*root.ntCoff+8
-                    anchors.top: knopkaPdfViewer.bottom
+                    anchors.top: knopkaRedaktor.bottom
                     anchors.left: rctZona.left
                     anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2

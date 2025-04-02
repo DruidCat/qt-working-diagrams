@@ -22,6 +22,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: txdZona.radius
+    property bool appRedaktor: false//true - включить Редактор приложения.
 	property alias textTextEdit: txdZona.text
 	property string strOpisanie: "titul"
     anchors.fill: parent//Растянется по Родителю.
@@ -161,9 +162,9 @@ Item {
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.left: tmToolbar.left
             anchors.margins: root.ntCoff/2
-			visible: true 
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
+			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
 			onClicked: {
 				txdZona.readOnly = false;//Разрешить редактировать.
                 root.clickedSozdat();//Излучаем сигнал Создать

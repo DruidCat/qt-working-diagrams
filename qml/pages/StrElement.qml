@@ -23,6 +23,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
+    property bool appRedaktor: false//true - включить Редактор приложения.
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого Элемента, если true
@@ -263,7 +264,10 @@ Item {
 				clrFona: "SlateGray"
                 onClicked: function(ntKod, strElement) {//Слот нажатия на один из Элементов списка.
 					if(cppqml.blElementPervi){//Если это первый элемент, то...
-                        fnClickedSozdat();//Функция при нажатии кнопки Создать.
+						if(root.appRedaktor)//Если включён Редактор приложения, то...
+                        	fnClickedSozdat();//Функция при нажатии кнопки Создать.
+						else
+                    		cppqml.strDebug = qsTr("Режим редактора выключен.");
 					}
 					else{//Если не первый элемент, то...
                         if(blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания, то...
@@ -350,6 +354,7 @@ Item {
 			anchors.margins: root.ntCoff/2
 			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
+			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             onClicked: {//Слот сигнала clicked кнопки Создать.
 				txnZagolovok.visible ? fnClickedZakrit() : fnClickedSozdat()
             }
@@ -363,6 +368,7 @@ Item {
 			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
+			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             onClicked: {
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuElement.visible ? menuElement.visible = false : menuElement.visible = true;

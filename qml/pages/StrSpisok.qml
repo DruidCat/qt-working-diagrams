@@ -23,6 +23,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
+    property bool appRedaktor: false//true - включить Редактор приложения.
     property bool blPereimenovatVibor: false//Выбрать элемент пеименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого Списка, если true
@@ -285,7 +286,11 @@ Item {
 				clrFona: "SlateGray" 
                 onClicked: function(ntKod, strSpisok) {//Слот clicked нажатия на один из элементов Списка.
                     if(cppqml.blSpisokPervi){//Если это первый в Списке, то...
-                        fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
+						if(root.appRedaktor)//Если включён Редактор приложения, то...
+                        	fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
+						else
+                    		cppqml.strDebug = qsTr("Режим редактора выключен.");
+							
                     }
                     else{//Если не первый элемент, то...
                         if(root.blPereimenovatVibor){//Если разрешён выбор элементов для переименовывания.
@@ -375,6 +380,7 @@ Item {
 			anchors.margins: root.ntCoff/2
 			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
+			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             onClicked: {//Слот сигнала clicked кнопки Создать.
 				txnZagolovok.visible ? fnClickedZakrit() : fnClickedSozdat()
             }
@@ -388,6 +394,7 @@ Item {
 			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
+			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             onClicked: {
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;

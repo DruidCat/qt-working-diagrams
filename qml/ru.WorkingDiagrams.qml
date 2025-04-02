@@ -35,6 +35,7 @@ Window {
     property color clrFaila: "yellow"
 	property color clrStranic: "black"
     property bool pdfViewer: true//false - Отключить pdf просмоторщик.
+    property bool appRedaktor: true//false - Отключить Редактор приложения.
 
 	StackView {
 		id: stvStr
@@ -82,6 +83,9 @@ Window {
 				}
                 onPdfViewerChanged: {//Если флаг настройки pdf Проигрывателя изменился, то...
                     root.pdfViewer = pdfViewer;//Приравниваем флаг настройки.
+                }
+				onAppRedaktorChanged: {//Если флаг настройки включения Редактора изменился, то...
+                    root.appRedaktor = appRedaktor;//Приравниваем флаг настройки.
                 }
 			}
 		}
@@ -230,13 +234,16 @@ Window {
 				toolbarX: pgStrSpisok.rctStrToolbar.x; toolbarY: pgStrSpisok.rctStrToolbar.y
 				toolbarWidth: pgStrSpisok.rctStrToolbar.width; toolbarHeight: pgStrSpisok.rctStrToolbar.height
 				radiusZona: pgStrSpisok.rctStrZona.radius//Радиус берём из настроек элемента qml
+                appRedaktor: root.appRedaktor
 				onClickedMenu: {//Слот нажатия кнопки Меню.
 					stvStr.push(pgStrMenu)//Перейти на страницу Меню
 				}
                 onClickedInfo: {
                     tmOpisanie.textTextEdit = cppqml.strTitulOpisanie;//Отправляем текст из бизнес логики.
-                    pgStrOpisanie.textToolbar = pgStrSpisok.textZagolovok
-                            + qsTr(". Для изменения описания нажмите иконку (+).")
+					if(root.appRedaktor){//Если Редактор приложения включен, то...
+                    	pgStrOpisanie.textToolbar = pgStrSpisok.textZagolovok
+                        		+ qsTr(". Для изменения описания нажмите иконку (+).")
+					}
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 				onClickedSpisok: function(strSpisok) {
@@ -276,14 +283,17 @@ Window {
 				toolbarWidth: pgStrElement.rctStrToolbar.width
 				toolbarHeight: pgStrElement.rctStrToolbar.height
 				radiusZona: pgStrElement.rctStrZona.radius//Радиус берём из настроек элемента qml
+                appRedaktor: root.appRedaktor
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.strOpisanie = "titul";//Показываем описание Титульной страницы.
 					stvStr.pop()//Назад страницу
 				}
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;//Отправляем текст в бизнес логику.
-                    pgStrOpisanie.textToolbar = pgStrElement.textZagolovok
-                            + qsTr(". Для изменения описания нажмите иконку (+).")
+					if(root.appRedaktor){//Если Редактор приложения включен, то...
+                    	pgStrOpisanie.textToolbar = pgStrElement.textZagolovok
+                            	+ qsTr(". Для изменения описания нажмите иконку (+).")
+					}
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onClickedElement: function(strElement) {//Слот сигнала нажатия на Элемент, вернув имя Элемента
@@ -320,7 +330,7 @@ Window {
 				toolbarX: pgStrDannie.rctStrToolbar.x; toolbarY: pgStrDannie.rctStrToolbar.y
 				toolbarWidth: pgStrDannie.rctStrToolbar.width; toolbarHeight: pgStrDannie.rctStrToolbar.height
 				radiusZona: pgStrDannie.rctStrZona.radius//Радиус берём из настроек элемента qml
-                pdfViewer: root.pdfViewer
+                pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
 					stvStr.pop()//Назад страницу
@@ -331,8 +341,10 @@ Window {
                 }
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
-                    pgStrOpisanie.textToolbar = pgStrDannie.textZagolovok
-                            + qsTr(". Для изменения описания нажмите иконку (+).")
+					if(root.appRedaktor){//Если Редактор приложения включен, то...
+						pgStrOpisanie.textToolbar = pgStrDannie.textZagolovok
+                            + qsTr(". Для изменения описания нажмите иконку (+).");
+					}
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
@@ -480,6 +492,7 @@ Window {
 				toolbarHeight: pgStrOpisanie.rctStrToolbar.height
 				radiusZona: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
 				strOpisanie: stvStr.strOpisanie//Передаём флаг Отображения конкретного Описания.
+                appRedaktor: root.appRedaktor
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.pop()//Назад страницу
 				}

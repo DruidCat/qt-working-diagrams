@@ -25,6 +25,7 @@ Item {
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
     property bool pdfViewer: false//true - включить собственный pdf просмотрщик.
+    property bool appRedaktor: false//true - включить Редактор приложения.
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого документа, если true
@@ -265,7 +266,10 @@ Item {
 				clrFona: "SlateGray"
                 onClicked: function(ntKod, strDannie) {//Слот нажатия на один из Документов списка.
 					if(cppqml.blDanniePervi){//Если это первый Документ, то...
-                        fnClickedSozdat();//Функция при нажатии кнопки Создать(Проводник).
+						if(root.appRedaktor)//Если включён Редактор приложения, то...
+                        	fnClickedSozdat();//Функция при нажатии кнопки Создать(Проводник).
+						else
+                    		cppqml.strDebug = qsTr("Режим редактора выключен.");
 					}
 					else{//Если не первый элемент, то...
                         if(root.blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания
@@ -357,6 +361,7 @@ Item {
             clrKnopki: root.clrFaila//Цвет файлов
 			clrFona: root.clrFona
             blKrug: false//Не круглая кнопка.
+			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             onClicked: {
                 fnClickedSozdat();//Функция нажатия кнопки Создать.
             }
@@ -370,6 +375,7 @@ Item {
 			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
+			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
 			onClicked: {
                 txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
                 menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
