@@ -320,6 +320,7 @@ Item {
 			pskPoisk.text = txnZagolovok.text;//текст присваиваем.
 			pskPoisk.visible = true;//Делаем видимым режим поиска
 			txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+            srchDoc.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
 		}
 	}
 	Item {
@@ -530,7 +531,11 @@ Item {
         PdfDocument {//Класс, который возвращает данные о Pdf Документе.
             id: pdfDocPustoi
             //source: "qrc:///workingdata/000000000.dc";
-        }	
+        }
+        PdfSearchModel {
+            id: srchDoc
+            document: pdfDoc
+        }
 		Loader {//Загрузчик, который будет выделять и удалять память под каждый открытый документ.
 			id: ldrDoc
 			anchors.fill: tmZona//Растягиваем его до рабочей зоны.
