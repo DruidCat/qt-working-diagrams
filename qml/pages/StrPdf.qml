@@ -321,10 +321,7 @@ Item {
 			pskPoisk.visible = true;//Делаем видимым режим поиска
 			txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
 			ldrDoc.item.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
-            searchModel.searchString = txnZagolovok.text;
-            pskPoisk.sumPoisk = searchModel.currentResult;
 			ldrDoc.item.searchForward();//Показываем следующий результат поиска.
-            //console.error("Поиск " + srchModel.currentResult);
 		}
 	}
 	Item {
@@ -533,10 +530,6 @@ Item {
 				pssPassword.visible = true;//Делаем видимым поле ввода пароля.
 			}	
 		}
-        PdfSearchModel {//Модель поиска в документе
-            id: searchModel
-            document: pdfDoc
-        }
         PdfDocument {//Класс, который возвращает данные о Pdf Документе.
             id: pdfDocPustoi
             //source: "qrc:///workingdata/000000000.dc";
@@ -555,7 +548,6 @@ Item {
 				anchors.fill: parent
 				document: pdfDoc//Добавляем pdf документ.
 				visible: false//По умолчанию не видимый.
-                //searchModel: searchModel
 				searchString: ""
 				onCurrentPageChanged: {//Если страница документа изменилась, то...
 					spbPdfPage.value = ldrDoc.item.currentPage + 1//В DCSpinBox выставляем значение страницы.
