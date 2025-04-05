@@ -10,7 +10,9 @@ Item {
     property alias clrTexta: txtPoisk.color//цвет текста
     property color clrKnopki: "red"//цвет Кнопок
     property alias clrBorder: rctText.border.color//цвет границы
-    property string text: "" //элемент поиска
+    property string text: ""//элемент поиска
+    property int sumPoisk: 0//суммарный результат поиска
+    property int nomerPoisk: 0//номер поиска
     property alias bold: txtPoisk.font.bold
     property alias italic: txtPoisk.font.italic
     property alias textUdalit: txtPoisk//Передаём в виде свойства весь объект Text
@@ -88,7 +90,7 @@ Item {
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: root.text	
+                text: root.text	+ " [" + root.nomerPoisk + "|" + root.sumPoisk + "]"
 				onTextChanged: {//Если текст изменился, то...
 					if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
 					for(let ltShag=txtPoisk.font.pixelSize; ltShag<root.ntWidth*root.ntCoff; ltShag++){
