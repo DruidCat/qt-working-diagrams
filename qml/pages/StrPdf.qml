@@ -70,6 +70,11 @@ Item {
             if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
                 fnPdfGoToPage(ntStrUp);//На -1 страницу.
 		}
+		if((event.key === 16777220)||(event.key === 16777221)){//Если нажат Enter, то..
+			if(pskPoisk.visible){//Если панель поиска видимая, то...
+				ldrDoc.item.searchForward();//Показываем следующий результат поиска.
+			}
+		}
 		//cppqml.strDebug = event.key;
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
@@ -320,7 +325,8 @@ Item {
 			pskPoisk.text = txnZagolovok.text;//текст присваиваем.
 			pskPoisk.visible = true;//Делаем видимым режим поиска
 			txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
-            srchDoc.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
+			ldrDoc.item.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
+			ldrDoc.item.searchForward();//Показываем следующий результат поиска.
 		}
 	}
 	Item {
@@ -432,11 +438,11 @@ Item {
             clrTexta: "yellow"
             clrKnopki: "yellow"
             clrBorder: "orange"
-            onClickedNext: function (strKod) {//Слот нажатия кнопки Следующего поиска
-
+            onClickedNext: {//Слот нажатия кнопки Следующего поиска
+				ldrDoc.item.searchForward();//Показываем следующий результат поиска.
 			}
-			onClickedPrevious: function (strKod) {//Слот нажатия кнопки Предыдущего поиска
-
+			onClickedPrevious: {//Слот нажатия кнопки Предыдущего поиска
+				ldrDoc.item.searchBack();//Показываем предыдущий результат поиска.
             }
             onClickedZakrit: {//Слот нажатия кнопки Отмены режима поиска. 
                 pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
@@ -446,6 +452,7 @@ Item {
 				knopkaPoisk.visible = true;//Конопка Поиск Видимая.
 				knopkaPoisk.focus = true;//Фокус на кнопке поиск, чтоб не работал Enter.
                 txnZagolovok.text = "";//Текст обнуляем вводимый.
+				ldrDoc.item.searchString = "";//Передаём пустой запрос в поисковую модель.
             }
         }
         DCKnopkaPoisk{//@disable-check M300
@@ -532,10 +539,6 @@ Item {
             id: pdfDocPustoi
             //source: "qrc:///workingdata/000000000.dc";
         }
-        PdfSearchModel {
-            id: srchDoc
-            document: pdfDoc
-        }
 		Loader {//Загрузчик, который будет выделять и удалять память под каждый открытый документ.
 			id: ldrDoc
 			anchors.fill: tmZona//Растягиваем его до рабочей зоны.
@@ -550,6 +553,20 @@ Item {
 				anchors.fill: parent
 				document: pdfDoc//Добавляем pdf документ.
 				visible: false//По умолчанию не видимый.
+				searchString: ""
+				/*
+				Repeater {// Подсветка результатов поиска
+					model: srchDoc.searchResults.length
+					delegate: Rectangle {
+						x: srchDoc.searchResults[index].x
+						y: srchDoc.searchResults[index].y
+						width: srchDoc.searchResults[index].width
+						height: srchDoc.searchResults[index].height
+						color: "yellow"
+						opacity: 0.5
+					}
+				}
+				*/
 				onCurrentPageChanged: {//Если страница документа изменилась, то...
 					spbPdfPage.value = ldrDoc.item.currentPage + 1//В DCSpinBox выставляем значение страницы.
 				}

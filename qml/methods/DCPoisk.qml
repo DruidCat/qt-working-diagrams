@@ -10,20 +10,19 @@ Item {
     property alias clrTexta: txtPoisk.color//цвет текста
     property color clrKnopki: "red"//цвет Кнопок
     property alias clrBorder: rctText.border.color//цвет границы
-    property string kod: ""//Код элемента поиска
     property string text: "" //элемент поиска
     property alias bold: txtPoisk.font.bold
     property alias italic: txtPoisk.font.italic
     property alias textUdalit: txtPoisk//Передаём в виде свойства весь объект Text
-    signal clickedNext(var strKod);//Сигнал на следующий элемент поиска
-    signal clickedPrevious(var strKod);//Сигнал на предыдущий элемент поиска.
+    signal clickedNext();//Сигнал на следующий элемент поиска
+    signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
     signal clickedZakrit();//Сигнал на отмену поиска.
 
 	function fnClickedVniz() {//Функция обрабатывающая следующий поиск.
-		root.clickedNext(root.kod);//Сигнал следующего поиска.
+		root.clickedNext();//Сигнал следующего поиска.
 	}
 	function fnClickedVverh() {//Функция обрабатывающая предыдущий поиск.
-		root.clickedPrevious(root.kod);//Сигнал предыдущего поиска.
+		root.clickedPrevious();//Сигнал предыдущего поиска.
 	}
 	function fnClickedZakrit() {//Функция закрытия виджета.
 		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
