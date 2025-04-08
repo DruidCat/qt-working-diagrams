@@ -26,6 +26,7 @@
         <file>qml/methods/DCLogoTMK.qml</file>
         <file>qml/methods/DCMenu.qml</file>
         <file>qml/methods/DCPassword.qml</file>
+        <file>qml/methods/DCPdfMPV.qml</file>
         <file>qml/methods/DCPoisk.qml</file>
         <file>qml/methods/DCScale.qml</file>
         <file>qml/methods/DCSpinBox.qml</file>
