@@ -87,7 +87,7 @@ Item {
 		//4) pdfDoc.source = strPdfUrl;
         root.blClose = false;//Не закрываем документ.
 		ldrDoc.active = true;//Активируем Loader.
-		tmrLogo.running = true;//включаем таймер  и тем самым не показываем документ и кнопки
+        tmrLogo.running = true;//включаем таймер  и тем самым не показываем документ и кнопки
         pdfDoc.source = strPdfUrl;//Добавляем ссылку на документ.
 
         //ldrDoc.item.visible = true;//Делаем отображение сцены видимой. Отладочная строка.
@@ -539,8 +539,8 @@ Item {
 			anchors.fill: tmZona//Растягиваем его до рабочей зоны.
             //sourceComponent: pdfDoc.source ? cmpDoc : null//ВАЖНАЯ СТРОКА, без неё ничего не работает.
             sourceComponent: root.blClose ? null : cmpDoc//ВАЖНАЯ СТРОКА, без неё ничего не работает.
-			active: false//Поумолчанию не активен
-		}
+            active: false//Поумолчанию не активен
+        }
 		Component {//Компонет, который добавится в Загрузчик.
 			id: cmpDoc
 			PdfMultiPageView{//Мульти страница добавленая в Компонет для Загрузчика
@@ -556,7 +556,7 @@ Item {
 					fnPdfPageStatus();//Обрабатывает событие изменения статуса рендеринга страницы.
 				}
 			}
-		}
+        }
 		Rectangle {//Это граница документа очерченая линией для красоты.
 			id: rctBorder
 			anchors.fill: tmZona
