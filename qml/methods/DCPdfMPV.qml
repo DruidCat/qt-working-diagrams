@@ -11,8 +11,9 @@ Item {
     property string password: ""//Пароль для pdf документа.
     property real renderScale: 1//Коэффициень масштаба 1.
     property real rlMasshtab: 1//Коэффициень масштаба 1.
-    property int currentPage : 0//Номер страницы устанавливаемый вне виджет(set).(не путать с ntStranica)
-    property int nomerStranici: 0//Номер страницы внутри виджета(get).
+    property int currentPage : -1//Номер страницы устанавливаемый вне виджет(set).(не путать с ntStranica)
+    property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
+    property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
     //Сигналы.
     signal sgnVisible()//Сигнал - изменилась видимость документа. А состояние отследить по visible.
     signal sgnError()//Закрываем pdf документ.
@@ -25,12 +26,12 @@ Item {
         pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
         root.visible = false;//Невидимый виджет.
         root.sgnVisible();//Изменилась видимость.
-        console.error("35:Timer tmrScale start");
+        console.error("29:Timer tmrScale start");
         pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
         tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
     }
     onCurrentPageChanged: {//Если страница поменялась из вне, то...
-        console.error("33: страница поменялась из вне");
+        console.error("34:Страница " + root.currentPage + " из вне.");
         if(pmpDoc.blStranica)//Первоначальная установка страницы при загрузке документа
             pmpDoc.blStranica = false;//Сбрасываем флаг.
         else//Если изменение страницы не в первый раз, то...
@@ -56,7 +57,7 @@ Item {
         if(!pmpDoc.blSize){//Принимаю размеры приложения, пока не запустится обработкик показа документа.
             if(!tmrAppSize.running){//Если таймер еще не запускался, то...
                 pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
-                console.error("55:fnTimerAppSize. Невидимость виджета");
+                console.error("60:fnTimerAppSize. Невидимость виджета");
                 root.visible = false;//Невидимым виджет делаем.
                 root.sgnVisible();//Изменилась видимость.
             }
@@ -80,9 +81,9 @@ Item {
         console.error("81:fnScale. Окончание масштабирования.")
     }
     function fnGoToPage(ntPage){//Функция обрабатывающая переход на новую страницу документа.
-        console.error("79:fnGoToPage Номер страницы: " + ntPage);
+        console.error("84:fnGoToPage Номер страницы: " + ntPage);
         pmpDoc.goToLocation(ntPage, Qt.point(0, 0), pmpDoc.renderScale);//Переходим на страницу.
-        console.error("81:fnGoToPage tmrVisible start");
+        console.error("86:fnGoToPage tmrVisible start");
         tmrVisible.running = true;//Запускаем таймер отображения документа.
     }
     Timer {//Таймер необходим, чтоб пока пользователь изменяет размер окна приложения,не обрабатывался масштаб
@@ -103,7 +104,7 @@ Item {
         running: false
         repeat:	false
         onTriggered: {
-            console.error("108:Timer tmrScale stop");
+            console.error("107:Timer tmrScale stop");
             fnScale();//масштабируем документ автоматически/вручную.
         }
     }
@@ -113,7 +114,7 @@ Item {
         running: false
         repeat:	false
         onTriggered: {
-            console.error("112:Timer tmrGoToPage stop");
+            console.error("117:Timer tmrGoToPage stop");
             if(pmpDoc.blSize)//Если идет изменение масштаба через изменение размера виджета, то...
                 fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
             else{//Если нет, то...
@@ -130,7 +131,7 @@ Item {
         running: false
         repeat:	false
         onTriggered: {
-            console.error("129:Timer tmrVisible stop");
+            console.error("134:Timer tmrVisible stop");
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
             root.visible = true;//Видимый виджет
             root.sgnVisible();//Изменилась видимость.
@@ -142,11 +143,9 @@ Item {
         running: false
         repeat:	false
         onTriggered: {
-            console.error("131:Timer tmrError stop");
+            console.error("146:Timer tmrError stop");
             if(pmpDoc.blPassword){//Если был запрос на пароль, то...
                 pmpDoc.blPassword = false;//Сбрасываем флаг.
-                //if(!pssPassword.passTrue)//Если пароль введён неверно, то...
-                    //root.signalDebug(qsTr("Введён неверный пароль."));
             }
             else{//Если не было запроса на пароль, то это ошибка обычная...
                 root.sgnDebug(qsTr("Ошибка открытия документа: ") + pdfDoc.error);//Передаём ошибку.
@@ -177,15 +176,15 @@ Item {
             source: root.source//Привязываем источник PDF
             password: root.password//Пароль для pdf документа.
             onStatusChanged: {
-                console.error("154:PdfDocumentStatus: " + pdfDoc.status);
+                console.error("181:PdfDocumentStatus: " + pdfDoc.status);
                 if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
-                    console.error("156: TimerError Start");
+                    console.error("183: TimerError Start");
                     tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
                 }
                 else{//Если не ошибка, то...
                     if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
                         root.sgnDebug("");//Документ открыт, в тулбар не должно быть никаких надписей.
-                        console.error("162:PdfDocumentStatus Ready");
+                        console.error("189:PdfDocumentStatus Ready");
                         //Расчитываем, вертикальный или горизонтальный документ.
                         if(pdfDoc.pagePointSize(root.currentPage).height
                                 >= pdfDoc.pagePointSize(root.currentPage).width)
@@ -196,33 +195,31 @@ Item {
                 }
             }
             onPasswordRequired: {//Если пришёл сигнал passwordRequire запроса пароля в pdf документе, то...
-                console.error("173: Запрашиваю пароль.")
+                console.error("200: Запрашиваю пароль.")
                 pmpDoc.blPassword = true;//Запрашиваю пароль.
                 root.sgnPassword();//Сигнал о том, что есть запрос на ввод пароля.
             }
         }
         onCurrentPageChanged: {//Если страница документа изменилась, то...
-            console.error("179: страница поменялась внутри виджета.")
-            root.nomerStranici = pmpDoc.currentPage;//Сохраняем действующу страницу для всего виджета.
-            root.sgnCurrentPage(root.nomerStranici)//Сигнал с номером страницы отсылаем.
+            root.sgnCurrentPage(pmpDoc.currentPage)//Сигнал с номером страницы отсылаем.
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
-            console.error("184:PdfPageStatus.vvv")
+            console.error("211:PdfPageStatus.vvv")
             if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
-                console.error("186: Рендера страницы: " + pmpDoc.currentPage + " Загрузка.");
+                console.error("213: Рендера страницы: " + pmpDoc.currentPage + " Загрузка.");
             }
             if(pmpDoc.currentPageRenderingStatus === Image.Ready){//Статус рендеринга страницы ОТКРЫТ.
-                console.error("189: Рендера страницы: " + pmpDoc.currentPage + " Открыт.");
+                console.error("216: Рендера страницы: " + pmpDoc.currentPage + " Открыт.");
                 if(!pmpDoc.blScale){//Если стартового масштабирование не было, то...
                     pmpDoc.blScale = true;//Активируем флаг, что началось первичное масштабирование.
-                    console.error("192:Timer tmrScale start");
+                    console.error("219:Timer tmrScale start");
                     pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
                     tmrScale.running = true;//запускаем таймер, перед переходом на страницу
                 }
                 else{//Если первичное масштабирование произошло, то...
                     if(!pmpDoc.blGoToPage){//Если не было стартового перехода на страницу, то...
                         pmpDoc.blGoToPage = true;//Активируем флаг, что начался первичный переход на страницу.
-                        console.error("199:Timer tmrGoToPage start");
+                        console.error("226:Timer tmrGoToPage start");
                         tmrGoToPage.running = true;//запускаем таймер, перед переходом на страницу
                     }
                 }
@@ -231,13 +228,14 @@ Item {
         onRenderScaleChanged: {//Если масштаб изменился, то...
             root.rlMasshtab = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
             root.sgnRenderScale(root.rlMasshtab);//отправляем сигнал со значением масштаба
-            console.error("208:Масштаб поменялся, сбрасываем сцену.")
-            if(!pmpDoc.blResetScene){//Если это первичное масштабирование, то...
+            console.error("235:Масштаб поменялся, сбрасываем сцену.")
+            //if(!pmpDoc.blResetScene){//Если это первичное масштабирование, то...
                 pmpDoc.blResetScene = true;//Изменяем флаг, чтоб последующие масштабирования были качественные
                 //Это быстрый способ, но с ошибками в консоли, так как документ обнуляется.
                 let doc = pmpDoc.document;//Запоминаем pdf документ.
                 pmpDoc.document = null;//Выставляем нулевой документ, и тем самым сбрасываем сцену.
                 pmpDoc.document = doc;//Восстанавливаем старый документ с обновлённой сценой.
+            /*
             }
             else{//Дальнейший медленный сброс сцены, он корректно масштабирует документ и стабильно. ВАЖНО!
                 //Это очень медленный способ, даже на быстром компьютере, но без ошибок.
@@ -246,6 +244,7 @@ Item {
                 pmpDoc.height = pdfDoc.pagePointSize(0).height * pmpDoc.renderScale * pdfDoc.pageCount//Ширину
                 pmpDoc.anchors.fill = parent;//Растягиваем pmpDoc, и тем самым пересчитываем Сцену.
             }
+            */
         }
     }
     property PdfSearchModel searchModel: PdfSearchModel {
@@ -254,7 +253,8 @@ Item {
     function setSearchText(text) {
         searchModel.searchString = text
     }
-    // Дополнительные элементы управления, если нужно
+    /*
+    //Дополнительные элементы управления
     Rectangle {
         anchors.bottom: parent.bottom
         anchors.horizontalCenter: parent.horizontalCenter
@@ -270,4 +270,5 @@ Item {
             }
         }
     }
+    */
 }

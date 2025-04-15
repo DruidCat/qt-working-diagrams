@@ -7,6 +7,9 @@ import "qrc:/qml/methods"//Импортируем методы написанн�
 //Страница просмотра PDF документов.
 Item {
 	id: root
+    anchors.fill: parent//Растянется по Родителю.
+    focus: true//Чтоб кнопки работали.
+
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -30,10 +33,8 @@ Item {
     property bool blLogoTMK: false//true - логотип на увеличение.
     //Расчитываемые при открытии/закрытии pdf документа.
     property bool blClose: true//true - закрываем документ.
-    property string strPdfPut: ""//Пустой путь к pdf документу.
-    property int currentPage: 0//Номер страницы из БД, которую нужно открыть.
+    property string strPdfPut: ""//Путь к pdf документу, который нужно открыть или пустой путь, чтоб закрыть.
 
-    anchors.fill: parent//Растянется по Родителю.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -41,19 +42,16 @@ Item {
 			if(txnZagolovok.visible)//Если строка ввода запроса на поиск видима, то...
 				fnClickedZakrit();//Закрываем эту строку
         }
-        /*
 		if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
-            var ntStrDown = ldrDoc.item.currentPage + 1;
-            if(ntStrDown < pdfDoc.pageCount)
-                fnPdfGoToPage(ntStrDown);
-			
+            var ntStrDown = pdfLoader.item.nomerStranici + 1;
+            if(ntStrDown < pdfLoader.item.pageCount)
+                pdfLoader.item.currentPage = ntStrDown;
         }
 		if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
-            var ntStrUp = ldrDoc.item.currentPage - 1;//-1 страница
+            var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
             if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                fnPdfGoToPage(ntStrUp);//На -1 страницу.
+                pdfLoader.item.currentPage = ntStrUp;
 		}
-        */
         //cppqml.strDebug = event.key;
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
@@ -62,15 +60,16 @@ Item {
     }
 
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
+        spbPdfPage.value = 1;//Задаём первую страницу в DCSpinBox до открытия документа по умолчанию, ВАЖНО!
         root.strPdfPut = urlPdfPut;//Устанавливаем путь.
         if(urlPdfPut){//Если путь не пустая строка, то...
             root.blClose = false;//Не закрываем Загрузчик.
-            pdfLoader.active = true;
+            pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
         }
         else{//Если путь пустая строка, то...
-            console.error("71:fnNazad. закрываем pdf документ.");
+            console.error("69:fnNazad. закрываем pdf документ.");
             root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
-            root.blClose = true;//закрываем Загрузчик.
+            root.blClose = true;//Закрываем Загрузчик.
             pdfLoader.active = false;//Деактивируем загрузчик, уничтожаем всё его содержимое.
             Qt.callLater(fnGarbageCollector);//Принудительно вызываем сборщик мусора
         }
@@ -82,28 +81,9 @@ Item {
             Qt.gc();
     }
 
-	function fnPdfOtkrit(){//Функция открытия Pdf документа.
-        var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
-        fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
-        //console.error("81: Url: " + strPdfUrl);
-
-		//Порядок вызова переменных, чтоб документы повторно открывались с первой страницы и не зависали.
-		//1) root.blClose = false;
-		//2) ldrDoc.active = true;
-		//3)tmrLogo.running = true;
-		//4) pdfDoc.source = strPdfUrl;
-        //tmrLogo.running = true;//включаем таймер  и тем самым не показываем документ и кнопки
-        //pdfDoc.source = strPdfUrl;//Добавляем ссылку на документ.
-
-        spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
-        //spbPdfPage.to = pdfDoc.pageCount;//Задаём максимальное количество страниц в DCSpinBox
-    }
-
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
         id: tmrLogo
-        interval: 110
-        running: false
-        repeat: true
+        interval: 110; running: false; repeat: true
         onTriggered: {
             if(root.blLogoTMK){//Если true, то...
                 lgTMK.ntCoff++;
@@ -120,20 +100,13 @@ Item {
             if(running){//Если запустился таймер, то...
                 spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
                 pdfScale.visible = false;//Делаем невидимым DCScale
-                //ldrDoc.item.visible = false;//Делаем отображение сцены невидимой.
             }
             else{//Если таймер выключен, то...
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
-                //ldrDoc.item.visible = true;//Делаем отображение сцены видимой.
             }
         }
     } 
-	function fnClickedPoisk(){//Функция обрабатывающая кнопку Поиск.
-        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю,что вводить нужно
- 		txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
-        txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
-	}
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
 		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
 	}
@@ -155,10 +128,8 @@ Item {
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
 			id: knopkaNazad
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			anchors.verticalCenter: tmZagolovok.verticalCenter
-			anchors.left: tmZagolovok.left
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
 			anchors.margins: root.ntCoff/2
 			clrKnopki: root.clrTexta
 			onClicked: {
@@ -168,37 +139,27 @@ Item {
 		}	
 		DCKnopkaZakrit {//@disable-check M300
             id: knopkaZakrit
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
             visible: false
-            anchors.verticalCenter: tmZagolovok.verticalCenter
-            anchors.left: tmZagolovok.left
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
             anchors.margins: root.ntCoff/2
-            clrKnopki: root.clrTexta
-            clrFona: root.clrFona
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
 		Item {
 			id: tmTextInput
-			anchors.top: tmZagolovok.top
-			anchors.bottom: tmZagolovok.bottom
-			anchors.left: knopkaNazad.right
-			anchors.right: knopkaPoisk.left
-			anchors.topMargin: root.ntCoff/4
-			anchors.bottomMargin: root.ntCoff/4
-			anchors.leftMargin: root.ntCoff/2
-			anchors.rightMargin: root.ntCoff/2
+            anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
+            anchors.left: knopkaNazad.right; anchors.right: knopkaPoisk.left
+            anchors.topMargin: root.ntCoff/4; anchors.bottomMargin: root.ntCoff/4
+            anchors.leftMargin: root.ntCoff/2; anchors.rightMargin: root.ntCoff/2
             DCTextInput {//@disable-check M300
 				id: txnZagolovok
-				ntWidth: root.ntWidth
-				ntCoff: root.ntCoff
+                ntWidth: root.ntWidth; ntCoff: root.ntCoff
 				anchors.fill: tmTextInput
-				visible: false
-                clrTexta: root.clrTexta
-				clrFona: "SlateGray"
-				radius: root.ntCoff/2
+                visible: false; radius: root.ntCoff/2
+                clrTexta: root.clrTexta; clrFona: "SlateGray"
 				blSqlProtect: false//Отключаем защиту от Sql инъекций, вводить можно любой текст.
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
@@ -227,39 +188,24 @@ Item {
 		}	
 		DCKnopkaOk{//@disable-check M300
 			id: knopkaOk
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false
-			anchors.verticalCenter: tmZagolovok.verticalCenter
-			anchors.right: tmZagolovok.right
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
 			anchors.margins: root.ntCoff/2
-			clrKnopki: root.clrTexta
-			clrFona: root.clrFona
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
 			onClicked: {
 				fnClickedOk();//Функция отправить запрос на поиск
 			}
 		}	
 		DCPoisk {//@disable-check M300
             id: pskPoisk
-            anchors.top: tmZagolovok.top
-            anchors.bottom: tmZagolovok.bottom
-            anchors.left: tmZagolovok.left
-            anchors.right: tmZagolovok.right
-
-            anchors.topMargin: root.ntCoff/4
-            anchors.bottomMargin: root.ntCoff/4
-            anchors.leftMargin: root.ntCoff/2
-            anchors.rightMargin: root.ntCoff/2
-
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-
+            anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
+            anchors.left: tmZagolovok.left; anchors.right: tmZagolovok.right
+            anchors.topMargin: root.ntCoff/4; anchors.bottomMargin: root.ntCoff/4
+            anchors.leftMargin: root.ntCoff/2; anchors.rightMargin: root.ntCoff/2
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false//Невидимый виджет.
-
-            clrFona: "black"//Если не задать цвет, будет видно текст под надписью
-            clrTexta: "yellow"
-            clrKnopki: "yellow"
-            clrBorder: "orange"
+            clrFona: "black"; clrTexta: "yellow"; clrKnopki: "yellow"; clrBorder: "orange"
             onClickedNext: {//Слот нажатия кнопки Следующего поиска
                 //ldrDoc.item.searchForward();//Показываем следующий результат поиска.
 			}
@@ -279,46 +225,34 @@ Item {
         }
         DCKnopkaPoisk{//@disable-check M300
             id: knopkaPoisk
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            anchors.verticalCenter: tmZagolovok.verticalCenter
-			anchors.right: tmZagolovok.right
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
             anchors.margins: root.ntCoff/2
-            clrKnopki: root.clrTexta
-            clrFona: root.clrFona
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
             onClicked: {//Слот сигнала clicked кнопки Поиск.
-                fnClickedPoisk();//Функция обрабатывающая кнопку Поиск.
+                txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
+                txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
+                txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
             }
         }
         DCPassword{//@disable-check M300
             id: pssPassword
-            anchors.top: tmZagolovok.top
-            anchors.bottom: tmZagolovok.bottom
-            anchors.left: tmZagolovok.left
-            anchors.right: tmZagolovok.right
-
-            anchors.topMargin: root.ntCoff/4
-            anchors.bottomMargin: root.ntCoff/4
-            anchors.leftMargin: root.ntCoff/2
-            anchors.rightMargin: root.ntCoff/2
-
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-
+            anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
+            anchors.left: tmZagolovok.left; anchors.right: tmZagolovok.right
+            anchors.topMargin: root.ntCoff/4; anchors.bottomMargin: root.ntCoff/4
+            anchors.leftMargin: root.ntCoff/2; anchors.rightMargin: root.ntCoff/2
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false//Невидимый виджет.
-
-            clrFona: "black"
-            clrFonaPass: "orange"
-            clrTexta: "black"
-            clrKnopki: "yellow"
-            clrBorder: "yellow"
+            clrFona: "black"; clrFonaPass: "orange"; clrTexta: "black"; clrKnopki: "yellow";clrBorder:"yellow"
             placeholderTextTrue: qsTr("ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА")
             placeholderTextFalse: qsTr("НЕВЕРНЫЙ ПАРОЛЬ ДОКУМЕНТА")
             onClickedOk: function (strPassword)  {//Слот нажатия кнопки Ок
-                //pdfDoc.password = strPassword;//Передаём пароль в документ.
+                pssPassword.visible = false;//Невидимым ввода пароля.
+                pdfLoader.item.password = strPassword;//Передаём пароль в документ.
                 pssPassword.password = "";//Обнуляем вводимый пароль в TextInput.
                 pssPassword.passTrue = false;//Делаем крассным, если пароль верный, никто не увидит.
-                fnPdfOtkrit();
+                spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
+                spbPdfPage.to = pdfLoader.item.pageCount;//Задаём максимальное количество страниц в DCSpinBox
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
                 pssPassword.visible = false;//Делаем невидимым виджет
@@ -326,12 +260,10 @@ Item {
                 fnPdfSource("");//Закрываем страницу.
             }
 			onVisibleChanged: {//Если видимость изменилась, то...
-				if(pssPassword.visible){
+                if(pssPassword.visible)
                     spbPdfPage.spinBox.readOnly = true;//запрещаем редактировать для Android.
-				}
-				else{
+                else
                     spbPdfPage.spinBox.readOnly = false;//разрешаем редактировать для Android.
-				}
 			}
         }
 	}
@@ -342,8 +274,7 @@ Item {
 			id: lgTMK
 			ntCoff: root.ntLogoTMK
 			anchors.centerIn: tmZona
-			clrLogo: root.clrTexta
-			clrFona: root.clrFona
+            clrLogo: root.clrTexta; clrFona: root.clrFona
 		}
         Loader {//Loader динамической загрузки PDF Viewer
             id: pdfLoader
@@ -352,7 +283,6 @@ Item {
             active: false//не активирован.
             onLoaded: {
                 pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
-                //pdfLoader.item.currentPage = root.currentPage;//
                 pdfLoader.item.source = root.strPdfPut;// Устанавливаем путь к PDF
             }
         }
@@ -363,33 +293,33 @@ Item {
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
             }
             function onSgnDebug(strDebug){//Пришла ошибка из qml файла.
-                //cppqml.strDebug = strDebug;//Отображаем ошибку.
-                console.error(strDebug);//Отображаем ошибку.
+                cppqml.strDebug = strDebug;//Отображаем ошибку.
             }
             function onSgnVisible(){//Изменилась видимость виджета отображения pdf документа.
                 if(pdfLoader.item.visible){//Виджет видимый.
-                    //tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
-                    //root.blLogoTMK = false;//Делаем флаг анимации логотипа ТМК на уменьшение.
-                    //lgTMK.ntCoff = ntLogoTMK;//Задаём размер логотипа.
+                    tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
+                    root.blLogoTMK = false;//Делаем флаг анимации логотипа ТМК на уменьшение.
+                    lgTMK.ntCoff = ntLogoTMK;//Задаём размер логотипа.
                 }
-                else{//Виджет не видимый.
-                    //tmrLogo.running = true;//Запускаем таймер анимации логотипа
-                }
+                else//Виджет не видимый. При открытии этот флаг не изменится.
+                    tmrLogo.running = true;//Запускаем таймер анимации логотипа
             }
             function onSgnCurrentPage(ntStranica){//Изменился номер страницы
-                console.error("Страница: " + (ntStranica + 1));
-                //spbPdfPage.value = ntStranica + 1//В DCSpinBox выставляем значение страницы.
+                spbPdfPage.value = ntStranica + 1//В DCSpinBox выставляем значение страницы.
             }
             function onSgnRenderScale(rlMasshtab){//Изменился масштаб документа.
                 var ntScale = rlMasshtab*100;//Чтоб несколько раз не вызывать, так быстрее.
                 console.error("Масштаб: " + ntScale);
                 //pdfScale.from = ntScale;//Выставляем минимальное значение масштаба по уст. масштабу документа.
-                //pdfScale.value = ntScale;//И только после pdfScale.from выставляем значение масштаба в DCScale
+                pdfScale.value = ntScale;//И только после pdfScale.from выставляем значение масштаба в DCScale
             }
             function onSgnPassword(){//Произошёл запрос на ввод пароля.
-                console.error("Введите пожалуйста пароль.");
-                //pssPassword.visible = true;//Делаем видимым поле ввода пароля.
+                tmrPassword.running = true;//Делаем видимым поле ввода пароля через небольшую паузу.
             }
+        }
+        Timer{//Таймер нужен, чтоб виджет успел исчезнуть и потом появиться, если пароль неверный.
+            id: tmrPassword
+            interval: 11; repeat: false; onTriggered: pssPassword.visible = true;//Делаем видимым ввод пароля.
         }
 		Rectangle {//Это граница документа очерченая линией для красоты.
 			id: rctBorder
@@ -401,15 +331,16 @@ Item {
 		Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
-                //Первоначальная иннициализация флагов.
-                pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
+                tmrLogo.running = true;//Запускаем таймер анимации логотипа
                 root.blLogoTMK = false;//логотип на уменьшение.
-                //root.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
-                //Если отключен запуск анимации, то эти строки необходимы.
-                spbPdfPage.visible = true;//Делаем видимым DCSpinBox
-                pdfScale.visible = true;//Делаем видимым DCScale
-                if(root.pdfViewer)//Если выбран в настройках собственный просмотрщик, то...
-                    fnPdfOtkrit();//Функция открытия Pdf документа.
+                pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
+                if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+                    var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
+                    fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
+                    //console.error("390: Url: " + strPdfUrl);
+                    spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
+                    spbPdfPage.to = pdfLoader.item.pageCount;//Максимальное количество страниц в DCSpinBox
+                }
 			}
 		}
 	}
@@ -417,31 +348,25 @@ Item {
 		id: tmToolbar
         DCSpinBox {//@disable-check M300
 			id: spbPdfPage
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false 
-            anchors.verticalCenter: tmToolbar.verticalCenter
-            anchors.left: tmToolbar.left
+            anchors.verticalCenter: tmToolbar.verticalCenter; anchors.left: tmToolbar.left
             anchors.margins: root.ntCoff/2
-			clrTexta: root.clrTexta
-			clrFona: root.clrFona 
+            clrTexta: root.clrTexta; clrFona: root.clrFona
 			radius: root.ntCoff/2
 			from: 1
 			value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
 			onValueModified:{//Если значение измениловь в DCSpinBox...
-                //fnPdfGoToPage(value-1)
+                pdfLoader.item.currentPage = (value-1);//Если изменение страницы пришло из виджета.
 			}
 		}
         DCScale{//@disable-check M300
 			id: pdfScale
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			anchors.verticalCenter: tmToolbar.verticalCenter
-			anchors.right: tmToolbar.right
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmToolbar.verticalCenter; anchors.right: tmToolbar.right
 			visible: true
-			clrTexta: root.clrTexta
-			clrFona: root.clrFona 
+            clrTexta: root.clrTexta; clrFona: root.clrFona
 			radius: root.ntCoff/2
 			from: 25
 			to: 200
@@ -449,7 +374,7 @@ Item {
 			stepSize: 25
 			scale.cursorVisible: true;//Делаем курсор видимым обязательно.
 			onValueModified:{//Если значение измениловь в DCScale...
-                //fnScale(true);//Масштабируем документ по значению value этого виджета.
+                pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value этого виджета.
 			}	
 		}
 	}
