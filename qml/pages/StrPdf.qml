@@ -337,10 +337,6 @@ Item {
 	}
 	Item {
 		id: tmZona
-        //anchors.top: tmZagolovok.bottom
-        //anchors.left: root.left
-        //anchors.right: root.right
-        //anchors.bottom: tmToolbar.top
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.	
         DCLogoTMK {//@disable-check M300//Логотип до ZonaFileDialog, чтоб не перекрывать список.
 			id: lgTMK

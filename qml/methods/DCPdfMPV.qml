@@ -37,25 +37,19 @@ Item {
             fnGoToPage(root.currentPage);//Переходим на заданную страницу.
     }
     onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
-        console.error("1.1")
-        if(pmpDoc.blStartWidth){//Окно открылось, не обрабатываем сигнал об изменении..
-            console.error("1.2")
-            pmpDoc.blStartWidth = false;//Взводим флаг на оброботку размера.
-        }
-        else{
-            console.error("1.3")
-            //fnTimerAppSize();//Запускаем таймер.
+        if(width > 0){//Если ширина больше 0, это не формирование при старте окна, то...
+            if(pmpDoc.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
+                pmpDoc.blStartWidth = false;//Взводим флаг на оброботку размера.
+            else
+                fnTimerAppSize();//Запускаем таймер.
         }
     }
     onHeightChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
-        console.error("2.1")
-        if(pmpDoc.blStartHeight){//Окно открылось, не обрабатываем сигнал об изменении..
-            console.error("2.2")
-            pmpDoc.blStartHeight = false;//Взводим флаг на оброботку размера.
-        }
-        else{
-            console.error("2.3")
-            //fnTimerAppSize();//Запускаем таймер.
+        if(height > 0){//Если высота больше 0, это не формирование при старте окна, то...
+            if(pmpDoc.blStartHeight)//Окно открылось, не обрабатываем сигнал об изменении..
+                pmpDoc.blStartHeight = false;//Взводим флаг на оброботку размера.
+            else
+                fnTimerAppSize();//Запускаем таймер.
         }
     }
     function fnTimerAppSize(){//Функция старта таймера при изменении размеров приложения пользователем.
@@ -115,7 +109,7 @@ Item {
     }
     Timer {//Таймер необходим, чтоб pdf документ успел смаштабироваться, и можно было выставить страницу.
         id: tmrGoToPage
-        interval: 555//Чтоб отмасштабироваться успела страница, иначе переход на страницу не корректный будет.
+        interval: 333//Чтоб отмасштабироваться успела страница, иначе переход на страницу не корректный будет.
         running: false
         repeat:	false
         onTriggered: {
@@ -166,7 +160,7 @@ Item {
         anchors.fill: parent
         searchString: ""
         //Иннициализация Свойств при каждой загрузке, от сюда берутся первоначальные данные Свойств.
-        property bool blResetScane: false//false - быстрый сброс сцены при первом открытии pdf документа.
+        property bool blResetScene: false//false - быстрый сброс сцены при первом открытии pdf документа.
         property bool blDocVert: true//true - вертикальный документ, false - горизонтальный документ.
         property bool blScale: false//true - когда в pdf документе масштабирование произошло.
         property bool blScaleAuto: true//true - автоматическое масштабирование. false - ручное масштабирование
@@ -238,13 +232,12 @@ Item {
             root.rlMasshtab = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
             root.sgnRenderScale(root.rlMasshtab);//отправляем сигнал со значением масштаба
             console.error("208:Масштаб поменялся, сбрасываем сцену.")
-            //if(!pmpDoc.blResetScane){//Если это первичное масштабирование, то...
-                //pmpDoc.blResetScane = true;//Изменяем флаг, чтоб последующие масштабирования были качественные
+            if(!pmpDoc.blResetScene){//Если это первичное масштабирование, то...
+                pmpDoc.blResetScene = true;//Изменяем флаг, чтоб последующие масштабирования были качественные
                 //Это быстрый способ, но с ошибками в консоли, так как документ обнуляется.
                 let doc = pmpDoc.document;//Запоминаем pdf документ.
                 pmpDoc.document = null;//Выставляем нулевой документ, и тем самым сбрасываем сцену.
                 pmpDoc.document = doc;//Восстанавливаем старый документ с обновлённой сценой.
-            /*
             }
             else{//Дальнейший медленный сброс сцены, он корректно масштабирует документ и стабильно. ВАЖНО!
                 //Это очень медленный способ, даже на быстром компьютере, но без ошибок.
@@ -253,7 +246,6 @@ Item {
                 pmpDoc.height = pdfDoc.pagePointSize(0).height * pmpDoc.renderScale * pdfDoc.pageCount//Ширину
                 pmpDoc.anchors.fill = parent;//Растягиваем pmpDoc, и тем самым пересчитываем Сцену.
             }
-            */
         }
     }
     property PdfSearchModel searchModel: PdfSearchModel {
