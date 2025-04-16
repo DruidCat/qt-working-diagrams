@@ -41,7 +41,7 @@ Item {
 			if(txnZagolovok.visible)//Если строка ввода запроса на поиск видима, то...
 				fnClickedZakrit();//Закрываем эту строку
         }
-		if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
+        if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
             if(root.focus){//Необходимо, чтоб не срабатывало два эвента от StrPdf.qml и от DCPdfMPV.qml
                 var ntStrDown = pdfLoader.item.nomerStranici + 1;
                 if(ntStrDown < pdfLoader.item.pageCount)
