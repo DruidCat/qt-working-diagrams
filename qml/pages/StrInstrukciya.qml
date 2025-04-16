@@ -68,7 +68,7 @@ Item {
 				<html>
 					<body>
 <p><center><font color=\"black\">.<img src = \"/images/ru.WorkingDiagrams.png\">.</font></center></p>
-<p><center>Приложение: <b>РАБОЧИЕ СХЕМЫ.</b></center></p>
+<p><center>Приложение: <b>Ментор</b></center></p>
 <p><center>Версия: <b>v0.33</b></center></p>
 <p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
 <p><center>Приложение скомпилированно с <b>Qt версии 6.8.2</b></centers></p>
@@ -127,7 +127,7 @@ otherwise cannot comply with the terms of GNU (L)GPL.</p>
 <p>Qt licensed under GNU (L)GPL is appropriate for the development of Qt applications provided you can \
 comply with the terms and conditions of the respective licenses.</p>
 <p>Please see <a href=\"http://qt.io/licensing/\">qt.io/licensing</a> for an overview of Qt licensing.</p>
-<p>Copyright (C) 2024 The Qt Company Ltd and other contributors.</p>
+<p>Copyright (C) 2025 The Qt Company Ltd and other contributors.</p>
 <p>Qt and the Qt logo are trademarks of The Qt Company Ltd.</p>
 <p>Qt is The Qt Company Ltd product developed as an open source project. \
 See <a href=\"http://qt.io\">qt.io</a> for more information.</p>

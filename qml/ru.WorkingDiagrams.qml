@@ -27,7 +27,7 @@ Window {
 
     visible: true
 	color: "grey"
-    title: qsTr("Рабочий Список от druidcat@yandex.ru")
+    title: qsTr("Ментор от druidcat@yandex.ru")
     property int ntWidth: 4
 	property int ntCoff: 8
 	property color clrKnopok: "orange"
@@ -118,7 +118,7 @@ Window {
 				}
 			}
 		}
-		Stranica {//Рабочие Схемы
+        Stranica {//Ментор
 		/////////////////////////////
 		///О   П Р И Л О Ж Е Н И И///
 		/////////////////////////////

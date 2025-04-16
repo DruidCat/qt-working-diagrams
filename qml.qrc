@@ -49,6 +49,5 @@
         <file>qml/zones/ZonaElement.qml</file>
         <file>qml/zones/ZonaFileDialog.qml</file>
         <file>qml/zones/ZonaSpisok.qml</file>
-        <file>workingdata/000000000.dc</file>
     </qresource>
 </RCC>
