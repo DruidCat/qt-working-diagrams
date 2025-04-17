@@ -190,8 +190,9 @@ Item {
         property bool blStartHeight: true//true - пришёл сигнал об измении высоты виджета при его открытии.
         property bool blStranica: true//true-чтоб не обрабатывать первоначально заданную страницу в прерывании
         property bool blGoToPage: false//true - когда в pdf документе перешли на заданную страницу.
-        property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба.
-        property int ntPinchPage: 0//Номер страницы, который запопинается при щипке на Android
+        property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
+        property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
+        property int ntCurrentPage: 0//Номер страницы, который запопинается в прерывании Изменения Страницы
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
 
         document: PdfDocument {
@@ -224,6 +225,7 @@ Item {
             }
         }
         onCurrentPageChanged: {//Если страница документа изменилась, то...
+            pmpDoc.ntCurrentPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
             root.sgnCurrentPage(pmpDoc.currentPage)//Сигнал с номером страницы отсылаем.
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
@@ -252,7 +254,7 @@ Item {
         }
         onRenderScaleChanged: {//Если масштаб изменился, то...
             if(!pmpDoc.blScaleStart){//Если не была запущена функция масштабирования fnScale(), то...
-                pmpDoc.ntPinchPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
+                pmpDoc.ntPinchPage = pmpDoc.ntCurrentPage;//Запомниается страница, до изменения масштаба.
                 pmpDoc.blPinch = true;//То это увеличение масштаба пользователем через щипок
                 root.visible = false;//Невидимый виджет.
                 root.sgnVisible();//Изменилась видимость.
