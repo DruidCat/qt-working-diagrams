@@ -87,6 +87,7 @@ Item {
         }
     }
     function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
+        pmpDoc.blScaleStart = true;//Начало масштабирования.
         console.error("90:fnScale. Начало масштабирования.")
         if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
             var widthRect = pmpDoc.childrenRect.width;
@@ -101,6 +102,7 @@ Item {
             tmrGoToPage.running = true;//Запускаем таймер перехода на страницу после масштабирования.
         }
         console.error("103:fnScale. Окончание масштабирования.")
+        pmpDoc.blScaleStart = false;//Окончание масштабирования.
     }
     function fnGoToPage(ntPage){//Функция обрабатывающая переход на новую страницу документа.
         console.error("106:fnGoToPage Номер страницы: " + ntPage);
@@ -131,13 +133,19 @@ Item {
         interval: 333; running: false; repeat: false
         onTriggered: {
             console.error("133:Timer tmrGoToPage stop");
-            if(pmpDoc.blSize)//Если идет изменение масштаба через изменение размера виджета, то...
-                fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
-            else{//Если нет, то...
-                if(pmpDoc.blScaleAuto)//Если масштабирование Автоматическое при старте, то...
-                    fnGoToPage(root.currentPage);//Выставляем заданную страницу из вне виджита.
-                else//Если Ручное масштабирование пользователем, то...
+            if(pmpDoc.blPinch){//Если был щипок пользователя с изменением Масштаба, то...
+                pmpDoc.blPinch = false;//Сбрасываем флаг
+                fnGoToPage(pmpDoc.ntPinchPage);//Выставляем запомненную страницу после щипка
+            }
+            else{//Если не было щипка пользователя, то...
+                if(pmpDoc.blSize)//Если идет изменение масштаба через изменение размера виджета, то...
                     fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
+                else{//Если нет, то...
+                    if(pmpDoc.blScaleAuto)//Если масштабирование Автоматическое при старте, то...
+                        fnGoToPage(root.currentPage);//Выставляем заданную страницу из вне виджита.
+                    else//Если Ручное масштабирование пользователем, то...
+                        fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
+                }
             }
         }
     }
@@ -175,12 +183,15 @@ Item {
         property bool blDocVert: true//true - вертикальный документ, false - горизонтальный документ.
         property bool blScale: false//true - когда в pdf документе масштабирование произошло.
         property bool blScaleAuto: true//true - автоматическое масштабирование. false - ручное масштабирование
+        property bool blScaleStart: false//true - когда pdf документ изменяет масштаб.
+        property bool blPinch: false//true - когда пользователь щипком изменил масштаб.
         property bool blSize: false//true - когда pdf документ изменяет размер при масштабе виджета.
         property bool blStartWidth: true//true - пришёл сигнал об измении ширины виджета при его открытии.
         property bool blStartHeight: true//true - пришёл сигнал об измении высоты виджета при его открытии.
         property bool blStranica: true//true-чтоб не обрабатывать первоначально заданную страницу в прерывании
         property bool blGoToPage: false//true - когда в pdf документе перешли на заданную страницу.
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба.
+        property int ntPinchPage: 0//Номер страницы, который запопинается при щипке на Android
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
 
         document: PdfDocument {
@@ -216,7 +227,7 @@ Item {
             root.sgnCurrentPage(pmpDoc.currentPage)//Сигнал с номером страницы отсылаем.
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
-            console.error("219:PdfPageStatus.vvv")
+            console.error("219:PdfPageStatus.vvv");
             if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
                 console.error("221: Рендера страницы: " + pmpDoc.currentPage + " Загрузка.");
             }
@@ -236,8 +247,16 @@ Item {
                     }
                 }
             }
+            if(pmpDoc.blPinch)
+                tmrGoToPage.running = true;
         }
         onRenderScaleChanged: {//Если масштаб изменился, то...
+            if(!pmpDoc.blScaleStart){//Если не была запущена функция масштабирования fnScale(), то...
+                pmpDoc.ntPinchPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
+                pmpDoc.blPinch = true;//То это увеличение масштаба пользователем через щипок
+                root.visible = false;//Невидимый виджет.
+                root.sgnVisible();//Изменилась видимость.
+            }
             root.rlMasshtab = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
             root.sgnRenderScale(root.rlMasshtab);//отправляем сигнал со значением масштаба
             console.error("243:Масштаб поменялся, сбрасываем сцену.")
