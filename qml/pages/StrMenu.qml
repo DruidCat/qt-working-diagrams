@@ -105,6 +105,7 @@ Item {
                         root.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
                     }
                 }
+                /*
                 DCKnopkaOriginal {//@disable-check M300
                     id: knopkaSpisok
                     ntHeight: root.ntWidth*root.ntCoff+8
@@ -123,10 +124,11 @@ Item {
                         pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
                     }
                 }
+                */
                 DCKnopkaOriginal {//@disable-check M300
                     id: knopkaPlan
                     ntHeight: root.ntWidth*root.ntCoff+8
-                    anchors.top: knopkaSpisok.bottom
+                    anchors.top: knopkaAvtor.bottom
                     anchors.left: rctZona.left
                     anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
@@ -209,6 +211,7 @@ Item {
                 }
             }
         }
+        /*
         PathViewSpisok {//@disable-check M300
             id: pvSpisok
             visible: false
@@ -225,6 +228,7 @@ Item {
                 knopkaSpisok.text = strSpisok;
             }
         }
+        */
         DCMenu {//@disable-check M300//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
             visible: false//Невидимое меню.
