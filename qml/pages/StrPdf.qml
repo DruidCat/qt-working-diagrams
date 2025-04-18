@@ -118,10 +118,12 @@ Item {
             if(running){//Если запустился таймер, то...
                 spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
                 pdfScale.visible = false;//Делаем невидимым DCScale
+                knopkaPoisk.visible = false;//Делаем невидимым кнопку Поиска.
             }
             else{//Если таймер выключен, то...
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
+                knopkaPoisk.visible = true;//Делаем видимым кнопку Поиска.
             }
         }
     }
@@ -275,6 +277,7 @@ Item {
             anchors.fill: tmZona
             source: root.blClose ? "" : "qrc:/qml/methods/DCPdfMPV.qml"//Указываем путь к отдельному QML-файлу
             active: false//не активирован.
+            asynchronous: true//Загрузка асинхронно (но всё ещё в GUI-потоке)
             onLoaded: {
                 pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
                 pdfLoader.item.source = root.strPdfPut;// Устанавливаем путь к PDF

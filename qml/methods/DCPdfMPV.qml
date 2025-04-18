@@ -192,7 +192,6 @@ Item {
         property bool blGoToPage: false//true - когда в pdf документе перешли на заданную страницу.
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
         property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
-        property int ntCurrentPage: 0//Номер страницы, который запопинается в прерывании Изменения Страницы
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
 
         document: PdfDocument {
@@ -225,7 +224,6 @@ Item {
             }
         }
         onCurrentPageChanged: {//Если страница документа изменилась, то...
-            pmpDoc.ntCurrentPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
             root.sgnCurrentPage(pmpDoc.currentPage)//Сигнал с номером страницы отсылаем.
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
@@ -254,7 +252,7 @@ Item {
         }
         onRenderScaleChanged: {//Если масштаб изменился, то...
             if(!pmpDoc.blScaleStart){//Если не была запущена функция масштабирования fnScale(), то...
-                pmpDoc.ntPinchPage = pmpDoc.ntCurrentPage;//Запомниается страница, до изменения масштаба.
+                pmpDoc.ntPinchPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
                 pmpDoc.blPinch = true;//То это увеличение масштаба пользователем через щипок
                 root.visible = false;//Невидимый виджет.
                 root.sgnVisible();//Изменилась видимость.
@@ -271,7 +269,7 @@ Item {
             /*
             }
             else{//Дальнейший медленный сброс сцены, он корректно масштабирует документ и стабильно. ВАЖНО!
-                //Это очень медленный способ, даже на быстром компьютере, но без ошибок.
+                //Это очень медленный способ, даже на быстром компьютере, но без ошибок. На Android падает app
                 pmpDoc.anchors.fill = undefined;//Не определен якорь.
                 pmpDoc.width = pdfDoc.pagePointSize(0).width * pmpDoc.renderScale;//Задаём посчитанную длину.
                 pmpDoc.height = pdfDoc.pagePointSize(0).height * pmpDoc.renderScale * pdfDoc.pageCount//Ширину
