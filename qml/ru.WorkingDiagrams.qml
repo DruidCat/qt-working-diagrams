@@ -4,7 +4,7 @@ import QtQuick.Controls //2.15 //StackView
 
 import "pages"//Импортируем Страницы программы.
 
-Window {
+ApplicationWindow {
 	id: root
     width: {
         var vrWidth = Screen.desktopAvailableWidth;//Расчитываем доступную ширину экрана
