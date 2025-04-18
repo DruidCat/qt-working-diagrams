@@ -7,7 +7,8 @@
         <file>images/Qt_logo_2016.png</file>
         <file>images/ru.WorkingDiagrams.png</file>
         <file>js/DCFunkciiJS.js</file>
-        <file>qml/ru.WorkingDiagrams.qml</file>
+		<file>js/worker.js</file>
+		<file>qml/ru.WorkingDiagrams.qml</file>
         <file>qml/buttons/DCKnopkaInfo.qml</file>
         <file>qml/buttons/DCKnopkaKruglaya.qml</file>
         <file>qml/buttons/DCKnopkaMenu.qml</file>

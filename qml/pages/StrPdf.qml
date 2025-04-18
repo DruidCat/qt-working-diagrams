@@ -68,6 +68,7 @@ Item {
         if(urlPdfPut){//Если путь не пустая строка, то...
             root.blClose = false;//Не закрываем Загрузчик.
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
+            worker.sendMessage({ start: true })
         }
         else{//Если путь пустая строка, то...
             root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
@@ -247,7 +248,6 @@ Item {
                 pdfLoader.item.password = strPassword;//Передаём пароль в документ.
                 pssPassword.password = "";//Обнуляем вводимый пароль в TextInput.
                 pssPassword.passTrue = false;//Делаем крассным, если пароль верный, никто не увидит.
-                spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
                 spbPdfPage.to = pdfLoader.item.pageCount;//Задаём максимальное количество страниц в DCSpinBox
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
@@ -277,7 +277,6 @@ Item {
             anchors.fill: tmZona
             source: root.blClose ? "" : "qrc:/qml/methods/DCPdfMPV.qml"//Указываем путь к отдельному QML-файлу
             active: false//не активирован.
-            asynchronous: true//Загрузка асинхронно (но всё ещё в GUI-потоке)
             onLoaded: {
                 pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
                 pdfLoader.item.source = root.strPdfPut;// Устанавливаем путь к PDF
@@ -293,7 +292,6 @@ Item {
                     var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
                     fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
                     //console.error("390: Url: " + strPdfUrl);
-                    spbPdfPage.from = 1;//Задаём минимальное количество страниц в DCSpinBox
                     spbPdfPage.to = pdfLoader.item.pageCount;//Максимальное количество страниц в DCSpinBox
                 }
             }
@@ -341,6 +339,22 @@ Item {
 	}
     Item {//Тулбар
 		id: tmToolbar
+        Rectangle {
+            id: rctProgress
+            width: 0
+            height: tmToolbar.height
+            color: "orange"
+            anchors.top: tmToolbar.top
+            anchors.left: tmToolbar.left
+        }
+        WorkerScript {//WorkerScript для выполнения в отдельном потоке
+            id: worker
+            source: "qrc:/js/worker.js"
+            onMessage: function(message) {
+                rctProgress.width = message.progress * tmToolbar.width / 100
+                //progressText.text = "Загрузка: " + message.progress + "%"
+            }
+        }
         DCSpinBox {//@disable-check M300
 			id: spbPdfPage
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
