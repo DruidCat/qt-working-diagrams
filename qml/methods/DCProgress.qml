@@ -2,12 +2,11 @@
 //Шаблон DCProgress.qml - состоит из области, которая показывает прогресс какого либо процесса
 Item {
     id: root
-    //anchors.fill: parent
-    visible: false//невидимый по умолчанию
-
     property alias radius: rctProgress.radius//Радиус зоны отображения виджета поиска.
-    property alias clrFona: rctProgress.color//цвет фона
+    property alias clrProgress: rctProgress.color//цвет фона
     property bool running: false//флаг который будет запускать таймер пролосы прогресса.
+
+    visible: running ? true : false//Видимость зависит от статуса запущеного таймера.
 
     Rectangle {//Основной прямоугольник.
         id: rctProgress
@@ -15,16 +14,22 @@ Item {
         height: root.height
         anchors.top: root.top
         anchors.left: root.left
-        color: "transparent"
+        color: "orange"
         radius: root.ntCoff/2
     }
 
     Timer {
         id: tmrProgress
-        interval: 110; repeat: false; running: false;
+        interval: 1100; repeat: true;
+        running: root.running ? true : false
         property int ntShag: 0
         onTriggered: {
-
+            if(ntShag < 100){
+                ntShag += 1;
+                rctProgress.width = ntShag * root.width / 100
+            }
+            else
+                root.running = false;
         }
     }
 }

@@ -64,7 +64,7 @@ Item {
         if(urlPdfPut){//Если путь не пустая строка, то...
             pdfLoader.blClose = false;//Не закрываем Загрузчик.
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
-            wrsProgress.sendMessage({ start: true })
+            prgZagruzka.running = true;//Запускаем виджет загрузки
         }
         else{//Если путь пустая строка, то...
             root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
@@ -339,21 +339,10 @@ Item {
 	}
     Item {//Тулбар
 		id: tmToolbar
-        Rectangle {
-            id: rctProgress
-            width: 0
-            height: tmToolbar.height
-            color: "orange"
-            anchors.top: tmToolbar.top
-            anchors.left: tmToolbar.left
-        }
-        WorkerScript {//WorkerScript для выполнения в отдельном потоке
-            id: wrsProgress
-            source: "qrc:/js/jsProgress.js"
-            onMessage: function(message) {
-                rctProgress.width = message.progress * tmToolbar.width / 100
-                //progressText.text = "Загрузка: " + message.progress + "%"
-            }
+        DCProgress {//@disable-check M300
+            id: prgZagruzka
+            anchors.fill: tmToolbar
+            clrProgress: root.clrTexta; radius: root.ntCoff/2
         }
         DCSpinBox {//@disable-check M300
 			id: spbPdfPage
