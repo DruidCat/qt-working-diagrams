@@ -28,11 +28,7 @@ Item {
 	property alias toolbarHeight: tmToolbar.height
 
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
-
     property int ntLogoTMK: 16
-    property bool blLogoTMK: false//true - логотип на увеличение.
-    property bool blClose: true//true - закрываем документ.
-    property string strPdfPut: ""//Путь к pdf документу, который нужно открыть или пустой путь, чтоб закрыть.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 
@@ -64,15 +60,15 @@ Item {
 
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
         spbPdfPage.value = 1;//Задаём первую страницу в DCSpinBox до открытия документа по умолчанию, ВАЖНО!
-        root.strPdfPut = urlPdfPut;//Устанавливаем путь.
+        pdfLoader.strPdfPut = urlPdfPut;//Устанавливаем путь.
         if(urlPdfPut){//Если путь не пустая строка, то...
-            root.blClose = false;//Не закрываем Загрузчик.
+            pdfLoader.blClose = false;//Не закрываем Загрузчик.
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
-            worker.sendMessage({ start: true })
+            wrsProgress.sendMessage({ start: true })
         }
         else{//Если путь пустая строка, то...
             root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
-            root.blClose = true;//Закрываем Загрузчик.
+            pdfLoader.blClose = true;//Закрываем Загрузчик.
             pdfLoader.active = false;//Деактивируем загрузчик, уничтожаем всё его содержимое.
             Qt.callLater(fnGarbageCollector);//Принудительно вызываем сборщик мусора
         }
@@ -103,16 +99,17 @@ Item {
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
         id: tmrLogo
         interval: 110; running: false; repeat: true
+        property bool blLogoTMK: false
         onTriggered: {
-            if(root.blLogoTMK){//Если true, то...
+            if(blLogoTMK){//Если true, то...
                 lgTMK.ntCoff++;
                 if(lgTMK.ntCoff >= root.ntLogoTMK)
-                    root.blLogoTMK = false;
+                    blLogoTMK = false;
             }
             else{
                 lgTMK.ntCoff--;
                 if(lgTMK.ntCoff <= 1)
-                    root.blLogoTMK = true;
+                    blLogoTMK = true;
             }
         }
         onRunningChanged: {//Если таймер изменился, то...
@@ -274,19 +271,23 @@ Item {
 		}
         Loader {//Loader динамической загрузки PDF Viewer
             id: pdfLoader
+            property string strPdfPut: ""//Путь к pdf документу, который нужно открыть или пустой путь, чтоб закрыть.
+            property bool blClose: true//true - закрываем документ.
+
             anchors.fill: tmZona
-            source: root.blClose ? "" : "qrc:/qml/methods/DCPdfMPV.qml"//Указываем путь к отдельному QML-файлу
+            source: pdfLoader.blClose ? "" : "qrc:/qml/methods/DCPdfMPV.qml"//Указываем путь к отдельному QMl
             active: false//не активирован.
+
+
             onLoaded: {
                 pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
-                pdfLoader.item.source = root.strPdfPut;// Устанавливаем путь к PDF
+                pdfLoader.item.source = pdfLoader.strPdfPut;// Устанавливаем путь к PDF
             }
         }
         Connections {//Соединяем сигнал из C++ с действием в QML
             target: cppqml;//Цель объект класса С++ DCCppQml
             function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
                 tmrLogo.running = true;//Запускаем таймер анимации логотипа
-                root.blLogoTMK = false;//логотип на уменьшение.
                 pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
                 if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
                     var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
@@ -307,8 +308,7 @@ Item {
             function onSgnVisible(){//Изменилась видимость виджета отображения pdf документа.
                 if(pdfLoader.item.visible){//Виджет видимый.
                     tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
-                    root.blLogoTMK = false;//Делаем флаг анимации логотипа ТМК на уменьшение.
-                    lgTMK.ntCoff = ntLogoTMK;//Задаём размер логотипа.
+                    lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
                 }
                 else//Виджет не видимый. При открытии этот флаг не изменится.
                     tmrLogo.running = true;//Запускаем таймер анимации логотипа
@@ -348,8 +348,8 @@ Item {
             anchors.left: tmToolbar.left
         }
         WorkerScript {//WorkerScript для выполнения в отдельном потоке
-            id: worker
-            source: "qrc:/js/worker.js"
+            id: wrsProgress
+            source: "qrc:/js/jsProgress.js"
             onMessage: function(message) {
                 rctProgress.width = message.progress * tmToolbar.width / 100
                 //progressText.text = "Загрузка: " + message.progress + "%"

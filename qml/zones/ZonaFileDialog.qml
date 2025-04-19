@@ -1,5 +1,5 @@
 ﻿import QtQuick //2.15
-import "qrc:/js/DCFunkciiJS.js" as JSFileDialog
+import "qrc:/js/jsJSON.js" as JSFileDialog
 
 Item {
     id: tmZona

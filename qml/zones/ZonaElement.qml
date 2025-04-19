@@ -1,5 +1,5 @@
 ﻿import QtQuick //2.15
-import "qrc:/js/DCFunkciiJS.js" as JSElement
+import "qrc:/js/jsJSON.js" as JSElement
 
 Item {
     id: root

@@ -6,9 +6,9 @@
         <file>icons/86x86/ru.WorkingDiagrams.png</file>
         <file>images/Qt_logo_2016.png</file>
         <file>images/ru.WorkingDiagrams.png</file>
-        <file>js/DCFunkciiJS.js</file>
-		<file>js/worker.js</file>
-		<file>qml/ru.WorkingDiagrams.qml</file>
+        <file>js/jsJSON.js</file>
+        <file>js/jsProgress.js</file>
+        <file>qml/ru.WorkingDiagrams.qml</file>
         <file>qml/buttons/DCKnopkaInfo.qml</file>
         <file>qml/buttons/DCKnopkaKruglaya.qml</file>
         <file>qml/buttons/DCKnopkaMenu.qml</file>
@@ -29,6 +29,7 @@
         <file>qml/methods/DCPassword.qml</file>
         <file>qml/methods/DCPdfMPV.qml</file>
         <file>qml/methods/DCPoisk.qml</file>
+        <file>qml/methods/DCProgress.qml</file>
         <file>qml/methods/DCScale.qml</file>
         <file>qml/methods/DCSpinBox.qml</file>
         <file>qml/methods/DCTextEdit.qml</file>

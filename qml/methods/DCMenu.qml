@@ -1,6 +1,6 @@
 ﻿import QtQuick //2.15
 //DCMenu - ШАБЛОН ВСПЛЫВАЮЩЕГО МЕНЮ НАСТРОЕК.
-import "qrc:/js/DCFunkciiJS.js" as JSMenu
+import "qrc:/js/jsJSON.js" as JSMenu
 
 Item {
     id: root
