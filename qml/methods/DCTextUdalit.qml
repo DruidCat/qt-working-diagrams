@@ -79,7 +79,7 @@ Item {
                 text: qsTr("УДАЛИТЬ:")+root.text+"?"
 				onTextChanged: {//Если текст изменился, то...
 					if(rctText.width > txtTextUdalit.width){//Если длина строки больше длины текста, то...
-					for(let ltShag=txtTextUdalit.font.pixelSize;
+                        for(let ltShag=txtTextUdalit.font.pixelSize;
                                                 ltShag<root.ntWidth*root.ntCoff; ltShag++){
 							if(txtTextUdalit.width < rctText.width){//Если длина текста меньше динны строки
 								txtTextUdalit.font.pixelSize = ltShag;//Увеличиваем размер шрифта
