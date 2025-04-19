@@ -324,6 +324,10 @@ Item {
             function onSgnPassword(){//Произошёл запрос на ввод пароля.
                 tmrPassword.running = true;//Делаем видимым поле ввода пароля через небольшую паузу.
             }
+            function onSgnProgress(ntProgress, strStatus){//Изменился прогресс документа.
+                prgZagruzka.progress = ntProgress;//Отправляем прогресс загрузки документа в DCProgress.
+                prgZagruzka.text = strStatus;//Выводим статус загрузки документа.
+            }
         }
         Timer{//Таймер нужен, чтоб виджет успел исчезнуть и потом появиться, если пароль неверный.
             id: tmrPassword
@@ -342,7 +346,8 @@ Item {
         DCProgress {//@disable-check M300
             id: prgZagruzka
             anchors.fill: tmToolbar
-            clrProgress: root.clrTexta; radius: root.ntCoff/2
+            clrProgress: root.clrTexta;
+            clrTexta: "grey"
         }
         DCSpinBox {//@disable-check M300
 			id: spbPdfPage
