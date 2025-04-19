@@ -33,7 +33,7 @@ Item {
     }
     Timer {
         id: tmrProgress
-        interval: 110; repeat: true;
+        interval: 1100; repeat: true;
         running: root.running ? true : false
         onTriggered: {//Срабатывает таймер.
             if(root.progress <= 100){//Если меньше 100%
