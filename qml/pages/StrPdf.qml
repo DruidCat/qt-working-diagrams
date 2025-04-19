@@ -64,7 +64,6 @@ Item {
         if(urlPdfPut){//Если путь не пустая строка, то...
             pdfLoader.blClose = false;//Не закрываем Загрузчик.
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
-            prgZagruzka.running = true;//Запускаем виджет загрузки
         }
         else{//Если путь пустая строка, то...
             root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
@@ -114,11 +113,13 @@ Item {
         }
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
+                prgZagruzka.running = true;//Запускаем виджет загрузки
                 spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
                 pdfScale.visible = false;//Делаем невидимым DCScale
                 knopkaPoisk.visible = false;//Делаем невидимым кнопку Поиска.
             }
             else{//Если таймер выключен, то...
+                prgZagruzka.running = false;//Отключаем прогресс.
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
                 knopkaPoisk.visible = true;//Делаем видимым кнопку Поиска.
@@ -278,7 +279,6 @@ Item {
             source: pdfLoader.blClose ? "" : "qrc:/qml/methods/DCPdfMPV.qml"//Указываем путь к отдельному QMl
             active: false//не активирован.
 
-
             onLoaded: {
                 pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
                 pdfLoader.item.source = pdfLoader.strPdfPut;// Устанавливаем путь к PDF
@@ -345,9 +345,9 @@ Item {
 		id: tmToolbar
         DCProgress {//@disable-check M300
             id: prgZagruzka
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.fill: tmToolbar
-            clrProgress: root.clrTexta;
-            clrTexta: "grey"
+            clrProgress: root.clrTexta; clrTexta: "grey"
         }
         DCSpinBox {//@disable-check M300
 			id: spbPdfPage

@@ -2,6 +2,8 @@
 //Шаблон DCProgress.qml - состоит из области, которая показывает прогресс какого либо процесса
 Item {
     id: root
+    property int  ntWidth: 2//Для реазмера текста.
+    property int ntCoff: 8//Для реазмера текста.
     property alias radius: rctProgress.radius//Радиус зоны отображения виджета поиска.
     property alias clrProgress: rctProgress.color//цвет фона
     property alias clrTexta: txtProgress.color//цвет фона
@@ -17,19 +19,42 @@ Item {
 
     Text {
         id: txtProgress
+        z: 1
         anchors.fill: root
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
         color: "grey"
+        font.pixelSize: root.ntWidth*root.ntCoff/2//размер шрифта текста.
         text: ""
-        z: 1
+        /*
+        onTextChanged: {//Если текст изменился, то...
+            if(root.width > txtProgress.width){//Если длина строки больше длины текста, то...
+                for(var ltShag=txtProgress.font.pixelSize;
+                                        ltShag<root.ntWidth*root.ntCoff; ltShag++){
+                    if(txtProgress.width < root.width){//Если длина текста меньше динны строки
+                        txtProgress.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                        if(txtProgress.width > root.width){//Но, если переборщили
+                            txtProgress.font.pixelSize--;//То уменьшаем размер шрифта и...
+                            return;//Выходим из увеличения шрифта.
+                        }
+                    }
+                }
+            }
+            else{//Если длина строки меньше длины текста, то...
+                for(let ltShag = txtProgress.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                    if(txtProgress.width > root.width)//Если текст дилиннее строки, то...
+                        txtProgress.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                }
+            }
+        }
+        */
     }
     Rectangle {//Основной прямоугольник.
         id: rctProgress
-        width: 0; height: root.height
+        z: 0
+        width: 1; height: root.height
         anchors.top: root.top; anchors.left: root.left
         color: "orange"; radius: 1
-        z: 0
     }
     Timer {
         id: tmrProgress
@@ -41,7 +66,8 @@ Item {
                 rctProgress.width = root.progress * root.width/100;//Задаём длину прогресса.
             }
             else{//Если больше 100, то...
-                rctProgress.width = 0;//Длину прогресса сбрасываем до 0
+                rctProgress.width = 1;//Длину прогресса сбрасываем до 0
+                root.progress = 0;//Обнуляем счётчик.
                 root.running = false;//Отключаем таймер.
             }
         }

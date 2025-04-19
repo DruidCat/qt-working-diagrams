@@ -44,7 +44,7 @@ Item {
         root.sgnVisible();//Изменилась видимость.
         pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
         console.error("46: 3. Старт таймера масштабирования.");
-        root.sgnProgress(28, "3. Старт таймера масштабирования.");
+        root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
         tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
     }
     onCurrentPageChanged: {//Если страница поменялась из вне, то...
@@ -82,7 +82,7 @@ Item {
             if(!tmrAppSize.running){//Если таймер еще не запускался, то...
                 pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
                 console.error("84: 4. Изменился размер окна.");
-                root.sgnProgress(37, "4. Изменился размер окна.")
+                root.sgnProgress(37, "4/11 Изменился размер окна.")
                 root.visible = false;//Невидимым виджет делаем.
                 root.sgnVisible();//Изменилась видимость.
             }
@@ -92,7 +92,7 @@ Item {
     function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
         pmpDoc.blScaleStart = true;//Начало масштабирования.
         console.error("94: 5. Начало масштабирования документа.");
-        root.sgnProgress(46, "5. Начало масштабирования документа.");
+        root.sgnProgress(46, "5/11 Начало масштабирования документа.");
         if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
             var widthRect = pmpDoc.childrenRect.width;
             var heightRect = pmpDoc.childrenRect.height;
@@ -104,19 +104,20 @@ Item {
         else
             pmpDoc.renderScale = root.renderScale;//Выставляем масштаб из Свойства.
         console.error("106: 7. Окончание масштабирования документа.")
-        root.sgnProgress(64, "7. Окончание масштабирования документа.");
+        root.sgnProgress(64, "7/11 Окончание масштабирования документа.");
         pmpDoc.blScaleStart = false;//Окончание масштабирования.
         if(!pmpDoc.blScaleAuto){//Если ручной режим, то... необходимo для правильного логирования
             console.error("110: 8. Старт таймера страницы.")
-            root.sgnProgress(73, "8. Старт таймера страницы.");
+            root.sgnProgress(73, "8/11 Старт таймера страницы.");
             tmrGoToPage.running = true;//Запускаем таймер перехода на страницу после масштабирования.
         }
     }
     function fnGoToPage(ntPage){//Функция обрабатывающая переход на новую страницу документа.
         console.error("116: 10. Переходим на страницу: " + ntPage);
-        root.sgnProgress(91, "10. Переходим на страницу.");
+        root.sgnProgress(91, "10/11 Переходим на страницу.");
         pmpDoc.goToLocation(ntPage, Qt.point(0, 0), pmpDoc.renderScale);//Переходим на страницу.
-        console.error("119:fnGoToPage Старт таймера видимости.");
+        console.error("119: 11. Старт таймера видимости.");
+        root.sgnProgress(100, "11/11 Старт таймера отображения.");
         tmrVisible.running = true;//Запускаем таймер отображения документа.
     }
     Timer {//Таймер необходим, чтоб пока пользователь изменяет размер окна приложения,не обрабатывался масштаб
@@ -127,7 +128,7 @@ Item {
             pmpDoc.blScaleAuto = true;//Автоматический режим масштабирования по размеру виджета
             fnScale();//Выставляем масштаб по ширине или по высоте в зависимости от размера документа.
             console.error("129: 8. Старт таймера страницы.")
-            root.sgnProgress(73, "8. Старт таймера страницы.");
+            root.sgnProgress(73, "8/11 Старт таймера страницы.");
             tmrGoToPage.running = true;//запускаем таймер, перед переходом на страницу
         }
     }
@@ -136,7 +137,7 @@ Item {
         interval: 111; running: false; repeat: false
         onTriggered: {
             console.error("138: 4. Стоп таймера масштабирования.");
-            root.sgnProgress(37, "4. Стоп таймера масштабирования.");
+            root.sgnProgress(37, "4/11 Стоп таймера масштабирования.");
             fnScale();//масштабируем документ автоматически/вручную.
         }
     }
@@ -145,7 +146,7 @@ Item {
         interval: 333; running: false; repeat: false
         onTriggered: {
             console.error("147: 9. Стоп таймера страницы.");
-            root.sgnProgress(82, "9. Стоп таймера страницы.");
+            root.sgnProgress(82, "9/11 Стоп таймера страницы.");
             if(pmpDoc.blPinch){//Если был щипок пользователя с изменением Масштаба, то...
                 pmpDoc.blPinch = false;//Сбрасываем флаг
                 fnGoToPage(pmpDoc.ntPinchPage);//Выставляем запомненную страницу после щипка
@@ -166,8 +167,7 @@ Item {
         id: tmrVisible
         interval: 333; running: false; repeat: false
         onTriggered: {
-            console.error("169: 11. Отображаем ваш документ.");
-            root.sgnProgress(100, "11. Отображаем ваш документ.");
+            console.error("169: Отображаем ваш документ.");
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
             root.visible = true;//Видимый виджет
             root.sgnVisible();//Изменилась видимость.
@@ -178,7 +178,7 @@ Item {
         interval: 111; running: false; repeat: false
         onTriggered: {
             console.error("180: 11. Ошибка, окончание загрузки.");
-            root.sgnProgress(100, "11. Ошибка, окончание загрузки.");
+            root.sgnProgress(100, "11/11 Ошибка, окончание загрузки.");
             if(pmpDoc.blPassword){//Если был запрос на пароль, то...
                 pmpDoc.blPassword = false;//Сбрасываем флаг.
             }
@@ -216,13 +216,13 @@ Item {
             onStatusChanged: {
                 if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
                     console.error("218: 10. Старт таймера ошибки.");
-                    root.sgnProgress(91, "10. Старт таймера ошибки.");
+                    root.sgnProgress(91, "10/11 Старт таймера ошибки.");
                     tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
                 }
                 else{//Если не ошибка, то...
                     if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
-                        console.error("224: 2. Статус документа: открыто.");
-                        root.sgnProgress(19, "2. Статус документа: открыто.");
+                        console.error("224: 2. Статус документа: готов.");
+                        root.sgnProgress(19, "2/11 Статус документа: готов.");
                         //Расчитываем, вертикальный или горизонтальный документ.
                         if(pdfDoc.pagePointSize(root.currentPage).height
                                 >= pdfDoc.pagePointSize(root.currentPage).width)
@@ -233,7 +233,7 @@ Item {
                     else{
                         if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
                             console.error("235: 1. Статус документа: Загрузка.");
-                            root.sgnProgress(10, "1. Статус документа: Загрузка.");
+                            root.sgnProgress(10, "1/11 Статус документа: Загрузка.");
                         }
                     }
                 }
@@ -257,7 +257,7 @@ Item {
                 if(!pmpDoc.blScale){//Если стартового масштабирование не было, то...
                     pmpDoc.blScale = true;//Активируем флаг, что началось первичное масштабирование.
                     console.error("259: 3. Старт таймера масштабирования.");
-                    root.sgnProgress(28, "3. Старт таймера масштабирования.");
+                    root.sgnProgress(28, "3/11 Остановка анимации логотипа.");
                     pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
                     tmrScale.running = true;//запускаем таймер, перед переходом на страницу
                 }
@@ -265,14 +265,14 @@ Item {
                     if(!pmpDoc.blGoToPage){//Если не было стартового перехода на страницу, то...
                         pmpDoc.blGoToPage = true;//Активируем флаг, что начался первичный переход на страницу.
                         console.error("267: 8. Старт таймера страницы.");
-                        root.sgnProgress(73, "8. Старт таймера страницы.");
+                        root.sgnProgress(73, "8/11 Старт таймера страницы.");
                         tmrGoToPage.running = true;//запускаем таймер, перед переходом на страницу
                     }
                 }
             }
             if(pmpDoc.blPinch){
                 console.error("274: 8. Старт таймера страницы.")
-                root.sgnProgress(73, "8. Старт таймера страницы.");
+                root.sgnProgress(73, "8/11 Старт таймера страницы.");
                 tmrGoToPage.running = true;
             }
         }
@@ -286,7 +286,7 @@ Item {
             root.rlMasshtab = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
             root.sgnRenderScale(root.rlMasshtab);//отправляем сигнал со значением масштаба
             console.error("288: 6. Сброс сцены документа.")
-            root.sgnProgress(55, "6. Сброс сцены документа.");
+            root.sgnProgress(55, "6/11 Сброс сцены документа.");
             //if(!pmpDoc.blResetScene){//Если это первичное масштабирование, то...
                 pmpDoc.blResetScene = true;//Изменяем флаг, чтоб последующие масштабирования были качественные
                 //Это быстрый способ, но с ошибками в консоли, так как документ обнуляется.
