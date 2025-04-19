@@ -633,8 +633,9 @@ void DCCppQml::setStrDebug(QString& strDebugNovi){//Установить Нов�
     if(strDebugNovi == "")//Стераем сообщение из Toolbar
         m_pTimerDebug->stop();//Останавливаем таймер.
     else{
-        QString strLog = QTime::currentTime().toString("HH:mm:ss");//В строку добавляем текущее время.
-        strDebugNovi = strLog + ": " + strDebugNovi;//Добавляем двоеточие и само Сообщение.
+        //QString strLog = QTime::currentTime().toString("HH:mm:ss");//В строку добавляем текущее время.
+        //strDebugNovi = strLog + ": " + strDebugNovi;//Добавляем двоеточие и само Сообщение.
+        strDebugNovi = strDebugNovi;//Добавляем двоеточие и само Сообщение.
         m_pTimerDebug->start();//Запустить таймер.
     }
 	m_strDebug = strDebugNovi;
