@@ -25,7 +25,6 @@ Item {
     property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctZona.radius//Радиус Зоны рабочей
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
-    property bool blLogoTMK: false//Флаг, отвечает за изменение размера логотипа. Уменьшаем - false
     property int ntLogoTMK: 16
 
     anchors.fill: parent//Растянется по Родителю.
@@ -104,19 +103,20 @@ Item {
             clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
             Timer {
                 id: tmrLogoTMK
+                property bool blLogoTMK: false//Флаг, отвечает за изменение размера логотипа. Уменьшаем-false
                 interval: 111
                 running: false
                 repeat: true
                 onTriggered: {
-                    if(tmFileDialog.blLogoTMK){//Если true, то...
+                    if(blLogoTMK){//Если true, то...
                         lgTMK.ntCoff++;
                         if(lgTMK.ntCoff >= tmFileDialog.ntLogoTMK)
-                            tmFileDialog.blLogoTMK = false;
+                            blLogoTMK = false;
                     }
                     else{
                         lgTMK.ntCoff--;
                         if(lgTMK.ntCoff <= 1)
-                            tmFileDialog.blLogoTMK = true;
+                            blLogoTMK = true;
                     }
                }
             }
@@ -222,7 +222,6 @@ Item {
         function onBlFileDialogCopyChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то
             tmrLogoTMK.running = false;//Останавливаем таймер анимации логотипа ТМК.
             lgTMK.ntCoff = tmFileDialog.ntLogoTMK;//По умолчанию размер логотипа ТМК.
-            tmFileDialog.blLogoTMK = false;//Делаем флаг анимации логотипа ТМК на уменьш.
             knopkaNazad.visible= true//Делаем кнопку назад видимой.
             knopkaZakrit.visible = true//Делаем кнопку закрыть видимой.
             lsvZona.visible = true;//Делаем видимую зону с Проводником.
