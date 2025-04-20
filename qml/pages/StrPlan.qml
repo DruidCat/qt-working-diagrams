@@ -1,7 +1,9 @@
 ﻿import QtQuick //2.15
+
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-//Страница с отображением Плана цеха.
+import "qrc:/qml/methods"//Импортируем методы написанные мной.
+//Страница с отображением Плана.
 Item {
     id: root
     //Свойства
@@ -21,21 +23,66 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-    property alias radiusZona: rctZona.radius
     property bool appRedaktor: false//true - включить Редактор приложения.
+    property bool pdfViewer: false//true - собственный просмотщик pdf документов.
+    property int ntLogoTMK: 16
     //Настройки
 	anchors.fill: parent//Растянется по Родителю.
     //Сигналы
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedSozdat();//Сигнал нажатия кнопки Создать
-
+    //Функции
+    function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
+        pdfLoader.strPdfPut = urlPdfPut;//Устанавливаем путь.
+        if(urlPdfPut){//Если путь не пустая строка, то...
+            pdfLoader.blClose = false;//Не закрываем Загрузчик.
+            pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
+        }
+        else{//Если путь пустая строка, то...
+            root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
+            pdfLoader.blClose = true;//Закрываем Загрузчик.
+            pdfLoader.active = false;//Деактивируем загрузчик, уничтожаем всё его содержимое.
+            Qt.callLater(fnGarbageCollector);//Принудительно вызываем сборщик мусора
+        }
+    }
+    function fnGarbageCollector(){//Функция сборщика мусора, после закрытия документа.
+        if (typeof gc === "function")//Если это функция, то...
+            gc();//Прямой вызов JavaScript-сборщика мусора.
+        else//Если это метод, то...
+            Qt.gc();
+    }
+    Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
+        id: tmrLogo
+        interval: 110; running: false; repeat: true
+        property bool blLogoTMK: false
+        onTriggered: {
+            if(blLogoTMK){//Если true, то...
+                lgTMK.ntCoff++;
+                if(lgTMK.ntCoff >= root.ntLogoTMK)
+                    blLogoTMK = false;
+            }
+            else{
+                lgTMK.ntCoff--;
+                if(lgTMK.ntCoff <= 1)
+                    blLogoTMK = true;
+            }
+        }
+        onRunningChanged: {//Если таймер изменился, то...
+            if(running){//Если запустился таймер, то...
+                ldrProgress.active = true;//Запускаем виджет загрузки
+                knopkaSozdat.visible = false;//Невидимая кнопка Создать.
+            }
+            else{//Если таймер выключен, то...
+                ldrProgress.active = false;//Отключаем прогресс.
+                knopkaSozdat.visible = true;//Видимая кнопка Создать.
+            }
+        }
+    }
     Item {//Данные Заголовок
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-			anchors.verticalCenter: tmZagolovok.verticalCenter
-			anchors.left:tmZagolovok.left
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left:tmZagolovok.left
             anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
             onClicked: {
@@ -43,26 +90,102 @@ Item {
             }
         }
     }
-    Item {//Данные Зона
-		id: tmZona
+    Item {
+        id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-		Rectangle {
-			id: rctZona
-			anchors.fill: tmZona
-			color: "transparent"
-		}
+        DCLogoTMK {//@disable-check M300//Логотип до ZonaFileDialog, чтоб не перекрывать список.
+            id: lgTMK
+            ntCoff: root.ntLogoTMK
+            anchors.centerIn: tmZona
+            clrLogo: root.clrTexta; clrFona: root.clrFona
+        }
+        Loader {//Loader динамической загрузки PDF Viewer
+            id: pdfLoader
+            //Свойства.
+            property string strPdfPut: ""//Путь к pdf документу, который нужно открыть или пустой путь, чтоб закрыть.
+            property bool blClose: true//true - закрываем документ.
+            //Настройки.
+            anchors.fill: tmZona
+            source: pdfLoader.blClose ? "" : "qrc:/qml/methods/DCPdfMPV.qml"//Указываем путь к отдельному QMl
+            active: false//не активирован.
+
+            onLoaded: {
+                pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
+                pdfLoader.item.source = pdfLoader.strPdfPut;// Устанавливаем путь к PDF
+            }
+        }
+        Connections {//Соединяем сигнал из C++ с действием в QML
+            /*
+            target: cppqml;//Цель объект класса С++ DCCppQml
+            function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
+                tmrLogo.running = true;//Запускаем таймер анимации логотипа
+                //pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
+                if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+                    //var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
+                    //fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
+                    //console.error("390: Url: " + strPdfUrl);
+                }
+            }
+            */
+        }
+        Connections {//Соединение сигналов из qml файла со слотами.
+            target: pdfLoader.item
+            function onSgnError() {//Ошибка при открытии документа
+                fnPdfSource("");//Пустой путь PDF документа, закрываем.
+            }
+            function onSgnDebug(strDebug){//Пришла ошибка из qml файла.
+                cppqml.strDebug = strDebug;//Отображаем ошибку.
+            }
+            function onSgnVisible(){//Изменилась видимость виджета отображения pdf документа.
+                if(pdfLoader.item.visible){//Виджет видимый.
+                    tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
+                    lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
+                }
+                else//Виджет не видимый. При открытии этот флаг не изменится.
+                    tmrLogo.running = true;//Запускаем таймер анимации логотипа
+            }
+            /*
+            function onSgnPassword(){//Произошёл запрос на ввод пароля.
+                tmrPassword.running = true;//Делаем видимым поле ввода пароля через небольшую паузу.
+            }
+            */
+            function onSgnProgress(ntProgress, strStatus){//Изменился прогресс документа.
+                ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки документа в DCProgress.
+                ldrProgress.item.text = strStatus;//Выводим статус загрузки документа.
+            }
+        }
+        /*
+        Timer{//Таймер нужен, чтоб виджет успел исчезнуть и потом появиться, если пароль неверный.
+            id: tmrPassword
+            interval: 11; repeat: false; onTriggered: pssPassword.visible = true;//Делаем видимым ввод пароля.
+        }
+        */
+        Rectangle {//Это граница документа очерченая линией для красоты.
+            id: rctBorder
+            anchors.fill: tmZona
+            color: "transparent"
+            border.color: root.clrTexta
+            border.width: root.ntCoff/4//Бордюр при переименовании и удалении.
+        }
     }
     Item {//Данные Тулбар
 		id: tmToolbar
+        Loader {//Loader Прогресса загрузки pdf документа
+            id: ldrProgress
+            anchors.fill: tmToolbar
+            source: "qrc:/qml/methods/DCProgress.qml"//Указываем путь к отдельному QMl
+            active: false//не активирован.
+            onLoaded: {//Когда загрузчик загрузился, передаём свойства в него.
+                ldrProgress.item.ntWidth = root.ntWidth; ldrProgress.item.ntCoff = root.ntCoff;
+                ldrProgress.item.clrProgress = root.clrTexta; ldrProgress.item.clrTexta = "grey";
+            }
+        }
         DCKnopkaSozdat {//@disable-check M300
             id: knopkaSozdat
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            anchors.verticalCenter: tmToolbar.verticalCenter
-            anchors.left: tmToolbar.left
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmToolbar.verticalCenter; anchors.left: tmToolbar.left
             anchors.margins: root.ntCoff/2
-            clrKnopki: root.clrTexta
-            clrFona: root.clrFona
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
             visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             onClicked: {
                 root.clickedSozdat();//Сигнал нажатия кнопки Создать

@@ -201,7 +201,7 @@ ApplicationWindow {
                 zonaWidth: pgStrPlan.rctStrZona.width; zonaHeight: pgStrPlan.rctStrZona.height
                 toolbarX: pgStrPlan.rctStrToolbar.x; toolbarY: pgStrPlan.rctStrToolbar.y
                 toolbarWidth: pgStrPlan.rctStrToolbar.width; toolbarHeight: pgStrPlan.rctStrToolbar.height
-                radiusZona: pgStrPlan.rctStrZona.radius; appRedaktor: root.appRedaktor
+                appRedaktor: root.appRedaktor
                 onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}

@@ -5,6 +5,7 @@ import "qrc:/qml/methods"//Импортируем методы написанн�
 //Страница отображающая Описание чего либо.
 Item {
     id: root
+    //Свойства
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"

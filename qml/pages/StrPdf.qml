@@ -1,5 +1,4 @@
 ﻿import QtQuick //2.15
-import QtQuick.Pdf //5.15
 
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
@@ -7,9 +6,7 @@ import "qrc:/qml/methods"//Импортируем методы написанн�
 //Страница просмотра PDF документов.
 Item {
 	id: root
-    anchors.fill: parent//Растянется по Родителю.
-    focus: true//Чтоб кнопки работали.
-
+    //Свойства
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -26,12 +23,14 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
     property int ntLogoTMK: 16
+    //Настройки
+    anchors.fill: parent//Растянется по Родителю.
+    focus: true//Чтоб кнопки работали.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
-
+    //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
 			if(txnZagolovok.visible)//Если строка ввода запроса на поиск видима, то...
@@ -272,9 +271,10 @@ Item {
 		}
         Loader {//Loader динамической загрузки PDF Viewer
             id: pdfLoader
+            //Свойства.
             property string strPdfPut: ""//Путь к pdf документу, который нужно открыть или пустой путь, чтоб закрыть.
             property bool blClose: true//true - закрываем документ.
-
+            //Настройки.
             anchors.fill: tmZona
             source: pdfLoader.blClose ? "" : "qrc:/qml/methods/DCPdfMPV.qml"//Указываем путь к отдельному QMl
             active: false//не активирован.
