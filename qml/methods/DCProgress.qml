@@ -7,15 +7,11 @@ Item {
     property alias radius: rctProgress.radius//Радиус зоны отображения виджета поиска.
     property alias clrProgress: rctProgress.color//цвет фона
     property alias clrTexta: txtProgress.color//цвет фона
-    property bool running: false//флаг который будет запускать таймер пролосы прогресса.
+    property alias running: tmrProgress.running//флаг который запускает таймер пролосы прогресса.
     property int progress: 0//Свойство прогресса от 0 до 100
     property alias text: txtProgress.text
 
-    visible: running ? true : false//Видимость зависит от статуса запущеного таймера.
-
-    onRunningChanged: {
-        root.progress = 0;//Обнуляем счётчик.
-    }
+    visible:  true//Видимость процесса загрузки.
 
     Text {
         id: txtProgress
@@ -59,7 +55,7 @@ Item {
     Timer {
         id: tmrProgress
         interval: 1100; repeat: true;
-        running: root.running ? true : false
+        running: true
         onTriggered: {//Срабатывает таймер.
             if(root.progress <= 100){//Если меньше 100%
                 root.progress += 1;//+1

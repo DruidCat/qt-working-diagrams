@@ -113,13 +113,13 @@ Item {
         }
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
-                prgZagruzka.running = true;//Запускаем виджет загрузки
+                ldrProgress.active = true;//Запускаем виджет загрузки
                 spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
                 pdfScale.visible = false;//Делаем невидимым DCScale
                 knopkaPoisk.visible = false;//Делаем невидимым кнопку Поиска.
             }
             else{//Если таймер выключен, то...
-                prgZagruzka.running = false;//Отключаем прогресс.
+                ldrProgress.active = false;//Отключаем прогресс.
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
                 knopkaPoisk.visible = true;//Делаем видимым кнопку Поиска.
@@ -325,8 +325,8 @@ Item {
                 tmrPassword.running = true;//Делаем видимым поле ввода пароля через небольшую паузу.
             }
             function onSgnProgress(ntProgress, strStatus){//Изменился прогресс документа.
-                prgZagruzka.progress = ntProgress;//Отправляем прогресс загрузки документа в DCProgress.
-                prgZagruzka.text = strStatus;//Выводим статус загрузки документа.
+                ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки документа в DCProgress.
+                ldrProgress.item.text = strStatus;//Выводим статус загрузки документа.
             }
         }
         Timer{//Таймер нужен, чтоб виджет успел исчезнуть и потом появиться, если пароль неверный.
@@ -343,11 +343,15 @@ Item {
 	}
     Item {//Тулбар
 		id: tmToolbar
-        DCProgress {//@disable-check M300
-            id: prgZagruzka
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+        Loader {//Loader Прогресса загрузки pdf документа
+            id: ldrProgress
             anchors.fill: tmToolbar
-            clrProgress: root.clrTexta; clrTexta: "grey"
+            source: "qrc:/qml/methods/DCProgress.qml"//Указываем путь к отдельному QMl
+            active: false//не активирован.
+            onLoaded: {//Когда загрузчик загрузился, передаём свойства в него.
+                ldrProgress.item.ntWidth = root.ntWidth; ldrProgress.item.ntCoff = root.ntCoff;
+                ldrProgress.item.clrProgress = root.clrTexta; ldrProgress.item.clrTexta = "grey";
+            }
         }
         DCSpinBox {//@disable-check M300
 			id: spbPdfPage

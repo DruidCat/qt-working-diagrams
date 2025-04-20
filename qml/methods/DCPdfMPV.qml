@@ -222,7 +222,7 @@ Item {
                 else{//Если не ошибка, то...
                     if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
                         console.error("224: 2. Статус документа: готов.");
-                        root.sgnProgress(19, "2/11 Статус документа: готов.");
+                        root.sgnProgress(19, "2/11 Загрузка большого документа.");
                         //Расчитываем, вертикальный или горизонтальный документ.
                         if(pdfDoc.pagePointSize(root.currentPage).height
                                 >= pdfDoc.pagePointSize(root.currentPage).width)
@@ -257,7 +257,7 @@ Item {
                 if(!pmpDoc.blScale){//Если стартового масштабирование не было, то...
                     pmpDoc.blScale = true;//Активируем флаг, что началось первичное масштабирование.
                     console.error("259: 3. Старт таймера масштабирования.");
-                    root.sgnProgress(28, "3/11 Остановка анимации логотипа.");
+                    root.sgnProgress(28, "3/11 Остановка анимации: ожидайте.");
                     pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
                     tmrScale.running = true;//запускаем таймер, перед переходом на страницу
                 }
