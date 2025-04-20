@@ -201,10 +201,14 @@ ApplicationWindow {
                 zonaWidth: pgStrPlan.rctStrZona.width; zonaHeight: pgStrPlan.rctStrZona.height
                 toolbarX: pgStrPlan.rctStrToolbar.x; toolbarY: pgStrPlan.rctStrToolbar.y
                 toolbarWidth: pgStrPlan.rctStrToolbar.width; toolbarHeight: pgStrPlan.rctStrToolbar.height
-				radiusZona: pgStrPlan.rctStrZona.radius//Радиус берём из настроек элемента qml
-				onClickedNazad: {
+                radiusZona: pgStrPlan.rctStrZona.radius; appRedaktor: root.appRedaktor
+                onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
+                onClickedSozdat: {//Слот нажатия кнопки Создать.
+                    pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
+                    stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
+                }
 			}
 		}
 		Stranica {//Страница со Списком

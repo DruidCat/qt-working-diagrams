@@ -78,8 +78,8 @@ Item {
                 root.clickedNazad();//Сигнал, что кнопка Назад нажата.
 			}
 		} 
-        DCKnopkaMap {//@disable-check M300
-            id: knopkaMap
+        DCKnopkaPlan {//@disable-check M300
+            id: knopkaPlan
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -140,6 +140,7 @@ Item {
                     txdZona.textEdit.cursorVisible = false;//Курсор сделаем не видимым
                     knopkaOtmena.visible = false;//делаем невидимой кнопку Отмена.
                     knopkaOk.visible = false;//делаем невидимой кнопку Ок.
+                    knopkaPlan.visible = true;//Делаем видимой кнопка План.
                     knopkaSozdat.visible = true;//делаем видимой кнопку Создать.
                 }
                 else{
@@ -147,6 +148,7 @@ Item {
                     txdZona.textEdit.cursorPosition = txdZona.text.length;//Курсор в конец текста
                     knopkaSozdat.visible = false//Делаем невидимой кнопку Создать.
                     knopkaOtmena.visible = true;//делаем видимой кнопку Отмена.
+                    knopkaPlan.visible = false;//Делаем невидимой кнопка План.
                     knopkaOk.visible = true;//Делаем видимой кнопку Ок
                 }
             }

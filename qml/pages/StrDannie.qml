@@ -6,6 +6,7 @@ import "qrc:/qml/zones"//Импортируем зону Данных.
 //Страница с Данными, где отображаются сами документы в виде списка.
 Item {
     id: root
+    //Свойства
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -30,14 +31,17 @@ Item {
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого документа, если true
 	property string strDannieRen: "";//Переменная хранит имя Документа, который нужно переименовать
+    //Настройки
     anchors.fill: parent//Растянется по Родителю.
+    focus: true//Не удалять, может Escape не работать.
+    //Сигналы
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedDannie(var strDannie);//Сигнал когда нажат один из элементов Данных.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
-
+    //Функции
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuDannie.visible = false;//Делаем невидимым всплывающее меню.
@@ -47,7 +51,6 @@ Item {
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         lsvZona.enabled = true;//Делаем кликабельную Зону.
     }
-    focus: true//Не удалять, может Escape не работать.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             root.signalToolbar("");//Делаем пустую строку в Toolbar.

@@ -1,9 +1,10 @@
 ﻿import QtQuick //2.15
 import "qrc:/qml"//Импортируем основные элементы qml
 import "qrc:/qml/buttons"//Импортируем кнопки
-//Страница с отображением Участков Цеха для управления потолочным освещением.
+//Страница с отображением Плана цеха.
 Item {
-    id: tmSvet
+    id: root
+    //Свойства
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -20,21 +21,25 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-	property alias radiusZona: rctZona.radius
+    property alias radiusZona: rctZona.radius
+    property bool appRedaktor: false//true - включить Редактор приложения.
+    //Настройки
 	anchors.fill: parent//Растянется по Родителю.
-	signal clickedNazad();//Сигнал нажатия кнопки Назад
+    //Сигналы
+    signal clickedNazad();//Сигнал нажатия кнопки Назад
+    signal clickedSozdat();//Сигнал нажатия кнопки Создать
 
     Item {//Данные Заголовок
 		id: tmZagolovok
         DCKnopkaNazad {//@disable-check M300
-            ntWidth: tmSvet.ntWidth
-            ntCoff: tmSvet.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left:tmZagolovok.left
-            anchors.margins: tmSvet.ntCoff/2
-            clrKnopki: tmSvet.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
             onClicked: {
-				tmSvet.clickedNazad();
+                root.clickedNazad();
             }
         }
     }
@@ -49,5 +54,19 @@ Item {
     }
     Item {//Данные Тулбар
 		id: tmToolbar
+        DCKnopkaSozdat {//@disable-check M300
+            id: knopkaSozdat
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            anchors.verticalCenter: tmToolbar.verticalCenter
+            anchors.left: tmToolbar.left
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
+            visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
+            onClicked: {
+                root.clickedSozdat();//Сигнал нажатия кнопки Создать
+            }
+        }
     }
 }
