@@ -30,6 +30,7 @@ Item {
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
+    signal clickedPlan();//Сигнал нажатия кнопки План.
     //Функции
 	function fnClickedOtmena(){//Отмена редакрирования
         txdZona.readOnly = true;//запрещаем редактировать текст.
@@ -88,7 +89,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             onClicked: {
-                //TODO Запуск окна План.
+                root.clickedPlan();//Сигнал нажатия кнопки План.
             }
         }
 		DCKnopkaZakrit {//@disable-check M300

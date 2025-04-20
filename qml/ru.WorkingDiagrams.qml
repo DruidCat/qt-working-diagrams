@@ -77,10 +77,7 @@ ApplicationWindow {
 				}
 				onClickedQt: {
 					stvStr.push(pgStrQt)//Переходим на страницу об Qt.
-                }
-                onClickedPlan: {
-                    stvStr.push(pgStrPlan)//Переходим на страницу Плана.
-				}
+                } 
                 onPdfViewerChanged: {//Если флаг настройки pdf Проигрывателя изменился, то...
                     root.pdfViewer = pdfViewer;//Приравниваем флаг настройки.
                 }
@@ -496,6 +493,9 @@ ApplicationWindow {
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.pop()//Назад страницу
 				}
+                onClickedPlan: {//Слот нажатия Плана.
+                    stvStr.push(pgStrPlan)//Переходим на страницу Плана.
+                }
 			}
 		}
 	} 

@@ -28,7 +28,6 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	signal clickedWorkingDiagrams();//Сигнал нажатия кнопки об Рабочих Схемах.
-    signal clickedPlan();//Сигнал нажатия кнопки План.
     signal clickedQt();//Сигнал нажатия кнопки Об Qt.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
@@ -126,26 +125,9 @@ Item {
                 }
                 */
                 DCKnopkaOriginal {//@disable-check M300
-                    id: knopkaPlan
-                    ntHeight: root.ntWidth*root.ntCoff+8
-                    anchors.top: knopkaAvtor.bottom
-                    anchors.left: rctZona.left
-                    anchors.right: rctZona.right
-                    anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"
-                    clrTexta: root.clrTexta
-                    text: qsTr("План")
-                    bold: true
-                    italic: true
-                    onClicked: {//Слот запускающий
-                        menuMenu.visible = false;//Делаем невидимым меню.
-                        root.clickedPlan();//Сигнал нажатия кнопки План.
-                    }
-                }
-                DCKnopkaOriginal {//@disable-check M300
                     id: knopkaQt
                     ntHeight: root.ntWidth*root.ntCoff+8
-                    anchors.top: knopkaPlan.bottom
+                    anchors.top: knopkaAvtor.bottom
                     anchors.left: rctZona.left
                     anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
