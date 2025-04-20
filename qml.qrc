@@ -51,5 +51,6 @@
         <file>qml/zones/ZonaElement.qml</file>
         <file>qml/zones/ZonaFileDialog.qml</file>
         <file>qml/zones/ZonaSpisok.qml</file>
+        <file>qml/buttons/DCKnopkaMap.qml</file>
     </qresource>
 </RCC>

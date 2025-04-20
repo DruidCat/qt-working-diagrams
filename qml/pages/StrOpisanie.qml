@@ -25,10 +25,12 @@ Item {
     property bool appRedaktor: false//true - включить Редактор приложения.
 	property alias textTextEdit: txdZona.text
 	property string strOpisanie: "titul"
+    //Настройки
     anchors.fill: parent//Растянется по Родителю.
+    //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
-
+    //Функции
 	function fnClickedOtmena(){//Отмена редакрирования
         txdZona.readOnly = true;//запрещаем редактировать текст.
 		if(strOpisanie == "titul"){//Если Титул, то...
@@ -75,6 +77,20 @@ Item {
                 root.clickedNazad();//Сигнал, что кнопка Назад нажата.
 			}
 		} 
+        DCKnopkaMap {//@disable-check M300
+            id: knopkaMap
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter
+            anchors.right: tmZagolovok.right
+            anchors.margins: root.ntCoff/2
+            visible: true
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
+            onClicked: {
+                //TODO Запуск окна План.
+            }
+        }
 		DCKnopkaZakrit {//@disable-check M300
             id: knopkaOtmena
             ntWidth: root.ntWidth
