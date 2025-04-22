@@ -4,10 +4,8 @@ import QtQuick.Controls
 
 Item {
     id: root
-    anchors.fill: parent
-    visible: false;//по умолчанию он невидимый.
-
-    property url source: ""// Свойство для установки пути к PDF
+    //Свойства.
+    property string source: ""// Свойство для установки пути к PDF
     property string password: ""//Пароль для pdf документа.
     property real renderScale: 1//Коэффициень масштаба 1.
     property real rlMasshtab: 1//Коэффициень масштаба 1.
@@ -15,6 +13,9 @@ Item {
     property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
     property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
     property alias searchString: pmpDoc.searchString//Запрос на поиск.
+    //Настройки
+    anchors.fill: parent
+    visible: false;//по умолчанию он невидимый.
     //Сигналы.
     signal sgnVisible()//Сигнал - изменилась видимость документа. А состояние отследить по visible.
     signal sgnError()//Закрываем pdf документ.
@@ -23,7 +24,7 @@ Item {
     signal sgnRenderScale(real rlMasshtab)//Cигнал возвращающий значение масштаба.
     signal sgnPassword()//Сигнал о том, что запрашивается пароль. 
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
-
+    //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
             var ntStrDown = root.nomerStranici + 1;

@@ -66,6 +66,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
     m_pDataDannie = new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strWorkingDiagramsPut,
                                    ullDannieMax);//Данные.
+    m_pDataPlan = new DataPlan(strWorkingDiagramsPut, ullDannieMax);//План.
     m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
     connect(	m_pDataTitul,
 				SIGNAL(signalDebug(QString)),
@@ -83,14 +84,25 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                 SIGNAL(signalDebug(QString)),
                 this,
                 SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    connect(	m_pDataPlan,
+                SIGNAL(signalDebug(QString)),
+                this,
+                SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
     connect(	m_pDataDannie,
                 SIGNAL(signalFileDialogCopy(bool)),
                 this,
                 SLOT(slotFileDialogCopy(bool)));//Связываем сигнал статуса скопированного документа в Проводни
+    /*
+    connect(	m_pDataPlan,
+                SIGNAL(signalFileDialogCopy(bool)),
+                this,
+                SLOT(slotFileDialogCopy(bool)));//Связываем сигнал статуса скопированного документа в Проводни
+    */
     m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
     m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
     m_pDataDannie->dbStart();//Записываем первоначальные данные в БД.
+    m_pDataPlan->dbStart();//Записываем первоначальные данные.
     m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	m_pTimerDebug = new QTimer();//Указатель на QTimer для Debug
 	m_pTimerDebug->setInterval(1000);//Интервал прерывания 1000 мс (1с).
@@ -112,6 +124,8 @@ DCCppQml::~DCCppQml(){//Деструктор.
     m_pDataElement = nullptr;//Указатель на таблицу Элементов в БД обнуляем.
     delete m_pDataDannie;//Удаляем указатель.
     m_pDataDannie = nullptr;//Указатель на таблицу Данных в БД обнуляем.
+    delete m_pDataPlan;//Удаляем указатель.
+    m_pDataPlan = nullptr;//Указатель на таблицу Данных в БД обнуляем.
     delete m_pFileDialog;//Удаляем указатель.
     m_pFileDialog = nullptr;//Указатель на Проводник в БД обнуляем.
 	delete m_pTimerDebug;//Удаляем указатель на таймер.

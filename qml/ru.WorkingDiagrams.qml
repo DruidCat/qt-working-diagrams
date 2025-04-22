@@ -177,40 +177,7 @@ ApplicationWindow {
 					stvStr.pop()//Назад страницу
 				}
 			}
-		}
-        Stranica {//План
-		/////////////
-        ///П Л А Н///
-		/////////////
-            id: pgStrPlan
-			visible: false
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-			clrRabOblasti: "black"
-            textZagolovok: qsTr("ПЛАН")
-            StrPlan {
-                id: tmPlan
-                ntWidth: pgStrPlan.ntWidth; ntCoff: pgStrPlan.ntCoff
-                clrTexta: pgStrPlan.clrTexta; clrFona: pgStrPlan.clrRabOblasti
-                zagolovokX: pgStrPlan.rctStrZagolovok.x; zagolovokY: pgStrPlan.rctStrZagolovok.y
-                zagolovokWidth: pgStrPlan.rctStrZagolovok.width
-                zagolovokHeight: pgStrPlan.rctStrZagolovok.height
-                zonaX: pgStrPlan.rctStrZona.x; zonaY: pgStrPlan.rctStrZona.y
-                zonaWidth: pgStrPlan.rctStrZona.width; zonaHeight: pgStrPlan.rctStrZona.height
-                toolbarX: pgStrPlan.rctStrToolbar.x; toolbarY: pgStrPlan.rctStrToolbar.y
-                toolbarWidth: pgStrPlan.rctStrToolbar.width; toolbarHeight: pgStrPlan.rctStrToolbar.height
-                appRedaktor: root.appRedaktor
-                onClickedNazad: {
-					stvStr.pop()//Назад страницу
-				}
-                onClickedSozdat: {//Слот нажатия кнопки Создать.
-                    pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
-                    stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
-                }
-			}
-		}
+		} 
 		Stranica {//Страница со Списком
 		/////////////////
 		///С П И С О К///
@@ -498,9 +465,43 @@ ApplicationWindow {
 					stvStr.pop()//Назад страницу
 				}
                 onClickedPlan: {//Слот нажатия Плана.
+                    tmPlan.source = "qrc:///workingdata/plan.pdf"
                     stvStr.push(pgStrPlan)//Переходим на страницу Плана.
                 }
 			}
 		}
+        Stranica {//План
+        /////////////
+        ///П Л А Н///
+        /////////////
+            id: pgStrPlan
+            visible: false
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            clrFona: root.clrFona
+            clrTexta: root.clrKnopok
+            clrRabOblasti: "black"
+            textZagolovok: qsTr("ПЛАН")
+            StrPlan {
+                id: tmPlan
+                ntWidth: pgStrPlan.ntWidth; ntCoff: pgStrPlan.ntCoff
+                clrTexta: pgStrPlan.clrTexta; clrFona: pgStrPlan.clrRabOblasti
+                zagolovokX: pgStrPlan.rctStrZagolovok.x; zagolovokY: pgStrPlan.rctStrZagolovok.y
+                zagolovokWidth: pgStrPlan.rctStrZagolovok.width
+                zagolovokHeight: pgStrPlan.rctStrZagolovok.height
+                zonaX: pgStrPlan.rctStrZona.x; zonaY: pgStrPlan.rctStrZona.y
+                zonaWidth: pgStrPlan.rctStrZona.width; zonaHeight: pgStrPlan.rctStrZona.height
+                toolbarX: pgStrPlan.rctStrToolbar.x; toolbarY: pgStrPlan.rctStrToolbar.y
+                toolbarWidth: pgStrPlan.rctStrToolbar.width; toolbarHeight: pgStrPlan.rctStrToolbar.height
+                pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
+                onClickedNazad: {
+                    stvStr.pop()//Назад страницу
+                }
+                onClickedSozdat: {//Слот нажатия кнопки Создать.
+                    pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
+                    stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
+                }
+            }
+        }
 	} 
 }

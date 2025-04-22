@@ -287,9 +287,10 @@ Item {
         Connections {//Соединяем сигнал из C++ с действием в QML
             target: cppqml;//Цель объект класса С++ DCCppQml
             function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
-                tmrLogo.running = true;//Запускаем таймер анимации логотипа
-                pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
                 if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+                    tmrLogo.running = true;//Запускаем таймер анимации логотипа
+                    pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
+                    //var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
                     var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
                     fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
                     //console.error("390: Url: " + strPdfUrl);

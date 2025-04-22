@@ -26,12 +26,23 @@ Item {
     property bool appRedaktor: false//true - включить Редактор приложения.
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
     property int ntLogoTMK: 16
+    property string source: ""//Путь к pdf документу.
     //Настройки
 	anchors.fill: parent//Растянется по Родителю.
     //Сигналы
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedSozdat();//Сигнал нажатия кнопки Создать
     //Функции
+    onSourceChanged: {//Если изменился адрес pdf документа.
+        if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+            tmrLogo.running = true;//Запускаем таймер анимации логотипа
+            //pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
+            var strPdfUrl = root.source;//Считываем путь+документ.pdf
+            fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
+            //console.error("390: Url: " + strPdfUrl);
+        }
+    }
+
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
         pdfLoader.strPdfPut = urlPdfPut;//Устанавливаем путь.
         if(urlPdfPut){//Если путь не пустая строка, то...
@@ -70,10 +81,12 @@ Item {
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
                 ldrProgress.active = true;//Запускаем виджет загрузки
+                pdfScale.visible = false;//Делаем невидимым DCScale
                 knopkaSozdat.visible = false;//Невидимая кнопка Создать.
             }
             else{//Если таймер выключен, то...
                 ldrProgress.active = false;//Отключаем прогресс.
+                pdfScale.visible = true;//Делаем видимым DCScale
                 knopkaSozdat.visible = true;//Видимая кнопка Создать.
             }
         }
@@ -110,7 +123,7 @@ Item {
             active: false//не активирован.
 
             onLoaded: {
-                pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
+                pdfLoader.item.currentPage = 0;//номер 1 странцы документа.
                 pdfLoader.item.source = pdfLoader.strPdfPut;// Устанавливаем путь к PDF
             }
         }
@@ -143,6 +156,11 @@ Item {
                 }
                 else//Виджет не видимый. При открытии этот флаг не изменится.
                     tmrLogo.running = true;//Запускаем таймер анимации логотипа
+            }
+            function onSgnRenderScale(rlMasshtab){//Изменился масштаб документа.
+                var ntScale = rlMasshtab*100;//Чтоб несколько раз не вызывать, так быстрее.
+                //pdfScale.from = ntScale;//Выставляем минимальное значение масштаба по уст.масштабу документа
+                pdfScale.value = ntScale;//И только после pdfScale.from выставляем значение масштаба в DCScale
             }
             /*
             function onSgnPassword(){//Произошёл запрос на ввод пароля.
@@ -180,6 +198,7 @@ Item {
                 ldrProgress.item.clrProgress = root.clrTexta; ldrProgress.item.clrTexta = "grey";
             }
         }
+
         DCKnopkaSozdat {//@disable-check M300
             id: knopkaSozdat
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
@@ -190,6 +209,17 @@ Item {
             onClicked: {
                 root.clickedSozdat();//Сигнал нажатия кнопки Создать
             }
+        }
+        DCScale{//@disable-check M300
+            id: pdfScale
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmToolbar.verticalCenter; anchors.right: tmToolbar.right
+            visible: true
+            clrTexta: root.clrTexta; clrFona: root.clrFona
+            radius: root.ntCoff/2
+            from: 25; to: 200; value: 100; stepSize: 25
+            scale.cursorVisible: true;//Делаем курсор видимым обязательно.
+            onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
         }
     }
 }

@@ -11,6 +11,7 @@
 #include "dataspisok.h"
 #include "dataelement.h"
 #include "datadannie.h"
+#include "dataplan.h"
 #include "dcfiledialog.h"
 
 class DCCppQml : public QObject {
@@ -240,6 +241,7 @@ private:
     DataSpisok* 	m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
     DataElement*	m_pDataElement = nullptr;//Указатель на таблицу Элементов в БД.
     DataDannie*		m_pDataDannie = nullptr;//Указатель на таблицу Данных в БД.
+    DataPlan*		m_pDataPlan = nullptr;//Указатель на таблицу Данных в БД.
     DCFileDialog*	m_pFileDialog = nullptr;//Указатель на Проводник.
     QTimer*			m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.
     uint 			m_untDebugSec;//Счётчик секунд для таймера отладки.
