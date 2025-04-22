@@ -23,7 +23,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick QuickControls2
 set(PROJECT_SOURCES
         src/copydannie.h
         src/copydannie.cpp
-		 src/copyplan.h
+		src/copyplan.h
 		src/copyplan.cpp
         src/cppqml.h
         src/cppqml.cpp
@@ -48,6 +48,7 @@ set(PROJECT_SOURCES
 		src/main.cpp
 		qml.qrc
 )
+
 # Создаём переменную DATA_FILE, и добавляем в неё файлы, которые не участвуют в создании кода.
 # set(DATA_FILE ${PROJECT_SOURCE_DIR}/TODO.txt)
 set(DATA_FILE
@@ -55,6 +56,7 @@ set(DATA_FILE
         TODO.txt
         vim.txt
 )
+
 # Три строчки - это лоадер qmlcompat для Qt5 и Qt6, чтоб не прописывать в QML версии импортируемх библиотек.
 # add_executable() собирает переменные объявленные выше с файлами С++, стронними файлами под именем проекта.
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
@@ -90,16 +92,11 @@ if(ANDROID)
 	# Это новая политика вышедшая с Qt6.6 для Android: https://doc.qt.io/qt-6/qt-cmake-policy-qtp0002.html
 	qt_policy(SET QTP0002 NEW)
 endif()
-# Указываем путь к QML, чтоб QtCreator увидел пути к qmldir находящийся в /qml или подпапках.
-set(QML_IMPORT_PATH "${CMAKE_SOURCE_DIR}/qml")
 
-# Копируем qml/ директорию в build. Чтоб не было ошибок при import модуль 1.0.
-add_custom_target(copy_qml ALL
-	COMMAND ${CMAKE_COMMAND} -E copy_directory
-			${CMAKE_SOURCE_DIR}/qml
-			${CMAKE_BINARY_DIR}/qml
-)
-add_dependencies(${EXECUTABLE_NAME} copy_qml)
+# Указываем путь к QML, чтоб QtCreator увидел пути к qmldir находящийся в /qml или подпапках.
+# set(QML_IMPORT_PATH "${CMAKE_SOURCE_DIR}/qml")
+# чтобы QML Language Server понимал структуру проекта, особенно модули с qmldir. В build создаётся .qmlls.ini
+# set(QT_QML_GENERATE_QMLLS_INI ON) #Работает только с qt_add_qml_module()
 
 target_link_libraries(${EXECUTABLE_NAME}
         PRIVATE 	Qt${QT_VERSION_MAJOR}::Core
@@ -122,6 +119,13 @@ install(TARGETS ${EXECUTABLE_NAME}
 set_property(	TARGET ${EXECUTABLE_NAME}
                 PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
 
+# Копируем qml/ директорию в build. Чтоб не было ошибок при import модуль 1.0, qmldir без ошибок.
+add_custom_target(copy_qml ALL
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	        ${CMAKE_SOURCE_DIR}/qml
+			${CMAKE_BINARY_DIR}/qml
+)
+add_dependencies(${EXECUTABLE_NAME} copy_qml)
 # Qt Creator автоматически подхватывает эту переменную при генерации проекта, qmldir без ошибок.
 set(QML_IMPORT_PATH "${CMAKE_BINARY_DIR}/qml" CACHE INTERNAL "")
 
