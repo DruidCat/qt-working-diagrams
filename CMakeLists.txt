@@ -45,12 +45,9 @@ set(PROJECT_SOURCES
         src/dcdbdata.cpp
         src/dcfiledialog.h
         src/dcfiledialog.cpp
-        src/main.cpp
-        qml.qrc
+		src/main.cpp
+		qml.qrc
 )
-# Указываем путь к QML, чтоб QtCreator увидел пути к qmldir находящийся в /qml или подпапках.
-set(QML_IMPORT_PATH "${PROJECT_SOURCE_DIR}/qml")
-
 # Создаём переменную DATA_FILE, и добавляем в неё файлы, которые не участвуют в создании кода.
 # set(DATA_FILE ${PROJECT_SOURCE_DIR}/TODO.txt)
 set(DATA_FILE
@@ -93,6 +90,16 @@ if(ANDROID)
 	# Это новая политика вышедшая с Qt6.6 для Android: https://doc.qt.io/qt-6/qt-cmake-policy-qtp0002.html
 	qt_policy(SET QTP0002 NEW)
 endif()
+# Указываем путь к QML, чтоб QtCreator увидел пути к qmldir находящийся в /qml или подпапках.
+set(QML_IMPORT_PATH "${CMAKE_SOURCE_DIR}/qml")
+
+# Копируем qml/ директорию в build. Чтоб не было ошибок при import модуль 1.0.
+add_custom_target(copy_qml ALL
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+			${CMAKE_SOURCE_DIR}/qml
+			${CMAKE_BINARY_DIR}/qml
+)
+add_dependencies(${EXECUTABLE_NAME} copy_qml)
 
 target_link_libraries(${EXECUTABLE_NAME}
         PRIVATE 	Qt${QT_VERSION_MAJOR}::Core
@@ -114,6 +121,9 @@ install(TARGETS ${EXECUTABLE_NAME}
 
 set_property(	TARGET ${EXECUTABLE_NAME}
                 PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
+
+# Qt Creator автоматически подхватывает эту переменную при генерации проекта, qmldir без ошибок.
+set(QML_IMPORT_PATH "${CMAKE_BINARY_DIR}/qml" CACHE INTERNAL "")
 
 if(QT_VERSION_MAJOR EQUAL 6)
 	qt_import_qml_plugins(${EXECUTABLE_NAME})
