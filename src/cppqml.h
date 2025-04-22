@@ -46,7 +46,8 @@ class DCCppQml : public QObject {
                     WRITE setStrSpisokOpisanie
                     NOTIFY strSpisokOpisanieChanged FINAL)
     Q_PROPERTY(bool blSpisokPervi
-                    READ blSpisokPervi FINAL)
+                    READ blSpisokPervi
+                    NOTIFY blSpisokPerviChanged FINAL)
 
     Q_PROPERTY(QString strElement
                     READ strElement
@@ -65,7 +66,8 @@ class DCCppQml : public QObject {
                     WRITE setStrElementOpisanie
                     NOTIFY strElementOpisanieChanged FINAL)
     Q_PROPERTY(bool blElementPervi
-                    READ blElementPervi FINAL)
+                    READ blElementPervi
+                    NOTIFY blElementPerviChanged FINAL)
 
     Q_PROPERTY(QString strDannie
                     READ strDannie
@@ -84,9 +86,11 @@ class DCCppQml : public QObject {
                     WRITE setStrDannieStr
                     NOTIFY strDannieStrChanged FINAL)
     Q_PROPERTY(QString strDannieUrl
-                    READ strDannieUrl FINAL)
+                    READ strDannieUrl
+                    NOTIFY strDannieUrlChanged FINAL)
 	Q_PROPERTY(bool blDanniePervi
-                    READ blDanniePervi FINAL)
+                    READ blDanniePervi
+                    NOTIFY blDanniePerviChanged FINAL)
 
     Q_PROPERTY(QString strFileDialog
                     READ strFileDialog
@@ -101,7 +105,8 @@ class DCCppQml : public QObject {
                     WRITE setStrFileDialogModel
                     NOTIFY strFileDialogModelChanged FINAL)
     Q_PROPERTY(bool blFileDialogCopy
-                    READ blFileDialogCopy FINAL)
+                    READ blFileDialogCopy
+                    NOTIFY blFileDialogCopyChanged FINAL)
 
     Q_PROPERTY(QString strDebug
                     READ strDebug
@@ -182,21 +187,25 @@ signals:
     void strSpisokDBChanged();//Сигнал о том, что записан элемент Списка в БД.
     void ullSpisokKodChanged();//Сигнал, что Код выбранного элемента Списка изменился.
     void strSpisokOpisanieChanged();//Сигнал, что описание изменилось.
+    void blSpisokPerviChanged();//Сигнал, что флаг изменился.
 
     void strElementChanged();//Сигнал о том, что записан новый элемент.
     void strElementDBChanged();//Сигнал о том, что записан элемент в БД.
     void ullElementKodChanged();//Сигнал, что Код выбранного Элемента изменился.
     void strElementOpisanieChanged();//Сигнал, что описание изменилось.
+    void blElementPerviChanged();//Сигнал о том, что изменился флаг.
 
     void strDannieChanged();//Сигнал о том, что записан новые Данные.
     void strDannieDBChanged();//Сигнал о том, что записаны Данные в БД.
     void ullDannieKodChanged();//Сигнал, что Код выбранных Данных изменился.
     void strDannieStrChanged();//Сигнал о том, что номер страницы Документа записан в БД.
+    void strDannieUrlChanged();//Сигнал о том, что ссылка на pdf Документ изменился.
+    void blDanniePerviChanged();//Сигнал о том, что флаг изменился.
 
     void strFileDialogChanged();//Сигнал о том, что изменился каталог папок и файлов.
     void strFileDialogPutChanged();//Сигнал о том, что изменился путь отображаемой папки.
-    void blFileDialogCopyChanged();//Сигнал о том, что скопировался файл или нет.
     void strFileDialogModelChanged();//Сигнал о том, что изменилась на 0-папка или 1-файл
+    void blFileDialogCopyChanged();//Сигнал о том, что скопировался файл или нет.
 
     void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
