@@ -1,4 +1,5 @@
-module buttons
+module DCButtons
+
 DCKnopkaInfo 1.0 DCKnopkaInfo.qml
 DCKnopkaKruglaya 1.0 DCKnopkaKruglaya.qml
 DCKnopkaMenu 1.0 DCKnopkaMenu.qml
@@ -7,6 +8,7 @@ DCKnopkaNastroiki 1.0 DCKnopkaNastroiki.qml
 DCKnopkaNazad 1.0 DCKnopkaNazad.qml
 DCKnopkaOk 1.0 DCKnopkaOk.qml
 DCKnopkaOriginal 1.0 DCKnopkaOriginal.qml
+DCKnopkaPlan 1.0 DCKnopkaPlan.qml
 DCKnopkaPlus 1.0 DCKnopkaPlus.qml
 DCKnopkaPoisk 1.0 DCKnopkaPoisk.qml
 DCKnopkaSozdat 1.0 DCKnopkaSozdat.qml
@@ -14,4 +16,3 @@ DCKnopkaVniz 1.0 DCKnopkaVniz.qml
 DCKnopkaVpered 1.0 DCKnopkaVpered.qml
 DCKnopkaVverh 1.0 DCKnopkaVverh.qml
 DCKnopkaZakrit 1.0 DCKnopkaZakrit.qml
-DCKnopkaPlan 1.0 DCKnopkaPlan.qml

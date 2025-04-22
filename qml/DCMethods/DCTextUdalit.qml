@@ -1,5 +1,6 @@
 ﻿import QtQuick //2.15
-import buttons 1.0//Импортируем кнопки
+
+import DCButtons 1.0//Импортируем кнопки
 //Шаблон DCTextUdalit.qml - состоит из области, которая показывает текст удалённого документа.
 Item {
     id: root

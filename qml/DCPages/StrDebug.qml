@@ -1,8 +1,7 @@
 ﻿import QtQuick //2.15
 
-import buttons 1.0//Импортируем кнопки
-import methods 1.0//Импортируем методы написанные мной.
-import zones 1.0//Импортируем зону Данных.
+import DCButtons 1.0//Импортируем кнопки
+import DCMethods 1.0//Импортируем методы написанные мной.
 //Страница с отладочной информацией.
 Item {
     id: root

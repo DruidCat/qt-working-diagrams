@@ -1,5 +1,6 @@
 ﻿import QtQuick //2.15
-import buttons 1.0//Импортируем кнопки
+
+import DCButtons 1.0//Импортируем кнопки
 //DCSpinBox - ШАБЛОН ДЛЯ РАБОТЫ С ЧИСЛАМИ И ИХ УВЕЛИЧЕНИЕМ И УМЕНЬШЕНИЕМ КНОПКАМИ [+] И [-].
 Item {
     id: root

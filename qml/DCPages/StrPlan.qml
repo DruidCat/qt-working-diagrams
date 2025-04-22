@@ -1,7 +1,7 @@
 ﻿import QtQuick //2.15
 
-import buttons 1.0//Импортируем кнопки
-import methods 1.0//Импортируем методы написанные мной.
+import DCButtons 1.0//Импортируем кнопки
+import DCMethods 1.0//Импортируем методы написанные мной.
 //Страница с отображением Плана.
 Item {
     id: root
@@ -118,7 +118,7 @@ Item {
             property bool blClose: true//true - закрываем документ.
             //Настройки.
             anchors.fill: tmZona
-            source: pdfLoader.blClose ? "" : "qrc:/qml/methods/DCPdfMPV.qml"//Указываем путь к отдельному QMl
+            source: pdfLoader.blClose ? "" : "qrc:/qml/DCMethods/DCPdfMPV.qml"//Указываем путь отдельному QMl
             active: false//не активирован.
 
             onLoaded: {
@@ -190,7 +190,7 @@ Item {
         Loader {//Loader Прогресса загрузки pdf документа
             id: ldrProgress
             anchors.fill: tmToolbar
-            source: "qrc:/qml/methods/DCProgress.qml"//Указываем путь к отдельному QMl
+            source: "qrc:/qml/DCMethods/DCProgress.qml"//Указываем путь к отдельному QMl
             active: false//не активирован.
             onLoaded: {//Когда загрузчик загрузился, передаём свойства в него.
                 ldrProgress.item.ntWidth = root.ntWidth; ldrProgress.item.ntCoff = root.ntCoff;

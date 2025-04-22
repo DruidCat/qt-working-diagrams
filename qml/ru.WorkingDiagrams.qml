@@ -1,7 +1,7 @@
 ﻿import QtQuick //2.15
 import QtQuick.Controls //2.15 //StackView
 
-import "pages"//Импортируем Страницы программы.
+import DCPages 1.0//Импортируем Страницы программы.
 
 ApplicationWindow {
 	id: root

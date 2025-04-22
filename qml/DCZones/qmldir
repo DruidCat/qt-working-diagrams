@@ -1,4 +1,5 @@
-module zones
+module DCZones
+
 ZonaDannie 1.0 ZonaDannie.qml
 ZonaElement 1.0 ZonaElement.qml
 ZonaFileDialog 1.0 ZonaFileDialog.qml

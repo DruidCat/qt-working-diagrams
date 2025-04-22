@@ -1,4 +1,5 @@
-module methods
+module DCMethods
+
 DCLogoTMK 1.0 DCLogoTMK.qml
 DCMenu 1.0 DCMenu.qml
 DCPassword 1.0 DCPassword.qml

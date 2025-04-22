@@ -1,6 +1,6 @@
 ﻿import QtQuick //2.15
 
-import buttons 1.0//Импортируем кнопки
+import DCButtons 1.0//Импортируем кнопки
 //DCPassword - ШАБЛОН ДЛЯ РАБОТЫ С ВВОДОМ ПАРОЛЕЙ.
 Item {
     id: root

@@ -1,18 +1,17 @@
 ﻿import QtQuick //2.15
 
-import buttons 1.0//Импортируем кнопки
-import methods 1.0//Импортируем методы написанные мной.
-import zones 1.0//Импортируем зону Данных.
-//Страница с Данными, где отображаются сами документы в виде списка.
+import DCButtons 1.0//Импортируем кнопки
+import DCMethods 1.0//Импортируем методы написанные мной.
+import DCZones 1.0//Импортируем зону Данных.
+//Страница отображающая Элементы Списка.
 Item {
-    id: root
-    //Свойства
+	id: root
+    //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
 	property color clrFona: "black"
-    property color clrFaila: "yellow"
-    property alias zagolovokX: tmZagolovok.x
+	property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
 	property alias zagolovokHeight: tmZagolovok.height
@@ -25,29 +24,26 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
-    property bool pdfViewer: false//true - включить собственный pdf просмотрщик.
     property bool appRedaktor: false//true - включить Редактор приложения.
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
-    property bool blUdalitVibor: false//Включить режим выбора удаляемого документа, если true
-	property string strDannieRen: "";//Переменная хранит имя Документа, который нужно переименовать
-    //Настройки
+    property bool blUdalitVibor: false//Включить режим выбора удаляемого Элемента, если true
+    //Настройки.
     anchors.fill: parent//Растянется по Родителю.
-    focus: true//Не удалять, может Escape не работать.
-    //Сигналы
+    focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
+    //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
-	signal clickedDannie(var strDannie);//Сигнал когда нажат один из элементов Данных.
+	signal clickedElement(var strElement);//Сигнал когда нажат один из Элементов.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
-    signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
-    //Функции
+    //Функции.
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
-        menuDannie.visible = false;//Делаем невидимым всплывающее меню.
+        menuElement.visible = false;//Делаем невидимым всплывающее меню.
         root.blPereimenovat = false;//Запрещаем выбор переименовывания.
         root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        root.blUdalitVibor = false;//Запрещаем выбирать документ для удаления.
+        root.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         lsvZona.enabled = true;//Делаем кликабельную Зону.
     }
@@ -68,10 +64,13 @@ Item {
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
-    function fnClickedOk(){//Функция переименования Данных.
+    function fnClickedOk(){//Функция сохранения/переименования Элементов списка.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
         if(root.blPereimenovat)//Если запрос на переименовывание.
-            cppqml.renStrDannieDB(strDannieRen, txnZagolovok.text);//Переименовываем имя Документа.
+            cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text);//Переименовываем Элемент списка.
+        else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то Сохранить.
+            cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
+        }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
@@ -80,50 +79,50 @@ Item {
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
         lsvZona.enabled = false;//Делаем не кликабельную Зону.
-        root.signalToolbar(qsTr("Удалить данный документ?"));//Делаем предупреждение в Toolbar.
+        root.signalToolbar(qsTr("Удалить данный элемент?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        root.blUdalitVibor = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
-        menuDannie.visible = false;//Делаем невидимым меню.
-        txnZagolovok.visible = false;//Отключаем переименование Докумена.
-        lsvZona.enabled = true;//Делаем кликабельную Зону.
-        root.clickedSozdat();//Излучаем сигнал, что нужно запустить Файловый Диалог.
+        root.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
+        menuElement.visible = false;//Делаем невидимым меню.
+        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
+        txnZagolovok.visible = true;//Режим создания элемента Списка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
+        lsvZona.enabled = false;//Делаем не кликабельную Зону.
+        root.signalToolbar(qsTr("Создайте новый элемент."));
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
         fnClickedSozdat();//Функция обработки кнопки Создать.
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
         root.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
-        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ДОКУМЕНТА");//Подсказка пользователю,что вводить нужн
-        root.signalToolbar(qsTr("Выберите документ для его переименования."))
+        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
+        root.signalToolbar(qsTr("Выберите элемент для его переименования."));
     }
     function fnMenuUdalit(){//Нажат пункт меню Удалить.
-        root.blUdalitVibor = true;//Включаем режим выбора удаляемого файла
-        root.signalToolbar(qsTr("Выберите документ для его удаления."))
+        root.blUdalitVibor = true;//Включаем режим выбора удаляемого Элемента
+        root.signalToolbar(qsTr("Выберите элемент для его удаления."))
     }
     function fnMenuSort(){//Функция нажатия пункта меню Сортировать.
         cppqml.strDebug = "Данный функционал в стадии разработки.";//Сообщение в Toolbar.
     }
-    Item {//Данные Заголовок
+	Item {//Элементы Заголовок
 		id: tmZagolovok
-
         DCKnopkaNazad {
 			id: knopkaNazad
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+			anchors.left: tmZagolovok.left
 			anchors.verticalCenter: tmZagolovok.verticalCenter
-			anchors.left:tmZagolovok.left
-            anchors.margins: root.ntCoff/2
-            clrKnopki: root.clrTexta
-            onClicked: {
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
+			onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
-                root.clickedNazad();
-            }
-        } 
+				root.clickedNazad();//Сигнал Назад.
+			}
+		}
         DCKnopkaZakrit {
             id: knopkaZakrit
             ntWidth: root.ntWidth
@@ -140,34 +139,33 @@ Item {
         }
         DCKnopkaInfo {
 			id: knopkaInfo
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			visible: true
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-            anchors.margins: root.ntCoff/2
-            clrKnopki: root.clrTexta
-			clrFona: root.clrFona
-            onClicked: {
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
+			onClicked: {//Слот клика кнопки Инфо
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
-                root.clickedInfo();
-            }
-        } 
+				root.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
+			}
+		} 
         DCKnopkaOk{
-            id: knopkaOk
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            visible: false
-            anchors.verticalCenter: tmZagolovok.verticalCenter
-            anchors.right: tmZagolovok.right
-            anchors.margins: root.ntCoff/2
-            clrKnopki: root.clrTexta
-            clrFona: root.clrFona
-            onClicked: {
-                fnClickedOk();//Функция переименование данных.
-            }
-        } 
+			id: knopkaOk
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+			visible: false
+			anchors.verticalCenter: tmZagolovok.verticalCenter
+			anchors.right: tmZagolovok.right
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
+			clrFona: root.clrFona
+			onClicked: {
+				fnClickedOk();//Функция сохранения данных.
+			}
+		}
         DCTextUdalit {
             id: txuUdalit
             anchors.top: tmZagolovok.top
@@ -192,8 +190,8 @@ Item {
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvZona.enabled = true;//Делаем кликабельную Зону.
-                if(cppqml.delStrDannie(strKod))//Запускаю метод удаление записи из БД и самого Документа.
-                    root.signalToolbar(qsTr("Успешное удаление документа"));
+                if(cppqml.delStrElement(strKod))//Запускаю метод удаление Элемента из БД и их Документов.
+                    root.signalToolbar(qsTr("Успешное удаление элемента."));
                 else
                     cppqml.strDebug = qsTr("Ошибка при удалении.");
             }
@@ -228,7 +226,7 @@ Item {
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
-                        knopkaInfo.visible = false;//Конопка Информация Невидимая.
+                        knopkaInfo.visible = false;//Конопка Информации Невидимая.
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
 					}
@@ -246,69 +244,65 @@ Item {
 				}
 			}
 		}
-    } 
-    Item {//Данные Зона
+	} 
+	Item {//Список Рабочей Зоны
 		id: tmZona
 		Rectangle {
 			id: rctZona
 			anchors.fill: tmZona
 			color: "transparent"
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-            DCLogoTMK {
+            DCLogoTMK {//Логотип
                 ntCoff: 16
                 anchors.centerIn: parent
-                clrLogo: tmElement.clrTexta
-                clrFona: tmElement.clrFona
+                clrLogo: root.clrTexta
+                clrFona: root.clrFona
             }
-            ZonaDannie {
+            ZonaElement {
 				id: lsvZona
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
-                clrTexta: root.clrFaila//Цвет файлов
+				clrTexta: root.clrTexta
 				clrFona: "SlateGray"
-                onClicked: function(ntKod, strDannie) {//Слот нажатия на один из Документов списка.
-					if(cppqml.blDanniePervi){//Если это первый Документ, то...
+                onClicked: function(ntKod, strElement) {//Слот нажатия на один из Элементов списка.
+					if(cppqml.blElementPervi){//Если это первый элемент, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
-                        	fnClickedSozdat();//Функция при нажатии кнопки Создать(Проводник).
+                        	fnClickedSozdat();//Функция при нажатии кнопки Создать.
 						else
                     		cppqml.strDebug = qsTr("Режим редактора выключен.");
 					}
 					else{//Если не первый элемент, то...
-                        if(root.blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания
+                        if(blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания, то...
                             root.blPereimenovat = true;//Переименование (отмена)...(ок)
-                            root.signalToolbar(qsTr("Переименуйте выбранный документ."));
+                            root.signalToolbar(qsTr("Переименуйте выбранный элемент."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
-                            strDannieRen = strDannie;//Присваиваем переменной имя Документа.
-                            txnZagolovok.text = strDannie;//Добавляем в строку выбранный Документ.
-                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
+                            cppqml.strElement = strElement;//Присваиваем Элемент списка к свойству Q_PROPERTY
+                            txnZagolovok.text = strElement;//Добавляем в строку выбранный Элемент списка.
+                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименовани
                             lsvZona.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...
                             if(root.blUdalitVibor){//Если удалить, то...
-                                fnUdalit(ntKod, strDannie);
+                                fnUdalit(ntKod, strElement);//Функция удаления
                             }
-                            else{//Если не выбор элемента на удаление, то открыть файл к просмотру...
-                                cppqml.strDebug = "";
+                            else {//Если не режим выбора элементов Переименования, то перейти к Данным...
+                                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                                 root.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
-                                root.blUdalitVibor = false;//Запрещено выбирать документ на удаление.
+                                root.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
                                 txuUdalit.visible = false;//Убираем запрос на удаление, если он есть.
                                 txnZagolovok.visible = false;//Отключаем создание Элемента.
-                                menuDannie.visible = false;//Делаем невидимым всплывающее меню.
-                                cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
-                                cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
-								//Открываем Pdf документ.
-                                if(root.pdfViewer)//Если настройка настроена на собственный pdf просмотрщик,то
-                                    root.clickedDannie(strDannie);//сигнал с кодом и именем Документа.
-                                else//Если на сторонний просмотщик pdf документов, то...
-                                    Qt.openUrlExternally(cppqml.strDannieUrl);//Открываем pdf в стороннем app.
+                                menuElement.visible = false;//Делаем невидимым всплывающее меню.
+                                cppqml.ullElementKod = ntKod;//Присваиваем Код Элемента к свойству Q_PROPERTY
+                                cppqml.strElement = strElement;//Присваиваем элемент списка к свойству Q_PROPE
+                                root.clickedElement(strElement);//Излучаем сигнал с именем Элемента.
                             }
                         }
 					}
 				}
-			}
+			}	
             DCMenu {
-				id: menuDannie
+				id: menuElement
 				visible: false//Невидимое меню. 
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
@@ -318,11 +312,11 @@ Item {
 				anchors.margins: root.ntCoff
 				clrTexta: root.clrTexta
 				clrFona: "SlateGray"
-				imyaMenu: "dannie"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
+				imyaMenu: "element"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
-					menuDannie.visible = false;//Делаем невидимым меню.
+					menuElement.visible = false;//Делаем невидимым меню.
                     if(ntNomer === 1){//Добавить.
-                        fnMenuSozdat();//Функция обработки пункта меню Добавить.
+                        fnMenuSozdat();//Функция нажат пункт меню Добавить.
                     }
                     if(ntNomer === 2){//Переименовать.
                         fnMenuPereimenovat();//Функция нажатия пункта меню Переименовать.
@@ -345,30 +339,29 @@ Item {
 				border.width: root.ntCoff/2//Бордюр при переименовании и удалении.
 			}
 		}
-    }
-	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
-        root.blPereimenovatVibor ? rctBorder.border.color=clrTexta : rctBorder.border.color="transparent";
 	}
+	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
+        root.blPereimenovatVibor ? rctBorder.border.color=clrTexta:rctBorder.border.color="transparent";
+    }
     onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
         root.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
     }
-    Item {//Данные Тулбар
+	Item {//Состава Тулбар
 		id: tmToolbar 
         DCKnopkaSozdat {
 			id: knopkaSozdat
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
+			ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.left: tmToolbar.left
-            anchors.margins: root.ntCoff/2
-            clrKnopki: root.clrFaila//Цвет файлов
+			anchors.margins: root.ntCoff/2
+			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
-            blKrug: false//Не круглая кнопка.
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
-            onClicked: {
-                fnClickedSozdat();//Функция нажатия кнопки Создать.
+            onClicked: {//Слот сигнала clicked кнопки Создать.
+				txnZagolovok.visible ? fnClickedZakrit() : fnClickedSozdat()
             }
-        }
+		}
         DCKnopkaNastroiki {
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
@@ -379,16 +372,16 @@ Item {
 			clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
-			onClicked: {
-                txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
-                menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
+            onClicked: {
+                txnZagolovok.visible = false;//Отключаем создание Элемента списка.
+                menuElement.visible ? menuElement.visible = false : menuElement.visible = true;
                 root.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
                 root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-                root.blUdalitVibor = false;//Запрещено удалять.
-                txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                root.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
+                txuUdalit.visible = false;//Убираем запрос на удаление, если он есть.
                 lsvZona.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}
-    }
+	}
 }
