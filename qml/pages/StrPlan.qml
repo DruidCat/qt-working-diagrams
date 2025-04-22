@@ -1,8 +1,7 @@
 ﻿import QtQuick //2.15
 
-import "qrc:/qml"//Импортируем основные элементы qml
-import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной.
+import buttons 1.0//Импортируем кнопки
+import methods 1.0//Импортируем методы написанные мной.
 //Страница с отображением Плана.
 Item {
     id: root
@@ -93,7 +92,7 @@ Item {
     }
     Item {//Данные Заголовок
 		id: tmZagolovok
-        DCKnopkaNazad {//@disable-check M300
+        DCKnopkaNazad {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left:tmZagolovok.left
             anchors.margins: root.ntCoff/2
@@ -106,7 +105,7 @@ Item {
     Item {
         id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-        DCLogoTMK {//@disable-check M300//Логотип до ZonaFileDialog, чтоб не перекрывать список.
+        DCLogoTMK {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
             id: lgTMK
             ntCoff: root.ntLogoTMK
             anchors.centerIn: tmZona
@@ -199,7 +198,7 @@ Item {
             }
         }
 
-        DCKnopkaSozdat {//@disable-check M300
+        DCKnopkaSozdat {
             id: knopkaSozdat
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter; anchors.left: tmToolbar.left
@@ -210,7 +209,7 @@ Item {
                 root.clickedSozdat();//Сигнал нажатия кнопки Создать
             }
         }
-        DCScale{//@disable-check M300
+        DCScale{
             id: pdfScale
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter; anchors.right: tmToolbar.right

@@ -1,10 +1,12 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml"//Импортируем основные элементы qml
-import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной.
+
+import buttons 1.0//Импортируем кнопки
+import methods 1.0//Импортируем методы написанные мной.
+import zones 1.0//Импортируем зону Данных.
 //Страница с отладочной информацией.
 Item {
-    id: tmDebug
+    id: root
+    //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -23,37 +25,39 @@ Item {
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: txdZona.radius
 	property string strDebug: ""//Глобальная переменная, в ней собирается строка со всеми Сообщениями.
+    //Настройки.
 	anchors.fill: parent//Растянется по Родителю.
+    //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
-
+    //Функции.
     Item {//Данные Заголовок
 		id: tmZagolovok
-        DCKnopkaNazad {//@disable-check M300
-            ntWidth: tmDebug.ntWidth
-            ntCoff: tmDebug.ntCoff
+        DCKnopkaNazad {
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left:tmZagolovok.left
-            anchors.margins: tmDebug.ntCoff/2
-            clrKnopki: tmDebug.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
             onClicked: {
-				tmDebug.clickedNazad();
+                root.clickedNazad();
             }
         }
     }
     Item {//Данные Зона
 		id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-        DCTextEdit {//@disable-check M300//Модуль просмотра текста, прокрутки и редактирования.
+        DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
 			id: txdZona
-			ntWidth: tmDebug.ntWidth
-			ntCoff: tmDebug.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			readOnly: true//Запрещено редактировать текст
             textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
-            pixelSize: tmDebug.ntWidth/2*tmDebug.ntCoff//размер шрифта текста в два раза меньше.
-            radius: tmDebug.ntCoff/4//Радиус возьмём из настроек элемента qml через property
-			clrFona: tmDebug.clrFona//Цвет фона рабочей области
-			clrTexta: tmDebug.clrTexta//Цвет текста
-			clrBorder: tmDebug.clrTexta//Цвет бардюра при редактировании текста.
+            pixelSize: root.ntWidth/2*root.ntCoff//размер шрифта текста в два раза меньше.
+            radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
+            clrFona: root.clrFona//Цвет фона рабочей области
+            clrTexta: root.clrTexta//Цвет текста
+            clrBorder: root.clrTexta//Цвет бардюра при редактировании текста.
 			italic: true//Текст курсивом.
 		}
     }

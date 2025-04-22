@@ -1,21 +1,22 @@
 ﻿import QtQuick //2.15
 
 Item {
-	id: tmKnopkaSozdat
+    id: root
+    //Свойства.
 	property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrKnopki: "black"
     property color clrFona: "white"
     property bool blKrug: true
-
+    //Настройки.
 	width: ntWidth*ntCoff
 	height: width
-
+    //Сигналы.
 	signal clicked();
-
+    //Функции.
 	Rectangle{
 		id: rctKnopkaKrug
-		anchors.fill: tmKnopkaSozdat
+        anchors.fill: root
 
 		color: maKnopkaSozdat.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
 		border.color: Qt.darker(clrKnopki, 1.3)//Граница кнопки чуть темнее
@@ -26,29 +27,29 @@ Item {
 
 	Rectangle{
 		id: rctKnopkaSeredina
-		width: tmKnopkaSozdat.width/2
-		height: tmKnopkaSozdat.width/8
-		anchors.centerIn: tmKnopkaSozdat
+        width: root.width/2
+        height: root.width/8
+        anchors.centerIn: root
 
 		color: maKnopkaSozdat.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
-		radius: tmKnopkaSozdat.width/4
+        radius: root.width/4
 	}
 
 	Rectangle{
 		id: rctKnopkaNiz
-		width: tmKnopkaSozdat.width/8
-		height: tmKnopkaSozdat.width/2
-		anchors.centerIn: tmKnopkaSozdat
+        width: root.width/8
+        height: root.width/2
+        anchors.centerIn: root
 
 		color: maKnopkaSozdat.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
-		radius: tmKnopkaSozdat.width/4
+        radius: root.width/4
 	}
 
 	MouseArea {
 		id: maKnopkaSozdat
         anchors.fill: rctKnopkaKrug
 		onClicked: {
-			tmKnopkaSozdat.clicked();
+            root.clicked();
 		}
 	}
 }

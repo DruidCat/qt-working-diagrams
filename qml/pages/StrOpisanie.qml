@@ -1,7 +1,7 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml"//Импортируем основные элементы qml
-import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной.
+
+import buttons 1.0//Импортируем кнопки
+import methods 1.0//Импортируем методы написанные мной.
 //Страница отображающая Описание чего либо.
 Item {
     id: root
@@ -67,7 +67,7 @@ Item {
 	}	
 	Item {
 		id: tmZagolovok
-        DCKnopkaNazad {//@disable-check M300
+        DCKnopkaNazad {
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -79,7 +79,7 @@ Item {
                 root.clickedNazad();//Сигнал, что кнопка Назад нажата.
 			}
 		} 
-        DCKnopkaPlan {//@disable-check M300
+        DCKnopkaPlan {
             id: knopkaPlan
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -93,7 +93,7 @@ Item {
                 root.clickedPlan();//Сигнал нажатия кнопки План.
             }
         }
-		DCKnopkaZakrit {//@disable-check M300
+        DCKnopkaZakrit {
             id: knopkaOtmena
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -107,7 +107,7 @@ Item {
                 fnClickedOtmena();//Функция обрабатывающая кнопку Отмена.
             }
         }
-        DCKnopkaOk {//@disable-check M300
+        DCKnopkaOk {
 			id: knopkaOk
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -125,7 +125,7 @@ Item {
 	Item {
 		id: tmZona
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-        DCTextEdit {//@disable-check M300//Модуль просмотра текста, прокрутки и редактирования.
+        DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
 			id: txdZona
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -175,7 +175,7 @@ Item {
 	}
 	Item {
 		id: tmToolbar
-		DCKnopkaSozdat {//@disable-check M300
+        DCKnopkaSozdat {
             id: knopkaSozdat
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff

@@ -2,6 +2,7 @@
 //Шаблон DCProgress.qml - состоит из области, которая показывает прогресс какого либо процесса
 Item {
     id: root
+    //Свойства.
     property int  ntWidth: 2//Для реазмера текста.
     property int ntCoff: 8//Для реазмера текста.
     property alias radius: rctProgress.radius//Радиус зоны отображения виджета поиска.
@@ -10,9 +11,9 @@ Item {
     property alias running: tmrProgress.running//флаг который запускает таймер пролосы прогресса.
     property int progress: 0//Свойство прогресса от 0 до 100
     property alias text: txtProgress.text
-
+    //Настройки.
     visible:  true//Видимость процесса загрузки.
-
+    //Функции.
     Text {
         id: txtProgress
         z: 1

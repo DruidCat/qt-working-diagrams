@@ -1,10 +1,9 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml/buttons"//Импортируем кнопки
+import buttons 1.0//Импортируем кнопки
 //DCSpinBox - ШАБЛОН ДЛЯ РАБОТЫ С ЧИСЛАМИ И ИХ УВЕЛИЧЕНИЕМ И УМЕНЬШЕНИЕМ КНОПКАМИ [+] И [-].
 Item {
-    id: tmSpinBox
-	height: ntWidth*ntCoff
-	width:	height*6
+    id: root
+    //Свойства
 	property alias spinBox: txnSpinBox//Передаём в виде свойства весь объект TextInput
     property alias radius: rctSpinBox.radius//Радиус рабочей зоны
     property color clrFona: "transparent"//цвет текста
@@ -17,7 +16,12 @@ Item {
 	property int from: 0//Задаём значение по умолчанию.
 	property int to: 32767//Задаём значение по умолчанию.
 	property int stepSize: 1//Шаг увеличения и уменьшения value
+    //Настройки
+    height: ntWidth*ntCoff
+    width:	height*6
+    //Сигналы.
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
+    //Функции.
 	//onValueModified: console.error(value)
 	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
 		if(value < from){
@@ -69,27 +73,27 @@ Item {
 		}
 	}
 	function fnClickedEscape (){//Функция нажатия Escape.
-		txnSpinBox.text = tmSpinBox.value;//Отображаем последнее значение.
+        txnSpinBox.text = root.value;//Отображаем последнее значение.
 	}
 	function fnClickedEnter(){//Функция нажатия Enter/
 		if(txnSpinBox.text){//Если не пустая строка, то...
-			tmSpinBox.value = txnSpinBox.text;//Приравниваем обязательно.
-			tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
+            root.value = txnSpinBox.text;//Приравниваем обязательно.
+            root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 		}
 		else//Если пустая строка, пользователь удалил число, то...
 			fnClickedEscape();//Функция нажатия Escape, запонить пустое значение последним значением.
 	}
 	function fnClickedMinus(){//Функция нажатия кнопки минус.
 		if(txnSpinBox.text){//Если не пустая строка, то...
-			if(tmSpinBox.value != txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
-				tmSpinBox.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
-				tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
+            if(root.value !== txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
+                root.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
+                root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 			}
 			else{//Если есть равенство, значит изменение идёт через + или -
-				if(tmSpinBox.value != tmSpinBox.from){//Если нет равенства с минимальным значением, то..
-					tmSpinBox.value = tmSpinBox.value - tmSpinBox.stepSize;//Уменьшаем.
+                if(root.value != root.from){//Если нет равенства с минимальным значением, то..
+                    root.value = root.value - root.stepSize;//Уменьшаем.
 					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
-					tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
+                    root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 				}
 			}
 		}
@@ -99,15 +103,15 @@ Item {
 	}
 	function fnClickedPlus(){//Функция нажатиякнопки плюс.
 		if(txnSpinBox.text){//Если не пустая строка, то...
-			if(tmSpinBox.value != txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
-				tmSpinBox.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
-				tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
+            if(root.value !== txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
+                root.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
+                root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 			}
 			else{//Если есть равенство, значит изменение идёт через + или -
-				if(tmSpinBox.value != tmSpinBox.to){//Если нет равенства с максимальным значением, то.
-					tmSpinBox.value = tmSpinBox.value + tmSpinBox.stepSize;//Увеличиваем.
+                if(root.value != root.to){//Если нет равенства с максимальным значением, то.
+                    root.value = root.value + root.stepSize;//Увеличиваем.
 					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
-					tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
+                    root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 				}
 			}
 		}
@@ -117,29 +121,29 @@ Item {
 	}
     Rectangle {
         id: rctSpinBox
-		anchors.centerIn: tmSpinBox
-		anchors.fill: tmSpinBox
-		color: tmSpinBox.clrFona 
+        anchors.centerIn: root
+        anchors.fill: root
+        color: root.clrFona
 
-        DCKnopkaMinus{//@disable-check M300//Кнопка минус.
+        DCKnopkaMinus{//Кнопка минус.
 			id: knopkaMinus
-			ntWidth: tmSpinBox.ntWidth
-			ntCoff: tmSpinBox.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: rctSpinBox.verticalCenter
 			anchors.left:rctSpinBox.left
-			anchors.margins: tmSpinBox.ntCoff/2
-			clrKnopki: tmSpinBox.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
 			onClicked: {
 				fnClickedMinus();//Функция нажатия Минус.
 			}
 		}
 		Rectangle {
 			id: rctTextInput
-			height: tmSpinBox.ntWidth*tmSpinBox.ntCoff
+            height: root.ntWidth*root.ntCoff
 			width: height*3
 			anchors.verticalCenter: rctSpinBox.verticalCenter
 			anchors.left: knopkaMinus.right
-			anchors.margins: tmSpinBox.ntCoff/2
+            anchors.margins: root.ntCoff/2
 			color: "transparent"
 			clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
 			TextInput {//Область текста.
@@ -147,7 +151,7 @@ Item {
 				anchors.left: rctTextInput.left
 				anchors.right: rctTextInput.right
 				anchors.verticalCenter: rctTextInput.verticalCenter
-				color: tmSpinBox.clrTexta
+                color: root.clrTexta
 				horizontalAlignment: TextInput.AlignHCenter
 				verticalAlignment: TextInput.AlignVCenter
 				//TODO Qt6 интерфейс. Закоментировать не нужный.
@@ -162,8 +166,8 @@ Item {
 					regExp: /[0-9]+/
 				}
                 */
-                text: tmSpinBox.value
-				font.pixelSize: tmSpinBox.ntWidth*tmSpinBox.ntCoff//размер шрифта текста.
+                text: root.value
+                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
 				readOnly: false//Можно редактировать. 
 				//focus: true//Фокус на TextInput
 				selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
@@ -189,29 +193,29 @@ Item {
 				onTextChanged: {//Если текст меняет пользователь вручную или кнопками.
 					var ntValue = txnSpinBox.text;//Приравниваем значение.
 					if(text){//Если не пустая строка, эта важная строка, чтоб можно было вводить число.
-						if(ntValue > tmSpinBox.to){//Если пользователь вводит число больше заданного
-							if(tmSpinBox.value != tmSpinBox.to){//Если нет равенства, то...
-								tmSpinBox.value = tmSpinBox.to;//Выставляем максимальное значение.
-								text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,приравнив
-								tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном SpinBox.
+                        if(ntValue > root.to){//Если пользователь вводит число больше заданного
+                            if(root.value != root.to){//Если нет равенства, то...
+                                root.value = root.to;//Выставляем максимальное значение.
+                                text = root.value;//В этом слоте,onValueChanged не срабатывает,приравнив
+                                root.valueModified();//Отправляем Сигнал, как в оригинальном SpinBox.
 							}
 							else{
-								if(ntValue > tmSpinBox.to){
-									tmSpinBox.value = tmSpinBox.to;//Выставляем максимальное значение.
-									text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,прирав
+                                if(ntValue > root.to){
+                                    root.value = root.to;//Выставляем максимальное значение.
+                                    text = root.value;//В этом слоте,onValueChanged не срабатывает,прирав
 								}
 							}
 						}
-						if(ntValue < tmSpinBox.from){//Если пользователь вводит число меньше заданного
-							if(tmSpinBox.value != tmSpinBox.from){//Если нет равенства, то...
-								tmSpinBox.value = tmSpinBox.from;//Выставляем минимальное значение.
-								text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,приравнив
-								tmSpinBox.valueModified();//Отправляем Сигнал, как в оригинальном SpinBox.
+                        if(ntValue < root.from){//Если пользователь вводит число меньше заданного
+                            if(root.value != root.from){//Если нет равенства, то...
+                                root.value = root.from;//Выставляем минимальное значение.
+                                text = root.value;//В этом слоте,onValueChanged не срабатывает,приравнив
+                                root.valueModified();//Отправляем Сигнал, как в оригинальном SpinBox.
 							}
 							else{
-								if(ntValue < tmSpinBox.from){
-									tmSpinBox.value = tmSpinBox.from;//Выставляем минимальное значение.
-									text = tmSpinBox.value;//В этом слоте,onValueChanged не срабатывает,прирав
+                                if(ntValue < root.from){
+                                    root.value = root.from;//Выставляем минимальное значение.
+                                    text = root.value;//В этом слоте,onValueChanged не срабатывает,прирав
 								}
 							}
 						}
@@ -219,14 +223,14 @@ Item {
 				}
 			}
 		}
-        DCKnopkaPlus {//@disable-check M300//Кнопка плюс.
+        DCKnopkaPlus {//Кнопка плюс.
 			id: knopkaPlus
-			ntWidth: tmSpinBox.ntWidth
-			ntCoff: tmSpinBox.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: rctSpinBox.verticalCenter
 			anchors.right:rctSpinBox.right
-			anchors.margins: tmSpinBox.ntCoff/2
-			clrKnopki: tmSpinBox.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
 			onClicked: {
 				fnClickedPlus();//Функция нажатия Плюс.
 			}

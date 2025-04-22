@@ -1,25 +1,26 @@
 ﻿import QtQuick //2.15
 
 Item{
-	id: tmKnopkaVniz
+    id: root
+    //Свойства.
 	property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrKnopki: "grey"
 	property color clrFona: "transparent"
-
+    //Настройки.
 	width: ntWidth*ntCoff
 	height: width
-
-	signal clicked();
-
+    //Сигналы.
+    signal clicked();
+    //Функции.
 	Rectangle {
 		id: rctKnopkaVniz
-		anchors.fill: tmKnopkaVniz
+        anchors.fill: root
 
 		color: maKnopkaVniz.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
 		border.color: maKnopkaVniz.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-		border.width: tmKnopkaVniz.width/8/4
-		radius: tmKnopkaVniz.width/4
+        border.width: root.width/8/4
+        radius: root.width/4
 
 		Rectangle {
 			id: rctStrelkaVerhPravo
@@ -63,7 +64,7 @@ Item{
             id: maKnopkaVniz
             anchors.fill: rctKnopkaVniz
             onClicked: {
-                tmKnopkaVniz.clicked();
+                root.clicked();
             }
         }
 	}	

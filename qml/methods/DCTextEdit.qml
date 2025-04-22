@@ -2,6 +2,7 @@
 //DCTextEdit - ШАБЛОН РАБОТЫ С ТЕКСТОМ НА СТРАНИЦЕ (ЛИСТАТЬ, РЕДАКТИРОВАТЬ, ВЫДЕЛЯТЬ).
 Item {
     id: root
+    //Свойства.
     property alias text: txdTextEdit.text //Текст
     property alias readOnly: txdTextEdit.readOnly//читать Только текст. (false - можно изменять)
 	property alias textEdit: txdTextEdit//Передаём в виде свойства весь объект TextEdit
@@ -14,11 +15,12 @@ Item {
     property real pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
     property int  ntWidth: 2
     property int ntCoff: 8
+    //Настройки.
     anchors.fill: parent
     //TODO Чета этот код не работает, нужно его логировать. Видимо из-за fnEnsureVisible
     //width: Screen.desktopAvailableWidth//ВАЖНО, экранная клавиатура работает корректно с размером приложения.
     height: Screen.desktopAvailableHeight//ВАЖНО,экранная клавиатура работает корректно с размером приложени
-
+    //Функции.
     Rectangle {
         id: rctTextEdit
         anchors.fill: root

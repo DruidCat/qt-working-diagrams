@@ -3,13 +3,15 @@ import "qrc:/js/jsJSON.js" as JSSpisok
 
 Item {
     id: root
+    //Свойства.
 	property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
     property bool enabled: true
+    //Сигналы.
 	signal clicked(int ntNomer, var strSpisok);
-
+    //Функции.
 	ListView {
 		id: lsvZona
 		Component {

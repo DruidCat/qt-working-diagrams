@@ -1,8 +1,9 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml/buttons"//Импортируем кнопки
+import buttons 1.0//Импортируем кнопки
 //Шаблон DCPoisk.qml - состоит из области, которая показывает искать в pdf документе.
 Item {
     id: root
+    //Свойства.
     property int  ntWidth: 2
     property int ntCoff: 8
     property alias radius: rctPoisk.radius//Радиус зоны отображения виджета поиска.
@@ -16,10 +17,11 @@ Item {
     property alias bold: txtPoisk.font.bold
     property alias italic: txtPoisk.font.italic
     property alias textUdalit: txtPoisk//Передаём в виде свойства весь объект Text
+    //Сигналы.
     signal clickedNext();//Сигнал на следующий элемент поиска
     signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
     signal clickedZakrit();//Сигнал на отмену поиска.
-
+    //Функции.
 	function fnClickedVniz() {//Функция обрабатывающая следующий поиск.
 		root.clickedNext();//Сигнал следующего поиска.
 	}
@@ -56,7 +58,7 @@ Item {
 			}
 			//console.log(event.key);
 		}
-        DCKnopkaZakrit {//@disable-check M300//Кнопка Отмены поиска.
+        DCKnopkaZakrit {//Кнопка Отмены поиска.
             id: knopkaZakrit
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -93,7 +95,7 @@ Item {
                 text: root.text	+ " [" + root.nomerPoisk + "|" + root.sumPoisk + "]"
 				onTextChanged: {//Если текст изменился, то...
 					if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
-					for(let ltShag=txtPoisk.font.pixelSize; ltShag<root.ntWidth*root.ntCoff; ltShag++){
+                    for(var ltShag=txtPoisk.font.pixelSize; ltShag<root.ntWidth*root.ntCoff; ltShag++){
 							if(txtPoisk.width < rctText.width){//Если длина текста меньше динны строки
 								txtPoisk.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 								if(txtPoisk.width > rctText.width){//Но, если переборщили
@@ -113,7 +115,7 @@ Item {
 			}
 			onWidthChanged: {//Если длина строки измениасть, то...
 				if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
-				for(let ltShag=txtPoisk.font.pixelSize;
+                for(var ltShag = txtPoisk.font.pixelSize;
 												ltShag<root.ntWidth*root.ntCoff; ltShag++){
 						if(txtPoisk.width < rctText.width){//Если длина текста меньше динны строки
 							txtPoisk.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -125,14 +127,14 @@ Item {
 					}
 				}
 				else{//Если длина строки меньше длины текста, то...
-					for(let ltShag = txtPoisk.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения 
+                    for(let ltShag = txtPoisk.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
 						if(txtPoisk.width > rctText.width)//Если текст дилиннее строки, то...
 							txtPoisk.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
 					}
 				}
 			}
         }
-		DCKnopkaVverh{//@disable-check M300//Кнопка предыдущего поиска
+        DCKnopkaVverh{//Кнопка предыдущего поиска
             id: knopkaVverh
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -144,7 +146,7 @@ Item {
 				fnClickedVverh();//Функция обрабатывающая предыдущий поиск.
             }
         }
-        DCKnopkaVniz{//@disable-check M300//Кнопка следующего поиска.
+        DCKnopkaVniz{//Кнопка следующего поиска.
             id: knopkaVniz
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff

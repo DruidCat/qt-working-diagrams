@@ -2,16 +2,17 @@
 
 Item {
     id: root
+    //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrKnopki: "grey"
     property color clrFona: "transparent"
-
+    //Настройки.
     width: ntWidth*ntCoff
     height: width
-
+    //Сигналы
     signal clicked();
-
+    //Функции.
     Rectangle {
         id: rctKnopkaPlan
         anchors.fill: root

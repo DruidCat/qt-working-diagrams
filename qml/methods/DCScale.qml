@@ -1,10 +1,9 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml/buttons"//Импортируем кнопки
+import buttons 1.0//Импортируем кнопки
 //DCScale - ШАБЛОН ДЛЯ РАБОТЫ С ЧИСЛАМИ И ИХ УВЕЛИЧЕНИЕМ И УМЕНЬШЕНИЕМ КНОПКАМИ [+] И [-].
 Item {
-    id: tmScale
-	height: ntWidth*ntCoff
-	width:	height*7
+    id: root
+    //Свойства.
 	property alias scale: txnScale//Передаём в виде свойства весь объект TextInput
     property alias radius: rctScale.radius//Радиус рабочей зоны
     property color clrFona: "transparent"//цвет текста
@@ -17,7 +16,12 @@ Item {
 	property int from: 0//Задаём значение по умолчанию.
 	property int to: 32767//Задаём значение по умолчанию.
 	property int stepSize: 1
+    //Настройки.
+    height: ntWidth*ntCoff
+    width:	height*7
+    //Сигналы.
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
+    //Функции.
 	//onValueModified: console.error(value)
 	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
         if(value < from){
@@ -69,33 +73,33 @@ Item {
 		}
 	}
 	function fnClickedMinus(){//Функция нажатия кнопки минус.
-		if(tmScale.value > tmScale.from){//Если нет равенства с минимальным значением, то..
-			tmScale.value = tmScale.value - tmScale.stepSize;//Уменьшаем.
+        if(root.value > root.from){//Если нет равенства с минимальным значением, то..
+            root.value = root.value - root.stepSize;//Уменьшаем.
 			//А отображение value в txnScale.text произойдет в слоте onValueChanged
-			tmScale.valueModified();//Отправляем Сигнал, как в оригинальном  виджете Scale.
+            root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете Scale.
 		}
 	}
 	function fnClickedPlus(){//Функция нажатия кнопки плюс.
-		if(tmScale.value < tmScale.to){//Если нет равенства с максимальным значением, то.
-			tmScale.value = tmScale.value + tmScale.stepSize;//Увеличиваем.
+        if(root.value < root.to){//Если нет равенства с максимальным значением, то.
+            root.value = root.value + root.stepSize;//Увеличиваем.
 			//А отображение value в txnScale.text произойдет в слоте onValueChanged
-			tmScale.valueModified();//Отправляем Сигнал, как в оригинальном  виджете Scale.
+            root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете Scale.
 		}
 	}
     Rectangle {
         id: rctScale
-		anchors.centerIn: tmScale
-		anchors.fill: tmScale
-		color: tmScale.clrFona 
+        anchors.centerIn: root
+        anchors.fill: root
+        color: root.clrFona
 
-        DCKnopkaMinus{//@disable-check M300//Кнопка минус.
+        DCKnopkaMinus{//Кнопка минус.
 			id: knopkaMinus
-			ntWidth: tmScale.ntWidth
-			ntCoff: tmScale.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: rctScale.verticalCenter
 			anchors.left:rctScale.left
-			anchors.margins: tmScale.ntCoff/2
-			clrKnopki: tmScale.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
 			border: false
 			onClicked: {
 				fnClickedMinus();//Функция нажатия Минус.
@@ -103,21 +107,21 @@ Item {
 		}
 		Rectangle {
 			id: rctTextInput
-			height: tmScale.ntWidth*tmScale.ntCoff
+            height: root.ntWidth*root.ntCoff
 			width: height*4
 			anchors.verticalCenter: rctScale.verticalCenter
 			anchors.left: knopkaMinus.right
-			anchors.margins: tmScale.ntCoff/2
+            anchors.margins: root.ntCoff/2
 			color: "transparent"
-			border.color: tmScale.clrTexta
-			border.width: tmScale.ntCoff/8
+            border.color: root.clrTexta
+            border.width: root.ntCoff/8
 			clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
 			Text {
 				anchors.verticalCenter: rctTextInput.verticalCenter
 				anchors.right: rctTextInput.right
-				anchors.margins: tmScale.ntCoff/4
-				color: tmScale.clrTexta
-				font.pixelSize: tmScale.ntWidth*tmScale.ntCoff//размер шрифта текста.
+                anchors.margins: root.ntCoff/4
+                color: root.clrTexta
+                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
 				text: "%"
 			}
 			TextInput {//Область текста.
@@ -125,55 +129,55 @@ Item {
 				anchors.left: rctTextInput.left
 				anchors.right: rctTextInput.right
 				anchors.verticalCenter: rctTextInput.verticalCenter
-				color: tmScale.clrTexta
+                color: root.clrTexta
 				horizontalAlignment: TextInput.AlignHCenter
 				verticalAlignment: TextInput.AlignVCenter
 
-				font.pixelSize: tmScale.ntWidth*tmScale.ntCoff//размер шрифта текста.
+                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
 				readOnly: true//Нельзя редактировать. 
-				text: tmScale.value
+                text: root.value
 				Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
 					//console.error(event.key);
 				}
 				onTextChanged: {//Если текст меняет пользователь вручную или кнопками.
 					var ntValue = txnScale.text;//Приравниваем значение.
-					if(ntValue > tmScale.to){//Если пользователь вводит число больше заданного
-						if(tmScale.value != tmScale.to){//Если нет равенства, то...
-							tmScale.value = tmScale.to;//Выставляем максимальное значение.
-							text = tmScale.value;//В этом слоте,onValueChanged не срабатывает,приравнив
-							tmScale.valueModified();//Отправляем Сигнал, как в оригинальном Scale.
+                    if(ntValue > root.to){//Если пользователь вводит число больше заданного
+                        if(root.value != root.to){//Если нет равенства, то...
+                            root.value = root.to;//Выставляем максимальное значение.
+                            text = root.value;//В этом слоте,onValueChanged не срабатывает,приравнив
+                            root.valueModified();//Отправляем Сигнал, как в оригинальном Scale.
 						}
 						else{
-							if(ntValue > tmScale.to){
-								tmScale.value = tmScale.to;//Выставляем максимальное значение.
-								text = tmScale.value;//В этом слоте,onValueChanged не срабатывает,прирав
+                            if(ntValue > root.to){
+                                root.value = root.to;//Выставляем максимальное значение.
+                                text = root.value;//В этом слоте,onValueChanged не срабатывает,прирав
 							}
 						}
 					}
-					if(ntValue < tmScale.from){//Если пользователь вводит число меньше заданного
-						if(tmScale.value != tmScale.from){//Если нет равенства, то...
-							tmScale.value = tmScale.from;//Выставляем минимальное значение.
-							text = tmScale.value;//В этом слоте,onValueChanged не срабатывает,приравнив
-							tmScale.valueModified();//Отправляем Сигнал, как в оригинальном Scale.
+                    if(ntValue < root.from){//Если пользователь вводит число меньше заданного
+                        if(root.value != root.from){//Если нет равенства, то...
+                            root.value = root.from;//Выставляем минимальное значение.
+                            text = root.value;//В этом слоте,onValueChanged не срабатывает,приравнив
+                            root.valueModified();//Отправляем Сигнал, как в оригинальном Scale.
 						}
 						else{
-							if(ntValue < tmScale.from){
-								tmScale.value = tmScale.from;//Выставляем минимальное значение.
-								text = tmScale.value;//В этом слоте,onValueChanged не срабатывает,прирав
+                            if(ntValue < root.from){
+                                root.value = root.from;//Выставляем минимальное значение.
+                                text = root.value;//В этом слоте,onValueChanged не срабатывает,прирав
 							}
 						}
 					}
 				}
 			}
 		}
-        DCKnopkaPlus {//@disable-check M300//Кнопка плюс.
+        DCKnopkaPlus {//Кнопка плюс.
 			id: knopkaPlus
-			ntWidth: tmScale.ntWidth
-			ntCoff: tmScale.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
 			anchors.verticalCenter: rctScale.verticalCenter
 			anchors.right:rctScale.right
-			anchors.margins: tmScale.ntCoff/2
-			clrKnopki: tmScale.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
 			border: false
 			onClicked: {
 				fnClickedPlus();//Функция нажатия Плюс.

@@ -48,6 +48,9 @@ set(PROJECT_SOURCES
         src/main.cpp
         qml.qrc
 )
+# Указываем путь к QML, чтоб QtCreator увидел пути к qmldir находящийся в /qml или подпапках.
+set(QML_IMPORT_PATH "${PROJECT_SOURCE_DIR}/qml")
+
 # Создаём переменную DATA_FILE, и добавляем в неё файлы, которые не участвуют в создании кода.
 # set(DATA_FILE ${PROJECT_SOURCE_DIR}/TODO.txt)
 set(DATA_FILE

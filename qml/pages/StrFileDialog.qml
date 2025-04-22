@@ -1,11 +1,12 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml"//Импортируем основные элементы qml
-import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной.
-import "qrc:/qml/zones"//Импортируем зону файлового диалога.
+
+import buttons 1.0//Импортируем кнопки
+import methods 1.0//Импортируем методы написанные мной.
+import zones 1.0//Импортируем зону Данных.
 //Страница с отображением каталога папок и файлов
 Item {
-    id: tmFileDialog
+    id: root
+    //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -26,70 +27,71 @@ Item {
 	property alias radiusZona: rctZona.radius//Радиус Зоны рабочей
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
     property int ntLogoTMK: 16
-
+    //Настройки.
     anchors.fill: parent//Растянется по Родителю.
+    focus: true//Не удалять, может Escape не работать.
+    //Сигналы.
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть.
     signal clickedInfo();//Сигнал нажатич кнопки Инфо, где будет описание работы Файлового Диалога.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 	signal signalToolbar (var strToolbar);//Сигнал излучающий в Toolbar в Проводнике.
-
+    //Функции.
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         menuFileDialog.visible = false;//Делаем невидимым всплывающее меню.
     }
-    focus: true//Не удалять, может Escape не работать.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: tmFileDialog
+        anchors.fill: root
         onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnClickedNazad(){//Функция нажатия кнопки Назад или клика папки [..]
-        if(cppqml.strFileDialogPut === tmFileDialog.strPutDom){//Если каталог совпадает с домашним, то...
+        if(cppqml.strFileDialogPut === root.strPutDom){//Если каталог совпадает с домашним, то...
             fnClickedZakrit();//Закрываем проводник.
         }
         else{//Противном случае...
             cppqml.strFileDialog = "[..]";//Назад в папке.
             fnClickedEscape();//Меню сворачиваем
-            tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
+            root.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
         }
     }
     function fnClickedZakrit(){
         cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.
-		tmFileDialog.signalZagolovok(qsTr("ПРОВОДНИК"));//Передаю имя папки назад [..].
+        root.signalZagolovok(qsTr("ПРОВОДНИК"));//Передаю имя папки назад [..].
         fnClickedEscape();//Меню сворачиваем
-        tmFileDialog.clickedZakrit();//Излучаем сигнал закрытия проводника.
+        root.clickedZakrit();//Излучаем сигнал закрытия проводника.
     }
 
     Item {//Данные Заголовок
         id: tmZagolovok
-        DCKnopkaNazad {//@disable-check M300
+        DCKnopkaNazad {
             id: knopkaNazad
-            ntWidth: tmFileDialog.ntWidth
-            ntCoff: tmFileDialog.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.left:tmZagolovok.left
-            anchors.margins: tmFileDialog.ntCoff/2
-            clrKnopki: tmFileDialog.clrTexta
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
             onClicked: {
                 fnClickedNazad();//Функция клика Назад.
             }
         }
-        DCKnopkaInfo {//@disable-check M300
+        DCKnopkaInfo {
             id: knopkaInfo
-            ntWidth: tmFileDialog.ntWidth
-            ntCoff: tmFileDialog.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.right: tmZagolovok.right
-            anchors.margins: tmFileDialog.ntCoff/2
-            clrKnopki: tmFileDialog.clrTexta
-            clrFona: tmFileDialog.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             onClicked: {
                 fnClickedEscape();//Меню сворачиваем
-                tmFileDialog.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
+                root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
             }
         }
     }
@@ -110,7 +112,7 @@ Item {
                 onTriggered: {
                     if(blLogoTMK){//Если true, то...
                         lgTMK.ntCoff++;
-                        if(lgTMK.ntCoff >= tmFileDialog.ntLogoTMK)
+                        if(lgTMK.ntCoff >= root.ntLogoTMK)
                             blLogoTMK = false;
                     }
                     else{
@@ -120,20 +122,20 @@ Item {
                     }
                }
             }
-            DCLogoTMK {//@disable-check M300//Логотип до ZonaFileDialog, чтоб не перекрывать список.
+            DCLogoTMK {
                 id: lgTMK
-                ntCoff: tmFileDialog.ntLogoTMK
+                ntCoff: root.ntLogoTMK
                 anchors.centerIn: parent
-                clrLogo: tmFileDialog.clrTexta
-                clrFona: tmFileDialog.clrFona
+                clrLogo: root.clrTexta
+                clrFona: root.clrFona
             }
-            ZonaFileDialog {//@disable-check M300
+            ZonaFileDialog {
                 id: lsvZona
-                ntWidth: tmFileDialog.ntWidth
-                ntCoff: tmFileDialog.ntCoff
+                ntWidth: root.ntWidth
+                ntCoff: root.ntCoff
                 anchors.fill: rctZona
-                clrPapki: tmFileDialog.clrTexta//Цвет папок в проводнике.
-                clrFaila: tmFileDialog.clrFaila//Цвет файлов в проводнике
+                clrPapki: root.clrTexta//Цвет папок в проводнике.
+                clrFaila: root.clrFaila//Цвет файлов в проводнике
                 clrFona: "SlateGray"
                 onClicked: function(ntTip, strFileDialog) {//Слот нажатия на один из Элементов Проводника.
                     if(!ntTip){//Если Тип = 0, это нажатие кнопки Назад
@@ -143,12 +145,12 @@ Item {
                         if(ntTip === 1){//Если это Папки, то...
                             fnClickedEscape();//Меню сворачиваем
                             cppqml.strFileDialog = strFileDialog;//Присваиваем имя папки выбранной.
-                            tmFileDialog.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки.`
+                            root.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки.`
                         }
                         else{
                             if(ntTip === 2){//Если это file из Маски, то...
-                                tmFileDialog.signalZagolovok(qsTr("ИДЁТ КОПИРОВАНИЕ ДОКУМЕНТА"));//
-                                tmFileDialog.signalToolbar(qsTr("Копирование."));//Сообщение в Toolbar.
+                                root.signalZagolovok(qsTr("ИДЁТ КОПИРОВАНИЕ ДОКУМЕНТА"));//
+                                root.signalToolbar(qsTr("Копирование."));//Сообщение в Toolbar.
                                 knopkaNazad.visible= false//Делаем кнопку назад невидимой.
                                 knopkaZakrit.visible = false//Делаем кнопку закрыть невидимой.
                                 lsvZona.visible = false;//Делаем невидимую зону с Проводником.
@@ -162,16 +164,16 @@ Item {
                     }
                 }
             }
-            DCMenu {//@disable-check M300
+            DCMenu {
                 id: menuFileDialog
                 visible: false//Невидимое меню.
-                ntWidth: tmFileDialog.ntWidth
-                ntCoff: tmFileDialog.ntCoff
+                ntWidth: root.ntWidth
+                ntCoff: root.ntCoff
                 anchors.left: rctZona.left
                 anchors.right: rctZona.right
                 anchors.bottom: rctZona.bottom
-                anchors.margins: tmFileDialog.ntCoff
-                clrTexta: tmFileDialog.clrTexta
+                anchors.margins: root.ntCoff
+                clrTexta: root.clrTexta
                 clrFona: "SlateGray"
                 imyaMenu: "filedialog"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
                 onClicked: function(ntNomer, strMenu) {
@@ -185,29 +187,29 @@ Item {
     }
     Item {//Данные Тулбар
         id: tmToolbar
-        DCKnopkaZakrit {//@disable-check M300
+        DCKnopkaZakrit {
             id: knopkaZakrit
-            ntWidth: tmFileDialog.ntWidth
-            ntCoff: tmFileDialog.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             visible: true
             anchors.verticalCenter: tmToolbar.verticalCenter
             anchors.left: tmToolbar.left
-            anchors.margins: tmFileDialog.ntCoff/2
-            clrKnopki: tmFileDialog.clrTexta
-            clrFona: tmFileDialog.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
-        DCKnopkaNastroiki {//@disable-check M300
+        DCKnopkaNastroiki {
             id: knopkaNastroiki
-            ntWidth: tmFileDialog.ntWidth
-            ntCoff: tmFileDialog.ntCoff
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter
             anchors.right: tmToolbar.right
-            anchors.margins: tmFileDialog.ntCoff/2
-            clrKnopki: tmFileDialog.clrTexta
-            clrFona: tmFileDialog.clrFona
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
             onClicked: {
                 menuFileDialog.visible ? menuFileDialog.visible = false : menuFileDialog.visible = true;
@@ -215,13 +217,13 @@ Item {
         } 
     }
     Component.onCompleted: {//Вызывается при завершении иннициализации компонента.
-        tmFileDialog.strPutDom = cppqml.strFileDialogPut;//Запоминаем домашнюю деррикторию.
+        root.strPutDom = cppqml.strFileDialogPut;//Запоминаем домашнюю деррикторию.
     }
     Connections {//Соединяем сигнал из C++ с действием в QML
         target: cppqml;//Цель объект класса С++ DCCppQml
         function onBlFileDialogCopyChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то
             tmrLogoTMK.running = false;//Останавливаем таймер анимации логотипа ТМК.
-            lgTMK.ntCoff = tmFileDialog.ntLogoTMK;//По умолчанию размер логотипа ТМК.
+            lgTMK.ntCoff = root.ntLogoTMK;//По умолчанию размер логотипа ТМК.
             knopkaNazad.visible= true//Делаем кнопку назад видимой.
             knopkaZakrit.visible = true//Делаем кнопку закрыть видимой.
             lsvZona.visible = true;//Делаем видимую зону с Проводником.

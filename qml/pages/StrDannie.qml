@@ -1,8 +1,8 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml"//Импортируем основные элементы qml
-import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной.
-import "qrc:/qml/zones"//Импортируем зону Данных.
+
+import buttons 1.0//Импортируем кнопки
+import methods 1.0//Импортируем методы написанные мной.
+import zones 1.0//Импортируем зону Данных.
 //Страница с Данными, где отображаются сами документы в виде списка.
 Item {
     id: root
@@ -110,7 +110,7 @@ Item {
     Item {//Данные Заголовок
 		id: tmZagolovok
 
-        DCKnopkaNazad {//@disable-check M300
+        DCKnopkaNazad {
 			id: knopkaNazad
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -124,7 +124,7 @@ Item {
                 root.clickedNazad();
             }
         } 
-        DCKnopkaZakrit {//@disable-check M300
+        DCKnopkaZakrit {
             id: knopkaZakrit
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -138,7 +138,7 @@ Item {
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
-		DCKnopkaInfo {//@disable-check M300
+        DCKnopkaInfo {
 			id: knopkaInfo
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -154,7 +154,7 @@ Item {
                 root.clickedInfo();
             }
         } 
-        DCKnopkaOk{//@disable-check M300
+        DCKnopkaOk{
             id: knopkaOk
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -168,7 +168,7 @@ Item {
                 fnClickedOk();//Функция переименование данных.
             }
         } 
-        DCTextUdalit {//@disable-check M300
+        DCTextUdalit {
             id: txuUdalit
             anchors.top: tmZagolovok.top
             anchors.bottom: tmZagolovok.bottom
@@ -213,7 +213,7 @@ Item {
 			anchors.bottomMargin: root.ntCoff/4
 			anchors.leftMargin: root.ntCoff/2
 			anchors.rightMargin: root.ntCoff/2
-            DCTextInput {//@disable-check M300
+            DCTextInput {
 				id: txnZagolovok
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
@@ -254,13 +254,13 @@ Item {
 			anchors.fill: tmZona
 			color: "transparent"
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-            DCLogoTMK {//@disable-check M300//Логотип до ZonaDannie, чтоб не перекрывать Документы.
+            DCLogoTMK {
                 ntCoff: 16
                 anchors.centerIn: parent
                 clrLogo: tmElement.clrTexta
                 clrFona: tmElement.clrFona
             }
-            ZonaDannie {//@disable-check M300
+            ZonaDannie {
 				id: lsvZona
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
@@ -307,7 +307,7 @@ Item {
 					}
 				}
 			}
-            DCMenu {//@disable-check M300
+            DCMenu {
 				id: menuDannie
 				visible: false//Невидимое меню. 
 				ntWidth: root.ntWidth
@@ -354,7 +354,7 @@ Item {
     }
     Item {//Данные Тулбар
 		id: tmToolbar 
-		DCKnopkaSozdat {//@disable-check M300
+        DCKnopkaSozdat {
 			id: knopkaSozdat
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -369,7 +369,7 @@ Item {
                 fnClickedSozdat();//Функция нажатия кнопки Создать.
             }
         }
-        DCKnopkaNastroiki {//@disable-check M300
+        DCKnopkaNastroiki {
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter

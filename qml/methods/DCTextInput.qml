@@ -2,6 +2,7 @@
 //DCTextInput - ШАБЛОН ДЛЯ РАБОТЫ СО СТРОКОЙ ТЕКСТА. (33 БУКВЫ, работает ESCAPE и ENTER)
 Item {
     id: root
+    //Свойства.
     property alias text: txnTextInput.text //Текст
 	property alias textInput: txnTextInput//Передаём в виде свойства весь объект TextInput
     property alias radius: rctTextInput.radius//Радиус рабочей зоны
@@ -14,10 +15,12 @@ Item {
     property int ntCoff: 8
     property alias placeholderText: txtTextInput.text//Текст в строке, подсказывающий, что нужно вводить юзеру
     property alias placeholderColor: txtTextInput.color//Цвет текста подсказки
+    //Настройки.
     anchors.fill: parent
+    //Сигналы.
 	signal clickedEnter();//Сигнал нажатия Enter
 	signal clickedEscape();//Сигнал нажатия Escape
-
+    //Функции.
     Rectangle {
         id: rctTextInput
 		anchors.fill: root
@@ -93,7 +96,7 @@ Item {
 					if(text){//(Защита от пустого текста) Если не пустой текст, то...
 						if(visible){//Если подсказка становится видимой, то...
 							if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
-								for(let ltShag = txtTextInput.font.pixelSize;
+                                for(var ltShag = txtTextInput.font.pixelSize;
 												ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 									if(txtTextInput.width < rctTextInput.width){//длина текста < динны строки
 										txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -120,7 +123,7 @@ Item {
 		if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
 			if(txtTextInput.visible){//Если подсказка становится видимой, то...
 				if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
-					for(let ltShag = txtTextInput.font.pixelSize;
+                    for(var ltShag = txtTextInput.font.pixelSize;
 									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 						if(txtTextInput.width < rctTextInput.width){//длина текста < динны строки
 							txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -166,7 +169,7 @@ Item {
 		if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
 			if(txtTextInput.visible){//Если подсказка становится видимой, то...
 				if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
-					for(let ltShag = txtTextInput.font.pixelSize;
+                    for(var ltShag = txtTextInput.font.pixelSize;
 									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 						if(txtTextInput.width < rctTextInput.width){//длина текста < динны строки
 							txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -190,7 +193,7 @@ Item {
 		if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
 			if(txnTextInput.visible){//Если текст становится видимым, то...
 				if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста,то
-					for(let ltShag = txnTextInput.font.pixelSize;
+                    for(var ltShag = txnTextInput.font.pixelSize;
 									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 						if(txnTextInput.width < rctTextInput.width){//длина текста < динны строки
 							txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта

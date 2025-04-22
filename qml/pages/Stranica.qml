@@ -2,7 +2,8 @@
 import QtQuick.Controls //2.15 //Для Page
 //СТРАНИЦА - шаблон страницы программы с Заголовком, Зоной и Тулбаром.
 Page {
-	id: pgStr
+    id: root
+    //Свойства.
 	property int ntWidth: 8
 	property int ntCoff: 8
 	property color clrFona: "transparent"
@@ -14,7 +15,7 @@ Page {
 	property alias rctStrZagolovok: rctStrZagolovok
 	property alias rctStrZona: rctStrZona
     property alias rctStrToolbar: rctStrToolbar
-
+    //Функции.
 	Item{
 		id: tmStr
         anchors.fill: parent
@@ -43,14 +44,14 @@ Page {
 				Rectangle {
                     id: rctStrZagolovokText
                     width: rctStrZagolovok.width-2*tmZagolovokKnopkaCleva.width
-                    height: rctStrZagolovok.height-pgStr.ntCoff
+                    height: rctStrZagolovok.height-root.ntCoff
                     anchors.left: tmZagolovokKnopkaCleva.right
                     anchors.verticalCenter: rctStrZagolovok.verticalCenter
 					color: "transparent"
 					Text {
                         id: txtStrZagolovok
 						anchors.centerIn: rctStrZagolovokText
-						color: pgStr.clrTexta
+                        color: root.clrTexta
 						text: ""
                         font.bold: true
 						font.pixelSize: rctStrZagolovokText.height
@@ -120,14 +121,14 @@ Page {
 			Rectangle {
                 id: rctStrToolbar
 				width: rctStr.width
-				height: pgStr.ntWidth*pgStr.ntCoff+pgStr.ntCoff
+                height: root.ntWidth*root.ntCoff+root.ntCoff
 				anchors.left: rctStr.left
 				anchors.right: rctStr.right
 				anchors.bottom: rctStr.bottom
-				anchors.margins: pgStr.ntCoff
+                anchors.margins: root.ntCoff
 				color: clrRabOblasti
 				border.color: Qt.darker(clrRabOblasti, 1.3)
-				border.width: pgStr.ntCoff/4
+                border.width: root.ntCoff/4
 				Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
                     id: tmToolbarKnopkaCleva
 					height: rctStrToolbar.height
@@ -139,14 +140,14 @@ Page {
 				Rectangle {
                     id: rctStrToolbarText
                     width: rctStrToolbar.width-2*tmToolbarKnopkaCleva.width
-                    height: rctStrToolbar.height-pgStr.ntCoff
+                    height: rctStrToolbar.height-root.ntCoff
                     anchors.left: tmToolbarKnopkaCleva.right
                     anchors.verticalCenter: rctStrToolbar.verticalCenter
 					color: "transparent"
 					Text {
                         id: txtStrToolbar
 						anchors.centerIn: rctStrToolbarText
-						color: pgStr.clrTexta
+                        color: root.clrTexta
 						text: ""
 						font.pixelSize: rctStrToolbarText.height
 						onTextChanged: {//Если длина строки изменилась, то...

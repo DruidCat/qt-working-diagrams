@@ -1,24 +1,25 @@
 ﻿import QtQuick //2.15
 
 Item{
-    id: tmKnopkaMinus
+    id: root
+    //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrKnopki: "grey"
     property color clrFona: "transparent"
 	property bool border: true
-
+    //Настройки.
     width: ntWidth*ntCoff
     height: width
-
+    //Сигналы.
     signal clicked();
-
+    //Функции.
     Rectangle {
         id: rctKnopkaMinus
-        anchors.fill: tmKnopkaMinus
+        anchors.fill: root
 
         color: maKnopkaMinus.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
-        radius: tmKnopkaMinus.width/4
+        radius: root.width/4
 
         Rectangle {
             id: rctCentor
@@ -33,14 +34,14 @@ Item{
             id: maKnopkaMinus
             anchors.fill: rctKnopkaMinus
             onClicked: {
-                tmKnopkaMinus.clicked();
+                root.clicked();
             }
         }
 	}
 	Component.onCompleted: {
-		if(tmKnopkaMinus.border){
+        if(root.border){
 			rctKnopkaMinus.border.color = maKnopkaMinus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        	rctKnopkaMinus.border.width = tmKnopkaMinus.width/8/4;
+            rctKnopkaMinus.border.width = root.width/8/4;
 		}
 	} 
 }

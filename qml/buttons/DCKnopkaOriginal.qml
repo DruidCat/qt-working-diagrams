@@ -1,7 +1,8 @@
 ﻿import QtQuick //2.15
 
 Item {
-	id: tmKnopkaOriginal
+    id: root
+    //Свойства.
 	property int ntHeight: 16
 	property alias text: txtKnopkaOriginal.text
 	property alias bold: txtKnopkaOriginal.font.bold
@@ -9,15 +10,15 @@ Item {
 	property alias pixelSize: txtKnopkaOriginal.font.pixelSize
 	property color clrKnopki: "transparent"
 	property color clrTexta: "black"
-
+    //Настройки.
 	height: ntHeight
 	//Длина кнопки расчитывается автоматически в слоте onCompleted в конце файла.
-
+    //Сигналы.
 	signal clicked();
-
+    //Функции.
 	Rectangle {
 		id: rctKnopkaOriginal
-		anchors.fill: tmKnopkaOriginal
+        anchors.fill: root
 
 		color: maKnopkaOriginal.containsPress ? Qt.darker(clrKnopki, 1.3) : clrKnopki
 		radius: height/4
@@ -42,13 +43,13 @@ Item {
 			id: maKnopkaOriginal
 			anchors.fill: rctKnopkaOriginal
 			onClicked: {
-				tmKnopkaOriginal.clicked();
+                root.clicked();
 			}
 		}
 	}
 
 	Component.onCompleted: {//Слот обрабатывает данные, когда сомпонет полностью отрисовался.
 		//Императивное присвоение значения, так как тут используется JS, нужно присваивать через знак "=".
-		tmKnopkaOriginal.width = txtKnopkaOriginal.text.length*tmKnopkaOriginal.ntHeight;//Расчёт длины строки.
+        root.width = txtKnopkaOriginal.text.length*root.ntHeight;//Расчёт длины строки.
 	}
 }

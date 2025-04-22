@@ -1,11 +1,11 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml"//Импортируем основные элементы qml
-import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной.
-//Страница отображающая Меню.
 
+import buttons 1.0//Импортируем кнопки
+import methods 1.0//Импортируем методы написанные мной.
+//Страница отображающая Меню.
 Item {
     id: root
+    //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -24,11 +24,14 @@ Item {
 	property alias toolbarHeight: tmToolbar.height
     property bool pdfViewer: true//true - включен собственный просмотрщик.
     property bool appRedaktor: true//true - включен Редактор приложения.
+    //Настройки.
     anchors.fill: parent//Растянется по Родителю.
+    //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	signal clickedWorkingDiagrams();//Сигнал нажатия кнопки об Рабочих Схемах.
     signal clickedQt();//Сигнал нажатия кнопки Об Qt.
+    //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             menuMenu.visible = false;//Делаем невидимым всплывающее меню.
@@ -42,7 +45,7 @@ Item {
 
 	Item {
 		id: tmZagolovok
-        DCKnopkaVpered{//@disable-check M300
+        DCKnopkaVpered{
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -66,11 +69,10 @@ Item {
 
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
                 id: rctZona
-                width: tmZona.width
-                height: flZona.contentHeight
+                width: tmZona.width; height: flZona.contentHeight
                 color: "transparent"
 
-                DCKnopkaOriginal {//@disable-check M300
+                DCKnopkaOriginal {
                     id: knopkaLogi
                     ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: rctZona.top
@@ -87,7 +89,7 @@ Item {
                         root.clickedLogi();//Сигнал нажатия кнопки Логи.
                     }
                 }
-                DCKnopkaOriginal {//@disable-check M300
+                DCKnopkaOriginal {
                     id: knopkaAvtor
                     ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaLogi.bottom
@@ -105,7 +107,7 @@ Item {
                     }
                 }
                 /*
-                DCKnopkaOriginal {//@disable-check M300
+                DCKnopkaOriginal {
                     id: knopkaSpisok
                     ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaAvtor.bottom
@@ -124,7 +126,7 @@ Item {
                     }
                 }
                 */
-                DCKnopkaOriginal {//@disable-check M300
+                DCKnopkaOriginal {
                     id: knopkaQt
                     ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaAvtor.bottom
@@ -141,7 +143,7 @@ Item {
                         root.clickedQt();//Сигнал нажатия кнопки об Qt.
                     }
                 }
-                DCKnopkaOriginal {//@disable-check M300
+                DCKnopkaOriginal {
                     id: knopkaPdfViewer
                     ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaQt.bottom
@@ -158,7 +160,7 @@ Item {
                         root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
                     }
                 }
-				DCKnopkaOriginal {//@disable-check M300
+                DCKnopkaOriginal {
                     id: knopkaRedaktor
                     ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaPdfViewer.bottom
@@ -175,7 +177,7 @@ Item {
                         root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
                     }
                 }
-                DCKnopkaOriginal {//@disable-check M300
+                DCKnopkaOriginal {
                     id: knopkaVihod
                     ntHeight: root.ntWidth*root.ntCoff+8
                     anchors.top: knopkaRedaktor.bottom
@@ -194,7 +196,7 @@ Item {
             }
         }
         /*
-        PathViewSpisok {//@disable-check M300
+        PathViewSpisok {
             id: pvSpisok
             visible: false
             ntWidth: root.ntWidth
@@ -211,7 +213,7 @@ Item {
             }
         }
         */
-        DCMenu {//@disable-check M300//Меню отображается в Рабочей Зоне приложения.
+        DCMenu {//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
             visible: false//Невидимое меню.
             ntWidth: root.ntWidth
@@ -233,7 +235,7 @@ Item {
 	}
     Item {//Тулбар
 		id: tmToolbar
-        DCKnopkaNastroiki {//@disable-check M300//Кнопка Меню.
+        DCKnopkaNastroiki {//Кнопка Меню.
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter

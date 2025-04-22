@@ -1,11 +1,12 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml"//Импортируем основные элементы qml
-import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной.
-import "qrc:/qml/zones"//Импортируем зону элементов.
+
+import buttons 1.0//Импортируем кнопки
+import methods 1.0//Импортируем методы написанные мной.
+import zones 1.0//Импортируем зону Данных.
 //Страница отображающая Элементы Списка.
 Item {
 	id: root
+    //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrTexta: "orange"
@@ -27,13 +28,16 @@ Item {
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого Элемента, если true
+    //Настройки.
     anchors.fill: parent//Растянется по Родителю.
+    focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
+    //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedElement(var strElement);//Сигнал когда нажат один из Элементов.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
-
+    //Функции.
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuElement.visible = false;//Делаем невидимым всплывающее меню.
@@ -43,7 +47,6 @@ Item {
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         lsvZona.enabled = true;//Делаем кликабельную Зону.
     }
-    focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             root.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -106,7 +109,7 @@ Item {
     }
 	Item {//Элементы Заголовок
 		id: tmZagolovok
-        DCKnopkaNazad {//@disable-check M300
+        DCKnopkaNazad {
 			id: knopkaNazad
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
@@ -120,7 +123,7 @@ Item {
 				root.clickedNazad();//Сигнал Назад.
 			}
 		}
-        DCKnopkaZakrit {//@disable-check M300
+        DCKnopkaZakrit {
             id: knopkaZakrit
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -134,7 +137,7 @@ Item {
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
         }
-		DCKnopkaInfo {//@disable-check M300
+        DCKnopkaInfo {
 			id: knopkaInfo
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
@@ -149,7 +152,7 @@ Item {
 				root.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
 			}
 		} 
-        DCKnopkaOk{//@disable-check M300
+        DCKnopkaOk{
 			id: knopkaOk
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
@@ -163,7 +166,7 @@ Item {
 				fnClickedOk();//Функция сохранения данных.
 			}
 		}
-        DCTextUdalit {//@disable-check M300
+        DCTextUdalit {
             id: txuUdalit
             anchors.top: tmZagolovok.top
             anchors.bottom: tmZagolovok.bottom
@@ -208,7 +211,7 @@ Item {
 			anchors.bottomMargin: root.ntCoff/4
 			anchors.leftMargin: root.ntCoff/2
 			anchors.rightMargin: root.ntCoff/2
-            DCTextInput {//@disable-check M300
+            DCTextInput {
 				id: txnZagolovok
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
@@ -249,13 +252,13 @@ Item {
 			anchors.fill: tmZona
 			color: "transparent"
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-            DCLogoTMK {//@disable-check M300 Логотип
+            DCLogoTMK {//Логотип
                 ntCoff: 16
                 anchors.centerIn: parent
                 clrLogo: root.clrTexta
                 clrFona: root.clrFona
             }
-            ZonaElement {//@disable-check M300
+            ZonaElement {
 				id: lsvZona
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
@@ -298,7 +301,7 @@ Item {
 					}
 				}
 			}	
-            DCMenu {//@disable-check M300
+            DCMenu {
 				id: menuElement
 				visible: false//Невидимое меню. 
 				ntWidth: root.ntWidth
@@ -345,7 +348,7 @@ Item {
     }
 	Item {//Состава Тулбар
 		id: tmToolbar 
-		DCKnopkaSozdat {//@disable-check M300
+        DCKnopkaSozdat {
 			id: knopkaSozdat
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
@@ -359,7 +362,7 @@ Item {
 				txnZagolovok.visible ? fnClickedZakrit() : fnClickedSozdat()
             }
 		}
-        DCKnopkaNastroiki {//@disable-check M300
+        DCKnopkaNastroiki {
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter

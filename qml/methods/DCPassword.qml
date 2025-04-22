@@ -1,5 +1,6 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml/buttons"//Импортируем кнопки
+
+import buttons 1.0//Импортируем кнопки
 //DCPassword - ШАБЛОН ДЛЯ РАБОТЫ С ВВОДОМ ПАРОЛЕЙ.
 Item {
     id: root
@@ -38,7 +39,7 @@ Item {
 				return false;//Невидимый
 			}
 		}			
-        DCKnopkaZakrit {//@disable-check M300//Кнопка Отмены удаления.
+        DCKnopkaZakrit {//Кнопка Отмены удаления.
             id: knopkaOtmena
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -102,7 +103,7 @@ Item {
 						if(text){//(Защита от пустого текста) Если не пустой текст, то...
 							if(visible){//Если подсказка становится видимой, то...
 								if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста
-									for(let ltShag = txtTextInput.font.pixelSize;
+                                    for(var ltShag = txtTextInput.font.pixelSize;
 													ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 										if(txtTextInput.width < rctTextInput.width){//длина текста<динны строк
 											txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -128,7 +129,7 @@ Item {
 				if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
 					if(txtTextInput.visible){//Если подсказка становится видимой, то...
 						if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста
-							for(let ltShag = txtTextInput.font.pixelSize;
+                            for(var ltShag = txtTextInput.font.pixelSize;
 											ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 								if(txtTextInput.width < rctTextInput.width){//длина текста<динны строк
 									txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -171,7 +172,7 @@ Item {
 				}
 			}
 		}
-        DCKnopkaOk{//@disable-check M300//Кнопка подтверждения пароля.
+        DCKnopkaOk{//Кнопка подтверждения пароля.
             id: knopkaOk
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -190,7 +191,7 @@ Item {
 		if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
 			if(txtTextInput.visible){//Если подсказка становится видимой, то...
 				if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста
-					for(let ltShag = txtTextInput.font.pixelSize;
+                    for(var ltShag = txtTextInput.font.pixelSize;
 									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 						if(txtTextInput.width < rctTextInput.width){//длина текста<динны строк
 							txtTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -214,7 +215,7 @@ Item {
 		if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
 			if(txnTextInput.visible){//Если Пароль становится видимой, то...
 				if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста
-					for(let ltShag = txnTextInput.font.pixelSize;
+                    for(var ltShag = txnTextInput.font.pixelSize;
 									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
 						if(txnTextInput.width < rctTextInput.width){//длина текста<динны строк
 							txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта

@@ -1,0 +1,5 @@
+module zones
+ZonaDannie 1.0 ZonaDannie.qml
+ZonaElement 1.0 ZonaElement.qml
+ZonaFileDialog 1.0 ZonaFileDialog.qml
+ZonaSpisok 1.0 ZonaSpisok.qml

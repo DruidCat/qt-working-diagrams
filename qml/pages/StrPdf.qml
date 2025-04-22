@@ -1,8 +1,7 @@
 ﻿import QtQuick //2.15
 
-import "qrc:/qml"//Импортируем основные элементы qml
-import "qrc:/qml/buttons"//Импортируем кнопки
-import "qrc:/qml/methods"//Импортируем методы написанные мной.
+import buttons 1.0//Импортируем кнопки
+import methods 1.0//Импортируем методы написанные мной.
 //Страница просмотра PDF документов.
 Item {
 	id: root
@@ -127,7 +126,7 @@ Item {
     }
 	Item {
 		id: tmZagolovok
-        DCKnopkaNazad {//@disable-check M300
+        DCKnopkaNazad {
 			id: knopkaNazad
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
@@ -138,7 +137,7 @@ Item {
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
 			}
 		}	
-		DCKnopkaZakrit {//@disable-check M300
+        DCKnopkaZakrit {
             id: knopkaZakrit
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             visible: false
@@ -153,7 +152,7 @@ Item {
             anchors.left: knopkaNazad.right; anchors.right: knopkaPoisk.left
             anchors.topMargin: root.ntCoff/4; anchors.bottomMargin: root.ntCoff/4
             anchors.leftMargin: root.ntCoff/2; anchors.rightMargin: root.ntCoff/2
-            DCTextInput {//@disable-check M300
+            DCTextInput {
 				id: txnZagolovok
                 ntWidth: root.ntWidth; ntCoff: root.ntCoff
 				anchors.fill: tmTextInput
@@ -182,7 +181,7 @@ Item {
                 onClickedEnter: fnClickedOk()//Функция отправить запрос на поиск
 			}
 		}	
-		DCKnopkaOk{//@disable-check M300
+        DCKnopkaOk{
 			id: knopkaOk
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false
@@ -191,7 +190,7 @@ Item {
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             onClicked: fnClickedOk()//Функция отправить запрос на поиск
 		}	
-		DCPoisk {//@disable-check M300
+        DCPoisk {
             id: pskPoisk
             anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
             anchors.left: tmZagolovok.left; anchors.right: tmZagolovok.right
@@ -217,7 +216,7 @@ Item {
                 pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
             }
         }
-        DCKnopkaPoisk{//@disable-check M300
+        DCKnopkaPoisk{
             id: knopkaPoisk
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
@@ -229,7 +228,7 @@ Item {
                 txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
             }
         }
-        DCPassword{//@disable-check M300
+        DCPassword{
             id: pssPassword
             anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
             anchors.left: tmZagolovok.left; anchors.right: tmZagolovok.right
@@ -263,7 +262,7 @@ Item {
 	Item {
 		id: tmZona
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.	
-        DCLogoTMK {//@disable-check M300//Логотип до ZonaFileDialog, чтоб не перекрывать список.
+        DCLogoTMK {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
 			id: lgTMK
 			ntCoff: root.ntLogoTMK
 			anchors.centerIn: tmZona
@@ -354,7 +353,7 @@ Item {
                 ldrProgress.item.clrProgress = root.clrTexta; ldrProgress.item.clrTexta = "grey";
             }
         }
-        DCSpinBox {//@disable-check M300
+        DCSpinBox {
 			id: spbPdfPage
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false 
@@ -366,7 +365,7 @@ Item {
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
             onValueModified: pdfLoader.item.currentPage = (value-1)//Если изменение страницы пришло из виджета
 		}
-        DCScale{//@disable-check M300
+        DCScale{
 			id: pdfScale
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter; anchors.right: tmToolbar.right

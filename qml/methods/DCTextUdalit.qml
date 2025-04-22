@@ -1,8 +1,9 @@
 ﻿import QtQuick //2.15
-import "qrc:/qml/buttons"//Импортируем кнопки
+import buttons 1.0//Импортируем кнопки
 //Шаблон DCTextUdalit.qml - состоит из области, которая показывает текст удалённого документа.
 Item {
     id: root
+    //Свойства.
     property int  ntWidth: 2
     property int ntCoff: 8
     property alias radius: rctTextUdalit.radius//Радиус зоны отображения удаляемого документа.
@@ -15,8 +16,10 @@ Item {
     property alias bold: txtTextUdalit.font.bold
     property alias italic: txtTextUdalit.font.italic
     property alias textUdalit: txtTextUdalit//Передаём в виде свойства весь объект Text
+    //Сигналы.
     signal clickedUdalit(var strKod);//Сигнал на удаление вместе с кодом удаляемого эдемента.
     signal clickedOtmena();//Сигнал на отмену удаления.
+    //Функции.
     function fnClickedZakrit(){//Функция Закрытия виджета.
         root.clickedOtmena();//Запускаем сигнал Отмены удаления.
     }
@@ -42,7 +45,7 @@ Item {
             }
             //console.log(event.key);
         }
-        DCKnopkaZakrit {//@disable-check M300//Кнопка Отмены удаления.
+        DCKnopkaZakrit {//Кнопка Отмены удаления.
             id: knopkaOtmena
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
@@ -79,7 +82,7 @@ Item {
                 text: qsTr("УДАЛИТЬ:")+root.text+"?"
 				onTextChanged: {//Если текст изменился, то...
 					if(rctText.width > txtTextUdalit.width){//Если длина строки больше длины текста, то...
-                        for(let ltShag=txtTextUdalit.font.pixelSize;
+                        for(var ltShag=txtTextUdalit.font.pixelSize;
                                                 ltShag<root.ntWidth*root.ntCoff; ltShag++){
 							if(txtTextUdalit.width < rctText.width){//Если длина текста меньше динны строки
 								txtTextUdalit.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -91,7 +94,7 @@ Item {
 						}
 					}
 					else{//Если длина строки меньше длины текста, то...
-						for(let ltShag = txtTextUdalit.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения 
+                        for(let ltShag = txtTextUdalit.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
 							if(txtTextUdalit.width > rctText.width)//Если текст дилиннее строки, то...
 								txtTextUdalit.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
 						}
@@ -100,7 +103,7 @@ Item {
 			}
 			onWidthChanged: {//Если длина строки измениасть, то...
 				if(rctText.width > txtTextUdalit.width){//Если длина строки больше длины текста, то...
-				for(let ltShag=txtTextUdalit.font.pixelSize;
+                for(var ltShag=txtTextUdalit.font.pixelSize;
                                                 ltShag<root.ntWidth*root.ntCoff; ltShag++){
 						if(txtTextUdalit.width < rctText.width){//Если длина текста меньше динны строки
 							txtTextUdalit.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -119,7 +122,7 @@ Item {
 				}
 			}
         }
-        DCKnopkaOk{//@disable-check M300//Кнопка подтверждения удаления.
+        DCKnopkaOk{//Кнопка подтверждения удаления.
             id: knopkaOk
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff

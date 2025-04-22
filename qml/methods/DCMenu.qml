@@ -1,16 +1,18 @@
 ﻿import QtQuick //2.15
-//DCMenu - ШАБЛОН ВСПЛЫВАЮЩЕГО МЕНЮ НАСТРОЕК.
-import "qrc:/js/jsJSON.js" as JSMenu
 
+import "qrc:/js/jsJSON.js" as JSMenu
+//DCMenu - ШАБЛОН ВСПЛЫВАЮЩЕГО МЕНЮ НАСТРОЕК.
 Item {
     id: root
+    //Свойства.
     property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
     property string imyaMenu: ""
+    //Сигналы.
 	signal clicked(int ntNomer, var strMenu)
-
+    //Функции.
     ListView {
 		id: lsvMenu
         focus: {

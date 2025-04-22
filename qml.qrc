@@ -24,6 +24,7 @@
         <file>qml/buttons/DCKnopkaVpered.qml</file>
         <file>qml/buttons/DCKnopkaVverh.qml</file>
         <file>qml/buttons/DCKnopkaZakrit.qml</file>
+		<file>qml/buttons/qmldir</file>
         <file>qml/methods/DCLogoTMK.qml</file>
         <file>qml/methods/DCMenu.qml</file>
         <file>qml/methods/DCPassword.qml</file>
@@ -36,6 +37,7 @@
         <file>qml/methods/DCTextInput.qml</file>
         <file>qml/methods/DCTextUdalit.qml</file>
         <file>qml/methods/PathViewSpisok.qml</file>
+		<file>qml/methods/qmldir</file>
         <file>qml/pages/Stranica.qml</file>
         <file>qml/pages/StrInstrukciya.qml</file>
         <file>qml/pages/StrDannie.qml</file>
@@ -47,11 +49,12 @@
         <file>qml/pages/StrPdf.qml</file>
         <file>qml/pages/StrSpisok.qml</file>
         <file>qml/pages/StrPlan.qml</file>
+		<file>qml/zones/qmldir</file>
         <file>qml/zones/ZonaDannie.qml</file>
         <file>qml/zones/ZonaElement.qml</file>
         <file>qml/zones/ZonaFileDialog.qml</file>
         <file>qml/zones/ZonaSpisok.qml</file>
         <file>qml/buttons/DCKnopkaPlan.qml</file>
-		<file>workingdata/plan.pdf</file>
-	</qresource>
+        <file>workingdata/plan.pdf</file>
+    </qresource>
 </RCC>

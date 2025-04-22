@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     QLocale::setDefault(QLocale(QLocale::Russian, QLocale::Russia));//Настройка локали на кирилицу.
     DCCppQml odccppqml;//Создаём объект для движка, который соединит cpp с qml
     QQmlApplicationEngine engine;//Создаём движок qml после объекта C++, иначе ошибки debug при закрытии будут
+    engine.addImportPath("qrc:/qml");//Необходимо, чтоб работал qmldir в qml.
     const QUrl url(QStringLiteral("qrc:/qml/ru.WorkingDiagrams.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
@@ -28,7 +29,6 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     QQmlContext* pkornevoiKontekst = engine.rootContext();//Создаём корневой контекс
     pkornevoiKontekst->setContextProperty("cppqml", &odccppqml);//Передаём имя и объект
-
     engine.load(url);
     return app.exec();
 }

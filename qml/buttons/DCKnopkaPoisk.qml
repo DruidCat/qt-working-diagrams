@@ -1,20 +1,21 @@
 ﻿import QtQuick //2.15
 
 Item {
-    id: tmKnopkaPoisk
+    id: root
+    //Свойства.
 	property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrKnopki: "grey"
     property color clrFona: "white"
-
+    //Настройки.
     width: ntWidth*ntCoff
     height: width
-
+    //Сигналы.
 	signal clicked();
-
+    //Функции.
 	Rectangle {
         id: rctKnopkaPoisk
-        anchors.fill: tmKnopkaPoisk
+        anchors.fill: root
 
         color: clrFona
 
@@ -65,7 +66,7 @@ Item {
             id: maKnopkaPoisk
             anchors.fill: rctKnopkaPoisk
             onClicked: {
-                tmKnopkaPoisk.clicked();
+                root.clicked();
             }
         }
     } 

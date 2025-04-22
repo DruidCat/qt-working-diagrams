@@ -3,13 +3,15 @@ import "qrc:/js/jsJSON.js" as JSElement
 
 Item {
     id: root
+    //Свойства.
 	property int ntWidth: 2
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
     property bool enabled: true
+    //Сигналы
     signal clicked(int ntNomer, var strElement);//Сигнал клика на одном из элементов, передаёт номер и имя.
-
+    //Функции.
 	ListView {
 		id: lsvZona
 

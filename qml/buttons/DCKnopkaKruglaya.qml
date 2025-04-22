@@ -1,7 +1,8 @@
 ﻿import QtQuick //2.15
 
 Item{
-	id: tmKnopkaKruglaya
+    id: root
+    //Свойства.
 	property int ntWidth: 8
 	property int ntCoff: 8
 	property color clrKnopki: "grey"
@@ -10,16 +11,16 @@ Item{
 	property alias bold: txtKnopkaKruglaya.font.bold
 	property alias italic: txtKnopkaKruglaya.font.italic
 	property alias pixelSize: txtKnopkaKruglaya.font.pixelSize
-
+    //Настройки.
 	width:  ntWidth*ntCoff
 	height: width
-
+    //Сигналы.
 	signal clicked();
-
+    //Функции.
 	Rectangle{
 		id: rctKnopkaKruglaya
 		color: maKnopkaKruglaya.containsPress ?  Qt.darker(clrKnopki, 1.3) : clrKnopki
-		anchors.fill: tmKnopkaKruglaya
+        anchors.fill: root
 
 		radius: width/2//Радиус половина ширины, это круг
 		border.color: Qt.darker(clrKnopki, 1.3)//Граница круга темнее
@@ -42,7 +43,7 @@ Item{
 			id: maKnopkaKruglaya
 			anchors.fill: rctKnopkaKruglaya
 			onClicked: {
-				tmKnopkaKruglaya.clicked();
+                root.clicked();
 			}
 		}
 	}
