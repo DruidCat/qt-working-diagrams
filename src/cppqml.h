@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTime>
 #include <QTimer>
+#include <QSettings>
 
 #include "dcdb.h"// IWYU pragma: keep //Подавляет предупреждение от clang.
 #include "dcclass.h"
@@ -16,6 +17,14 @@
 
 class DCCppQml : public QObject {
     Q_OBJECT
+    Q_PROPERTY(uint	untHeight
+                    READ untHeight
+                    WRITE setUntHeight
+                    NOTIFY untHeightChanged FINAL)
+    Q_PROPERTY(uint	untWidth
+                    READ untWidth
+                    WRITE setUntWidth
+                    NOTIFY untWidthChanged FINAL)
     Q_PROPERTY(uint untNastroikiMaxLength
                     READ untNastroikiMaxLength
                     NOTIFY untNastroikiMaxLengthChanged FINAL)
@@ -116,6 +125,10 @@ public:
     explicit	DCCppQml(QObject* proditel = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
 	//---Методы Q_PROPERTY---//
+    uint		untHeight() { return m_untHeight; }//Возвращаем высоту окна.
+    void		setUntHeight(const uint& untHeight);//Изменяем высоту окна приложения.
+    uint		untWidth() { return m_untWidth; }//Возвращаем ширину окна.
+    void		setUntWidth(const uint& untWidth);//Изменяем ширину окна приложения.
     uint 		untNastroikiMaxLength() { return m_untNastroikiMaxLength; }//Максимальная длина строки текста
 
     QString		strTitul();//Получить имя Титула.
@@ -178,6 +191,8 @@ public:
 	void 		qdebug(QString strDebug);//Передаёт ошибки в QML через Q_PROPERTY.
 
 signals:
+    void untHeightChanged();//Сигнал о том, что высота окна изменилась.
+    void untWidthChanged();//Сигнал о том, что ширина окна изменилась.
     void untNastroikiMaxLengthChanged();//Сигнал о том, что максимальная длина текста изменилась.
 
     void strTitulChanged();//Сигнал о том, что имя Титула изменилось.
@@ -215,6 +230,8 @@ public	slots:
 	void slotTimerDebug();//Слот прерывания от таймена Отладчика.
 
 private:
+    uint	m_untHeight;//Высота окна приложения.
+    uint	m_untWidth;//Ширина окна приложения.
     uint	m_untNastroikiMaxLength;//Максимальная длина строки текста в Свойстве Q_PROPERTY
 
     QString m_strTitul;//аргумент элемента имени Титула в Свойстве Q_PROPERTY

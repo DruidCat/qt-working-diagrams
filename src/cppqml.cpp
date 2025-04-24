@@ -3,7 +3,10 @@
 #include <QDebug>
 
 DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
+                                        m_untHeight(640),
+                                        m_untWidth(480),
                                         m_untNastroikiMaxLength(33),
+
 										m_strTitul(""),
 										m_strTitulOpisanie(""),
 
@@ -132,6 +135,25 @@ DCCppQml::~DCCppQml(){//Деструктор.
 	m_pTimerDebug = nullptr;//Обнуляем указатель на таймер отладки.
 	delete m_pdcclass;//Удаляем указатель.
 	m_pdcclass = nullptr;//Обнуляем указатель
+}
+
+void DCCppQml::setUntHeight(const uint& untHeight) {//Изменяем высоту окна приложения.
+///////////////////////////////////////////////////
+//---И З М Е Н Е Н И Е   В Ы С О Т Ы   О К Н А---//
+///////////////////////////////////////////////////
+    if(untHeight != m_untHeight){//Если не равны значения, то...
+        m_untHeight = untHeight;//Приравниваем.
+        emit untHeightChanged();//Излучаем сигнал об изменении аргумента.
+    }
+}
+void DCCppQml::setUntWidth(const uint& untWidth) {//Изменяем ширину окна приложения.
+///////////////////////////////////////////////////
+//---И З М Е Н Е Н И Е   Ш И Р И Н У   О К Н А---//
+///////////////////////////////////////////////////
+    if(untWidth != m_untWidth){//Если не равны значения, то...
+        m_untWidth = untWidth;//Приравниваем.
+        emit untWidthChanged();//Излучаем сигнал об изменении аргумента.
+    }
 }
 QString DCCppQml::strTitul() {//Получить имя Титула.
 ///////////////////////////////////////////////
