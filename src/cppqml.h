@@ -230,6 +230,11 @@ public	slots:
 	void slotTimerDebug();//Слот прерывания от таймена Отладчика.
 
 private:
+    //---настройки-в-реестре---//
+    QSettings m_sttReestr;//Настройки программы которые будут хранится в системном реестре.
+    void ustReestr();//Запись настроек программы
+    void polReestr();//Чтение настроек программы
+
     uint	m_untHeight;//Высота окна приложения.
     uint	m_untWidth;//Ширина окна приложения.
     uint	m_untNastroikiMaxLength;//Максимальная длина строки текста в Свойстве Q_PROPERTY
