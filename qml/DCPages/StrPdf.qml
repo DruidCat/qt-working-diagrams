@@ -120,7 +120,8 @@ Item {
                 ldrProgress.active = false;//Отключаем прогресс.
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
-                knopkaPoisk.visible = true;//Делаем видимым кнопку Поиска.
+                if(!pskPoisk.visible)//Если не видим виджет поиска(например при увеличении), то...
+                    knopkaPoisk.visible = true;//Делаем видимым кнопку Поиска.
             }
         }
     }
