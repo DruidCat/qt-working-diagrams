@@ -118,7 +118,7 @@ Item {
     }
     Timer {//Таймер необходим, чтоб
         id: tmrResetScene
-        interval: 333; running: false; repeat: false
+        interval: 222; running: false; repeat: false
         onTriggered: {
             console.error("123: 7. Сброс сцены документа.")
             root.sgnProgress(64, "7/11 Сброс сцены документа.");
