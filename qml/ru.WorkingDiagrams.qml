@@ -5,12 +5,25 @@ import DCPages 1.0//Импортируем Страницы программы.
 
 ApplicationWindow {
 	id: root
+    //Свойства.
+    property int ntWidth: 4
+    property int ntCoff: 8
+    property color clrKnopok: "orange"
+    property color clrFona: "grey"
+    property color clrFaila: "yellow"
+    property color clrStranic: "black"
+    property bool pdfViewer: true//false - Отключить pdf просмоторщик.
+    property bool appRedaktor: true//false - Отключить Редактор приложения.
+    //Настройки.
+    visible: true
+	color: "grey"
+    title: qsTr("Ментор от druidcat@yandex.ru")
     width: {
         var vrWidth = Screen.desktopAvailableWidth;//Расчитываем доступную ширину экрана
         if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
             return vrWidth;//Масимально возможная ширина.
         else{
-            return vrWidth/2;//Половина ширины экрана.
+            return cppqml.untWidth;//Считываем из реестра ширину окна.
         }
     }
     height: {
@@ -18,24 +31,25 @@ ApplicationWindow {
         if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
             return vrHeight;//Масимально возможная ширина.
         else{
-            return (vrHeight/4)*3;//Половина высоты экрана.
+            return cppqml.untHeight;//Считываем из реестра высоту окна.
         }
     }
-    //minimumWidth: 480
-    //minimumHeight: 640
-
-    visible: true
-	color: "grey"
-    title: qsTr("Ментор от druidcat@yandex.ru")
-    property int ntWidth: 4
-	property int ntCoff: 8
-	property color clrKnopok: "orange"
-	property color clrFona: "grey"
-    property color clrFaila: "yellow"
-	property color clrStranic: "black"
-    property bool pdfViewer: true//false - Отключить pdf просмоторщик.
-    property bool appRedaktor: true//false - Отключить Редактор приложения.
-
+    minimumWidth: {//Минимальная ширина не для мобильных платформ.
+        if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
+            return 320;
+    }
+    minimumHeight: {//Минимальная высота не для мобильных платформ.
+        if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
+            return 240;
+    }
+    onWidthChanged: {//Если Ширина поменялась, то...
+        if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
+            cppqml.untWidth = width;//Отправляем в бизнес логику ширину окна, для обработки.
+    }
+    onHeightChanged: {//Если Высота поменялась, то...
+        if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
+            cppqml.untHeight = height;//Отправляем в бизнес логику высоту окна, для обработки.
+    }
 	StackView {
 		id: stvStr
 		property string strOpisanie: "titul"

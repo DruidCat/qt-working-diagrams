@@ -4,8 +4,8 @@
 
 DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_sttReestr("DruidCat", "Mentor"),
-                                        m_untHeight(640),
-                                        m_untWidth(480),
+                                        m_untHeight(0),
+                                        m_untWidth(0),
                                         m_untNastroikiMaxLength(33),
 
 										m_strTitul(""),
@@ -115,6 +115,8 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 				SIGNAL(timeout()),
 				this,
 				SLOT(slotTimerDebug()));//При сигнале на прерывание таймера, запускаем слот таймера.
+    //---чтение-настроек-из-реестра---//
+    polReestr();//Читаем настройки из реестра.
 }
 DCCppQml::~DCCppQml(){//Деструктор.
 //////////////////////////////
@@ -138,29 +140,24 @@ DCCppQml::~DCCppQml(){//Деструктор.
 	delete m_pdcclass;//Удаляем указатель.
 	m_pdcclass = nullptr;//Обнуляем указатель
 }
+
 void DCCppQml::ustReestr(){//Запись настроек программы
-    ///////////////////////////////////////
-    //---З А П И С Ь   Н А С Т Р О Е К---//
-    ///////////////////////////////////////
-    /*
+/////////////////////////////////////////////////////////////
+//---З А П И С Ь   Н А С Т Р О Е К   П Р И Л О Ж Е Н И Я---//
+/////////////////////////////////////////////////////////////
     m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-    m_sttReestr.setValue("/helper_shirina_okna", width());//Записываем ширину окна
-    m_sttReestr.setValue("/helper_visota_okna", height());//Записываем высоту окна
+    m_sttReestr.setValue("/shirina_okna", m_untWidth);//Записываем ширину окна
+    m_sttReestr.setValue("/visota_okna", m_untHeight);//Записываем высоту окна
     m_sttReestr.endGroup();//Закрываем группу /Настройки
-    */
 }
 void DCCppQml::polReestr(){//Чтение настроек программы
-    ///////////////////////////////////////
-    //---Ч Т Е Н И Е   Н А С Т Р О Е К---//
-    ///////////////////////////////////////
-    /*
+/////////////////////////////////////////////////////////////
+//---Ч Т Е Н И Е   Н А С Т Р О Е К   П Р И Л О Ж Е Н И Я---//
+/////////////////////////////////////////////////////////////
     m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-    int ntShirinaOkna = m_sttReestr.value("/helper_shirina_okna", width()).toInt();//Читаем ширину окна
-    int ntVisotaOkna = m_sttReestr.value("/helper_visota_okna", height()).toInt();//Читаем высоту окна
+    m_untWidth = m_sttReestr.value("/shirina_okna", 640).toInt();//Читаем ширину окна, по умолчанию 640
+    m_untHeight = m_sttReestr.value("/visota_okna", 480).toInt();//Читаем высоту окна, по умолчанию 480
     m_sttReestr.endGroup();//Закрываем группу /Настройки
-
-    resize(ntShirinaOkna, ntVisotaOkna);//Выставляем размеры окна
-    */
 }
 void DCCppQml::setUntHeight(const uint& untHeight) {//Изменяем высоту окна приложения.
 ///////////////////////////////////////////////////
