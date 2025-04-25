@@ -50,6 +50,7 @@ ApplicationWindow {
         if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
             cppqml.untHeight = height;//Отправляем в бизнес логику высоту окна, для обработки.
     }
+
 	StackView {
 		id: stvStr
 		property string strOpisanie: "titul"
@@ -98,6 +99,10 @@ ApplicationWindow {
                     root.appRedaktor = appRedaktor;//Приравниваем флаг настройки.
                 }
 			}
+            Component.onCompleted: {//После отрисовки страницы...
+                root.pdfViewer = tmMenu.pdfViewer;//Приравниваем флаг настройки. ВАЖНО.
+                root.appRedaktor = tmMenu.appRedaktor;//Приравниваем флаг настройки.
+            }
 		}
 		Stranica {//Debug
 		///////////////
@@ -352,7 +357,7 @@ ApplicationWindow {
 			clrTexta: root.clrKnopok
             clrRabOblasti: "black"
             textZagolovok: qsTr("PDF")
-			StrPdf{
+            StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
 				clrTexta: pgStrPdf.clrTexta; clrFona: pgStrPdf.clrRabOblasti

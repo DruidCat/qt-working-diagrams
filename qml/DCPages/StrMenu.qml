@@ -22,7 +22,7 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-    property bool pdfViewer: true//true - включен собственный просмотрщик.
+    property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
     property bool appRedaktor: true//true - включен Редактор приложения.
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
@@ -41,6 +41,10 @@ Item {
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
         onClicked: menuMenu.visible = false
+    }
+
+    onPdfViewerChanged: {//Если просмотрщик поменялся, то...
+        cppqml.blPdfViewer = root.pdfViewer;//Отправляем в бизнес логику просмотрщик pdf документов.
     }
 
 	Item {
