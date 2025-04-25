@@ -326,8 +326,10 @@ Item {
                 tmrPassword.running = true;//Делаем видимым поле ввода пароля через небольшую паузу.
             }
             function onSgnProgress(ntProgress, strStatus){//Изменился прогресс документа.
-                ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки документа в DCProgress.
-                ldrProgress.item.text = strStatus;//Выводим статус загрузки документа.
+                if(ldrProgress.item)
+                    ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки документа в DCProgress.
+                if(ldrProgress.item)
+                    ldrProgress.item.text = strStatus;//Выводим статус загрузки документа.
             }
         }
         Timer{//Таймер нужен, чтоб виджет успел исчезнуть и потом появиться, если пароль неверный.
@@ -364,7 +366,10 @@ Item {
 			radius: root.ntCoff/2
             from: 1; value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
-            onValueModified: pdfLoader.item.currentPage = (value-1)//Если изменение страницы пришло из виджета
+            onValueModified: {
+                pdfLoader.item.currentPage = (spbPdfPage.value-1)//Если изменение страницы пришло из виджета
+                knopkaNazad.focus = true;//Чтоб не было фокуса на DCSpinBox
+            }
 		}
         DCScale{
 			id: pdfScale

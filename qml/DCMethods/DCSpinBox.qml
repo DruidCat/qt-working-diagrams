@@ -78,7 +78,7 @@ Item {
 	}
 	function fnClickedEnter(){//Функция нажатия Enter/
 		if(txnSpinBox.text){//Если не пустая строка, то...
-            root.value = txnSpinBox.text;//Приравниваем обязательно.
+            root.value = parseInt(txnSpinBox.text);//Приравниваем обязательно.
             root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 		}
 		else//Если пустая строка, пользователь удалил число, то...
@@ -86,12 +86,12 @@ Item {
 	}
 	function fnClickedMinus(){//Функция нажатия кнопки минус.
 		if(txnSpinBox.text){//Если не пустая строка, то...
-            if(root.value !== txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
-                root.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
+            if(root.value !== parseInt(txnSpinBox.text)){//Если нет равенства, значит число вручную ввели.
+                root.value = parseInt(txnSpinBox.text);//Приравниваем, чтоб не застрять в этом неравенстве.
                 root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
-			}
+            }
 			else{//Если есть равенство, значит изменение идёт через + или -
-                if(root.value != root.from){//Если нет равенства с минимальным значением, то..
+                if(root.value !== root.from){//Если нет равенства с минимальным значением, то..
                     root.value = root.value - root.stepSize;//Уменьшаем.
 					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
                     root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
@@ -101,15 +101,15 @@ Item {
 		else{//Если пустая строка, то...
 			fnClickedEscape();//Эмулируем нажатия Escape. Выставляем прежнее значение.
 		}	
-	}
+    }
 	function fnClickedPlus(){//Функция нажатиякнопки плюс.
 		if(txnSpinBox.text){//Если не пустая строка, то...
-            if(root.value !== txnSpinBox.text){//Если нет равенства, значит число вручную ввели.
-                root.value = txnSpinBox.text;//Приравниваем, чтоб не застрять в этом неравенстве.
+            if(root.value !== parseInt(txnSpinBox.text)){//Если нет равенства, значит число вручную ввели.
+                root.value = parseInt(txnSpinBox.text);//Приравниваем, чтоб не застрять в этом неравенстве.
                 root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
 			}
 			else{//Если есть равенство, значит изменение идёт через + или -
-                if(root.value != root.to){//Если нет равенства с максимальным значением, то.
+                if(root.value !== root.to){//Если нет равенства с максимальным значением, то.
                     root.value = root.value + root.stepSize;//Увеличиваем.
 					//А отображение value в txnSpinBox.text произойдет в слоте onValueChanged
                     root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете SpinBox.
@@ -155,16 +155,21 @@ Item {
                 color: root.clrTexta
 				horizontalAlignment: TextInput.AlignHCenter
 				verticalAlignment: TextInput.AlignVCenter
+                validator: IntValidator {
+                    bottom: 0  // Минимальное значение
+                    top: root.to // Максимальное значение
+                }
+                inputMethodHints: Qt.ImhDigitsOnly//Подсказка для клавиатуры, чтобы показывать только цифры
 				//TODO Qt6 интерфейс. Закоментировать не нужный.
-
+                /*
 				validator: RegularExpressionValidator {//Чтоб не было букв.
-					regularExpression: /[0-9]+/
+                    regularExpression: /^[0-9]*$/
 				}
-
+                */
 				//TODO Qt5 Интерфейс. Закоментировать не нужный.
                 /*
                 validator: RegExpValidator {//Чтоб не было букв.
-					regExp: /[0-9]+/
+                    regExp: /^[0-9]*$/
 				}
                 */
                 text: root.value
@@ -192,10 +197,10 @@ Item {
 					}
 				}
 				onTextChanged: {//Если текст меняет пользователь вручную или кнопками.
-					var ntValue = txnSpinBox.text;//Приравниваем значение.
+                    var ntValue = parseInt(txnSpinBox.text);//Приравниваем значение.
 					if(text){//Если не пустая строка, эта важная строка, чтоб можно было вводить число.
                         if(ntValue > root.to){//Если пользователь вводит число больше заданного
-                            if(root.value != root.to){//Если нет равенства, то...
+                            if(root.value !== root.to){//Если нет равенства, то...
                                 root.value = root.to;//Выставляем максимальное значение.
                                 text = root.value;//В этом слоте,onValueChanged не срабатывает,приравнив
                                 root.valueModified();//Отправляем Сигнал, как в оригинальном SpinBox.
@@ -208,7 +213,7 @@ Item {
 							}
 						}
                         if(ntValue < root.from){//Если пользователь вводит число меньше заданного
-                            if(root.value != root.from){//Если нет равенства, то...
+                            if(root.value !== root.from){//Если нет равенства, то...
                                 root.value = root.from;//Выставляем минимальное значение.
                                 text = root.value;//В этом слоте,onValueChanged не срабатывает,приравнив
                                 root.valueModified();//Отправляем Сигнал, как в оригинальном SpinBox.
