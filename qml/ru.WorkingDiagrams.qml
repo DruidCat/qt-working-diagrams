@@ -36,11 +36,11 @@ ApplicationWindow {
     }
     minimumWidth: {//Минимальная ширина не для мобильных платформ.
         if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
-            return 320;
+            return ntWidth*ntCoff*11;//Расчёт по виджету DCSpinBox и DCScale.
     }
     minimumHeight: {//Минимальная высота не для мобильных платформ.
         if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
-            return 240;
+            return 330;
     }
     onWidthChanged: {//Если Ширина поменялась, то...
         if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...

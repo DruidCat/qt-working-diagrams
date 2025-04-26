@@ -91,7 +91,6 @@ Item {
         id: rctScale
         anchors.fill: root
         color: root.clrFona
-
         DCKnopkaMinus{//Кнопка минус.
 			id: knopkaMinus
             ntWidth: root.ntWidth
@@ -108,11 +107,10 @@ Item {
 		Rectangle {
 			id: rctTextInput
             height: root.ntWidth*root.ntCoff
-            width: height*2.5
 			anchors.verticalCenter: rctScale.verticalCenter
-			anchors.left: knopkaMinus.right
+            anchors.left: knopkaMinus.right; anchors.right: knopkaPlus.left
             anchors.margins: root.ntCoff/2
-			color: "transparent"
+            color: "transparent"
             border.color: root.clrTexta
             border.width: root.ntCoff/8
             clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
@@ -173,7 +171,7 @@ Item {
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 			anchors.verticalCenter: rctScale.verticalCenter
-            anchors.left:rctTextInput.right
+            anchors.right: rctScale.right
             anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
 			border: false
