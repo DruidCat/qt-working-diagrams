@@ -19,18 +19,15 @@ Item {
 	property int stepSize: 1//Шаг увеличения и уменьшения value
     //Настройки
     height: ntWidth*ntCoff
-    width:	height*6
+    width:	height*5
     //Сигналы.
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
     //Функции.
-	//onValueModified: console.error(value)
     onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
-		if(value < from){
+        if(value < from)
 			value = from;
-		}
-		if(value > to){
+        if(value > to)
 			value = to;
-		}
 		txnSpinBox.text = value;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
 	}
 	onFromChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
@@ -116,45 +113,35 @@ Item {
 				}
 			}
 		}
-		else{//Если пустая строка, то...
+        else//Если пустая строка, то...
 			fnClickedEscape();//Эмулируем нажатия Escape. Выставляем прежнее значение.
-		}
 	}
     Rectangle {
         id: rctSpinBox
-        anchors.centerIn: root
         anchors.fill: root
         color: root.clrFona
-
         DCKnopkaMinus{//Кнопка минус.
 			id: knopkaMinus
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-			anchors.verticalCenter: rctSpinBox.verticalCenter
-			anchors.left:rctSpinBox.left
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: rctSpinBox.verticalCenter; anchors.left:rctSpinBox.left
             anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
-			onClicked: {
-				fnClickedMinus();//Функция нажатия Минус.
-			}
+            onClicked: fnClickedMinus()//Функция нажатия Минус.
 		}
 		Rectangle {
 			id: rctTextInput
             height: root.ntWidth*root.ntCoff
-			width: height*3
 			anchors.verticalCenter: rctSpinBox.verticalCenter
-			anchors.left: knopkaMinus.right
+            anchors.left: knopkaMinus.right; anchors.right: knopkaPlus.left
             anchors.margins: root.ntCoff/2
 			color: "transparent"
 			clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
 			TextInput {//Область текста.
-				id: txnSpinBox
-				anchors.left: rctTextInput.left
-				anchors.right: rctTextInput.right
-				anchors.verticalCenter: rctTextInput.verticalCenter
+                id: txnSpinBox
+                anchors.left: rctTextInput.left; anchors.right: rctTextInput.right
+                anchors.verticalCenter: rctTextInput.verticalCenter
                 color: root.clrTexta
-				horizontalAlignment: TextInput.AlignHCenter
-				verticalAlignment: TextInput.AlignVCenter
+                horizontalAlignment: TextInput.AlignHCenter; verticalAlignment: TextInput.AlignVCenter
                 validator: IntValidator {//Вводим только цифры.
                     bottom: 0  // Минимальное значение
                     top: root.to // Максимальное значение
@@ -163,9 +150,8 @@ Item {
                 text: root.value
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
 				readOnly: false//Можно редактировать. 
-				//focus: true//Фокус на TextInput
 				selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
-				//cursorPosition: text.length;//Курсор в конец текста
+                cursorPosition: text.length;//Курсор в конец текста
 				cursorVisible: true//Курсор сделать видимым
 				Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
 					if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
@@ -219,15 +205,11 @@ Item {
 		}
         DCKnopkaPlus {//Кнопка плюс.
 			id: knopkaPlus
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-			anchors.verticalCenter: rctSpinBox.verticalCenter
-			anchors.right:rctSpinBox.right
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: rctSpinBox.verticalCenter; anchors.right:rctSpinBox.right
             anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
-			onClicked: {
-				fnClickedPlus();//Функция нажатия Плюс.
-			}
+            onClicked: fnClickedPlus()//Функция нажатия Плюс.
 		}
     }
 }
