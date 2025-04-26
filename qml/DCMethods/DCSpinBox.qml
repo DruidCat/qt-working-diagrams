@@ -24,7 +24,7 @@ Item {
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
     //Функции.
 	//onValueModified: console.error(value)
-	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
+    onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
 		if(value < from){
 			value = from;
 		}
@@ -155,23 +155,11 @@ Item {
                 color: root.clrTexta
 				horizontalAlignment: TextInput.AlignHCenter
 				verticalAlignment: TextInput.AlignVCenter
-                validator: IntValidator {
+                validator: IntValidator {//Вводим только цифры.
                     bottom: 0  // Минимальное значение
                     top: root.to // Максимальное значение
                 }
                 inputMethodHints: Qt.ImhDigitsOnly//Подсказка для клавиатуры, чтобы показывать только цифры
-				//TODO Qt6 интерфейс. Закоментировать не нужный.
-                /*
-				validator: RegularExpressionValidator {//Чтоб не было букв.
-                    regularExpression: /^[0-9]*$/
-				}
-                */
-				//TODO Qt5 Интерфейс. Закоментировать не нужный.
-                /*
-                validator: RegExpValidator {//Чтоб не было букв.
-                    regExp: /^[0-9]*$/
-				}
-                */
                 text: root.value
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
 				readOnly: false//Можно редактировать. 

@@ -92,6 +92,7 @@ Item {
     }
     function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
         pmpDoc.blScaleStart = true;//Начало масштабирования.
+        pmpDoc.goToPage(0);
         console.error("95: 5. Начало масштабирования документа.");
         root.sgnProgress(46, "5/11 Начало масштабирования документа.");
         if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
@@ -118,7 +119,7 @@ Item {
     }
     Timer {//Таймер необходим, чтоб
         id: tmrResetScene
-        interval: 222; running: false; repeat: false
+        interval: 11; running: false; repeat: false
         onTriggered: {
             console.error("123: 7. Сброс сцены документа.")
             root.sgnProgress(64, "7/11 Сброс сцены документа.");
@@ -318,4 +319,7 @@ Item {
         }
     }
     */
+    Component.onCompleted: {
+        concole.error ("Я родился, currentPage: " + root.currentPage)
+    }
 }
