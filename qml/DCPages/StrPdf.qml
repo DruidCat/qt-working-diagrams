@@ -306,7 +306,7 @@ Item {
             function onSgnDebug(strDebug){//Пришла ошибка из qml файла.
                 cppqml.strDebug = strDebug;//Отображаем ошибку.
             }
-            function onSgnVisible(){//Изменилась видимость виджета отображения pdf документа.
+            function onVisibleChanged(){//Изменилась видимость виджета отображения pdf документа.
                 if(pdfLoader.item.visible){//Виджет видимый.
                     tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
                     lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
@@ -317,8 +317,8 @@ Item {
             function onSgnCurrentPage(ntStranica){//Изменился номер страницы
                 spbPdfPage.value = ntStranica + 1//В DCSpinBox выставляем значение страницы.
             }
-            function onSgnRenderScale(rlMasshtab){//Изменился масштаб документа.
-                var ntScale = rlMasshtab*100;//Чтоб несколько раз не вызывать, так быстрее.
+            function onRenderScaleChanged(){//Изменился масштаб документа.
+                var ntScale = pdfLoader.item.renderScale*100;//Чтоб несколько раз не вызывать, так быстрее.
                 //pdfScale.from = ntScale;//Выставляем минимальное значение масштаба по уст.масштабу документа
                 pdfScale.value = ntScale;//И только после pdfScale.from выставляем значение масштаба в DCScale
             }

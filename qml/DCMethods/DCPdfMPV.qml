@@ -8,11 +8,11 @@ Item {
     property string source: ""// Свойство для установки пути к PDF
     property string password: ""//Пароль для pdf документа.
     property real renderScale: 1//Коэффициень масштаба 1.
-    property real rlMasshtab: 1//Коэффициень масштаба 1.
     property int currentPage : -1//Номер страницы устанавливаемый вне виджет(set).(не путать с ntStranica)
     property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
     property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
     property alias searchString: pmpDoc.searchString//Запрос на поиск.
+    property alias straniciVisible: rctStranici.visible//Вкл/Выкл дополнительное окно с количеством страниц.
     //Настройки
     anchors.fill: parent
     visible: false;//по умолчанию он невидимый.
@@ -21,8 +21,7 @@ Item {
     signal sgnError()//Закрываем pdf документ.
     signal sgnDebug(string strDebug)//Передаём ошибку.
     signal sgnCurrentPage(int ntStranica)//Сигнал возвращающий номер страницы документа.
-    signal sgnRenderScale(real rlMasshtab)//Cигнал возвращающий значение масштаба.
-    signal sgnPassword()//Сигнал о том, что запрашивается пароль. 
+    signal sgnPassword()//Сигнал о том, что запрашивается пароль.
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -40,13 +39,14 @@ Item {
     }
 
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
-        pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
-        root.visible = false;//Невидимый виджет.
-        root.sgnVisible();//Изменилась видимость.
-        pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
-        console.error("47: 3. Старт таймера масштабирования.");
-        root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
-        tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
+        if(!pmpDoc.blMasshtab){
+            pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
+            root.visible = false;//Невидимый виджет.
+            pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
+            console.error("47: 3. Старт таймера масштабирования.");
+            root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
+            tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
+        }
     }
     onCurrentPageChanged: {//Если страница поменялась из вне, то...
         console.error("52:Страница " + root.currentPage + " из вне.");
@@ -85,7 +85,6 @@ Item {
                 console.error("85: 4. Изменился размер окна.");
                 root.sgnProgress(37, "4/11 Изменился размер окна.")
                 root.visible = false;//Невидимым виджет делаем.
-                root.sgnVisible();//Изменилась видимость.
             }
             tmrAppSize.restart();//Таймер перезапускаем.
         }
@@ -119,7 +118,7 @@ Item {
     }
     Timer {//Таймер необходим, чтоб
         id: tmrResetScene
-        interval: 11; running: false; repeat: false
+        interval: 3; running: false; repeat: false
         onTriggered: {
             console.error("124: 7. Сброс сцены документа.")
             root.sgnProgress(64, "7/11 Сброс сцены документа.");
@@ -160,7 +159,7 @@ Item {
     }
     Timer {//Таймер необходим, чтоб pdf документ успел смаштабироваться, и можно было выставить страницу.
         id: tmrGoToPage
-        interval: 333; running: false; repeat: false
+        interval: 555; running: false; repeat: false
         onTriggered: {
             console.error("165: 9. Стоп таймера страницы.");
             root.sgnProgress(82, "9/11 Стоп таймера страницы.");
@@ -187,7 +186,6 @@ Item {
             console.error("187: Отображаем ваш документ.");
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
             root.visible = true;//Видимый виджет
-            root.sgnVisible();//Изменилась видимость.
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
@@ -214,6 +212,7 @@ Item {
         property bool blResetScene: false//false - быстрый сброс сцены при первом открытии pdf документа.
         property bool blDocVert: true//true - вертикальный документ, false - горизонтальный документ.
         property bool blScale: false//true - когда в pdf документе масштабирование произошло.
+        property bool blMasshtab: false//
         property bool blScaleAuto: true//true - автоматическое масштабирование. false - ручное масштабирование
         property bool blScaleStart: false//true - когда pdf документ изменяет масштаб.
         property bool blPinch: false//true - когда пользователь щипком изменил масштаб.
@@ -290,34 +289,29 @@ Item {
                 pmpDoc.ntPinchPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
                 pmpDoc.blPinch = true;//То это увеличение масштаба пользователем через щипок
                 root.visible = false;//Невидимый виджет.
-                root.sgnVisible();//Изменилась видимость.
             }
-            root.rlMasshtab = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
-            root.sgnRenderScale(root.rlMasshtab);//отправляем сигнал со значением масштаба
+            pmpDoc.blMasshtab = true;
+            root.renderScale = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
+            pmpDoc.blMasshtab = false;
         }
     }
     property PdfSearchModel searchModel: PdfSearchModel {
-        document: pdfDoc // модель завязана на документ внутри этого скоупа
+        document: pdfDoc//Модель завязана на документ внутри этого скоупа
     }
     function setSearchText(text) {
         searchModel.searchString = text
     }
-    /*
-    //Дополнительные элементы управления
-    Rectangle {
-        anchors.bottom: parent.bottom
-        anchors.horizontalCenter: parent.horizontalCenter
-        width: 400
-        height: 40
-        color: "lightgray"
 
+    Rectangle {//Дополнительный элементы управления.
+        id: rctStranici
+        anchors.bottom: root.bottom; anchors.horizontalCenter: root.horizontalCenter; anchors.bottomMargin: 22
+        width: 220; height: 22
+        color: "lightgray"
+        clip: true; opacity: 0.6; radius: 50
+        visible: true//Видим дополнительный элемент управления.
         Text {
-            anchors.centerIn: parent
-            text:{
-                let ltScale = Math.floor(pmpDoc.renderScale*100);
-                return "Страница "+(pmpDoc.currentPage+1)+" из "+pdfDoc.pageCount+" Масштаб "+ltScale+"%"
-            }
+            anchors.centerIn: rctStranici
+            text: qsTr("Страница ") + (pmpDoc.currentPage+1) + qsTr(" из ") + pdfDoc.pageCount
         }
     }
-    */
 }

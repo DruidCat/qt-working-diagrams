@@ -148,7 +148,7 @@ Item {
             function onSgnDebug(strDebug){//Пришла ошибка из qml файла.
                 cppqml.strDebug = strDebug;//Отображаем ошибку.
             }
-            function onSgnVisible(){//Изменилась видимость виджета отображения pdf документа.
+            function onVisibleChanged(){//Изменилась видимость виджета отображения pdf документа.
                 if(pdfLoader.item.visible){//Виджет видимый.
                     tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
                     lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
@@ -156,8 +156,8 @@ Item {
                 else//Виджет не видимый. При открытии этот флаг не изменится.
                     tmrLogo.running = true;//Запускаем таймер анимации логотипа
             }
-            function onSgnRenderScale(rlMasshtab){//Изменился масштаб документа.
-                var ntScale = rlMasshtab*100;//Чтоб несколько раз не вызывать, так быстрее.
+            function onRenderScaleChanged(){//Изменился масштаб документа.
+                var ntScale = pdfLoader.item.renderScale*100;//Чтоб несколько раз не вызывать, так быстрее.
                 //pdfScale.from = ntScale;//Выставляем минимальное значение масштаба по уст.масштабу документа
                 pdfScale.value = ntScale;//И только после pdfScale.from выставляем значение масштаба в DCScale
             }
@@ -167,8 +167,10 @@ Item {
             }
             */
             function onSgnProgress(ntProgress, strStatus){//Изменился прогресс документа.
-                ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки документа в DCProgress.
-                ldrProgress.item.text = strStatus;//Выводим статус загрузки документа.
+                if(ldrProgress.item)
+                    ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки в DCProgress.
+                if(ldrProgress.item)
+                    ldrProgress.item.text = strStatus;//Выводим статус загрузки документа.
             }
         }
         /*
