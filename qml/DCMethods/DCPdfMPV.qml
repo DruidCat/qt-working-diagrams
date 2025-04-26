@@ -17,7 +17,6 @@ Item {
     anchors.fill: parent
     visible: false;//по умолчанию он невидимый.
     //Сигналы.
-    signal sgnVisible()//Сигнал - изменилась видимость документа. А состояние отследить по visible.
     signal sgnError()//Закрываем pdf документ.
     signal sgnDebug(string strDebug)//Передаём ошибку.
     signal sgnCurrentPage(int ntStranica)//Сигнал возвращающий номер страницы документа.
@@ -26,12 +25,12 @@ Item {
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
-            var ntStrDown = root.nomerStranici + 1;
+            var ntStrDown = pmpDoc.currentPage + 1;
             if(ntStrDown < root.pageCount)
                 root.currentPage = ntStrDown;
         }
         if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
-            var ntStrUp = root.nomerStranici - 1;//-1 страница
+            var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
             if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
                 root.currentPage = ntStrUp;
         }
@@ -39,7 +38,7 @@ Item {
     }
 
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
-        if(!pmpDoc.blMasshtab){
+        if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
             pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
@@ -212,7 +211,7 @@ Item {
         property bool blResetScene: false//false - быстрый сброс сцены при первом открытии pdf документа.
         property bool blDocVert: true//true - вертикальный документ, false - горизонтальный документ.
         property bool blScale: false//true - когда в pdf документе масштабирование произошло.
-        property bool blMasshtab: false//
+        property bool blRenderScale: false//Флаг предотвращающий рекурсию root.renderScale
         property bool blScaleAuto: true//true - автоматическое масштабирование. false - ручное масштабирование
         property bool blScaleStart: false//true - когда pdf документ изменяет масштаб.
         property bool blPinch: false//true - когда пользователь щипком изменил масштаб.
@@ -290,9 +289,9 @@ Item {
                 pmpDoc.blPinch = true;//То это увеличение масштаба пользователем через щипок
                 root.visible = false;//Невидимый виджет.
             }
-            pmpDoc.blMasshtab = true;
+            pmpDoc.blRenderScale = true;//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
             root.renderScale = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
-            pmpDoc.blMasshtab = false;
+            pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг.
         }
     }
     property PdfSearchModel searchModel: PdfSearchModel {
