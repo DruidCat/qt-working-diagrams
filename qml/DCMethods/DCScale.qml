@@ -19,7 +19,7 @@ Item {
 	property int stepSize: 1
     //Настройки.
     height: ntWidth*ntCoff
-    width:	height*7
+    width:	height*5
     //Сигналы.
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
     //Функции.
@@ -89,7 +89,6 @@ Item {
 	}
     Rectangle {
         id: rctScale
-        anchors.centerIn: root
         anchors.fill: root
         color: root.clrFona
 
@@ -109,31 +108,20 @@ Item {
 		Rectangle {
 			id: rctTextInput
             height: root.ntWidth*root.ntCoff
-			width: height*4
+            width: height*2.5
 			anchors.verticalCenter: rctScale.verticalCenter
 			anchors.left: knopkaMinus.right
             anchors.margins: root.ntCoff/2
 			color: "transparent"
             border.color: root.clrTexta
             border.width: root.ntCoff/8
-			clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
-			Text {
-				anchors.verticalCenter: rctTextInput.verticalCenter
-				anchors.right: rctTextInput.right
-                anchors.margins: root.ntCoff/4
-                color: root.clrTexta
-                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
-				text: "%"
-			}
+            clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
 			TextInput {//Область текста.
 				id: txnScale
-				anchors.left: rctTextInput.left
-				anchors.right: rctTextInput.right
+                anchors.left: rctTextInput.left; anchors.right: txtProcent.left
 				anchors.verticalCenter: rctTextInput.verticalCenter
                 color: root.clrTexta
-				horizontalAlignment: TextInput.AlignHCenter
-				verticalAlignment: TextInput.AlignVCenter
-
+                horizontalAlignment: TextInput.AlignHCenter; verticalAlignment: TextInput.AlignVCenter
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
 				readOnly: true//Нельзя редактировать. 
                 text: root.value
@@ -170,13 +158,22 @@ Item {
 					}
 				}
 			}
+            Text {
+                id: txtProcent
+                anchors.verticalCenter: rctTextInput.verticalCenter
+                anchors.right: rctTextInput.right
+                anchors.margins: root.ntCoff/4
+                color: root.clrTexta
+                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
+                text: "%"
+            }
 		}
         DCKnopkaPlus {//Кнопка плюс.
 			id: knopkaPlus
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 			anchors.verticalCenter: rctScale.verticalCenter
-			anchors.right:rctScale.right
+            anchors.left:rctTextInput.right
             anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
 			border: false
