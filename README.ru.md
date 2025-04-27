@@ -65,9 +65,9 @@ https://github.com/DruidCat/qt-working-diagrams
 ## Снимки экранов
 
 ![screenshots](screenshots/ru.WorkingDiagrams.png)
-    снимок приложения Рабочие Схемы.
+	снимок приложения Ментор.
 ![screenshots](screenshots/KnopkiQML.png)
-    снимок кнопок находящихся в (qml/bottons).
+	снимок кнопок находящихся в (qml/DCBottons).
 
 ## This document in English
 
