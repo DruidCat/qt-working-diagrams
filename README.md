@@ -1,4 +1,4 @@
-﻿# Working Diagrams
+﻿# Mentor 
 
 The project provides an editor for document directories and their viewer.
 
@@ -30,14 +30,14 @@ The project has a standard application structure based on C++ and QML.
         describes the project structure for the cmake build system.
 * Catalog **[icons](icons)** contains app icons for supported screen resolutions.
 * Catalog **[qml](qml)** directory contains the QML source code and user interface resources.
-    * Catalog **[buttons](qml/buttons)** directory contains the app's buttons.
-	* Catalog **[methods](qml/methods)** directory contains the app's methods.
-    * Catalog **[pages](qml/pages)** contains application pages (Menu, List, Items, Data, Explorer).
-    * Catalog **[zones](qml/zones)** contains the main page zones (List, Items, Data, Explorer).
+	* Catalog **[DCButtons](qml/DCButtons)** directory contains the app's buttons.
+	* Catalog **[DCMethods](qml/DCMethods)** directory contains the app's methods.
+	* Catalog **[DCPages](qml/DCPages)** contains application pages (Menu, List, Items, Data, Explorer).
+	* Catalog **[DCZones](qml/DCZones)** contains the main page zones (List, Items, Data, Explorer).
     * File **[ru.WorkingDiagrams.qml](qml/ru.WorkingDiagrams.qml)**
                 provides an implementation of the application window.
 * Catalog **[js](js)** contains java script files.
-    * File **[DCFunkciiJS.js](js/DCFunkciiJS.js)**
+	* File **[jsJSON.js](js/jsJSON.js)**
                 functions written in java script.
 * Catalog **[src](src)** directory contains the C++source code.
     * File **[main.cpp](src/main.cpp)** is the entry point to the app.
@@ -51,14 +51,16 @@ The project is compatible with:
 
 * Windows 7, 8, 10, 11.
 * GNU/Linux.
+* MacOS.
 * Android.
+* iOS.
 
 ## How the app works
 
 - [DCDB](src/dcdb.h) a class that works with an SQL database.
 - [DCDBData](src/dcdbdata.h) a class that works with files written to an SQL database.
 - [DCCppQml](src/cppqml.h) a class that is a driver that allows C++ and QML code to work with each other.
-- [Stranica](qml/pages/Stranica.qml) main template for the program interface.
+- [Stranica](qml/DCPages/Stranica.qml) main template for the program interface.
 
 ## Screenshots
 
