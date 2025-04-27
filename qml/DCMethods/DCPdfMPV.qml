@@ -158,7 +158,7 @@ Item {
     }
     Timer {//Таймер необходим, чтоб pdf документ успел смаштабироваться, и можно было выставить страницу.
         id: tmrGoToPage
-        interval: 555; running: false; repeat: false
+        interval: 777; running: false; repeat: false
         onTriggered: {
             console.error("163: 9. Стоп таймера страницы.");
             root.sgnProgress(82, "9/11 Стоп таймера страницы.");
@@ -205,7 +205,7 @@ Item {
 
     PdfMultiPageView {
         id: pmpDoc
-        anchors.fill: parent
+        anchors.fill: root
         searchString: ""
         //Иннициализация Свойств при каждой загрузке, от сюда берутся первоначальные данные Свойств.
         property bool blResetScene: false//false - быстрый сброс сцены при первом открытии pdf документа.
@@ -262,26 +262,48 @@ Item {
             root.sgnCurrentPage(pmpDoc.currentPage)//Сигнал с номером страницы отсылаем.
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
-            console.error("265:PdfPageStatus.vvv");
             if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
-                console.error("267: Рендера страницы: " + pmpDoc.currentPage + " Загрузка.");
+                console.error("266: Рендер страницы: " + pmpDoc.currentPage + " Загрузка.");
             }
-            if(pmpDoc.currentPageRenderingStatus === Image.Ready){//Статус рендеринга страницы ОТКРЫТ.
-                console.error("270: Рендера страницы: " + pmpDoc.currentPage + " Открыт.");
-                if(!pmpDoc.blScale){//Если стартового масштабирование не было, то...
-                    pmpDoc.blScale = true;//Активируем флаг, что началось первичное масштабирование.
-                    console.error("273: 3. Старт таймера масштабирования.");
-                    root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
-                    pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
-                    tmrScale.running = true;//запускаем таймер, перед переходом на страницу
+            else{//Если не загружается страница, то...
+                if(pmpDoc.currentPageRenderingStatus === Image.Ready){//Статус рендеринга страницы ОТКРЫТ.
+                    console.error("270: Рендер страницы: " + pmpDoc.currentPage + " Открыт.");
+                    if(!pmpDoc.blScale){//Если стартового масштабирование не было, то...
+                        pmpDoc.blScale = true;//Активируем флаг, что началось первичное масштабирование.
+                        console.error("273: 3. Старт таймера масштабирования.");
+                        root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
+                        pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером
+                        tmrScale.running = true;//запускаем таймер, перед переходом на страницу
+                    }
+                    else{//Если это не первичное масштабирование, то...
+                        if(pmpDoc.blPinch){//Если щипок был,то страница отрендерилась и нужно сбрасывать сцену
+                            pmpDoc.goToPage(0);//Переходим на первую страницу, потом goTo на заданную страницу
+                            console.error("281: 6. Окончание масштабирования документа.")
+                            root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
+                            tmrResetScene.running = true;//запускаем таймер, сброса сцены.
+                        }
+                    }
+                }
+                else{//Если не открылась страница, то...
+                    if(pmpDoc.currentPageRenderingStatus === Image.Error){//Статус рендеринга страницы ОШИБКА.
+                        console.error("289: Рендер страницы: " + pmpDoc.currentPage + " Ошибка.");
+                        console.error("290: 11. Ошибка рендера страницы.");
+                        root.sgnProgress(100, "11/11 Ошибка рендера страницы.");
+                        root.sgnDebug(qsTr("Ошибка рендера страницы."));//Передаём ошибку.
+                        root.sgnError();//Закрываем документ.
+                    }
+                    else{
+                        if(pmpDoc.currentPageRenderingStatus === Image.Null){//Статус рендеринга страницы Null
+                            console.error("297: Рендер страницы: " + pmpDoc.currentPage + " Null.");
+                            console.error("298: 11. Рендера страницы Null.");
+                            root.sgnProgress(100, "11/11 Рендера страницы Null.");
+                            root.sgnDebug(qsTr("Рендера страницы Null."));//Передаём ошибку.
+                            root.sgnError();//Закрываем документ.
+                        }
+                    }
                 }
             }
-            if(pmpDoc.blPinch){//Если щипок был, то страница отрендерилась и нужно сбрасывать сцену.
-                pmpDoc.goToPage(0);//Переходим на первую страницу, чтоб потом перейти на заданную страницу.
-                console.error("281: 6. Окончание масштабирования документа.")
-                root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
-                tmrResetScene.running = true;//запускаем таймер, сброса сцены.
-            }
+
         }
         onRenderScaleChanged: {//Если масштаб изменился, то...
             if(!pmpDoc.blScaleStart){//Если не была запущена функция масштабирования fnScale(), то...
