@@ -218,8 +218,7 @@ Item {
             visible: true
             clrTexta: root.clrTexta; clrFona: root.clrFona
             radius: root.ntCoff/2
-            from: 25; to: 200; value: 100; stepSize: 25
-            scale.cursorVisible: true;//Делаем курсор видимым обязательно.
+            from: 1; to: 200; value: 100; stepSize: 25
             onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
         }
     }

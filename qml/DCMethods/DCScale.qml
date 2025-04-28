@@ -5,12 +5,12 @@ import DCButtons 1.0//Импортируем кнопки
 Item {
     id: root
     //Свойства.
-	property alias scale: txnScale//Передаём в виде свойства весь объект TextInput
+    property alias scale: txtScale//Передаём в виде свойства весь объект TextInput
     property alias radius: rctScale.radius//Радиус рабочей зоны
     property color clrFona: "transparent"//цвет текста
 	property color clrTexta: "orange"
-    property alias bold: txnScale.font.bold
-    property alias italic: txnScale.font.italic
+    property alias bold: txtScale.font.bold
+    property alias italic: txtScale.font.italic
     property int  ntWidth: 2
     property int ntCoff: 8
 	property int value: 0
@@ -31,7 +31,7 @@ Item {
 		if(value > to){
 			value = to;
         }
-		txnScale.text = value;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
+        txtScale.text = value;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
 	}
 	onFromChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
 		if(from < 0){//С отрицательными числами DCScale не работает.
@@ -76,14 +76,14 @@ Item {
 	function fnClickedMinus(){//Функция нажатия кнопки минус.
         if(root.value > root.from){//Если нет равенства с минимальным значением, то..
             root.value = root.value - root.stepSize;//Уменьшаем.
-			//А отображение value в txnScale.text произойдет в слоте onValueChanged
+            //А отображение value в txtScale.text произойдет в слоте onValueChanged
             root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете Scale.
 		}
 	}
 	function fnClickedPlus(){//Функция нажатия кнопки плюс.
         if(root.value < root.to){//Если нет равенства с максимальным значением, то.
             root.value = root.value + root.stepSize;//Увеличиваем.
-			//А отображение value в txnScale.text произойдет в слоте onValueChanged
+            //А отображение value в txtScale.text произойдет в слоте onValueChanged
             root.valueModified();//Отправляем Сигнал, как в оригинальном  виджете Scale.
 		}
 	}
@@ -114,22 +114,18 @@ Item {
             border.color: root.clrTexta
             border.width: root.ntCoff/8
             clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
-			TextInput {//Область текста.
-				id: txnScale
+            Text {//Область текста.
+                id: txtScale
                 anchors.left: rctTextInput.left; anchors.right: txtProcent.left
 				anchors.verticalCenter: rctTextInput.verticalCenter
                 color: root.clrTexta
-                horizontalAlignment: TextInput.AlignHCenter; verticalAlignment: TextInput.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
-				readOnly: true//Нельзя редактировать. 
                 text: root.value
-				Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-					//console.error(event.key);
-				}
 				onTextChanged: {//Если текст меняет пользователь вручную или кнопками.
-					var ntValue = txnScale.text;//Приравниваем значение.
+                    let ntValue = parseInt(txtScale.text);//Приравниваем значение.
                     if(ntValue > root.to){//Если пользователь вводит число больше заданного
-                        if(root.value != root.to){//Если нет равенства, то...
+                        if(root.value !== root.to){//Если нет равенства, то...
                             root.value = root.to;//Выставляем максимальное значение.
                             text = root.value;//В этом слоте,onValueChanged не срабатывает,приравнив
                             root.valueModified();//Отправляем Сигнал, как в оригинальном Scale.
@@ -142,7 +138,7 @@ Item {
 						}
 					}
                     if(ntValue < root.from){//Если пользователь вводит число меньше заданного
-                        if(root.value != root.from){//Если нет равенства, то...
+                        if(root.value !== root.from){//Если нет равенства, то...
                             root.value = root.from;//Выставляем минимальное значение.
                             text = root.value;//В этом слоте,onValueChanged не срабатывает,приравнив
                             root.valueModified();//Отправляем Сигнал, как в оригинальном Scale.
