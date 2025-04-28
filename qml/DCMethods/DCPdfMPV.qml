@@ -121,6 +121,15 @@ Item {
         onTriggered: {
             console.error("122: 7. Сброс сцены документа.")
             root.sgnProgress(64, "7/11 Сброс сцены документа.");
+            /*
+            const curPage   = pmpDoc.currentPage
+            const curScale  = pmpDoc.renderScale
+            const curPoint  = Qt.point(0, 0)      // можно сохранить scroll-offset
+            Qt.callLater(function() {
+                    pmpDoc.renderScale = curScale+0.001
+                    pmpDoc.goToLocation(curPage, curPoint, curScale)
+            })
+            */
             //Это быстрый способ сброса сцены, но с ошибками в консоли, так как документ обнуляется.
             let doc = pmpDoc.document;//Запоминаем pdf документ.
             pmpDoc.document = null;//Выставляем нулевой документ, и тем самым сбрасываем сцену.
