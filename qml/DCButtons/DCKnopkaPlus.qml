@@ -1,4 +1,5 @@
 ﻿import QtQuick //2.15
+//import QtQuick.Handlers//Не требуется в Qt 6.2+
 
 Item{
     id: root
@@ -14,11 +15,18 @@ Item{
     //Сигналы.
     signal clicked();
     //Функции.
+    //Для Авроры комментируем TapHandler, расскомментируем MouseArea.
+    TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
+            id: tphKnopkaPlus
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad | PointerDevice.Stylus
+            onTapped: root.clicked()
+    }
     Rectangle {
         id: rctKnopkaPlus
         anchors.fill: root
 
-        color: maKnopkaPlus.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
+        color: tphKnopkaPlus.pressed ? Qt.darker(clrFona, 1.3) : clrFona
+        //color: maKnopkaPlus.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
         radius: root.width/4
 
         Rectangle {
@@ -27,7 +35,8 @@ Item{
             width: height*3
             anchors.centerIn: rctKnopkaPlus
 
-            color: maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: tphKnopkaPlus.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaPlus.width/4
         }
 		Rectangle {
@@ -36,9 +45,12 @@ Item{
             height: width*3
             anchors.centerIn: rctKnopkaPlus
 
-            color: maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: tphKnopkaPlus.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaPlus.width/4
         }
+        /*
+        //Для Авроры комментируем TapHandler, расскомментируем MouseArea.
         MouseArea {
             id: maKnopkaPlus
             anchors.fill: rctKnopkaPlus
@@ -46,11 +58,13 @@ Item{
                 root.clicked();
             }
         }
+        */
 	}
 	Component.onCompleted: {
         if(root.border){
-			rctKnopkaPlus.border.color = maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            rctKnopkaPlus.border.color = tphKnopkaPlus.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //rctKnopkaPlus.border.color = maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             rctKnopkaPlus.border.width = root.width/8/4;
 		}
-	} 
+    }
 }
