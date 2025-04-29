@@ -11,10 +11,14 @@ Item {
     property bool enabled: true
     //Сигналы.
     signal clicked(int ntNomer, var strDannie);//Сигнал клика на одном из Документов, передаёт номер и имя.
+    signal tap();//Сигнал нажатия не на элементы.
     //Функции.
 	ListView {
 		id: lsvZona
-
+        TapHandler {//Нажимаем не на элементы, а на пустую область.
+            id: tphTap
+            onTapped: root.tap()
+        }
         Component {//Компонент читающий из Модели, и создающий поочереди каждый Документ с настройками.
 			id: cmpZona
 			Rectangle {

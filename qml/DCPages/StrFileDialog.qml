@@ -163,6 +163,7 @@ Item {
                         }
                     }
                 }
+                onTap: fnClickedEscape();//Если нажали на пустое место.
             }
             DCMenu {
                 id: menuFileDialog

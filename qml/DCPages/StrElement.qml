@@ -300,7 +300,8 @@ Item {
                         }
 					}
 				}
-			}	
+                onTap: fnClickedEscape();//Если нажали на пустое место.
+            }
             DCMenu {
 				id: menuElement
 				visible: false//Невидимое меню. 
