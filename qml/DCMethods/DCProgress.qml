@@ -14,6 +14,9 @@ Item {
     //Настройки.
     visible:  true//Видимость процесса загрузки.
     //Функции.
+    onProgressChanged: {
+        rctProgress.width = root.progress * root.width/100;//Задаём длину прогресса.
+    }
     Text {
         id: txtProgress
         z: 1
@@ -55,18 +58,16 @@ Item {
     }
     Timer {
         id: tmrProgress
-        interval: 1100; repeat: true;
-        running: true
+        interval: 1100; repeat: true; running: true
         onTriggered: {//Срабатывает таймер.
-            if(root.progress <= 100){//Если меньше 100%
+            if(root.progress <= 100)//Если меньше 100%
                 root.progress += 1;//+1
-                rctProgress.width = root.progress * root.width/100;//Задаём длину прогресса.
-            }
-            else{//Если больше 100, то...
-                rctProgress.width = 1;//Длину прогресса сбрасываем до 0
-                root.progress = 0;//Обнуляем счётчик.
+            else//Если больше 100, то...
                 root.running = false;//Отключаем таймер.
-            }
+        }
+        onRunningChanged: {
+            if(!running)
+                root.progress = 0;//Обнуляем счётчик.
         }
     }
 }

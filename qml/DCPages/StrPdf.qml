@@ -266,7 +266,7 @@ Item {
         Loader {//Loader динамической загрузки PDF Viewer
             id: pdfLoader
             //Свойства.
-            property string strPdfPut: ""//Путь к pdf документу, который нужно открыть или пустой путь, чтоб закрыть.
+            property string strPdfPut: ""//Путь к документу,который нужно открыть или пустой путь,чтоб закрыть
             property bool blClose: true//true - закрываем документ.
             //Настройки.
             anchors.fill: tmZona
@@ -322,7 +322,7 @@ Item {
             }
             function onSgnProgress(ntProgress, strStatus){//Изменился прогресс документа.
                 if(ldrProgress.item)
-                    ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки документа в DCProgress.
+                    ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки в DCProgress.
                 if(ldrProgress.item)
                     ldrProgress.item.text = strStatus;//Выводим статус загрузки документа.
             }
