@@ -1,4 +1,5 @@
 ﻿import QtQuick //2.15
+//import QtQuick.Handlers//Не требуется в Qt 6.2+
 
 Item {
     id: root
@@ -14,12 +15,25 @@ Item {
     //Сигналы.
 	signal clicked();
     //Функции.
-	Rectangle{
+    //Для Авроры комментируем TapHandler, расскомментируем MouseArea и наоборот.
+    TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
+            id: tphKnopkaNastroiki
+            onTapped: root.clicked()
+    }
+    /*
+    MouseArea {
+        id: maKnopkaNastroiki
+        anchors.fill: root
+        onClicked: root.clicked()
+    }
+    */
+    Rectangle{
 		id: rctKnopkaNastroiki
         anchors.fill: root
-		color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
 
-		Rectangle{
+        color: tphKnopkaNastroiki.pressed ? Qt.darker(clrFona, 1.3) : clrFona
+        //color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
+        Rectangle{
 			id: rctKnopkaLevo
             visible: blVert ? false : true
             width: rctKnopkaNastroiki.width/4
@@ -27,8 +41,9 @@ Item {
 			anchors.verticalCenter: rctKnopkaNastroiki.verticalCenter
 			anchors.left: rctKnopkaNastroiki.left
 
-			color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-			radius: rctKnopkaNastroiki.width/2//Круг
+            color: tphKnopkaNastroiki.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            radius: rctKnopkaNastroiki.width/2//Круг
 		}
 
 		Rectangle{
@@ -37,8 +52,9 @@ Item {
 			height: rctKnopkaNastroiki.width/4
 			anchors.centerIn: rctKnopkaNastroiki
 
-			color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-			radius: rctKnopkaNastroiki.width/2//Круг
+            color: tphKnopkaNastroiki.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            radius: rctKnopkaNastroiki.width/2//Круг
 		}
 
 		Rectangle{
@@ -49,8 +65,9 @@ Item {
 			anchors.verticalCenter: rctKnopkaNastroiki.verticalCenter
 			anchors.right: rctKnopkaNastroiki.right
 
-			color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-			radius: rctKnopkaNastroiki.width/2//Круг
+            color: tphKnopkaNastroiki.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            radius: rctKnopkaNastroiki.width/2//Круг
 		}
 
         Rectangle{
@@ -61,7 +78,8 @@ Item {
             anchors.horizontalCenter: rctKnopkaNastroiki.horizontalCenter
             anchors.top: rctKnopkaNastroiki.top
 
-            color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: tphKnopkaNastroiki.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaNastroiki.width/2//Круг
         }
         Rectangle{
@@ -72,15 +90,9 @@ Item {
             anchors.horizontalCenter: rctKnopkaNastroiki.horizontalCenter
             anchors.bottom: rctKnopkaNastroiki.bottom
 
-            color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: tphKnopkaNastroiki.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaNastroiki.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaNastroiki.width/2//Круг
-        }
-        MouseArea {
-            id: maKnopkaNastroiki
-            anchors.fill: rctKnopkaNastroiki
-            onClicked: {
-                root.clicked();
-            }
-        }
+        } 
 	}	
 }

@@ -1,4 +1,5 @@
 ﻿import QtQuick //2.15
+//import QtQuick.Handlers//Не требуется в Qt 6.2+
 
 Item {
     id: root
@@ -14,13 +15,26 @@ Item {
     //Сигналы.
 	signal clicked();
     //Функции.
-	Rectangle{
+    //Для Авроры комментируем TapHandler, расскомментируем MouseArea и наоборот.
+    TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
+            id: tphKnopkaSozdat
+            onTapped: root.clicked()
+    }
+    /*
+    MouseArea {
+        id: maKnopkaSozdat
+        anchors.fill: root
+        onClicked: root.clicked()
+    }
+    */
+    Rectangle{
 		id: rctKnopkaKrug
         anchors.fill: root
 
-		color: maKnopkaSozdat.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-		border.color: Qt.darker(clrKnopki, 1.3)//Граница кнопки чуть темнее
-		border.width: 1//Ширина границы
+        color: tphKnopkaSozdat.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        //color: maKnopkaSozdat.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        border.color: Qt.darker(clrKnopki, 1.3)//Граница кнопки чуть темнее
+        border.width: 1//Ширина границы
         radius: blKrug ? width/2 : 1
 		smooth: true//Сглаживание
 	}
@@ -31,7 +45,8 @@ Item {
         height: root.width/8
         anchors.centerIn: root
 
-		color: maKnopkaSozdat.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
+        color: tphKnopkaSozdat.pressed ? Qt.darker(clrFona, 1.3) : clrFona
+        //color: maKnopkaSozdat.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
         radius: root.width/4
 	}
 
@@ -41,15 +56,8 @@ Item {
         height: root.width/2
         anchors.centerIn: root
 
-		color: maKnopkaSozdat.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
+        color: tphKnopkaSozdat.pressed ? Qt.darker(clrFona, 1.3) : clrFona
+        //color: maKnopkaSozdat.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
         radius: root.width/4
-	}
-
-	MouseArea {
-		id: maKnopkaSozdat
-        anchors.fill: rctKnopkaKrug
-		onClicked: {
-            root.clicked();
-		}
-	}
+	}	
 }

@@ -15,12 +15,18 @@ Item{
     //Сигналы.
     signal clicked();
     //Функции.
-    //Для Авроры комментируем TapHandler, расскомментируем MouseArea.
+    //Для Авроры комментируем TapHandler, расскомментируем MouseArea и наоборот.
     TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
             id: tphKnopkaPlus
-            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad | PointerDevice.Stylus
             onTapped: root.clicked()
     }
+    /*
+    MouseArea {
+        id: maKnopkaPlus
+        anchors.fill: root
+        onClicked: root.clicked()
+    }
+    */
     Rectangle {
         id: rctKnopkaPlus
         anchors.fill: root
@@ -48,17 +54,7 @@ Item{
             color: tphKnopkaPlus.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             //color: maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             radius: rctKnopkaPlus.width/4
-        }
-        /*
-        //Для Авроры комментируем TapHandler, расскомментируем MouseArea.
-        MouseArea {
-            id: maKnopkaPlus
-            anchors.fill: rctKnopkaPlus
-            onClicked: {
-                root.clicked();
-            }
-        }
-        */
+        } 
 	}
 	Component.onCompleted: {
         if(root.border){

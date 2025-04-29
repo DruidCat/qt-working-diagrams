@@ -1,4 +1,5 @@
 ﻿import QtQuick //2.15
+//import QtQuick.Handlers//Не требуется в Qt 6.2+
 
 Item{
     id: root
@@ -13,11 +14,24 @@ Item{
     //Сигналы.
 	signal clicked();
     //Функции.
-	Rectangle{
+    //Для Авроры комментируем TapHandler, расскомментируем MouseArea и наоборот.
+    TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
+            id: tphKnopkaMenu
+            onTapped: root.clicked()
+    }
+    /*
+    MouseArea {
+        id: maKnopkaMenu
+        anchors.fill: root
+        onClicked: root.clicked()
+    }
+    */
+    Rectangle{
 		id: rctKnopkaMenu
         anchors.fill: root
 
-		color: maKnopkaMenu.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
+        color: tphKnopkaMenu.pressed ? Qt.darker(clrFona, 1.3) : clrFona
+        //color: maKnopkaMenu.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
 
 		Rectangle{
 			id: rctKnopkaVerh
@@ -26,8 +40,9 @@ Item{
 			anchors.top: rctKnopkaMenu.top
 			anchors.left: rctKnopkaMenu.left
 
-			color: maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-			radius: rctKnopkaMenu.width/4
+            color: tphKnopkaMenu.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            radius: rctKnopkaMenu.width/4
 		}
 
 		Rectangle{
@@ -37,8 +52,9 @@ Item{
 			anchors.verticalCenter: rctKnopkaMenu.verticalCenter
 			anchors.left: rctKnopkaMenu.left
 
-			color: maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-			radius: rctKnopkaMenu.width/4
+            color: tphKnopkaMenu.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            radius: rctKnopkaMenu.width/4
 		}
 
 		Rectangle{
@@ -48,15 +64,9 @@ Item{
 			anchors.bottom: rctKnopkaMenu.bottom
 			anchors.left: rctKnopkaMenu.left
 
-			color: maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-			radius: rctKnopkaMenu.width/4
-        }
-        MouseArea {
-            id: maKnopkaMenu
-            anchors.fill: rctKnopkaMenu
-            onClicked: {
-                root.clicked();
-            }
-        }
+            color: tphKnopkaMenu.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            radius: rctKnopkaMenu.width/4
+        } 
 	}	
 }
