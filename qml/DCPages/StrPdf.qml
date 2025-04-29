@@ -34,28 +34,22 @@ Item {
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
 			if(txnZagolovok.visible)//Если строка ввода запроса на поиск видима, то...
 				fnClickedZakrit();//Закрываем эту строку
+            event.accepted = true;//Завершаем обработку эвента.
         }
         if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
-            if(root.focus){//Необходимо, чтоб не срабатывало два эвента от StrPdf.qml и от DCPdfMPV.qml
-                var ntStrDown = pdfLoader.item.nomerStranici + 1;
-                if(ntStrDown < pdfLoader.item.pageCount)
-                    pdfLoader.item.currentPage = ntStrDown;
-            }
+            var ntStrDown = pdfLoader.item.nomerStranici + 1;
+            if(ntStrDown < pdfLoader.item.pageCount)
+                pdfLoader.item.currentPage = ntStrDown;
+            event.accepted = true;//Завершаем обработку эвента.
         }
 		if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
-            if(root.focus){//Необходимо, чтоб не срабатывало два эвента от StrPdf.qml и от DCPdfMPV.qml
-                var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
-                if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                    pdfLoader.item.currentPage = ntStrUp;
-            }
-		}
+            var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
+            if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+                pdfLoader.item.currentPage = ntStrUp;
+            event.accepted = true;//Завершаем обработку эвента.
+        }
         //cppqml.strDebug = event.key;
     }
-    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: root
-        //onClicked:
-    }
-
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
         spbPdfPage.value = 1;//Задаём первую страницу в DCSpinBox до открытия документа по умолчанию, ВАЖНО!
         pdfLoader.strPdfPut = urlPdfPut;//Устанавливаем путь.
@@ -173,8 +167,8 @@ Item {
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
 						if(!pskPoisk.visible){//Если не открыли Режим поиска, то...
 							knopkaNazad.visible = true;//Кнопка назад видимая.
-							knopkaPoisk.visible = true;//Конопка Поиск Видимая.
-							knopkaPoisk.focus = true;//Фокус на кнопке Информация, чтоб не работал Enter.
+                            knopkaNazad.focus = true;//Фокус на кнопке Назад, чтоб не работал Enter.
+                            knopkaPoisk.visible = true;//Конопка Поиск Видимая.
                         	txnZagolovok.text = "";//Текст обнуляем вводимый.
 						}
 					}
@@ -211,8 +205,8 @@ Item {
                 knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                 knopkaOk.visible = false;//Кнопка Ок Невидимая.
 				knopkaNazad.visible = true;//Кнопка назад видимая.
-				knopkaPoisk.visible = true;//Конопка Поиск Видимая.
-				knopkaPoisk.focus = true;//Фокус на кнопке поиск, чтоб не работал Enter.
+                knopkaNazad.focus = true;//Фокус на кнопке Назад, чтоб не работал Enter.
+                knopkaPoisk.visible = true;//Конопка Поиск Видимая.
                 txnZagolovok.text = "";//Текст обнуляем вводимый.
                 pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
             }
@@ -279,7 +273,7 @@ Item {
             source: pdfLoader.blClose ? "" : "qrc:/qml/DCMethods/DCPdfMPV.qml"//Указываем путь отдельному QMl
             active: false//не активирован.
 
-            onLoaded: {
+            onLoaded: { 
                 pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
                 pdfLoader.item.source = pdfLoader.strPdfPut;// Устанавливаем путь к PDF
             }

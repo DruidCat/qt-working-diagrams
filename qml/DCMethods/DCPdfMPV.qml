@@ -15,7 +15,7 @@ Item {
     property alias straniciVisible: rctStranici.visible//Вкл/Выкл дополнительное окно с количеством страниц.
     //Настройки
     anchors.fill: parent
-    visible: false;//по умолчанию он невидимый.
+    visible: false//по умолчанию он невидимый.
     //Сигналы.
     signal sgnError()//Закрываем pdf документ.
     signal sgnDebug(string strDebug)//Передаём ошибку.
@@ -29,11 +29,13 @@ Item {
             var ntStrDown = pmpDoc.currentPage + 1;
             if(ntStrDown < root.pageCount)
                 root.currentPage = ntStrDown;
+            event.accepted = true;//Завершаем обработку эвента.
         }
         if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
             var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
             if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
                 root.currentPage = ntStrUp;
+            event.accepted = true;//Завершаем обработку эвента.
         }
         //cppqml.strDebug = event.key;
     }
@@ -199,6 +201,7 @@ Item {
             console.error("185: Отображаем ваш документ.");
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
             root.visible = true;//Видимый виджет
+            forceActiveFocus();//Виджет видимый, форсируем фокус, чтоб event работал.
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
