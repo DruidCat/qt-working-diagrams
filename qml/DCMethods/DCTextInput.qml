@@ -190,27 +190,29 @@ Item {
 		}
 	}
 	onTextChanged: {//Если изменилcя вводимый текст, то...
-		if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
-			if(txnTextInput.visible){//Если текст становится видимым, то...
-				if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста,то
-                    for(var ltShag = txnTextInput.font.pixelSize;
-									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
-						if(txnTextInput.width < rctTextInput.width){//длина текста < динны строки
-							txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-							if(txnTextInput.width > rctTextInput.width){//Но, если переборщили
-								txnTextInput.font.pixelSize--;//То уменьшаем размер шрифта и...
-								return;//Выходим из увеличения шрифта.
-							}
-						}
-					}
-				}
-				else{//Если длина строки меньше длины текста, то...
-					for(let ltShag = txnTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
-						if(txnTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
-							txnTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-					}
-				}
-			}
-		}
+        Qt.callLater(function() {//Чтоб успела посчитаться длина строки вставленного текста.
+            if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
+                if(txnTextInput.visible){//Если текст становится видимым, то...
+                    if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста,то
+                        for(var ltShag = txnTextInput.font.pixelSize;
+                                        ltShag < rctTextInput.height-root.ntCoff; ltShag++){
+                            if(txnTextInput.width < rctTextInput.width){//длина текста < динны строки
+                                txnTextInput.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                                if(txnTextInput.width > rctTextInput.width){//Но, если переборщили
+                                    txnTextInput.font.pixelSize--;//То уменьшаем размер шрифта и...
+                                    return;//Выходим из увеличения шрифта.
+                                }
+                            }
+                        }
+                    }
+                    else{//Если длина строки меньше длины текста, то...
+                        for(let ltShag = txnTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
+                            if(txnTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
+                                txnTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                        }
+                    }
+                }
+            }
+        })
 	}	
 }
