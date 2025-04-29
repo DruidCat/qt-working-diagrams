@@ -20,6 +20,7 @@ Item {
     signal sgnError()//Закрываем pdf документ.
     signal sgnDebug(string strDebug)//Передаём ошибку.
     signal sgnCurrentPage(int ntStranica)//Сигнал возвращающий номер страницы документа.
+    signal sgnScaleMin(real rlScaleMin)//Сигнал возвращающий минимальный масштаб страницы.
     signal sgnPassword()//Сигнал о том, что запрашивается пароль.
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
     //Функции.
@@ -45,6 +46,10 @@ Item {
             console.error("45: 3. Старт таймера масштабирования.");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
             tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
+        }
+        else{//Если внутреннее изменение масштаба, то...
+            if(pmpDoc.blScaleAuto)//Если это автоматическое изменение масштаба, то...
+                    root.sgnScaleMin(pmpDoc.renderScale);//Передаём значение минимального масштаба.
         }
     }
     onCurrentPageChanged: {//Если страница поменялась из вне, то...
@@ -322,7 +327,7 @@ Item {
             }
             pmpDoc.blRenderScale = true;//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
             root.renderScale = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
-            pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг.
+            pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг. 
         }
     }
     property PdfSearchModel searchModel: PdfSearchModel {

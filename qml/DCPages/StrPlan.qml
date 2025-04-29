@@ -157,9 +157,10 @@ Item {
                     tmrLogo.running = true;//Запускаем таймер анимации логотипа
             }
             function onRenderScaleChanged(){//Изменился масштаб документа.
-                var ntScale = pdfLoader.item.renderScale*100;//Чтоб несколько раз не вызывать, так быстрее.
-                //pdfScale.from = ntScale;//Выставляем минимальное значение масштаба по уст.масштабу документа
-                pdfScale.value = ntScale;//И только после pdfScale.from выставляем значение масштаба в DCScale
+                pdfScale.value = pdfLoader.item.renderScale*100;//Выставляем значение масштаба в DCScale
+            }
+            function onSgnScaleMin(rlScaleMin){//Изменился минимальный масштаб документа.
+                pdfScale.from = rlScaleMin*100;//Выставляем минимальное значение масштаба документа в DCScale.
             }
             /*
             function onSgnPassword(){//Произошёл запрос на ввод пароля.
