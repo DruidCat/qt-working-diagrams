@@ -41,7 +41,7 @@ Item {
 				}
 				Component.onCompleted:{//Когда текст отрисовался, нужно выставить размер шрифта.
 					if(rctZona.width > txtText.width){//Если длина строки больше длины текста, то...
-                        for(let ltShag=txtText.font.pixelSize; ltShag<rctZona.height-root.ntCoff; ltShag++){
+                        for(var ltShag=txtText.font.pixelSize; ltShag<rctZona.height-root.ntCoff; ltShag++){
 							if(txtText.width < rctZona.width){//Если длина текста меньше динны строки
 								txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 								if(txtText.width > rctZona.width){//Но, если переборщили
@@ -68,7 +68,7 @@ Item {
 				}
 				onWidthChanged: {//Если длина строки изменилась, то...
 					if(rctZona.width > txtText.width){//Если длина строки больше длины текста, то...
-                        for(let ltShag=txtText.font.pixelSize; ltShag<rctZona.height-root.ntCoff; ltShag++){
+                        for(var ltShag=txtText.font.pixelSize; ltShag<rctZona.height-root.ntCoff; ltShag++){
 							if(txtText.width < rctZona.width){//Если длина текста меньше динны строки
 								txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 								if(txtText.width > rctZona.width){//Но, если переборщили
