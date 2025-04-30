@@ -4,15 +4,16 @@
 Item {
     id: root
     //Свойства.
-	property int ntHeight: 16
-	property alias text: txtKnopkaOriginal.text
-	property alias bold: txtKnopkaOriginal.font.bold
-	property alias italic: txtKnopkaOriginal.font.italic
-	property alias pixelSize: txtKnopkaOriginal.font.pixelSize
+    property int ntCoff: 8
+    property int ntHeight: 2
+    property alias text: txtText.text
+    property alias bold: txtText.font.bold
+    property alias italic: txtText.font.italic
+    property alias pixelSize: txtText.font.pixelSize
 	property color clrKnopki: "transparent"
 	property color clrTexta: "black"
     //Настройки.
-	height: ntHeight
+    height: ntHeight*ntCoff+ntCoff
 	//Длина кнопки расчитывается автоматически в слоте onCompleted в конце файла.
     //Сигналы.
 	signal clicked();
@@ -30,7 +31,7 @@ Item {
     }
     */
     Rectangle {
-		id: rctKnopkaOriginal
+        id: rctKnopka
         anchors.fill: root
 
         color: tphKnopkaOriginal.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
@@ -39,24 +40,59 @@ Item {
 		smooth: true//Сглаживание.
 		border.color: Qt.darker(clrKnopki, 1.3)//Граница чуть темнее цвета кнопки
         border.width: 1//Толщина граници кнопки один пиксель
-		clip: true//Всё, что будет внутри прямоугольника и будет выходить за границы обрезается.
+        clip: true//Всё, что будет внутри прямоугольника и будет выходить за границы обрезается.
 
 		Text {
-			id: txtKnopkaOriginal
-			anchors.centerIn: rctKnopkaOriginal
-
+            id: txtText
+            anchors.horizontalCenter: rctKnopka.horizontalCenter
+            anchors.verticalCenter: rctKnopka.verticalCenter
             color: tphKnopkaOriginal.pressed ? Qt.darker(clrTexta, 1.3) : clrTexta
             //color: maKnopkaOriginal.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
             text: "Кнопка"
-			//Размер шрифта расчитывается в слоте onCompleted
-			font.pixelSize: ((rctKnopkaOriginal.width/txtKnopkaOriginal.text.length>=rctKnopkaOriginal.height)
-				 ? rctKnopkaOriginal.height : rctKnopkaOriginal.width/txtKnopkaOriginal.text.length)-8
+            font.pixelSize: root.height - root.ntCoff
 			font.bold: false//Не жирный текст
-			font.italic: false//Не курсивный текст
-		}	
+            font.italic: false//Не курсивный текст
+            onTextChanged: {//Если поменяется текст в кнопке, то и размер шрифта пересчитается.
+                if(rctKnopka.width > txtText.width){//Если длина строки больше длины текста, то...
+                    for(var ltShag=txtText.font.pixelSize; ltShag<rctKnopka.height-root.ntCoff; ltShag++){
+                        if(txtText.width < rctKnopka.width){//Если длина текста меньше динны строки
+                            txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                            if(txtText.width > rctKnopka.width){//Но, если переборщили
+                                txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                                return;//Выходим из увеличения шрифта.
+                            }
+                        }
+                    }
+                }
+                else{//Если длина строки меньше длины текста, то...
+                    for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                        if(txtText.width > rctKnopka.width)//Если текст дилиннее строки, то...
+                            txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                    }
+                }
+            }
+        }
+        onWidthChanged: {//При onComplited посчитается ширина, а на основании её, сработает этот сигнал.
+            if(rctKnopka.width > txtText.width){//Если длина строки больше длины текста, то...
+                for(var ltShag=txtText.font.pixelSize; ltShag<rctKnopka.height-root.ntCoff; ltShag++){
+                    if(txtText.width < rctKnopka.width){//Если длина текста меньше динны строки
+                        txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                        if(txtText.width > rctKnopka.width){//Но, если переборщили
+                            txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                            return;//Выходим из увеличения шрифта.
+                        }
+                    }
+                }
+            }
+            else{//Если длина строки меньше длины текста, то...
+                for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                    if(txtText.width > rctKnopka.width)//Если текст дилиннее строки, то...
+                        txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                }
+            }
+        }
 	}
 	Component.onCompleted: {//Слот обрабатывает данные, когда сомпонет полностью отрисовался.
-		//Императивное присвоение значения, так как тут используется JS, нужно присваивать через знак "=".
-        root.width = txtKnopkaOriginal.text.length*root.ntHeight;//Расчёт длины строки.
+        root.width = txtText.text.length*root.height;//Расчёт длины строки (кол-во символов на высоту кнопки).
 	}
 }
