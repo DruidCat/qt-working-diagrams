@@ -323,7 +323,10 @@ Item {
                         }
                     }
 				}
-                onTap: fnClickedEscape();//Если нажали на пустое место.
+                onTap: {
+                    root.signalToolbar("");//Делаем пустую строку в Toolbar.
+                    fnClickedEscape();//Если нажали на пустое место.
+                }
 			}	
             DCMenu {
                 id: menuSpisok
