@@ -24,6 +24,7 @@
 /build/Desktop_Qt_6_8_2_MinGW_64_bit-Release/
 /build/Android_Qt_6_8_2_Clang_armeabi_v7a_9d7ebc-Debug/
 /build/wget-log
+/build/qml/
 /deploy
 
 # This file is used to ignore files which are generated
