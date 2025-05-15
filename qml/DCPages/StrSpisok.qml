@@ -206,7 +206,17 @@ Item {
             clrFona: "orange"//Если не задать цвет, будет видно текст под надписью
             clrTexta: "black"
             clrKnopki: "black"
-            clrBorder: "black"
+            clrBorder: "black" 
+            onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
+                if(visible){//Если видимый виджет, то...
+                    knopkaMenu.visible = false;//Кнопка Меню Невидимая.
+                    knopkaInfo.visible = false;//Конопка Информация Невидимая.
+                }
+                else{//Если невидимый виджет, то...
+                    knopkaMenu.visible = true;//Кнопка Меню Видимая.
+                    knopkaInfo.visible = true;//Конопка Информация Видимая.
+                }
+            }
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvZona.enabled = true;//Делаем кликабельную Зону.
