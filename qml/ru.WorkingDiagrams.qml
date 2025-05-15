@@ -226,10 +226,10 @@ ApplicationWindow {
 				}
                 onClickedInfo: {
                     tmOpisanie.textTextEdit = cppqml.strTitulOpisanie;//Отправляем текст из бизнес логики.
-					if(root.appRedaktor){//Если Редактор приложения включен, то...
+                    pgStrOpisanie.textZagolovok = pgStrSpisok.textZagolovok;//Заголовок Списка.
+                    if(root.appRedaktor){//Если Редактор приложения включен, то...
                         pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).")
 					}
-                    pgStrOpisanie.textZagolovok = pgStrSpisok.textZagolovok;//Заголовок Списка.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 				onClickedSpisok: function(strSpisok) {
@@ -276,10 +276,10 @@ ApplicationWindow {
 				}
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;//Отправляем текст в бизнес логику.
-					if(root.appRedaktor){//Если Редактор приложения включен, то...
+                    pgStrOpisanie.textZagolovok = pgStrElement.textZagolovok;//Заголовок Элемента.
+                    if(root.appRedaktor){//Если Редактор приложения включен, то...
                         pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).")
 					}
-                    pgStrOpisanie.textZagolovok = pgStrElement.textZagolovok;//Заголовок Элемента.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onClickedElement: function(strElement) {//Слот сигнала нажатия на Элемент, вернув имя Элемента
@@ -322,15 +322,16 @@ ApplicationWindow {
 					stvStr.pop()//Назад страницу
 				}
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
+                    pgStrFileDialog.textZagolovok = pgStrDannie.textZagolovok;//Заголовок Данных.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
-					if(root.appRedaktor){//Если Редактор приложения включен, то...
+                    pgStrOpisanie.textZagolovok = pgStrDannie.textZagolovok;//Заголовок Данных.
+                    if(root.appRedaktor){//Если Редактор приложения включен, то...
                         pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).");
 					}
-                    pgStrOpisanie.textZagolovok = pgStrDannie.textZagolovok;//Заголовок Данных.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
@@ -386,7 +387,6 @@ ApplicationWindow {
             clrTexta: root.clrKnopok
             clrFaila: root.clrFaila
             clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("ПРОВОДНИК")
             StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
