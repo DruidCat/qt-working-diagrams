@@ -227,9 +227,9 @@ ApplicationWindow {
                 onClickedInfo: {
                     tmOpisanie.textTextEdit = cppqml.strTitulOpisanie;//Отправляем текст из бизнес логики.
 					if(root.appRedaktor){//Если Редактор приложения включен, то...
-                    	pgStrOpisanie.textToolbar = pgStrSpisok.textZagolovok
-                        		+ qsTr(". Для изменения описания нажмите иконку (+).")
+                        pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).")
 					}
+                    pgStrOpisanie.textZagolovok = pgStrSpisok.textZagolovok;//Заголовок Списка.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 				onClickedSpisok: function(strSpisok) {
@@ -277,9 +277,9 @@ ApplicationWindow {
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;//Отправляем текст в бизнес логику.
 					if(root.appRedaktor){//Если Редактор приложения включен, то...
-                    	pgStrOpisanie.textToolbar = pgStrElement.textZagolovok
-                            	+ qsTr(". Для изменения описания нажмите иконку (+).")
+                        pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).")
 					}
+                    pgStrOpisanie.textZagolovok = pgStrElement.textZagolovok;//Заголовок Элемента.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onClickedElement: function(strElement) {//Слот сигнала нажатия на Элемент, вернув имя Элемента
@@ -328,9 +328,9 @@ ApplicationWindow {
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
 					if(root.appRedaktor){//Если Редактор приложения включен, то...
-						pgStrOpisanie.textToolbar = pgStrDannie.textZagolovok
-                            + qsTr(". Для изменения описания нажмите иконку (+).");
+                        pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).");
 					}
+                    pgStrOpisanie.textZagolovok = pgStrDannie.textZagolovok;//Заголовок Данных.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
@@ -463,7 +463,6 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("ОПИСАНИЕ")
             StrOpisanie {
 				id: tmOpisanie
 				ntWidth: pgStrOpisanie.ntWidth; ntCoff: pgStrOpisanie.ntCoff
