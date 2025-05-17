@@ -10,7 +10,7 @@ DataPlan::DataPlan(	QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject
                 this,
                 SLOT(slotCopyPlan(bool)));//Связываем сигнал статуса копирования документа.
 	//qdebug(); не работает, пока конструктор cppqml полностью не создастся.
-    m_blDanniePervi = false;//Не первый элемент в Данных.(false)
+    m_blPlanPervi = true;//Первый План.(true)
 	m_strFileDialogPut = "";//Путь к каталогу, где лежит файл для записи.	
     m_strWorkingDiagramsPut = strWorkingDiagramsPut;//Присваеваем переменной каталог приложения.
     m_ullDannieMax = ullDannieMax;//Приравниваем максимальное количество Данных.
@@ -39,7 +39,12 @@ void DataPlan::ustWorkingDiagrams(QString strWorkingDiagramsPut){//Задаём 
 /////////////////////////////////////////////////////////////////////////////////////
 	m_strWorkingDiagramsPut = strWorkingDiagramsPut;//Приравниваем пути
 }
-
+bool DataPlan::polPlanPervi(qint64 ullSpisokKod,qint64 ullElementKod){//Первый План?
+///////////////////////////////////////
+//---Э Т О   П Е Р В Ы Й   П Л А Н---//
+///////////////////////////////////////
+	return m_blPlanPervi;//Возвращаем план первый или нет.
+}
 void DataPlan::ustFileDialogPut(QString strFileDialogPut){//Задать путь к каталогу, в котором файл записи.
 ///////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   П У Т Ь   К   Ф А Й Л У---//

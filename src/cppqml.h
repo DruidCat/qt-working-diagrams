@@ -121,6 +121,10 @@ class DCCppQml : public QObject {
                     READ blFileDialogCopy
                     NOTIFY blFileDialogCopyChanged FINAL)
 
+    Q_PROPERTY(bool blPlanPervi
+                    READ blPlanPervi
+                    NOTIFY blPlanPerviChanged FINAL)
+
     Q_PROPERTY(QString strDebug
                     READ strDebug
                     WRITE setStrDebug
@@ -187,6 +191,8 @@ public:
     void  		setStrFileDialogModel(const QString& strFileDialogImya);//Принимаем папку или файл.
     bool 		blFileDialogCopy() { return m_blFileDialogCopy; }//Флаг Копирования Документа, инверсируется.
 
+    bool 		blPlanPervi();//Возвращает флаг Первый План?
+														   //
     Q_INVOKABLE bool isPdfPoisk(const QString strPoisk);//Пустой запрос на поиск?
 
     QString		strDebug();//Возвращает ошибку.
@@ -229,6 +235,8 @@ signals:
     void strFileDialogModelChanged();//Сигнал о том, что изменилась на 0-папка или 1-файл
     void blFileDialogCopyChanged();//Сигнал о том, что скопировался файл или нет.
 
+    void blPlanPerviChanged();//Сигнал, что флаг изменился.
+								//
     void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
@@ -274,6 +282,8 @@ private:
     QString m_strFileDialogModel;//Переменная хранящая 0-папка или 1-файл в Свойстве Q_PROPERTY.
     bool 	m_blFileDialogCopy;//Флаг Копирования Документа Инверсируется постоянно в Свойстве Q_PROPERTY.
 
+    bool 	m_blPlanPervi;//Флаг Первый План? в Свойстве Q_PROPERTY.
+							//
     QString m_strDebug;//Текс ошибки.
 
     DataTitul* 		m_pDataTitul = nullptr;//Указатель на таблицу Титула в БД.

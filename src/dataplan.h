@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDir>
+#include <QDebug>
 
 #include "copyplan.h"
 
@@ -14,7 +15,7 @@ public:
     bool 		dbStart();//Создать первоначальные Данные.
 	void 		ustWorkingDiagrams(QString strWorkingDiagramsPut);//Задаём каталог хранения Документов.
 	QString 	polWorkingDiagrams(void){ return m_strWorkingDiagramsPut; }//Получить путь к каталогу файлов
-    bool 		polDanniePervi() { return m_blDanniePervi; }//Вернуть состояние флага Первые Данные?
+    bool 		polPlanPervi(qint64 ullSpisokKod,qint64 ullElementKod);//Первый План?
 	void 		ustFileDialogPut(QString strFileDialogPut);//Задать путь к каталогу, в котором файл записи.
     QString 	polImyaFaila(qint64 ullSpisokKod,qint64 ullElementKod,qint64 ullDannieKod);//Получить имя файл
     bool  		estImyaFaila(QString strImyaFaila);//Есть такой файл в каталоге?
@@ -23,7 +24,7 @@ public:
     bool 		copyPlan(QString strAbsolutPut, QString strImyaFaila);//Копируем файл в приложение.
 
 private:
-    bool 		m_blDanniePervi;//Первый элемент в Данных.
+    bool 		m_blPlanPervi;//Первый элемент в Данных.
     quint64 	m_ullDannieMax;//Максимальное количество Документов в Элементе.
     CopyPlan*	m_pcopyplan = nullptr;//Указатель на поток копирования файла.
 

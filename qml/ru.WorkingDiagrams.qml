@@ -271,6 +271,7 @@ ApplicationWindow {
 				radiusZona: pgStrElement.rctStrZona.radius//Радиус берём из настроек элемента qml
                 appRedaktor: root.appRedaktor
 				onClickedNazad: {//Слот нажатия кнопки Назад.
+					cppqml.ullSpisokKod = 0;//НЕ УДАЛЯТЬ! На странице Список код не выбран и равен 0.
 					stvStr.strOpisanie = "titul";//Показываем описание Титульной страницы.
 					stvStr.pop()//Назад страницу
 				}
@@ -318,6 +319,7 @@ ApplicationWindow {
 				radiusZona: pgStrDannie.rctStrZona.radius//Радиус берём из настроек элемента qml
                 pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
 				onClickedNazad: {//Слот нажатия кнопки Назад.
+					cppqml.ullElementKod = 0;//НЕ УДАЛЯТЬ! На странице Элемент код не выбран и равен 0.
 					stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
 					stvStr.pop()//Назад страницу
 				}
@@ -357,7 +359,6 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: "black"
-            textZagolovok: qsTr("PDF")
             StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
@@ -371,6 +372,7 @@ ApplicationWindow {
 				toolbarWidth: pgStrPdf.rctStrToolbar.width; toolbarHeight: pgStrPdf.rctStrToolbar.height
                 pdfViewer: root.pdfViewer
 				onClickedNazad: {
+					cppqml.ullDannieKod = 0;//НЕ УДАЛЯТЬ! На странице Данные код не выбран и равен 0.
 					stvStr.pop()//Назад страницу
 				}
 			}
@@ -482,7 +484,14 @@ ApplicationWindow {
 					stvStr.pop()//Назад страницу
 				}
                 onClickedPlan: {//Слот нажатия Плана.
-                    tmPlan.source = "qrc:///workingdata/plan.pdf"
+					if(cppqml.blPlanPervi){//Если план еще не задан, то...
+						console.error("488:План не задан!");
+                    	tmPlan.source = "qrc:///workingdata/plan.pdf";//То открываем инструкцию пользователя.
+					}
+					else{//Если план уже был задан, то...
+						console.error("492:План уже задан!");
+                    	tmPlan.source = "qrc:///workingdata/plan.pdf";//Открываем заданный план.
+					}
                     stvStr.push(pgStrPlan)//Переходим на страницу Плана.
                 }
 			}

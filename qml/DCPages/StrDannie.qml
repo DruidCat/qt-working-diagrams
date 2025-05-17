@@ -120,7 +120,7 @@ Item {
             clrKnopki: root.clrTexta
             onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                fnClickedEscape();//Функция нажатия кнопки Escape.
+                fnClickedEscape();//Функция нажатия кнопки Escape.	
                 root.clickedNazad();
             }
         } 

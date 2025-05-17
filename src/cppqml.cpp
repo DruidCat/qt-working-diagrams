@@ -36,6 +36,8 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_strFileDialogModel(""),
                                         m_blFileDialogCopy(false),
 
+                                        m_blPlanPervi(false),
+
                                         m_strDebug("")
 {
 ///////////////////////////////
@@ -347,8 +349,8 @@ void DCCppQml::setUllSpisokKod(const quint64 ullSpisokKodNovi){//Изменит�
 ///////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   К О Д   С П И С К А---//
 ///////////////////////////////////////////////////
-    if (ullSpisokKodNovi<=0)//Если номер меньше или равен 0, то...
-		qdebug("DCCppQml::setUllSpisokKod(quint64): quint64 меньше или равен 0.");
+    if (ullSpisokKodNovi<0)//Если номер меньше 0, то...
+		qdebug("DCCppQml::setUllSpisokKod(quint64): quint64 меньше 0.");
 	else {//Иначе...
 		if (m_ullSpisokKod != ullSpisokKodNovi){//Если не равны параметры, то...
 			m_ullSpisokKod = ullSpisokKodNovi;
@@ -478,8 +480,8 @@ void DCCppQml::setUllElementKod(const quint64 ullElementKodNovi){//Измени�
 ///////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   К О Д   Э Л Е М Е Н Т А---//
 ///////////////////////////////////////////////////////
-	if (ullElementKodNovi<=0)//Если номер меньше или равен 0, то...
-		qdebug("DCCppQml::setUllElementKod(quint64): quint64 меньше или равен 0.");
+	if (ullElementKodNovi<0)//Если номер меньше 0, то...
+		qdebug("DCCppQml::setUllElementKod(quint64): quint64 меньше 0.");
 	else {//Иначе...
 		if (m_ullElementKod != ullElementKodNovi){//Если не равны параметры, то...
 			m_ullElementKod = ullElementKodNovi;
@@ -603,8 +605,8 @@ void DCCppQml::setUllDannieKod(const quint64 ullDannieKodNovi){//Изменит�
 ///////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   К О Д   Д А Н Н Ы Х---//
 ///////////////////////////////////////////////////
-    if (ullDannieKodNovi<=0)//Если номер меньше или равен 0, то...
-        qdebug("DCCppQml::setUllDannieKod(quint64): quint64 меньше или равен 0.");
+    if (ullDannieKodNovi<0)//Если номер меньше 0, то...
+        qdebug("DCCppQml::setUllDannieKod(quint64): quint64 меньше 0.");
     else {//Иначе...
         if (m_ullDannieKod != ullDannieKodNovi){//Если не равны параметры, то...
             m_ullDannieKod = ullDannieKodNovi;
@@ -689,6 +691,13 @@ void DCCppQml::setStrFileDialogModel(const QString &strFileDialogImya){//При�
         m_strFileDialogModel = "0";//возвращаем 0-папка
     else//Иначе...
         m_strFileDialogModel = "1";//возвращаем 1-файл
+}
+bool DCCppQml::blPlanPervi(){//Возвращает флаг Первый План?
+///////////////////////////////////////
+//---Э Т О   П Е Р В Ы Й   П Л А Н---//
+///////////////////////////////////////
+	m_blPlanPervi = m_pDataPlan->polPlanPervi(m_ullSpisokKod, m_ullElementKod);
+	return m_blPlanPervi;
 }
 QString DCCppQml::strDebug(){//Возвращает ошибку.
 ///////////////////////////////////////////////////
