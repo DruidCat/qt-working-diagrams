@@ -32,16 +32,14 @@ Item {
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedSozdat();//Сигнал нажатия кнопки Создать
     //Функции
-    onSourceChanged: {//Если изменился адрес pdf документа.
+    function ustSource(strPdfUrl) {//Передаём адрес pdf документа.
         if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
             tmrLogo.running = true;//Запускаем таймер анимации логотипа
             //pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
-            var strPdfUrl = root.source;//Считываем путь+документ.pdf
+            //console.error("39: Url: " + strPdfUrl);
             fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
-            //console.error("390: Url: " + strPdfUrl);
         }
     }
-
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
         pdfLoader.strPdfPut = urlPdfPut;//Устанавливаем путь.
         if(urlPdfPut){//Если путь не пустая строка, то...
@@ -98,7 +96,7 @@ Item {
             anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
             onClicked: {
-                root.clickedNazad();
+                fnPdfSource("");//Пустой путь PDF документа, закрываем.
             }
         }
     }

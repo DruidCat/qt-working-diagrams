@@ -43,6 +43,11 @@ bool DataPlan::polPlanPervi(qint64 ullSpisokKod,qint64 ullElementKod){//Перв
 ///////////////////////////////////////
 //---Э Т О   П Е Р В Ы Й   П Л А Н---//
 ///////////////////////////////////////
+	if(estImyaFaila(polImyaFaila(ullSpisokKod, ullElementKod)))//Есть такой файл, то...
+		m_blPlanPervi = false;//Не первый План.
+	else//Если такого нет файла, то...
+		m_blPlanPervi = true;//Это будет первый План.
+	
 	return m_blPlanPervi;//Возвращаем план первый или нет.
 }
 void DataPlan::ustFileDialogPut(QString strFileDialogPut){//Задать путь к каталогу, в котором файл записи.
@@ -51,12 +56,12 @@ void DataPlan::ustFileDialogPut(QString strFileDialogPut){//Задать пут�
 ///////////////////////////////////////////////////////
 	m_strFileDialogPut = strFileDialogPut;//Приравниваем пути.
 }
-QString DataPlan::polImyaFaila(qint64 ullSpisokKod, qint64 ullElementKod, qint64 ullDannieKod){//Имя файла.
+QString DataPlan::polImyaFaila(qint64 ullSpisokKod, qint64 ullElementKod){//Имя файла.
 /////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   И М Я   Ф А Й Л А---//
 /////////////////////////////////////////////
-    uint ntImyaFaila = (ullSpisokKod*1000000)+(ullElementKod*1000)+ullDannieKod;
-    QString strImyaFaila = QString("%1").arg(ntImyaFaila, 9, 10, QLatin1Char('0'))+".pdf";//соберём имя файла
+    uint ntImyaFaila = ullSpisokKod * 1000 + ullElementKod;
+    QString strImyaFaila = QString("%1").arg(ntImyaFaila, 6, 10, QLatin1Char('0'))+".pdf";
     return strImyaFaila;
 }
 bool DataPlan::estImyaFaila(QString strImyaFaila){//Есть такой файл в каталоге?

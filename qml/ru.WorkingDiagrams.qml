@@ -486,11 +486,12 @@ ApplicationWindow {
                 onClickedPlan: {//Слот нажатия Плана.
 					if(cppqml.blPlanPervi){//Если план еще не задан, то...
 						console.error("488:План не задан!");
-                    	tmPlan.source = "qrc:///workingdata/plan.pdf";//То открываем инструкцию пользователя.
+                    	tmPlan.ustSource("qrc:///workingdata/plan.pdf");//То открываем инструкцию пользователя.
 					}
 					else{//Если план уже был задан, то...
 						console.error("492:План уже задан!");
-                    	tmPlan.source = "qrc:///workingdata/plan.pdf";//Открываем заданный план.
+						tmPlan.ustSource("file:///home/druidcat/git/qt-working-diagrams/build/workingdata/000000.pdf")
+                    	//tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем заданный план.
 					}
                     stvStr.push(pgStrPlan)//Переходим на страницу Плана.
                 }
