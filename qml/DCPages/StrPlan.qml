@@ -38,7 +38,7 @@ Item {
             //pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
             //console.error("39: Url: " + strPdfUrl);
             fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
-        }
+        }	
     }
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
         pdfLoader.strPdfPut = urlPdfPut;//Устанавливаем путь.

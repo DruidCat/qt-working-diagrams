@@ -484,16 +484,23 @@ ApplicationWindow {
 					stvStr.pop()//Назад страницу
 				}
                 onClickedPlan: {//Слот нажатия Плана.
+					let ltPdfUrl;//Переменная хранящая путь pdf файла.
 					if(cppqml.blPlanPervi){//Если план еще не задан, то...
-						console.error("488:План не задан!");
-                    	tmPlan.ustSource("qrc:///workingdata/plan.pdf");//То открываем инструкцию пользователя.
+						console.error("489:План не задан!");
+                    	ltPdfUrl = "qrc:///workingdata/plan.pdf";//То открываем инструкцию пользователя.
 					}
 					else{//Если план уже был задан, то...
-						console.error("492:План уже задан!");
-						tmPlan.ustSource("file:///home/druidcat/git/qt-working-diagrams/build/workingdata/000000.pdf")
-                    	//tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем заданный план.
+						console.error("493:План уже задан!");
+						ltPdfUrl="file:///home/druidcat/git/qt-working-diagrams/build/workingdata/000000.pdf"
+                    	//ltPdfUrl = "qrc:///workingdata/plan.pdf";//Открываем заданный план.
 					}
-                    stvStr.push(pgStrPlan)//Переходим на страницу Плана.
+
+					if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+						tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.
+                    	stvStr.push(pgStrPlan)//Переходим на страницу Плана.
+					}
+					else//Если на сторонний просмотщик pdf документов, то...
+						Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
                 }
 			}
 		}
