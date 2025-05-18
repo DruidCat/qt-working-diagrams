@@ -35,6 +35,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_strFileDialogPut(""),
                                         m_strFileDialogModel(""),
                                         m_blFileDialogCopy(false),
+                                        m_blFileDialogPlan(false),
 
                                         m_blPlanPervi(false),
 
@@ -670,7 +671,10 @@ QString DCCppQml::strFileDialogPut() {//Возвратить путь отобр
 //---П О Л У Ч И Т Ь   П У Т Ь   F I L E D I A L O G---//
 /////////////////////////////////////////////////////////
     m_strFileDialogPut = m_pFileDialog->polFileDialogPut();//Получить путь каталога.
-	m_pDataDannie->ustFileDialogPut(m_strFileDialogPut);//Задаём путь к каталогу, где лежит файл для записи.
+	if(m_blFileDialogPlan)//Если выбрано копирование Плана, то...
+		m_pDataPlan->ustFileDialogPut(m_strFileDialogPut);//Задаём путь к каталогу,где лежит файл для записи
+	else//Если выбрано копирование Данных, то...
+		m_pDataDannie->ustFileDialogPut(m_strFileDialogPut);//Задаём путь к каталогу,где лежит файл для записи
     return m_strFileDialogPut;//Возвратить путь отображения содержимого папки.
 }
 void DCCppQml::setStrFileDialogPut(const QString& strFileDialogPutNovi){//Запис. новый путь отображения папки.
@@ -692,12 +696,28 @@ void DCCppQml::setStrFileDialogModel(const QString &strFileDialogImya){//При�
     else//Иначе...
         m_strFileDialogModel = "1";//возвращаем 1-файл
 }
+void DCCppQml::setBlFileDialogPlan(const bool& blFileDialogPlanNovi){//Изменение флага Плана или Данных.
+///////////////////////////////////////
+//---П Л А Н   И Л И   Д А Н Н Ы Е---//
+///////////////////////////////////////
+    if(blFileDialogPlanNovi != m_blFileDialogPlan){//Если Данные не равны выбранному до этого, то...
+    	m_blFileDialogPlan = blFileDialogPlanNovi;//Приравниваем.
+        emit blFileDialogPlanChanged();//Излучаем сигнал об изменении аргумента.
+    }
+}
 bool DCCppQml::blPlanPervi(){//Возвращает флаг Первый План?
 ///////////////////////////////////////
 //---Э Т О   П Е Р В Ы Й   П Л А Н---//
 ///////////////////////////////////////
 	m_blPlanPervi = m_pDataPlan->polPlanPervi(m_ullSpisokKod, m_ullElementKod);
 	return m_blPlanPervi;
+}
+bool DCCppQml::copyPlan(QString strImyaFaila){//Копировать файл Плана.
+///////////////////////////////////////////////
+//---К О П И Р У Е М   Ф А Й Л   П Л А Н А---//
+///////////////////////////////////////////////
+	qWarning()<<"719:Копируем файл плана."<<strImyaFaila;	
+	return true;
 }
 QString DCCppQml::strDebug(){//Возвращает ошибку.
 ///////////////////////////////////////////////////

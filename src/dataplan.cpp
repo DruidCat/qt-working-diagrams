@@ -54,7 +54,7 @@ void DataPlan::ustFileDialogPut(QString strFileDialogPut){//Задать пут�
 ///////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   П У Т Ь   К   Ф А Й Л У---//
 ///////////////////////////////////////////////////////
-	m_strFileDialogPut = strFileDialogPut;//Приравниваем пути.
+	m_strFileDialogPut = strFileDialogPut;//Приравниваем пути папки открытой в Проводнике.
 }
 QString DataPlan::polImyaFaila(qint64 ullSpisokKod, qint64 ullElementKod){//Имя файла.
 /////////////////////////////////////////////

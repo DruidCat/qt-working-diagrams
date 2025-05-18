@@ -27,6 +27,7 @@ Item {
 	property alias radiusZona: rctZona.radius//Радиус Зоны рабочей
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
     property int ntLogoTMK: 16
+	property bool blPlan: false//true - проводник открыт для Плана. false - проводник открыт для Данных.
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Не удалять, может Escape не работать.
@@ -37,6 +38,9 @@ Item {
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 	signal signalToolbar (var strToolbar);//Сигнал излучающий в Toolbar в Проводнике.
     //Функции.
+	onBlPlanChanged: {//Если переменная изменилась, то...
+		cppqml.blFileDialogPlan = root.blPlan;//В бизнес логику настройки копирования Плана или Данных.
+	}
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         menuFileDialog.visible = false;//Делаем невидимым всплывающее меню.
     }
@@ -61,7 +65,6 @@ Item {
     }
     function fnClickedZakrit(){
         cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.
-        root.signalZagolovok(qsTr("ПРОВОДНИК"));//Передаю имя папки назад [..].
         fnClickedEscape();//Меню сворачиваем
         root.clickedZakrit();//Излучаем сигнал закрытия проводника.
     }
@@ -145,7 +148,7 @@ Item {
                         if(ntTip === 1){//Если это Папки, то...
                             fnClickedEscape();//Меню сворачиваем
                             cppqml.strFileDialog = strFileDialog;//Присваиваем имя папки выбранной.
-                            root.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки.`
+                            root.signalZagolovok(cppqml.strFileDialogPut);//Передаю путь Папки  в заголовок.`
                         }
                         else{
                             if(ntTip === 2){//Если это file из Маски, то...
@@ -157,8 +160,13 @@ Item {
                                 knopkaNastroiki.visible = false//Делаем кнопку настройки невидимой.
                                 knopkaInfo.visible = false//Делаем кнопку информации невидимой.
                                 tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
-                                cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
-                                cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Документа,и Документ
+								if(root.blPlan){//Если выбран режим сохранения документа Плана, то...
+									cppqml.copyPlan(strFileDialog);//Копируем файл Плана.
+								}
+								else{//Если выбран режим сохранения документа Данных, то...
+                                	cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
+                                	cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Док. и Документ
+								}
                             }
                         }
                     }

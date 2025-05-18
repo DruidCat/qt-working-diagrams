@@ -33,12 +33,10 @@ Item {
     signal clickedSozdat();//Сигнал нажатия кнопки Создать
     //Функции
     function ustSource(strPdfUrl) {//Передаём адрес pdf документа.
-        if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
-            tmrLogo.running = true;//Запускаем таймер анимации логотипа
-            //pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
-            //console.error("39: Url: " + strPdfUrl);
-            fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
-        }	
+		tmrLogo.running = true;//Запускаем таймер анимации логотипа
+		//pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
+		//console.error("39: Url: " + strPdfUrl);
+		fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
     }
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
         pdfLoader.strPdfPut = urlPdfPut;//Устанавливаем путь.
@@ -123,20 +121,6 @@ Item {
                 pdfLoader.item.currentPage = 0;//номер 1 странцы документа.
                 pdfLoader.item.source = pdfLoader.strPdfPut;// Устанавливаем путь к PDF
             }
-        }
-        Connections {//Соединяем сигнал из C++ с действием в QML
-            /*
-            target: cppqml;//Цель объект класса С++ DCCppQml
-            function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
-                tmrLogo.running = true;//Запускаем таймер анимации логотипа
-                //pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
-                if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
-                    //var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
-                    //fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
-                    //console.error("390: Url: " + strPdfUrl);
-                }
-            }
-            */
         }
         Connections {//Соединение сигналов из qml файла со слотами.
             target: pdfLoader.item

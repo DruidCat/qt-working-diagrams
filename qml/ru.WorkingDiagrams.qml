@@ -14,6 +14,7 @@ ApplicationWindow {
     property color clrStranic: "black"
     property bool pdfViewer: true//false - Отключить pdf просмоторщик.
     property bool appRedaktor: true//false - Отключить Редактор приложения.
+	property bool planFileDialog: false//Проводник false - открыт для Данных. true - открыт для Плана.
     //Настройки.
     visible: true
 	color: "grey"
@@ -324,6 +325,7 @@ ApplicationWindow {
 					stvStr.pop()//Назад страницу
 				}
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
+					root.planFileDialog = false;//Открываем проводник для Данных.
                     pgStrFileDialog.textZagolovok = pgStrDannie.textZagolovok;//Заголовок Данных.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
@@ -399,9 +401,10 @@ ApplicationWindow {
                 zonaX: pgStrFileDialog.rctStrZona.x; zonaY: pgStrFileDialog.rctStrZona.y
                 zonaWidth: pgStrFileDialog.rctStrZona.width; zonaHeight: pgStrFileDialog.rctStrZona.height
                 toolbarX: pgStrFileDialog.rctStrToolbar.x; toolbarY: pgStrFileDialog.rctStrToolbar.y
-                toolbarWidth: pgStrFileDialog.rctStrToolbar.width;
-                toolbarHeight: pgStrFileDialog.rctStrToolbar.height
+                toolbarWidth: pgStrFileDialog.rctStrToolbar.width
+				toolbarHeight: pgStrFileDialog.rctStrToolbar.height
 				radiusZona: pgStrFileDialog.rctStrZona.radius//Радиус берём из настроек элемента qml
+				blPlan: root.planFileDialog//Выбор режима открытия проводника для Плана или Данных.
                 onClickedNazad: {//Слот нажатия кнопки Назад.
                     stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
                     stvStr.pop()//Назад страницу
@@ -532,6 +535,7 @@ ApplicationWindow {
                     stvStr.pop()//Назад страницу
                 }
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
+					root.planFileDialog = true;//Открываем проводник для План.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }

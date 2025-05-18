@@ -120,6 +120,10 @@ class DCCppQml : public QObject {
     Q_PROPERTY(bool blFileDialogCopy
                     READ blFileDialogCopy
                     NOTIFY blFileDialogCopyChanged FINAL)
+    Q_PROPERTY(bool blFileDialogPlan
+                    READ blFileDialogPlan
+                    WRITE setBlFileDialogPlan
+                    NOTIFY blFileDialogPlanChanged FINAL)
 
     Q_PROPERTY(bool blPlanPervi
                     READ blPlanPervi
@@ -175,7 +179,7 @@ public:
     Q_INVOKABLE bool delStrDannie(QString strDannieKod);//Удалить Данные по коду.
     QString		strDannieDB();//Возвратить JSON строку Данных.
     void		setStrDannieDB(const QString& strDannieNovi);//Изменение JSON запроса Данных.
-    Q_INVOKABLE bool renStrDannieDB(QString strDannie, QString strDannieNovi);//Переименоваовать Данные.
+    Q_INVOKABLE bool renStrDannieDB(QString strDannie, QString strDannieNovi);//Переименовать Данные.
     quint64		ullDannieKod();//Возвращает Код Данных.
     void		setUllDannieKod(const quint64 ullDannieKodNovi);//Изменить Код Данных.
     QString		strDannieStr();//Возвратить номер страницы Документа из БД.
@@ -190,8 +194,11 @@ public:
     QString 	strFileDialogModel() { return m_strFileDialogModel; }//Возвращаем 0-папка или 1-файл.
     void  		setStrFileDialogModel(const QString& strFileDialogImya);//Принимаем папку или файл.
     bool 		blFileDialogCopy() { return m_blFileDialogCopy; }//Флаг Копирования Документа, инверсируется.
+    bool 		blFileDialogPlan() { return m_blFileDialogPlan; }//Возвращает флаг План или Данные копируем?
+    void  		setBlFileDialogPlan(const bool& blFileDialogPlanNovi);//Копируем План или Данные.
 
     bool 		blPlanPervi();//Возвращает флаг Первый План?
+    Q_INVOKABLE bool copyPlan(QString strImyaFaila);//Копировать файл Плана.
 														   //
     Q_INVOKABLE bool isPdfPoisk(const QString strPoisk);//Пустой запрос на поиск?
 
@@ -234,6 +241,7 @@ signals:
     void strFileDialogPutChanged();//Сигнал о том, что изменился путь отображаемой папки.
     void strFileDialogModelChanged();//Сигнал о том, что изменилась на 0-папка или 1-файл
     void blFileDialogCopyChanged();//Сигнал о том, что скопировался файл или нет.
+    void blFileDialogPlanChanged();//Сигнал о том, что скопироваться будет План или Данные.
 
     void blPlanPerviChanged();//Сигнал, что флаг изменился.
 								//
@@ -281,6 +289,7 @@ private:
     QString m_strFileDialogPut;//переменная записывающая путь отображения папки Свойстве Q_PROPERTY
     QString m_strFileDialogModel;//Переменная хранящая 0-папка или 1-файл в Свойстве Q_PROPERTY.
     bool 	m_blFileDialogCopy;//Флаг Копирования Документа Инверсируется постоянно в Свойстве Q_PROPERTY.
+	bool 	m_blFileDialogPlan;//true - проводник для Плана, false - проводник для Данных
 
     bool 	m_blPlanPervi;//Флаг Первый План? в Свойстве Q_PROPERTY.
 							//
