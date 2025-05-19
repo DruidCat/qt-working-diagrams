@@ -15,6 +15,7 @@ public:
     bool 		dbStart();//Создать первоначальные Данные.
 	void 		ustWorkingDiagrams(QString strWorkingDiagramsPut);//Задаём каталог хранения Документов.
 	QString 	polWorkingDiagrams(void){ return m_strWorkingDiagramsPut; }//Получить путь к каталогу файлов
+    bool 		ustPlan(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail);
     bool 		polPlanPervi(qint64 ullSpisokKod,qint64 ullElementKod);//Первый План?
 	void 		ustFileDialogPut(QString strFileDialogPut);//Задать путь к каталогу, в котором файл записи.
     QString 	polImyaFaila(qint64 ullSpisokKod,qint64 ullElementKod);//Получить имя файл

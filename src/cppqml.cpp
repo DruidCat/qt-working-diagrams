@@ -100,12 +100,10 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                 SIGNAL(signalFileDialogCopy(bool)),
                 this,
                 SLOT(slotFileDialogCopy(bool)));//Связываем сигнал статуса скопированного документа в Проводни
-    /*
     connect(	m_pDataPlan,
                 SIGNAL(signalFileDialogCopy(bool)),
                 this,
                 SLOT(slotFileDialogCopy(bool)));//Связываем сигнал статуса скопированного документа в Проводни
-    */
     m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
     m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
@@ -716,8 +714,7 @@ bool DCCppQml::copyPlan(QString strImyaFaila){//Копировать файл П
 ///////////////////////////////////////////////
 //---К О П И Р У Е М   Ф А Й Л   П Л А Н А---//
 ///////////////////////////////////////////////
-	qWarning()<<"719:Копируем файл плана."<<strImyaFaila;	
-	return true;
+    return m_pDataPlan->ustPlan(m_ullSpisokKod, m_ullElementKod, strImyaFaila);//Копируем файл и возв. статус.
 }
 QString DCCppQml::strDebug(){//Возвращает ошибку.
 ///////////////////////////////////////////////////
@@ -763,8 +760,10 @@ void DCCppQml::slotFileDialogCopy(bool blStatusCopy){//Обрабатываем 
 //---С Л О Т   С Т А Т У С А   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
 ///////////////////////////////////////////////////////////////////////////////////
     m_blFileDialogCopy = blStatusCopy;//Приравниваем.
-    if(blStatusCopy){//Если успешно скопировались документы и записались данные, то...
-        emit strDannieDBChanged();//Излучаем сигнал об изменении списка Данных.
+    if(!m_blFileDialogPlan){//Если копирование Данных, то...
+        if(blStatusCopy){//Если успешно скопировались документы и записались данные, то...
+            emit strDannieDBChanged();//Излучаем сигнал об изменении списка Данных.
+        }
     }
     emit blFileDialogCopyChanged();//Излучаем сигнал в QML об изменении статуса копирования Документа.
 }

@@ -39,6 +39,14 @@ void DataPlan::ustWorkingDiagrams(QString strWorkingDiagramsPut){//Задаём 
 /////////////////////////////////////////////////////////////////////////////////////
 	m_strWorkingDiagramsPut = strWorkingDiagramsPut;//Приравниваем пути
 }
+bool DataPlan::ustPlan(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail){
+///////////////////////////////////////
+//---З А П И С А Т Ь   Д А Н Н Ы Х---//
+///////////////////////////////////////
+    QString strAbsolutPut=m_strFileDialogPut+QDir::separator()+strFail;//Абсолют путь с именем файла+разшире
+    QString strImyaFaila(polImyaFaila(ullSpisokKod, ullElementKod));//Задаём имя файла с Док
+    return copyPlan(strAbsolutPut, strImyaFaila);//Копируем Документ в отдельном потоке.
+}
 bool DataPlan::polPlanPervi(qint64 ullSpisokKod,qint64 ullElementKod){//Первый План?
 ///////////////////////////////////////
 //---Э Т О   П Е Р В Ы Й   П Л А Н---//
@@ -111,6 +119,7 @@ bool DataPlan::copyPlan(QString strAbsolutPut, QString strImyaFaila){//Копи�
 ///////////////////////////////////////////
 //---К О П И Р О В А Т Ь   Д А Н Н Ы Е---//
 ///////////////////////////////////////////
+    qWarning()<<strAbsolutPut;
     QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать, расположенный...
     if(flDannie.exists()){//Если данный файл существует, то...
         if(estImyaFaila(strImyaFaila)){//Если такой файл с таким же именем существует, то...
