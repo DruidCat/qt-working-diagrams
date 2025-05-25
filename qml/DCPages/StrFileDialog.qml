@@ -44,6 +44,16 @@ Item {
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         menuFileDialog.visible = false;//Делаем невидимым всплывающее меню.
     }
+    function fnCopyStop(){//Останавливаем анимацию копирования.
+        tmrLogoTMK.running = false;//Останавливаем таймер анимации логотипа ТМК.
+        lgTMK.ntCoff = root.ntLogoTMK;//По умолчанию размер логотипа ТМК.
+        knopkaNazad.visible= true//Делаем кнопку назад видимой.
+        knopkaZakrit.visible = true//Делаем кнопку закрыть видимой.
+        lsvZona.visible = true;//Делаем видимую зону с Проводником.
+        knopkaNastroiki.visible = true//Делаем кнопку настройки видимой.
+        knopkaInfo.visible = true//Делаем кнопку информации видимой.
+        fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дом дерикторию! Сворачиваем, закрываем.
+    }
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             fnClickedEscape();//Функция нажатия кнопки Escape.
@@ -161,7 +171,9 @@ Item {
                                 knopkaInfo.visible = false//Делаем кнопку информации невидимой.
                                 tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
 								if(root.blPlan){//Если выбран режим сохранения документа Плана, то...
-									cppqml.copyPlan(strFileDialog);//Копируем файл Плана.
+                                    if(!cppqml.copyPlan(strFileDialog)){//Если ошибка Копирования файла Плана.
+                                        fnCopyStop();//Останавливаем анимацию копирования, закрываем проводник
+                                    }
 								}
 								else{//Если выбран режим сохранения документа Данных, то...
                                 	cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
@@ -231,14 +243,7 @@ Item {
     Connections {//Соединяем сигнал из C++ с действием в QML
         target: cppqml;//Цель объект класса С++ DCCppQml
         function onBlFileDialogCopyChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то
-            tmrLogoTMK.running = false;//Останавливаем таймер анимации логотипа ТМК.
-            lgTMK.ntCoff = root.ntLogoTMK;//По умолчанию размер логотипа ТМК.
-            knopkaNazad.visible= true//Делаем кнопку назад видимой.
-            knopkaZakrit.visible = true//Делаем кнопку закрыть видимой.
-            lsvZona.visible = true;//Делаем видимую зону с Проводником.
-            knopkaNastroiki.visible = true//Делаем кнопку настройки видимой.
-            knopkaInfo.visible = true//Делаем кнопку информации видимой.
-            fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дом дерикторию! Сворачиваем, закрываем.
+            fnCopyStop();//Останавливаем анимацию копирования.
         }
     }
 }
