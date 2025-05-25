@@ -405,12 +405,21 @@ ApplicationWindow {
 				toolbarHeight: pgStrFileDialog.rctStrToolbar.height
 				radiusZona: pgStrFileDialog.rctStrZona.radius//Радиус берём из настроек элемента qml
 				blPlan: root.planFileDialog//Выбор режима открытия проводника для Плана или Данных.
-                onClickedNazad: {//Слот нажатия кнопки Назад.
-                    stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
-                    stvStr.pop()//Назад страницу
-                }
-                onClickedZakrit: {
-                    stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
+                onClickedZakrit: {//Если нажата кнопка Назад или Закрыть, то...
+                    if(root.planFileDialog){//Если открывался План, то...
+                        let ltPdfUrl;//Переменная хранящая путь pdf файла.
+                        if(cppqml.blPlanPervi)//Если план еще не задан, то...
+                            ltPdfUrl = "qrc:///workingdata/plan.pdf";//То открываем инструкцию пользователя.
+                        else//Если план уже был задан, то...
+                            ltPdfUrl="file:///"+cppqml.polPutImyaPlan();//Путь и имя файла Плана.
+
+                        if(root.pdfViewer)//Если выбран в настройках собственный просмотрщик, то...
+                            tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.
+                        else//Если на сторонний просмотщик pdf документов, то...
+                            Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
+                    }
+                    else//Если открывались Данные, то...
+                        stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
                     stvStr.pop()//Назад страницу
                 }
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
@@ -488,15 +497,10 @@ ApplicationWindow {
 				}
                 onClickedPlan: {//Слот нажатия Плана.
 					let ltPdfUrl;//Переменная хранящая путь pdf файла.
-					if(cppqml.blPlanPervi){//Если план еще не задан, то...
-						console.error("489:План не задан!");
+                    if(cppqml.blPlanPervi)//Если план еще не задан, то...
                     	ltPdfUrl = "qrc:///workingdata/plan.pdf";//То открываем инструкцию пользователя.
-					}
-					else{//Если план уже был задан, то...
-						console.error("493:План уже задан!");
-						ltPdfUrl="file:///home/druidcat/git/qt-working-diagrams/build/workingdata/000000.pdf"
-                    	//ltPdfUrl = "qrc:///workingdata/plan.pdf";//Открываем заданный план.
-					}
+                    else//Если план уже был задан, то...
+                        ltPdfUrl="file:///"+cppqml.polPutImyaPlan();//Путь и имя файла Плана.
 
 					if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
 						tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.

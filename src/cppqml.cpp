@@ -716,6 +716,15 @@ bool DCCppQml::copyPlan(QString strImyaFaila){//Копировать файл П
 ///////////////////////////////////////////////
     return m_pDataPlan->ustPlan(m_ullSpisokKod, m_ullElementKod, strImyaFaila);//Копируем файл и возв. статус.
 }
+QString DCCppQml::polPutImyaPlan(){//Получить полный путь с именем Плана.
+///////////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   П У Т Ь   И   И М Я   Ф А Й Л А---//
+///////////////////////////////////////////////////////////
+    QString strPutImya = m_pDataPlan->polWorkingDiagrams()
+                         +QDir::separator()
+                         +m_pDataPlan->polImyaFaila(m_ullSpisokKod, m_ullElementKod);
+    return strPutImya;
+}
 QString DCCppQml::strDebug(){//Возвращает ошибку.
 ///////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Т Е К С Т   О Ш И Б К И---//

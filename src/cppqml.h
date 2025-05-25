@@ -198,8 +198,9 @@ public:
     void  		setBlFileDialogPlan(const bool& blFileDialogPlanNovi);//Копируем План или Данные.
 
     bool 		blPlanPervi();//Возвращает флаг Первый План?
-    Q_INVOKABLE bool copyPlan(QString strImyaFaila);//Копировать файл Плана.
-														   //
+    Q_INVOKABLE bool 	copyPlan(QString strImyaFaila);//Копировать файл Плана.
+    Q_INVOKABLE QString polPutImyaPlan();//Получить полный путь с именем Плана.
+                                                           //
     Q_INVOKABLE bool isPdfPoisk(const QString strPoisk);//Пустой запрос на поиск?
 
     QString		strDebug();//Возвращает ошибку.

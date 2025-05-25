@@ -32,8 +32,7 @@ Item {
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Не удалять, может Escape не работать.
     //Сигналы.
-    signal clickedNazad();//Сигнал нажатия кнопки Назад
-    signal clickedZakrit();//Сигнал нажатия кнопки Закрыть.
+    signal clickedZakrit();//Сигнал нажатия кнопки Закрыть или Назад.
     signal clickedInfo();//Сигнал нажатич кнопки Инфо, где будет описание работы Файлового Диалога.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 	signal signalToolbar (var strToolbar);//Сигнал излучающий в Toolbar в Проводнике.
