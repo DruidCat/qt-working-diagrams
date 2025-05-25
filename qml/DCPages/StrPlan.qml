@@ -45,7 +45,6 @@ Item {
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
         }
         else{//Если путь пустая строка, то...
-            root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
             pdfLoader.blClose = true;//Закрываем Загрузчик.
             pdfLoader.active = false;//Деактивируем загрузчик, уничтожаем всё его содержимое.
             Qt.callLater(fnGarbageCollector);//Принудительно вызываем сборщик мусора
@@ -95,6 +94,7 @@ Item {
             clrKnopki: root.clrTexta
             onClicked: {
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
+                root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
             }
         }
     }
@@ -135,8 +135,10 @@ Item {
                     tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
                     lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
                 }
-                else//Виджет не видимый. При открытии этот флаг не изменится.
-                    tmrLogo.running = true;//Запускаем таймер анимации логотипа
+                else{//Виджет не видимый. При открытии этот флаг не изменится.
+                    if(!pdfLoader.blClose)//Если Pdf загрузчик не закрываем... НЕ УДАЛЯТЬ!
+                        tmrLogo.running = true;//Запускаем таймер анимации логотипа
+                }
             }
             function onRenderScaleChanged(){//Изменился масштаб документа.
                 pdfScale.value = pdfLoader.item.renderScale*100;//Выставляем значение масштаба в DCScale
@@ -191,6 +193,7 @@ Item {
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             onClicked: {
+                fnPdfSource("");//Пустой путь PDF документа, закрываем.
                 root.clickedSozdat();//Сигнал нажатия кнопки Создать
             }
         }

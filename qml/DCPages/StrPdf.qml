@@ -304,8 +304,10 @@ Item {
                     tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
                     lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
                 }
-                else//Виджет не видимый. При открытии этот флаг не изменится.
-                    tmrLogo.running = true;//Запускаем таймер анимации логотипа
+                else{//Виджет не видимый. При открытии этот флаг не изменится.
+                    if(!pdfLoader.blClose)//Если Pdf загрузчик не закрываем... НЕ УДАЛЯТЬ!
+                        tmrLogo.running = true;//Запускаем таймер анимации логотипа
+                }
             }
             function onSgnCurrentPage(ntStranica){//Изменился номер страницы
                 spbPdfPage.value = ntStranica + 1//В DCSpinBox выставляем значение страницы.
