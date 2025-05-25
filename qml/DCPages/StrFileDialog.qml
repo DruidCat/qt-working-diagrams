@@ -170,14 +170,14 @@ Item {
                                 knopkaNastroiki.visible = false//Делаем кнопку настройки невидимой.
                                 knopkaInfo.visible = false//Делаем кнопку информации невидимой.
                                 tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
-								if(root.blPlan){//Если выбран режим сохранения документа Плана, то...
+                                cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
+                                if(root.blPlan){//Если выбран режим сохранения документа Плана, то...
                                     if(!cppqml.copyPlan(strFileDialog)){//Если ошибка Копирования файла Плана.
                                         fnCopyStop();//Останавливаем анимацию копирования, закрываем проводник
                                     }
 								}
 								else{//Если выбран режим сохранения документа Данных, то...
-                                	cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
-                                	cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Док. и Документ
+                                    cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Док. и Документ
 								}
                             }
                         }

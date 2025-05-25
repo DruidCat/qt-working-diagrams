@@ -108,7 +108,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
     m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
     m_pDataDannie->dbStart();//Записываем первоначальные данные в БД.
-    m_pDataPlan->dbStart();//Записываем первоначальные данные.
+    m_pDataPlan->ustFileDialogPut(m_pFileDialog->polFileDialogPut());//Задаём путь домашнего каталога на старт
     m_pdcclass = new DCClass;//Создаём динамический указатель на класс часто используемых методов.
 	m_pTimerDebug = new QTimer();//Указатель на QTimer для Debug
 	m_pTimerDebug->setInterval(1000);//Интервал прерывания 1000 мс (1с).
