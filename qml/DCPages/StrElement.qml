@@ -356,9 +356,11 @@ Item {
 	}
 	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
         root.blPereimenovatVibor ? rctBorder.border.color=clrTexta:rctBorder.border.color="transparent";
+        root.focus = true;//Фокус на головном элементе, чтоб работал Escape.
     }
     onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
         root.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
+        root.focus = true;//Фокус на головном элементе, чтоб работал Escape.
     }
 	Item {//Состава Тулбар
 		id: tmToolbar 
