@@ -48,6 +48,26 @@ Item {
                 pdfLoader.item.currentPage = ntStrUp;
             event.accepted = true;//Завершаем обработку эвента.
         }
+        if(event.key === 43){//Если нажата "+",то.
+            var ntScaleUp = pdfScale.value + 25;
+            if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
+                pdfLoader.item.renderScale = ntScaleUp/100;
+            else{//Если больше максимального масштаба, то...
+                if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения, то...
+                    pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
+            }
+            event.accepted = true;//Завершаем обработку эвента.
+        }
+        if(event.key === 95){//Если нажата "_", то.
+            var ntScaleDown = pdfScale.value - 25;//-1 страница
+            if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
+                pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
+            else{
+                if(pdfScale.value !== pdfScale.from)
+                    pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем минимальное значение.
+            }
+            event.accepted = true;//Завершаем обработку эвента.
+        }
         //cppqml.strDebug = event.key;
     }
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
