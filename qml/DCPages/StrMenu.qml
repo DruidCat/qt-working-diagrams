@@ -23,7 +23,7 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
     property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
-    property bool appRedaktor: true//true - включен Редактор приложения.
+    property bool appRedaktor: cppqml.blAppRedaktor//true - включен Редактор приложения.
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     //Сигналы.
@@ -37,14 +37,15 @@ Item {
             menuMenu.visible = false;//Делаем невидимым всплывающее меню.
         }
     }
-
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
         onClicked: menuMenu.visible = false
     }
-
     onPdfViewerChanged: {//Если просмотрщик поменялся, то...
         cppqml.blPdfViewer = root.pdfViewer;//Отправляем в бизнес логику просмотрщик pdf документов.
+    }
+    onAppRedaktorChanged: {//Если Редактор изменился вкл/выкл, то...
+        cppqml.blAppRedaktor = root.appRedaktor;//Отправляем в бизнес логику флаг редактора вкл/выкл.
     }
 
 	Item {

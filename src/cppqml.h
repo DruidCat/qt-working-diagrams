@@ -29,6 +29,10 @@ class DCCppQml : public QObject {
                     READ blPdfViewer
                     WRITE setBlPdfViewer
                     NOTIFY blPdfViewerChanged FINAL)
+    Q_PROPERTY(bool blAppRedaktor
+                    READ blAppRedaktor
+                    WRITE setBlAppRedaktor
+                    NOTIFY blAppRedaktorChanged FINAL)
     Q_PROPERTY(uint untNastroikiMaxLength
                     READ untNastroikiMaxLength
                     NOTIFY untNastroikiMaxLengthChanged FINAL)
@@ -143,6 +147,8 @@ public:
     void		setUntWidth(const uint& untWidth);//Изменяем ширину окна приложения.
     bool		blPdfViewer() { return m_blPdfViewer; }//Возвращаем флаг просмотщика.
     void		setBlPdfViewer(const bool& blPdfViewer);//Изменяем просмотрщик pdf документов.
+    bool		blAppRedaktor() { return m_blAppRedaktor; }//Возвращаем флаг редактора.
+    void		setBlAppRedaktor(const bool& blAppRedaktor);//Изменяем редактор Ментора.
     uint 		untNastroikiMaxLength() { return m_untNastroikiMaxLength; }//Максимальная длина строки текста
 
     QString		strTitul();//Получить имя Титула.
@@ -214,6 +220,7 @@ signals:
     void untHeightChanged();//Сигнал о том, что высота окна изменилась.
     void untWidthChanged();//Сигнал о том, что ширина окна изменилась.
     void blPdfViewerChanged();//Сигнал о том, что просмотрщик pdf документов поменялся.
+    void blAppRedaktorChanged();//Сигнал о том, что флаг Редактора поменялся.
     void untNastroikiMaxLengthChanged();//Сигнал о том, что максимальная длина текста изменилась.
 
     void strTitulChanged();//Сигнал о том, что имя Титула изменилось.
@@ -262,6 +269,7 @@ private:
     uint	m_untHeight;//Высота окна приложения.
     uint	m_untWidth;//Ширина окна приложения.
     bool	m_blPdfViewer;//Флаг pdf просмотрщика.
+    bool	m_blAppRedaktor;//Флаг Редактора вкл/выкл.
     uint	m_untNastroikiMaxLength;//Максимальная длина строки текста в Свойстве Q_PROPERTY
 
     QString m_strTitul;//аргумент элемента имени Титула в Свойстве Q_PROPERTY

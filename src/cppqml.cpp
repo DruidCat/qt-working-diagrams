@@ -7,6 +7,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_untHeight(0),
                                         m_untWidth(0),
                                         m_blPdfViewer(true),
+                                        m_blAppRedaktor(true),
                                         m_untNastroikiMaxLength(33),
 
 										m_strTitul(""),
@@ -151,6 +152,7 @@ void DCCppQml::ustReestr(){//Запись настроек программы
     m_sttReestr.setValue("/shirina_okna", m_untWidth);//Записываем ширину окна
     m_sttReestr.setValue("/visota_okna", m_untHeight);//Записываем высоту окна
     m_sttReestr.setValue("/pdf_viewer", m_blPdfViewer);//Записываем просмотрщик pdf документов.
+    m_sttReestr.setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::polReestr(){//Чтение настроек программы
@@ -161,6 +163,7 @@ void DCCppQml::polReestr(){//Чтение настроек программы
     m_untWidth = m_sttReestr.value("/shirina_okna", 640).toInt();//Читаем ширину окна, по умолчанию 640
     m_untHeight = m_sttReestr.value("/visota_okna", 480).toInt();//Читаем высоту окна, по умолчанию 480
     m_blPdfViewer = m_sttReestr.value("/pdf_viewer", true).toBool();//Читаем просмотрщик документов, по умол 1
+    m_blAppRedaktor = m_sttReestr.value("/app_redaktor", true).toBool();//Читаем флаг редактора, по умол 1
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::setUntHeight(const uint& untHeight) {//Изменяем высоту окна приложения.
@@ -181,7 +184,6 @@ void DCCppQml::setUntWidth(const uint& untWidth) {//Изменяем ширин�
         emit untWidthChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
-
 void DCCppQml::setBlPdfViewer(const bool& blPdfViewer){//Изменяем просмотрщик pdf документов.
 ///////////////////////////////////////////////////////////////////////
 //---И З М Е Н Я Е М   П Р О С М О Т Р Щ И К   Д О К У М Е Н Т О В---//
@@ -189,6 +191,15 @@ void DCCppQml::setBlPdfViewer(const bool& blPdfViewer){//Изменяем про
     if (blPdfViewer != m_blPdfViewer){//Если не равны значения, то...
         m_blPdfViewer = blPdfViewer;//Приравниваем.
         emit blPdfViewerChanged();//Излучаем сигнал об изменении аргумента.
+    }
+}
+void DCCppQml::setBlAppRedaktor(const bool& blAppRedaktor){//Изменяем флаг редактора вкл/выкл.
+///////////////////////////////////////////////////////
+//---И З М Е Н Я Е М   Ф Л А Г   Р Е Д А К Т О Р А---//
+///////////////////////////////////////////////////////
+    if (blAppRedaktor != m_blAppRedaktor){//Если не равны значения, то...
+        m_blAppRedaktor = blAppRedaktor;//Приравниваем.
+        emit blAppRedaktorChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
 QString DCCppQml::strTitul() {//Получить имя Титула.
