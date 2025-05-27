@@ -57,7 +57,7 @@ Page {
 						font.pixelSize: rctStrZagolovokText.height
 						onTextChanged: {//Если изменился текст, втавили длинный текст.
 							if(rctStrZagolovokText.width > txtStrZagolovok.width){//длина строки больше текста
-							for(let ltShag=txtStrZagolovok.font.pixelSize;
+                            for(var ltShag=txtStrZagolovok.font.pixelSize;
 																ltShag<rctStrZagolovokText.height; ltShag++){
 									if(txtStrZagolovok.width < rctStrZagolovokText.width){
 										txtStrZagolovok.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -78,7 +78,7 @@ Page {
 					}
 					onWidthChanged: {//Если длина строки изменилась, то...
 						if(rctStrZagolovokText.width > txtStrZagolovok.width){//длина строки больше текста, то
-						for(let ltShag=txtStrZagolovok.font.pixelSize; ltShag<rctStrZagolovokText.height;
+                        for(var ltShag=txtStrZagolovok.font.pixelSize; ltShag<rctStrZagolovokText.height;
 																									ltShag++){
 								if(txtStrZagolovok.width < rctStrZagolovokText.width){//длина текста меньше ст
 									txtStrZagolovok.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -149,31 +149,31 @@ Page {
 						anchors.centerIn: rctStrToolbarText
                         color: root.clrTexta
 						text: ""
-						font.pixelSize: rctStrToolbarText.height
-						onTextChanged: {//Если длина строки изменилась, то...
-							if(rctStrToolbarText.width > txtStrToolbar.width){//длина строки больше текста, то
-							for(let ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;
-																									ltShag++){
-									if(txtStrToolbar.width < rctStrToolbarText.width){//длина текста < страниц
-										txtStrToolbar.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-										if(txtStrToolbar.width > rctStrToolbarText.width){//если переборщили
-											txtStrToolbar.font.pixelSize--;//То уменьшаем размер шрифта и...
-											return;//Выходим из увеличения шрифта.
-										}
-									}
-								}
-							}
-							else{//Если длина строки меньше длины текста, то...
-								for(let ltShag = txtStrToolbar.font.pixelSize; ltShag > 0; ltShag--){//Цикл
-									if(txtStrToolbar.width > rctStrToolbarText.width)//текст дилиннее строки
-										txtStrToolbar.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-								}
-							}
-						}
+                        font.pixelSize: rctStrToolbarText.height
+                        onTextChanged: {//Если длина строки изменилась, то...
+                            if(rctStrToolbarText.width > txtStrToolbar.width){//длина строки больше текста, то
+                            for(var ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;
+                                                                                                    ltShag++){
+                                    if(txtStrToolbar.width < rctStrToolbarText.width){//длина текста < страниц
+                                        txtStrToolbar.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                                        if(txtStrToolbar.width > rctStrToolbarText.width){//если переборщили
+                                            txtStrToolbar.font.pixelSize--;//То уменьшаем размер шрифта и...
+                                            return;//Выходим из увеличения шрифта.
+                                        }
+                                    }
+                                }
+                            }
+                            else{//Если длина строки меньше длины текста, то...
+                                for(let ltShag = txtStrToolbar.font.pixelSize; ltShag > 0; ltShag--){//Цикл
+                                    if(txtStrToolbar.width > rctStrToolbarText.width)//текст дилиннее строки
+                                        txtStrToolbar.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                                }
+                            }
+                        }
 					}
 					onWidthChanged: {//Если длина строки изменилась, то...
 						if(rctStrToolbarText.width > txtStrToolbar.width){//длина строки больше текста, то...
-						for(let ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;ltShag++){
+                        for(var ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;ltShag++){
 								if(txtStrToolbar.width < rctStrToolbarText.width){//длина текста меньше страни
 									txtStrToolbar.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 									if(txtStrToolbar.width > rctStrToolbarText.width){//если переборщили
