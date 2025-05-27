@@ -59,19 +59,19 @@ Item {
                 }
                 event.accepted = true;//Завершаем обработку эвента.
             }
-            if(event.key === Qt.Key_Minus){//Если нажат "-", то.
-                var ntScaleDown = pdfScale.value - 25;//-1 страница
-                if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
-                    pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
-                else{
-                    if(pdfScale.value !== pdfScale.from)
-                        pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем минимальное значение.
+            else{
+                if(event.key === Qt.Key_Minus){//Если нажат "-", то.
+                    var ntScaleDown = pdfScale.value - 25;//-1 страница
+                    if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
+                        pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
+                    else{
+                        if(pdfScale.value !== pdfScale.from)
+                            pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем минимальное значение.
+                    }
+                    event.accepted = true;//Завершаем обработку эвента.
                 }
-                event.accepted = true;//Завершаем обработку эвента.
             }
         }
-
-
         //cppqml.strDebug = event.key;
     }
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
