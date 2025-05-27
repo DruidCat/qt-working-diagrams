@@ -366,6 +366,7 @@ Item {
 	}
     Item {//Тулбар
 		id: tmToolbar
+        clip: true//Обрезаем загрузчик, который выходит за границы toolbar
         Loader {//Loader Прогресса загрузки pdf документа
             id: ldrProgress
             anchors.fill: tmToolbar

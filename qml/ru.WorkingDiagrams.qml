@@ -80,7 +80,7 @@ ApplicationWindow {
 				zonaX: pgStrMenu.rctStrZona.x; zonaY: pgStrMenu.rctStrZona.y
 				zonaWidth: pgStrMenu.rctStrZona.width; zonaHeight: pgStrMenu.rctStrZona.height
 				toolbarX: pgStrMenu.rctStrToolbar.x; toolbarY: pgStrMenu.rctStrToolbar.y
-                toolbarWidth: pgStrMenu.rctStrToolbar.width-pgStrMenu.ntCoff/2//margins компенсируем.
+                toolbarWidth: pgStrMenu.rctStrToolbar.width
                 toolbarHeight: pgStrMenu.rctStrToolbar.height
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
@@ -128,7 +128,7 @@ ApplicationWindow {
 				zonaX: pgStrDebug.rctStrZona.x; zonaY: pgStrDebug.rctStrZona.y
 				zonaWidth: pgStrDebug.rctStrZona.width; zonaHeight: pgStrDebug.rctStrZona.height
 				toolbarX: pgStrDebug.rctStrToolbar.x; toolbarY: pgStrDebug.rctStrToolbar.y
-                toolbarWidth: pgStrDebug.rctStrToolbar.width-pgStrDebug.ntCoff/2//margins компенсируем.
+                toolbarWidth: pgStrDebug.rctStrToolbar.width
                 toolbarHeight: pgStrDebug.rctStrToolbar.height
 				radiusZona: pgStrDebug.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
@@ -161,7 +161,7 @@ ApplicationWindow {
 				zonaWidth: pgStrWorkingDiagrams.rctStrZona.width;
 				zonaHeight: pgStrWorkingDiagrams.rctStrZona.height
 				toolbarX: pgStrWorkingDiagrams.rctStrToolbar.x; toolbarY: pgStrWorkingDiagrams.rctStrToolbar.y
-                toolbarWidth: pgStrWorkingDiagrams.rctStrToolbar.width-pgStrWorkingDiagrams.ntCoff/2//margins
+                toolbarWidth: pgStrWorkingDiagrams.rctStrToolbar.width
 				toolbarHeight: pgStrWorkingDiagrams.rctStrToolbar.height
 				radiusZona: pgStrWorkingDiagrams.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
@@ -192,7 +192,7 @@ ApplicationWindow {
 				zonaX: pgStrQt.rctStrZona.x; zonaY: pgStrQt.rctStrZona.y
 				zonaWidth: pgStrQt.rctStrZona.width; zonaHeight: pgStrQt.rctStrZona.height
 				toolbarX: pgStrQt.rctStrToolbar.x; toolbarY: pgStrQt.rctStrToolbar.y
-                toolbarWidth: pgStrQt.rctStrToolbar.width-pgStrQt.ntCoff/2//margins компенсируем.
+                toolbarWidth: pgStrQt.rctStrToolbar.width
                 toolbarHeight: pgStrQt.rctStrToolbar.height
 				radiusZona: pgStrQt.rctStrZona.radius//Радиус берём из настроек элемента qml
 				onClickedNazad: {
@@ -222,7 +222,7 @@ ApplicationWindow {
 				zonaX: pgStrSpisok.rctStrZona.x; zonaY: pgStrSpisok.rctStrZona.y
 				zonaWidth: pgStrSpisok.rctStrZona.width; zonaHeight: pgStrSpisok.rctStrZona.height
 				toolbarX: pgStrSpisok.rctStrToolbar.x; toolbarY: pgStrSpisok.rctStrToolbar.y
-                toolbarWidth: pgStrSpisok.rctStrToolbar.width-pgStrSpisok.ntCoff/2//margins компенсируем.
+                toolbarWidth: pgStrSpisok.rctStrToolbar.width
                 toolbarHeight: pgStrSpisok.rctStrToolbar.height
 				radiusZona: pgStrSpisok.rctStrZona.radius//Радиус берём из настроек элемента qml
                 appRedaktor: root.appRedaktor
@@ -271,7 +271,7 @@ ApplicationWindow {
 				zonaX: pgStrElement.rctStrZona.x; zonaY: pgStrElement.rctStrZona.y
 				zonaWidth: pgStrElement.rctStrZona.width; zonaHeight: pgStrElement.rctStrZona.height
 				toolbarX: pgStrElement.rctStrToolbar.x; toolbarY: pgStrElement.rctStrToolbar.y
-                toolbarWidth: pgStrElement.rctStrToolbar.width-pgStrElement.ntCoff/2//margins компенсируем.
+                toolbarWidth: pgStrElement.rctStrToolbar.width
 				toolbarHeight: pgStrElement.rctStrToolbar.height
 				radiusZona: pgStrElement.rctStrZona.radius//Радиус берём из настроек элемента qml
                 appRedaktor: root.appRedaktor
@@ -320,7 +320,7 @@ ApplicationWindow {
 				zonaX: pgStrDannie.rctStrZona.x; zonaY: pgStrDannie.rctStrZona.y
 				zonaWidth: pgStrDannie.rctStrZona.width; zonaHeight: pgStrDannie.rctStrZona.height
 				toolbarX: pgStrDannie.rctStrToolbar.x; toolbarY: pgStrDannie.rctStrToolbar.y
-                toolbarWidth: pgStrDannie.rctStrToolbar.width-pgStrDannie.ntCoff/2//margins компенсируем.
+                toolbarWidth: pgStrDannie.rctStrToolbar.width
                 toolbarHeight: pgStrDannie.rctStrToolbar.height
 				radiusZona: pgStrDannie.rctStrZona.radius//Радиус берём из настроек элемента qml
                 pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
@@ -376,7 +376,7 @@ ApplicationWindow {
 				zonaX: pgStrPdf.rctStrZona.x; zonaY: pgStrPdf.rctStrZona.y
 				zonaWidth: pgStrPdf.rctStrZona.width; zonaHeight: pgStrPdf.rctStrZona.height
 				toolbarX: pgStrPdf.rctStrToolbar.x; toolbarY: pgStrPdf.rctStrToolbar.y
-                toolbarWidth: pgStrPdf.rctStrToolbar.width-pgStrPdf.ntCoff/2//margins компенсируем.
+                toolbarWidth: pgStrPdf.rctStrToolbar.width
                 toolbarHeight: pgStrPdf.rctStrToolbar.height
                 pdfViewer: root.pdfViewer
 				onClickedNazad: {
@@ -407,7 +407,7 @@ ApplicationWindow {
                 zonaX: pgStrFileDialog.rctStrZona.x; zonaY: pgStrFileDialog.rctStrZona.y
                 zonaWidth: pgStrFileDialog.rctStrZona.width; zonaHeight: pgStrFileDialog.rctStrZona.height
                 toolbarX: pgStrFileDialog.rctStrToolbar.x; toolbarY: pgStrFileDialog.rctStrToolbar.y
-                toolbarWidth: pgStrFileDialog.rctStrToolbar.width-pgStrFileDialog.ntCoff/2//margins компенсир
+                toolbarWidth: pgStrFileDialog.rctStrToolbar.width
 				toolbarHeight: pgStrFileDialog.rctStrToolbar.height
 				radiusZona: pgStrFileDialog.rctStrZona.radius//Радиус берём из настроек элемента qml
 				blPlan: root.planFileDialog//Выбор режима открытия проводника для Плана или Данных.
@@ -464,7 +464,7 @@ ApplicationWindow {
                 zonaWidth: pgStrFDInstrukciya.rctStrZona.width;
                 zonaHeight: pgStrFDInstrukciya.rctStrZona.height
                 toolbarX: pgStrFDInstrukciya.rctStrToolbar.x; toolbarY: pgStrFDInstrukciya.rctStrToolbar.y
-                toolbarWidth: pgStrFDInstrukciya.rctStrToolbar.width-pgStrFDInstrukciya.ntCoff/2//margins комп
+                toolbarWidth: pgStrFDInstrukciya.rctStrToolbar.width
                 toolbarHeight: pgStrFDInstrukciya.rctStrToolbar.height
                 radiusZona: pgStrFDInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
                 onClickedNazad: {
@@ -493,7 +493,7 @@ ApplicationWindow {
 				zonaX: pgStrOpisanie.rctStrZona.x; zonaY: pgStrOpisanie.rctStrZona.y
 				zonaWidth: pgStrOpisanie.rctStrZona.width; zonaHeight: pgStrOpisanie.rctStrZona.height
 				toolbarX: pgStrOpisanie.rctStrToolbar.x; toolbarY: pgStrOpisanie.rctStrToolbar.y
-                toolbarWidth: pgStrOpisanie.rctStrToolbar.width-pgStrOpisanie.ntCoff/2//margins компенсируем.
+                toolbarWidth: pgStrOpisanie.rctStrToolbar.width
 				toolbarHeight: pgStrOpisanie.rctStrToolbar.height
 				radiusZona: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
 				strOpisanie: stvStr.strOpisanie//Передаём флаг Отображения конкретного Описания.
@@ -539,7 +539,7 @@ ApplicationWindow {
                 zonaX: pgStrPlan.rctStrZona.x; zonaY: pgStrPlan.rctStrZona.y
                 zonaWidth: pgStrPlan.rctStrZona.width; zonaHeight: pgStrPlan.rctStrZona.height
                 toolbarX: pgStrPlan.rctStrToolbar.x; toolbarY: pgStrPlan.rctStrToolbar.y
-                toolbarWidth: pgStrPlan.rctStrToolbar.width-pgStrPlan.ntCoff/2//margins компенсируем.
+                toolbarWidth: pgStrPlan.rctStrToolbar.width
                 toolbarHeight: pgStrPlan.rctStrToolbar.height
                 pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
                 onClickedNazad: {
