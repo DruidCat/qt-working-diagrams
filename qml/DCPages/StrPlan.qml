@@ -107,7 +107,8 @@ Item {
             else{//Если таймер выключен, то...
                 ldrProgress.active = false;//Отключаем прогресс.
                 pdfScale.visible = true;//Делаем видимым DCScale
-                knopkaSozdat.visible = true;//Видимая кнопка Создать.
+                if(root.appRedaktor)//Если редактор включен, то...
+                    knopkaSozdat.visible = true;//Видимая кнопка Создать.
             }
         }
     }

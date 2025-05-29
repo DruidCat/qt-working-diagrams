@@ -142,7 +142,7 @@ Item {
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: root.pdfViewer ? qsTr("PdfViewer: вкл") : qsTr("PdfViewer: выкл")
+                    text: root.pdfViewer ? qsTr("ViewerPDF: вкл") : qsTr("ViewerPDF: выкл")
                     bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
@@ -157,7 +157,7 @@ Item {
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"
                     clrTexta: root.clrTexta
-                    text: root.appRedaktor ? qsTr("Администратор: вкл") : qsTr("Администратор: выкл")
+                    text: root.appRedaktor ? qsTr("Редактор: вкл") : qsTr("Редактор: выкл")
                     bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
