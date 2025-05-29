@@ -307,12 +307,12 @@ Item {
                     }
                     else{//Если не первый элемент, то...
                         if(root.blPereimenovatVibor){//Если разрешён выбор элементов для переименовывания.
+                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
                             root.blPereimenovat = true;//Переименование (отмена)...(ок)
                             root.signalToolbar(qsTr("Переименуйте выбранный список."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
                             txnZagolovok.text = strSpisok;//Добавляем в строку выбранный элемент Списка.
-                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
                             lsvZona.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор Списка переименования, то ...

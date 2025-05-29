@@ -286,12 +286,12 @@ Item {
 					}
 					else{//Если не первый элемент, то...
                         if(root.blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания
+                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
                             root.blPereimenovat = true;//Переименование (отмена)...(ок)
                             root.signalToolbar(qsTr("Переименуйте выбранный документ."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             strDannieRen = strDannie;//Присваиваем переменной имя Документа.
                             txnZagolovok.text = strDannie;//Добавляем в строку выбранный Документ.
-                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
                             lsvZona.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...
