@@ -366,6 +366,7 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: "black"
+            leftToolbar: 4; rightToolbar: 4
             StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
@@ -534,6 +535,7 @@ ApplicationWindow {
             clrTexta: root.clrKnopok
             clrRabOblasti: "black"
             textZagolovok: qsTr("ПЛАН")
+            leftToolbar: 1; rightToolbar: 4
             StrPlan {
                 id: tmPlan
                 ntWidth: pgStrPlan.ntWidth; ntCoff: pgStrPlan.ntCoff

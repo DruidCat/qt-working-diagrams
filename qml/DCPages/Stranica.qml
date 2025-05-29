@@ -15,6 +15,8 @@ Page {
 	property alias rctStrZagolovok: rctStrZagolovok
 	property alias rctStrZona: rctStrZona
     property alias rctStrToolbar: rctStrToolbar
+    property int leftToolbar: 1
+    property int rightToolbar: 1
     //Функции.
 	Item{
 		id: tmStr
@@ -132,19 +134,19 @@ Page {
 				Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
                     id: tmToolbarKnopkaCleva
 					height: rctStrToolbar.height
-					width: height
+                    width: height*root.leftToolbar//Длина левой кнопки в перерасчёта на коэффициент.
 					anchors.top: rctStrToolbar.top
                     anchors.left: rctStrToolbar.left
                     anchors.bottom: rctStrToolbar.bottom
-				}
+				} 
 				Rectangle {
                     id: rctStrToolbarText
-                    width: rctStrToolbar.width-2*tmToolbarKnopkaCleva.width
                     height: rctStrToolbar.height-root.ntCoff
                     anchors.left: tmToolbarKnopkaCleva.right
+                    anchors.right: tmToolbarKnopkaCprava.left
                     anchors.verticalCenter: rctStrToolbar.verticalCenter
 					color: "transparent"
-					Text {
+                    Text {
                         id: txtStrToolbar
 						anchors.centerIn: rctStrToolbarText
                         color: root.clrTexta
@@ -152,7 +154,7 @@ Page {
                         font.pixelSize: rctStrToolbarText.height
                         onTextChanged: {//Если длина строки изменилась, то...
                             if(rctStrToolbarText.width > txtStrToolbar.width){//длина строки больше текста, то
-                            for(var ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;
+                                for(var ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;
                                                                                                     ltShag++){
                                     if(txtStrToolbar.width < rctStrToolbarText.width){//длина текста < страниц
                                         txtStrToolbar.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -173,7 +175,8 @@ Page {
 					}
 					onWidthChanged: {//Если длина строки изменилась, то...
 						if(rctStrToolbarText.width > txtStrToolbar.width){//длина строки больше текста, то...
-                        for(var ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;ltShag++){
+                            for(var ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;
+                                                                                                    ltShag++){
 								if(txtStrToolbar.width < rctStrToolbarText.width){//длина текста меньше страни
 									txtStrToolbar.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 									if(txtStrToolbar.width > rctStrToolbarText.width){//если переборщили
@@ -190,13 +193,12 @@ Page {
 							}
 						}
 					}
-				}
+				} 
                 Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
                     id: tmToolbarKnopkaCprava
                     height: rctStrToolbar.height
-                    width: height
+                    width: height*root.rightToolbar//Длина правой кнопки в перерасчёте на коэффициент.
                     anchors.top: rctStrToolbar.top
-                    anchors.left: rctStrToolbarText.right
                     anchors.right: rctStrToolbar.right
                     anchors.bottom: rctStrToolbar.bottom
                 }
