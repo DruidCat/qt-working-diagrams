@@ -418,11 +418,14 @@ ApplicationWindow {
                             ltPdfUrl = "qrc:///workingdata/plan.pdf";//То открываем инструкцию пользователя.
                         else//Если план уже был задан, то...
                             ltPdfUrl="file:///"+cppqml.polPutImyaPlan();//Путь и имя файла Плана.
-
+                        //Механизм открытия инструкции с внешним просмотрщиком документов.
                         if(root.pdfViewer)//Если выбран в настройках собственный просмотрщик, то...
                             tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.
-                        else//Если на сторонний просмотщик pdf документов, то...
-                            Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
+                        else{//Если на сторонний просмотщик pdf документов, то...
+                            tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмотор
+                            if(!cppqml.blPlanPervi)//Если план еще не задан, то...
+                                Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
+                        }
                     }
                     else//Если открывались Данные, то...
                         stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
@@ -507,13 +510,15 @@ ApplicationWindow {
                     	ltPdfUrl = "qrc:///workingdata/plan.pdf";//То открываем инструкцию пользователя.
                     else//Если план уже был задан, то...
                         ltPdfUrl="file:///"+cppqml.polPutImyaPlan();//Путь и имя файла Плана.
-
-					if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
-						tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.
-                    	stvStr.push(pgStrPlan)//Переходим на страницу Плана.
-					}
-					else//Если на сторонний просмотщик pdf документов, то...
-						Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
+                    //Механизм открытия инструкции с внешним просмотрщиком документов.
+                    if(root.pdfViewer)//Если выбран в настройках собственный просмотрщик, то...
+                        tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.
+                    else{//Если на сторонний просмотщик pdf документов, то...
+                        tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмоторщике
+                        if(!cppqml.blPlanPervi)//Если план еще не задан, то...
+                            Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
+                    }
+                    stvStr.push(pgStrPlan)//Переходим на страницу Плана.
                 }
 			}
 		}
