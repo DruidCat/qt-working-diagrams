@@ -32,8 +32,10 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
     signal clickedPlan();//Сигнал нажатия кнопки План.
+    signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции
 	function fnClickedOtmena(){//Отмена редакрирования
+        root.signalToolbar("");//Удаляем надпись Подсказки.
         txdZona.readOnly = true;//запрещаем редактировать текст.
 		if(strOpisanie == "titul"){//Если Титул, то...
 			txdZona.text = cppqml.strTitulOpisanie;//Загружаем текст из бизнес логики.
@@ -50,6 +52,7 @@ Item {
 		}
 	}
     function fnClickedOk(){//Сохранение редакрированного описания.
+        root.signalToolbar("");//Удаляем надпись Подсказки.
         txdZona.readOnly = true;//Запрещаем редактировать текст.
 		if(strOpisanie == "titul"){//Если Титул, то...
 			cppqml.strTitulOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
@@ -189,6 +192,7 @@ Item {
             clrFona: root.clrFona
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
 			onClicked: {
+                root.signalToolbar(qsTr("Для окончания редактирования нажмите ОК."));//Подсказка.
 				txdZona.readOnly = false;//Разрешить редактировать.
                 root.clickedSozdat();//Излучаем сигнал Создать
             }

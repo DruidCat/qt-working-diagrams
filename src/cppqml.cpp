@@ -241,7 +241,7 @@ void DCCppQml::setStrTitulOpisanie(const QString& strTitulOpisanieNovi) {//Пе�
     if(m_strTitulOpisanie != strTitulOpisanieRed){//Если описание титулов не совпадают, то...
         if(m_pDataTitul->renTitulOpisanie(strTitulOpisanieRed)){//Если описание Титула записалось успешно
             m_strTitulOpisanie = strTitulOpisanieRed;
-            qdebug(tr("Новоя запись в описании заголовка."));
+            qdebug(tr("Новая запись в описании заголовка."));
             emit strTitulOpisanieChanged();//Излучаем сигнал об изменении аргумента.
         }
     }
@@ -388,7 +388,7 @@ void DCCppQml::setStrSpisokOpisanie(const QString& strSpisokOpisanieNovi){//Из
     if(strSpisokOpisanieRed != m_strSpisokOpisanie){//Если Описания разные, то...
         if(m_pDataSpisok->ustSpisokOpisanie(m_ullSpisokKod, strSpisokOpisanieRed)){//Записалось Описание,то
             m_strSpisokOpisanie = strSpisokOpisanieRed;//Новое описание присвоили.
-            qdebug("Новоя запись в описании списка.");
+            qdebug("Новая запись в описании списка.");
 			emit strSpisokOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}
@@ -521,7 +521,7 @@ void DCCppQml::setStrElementOpisanie(const QString& strElementOpisanieNovi){//И
     if(strElementOpisanieRed != m_strElementOpisanie){//Если Описания разные, то...
         if(m_pDataElement->ustElementOpisanie(m_ullSpisokKod, m_ullElementKod, strElementOpisanieRed)){
             m_strElementOpisanie = strElementOpisanieRed;//Новое описание присвоили.
-            qdebug(tr("Новоя запись в описании элемента."));
+            qdebug(tr("Новая запись в описании элемента."));
 			emit strElementOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}

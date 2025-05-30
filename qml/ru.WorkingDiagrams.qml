@@ -233,9 +233,6 @@ ApplicationWindow {
                 onClickedInfo: {
                     tmOpisanie.textTextEdit = cppqml.strTitulOpisanie;//Отправляем текст из бизнес логики.
                     pgStrOpisanie.textZagolovok = pgStrSpisok.textZagolovok;//Заголовок Списка.
-                    if(root.appRedaktor){//Если Редактор приложения включен, то...
-                        pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).")
-					}
                     stvStr.infoElement = pgStrSpisok.textZagolovok;//Запоминаем Заголовок.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
@@ -285,9 +282,6 @@ ApplicationWindow {
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strSpisokOpisanie;//Отправляем текст в бизнес логику.
                     pgStrOpisanie.textZagolovok = pgStrElement.textZagolovok;//Заголовок Элемента.
-                    if(root.appRedaktor){//Если Редактор приложения включен, то...
-                        pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).")
-					}
                     stvStr.infoElement = pgStrElement.textZagolovok;//Запоминаем Заголовок.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
@@ -342,9 +336,6 @@ ApplicationWindow {
 				onClickedInfo: {
 					tmOpisanie.textTextEdit = cppqml.strElementOpisanie;//Отправляем текст в бизнес логику.
                     pgStrOpisanie.textZagolovok = pgStrDannie.textZagolovok;//Заголовок Данных.
-                    if(root.appRedaktor){//Если Редактор приложения включен, то...
-                        pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).");
-					}
                     stvStr.infoElement = pgStrDannie.textZagolovok;//Запоминаем Заголовок.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
@@ -492,6 +483,12 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: root.clrStranic
+            onVisibleChanged: {
+                if(visible){
+                    if(root.appRedaktor)//Если Редактор приложения включен, то...
+                        textToolbar = qsTr("Для изменения описания нажмите иконку (+).");
+                }
+            }
             StrOpisanie {
 				id: tmOpisanie
 				ntWidth: pgStrOpisanie.ntWidth; ntCoff: pgStrOpisanie.ntCoff
@@ -525,6 +522,9 @@ ApplicationWindow {
                             Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
                     }
                     stvStr.push(pgStrPlan)//Переходим на страницу Плана.
+                }
+                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrOpisanie.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
 			}
 		}
