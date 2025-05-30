@@ -28,9 +28,15 @@ bool DCFileDialog::ustFileDialogPut(QString strPut){//Устанавливаем
 //---У С Т А Н О В И Т Ь   П У Т Ь   К   К А Т А Л О Г У---//
 /////////////////////////////////////////////////////////////
     if (strPut == "dom"){//Если переменная дом, то...
-        m_strFileDialogImya.clear();//Обнуляем строку с именем файла.
+        m_strFileDialogImya.clear();//ОБЯЗАТЕЛЬНО!!! Обнуляем строку с именем файла.
         m_pdrPut->setPath(m_strFileDialogPutDom);//Задаём домашний каталог.
         return true;//Истина.
+    }
+    else{//Если не переменная Дом, то...
+        if(strPut == "sohranit"){//Если переменная Сохранить текущую деррикторию, то...
+            m_strFileDialogImya.clear();//ОБЯЗАТЕЛЬНО!!! Обнуляем строку с именем файла.
+            return true;//Истина.
+        }
     }
     return false;//не успех.
 }

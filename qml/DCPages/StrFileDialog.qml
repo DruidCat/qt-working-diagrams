@@ -51,7 +51,7 @@ Item {
         lsvZona.visible = true;//Делаем видимую зону с Проводником.
         knopkaNastroiki.visible = true//Делаем кнопку настройки видимой.
         knopkaInfo.visible = true//Делаем кнопку информации видимой.
-        fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дом дерикторию! Сворачиваем, закрываем.
+        fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дерикторию! Сворачиваем, закрываем.
     }
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
@@ -73,7 +73,8 @@ Item {
         }
     }
     function fnClickedZakrit(){
-        cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.
+        //cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.
+        cppqml.strFileDialogPut = "sohranit";//Закрываем проводник и назначаем текущую деррикторию.
         fnClickedEscape();//Меню сворачиваем
         root.clickedZakrit();//Излучаем сигнал закрытия проводника.
     }
@@ -241,7 +242,7 @@ Item {
     }
     Connections {//Соединяем сигнал из C++ с действием в QML
         target: cppqml;//Цель объект класса С++ DCCppQml
-        function onBlFileDialogCopyChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то
+        function onBlFileDialogCopyChanged(){//Слот Если изменился флаг копирования (Q_PROPERTY), то
             fnCopyStop();//Останавливаем анимацию копирования.
         }
     }
