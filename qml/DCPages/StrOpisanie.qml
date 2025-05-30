@@ -68,6 +68,7 @@ Item {
 	Item {
 		id: tmZagolovok
         DCKnopkaNazad {
+            id: knopkaNazad
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -140,6 +141,7 @@ Item {
                 if(readOnly){//Если запрещено редактировать, то...
                     txdZona.textEdit.cursorVisible = false;//Курсор сделаем не видимым
                     knopkaOtmena.visible = false;//делаем невидимой кнопку Отмена.
+                    knopkaNazad.visible = true;//делаем видимой кнопку Назад.
                     knopkaOk.visible = false;//делаем невидимой кнопку Ок.
                     knopkaPlan.visible = true;//Делаем видимой кнопка План.
                     knopkaSozdat.visible = true;//делаем видимой кнопку Создать.
@@ -148,6 +150,7 @@ Item {
                     txdZona.textEdit.cursorVisible = true;//Курсор сделае видимым
                     txdZona.textEdit.cursorPosition = txdZona.text.length;//Курсор в конец текста
                     knopkaSozdat.visible = false//Делаем невидимой кнопку Создать.
+                    knopkaNazad.visible = false;//делаем невидимой кнопку Назад.
                     knopkaOtmena.visible = true;//делаем видимой кнопку Отмена.
                     knopkaPlan.visible = false;//Делаем невидимой кнопка План.
                     knopkaOk.visible = true;//Делаем видимой кнопку Ок
