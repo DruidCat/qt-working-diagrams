@@ -690,10 +690,16 @@ void DCCppQml::setStrFileDialogPut(const QString& strFileDialogPutNovi){//Зап
 ///////////////////////////////////////////////////////////
 //---И З М Е Н Е Н И Е   П У Т Ь   F I L E D I A L O G---//
 ///////////////////////////////////////////////////////////
+    //strFileDialogPutNovi = start; обновляет дерикторию при открытии Проводника.
     //strFileDialogPutNovi = dom; Задаёт домашнюю дерикторию.
-    if(m_pFileDialog->ustFileDialogPut(strFileDialogPutNovi)){//Если путь изменился успешно, то...
-        m_strFileDialogPut = strFileDialogPut();//Изменяем путь переменной.
-        emit strFileDialogPutChanged();//Излучаем сигнал об изменении аргумента.
+    //strFileDialogPutNovi = sohranit; Задаёт текущую дерикторию.
+    if(strFileDialogPutNovi == "start"){//Если это Старт, то...
+        emit strFileDialogPutChanged();//Излучаем сигнал об изменении аргумента и обновляем каталог проводника
+    }
+    else{//Если это не старт, то...
+     if(m_pFileDialog->ustFileDialogPut(strFileDialogPutNovi)){//Если путь изменился успешно, то...
+            m_strFileDialogPut = strFileDialogPut();//Изменяем путь переменной.
+        }
     }
 }
 void DCCppQml::setStrFileDialogModel(const QString &strFileDialogImya){//Принимаем папку или файл.

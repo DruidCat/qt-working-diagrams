@@ -333,6 +333,7 @@ ApplicationWindow {
 					root.planFileDialog = false;//Открываем проводник для Данных.
                     pgStrFileDialog.textZagolovok = pgStrDannie.textZagolovok;//Заголовок Данных.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
+                    cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }
 				onClickedInfo: {
@@ -555,6 +556,7 @@ ApplicationWindow {
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
 					root.planFileDialog = true;//Открываем проводник для План.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
+                    cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }
             }
