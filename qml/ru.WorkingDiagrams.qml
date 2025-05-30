@@ -55,6 +55,7 @@ ApplicationWindow {
 	StackView {
 		id: stvStr
 		property string strOpisanie: "titul"
+        property string infoElement: ""//Запоминает элемент, на котором нажата кнопка Информации.
 		anchors.fill: parent
         initialItem: pgStrSpisok
 
@@ -235,6 +236,7 @@ ApplicationWindow {
                     if(root.appRedaktor){//Если Редактор приложения включен, то...
                         pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).")
 					}
+                    stvStr.infoElement = pgStrSpisok.textZagolovok;//Запоминаем Заголовок.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
 				onClickedSpisok: function(strSpisok) {
@@ -286,6 +288,7 @@ ApplicationWindow {
                     if(root.appRedaktor){//Если Редактор приложения включен, то...
                         pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).")
 					}
+                    stvStr.infoElement = pgStrElement.textZagolovok;//Запоминаем Заголовок.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onClickedElement: function(strElement) {//Слот сигнала нажатия на Элемент, вернув имя Элемента
@@ -342,6 +345,7 @@ ApplicationWindow {
                     if(root.appRedaktor){//Если Редактор приложения включен, то...
                         pgStrOpisanie.textToolbar = qsTr("Для изменения описания нажмите иконку (+).");
 					}
+                    stvStr.infoElement = pgStrDannie.textZagolovok;//Запоминаем Заголовок.
                     stvStr.push(pgStrOpisanie);//Переключаемся на страницу Описания.
 				}
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
@@ -555,6 +559,7 @@ ApplicationWindow {
                 }
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
 					root.planFileDialog = true;//Открываем проводник для План.
+                    pgStrFileDialog.textZagolovok = stvStr.infoElement//Заголовок Проводника.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
                     cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
