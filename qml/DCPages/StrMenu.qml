@@ -47,6 +47,9 @@ Item {
     onAppRedaktorChanged: {//Если Редактор изменился вкл/выкл, то...
         cppqml.blAppRedaktor = root.appRedaktor;//Отправляем в бизнес логику флаг редактора вкл/выкл.
     }
+    function fnKatalog(){//Функция создания каталога pdf документов.
+        Qt.quit();//Закрыть приложение.
+    }
 
 	Item {
 		id: tmZagolovok
@@ -165,16 +168,22 @@ Item {
                     }
                 }
                 DCKnopkaOriginal {
-                    id: knopkaVihod
+                    id: knopkaKatalog
+                    visible: {
+                        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Мобильное устройство
+                            return false;//невидимая кнопка.
+                        else//Если это ПК, то...
+                            return true;//видимая кнопка.
+                    }
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaRedaktor.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: qsTr("Выход")
+                    text: qsTr("Создание каталога документов")
                     bold: true; italic: true
                     onClicked: {//Слот запускающий
-                        Qt.quit();//Закрыть приложение.
+                        fnKatalog();//Функция создания каталога pdf документов.
                     }
                 }
             }

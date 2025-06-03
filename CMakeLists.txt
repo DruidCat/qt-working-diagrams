@@ -31,6 +31,8 @@ set(PROJECT_SOURCES
         src/datadannie.cpp
         src/dataelement.h
         src/dataelement.cpp
+        src/datakatalog.h
+        src/datakatalog.cpp
 		src/dataplan.h
 		src/dataplan.cpp
         src/dataspisok.h
