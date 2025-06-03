@@ -48,7 +48,7 @@ Item {
         cppqml.blAppRedaktor = root.appRedaktor;//Отправляем в бизнес логику флаг редактора вкл/выкл.
     }
     function fnKatalog(){//Функция создания каталога pdf документов.
-        Qt.quit();//Закрыть приложение.
+        console.error(cppqml.polKatalogSummu());//
     }
 
 	Item {

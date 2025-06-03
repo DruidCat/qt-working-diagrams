@@ -75,8 +75,15 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
     m_pDataDannie = new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strWorkingDiagramsPut,
                                    ullDannieMax);//Данные.
+    m_pDataKatalog = new DataKatalog();//Каталог.
     m_pDataPlan = new DataPlan(strWorkingDiagramsPut, ullDannieMax);//План.
     m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
+    //---передаём-указатели-бд---//
+    m_pDataKatalog->ustPDBTitul(m_pDataTitul->polPDB());//Передаем указатель на БД из класса в класс.
+    m_pDataKatalog->ustPDBSpisok(m_pDataSpisok->polPDB());//Передаем указатель на БД из класса в класс.
+    m_pDataKatalog->ustPDBElement(m_pDataElement->polPDB());//Передаем указатель на БД из класса в класс.
+    m_pDataKatalog->ustPDBDannie(m_pDataDannie->polPDB());//Передаем указатель на БД из класса в класс.
+    //---debug---//
     connect(	m_pDataTitul,
 				SIGNAL(signalDebug(QString)),
 				this,
@@ -90,6 +97,10 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 				this,
 				SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
     connect(	m_pDataDannie,
+                SIGNAL(signalDebug(QString)),
+                this,
+                SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    connect(	m_pDataKatalog,
                 SIGNAL(signalDebug(QString)),
                 this,
                 SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
@@ -127,13 +138,15 @@ DCCppQml::~DCCppQml(){//Деструктор.
 //////////////////////////////
     ustReestr();//При закрытии программы записываем настройки программы
 	delete m_pDataTitul;//Удаляем указатель.
-    m_pDataTitul = nullptr;//Указатель на таблицу Списка в БД обнуляем.
+    m_pDataTitul = nullptr;//Указатель на класс Списка c БД обнуляем.
 	delete m_pDataSpisok;//Удаляем указатель.
-    m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД обнуляем.
+    m_pDataSpisok = nullptr;//Указатель на класс Списка c БД обнуляем.
     delete m_pDataElement;//Удаляем указатель.
-    m_pDataElement = nullptr;//Указатель на таблицу Элементов в БД обнуляем.
+    m_pDataElement = nullptr;//Указатель на класс Элементов c БД обнуляем.
     delete m_pDataDannie;//Удаляем указатель.
-    m_pDataDannie = nullptr;//Указатель на таблицу Данных в БД обнуляем.
+    m_pDataDannie = nullptr;//Указатель на класс Данных c БД обнуляем.
+    delete m_pDataKatalog;//Удаляем указатель.
+    m_pDataKatalog = nullptr;//Указатель на класс Каталог с БД обнуляем.
     delete m_pDataPlan;//Удаляем указатель.
     m_pDataPlan = nullptr;//Указатель на таблицу Данных в БД обнуляем.
     delete m_pFileDialog;//Удаляем указатель.
@@ -798,6 +811,12 @@ bool DCCppQml::isPdfPoisk(const QString strPoisk){//Пустой запрос н
 //---П У С Т О Й   З А П Р О С   П О И С К А ?---//
 ///////////////////////////////////////////////////
 	return m_pdcclass->isEmpty(strPoisk);//Вернёт true или false.
+}
+int DCCppQml::polKatalogSummu(){//Получить приблизительное сумарное число файлов в менторе.
+/////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   P D F   С У М М У---//
+/////////////////////////////////////////////
+    return m_pDataKatalog->polPdfSummu();//Получить приблизительное сумарное число файлов в менторе.
 }
 void DCCppQml::slotDebug(QString strDebug){//Слот обрабатывающий ошибку приходящую по сигналу.
 /////////////////////////////////////////////////////////////

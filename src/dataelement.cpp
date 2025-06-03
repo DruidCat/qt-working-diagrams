@@ -213,6 +213,12 @@ QStringList DataElement::polElementKodi(quint64 ullSpisokKod){//Получить
 	}
     return slsKod;
 }
+DCDB* DataElement::polPDB(){//Получить указатель на БД Элемента.
+/////////////////////////////////////////////////////////
+//---П О Л У Ч И Т Ь   У К А З А Т Е Л Ь   Н А   Б Д---//
+/////////////////////////////////////////////////////////
+    return m_pdbElement;//Возвращаем указатель на БД Элемента.
+}
 void DataElement::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////
 //---Q D E B U G---//

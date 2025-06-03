@@ -14,6 +14,7 @@
 #include "datadannie.h"
 #include "dataplan.h"
 #include "dcfiledialog.h"
+#include "datakatalog.h"
 
 class DCCppQml : public QObject {
     Q_OBJECT
@@ -207,7 +208,9 @@ public:
     Q_INVOKABLE bool 	copyPlan(QString strImyaFaila);//Копировать файл Плана.
     Q_INVOKABLE QString polPutImyaPlan();//Получить полный путь с именем Плана.
                                                            //
-    Q_INVOKABLE bool isPdfPoisk(const QString strPoisk);//Пустой запрос на поиск?
+    Q_INVOKABLE bool 	isPdfPoisk(const QString strPoisk);//Пустой запрос на поиск?
+
+    Q_INVOKABLE int		polKatalogSummu();//Получить приблизительное сумарное число файлов в менторе.
 
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
@@ -304,10 +307,11 @@ private:
 							//
     QString m_strDebug;//Текс ошибки.
 
-    DataTitul* 		m_pDataTitul = nullptr;//Указатель на таблицу Титула в БД.
-    DataSpisok* 	m_pDataSpisok = nullptr;//Указатель на таблицу Списка в БД.
-    DataElement*	m_pDataElement = nullptr;//Указатель на таблицу Элементов в БД.
-    DataDannie*		m_pDataDannie = nullptr;//Указатель на таблицу Данных в БД.
+    DataTitul* 		m_pDataTitul = nullptr;//Указатель на класс Титула c БД.
+    DataSpisok* 	m_pDataSpisok = nullptr;//Указатель на класс Списка c БД.
+    DataElement*	m_pDataElement = nullptr;//Указатель на класс Элементов c БД.
+    DataDannie*		m_pDataDannie = nullptr;//Указатель на класс Данных c БД.
+    DataKatalog*	m_pDataKatalog = nullptr;//Указатель на класс Каталог с БД.
     DataPlan*		m_pDataPlan = nullptr;//Указатель на таблицу Данных в БД.
     DCFileDialog*	m_pFileDialog = nullptr;//Указатель на Проводник.
     QTimer*			m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.

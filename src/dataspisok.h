@@ -23,6 +23,7 @@ public:
     bool 		ustSpisokOpisanie(quint64 ullSpisokKod, QString strSpisokOpisanie);//Записать в БД описание списка
 	quint64 	polKod(QString strSpisok);//Получить Код по названию элемента списка.
     bool 		polSpisokPervi() { return m_blSpisokPervi; }//Вернуть состояние флага Первый Список?
+    DCDB*		polPDB();//Получить указатель на БД Списка.
 
 private:
     bool 		m_blSpisokPervi;//Первый Список в Списке.

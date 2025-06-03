@@ -22,6 +22,7 @@ public:
 	bool 		ustElementOpisanie(quint64 ullSpisokKod, quint64 ullElementKod, QString strElementOpisanie);
     QStringList polElementKodi(quint64 ullSpisokKod);//Получить все Коды в таблице Элемент_ullSpisokKod
 	bool 		polElementPervi() { return m_blElementPervi; }//Вернуть состояние флага Первый Элемент?
+    DCDB*		polPDB();//Получить указатель на БД Элемента.
 
 private:
     QString 	m_strImyaDB;//Имя БД

@@ -31,6 +31,7 @@ public:
     bool  		udalDannieFaili(quint64 ullSpisokKod, quint64 ullElementKod);//Удалить все файлы Элемента.
     bool  		udalDannieTablicu(quint64 ullSpisokKod, quint64 ullElementKod);//Удалить таблицу Данных.
     bool 		copyDannie(QString strAbsolutPut, QString strImyaFaila);//Копируем файл в приложение.
+    DCDB*		polPDB();//Получить указатель на БД Данных.
 
 private:
     bool 		m_blDanniePervi;//Первый элемент в Данных.

@@ -16,6 +16,7 @@ public:
 	bool 		renTitul(QString strTitulNovi);//Переименовать в БД Титул.
 	QString 	polTitulOpisanie();//Полчить Описание Титула.
 	bool 		renTitulOpisanie(QString strOpisanie);//Переименовать в БД Описание Титула.
+    DCDB*		polPDB();//Получить указатель на БД Титула.
 
 private:
     DCDB* 		m_pdbTitul = nullptr;//Указатель на базу данных таблицы 
