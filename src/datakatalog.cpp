@@ -48,7 +48,6 @@ int DataKatalog::polPdfSummu(){//Возвратим приблизительну
     quint64 ullSpisok(0);//Количество Списков.
     quint64 ullElement(0);//количество Элементов в конкретном Списке.
     quint64 ullDannie(0);//количество Данных в конкретном Элементе.
-    quint64 ullPdfSumma(0);//Сумма Pdf документов.
 
     if(m_pdbSpisok->SELECT("список")){//Если таблица список существует, то...
         ullSpisok = m_pdbSpisok->SELECTPK();//Количество Списков созданых и удалённых.
@@ -63,14 +62,17 @@ int DataKatalog::polPdfSummu(){//Возвратим приблизительну
             m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));//Задаём таблицу Элемента
             ullElement = m_pdbElement->SELECTPK();//Подсчитываем количество Элементов в каждом из Списков.
             for(quint64 ullElementKod = 1; ullElementKod<=ullElement; ullElementKod++){
-                if(m_pdbDannie->SELECT("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod))){//Проверка наличия табл.
-                    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));//Задаём Таблицу.
-                    qdebug("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
+                if(m_pdbDannie->SELECT("данные_"+QString::number(ullSpisokKod)
+                                        +"_"+QString::number(ullElementKod))){//Проверка наличия табл.
+                    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)
+                                                +"_"+QString::number(ullElementKod));//Задаём Таблицу.
+                    //qdebug("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
+                    ullDannie = ullDannie + m_pdbDannie->SELECT();//Считаем количество строк в таблице.
                 }
             }
         }
     }
-    return ullSpisok;
+    return ullDannie;
 }
 void DataKatalog::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////
