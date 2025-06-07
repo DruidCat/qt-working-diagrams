@@ -22,6 +22,7 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
+    property int ntLogoTMK: 16
     property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
     property bool appRedaktor: cppqml.blAppRedaktor//true - включен Редактор приложения.
     //Настройки.
@@ -31,6 +32,8 @@ Item {
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	signal clickedWorkingDiagrams();//Сигнал нажатия кнопки об Рабочих Схемах.
     signal clickedQt();//Сигнал нажатия кнопки Об Qt.
+    signal signalZagolovok(var strZagolovok);//Сигнал, когда передаём новую надпись в Заголовок.
+    signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
@@ -49,25 +52,164 @@ Item {
     }
     function fnKatalog(){//Функция создания каталога pdf документов.
         console.error(cppqml.polKatalogSummu());//
+        copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
     }
-
+    function fnZakrit(){//Функция закрыти страницы.
+        menuMenu.visible = false;//Делаем невидимым меню.
+        signalZagolovok(qsTr("МЕНЮ"));//Надпись в заголовке, чтоб при следующем открытии меню видеть заголовок
+        root.clickedNazad();//Сигнал нажатия кнопки Назад.
+    }
+    Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
+        id: tmrLogo
+        interval: 110; running: false; repeat: true
+        property bool blLogoTMK: false
+        onTriggered: {
+            if(blLogoTMK){//Если true, то...
+                lgTMK.ntCoff++;
+                if(lgTMK.ntCoff >= root.ntLogoTMK)
+                    blLogoTMK = false;
+            }
+            else{
+                lgTMK.ntCoff--;
+                if(lgTMK.ntCoff <= 1)
+                    blLogoTMK = true;
+            }
+        }
+        onRunningChanged: {//Если таймер изменился, то...
+            if(running){//Если запустился таймер, то...
+                lgTMK.visible = true;//видимый логотип.
+                ldrProgress.active = true;//Запускаем виджет загрузки
+                flZona.visible = false;//невидимые кнопки меню.
+                knopkaMenu.visible = false;//Делаем невидимым кнопку Меню.
+            }
+            else{//Если таймер выключен, то...
+                lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
+                lgTMK.visible = false;//Невидимый логотип.
+                ldrProgress.active = false;//Отключаем прогресс.
+                flZona.visible = true;//видимые кнопки меню.
+                knopkaMenu.visible = true;//Делаем видимым кнопку Меню.
+            }
+        }
+    }
 	Item {
 		id: tmZagolovok
         DCKnopkaVpered{
+            id: knopkaZakrit
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left: tmZagolovok.left
             anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
 			onClicked: {
-                menuMenu.visible = false;//Делаем невидимым меню.
-                root.clickedNazad();//Сигнал нажатия кнопки Назад.
+                if(tmrLogo.running){//Если запущен процесс создания каталогов документов, то...
+                    copyStop.visible = true;//Задаём вопрос "Остановить создание каталога?"
+                }
+                else{//Если нет, то...
+                    fnZakrit();//Закрываем окно Меню
+                }
 			}
 		}
+        DCVopros{
+            id: copyStart
+            anchors.top: tmZagolovok.top
+            anchors.bottom: tmZagolovok.bottom
+            anchors.left: tmZagolovok.left
+            anchors.right: tmZagolovok.right
+
+            anchors.topMargin: root.ntCoff/4
+            anchors.bottomMargin: root.ntCoff/4
+            anchors.leftMargin: root.ntCoff/2
+            anchors.rightMargin: root.ntCoff/2
+
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+
+            text: qsTr("Начать создание каталога?")
+            visible: false//Невидимый виджет
+
+            clrFona: "yellow"//Если не задать цвет, будет видно текст под надписью
+            clrTexta: "black"
+            clrKnopki: "black"
+            clrBorder: "black"
+            onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
+                if(visible){//Если видимый виджет, то...
+                    knopkaZakrit.visible = false;//Конопка Закрыть Невидимая.
+                    flZona.visible = false;//невидимые кнопки меню.
+                    lgTMK.visible = true;//Видимый логотип.
+                    knopkaMenu.visible = false;//Кнопка Меню не видимая.
+                    root.signalToolbar("Начать процесс создения каталога документов?");//Вопрос.
+                }
+                else{//Если невидимый виджет, то...
+                    knopkaZakrit.visible = true;//Конопка Закрыть Видимая.
+                    flZona.visible = true;//видимые кнопки меню.
+                    lgTMK.visible = false;//Невидимый логотип.
+                    knopkaMenu.visible = true;//Кнопка Меню видимая.
+                    root.signalToolbar("");//Пустое сообщение.
+                }
+            }
+            onClickedOk: {//Слот нажатия кнопки Ок
+                signalZagolovok(qsTr("ПРОЦЕСС СОЗДАНИЯ КАТАЛОГА"));//Надпись в заголовке
+                copyStart.visible = false;//Делаем невидимый запрос с Вопросом начать создание каталога.
+                tmrLogo.running = true;//Запустить анимацию Логотипа.
+            }
+            onClickedOtmena: {//Слот нажатия кнопки Отмены
+                copyStart.visible = false;//Делаем невидимый запрос с Вопросом начать создание каталога.
+            }
+        }
+        DCVopros{
+            id: copyStop
+            anchors.top: tmZagolovok.top
+            anchors.bottom: tmZagolovok.bottom
+            anchors.left: tmZagolovok.left
+            anchors.right: tmZagolovok.right
+
+            anchors.topMargin: root.ntCoff/4
+            anchors.bottomMargin: root.ntCoff/4
+            anchors.leftMargin: root.ntCoff/2
+            anchors.rightMargin: root.ntCoff/2
+
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+
+            text: qsTr("Остановить создание каталога?")
+            visible: false//Невидимый виджет
+
+            clrFona: "red"//Если не задать цвет, будет видно текст под надписью
+            clrTexta: "black"
+            clrKnopki: "black"
+            clrBorder: "black"
+            onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
+                if(visible){//Если видимый виджет, то...
+                    knopkaZakrit.visible = false;//Конопка Закрыть Невидимая.
+                    ldrProgress.item.text = qsTr("Остановить процесс создания каталога документов?")
+                }
+                else{//Если невидимый виджет, то...
+                    knopkaZakrit.visible = true;//Конопка Закрыть Видимая.
+                    if(ldrProgress.item)//Если загрузчик существует, то...
+                        ldrProgress.item.text = ""//Удаляем сообщение в Загрузчике.
+                }
+            }
+            onClickedOk: {//Слот нажатия кнопки Ок
+                tmrLogo.running = false;//Останавливаем анимацию Логотипа.
+                copyStop.visible = false;//Делаем невидимый запрос с Вопросом остановки создания каталога.
+                fnZakrit();//Закрываем окно Меню
+                cppqml.strDebug = qsTr("Принудительная остановка создания каталога документов.");
+            }
+            onClickedOtmena: {//Слот нажатия кнопки Отмены
+                copyStop.visible = false;//Делаем невидимый запрос на удаление.
+            }
+        }
 	} 
     Item {
         id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+        DCLogoTMK {//Логотип до flZona, чтоб не перекрывать список.
+            id: lgTMK
+            ntCoff: root.ntLogoTMK
+            anchors.centerIn: tmZona
+            visible: false
+            clrLogo: root.clrTexta; clrFona: root.clrFona
+        }
         Flickable {//Рабочая Зона скроллинга
             id: flZona
             anchors.fill: tmZona//Расстягиваемся по всей рабочей зоне
@@ -173,7 +315,7 @@ Item {
                         if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Мобильное устройство
                             return false;//невидимая кнопка.
                         else//Если это ПК, то...
-                            return true;//видимая кнопка.
+                            root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора.
                     }
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaRedaktor.bottom
@@ -220,7 +362,19 @@ Item {
 	}
     Item {//Тулбар
 		id: tmToolbar
+        clip: true//Обрезаем загрузчик, который выходит за границы toolbar
+        Loader {//Loader Прогресса загрузки pdf документа
+            id: ldrProgress
+            anchors.fill: tmToolbar
+            source: "qrc:/qml/DCMethods/DCProgress.qml"//Указываем путь к отдельному QMl
+            active: false//не активирован.
+            onLoaded: {//Когда загрузчик загрузился, передаём свойства в него.
+                ldrProgress.item.ntWidth = root.ntWidth; ldrProgress.item.ntCoff = root.ntCoff;
+                ldrProgress.item.clrProgress = root.clrTexta; ldrProgress.item.clrTexta = "grey";
+            }
+        }
         DCKnopkaNastroiki {//Кнопка Меню.
+            id: knopkaMenu
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter; anchors.right: tmToolbar.right
             anchors.margins: root.ntCoff/2

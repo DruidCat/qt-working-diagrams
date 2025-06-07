@@ -101,6 +101,12 @@ ApplicationWindow {
 				onAppRedaktorChanged: {//Если флаг настройки включения Редактора изменился, то...
                     root.appRedaktor = appRedaktor;//Приравниваем флаг настройки.
                 }
+                onSignalZagolovok: function(strZagolovok) {//Слот сигнала signalZagolovok с новым Заголовком.
+                    pgStrMenu.textZagolovok = strZagolovok;//Выставляем изменённый Заголовок.
+                }
+                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrMenu.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
+                }
 			}
             Component.onCompleted: {//После отрисовки страницы...
                 root.pdfViewer = tmMenu.pdfViewer;//Приравниваем флаг настройки. ВАЖНО.
