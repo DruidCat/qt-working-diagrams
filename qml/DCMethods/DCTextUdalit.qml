@@ -43,6 +43,7 @@ Item {
         Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
             if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
                 fnClickedZakrit();//Функция закрытия виджета.
+                event.accepted = true;//Завершаем обработку эвента.
             }
             //console.log(event.key);
         }
