@@ -23,6 +23,8 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick QuickControls2
 set(PROJECT_SOURCES
         src/copydannie.h
         src/copydannie.cpp
+		src/copykatalog.h
+		src/copykatalog.cpp
 		src/copyplan.h
 		src/copyplan.cpp
         src/cppqml.h

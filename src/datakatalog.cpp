@@ -4,7 +4,11 @@ DataKatalog::DataKatalog(QObject* proditel) : QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
-
+    m_pcopykatalog = new CopyKatalog();//Класс потока копирования файла.
+    connect(	m_pcopykatalog,
+                SIGNAL(signalCopyDannie(bool)),
+                this,
+                SLOT(slotCopyDannie(bool)));//Связываем сигнал статуса копирования документа.
 }
 
 DataKatalog::~DataKatalog(){//Деструктор.
@@ -15,6 +19,8 @@ DataKatalog::~DataKatalog(){//Деструктор.
     m_pdbSpisok = nullptr;//Удалять не нужно, так как он в этом классе не выделялся динамически.
     m_pdbElement = nullptr;//Удалять не нужно, так как он в этом классе не выделялся динамически.
     m_pdbDannie = nullptr;//Удалять не нужно, так как он в этом классе не выделялся динамически.
+    delete m_pcopykatalog;//Удаляем указатель
+    m_pcopykatalog = nullptr;//Обнуляем указатель.
 }
 
 void DataKatalog::ustPDBTitul(DCDB* pdbTitul){//Устанавливаем указатель БД Титула.
@@ -79,4 +85,16 @@ void DataKatalog::qdebug(QString strDebug){//Метод отладки, излу
 //---Q D E B U G---//
 /////////////////////
     emit signalDebug(strDebug);//Испускаем сигнал со строчкой Лог
+}
+void DataKatalog::slotCopyDannie(bool blCopyStatus){//Слот получающий статус скопированного документа.
+///////////////////////////////////////////////////////////////////////////////////
+//---С Л О Т   С Т А Т У С А   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
+///////////////////////////////////////////////////////////////////////////////////
+    if(blCopyStatus){//Если копирование прошло успешно, то...
+        emit signalKatalogCopy(blCopyStatus);//отсылаем сигнал 1
+    }
+    else{
+        qdebug(tr("Ошибка копирования в каталог документов."));
+        emit signalKatalogCopy(blCopyStatus);//Отсылаем сигнал об ошибке копирования.
+    }
 }

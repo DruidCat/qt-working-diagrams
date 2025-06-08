@@ -3,6 +3,7 @@
 
 #include <QObject>
 
+#include "copykatalog.h"
 #include "dcdb.h"
 
 class DataKatalog : public QObject {
@@ -22,12 +23,15 @@ private:
     DCDB*		m_pdbSpisok = nullptr;//Указатель на БД Списка.
     DCDB*		m_pdbElement = nullptr;//Указатель на БД Элемента.
     DCDB*		m_pdbDannie = nullptr;//Указатель на БД Данных.
+    CopyKatalog* m_pcopykatalog = nullptr;//Указатель на поток копирования файла.
 
 private slots:
     void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
+    void 		slotCopyDannie(bool);//слот статуса скопированного документа true - скопирован, false - нет
 
 signals:
-    void signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
+    void		signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
+    void  		signalKatalogCopy(bool);//Сигнал статуса скопированного документа.
 };
 
 #endif // DATAKATALOG_H
