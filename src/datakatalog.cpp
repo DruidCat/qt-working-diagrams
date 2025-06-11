@@ -4,6 +4,9 @@ DataKatalog::DataKatalog(QObject* proditel) : QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
+    QStringList slsHomePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);//Документы
+    m_strDocPut = slsHomePath.first();
+    m_pdrPut = new QDir (m_strDocPut);//Путь дериктории Документы, в которой будет создаваться каталог.
     m_pcopykatalog = new CopyKatalog();//Класс потока копирования файла.
     connect(	m_pcopykatalog,
                 SIGNAL(signalCopyDannie(bool)),
@@ -19,6 +22,8 @@ DataKatalog::~DataKatalog(){//Деструктор.
     m_pdbSpisok = nullptr;//Удалять не нужно, так как он в этом классе не выделялся динамически.
     m_pdbElement = nullptr;//Удалять не нужно, так как он в этом классе не выделялся динамически.
     m_pdbDannie = nullptr;//Удалять не нужно, так как он в этом классе не выделялся динамически.
+    delete m_pdrPut;//Удаляем указатель.
+    m_pdrPut = nullptr;//Обнуляем указатель.
     delete m_pcopykatalog;//Удаляем указатель
     m_pcopykatalog = nullptr;//Обнуляем указатель.
 }
@@ -79,6 +84,62 @@ int DataKatalog::polPdfSummu(){//Возвратим приблизительну
         }
     }
     return ullDannie;
+}
+void DataKatalog::copyStart(){//Старт копирования документов в каталог.
+/////////////////////////////////////////////////////////
+//---Н А Ч А Л О   С О З Д А Н И Я   К А Т А Л О Г А---//
+/////////////////////////////////////////////////////////
+    m_pdrPut->setPath(m_strDocPut);//Всегда обнуляем путь на заданную по умолчание папку.
+    if(sozdatKatalogMentor()){//Если папка Ментор создалась, то...
+        if(sozdatKatalogTitul()){//Если папка Титул создалась, то...
+        }
+        else//Если не создалась папка Титул, то...
+            emit signalKatalogCopy(false);//Излучаем сигнал о том, что авария при создании каталога.
+    }
+    else//Если ошибка создания папки Ментор, то...
+        emit signalKatalogCopy(false);//Излучаем сигнал о том, что авария при создании каталога.
+}
+bool DataKatalog::sozdatKatalogMentor(){//Создаём каталог Ментор.
+/////////////////////////////////////////////////
+//---С О З Д А Т Ь   П А П К У   М Е Н Т О Р---//
+/////////////////////////////////////////////////
+    QString strData = QDate::currentDate().toString("yyyy-MM-dd");//Создаём строку вида 2022-11-22
+    QString strVremya = QTime::currentTime().toString("hh-mm-ss");//Создаём строку вида 22-11-33
+    QString strMentor = strData + "_" + strVremya + "_" + "Mentor";
+    if(m_pdrPut->mkdir(strMentor)){//Если папка ментор создалась, то...
+        if(!m_pdrPut->cd(strMentor)){//Если переход в папку неуспешный, то...
+            qdebug(tr("Ошибка перехода в папку Ментор с каталогом документов."));
+            return false;//Ошибка.
+        }
+    }
+    else{//Если ошибка создания каталога, то...
+        qdebug(tr("Ошибка создания папки Ментор под каталог документов."));
+        return false;//Ошибка.
+    }
+    return true;//В любых остальных случаях Успех.
+}
+bool DataKatalog::sozdatKatalogTitul(){//Создаём каталог Титул.
+/////////////////////////////////////////////////
+//---С О З Д А Т Ь   П А П К У   Т И Т У Л А---//
+/////////////////////////////////////////////////
+    QString strTitul = m_pdbTitul->SELECT("Код", "1", "Титул");//Читаем имя Титула из БД.
+    if(strTitul.isEmpty()){//Если Титул пустой, то...
+        qdebug(tr("Ошибка, имя Титула не может быть пустым."));
+        return false;//Ошибка.
+    }
+    else{//Если имя Титула не пустое, то...
+        if(m_pdrPut->mkdir(strTitul)){//Если папка с именем Титула создалась, то...
+            if(!m_pdrPut->cd(strTitul)){//Если не получилось перейти в папку с именем Титула, то...
+                qdebug(tr("Ошибка прехода в папку Титул с каталогом документов."));
+                return false;//Ошибка.
+            }
+        }
+        else{//Если папка с именем титула не создалась, то...
+            qdebug(tr("Ошибка создания папки Титула под каталог документов."));
+            return false;//Ошибка.
+        }
+    }
+    return false;
 }
 void DataKatalog::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////

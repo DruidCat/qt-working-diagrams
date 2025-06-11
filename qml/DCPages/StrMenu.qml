@@ -50,9 +50,21 @@ Item {
     onAppRedaktorChanged: {//Если Редактор изменился вкл/выкл, то...
         cppqml.blAppRedaktor = root.appRedaktor;//Отправляем в бизнес логику флаг редактора вкл/выкл.
     }
-    function fnKatalog(){//Функция создания каталога pdf документов.
-        console.error(cppqml.polKatalogSummu());//
-        copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
+    function fnKatalog(){//Функция создания каталога pdf документов. 
+        signalZagolovok(qsTr("ПРОЦЕСС СОЗДАНИЯ КАТАЛОГА"));//Надпись в заголовке
+        copyStart.visible = false;//Делаем невидимый запрос с Вопросом начать создание каталога.
+        tmrLogo.running = true;//Запустить анимацию Логотипа.
+        console.error(cppqml.polKatalogSummu());//Получаем количество документов в БД Ментора.
+        cppqml.copyKatalogStart();//Начинаем создание каталога
+    }
+    Connections {//Соединяем сигнал из C++ с действием в QML, перерисовываем, в зависимости от Элемента.
+        target: cppqml;//Цель объект класса С++ DCCppQml
+        function onBlKatalogStatusChanged(){//Слот Если изменился статус создания каталога(Q_PROPERTY), то...
+            if(!cppqml.blKatalogStatus){//Если статус false, то ...
+                signalZagolovok(qsTr("МЕНЮ"));//Надпись в заголовке
+                tmrLogo.running = false;//Останавливаем анимацию Логотипа.
+            }
+        }
     }
     function fnZakrit(){//Функция закрыти страницы.
         menuMenu.visible = false;//Делаем невидимым меню.
@@ -148,9 +160,7 @@ Item {
                 }
             }
             onClickedOk: {//Слот нажатия кнопки Ок
-                signalZagolovok(qsTr("ПРОЦЕСС СОЗДАНИЯ КАТАЛОГА"));//Надпись в заголовке
-                copyStart.visible = false;//Делаем невидимый запрос с Вопросом начать создание каталога.
-                tmrLogo.running = true;//Запустить анимацию Логотипа.
+                fnKatalog();//Функция создания каталога pdf документов.
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены
                 copyStart.visible = false;//Делаем невидимый запрос с Вопросом начать создание каталога.
@@ -325,7 +335,7 @@ Item {
                     text: qsTr("Создание каталога документов")
                     bold: true; italic: true
                     onClicked: {//Слот запускающий
-                        fnKatalog();//Функция создания каталога pdf документов.
+                        copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
                     }
                 }
             }

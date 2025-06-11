@@ -2,6 +2,7 @@
 #define DATAKATALOG_H
 
 #include <QObject>
+#include <QDate>
 
 #include "copykatalog.h"
 #include "dcdb.h"
@@ -17,6 +18,7 @@ public:
     void		ustPDBDannie(DCDB* pdbDannie);//Устанавливаем указатель БД Данных.
 
     int 		polPdfSummu();//Возвратим приблизительную сумму всех pdf документов в Менторе.
+    void		copyStart();//Старт копирования документов в каталог.
 
 private:
     DCDB*		m_pdbTitul = nullptr;//Указатель на БД Титула.
@@ -24,6 +26,12 @@ private:
     DCDB*		m_pdbElement = nullptr;//Указатель на БД Элемента.
     DCDB*		m_pdbDannie = nullptr;//Указатель на БД Данных.
     CopyKatalog* m_pcopykatalog = nullptr;//Указатель на поток копирования файла.
+
+    QDir*		m_pdrPut = nullptr;//Указатель на путь каталогов, в которых заместится документация.
+    bool		sozdatKatalogMentor();//Создаём каталог Ментор.
+    bool		sozdatKatalogTitul();//Создаём каталог Титул.
+
+    QString		m_strDocPut;//Переменная, которая хранит в себе путь к дериктории Документы.
 
 private slots:
     void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог

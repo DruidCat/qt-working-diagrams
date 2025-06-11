@@ -134,6 +134,13 @@ class DCCppQml : public QObject {
                     READ blPlanPervi
                     NOTIFY blPlanPerviChanged FINAL)
 
+    Q_PROPERTY(uint untKatalogCopy
+                    READ untKatalogCopy
+                    NOTIFY untKatalogCopyChanged FINAL)
+    Q_PROPERTY(bool blKatalogStatus
+                    READ blKatalogStatus
+                    NOTIFY blKatalogStatusChanged FINAL)
+
     Q_PROPERTY(QString strDebug
                     READ strDebug
                     WRITE setStrDebug
@@ -210,7 +217,10 @@ public:
                                                            //
     Q_INVOKABLE bool 	isPdfPoisk(const QString strPoisk);//Пустой запрос на поиск?
 
+    uint		untKatalogCopy() { return m_untKatalogCopy; }//Возвращает количество скопированных документов.
+    bool		blKatalogStatus() { return m_blKatalogStatus; }//Возвращает статус создания каталога.
     Q_INVOKABLE int		polKatalogSummu();//Получить приблизительное сумарное число файлов в менторе.
+    Q_INVOKABLE void	copyKatalogStart();//Начать копирование документов в каталог.
 
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
@@ -255,11 +265,15 @@ signals:
     void blFileDialogPlanChanged();//Сигнал о том, что скопироваться будет План или Данные.
 
     void blPlanPerviChanged();//Сигнал, что флаг изменился.
-								//
+
+    void untKatalogCopyChanged();//Сигнал, что изменился счётчик скопированных документов.
+    void blKatalogStatusChanged();//Сигнал, что изменился статус создания каталога.
+                                //
     void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
     void slotFileDialogCopy(bool);//Слот обрабатывающий статус скопированного документа из Проводника.
+    void slotKatalogCopy(bool);//Слот обрабатывающий статус скопированных pdf документов.
 	void slotDebug(QString strDebug);//Слот обрабатывающий ошибку приходящую по сигналу.
 	void slotTimerDebug();//Слот прерывания от таймена Отладчика.
 
@@ -304,7 +318,10 @@ private:
 	bool 	m_blFileDialogPlan;//true - проводник для Плана, false - проводник для Данных
 
     bool 	m_blPlanPervi;//Флаг Первый План? в Свойстве Q_PROPERTY.
-							//
+
+    uint	m_untKatalogCopy;//Количество скопированных pdf документов.
+    bool	m_blKatalogStatus;//Статус создания каталога документов.
+
     QString m_strDebug;//Текс ошибки.
 
     DataTitul* 		m_pDataTitul = nullptr;//Указатель на класс Титула c БД.
