@@ -29,17 +29,36 @@ private:
 
     QDir*		m_pdrPut = nullptr;//Указатель на путь каталогов, в которых заместится документация.
     bool		sozdatKatalogMentor();//Создаём каталог Ментор.
-    bool		sozdatKatalogTitul();//Создаём каталог Титул.
+    bool		sozdatTitul();//Создаём каталог Титул.
+    bool		sozdatSpisok(const uint untSpisokNomer);//Создаём список по его Номеру.
+    bool		sozdatElement(const uint untSpisokNomer, const uint untElementNomer);//Создаём Элемент по №.
 
     QString		m_strDocPut;//Переменная, которая хранит в себе путь к дериктории Документы.
 
+    bool 		m_blSpisokMax;//true - Последний элемент Списка.
+    bool 		m_blElementMax;//true - Последний Элемент в конкретном Списке.
+    bool		m_blDannieMax;//true - Последний элемент Данных в конкретном Элементе.
+
+    uint 		m_untSpisokKod;//Это код в БД, элемент Списка которого нужно прочитать.
+    uint 		m_untElementKod;//Это код в БД, в Списке Элемент которого нужно прочитать.
+    uint 		m_untDannieKod;//Это код в БД, Данные Элемента которох нужно прочитать.
+
+    uint 		m_untSpisokNomer;//Это номер в БД, элемент Списка которого нужно прочитать.
+    uint 		m_untElementNomer;//Это номер в БД, в Списке Элемент которого нужно прочитать.
+    uint 		m_untDannieNomer;//Это номер в БД, Данные Элемента которох нужно прочитать.
+
+    uint		m_untSpisokMax;//Количество Списков.
+    uint		m_untDannie;//Суммарное количество документов в БД.
+
 private slots:
+    void		slotSozdatDannie(const uint untSpisokNomer,const uint untElementNomer,const uint untDannieNomer);
     void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
     void 		slotCopyDannie(bool);//слот статуса скопированного документа true - скопирован, false - нет
 
 signals:
     void		signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
     void  		signalKatalogCopy(bool);//Сигнал статуса скопированного документа.
+    void 		signalKatalogStop();//Окончание процесса копирования.
 };
 
 #endif // DATAKATALOG_H
