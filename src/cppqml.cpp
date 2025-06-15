@@ -78,7 +78,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
     m_pDataDannie = new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strWorkingDiagramsPut,
                                    ullDannieMax);//Данные.
-    m_pDataKatalog = new DataKatalog();//Каталог.
+    m_pDataKatalog = new DataKatalog(strWorkingDiagramsPut);//Каталог.
     m_pDataPlan = new DataPlan(strWorkingDiagramsPut, ullDannieMax);//План.
     m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
     //---передаём-указатели-бд---//

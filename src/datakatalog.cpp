@@ -1,6 +1,6 @@
 #include "datakatalog.h"
 
-DataKatalog::DataKatalog(QObject* proditel) : QObject{proditel}{
+DataKatalog::DataKatalog(const QString strWorkingData, QObject* proditel) : QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
@@ -18,6 +18,9 @@ DataKatalog::DataKatalog(QObject* proditel) : QObject{proditel}{
     m_untDannieNomer = 0;//Это номер в БД, Данные Элемента которох нужно прочитать. НОЛЬ НЕ ЧИТАЕТСЯ!
 
     m_untSpisokMax = 0;//Количество Списков.
+    m_untElementMax = 0;//Количество Елементов в отдельно взятом Списке.
+    m_untDannieMax = 0;//Количество Данных в конкретном Элементе.
+
     m_untDannie = 0;//Суммарное количество документов в БД.
 
     QStringList slsHomePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);//Документы
@@ -28,6 +31,8 @@ DataKatalog::DataKatalog(QObject* proditel) : QObject{proditel}{
                 SIGNAL(signalCopyDannie(bool)),
                 this,
                 SLOT(slotCopyDannie(bool)));//Связываем сигнал статуса копирования документа.
+
+    m_strWorkingData = strWorkingData;//Путь к каталогу, где находится БД и документы Ментора.
 }
 
 DataKatalog::~DataKatalog(){//Деструктор.
@@ -114,8 +119,12 @@ void DataKatalog::copyStart(){//Старт копирования докумен
         if(sozdatKatalogMentor()){//Если папка Ментор создалась, то...
             if(sozdatTitul()){//Если папка Титул создалась, то...
                 if(sozdatSpisok(1)){//Запускаем цикл создания каталогов и копирования документов со списка №1.
-                    if(sozdatElement(m_untSpisokKod, 1)){//Переходим по Коду Списка и Номеру Элемента.
+                    if(sozdatElement(1)){//Переходим по Коду Списка и Номеру Элемента.
+                        if(sozdatDannie(1)){//Копируем документ по первому Номеру.
 
+                        }
+                        else
+                            emit signalKatalogCopy(false);//Сигнал о том, что авария при копировании документа
                     }
                     else
                         emit signalKatalogCopy(false);//Излучаем сигнал о том, что авария при создании каталог
@@ -211,56 +220,101 @@ bool DataKatalog::sozdatSpisok(const uint untSpisokNomer){//Слот созда�
             }
         }
     }
-    m_untSpisokKod = m_pdbSpisok->SELECT("Номер", QString::number(untSpisokNomer), "Код").toUInt();
+    m_untSpisokKod = m_pdbSpisok->SELECT("Номер", QString::number(m_untSpisokNomer), "Код").toUInt();
     return true;//Успех
 }
-bool DataKatalog::sozdatElement(const uint untSpisokNomer, const uint untElementNomer){//Создать Элемент по №.
+bool DataKatalog::sozdatElement(const uint untElementNomer){//Создать Элемент по Номеру.
 /////////////////////////////////////////////////////
 //---С О З Д А Т Ь   П А П К У   Э Л Е М Е Н Т А---//
 /////////////////////////////////////////////////////
-    /*
-    m_untSpisokNomer = untSpisokNomer;//Приравниваем параметры в начале метода.
-    if((untSpisokNomer > m_untSpisokMax)||(untSpisokNomer <= 0)){//Если Номер не в эти рамках, то...
-        qdebug(tr("Не правильной номер списка для его создания."));
+
+    m_untElementNomer = untElementNomer;//Приравниваем параметры в начале метода.
+    if(!m_untElementMax){//ВАЖНО! Если = 0, то читаем из БД, Но при последнем Элементе в Списке ОБНУЛЯЕМ!!!
+        m_pdbElement->ustImyaTablici("элемент_"+QString::number(m_untSpisokKod));//Задаём таблицу Элемента
+        m_untElementMax = m_pdbElement->SELECTPK();//Подсчитываем количество Элементов в каждом из Списков.
+    }
+    if((untElementNomer > m_untElementMax)||(untElementNomer <= 0)){//Если Номер не в эти рамках, то...
+        qdebug(tr("Не правильной номер элемента для его создания."));
         return false;//Ошибка.
     }
     else{//Если нет, то...
-        QString strSpisok = m_pdbSpisok->SELECT("Номер", QString::number(untSpisokNomer), "Список");
-        if(strSpisok.isEmpty()){//Если элемент списка пустой, то...
-            if(untSpisokNomer != m_untSpisokMax){//Если не равняется, значит следующий элемент Списка смотрим.
-                m_untSpisokNomer += 1;//Увеличиваем Номер Списка на +1.
-                sozdatSpisok(m_untSpisokNomer);//РЕКУРСИЯ!!! ОПАСНО!!!
+        QString strElement = m_pdbElement->SELECT("Номер", QString::number(untElementNomer), "Элемент");
+        if(strElement.isEmpty()){//Если Элемент в Списке пустой, то...
+            if(untElementNomer != m_untElementMax){//Если не равняется, значит следующий Элемент смотрим.
+                m_untElementNomer += 1;//Увеличиваем Номер Элемента на +1.
+                sozdatElement(m_untElementNomer);//РЕКУРСИЯ!!! ОПАСНО!!!
             }
         }
-        else{//Если не пустой элемент Списка, то...
-            if(untSpisokNomer == m_untSpisokMax){//Если равняется, значит это последний элемент Списка
-                m_blSpisokMax = true;//Последний элемент Списка.
+        else{//Если не пустой Элемент в Списке, то...
+            if(untElementNomer == m_untElementMax){//Если равняется, значит это последний Элемент в Списке
+                m_blElementMax = true;//Последний Элемент в Списке.
             }
-            QString strSpisokNomer = QString("%1").arg(untSpisokNomer, 3, 10, QLatin1Char('0'));//№ Списка
-            strSpisok = strSpisokNomer + " " + strSpisok;//Собираем имя Списка с номером его.
-            if(m_pdrPut->mkdir(strSpisok)){//Если папка с именем Списка создалась, то...
-                if(!m_pdrPut->cd(strSpisok)){//Если не получилось перейти в папку с именем Списка, то...
-                    qdebug(tr("Ошибка прехода в папку Списка: ") + strSpisok);
+            QString strElementNomer = QString("%1").arg(untElementNomer, 3, 10, QLatin1Char('0'));//№ Элемента
+            strElement = strElementNomer + " " + strElement;//Собираем имя Элемента с номером его.
+            if(m_pdrPut->mkdir(strElement)){//Если папка с именем Элемента создалась, то...
+                if(!m_pdrPut->cd(strElement)){//Если не получилось перейти в папку с именем Элемента, то...
+                    qdebug(tr("Ошибка прехода в папку Элемента: ") + strElement);
                     return false;//Ошибка.
                 }
             }
-            else{//Если папка с именем Списка не создалась, то...
-                qdebug(tr("Ошибка создания папки Списка: ") + strSpisok);
+            else{//Если папка с именем Элемента не создалась, то...
+                qdebug(tr("Ошибка создания папки Элемента: ") + strElement);
                 return false;//Ошибка.
             }
         }
     }
-*/
-    return false;//Успех
+    m_untElementKod = m_pdbElement->SELECT("Номер", QString::number(m_untElementNomer), "Код").toUInt();
+    return true;//Успех
 }
-void DataKatalog::slotSozdatDannie(	const uint untSpisokNomer,
-                                    const uint untElementNomer,
-                                    const uint untDannieNomer){//Слот копирования данных конкретных
-///////////////////////////////////////////////////////
-//---С Л О Т   К О П И Р О В А Н И Я   Д А Н Н Ы Х---//
-///////////////////////////////////////////////////////
+bool DataKatalog::sozdatDannie(const uint untDannieNomer){//Cкопировать документ по номеру.
+///////////////////////////////////////////////////
+//---К О П И Р О В А Н И Е   Д О К У М Е Н Т А---//
+///////////////////////////////////////////////////
 
+    m_untDannieNomer = untDannieNomer;//Приравниваем параметры в начале метода.
+    if(!m_untDannieMax){//ВАЖНО! Если = 0, то читаем из БД, Но при последних Данных в Элементе ОБНУЛЯЕМ!!!
+        m_pdbDannie->ustImyaTablici("данные_"	+ QString::number(m_untSpisokKod) + "_"
+                                                + QString::number(m_untElementKod));
+        m_untDannieMax = m_pdbDannie->SELECTPK();//Подсчитываем количество Данных в конкретом Элементе.
+    }
+    if((untDannieNomer > m_untDannieMax)||(untDannieNomer <= 0)){//Если Номер не в эти рамках, то...
+        qdebug(tr("Не правильной номер данных для его копирования."));
+        return false;//Ошибка.
+    }
+    else{//Если нет, то...
+        QString strDannie = m_pdbDannie->SELECT("Номер", QString::number(untDannieNomer), "Данные");
+        if(strDannie.isEmpty()){//Если Данные в Элементе пустые, то...
+            if(untDannieNomer != m_untDannieMax){//Если не равняется, значит следующий Элемент смотрим.
+                m_untDannieNomer += 1;//Увеличиваем Номер Данных на +1.
+                sozdatDannie(m_untDannieNomer);//РЕКУРСИЯ!!! ОПАСНО!!!
+            }
+        }
+        else{//Если не пустой Элемент в Списке, то...
+            if(untDannieNomer == m_untDannieMax){//Если равняется, значит это последние Данные в Элементе.
+                m_blDannieMax = true;//Последние Данные в Элементе.
+            }
 
+            QString strDannieNomer = QString("%1").arg(untDannieNomer, 3, 10, QLatin1Char('0'));//№ Данных.
+            strDannie = strDannieNomer + " " + strDannie + ".pdf";//Собираем имя Данных с его номером + pdf.
+
+            m_untDannieKod = m_pdbDannie->SELECT("Номер", QString::number(m_untDannieNomer), "Код").toUInt();
+            uint ntImyaFaila = (m_untSpisokKod*1000000)+(m_untElementKod*1000)+m_untDannieKod;
+            QString strImyaFaila = QString("%1").arg(ntImyaFaila, 9, 10, QLatin1Char('0'))+".pdf";//имя файла
+            QString strAbsolutPut=m_strWorkingData+QDir::separator()+strImyaFaila;//Абсолют путь с именем файл
+
+            QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать, расположенный...
+            if(flDannie.exists()){//Если данный файл существует, то...
+                m_pcopykatalog->ustPutiFailov(strAbsolutPut, m_pdrPut->absolutePath()+QDir::separator()
+                                                                 +strDannie);
+                m_pcopykatalog->start();//Запускаем поток и ждём сигнала о завершении копирования.
+            }
+            else{
+                qdebug(tr("Выбранный файл отсутствует!"));
+                return false;
+            }
+        }
+    }
+    return false;//Успех.
 }
 void DataKatalog::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////

@@ -10,7 +10,7 @@
 class DataKatalog : public QObject {
     Q_OBJECT
 public:
-    explicit 	DataKatalog(QObject* proditel = nullptr);
+    explicit 	DataKatalog(const QString strWorkingData, QObject* proditel = nullptr);
     ~			DataKatalog();
     void		ustPDBTitul(DCDB* pdbTitul);//Устанавливаем указатель БД Титула.
     void		ustPDBSpisok(DCDB* pdbSpisok);//Устанавливаем указатель БД Списка.
@@ -31,7 +31,8 @@ private:
     bool		sozdatKatalogMentor();//Создаём каталог Ментор.
     bool		sozdatTitul();//Создаём каталог Титул.
     bool		sozdatSpisok(const uint untSpisokNomer);//Создаём список по его Номеру.
-    bool		sozdatElement(const uint untSpisokNomer, const uint untElementNomer);//Создаём Элемент по №.
+    bool		sozdatElement(const uint untElementNomer);//Создаём Элемент по Номеру.
+    bool		sozdatDannie(const uint untDannieNomer);//Копирование документа по Номеру.
 
     QString		m_strDocPut;//Переменная, которая хранит в себе путь к дериктории Документы.
 
@@ -48,10 +49,14 @@ private:
     uint 		m_untDannieNomer;//Это номер в БД, Данные Элемента которох нужно прочитать.
 
     uint		m_untSpisokMax;//Количество Списков.
+    uint		m_untElementMax;//Количество Елементов в отдельно взятом Списке.
+    uint		m_untDannieMax;//Количество Данных в конкретном Элементе.
+
     uint		m_untDannie;//Суммарное количество документов в БД.
 
+    QString 	m_strWorkingData;//Путь к каталогу, где находится БД и документы Ментора.
+
 private slots:
-    void		slotSozdatDannie(const uint untSpisokNomer,const uint untElementNomer,const uint untDannieNomer);
     void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
     void 		slotCopyDannie(bool);//слот статуса скопированного документа true - скопирован, false - нет
 
