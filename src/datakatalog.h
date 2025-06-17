@@ -34,6 +34,9 @@ private:
     bool		sozdatElement(const uint untElementNomer);//Создаём Элемент по Номеру.
     bool		sozdatDannie(const uint untDannieNomer);//Копирование документа по Номеру.
 
+    bool		nazadSpisok();//Переходим назад в папку со Списками.
+    bool		nazadElement();//Переходим назад в папку в Элементами.
+
     QString		m_strDocPut;//Переменная, которая хранит в себе путь к дериктории Документы.
 
     bool 		m_blSpisokMax;//true - Последний элемент Списка.
@@ -50,7 +53,9 @@ private:
 
     uint		m_untDannie;//Суммарное количество документов в БД.
 
-    bool		m_blDataEmpty;//Пустая переменная, которая не излучает сигнала Копирования данных.
+    bool		m_blDataEmpty;//Пустые данные, true - не излучает сигнала Копирования данных в UI.
+    bool 		m_blNazadSpisok;//true - разрешено назад к Списку.
+    bool		m_blNazadElement;//true - разрешено назад в Элементам.
 
     QString 	m_strWorkingData;//Путь к каталогу, где находится БД и документы Ментора.
 
