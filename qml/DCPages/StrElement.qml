@@ -51,6 +51,7 @@ Item {
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             root.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
+            event.accepted = true;//Завершаем обработку эвента.
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
