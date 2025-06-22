@@ -101,6 +101,9 @@ ApplicationWindow {
 				onAppRedaktorChanged: {//Если флаг настройки включения Редактора изменился, то...
                     root.appRedaktor = appRedaktor;//Приравниваем флаг настройки.
                 }
+                onClickedAnimaciya: {
+                    stvStr.push(pgStrAnimaciya);//Переходим на страницу Анимация.
+                }
                 onSignalZagolovok: function(strZagolovok) {//Слот сигнала signalZagolovok с новым Заголовком.
                     pgStrMenu.textZagolovok = strZagolovok;//Выставляем изменённый Заголовок.
                 }
@@ -207,6 +210,75 @@ ApplicationWindow {
 				}
 			}
 		} 
+        Stranica {//Анимация
+        /////////////////////
+        ///А Н И М А Ц И Я///
+        /////////////////////
+            id: pgStrAnimaciya
+            visible: false
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            clrFona: root.clrFona
+            clrTexta: root.clrKnopok
+            clrRabOblasti: "black"
+            textZagolovok: qsTr("АНИМАЦИЯ")
+            StrAnimaciya {
+                id: tmAnimaciya
+                ntWidth: pgStrAnimaciya.ntWidth; ntCoff: pgStrAnimaciya.ntCoff
+                clrTexta: pgStrAnimaciya.clrTexta; clrFona: pgStrAnimaciya.clrRabOblasti
+                zagolovokX: pgStrAnimaciya.rctStrZagolovok.x; zagolovokY: pgStrAnimaciya.rctStrZagolovok.y
+                zagolovokWidth: pgStrAnimaciya.rctStrZagolovok.width
+                zagolovokHeight: pgStrAnimaciya.rctStrZagolovok.height
+                zonaX: pgStrAnimaciya.rctStrZona.x; zonaY: pgStrAnimaciya.rctStrZona.y
+                zonaWidth: pgStrAnimaciya.rctStrZona.width; zonaHeight: pgStrAnimaciya.rctStrZona.height
+                toolbarX: pgStrAnimaciya.rctStrToolbar.x; toolbarY: pgStrAnimaciya.rctStrToolbar.y
+                toolbarWidth: pgStrAnimaciya.rctStrToolbar.width
+                toolbarHeight: pgStrAnimaciya.rctStrToolbar.height
+                onClickedNazad: {
+                    stvStr.pop()//Назад страницу
+                }
+                onClickedInfo: {
+                    stvStr.push(pgStrAnimaciyaInstrukciya);//Переключаемся на страницу Инструкция Анимации.
+                }
+                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrAnimaciya.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
+                }
+            }
+        }
+        Stranica {//Инструкция Анимации.
+        ///////////////////////////////////////////
+        ///И Н С Т Р У К Ц И Я   А Н И М А Ц И И///
+        ///////////////////////////////////////////
+            id: pgStrAnimaciyaInstrukciya
+            visible: false
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            clrFona: root.clrFona
+            clrTexta: root.clrKnopok
+            clrRabOblasti: "black"
+            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО АНИМАЦИИ")
+            StrInstrukciya {
+                id: tmAnimaciyaInstrukciya
+                strInstrukciya: "animaciya"
+                ntWidth: pgStrAnimaciyaInstrukciya.ntWidth; ntCoff: pgStrAnimaciyaInstrukciya.ntCoff
+                clrTexta: pgStrAnimaciyaInstrukciya.clrTexta; clrFona: pgStrAnimaciyaInstrukciya.clrRabOblasti
+                zagolovokX: pgStrAnimaciyaInstrukciya.rctStrZagolovok.x;
+                zagolovokY: pgStrAnimaciyaInstrukciya.rctStrZagolovok.y
+                zagolovokWidth: pgStrAnimaciyaInstrukciya.rctStrZagolovok.width
+                zagolovokHeight: pgStrAnimaciyaInstrukciya.rctStrZagolovok.height
+                zonaX: pgStrAnimaciyaInstrukciya.rctStrZona.x; zonaY: pgStrAnimaciyaInstrukciya.rctStrZona.y
+                zonaWidth: pgStrAnimaciyaInstrukciya.rctStrZona.width;
+                zonaHeight: pgStrAnimaciyaInstrukciya.rctStrZona.height
+                toolbarX: pgStrAnimaciyaInstrukciya.rctStrToolbar.x;
+                toolbarY: pgStrAnimaciyaInstrukciya.rctStrToolbar.y
+                toolbarWidth: pgStrAnimaciyaInstrukciya.rctStrToolbar.width
+                toolbarHeight: pgStrAnimaciyaInstrukciya.rctStrToolbar.height
+                radiusZona: pgStrAnimaciyaInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
+                onClickedNazad: {
+                    stvStr.pop()//Назад страницу
+                }
+            }
+        }
 		Stranica {//Страница со Списком
 		/////////////////
 		///С П И С О К///

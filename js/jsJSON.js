@@ -68,6 +68,28 @@ var vrMenuDannie = [
                 "menu": qsTr("Выход")
 			}
 ]
+var vrMenuAnimaciya = [
+            {
+                "nomer": "1",
+                "menu": qsTr("Добавить")
+            },
+            {
+                "nomer": "2",
+                "menu": qsTr("Старт")
+            },
+            {
+                "nomer": "3",
+                "menu": qsTr("Пауза")
+            },
+            {
+                "nomer": "4",
+                "menu": qsTr("Стоп")
+            },
+            {
+                "nomer": "5",
+                "menu": qsTr("Выход")
+            }
+]
 var vrMenuFileDialog = [
             {
                 "nomer": "1",

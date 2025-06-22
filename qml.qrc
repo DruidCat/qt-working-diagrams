@@ -58,5 +58,6 @@
         <file>qml/DCZones/ZonaSpisok.qml</file>
         <file>workingdata/plan.pdf</file>
         <file>qml/DCMethods/DCVopros.qml</file>
+        <file>qml/DCPages/StrAnimaciya.qml</file>
     </qresource>
 </RCC>

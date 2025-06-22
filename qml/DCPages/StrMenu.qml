@@ -32,6 +32,7 @@ Item {
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	signal clickedWorkingDiagrams();//Сигнал нажатия кнопки об Рабочих Схемах.
     signal clickedQt();//Сигнал нажатия кнопки Об Qt.
+    signal clickedAnimaciya();//Сигнал нажития кнопки Анимация.
     signal signalZagolovok(var strZagolovok);//Сигнал, когда передаём новую надпись в Заголовок.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции.
@@ -224,7 +225,7 @@ Item {
             id: flZona
             anchors.fill: tmZona//Расстягиваемся по всей рабочей зоне
             contentWidth: tmZona.width//Ширина контента, который будет вложен равен ширине Рабочей Зоны
-            contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*6//6 - количество кнопок.
+            contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*7//7 - количество кнопок.
 
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
                 id: rctZona
@@ -336,6 +337,26 @@ Item {
                     bold: true; italic: true
                     onClicked: {//Слот запускающий
                         copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
+                    }
+                }
+                DCKnopkaOriginal {
+                    id: knopkaAnimaciya
+                    visible: {
+                        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Мобильное устройство
+                            return false;//невидимая кнопка.
+                        else//Если это ПК, то...
+                            root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора.
+                    }
+                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
+                    anchors.top: knopkaKatalog.bottom
+                    anchors.left: rctZona.left; anchors.right: rctZona.right
+                    anchors.margins: root.ntCoff/2
+                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    text: qsTr("Анимация")
+                    bold: true; italic: true
+                    onClicked: {//Слот запускающий
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
                     }
                 }
             }

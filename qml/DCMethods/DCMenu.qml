@@ -122,8 +122,12 @@ Item {
                     if(imyaMenu == "filedialog"){
                         lsvMenu.model = JSMenu.vrMenuFileDialog;//Перегружаем модель ListView с новыми данными
                     }
-                    else
-                        lsvMenu.model = JSMenu.vrMenuVihod;//Перегружаем модель ListView с новыми данными.
+                    else {
+                        if(imyaMenu == "animaciya")
+                            lsvMenu.model = JSMenu.vrMenuAnimaciya;//Перегружаем модель ListView с новыми дан.
+                        else
+                            lsvMenu.model = JSMenu.vrMenuVihod;//Перегружаем модель ListView с новыми данными.
+                    }
                 }
             }
 		}
