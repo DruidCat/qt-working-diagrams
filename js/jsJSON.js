@@ -79,14 +79,6 @@ var vrMenuAnimaciya = [
             },
             {
                 "nomer": "3",
-                "menu": qsTr("Пауза")
-            },
-            {
-                "nomer": "4",
-                "menu": qsTr("Стоп")
-            },
-            {
-                "nomer": "5",
                 "menu": qsTr("Выход")
             }
 ]

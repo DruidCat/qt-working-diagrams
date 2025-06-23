@@ -341,12 +341,7 @@ Item {
                 }
                 DCKnopkaOriginal {
                     id: knopkaAnimaciya
-                    visible: {
-                        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Мобильное устройство
-                            return false;//невидимая кнопка.
-                        else//Если это ПК, то...
-                            root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора.
-                    }
+                    visible: root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaKatalog.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
