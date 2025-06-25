@@ -59,5 +59,15 @@
         <file>workingdata/plan.pdf</file>
         <file>qml/DCMethods/DCVopros.qml</file>
         <file>qml/DCPages/StrAnimaciya.qml</file>
+        <file>images/ts-rus-black-and-white-1.jpg</file>
+        <file>images/ts-rus-black-and-white-1.svg</file>
+        <file>images/ts-rus-black-and-white-2.jpg</file>
+        <file>images/ts-rus-black-and-white-2.svg</file>
+        <file>images/ts-rus-color.jpg</file>
+        <file>images/ts-rus-color.svg</file>
+        <file>images/ts-rus-orange.jpg</file>
+        <file>images/ts-rus-orange.svg</file>
+        <file>images/ts-rus-orange-1.jpg</file>
+        <file>images/ts-rus-orange-1.svg</file>
     </qresource>
 </RCC>

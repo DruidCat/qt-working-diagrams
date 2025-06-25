@@ -230,12 +230,29 @@ Item {
     Item {//Данные Зона
         id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+        /*
         DCLogoTMK {//Логотип до flZona, чтоб не перекрывать список.
             id: lgTMK
             ntCoff: root.ntLogoTMK
             anchors.centerIn: tmZona
             visible: true
             clrLogo: root.clrTexta; clrFona: root.clrFona
+        }
+        */
+        Image {
+            id: lgTMK
+
+            // Создаем пользовательское свойство для управления текущим размером
+            property int ntCoff: 16
+            source: "qrc:/images/ts-rus-color.svg"
+            sourceSize: Qt.size(88, 119)
+            width: ntCoff*11
+            height: ntCoff*14.875
+            anchors.centerIn: tmZona
+
+            // Это свойство важно для качественного рендеринга SVG.
+            // Мы указываем исходный размер изображения.
+            fillMode: Image.PreserveAspectFit // Сохраняем пропорции
         }
         Rectangle {
             id: rctZona
@@ -320,7 +337,10 @@ Item {
                 anchors.right: rctZona.right
                 anchors.bottomMargin: root.ntCoff
                 anchors.rightMargin: root.ntCoff
-                source: "qrc:/images/ru.WorkingDiagrams.png"
+
+                sourceSize: Qt.size(88, 119)
+                fillMode: Image.PreserveAspectFit// Сохраняем пропорции
+                source: "qrc:/images/ts-rus-orange-1.svg"
             }
         }
         DCMenu {
