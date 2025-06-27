@@ -51,6 +51,11 @@ ApplicationWindow {
         if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
             cppqml.untHeight = height;//Отправляем в бизнес логику высоту окна, для обработки.
     }
+    FontLoader {//Загружаем шпифт из локального файла.
+        id: fntLoader
+        source: "qrc:/fonts/verdana.ttf"
+    }
+    font.family: fntLoader.name//Задаём шрифт во всём приложении.
 
 	StackView {
 		id: stvStr
@@ -646,3 +651,4 @@ ApplicationWindow {
         }
 	} 
 }
+

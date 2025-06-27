@@ -241,18 +241,14 @@ Item {
         */
         Image {
             id: lgTMK
-
-            // Создаем пользовательское свойство для управления текущим размером
             property int ntCoff: 16
             source: "qrc:/images/ts-rus-color.svg"
             sourceSize: Qt.size(88, 119)
             width: ntCoff*11
             height: ntCoff*14.875
             anchors.centerIn: tmZona
-
-            // Это свойство важно для качественного рендеринга SVG.
-            // Мы указываем исходный размер изображения.
-            fillMode: Image.PreserveAspectFit // Сохраняем пропорции
+            //Это свойство важно для качественного рендеринга SVG. Мы указываем исходный размер изображения.
+            fillMode: Image.PreserveAspectFit//Сохраняем пропорции
         }
         Rectangle {
             id: rctZona
