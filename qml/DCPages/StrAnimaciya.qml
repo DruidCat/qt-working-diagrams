@@ -22,8 +22,8 @@ Item {
     property alias toolbarY: tmToolbar.y
     property alias toolbarWidth: tmToolbar.width
     property alias toolbarHeight: tmToolbar.height
-    property int ntLogoTMK: 16
-    property int ntStart: ntWidth*ntCoff
+    property int ntLogoTMK: 32
+    property int startSec: 3
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     //Сигналы.
@@ -32,6 +32,8 @@ Item {
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции.
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
+        txtAnimaciya.opacity = 1;//Непрозрачный текст.
+        imgTMK.opacity = 1;//Непрозрачный логотип.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuSpisok.visible = false;//Делаем невидимым всплывающее меню. 
     }
@@ -42,7 +44,11 @@ Item {
             fnClickedEscape();//Функция нажатия кнопки Escape.
             event.accepted = true;//Завершаем обработку эвента.
         }
-    }
+        if(event.key === Qt.Key_Space){//Если нажата на странице кнопка Пробел, то...
+            fnMenuStart();//Функция обработки нажатия меню Старт.
+            event.accepted = true;//Завершаем обработку эвента.
+        }
+    } 
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
         onClicked: {
@@ -56,6 +62,7 @@ Item {
     }
     function fnClickedOk(){//Нажимаем на Ок
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
+        txtZona.opacity = 1;//Полная не прозрачность предварительного текста.
         txtZona.text = txnZagolovok.text;//Сначала задаём введёный текс.
         txtZona.visible = true;//Потом делаем видимым текст.
         txtAnimaciya.text = txnZagolovok.text;//Сначала задаём введёный текс.
@@ -64,6 +71,32 @@ Item {
     }
     function fnMenuStart(){//Функция обработки нажатия меню Старт.
         tmrStart.running = true;
+    }
+    function fnMenuFormatOff(){//Функция отключение границ формата.
+        rctBorder.state = "borderOff";
+        rctBorder.border.color = "yellow"
+    }
+    function fnMenuFormat16_9(){//Функция включение границ формата 16:9.
+        let ltZonaWidth = tmZona.width;//Длина Зоны рабочей
+        let ltZonaHeight = tmZona.height;//Высота Зоны рабочей.
+        let ltProporciya;//Пропорция
+        let ltBorder9;//Длина 9 пропорций.
+        let ltBorder16;//Длина 16 пропорций.
+        if(ltZonaWidth < ltZonaHeight){//Если длина больше высоты, то это ПК или Телефон.
+            ltProporciya = ltZonaHeight/9;//Посчитали 1/9 пропорции экрана.
+            ltBorder9 =  ltZonaHeight;//Приравниваем высоту экрана.
+        }
+        else{//это предположительно телефон.
+            ltProporciya = ltZonaWidth/9;//Посчитали 1/9 пропорции экрана.
+            ltBorder9 =  ltZonaWidth;//Приравниваем ширину экрана.
+        }
+        ltBorder16 = ltProporciya*16;//Посчитали длину 16 пропорций.
+
+        rctBorder.state = "border16_9";
+        //rctBorder.width = ltBorder16;
+        //rctBorder.height = ltBorder9;
+
+        rctBorder.border.color = "red"
     }
     function fnClickedSozdat(){//Функция обработки нажатия меню Добавить.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -75,33 +108,12 @@ Item {
         txtZona.text = "";//Пустой текст.
         txtAnimaciya.visible = false;//Невидимый текст.
         txtAnimaciya.text = "";//Пустой текст.
-    }
-    Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
-        id: tmrLogo
-        interval: 110; running: false; repeat: true
-        property int ntShag: Math.trunc((txtZona.font.pixelSize - root.ntWidth*root.ntCoff)/root.ntLogoTMK)
-        onTriggered: {
-            lgTMK.ntCoff++;
-            txtAnimaciya.font.pixelSize += ntShag;
-            if(lgTMK.ntCoff >= root.ntLogoTMK)
-                running = false
-        }
-        onRunningChanged: {//Если таймер изменился, то...
-            if(running){//Если запустился таймер, то...
-                txtZona.visible = false;//Делаем невидимым текст, по которому расчитывали размер шрифта.
-                txtAnimaciya.font.pixelSize = root.ntWidth*root.ntCoff;//Устанавливаем стартовый размер шрифта
-                txtAnimaciya.visible = true;//Анимацию видно.
-                lgTMK.ntCoff = 1;//Задаём размер логотипа.
-            }
-            else{//Если таймер выключен, то...
-                signalToolbar("");//Очищаем тулбар.
-            }
-        }
+        console.error(txtAnimaciya.font.family)
     }
     Timer {//таймер старта анимации логотипа.
         id: tmrStart
         interval: 1000; running: false; repeat: true
-        property int ntSec: 3;//Секунды обратного отсчёта.
+        property int ntSec: root.startSec;//Секунды обратного отсчёта.
         onTriggered: {//Если таймер сработал, то...
             ntSec--;//-1 сек.
             if(ntSec === 0)//Если 0, то...
@@ -111,15 +123,53 @@ Item {
         }
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
+                if(txtZona.opacity){//Если не прозрачный предворительный текст, то...
+                    pctZona.start();//Запускаем прозрачность на первый тик таймера.
+                    pctImage.start();//Запускаем таймер прозрачности логотипа
+                }
                 signalToolbar(ntSec);//Отображаем первую цифру обратного отсчёта.
             }
             else{//Если таймер выключен, то...
-                ntSec = 3;//Задаём обратный отсчёт.
-                signalToolbar(qsTr("Старт!"));//Оповещаем.
+                ntSec = root.startSec;//Задаём обратный отсчёт.
+                signalToolbar(qsTr("Старт анимации."));//Оповещаем.
                 tmrLogo.running = true;//Запускаем таймер изменения размеров логотипа и текста.
             }
         }
     }
+    Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
+        id: tmrLogo
+        interval: 33; running: false; repeat: true
+        property int ntShag: Math.trunc((txtZona.font.pixelSize - root.ntWidth*root.ntCoff)/root.ntLogoTMK)
+        onTriggered: {
+            imgTMK.ntCoff++;
+            txtAnimaciya.font.pixelSize += ntShag;
+            if(imgTMK.ntCoff >= root.ntLogoTMK)
+                running = false
+        }
+        onRunningChanged: {//Если таймер изменился, то...
+            if(running){//Если запустился таймер, то...
+                txtZona.visible = false;//Делаем невидимым текст, по которому расчитывали размер шрифта.
+                txtAnimaciya.font.pixelSize = root.ntWidth*root.ntCoff;//Устанавливаем стартовый размер шрифта
+                txtAnimaciya.visible = true;//Анимацию видно.
+                imgTMK.ntCoff = 1;//Задаём размер логотипа.
+                txtAnimaciya.opacity = 1;//Полная не прозрачность текста.
+                imgTMK.opacity = 1;//Полная не прозрачность логотипа.
+            }
+            else{//Если таймер выключен, то...
+                tmrPause.running = true;//Запускаем таймер, чтоб успели прочитать.
+                signalToolbar("");//Очищаем тулбар.
+            }
+        }
+    }
+    Timer {
+        id: tmrPause
+        interval: 1000; running: false; repeat: false
+        onTriggered: {
+            pctAnimaciya.start();//Запускаем таймер прозрачности текста
+            pctImage.start();//Запускаем таймер прозрачности логотипа
+        }
+    }
+
     Item {//Данные Заголовок
         id: tmZagolovok
         DCKnopkaNazad {
@@ -203,7 +253,7 @@ Item {
                 clrTexta: root.clrTexta
                 clrFona: "SlateGray"
                 radius: root.ntCoff/2
-                textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
+                //textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
                 onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(visible){//Если DCTextInput видим, то...
@@ -240,31 +290,78 @@ Item {
         }
         */
         Image {
-            id: lgTMK
-            property int ntCoff: 16
+            id: imgTMK
+            property int ntCoff: 32
             source: "qrc:/images/ts-rus-color.svg"
             sourceSize: Qt.size(88, 119)
-            width: ntCoff*11
-            height: ntCoff*14.875
+            width: ntCoff*5.5
+            height: ntCoff*7.4375
             anchors.centerIn: tmZona
+            anchors.verticalCenterOffset: height/4
             //Это свойство важно для качественного рендеринга SVG. Мы указываем исходный размер изображения.
             fillMode: Image.PreserveAspectFit//Сохраняем пропорции
+            opacity: 1
+            NumberAnimation on opacity {//Анимация прозрачности от 1 до 0 за 1000мс, не запущенная.
+                id: pctImage
+                from: 1.0; to: 0.0
+                duration: 1000; running: false
+            }
         }
+        Rectangle {//Прямоугольник формата записываемого видео. Выставляет границы.
+            id: rctBorder
+            //anchors.fill: tmZona
+            color: "transparent"
+            border.width: 5
+            states: [
+                State {
+                    name: "borderOff"
+                    PropertyChanges {
+                        target: rctBorder
+                        anchors.right: tmZona.right
+                        anchors.left: undefined
+                        width: 300
+                        height: 300
+                    }
+                },
+                State {
+                    name: "border16_9"
+                    PropertyChanges {
+                        target: rctBorder
+                        anchors.left: tmZona.left
+                        anchors.right: undefined
+                        width: 100
+                        height: 100
+                    }
+                }
+
+            ]
+        }
+
         Rectangle {
             id: rctZona
-            anchors.fill: tmZona
+            anchors.left: tmZona.left
+            anchors.right: tmZona.right
+            anchors.top: tmZona.top
+            anchors.bottom: tmZona.verticalCenter
             color: "transparent"
             Text {
                 id: txtZona
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
+                anchors.verticalCenter: rctZona.verticalCenter
                 color: root.clrTexta
 
-                font.capitalization: Font.AllUppercase//Текст ЗАГЛАВНЫМИ буквами.
+                //font.capitalization: Font.AllUppercase//Текст ЗАГЛАВНЫМИ буквами.
                 horizontalAlignment: Text.AlignHCenter//Выровнять текст по центру по горизонтали
                 verticalAlignment: Text.AlignVCenter//Выровнять текст по центру по вертикали
 
                 visible: false;//Невидимый.
                 text: ""
+                opacity: 1
+                NumberAnimation on opacity {//Анимация прозрачности от 1 до 0 за 1000мс, не запущенная.
+                    id: pctZona
+                    from: 1.0; to: 0.0
+                    duration: 1000; running: false
+                }
                 onVisibleChanged: {//Если изменилась видимость, то...
                     if(text){//(Защита от пустого текста) Если не пустой текст, то...
                         if(visible){//Если становится видимым текс, то...
@@ -317,26 +414,26 @@ Item {
                 id: txtAnimaciya
                 anchors.left: rctZona.left
                 anchors.right: rctZona.right
-                anchors.top: rctZona.top
+                anchors.verticalCenter: rctZona.verticalCenter
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                 color: root.clrTexta
-                font.capitalization: Font.AllUppercase//Текст ЗАГЛАВНЫМИ буквами.
+                //font.capitalization: Font.AllUppercase//Текст ЗАГЛАВНЫМИ буквами.
                 horizontalAlignment: Text.AlignHCenter//Выровнять текст по центру по горизонтали
                 verticalAlignment: Text.AlignVCenter//Выровнять текст по центру по вертикали
 
+                opacity: 1//Полностью не прозрачный текст.
+                NumberAnimation on opacity {//Анимация прозрачности от 1 до 0 за 1000мс, не запущенная.
+                    id: pctAnimaciya
+                    from: 1.0; to: 0.0
+                    duration: 1000; running: false
+                }
+                onOpacityChanged: {//Если прозрачность изменилась, то...
+                    if(opacity === 0)//Если полностью прозрачный текст, то...
+                        root.signalToolbar(qsTr("Стоп анимации."));//Сообщение в Toolbar.
+                }
+
                 visible: false;//Невидимый.
                 text: ""
-            }
-            Image {
-                id: tmkLogo
-                anchors.bottom: rctZona.bottom
-                anchors.right: rctZona.right
-                anchors.bottomMargin: root.ntCoff
-                anchors.rightMargin: root.ntCoff
-
-                sourceSize: Qt.size(88, 119)
-                fillMode: Image.PreserveAspectFit// Сохраняем пропорции
-                source: "qrc:/images/ts-rus-orange-1.svg"
             }
         }
         DCMenu {
@@ -344,9 +441,9 @@ Item {
             visible: false//Невидимое меню.
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
-            anchors.left: rctZona.left
-            anchors.right: rctZona.right
-            anchors.bottom: rctZona.bottom
+            anchors.left: tmZona.left
+            anchors.right: tmZona.right
+            anchors.bottom: tmZona.bottom
             anchors.margins: root.ntCoff
             clrTexta: root.clrTexta
             clrFona: "SlateGray"
@@ -359,7 +456,13 @@ Item {
                 if(ntNomer === 2){//Старт.
                     fnMenuStart();//Функция обработки нажатия меню Старт.
                 }
-                if(ntNomer === 3){//Выход
+                if(ntNomer === 3){//Без формата.
+                    fnMenuFormatOff();//Функция отключение границ формата.
+                }
+                if(ntNomer === 4){//Старт.
+                    fnMenuFormat16_9();//Функция включение границ формата 16:9.
+                }
+                if(ntNomer === 5){//Выход
                     Qt.quit();//Закрыть приложение.
                 }
             }
@@ -396,5 +499,8 @@ Item {
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
+    } 
+    Component.onCompleted: {//Именно в конце Item, Когда компонет прогрузится полностью...
+        root.forceActiveFocus();//Делаем придудительный фокус на root, чтоб тут же работало собыние клавишь.
     }
 }

@@ -79,6 +79,14 @@ var vrMenuAnimaciya = [
             },
             {
                 "nomer": "3",
+                "menu": qsTr("Без формата")
+            },
+            {
+                "nomer": "4",
+                "menu": qsTr("Формат 16:9")
+            },
+            {
+                "nomer": "5",
                 "menu": qsTr("Выход")
             }
 ]
