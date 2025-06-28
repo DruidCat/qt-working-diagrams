@@ -79,11 +79,11 @@ var vrMenuAnimaciya = [
             },
             {
                 "nomer": "3",
-                "menu": qsTr("Без формата")
+                "menu": qsTr("Без рамки")
             },
             {
                 "nomer": "4",
-                "menu": qsTr("Формат 16:9")
+                "menu": qsTr("Рамка 16:9")
             },
             {
                 "nomer": "5",

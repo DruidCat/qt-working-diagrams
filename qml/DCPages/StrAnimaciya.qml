@@ -24,6 +24,8 @@ Item {
     property alias toolbarHeight: tmToolbar.height
     property int ntLogoTMK: 32
     property int startSec: 3
+    property bool borderOff: true//Без рамки.
+    property bool border16_9: false//Рамка 16х9
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     //Сигналы.
@@ -73,30 +75,17 @@ Item {
         tmrStart.running = true;
     }
     function fnMenuFormatOff(){//Функция отключение границ формата.
-        rctBorder.state = "borderOff";
-        rctBorder.border.color = "yellow"
+        rctBorder.width = tmZona.width;
+        rctBorder.height = tmZona.height;
+        rctBorder.border.color = "transparent"
     }
     function fnMenuFormat16_9(){//Функция включение границ формата 16:9.
-        let ltZonaWidth = tmZona.width;//Длина Зоны рабочей
-        let ltZonaHeight = tmZona.height;//Высота Зоны рабочей.
-        let ltProporciya;//Пропорция
-        let ltBorder9;//Длина 9 пропорций.
-        let ltBorder16;//Длина 16 пропорций.
-        if(ltZonaWidth < ltZonaHeight){//Если длина больше высоты, то это ПК или Телефон.
-            ltProporciya = ltZonaHeight/9;//Посчитали 1/9 пропорции экрана.
-            ltBorder9 =  ltZonaHeight;//Приравниваем высоту экрана.
-        }
-        else{//это предположительно телефон.
-            ltProporciya = ltZonaWidth/9;//Посчитали 1/9 пропорции экрана.
-            ltBorder9 =  ltZonaWidth;//Приравниваем ширину экрана.
-        }
-        ltBorder16 = ltProporciya*16;//Посчитали длину 16 пропорций.
-
-        rctBorder.state = "border16_9";
-        //rctBorder.width = ltBorder16;
-        //rctBorder.height = ltBorder9;
-
-        rctBorder.border.color = "red"
+        let ltProporciya = 16/9;//Пропорция.
+        //Вычисляем ширину как минимум из ширины внешнего прямоугольника и высоты * ltProporciya
+        rctBorder.width = Math.min(tmZona.width, tmZona.height*ltProporciya)
+        // Высота вычисляется на основе ширины, чтобы сохранить соотношение сторон
+        rctBorder.height = rctBorder.width/ltProporciya
+        rctBorder.border.color = "orange"
     }
     function fnClickedSozdat(){//Функция обработки нажатия меню Добавить.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -108,7 +97,6 @@ Item {
         txtZona.text = "";//Пустой текст.
         txtAnimaciya.visible = false;//Невидимый текст.
         txtAnimaciya.text = "";//Пустой текст.
-        console.error(txtAnimaciya.font.family)
     }
     Timer {//таймер старта анимации логотипа.
         id: tmrStart
@@ -139,12 +127,13 @@ Item {
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
         id: tmrLogo
         interval: 33; running: false; repeat: true
+        //Math.trunc - только целое число возвращает после татематической операции, дробная отсекается.
         property int ntShag: Math.trunc((txtZona.font.pixelSize - root.ntWidth*root.ntCoff)/root.ntLogoTMK)
         onTriggered: {
-            imgTMK.ntCoff++;
-            txtAnimaciya.font.pixelSize += ntShag;
-            if(imgTMK.ntCoff >= root.ntLogoTMK)
-                running = false
+            imgTMK.ntCoff++;//Увелициваем Логотип.
+            txtAnimaciya.font.pixelSize += ntShag;//Увеличиваем текст.
+            if(imgTMK.ntCoff >= root.ntLogoTMK)//Если Логотип достиг максимально заданного размера, то...
+                running = false//Отключаем таймер.
         }
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
@@ -280,6 +269,16 @@ Item {
     Item {//Данные Зона
         id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+        onWidthChanged: {//Если изменена ширина окна, то...
+            if(root.border16_9){//Если выбрана рамка 16х9, то...
+                fnMenuFormat16_9();//Перерасчитываем рамку 16:9 размера окна.
+            }
+        }
+        onHeightChanged: {//Если изменена высота окна, то...
+            if(root.border16_9){//Если выбрана рамка 16х9, то...
+                fnMenuFormat16_9();//Перерасчитываем рамку 16:9 размера окна.
+            }
+        }
         /*
         DCLogoTMK {//Логотип до flZona, чтоб не перекрывать список.
             id: lgTMK
@@ -291,7 +290,7 @@ Item {
         */
         Image {
             id: imgTMK
-            property int ntCoff: 32
+            property int ntCoff: root.ntLogoTMK
             source: "qrc:/images/ts-rus-color.svg"
             sourceSize: Qt.size(88, 119)
             width: ntCoff*5.5
@@ -309,40 +308,19 @@ Item {
         }
         Rectangle {//Прямоугольник формата записываемого видео. Выставляет границы.
             id: rctBorder
-            //anchors.fill: tmZona
+            anchors.centerIn: tmZona
+            width: tmZona.width
+            height: tmZona.height
             color: "transparent"
             border.width: 5
-            states: [
-                State {
-                    name: "borderOff"
-                    PropertyChanges {
-                        target: rctBorder
-                        anchors.right: tmZona.right
-                        anchors.left: undefined
-                        width: 300
-                        height: 300
-                    }
-                },
-                State {
-                    name: "border16_9"
-                    PropertyChanges {
-                        target: rctBorder
-                        anchors.left: tmZona.left
-                        anchors.right: undefined
-                        width: 100
-                        height: 100
-                    }
-                }
-
-            ]
         }
 
         Rectangle {
             id: rctZona
-            anchors.left: tmZona.left
-            anchors.right: tmZona.right
-            anchors.top: tmZona.top
-            anchors.bottom: tmZona.verticalCenter
+            anchors.left: rctBorder.left
+            anchors.right: rctBorder.right
+            anchors.top: rctBorder.top
+            anchors.bottom: rctBorder.verticalCenter
             color: "transparent"
             Text {
                 id: txtZona
@@ -456,10 +434,14 @@ Item {
                 if(ntNomer === 2){//Старт.
                     fnMenuStart();//Функция обработки нажатия меню Старт.
                 }
-                if(ntNomer === 3){//Без формата.
+                if(ntNomer === 3){//Без рамки.
+                    root.border16_9 = false;
+                    root.borderOff = true;
                     fnMenuFormatOff();//Функция отключение границ формата.
                 }
-                if(ntNomer === 4){//Старт.
+                if(ntNomer === 4){//Рамка 16:9
+                    root.borderOff = false;
+                    root.border16_9 = true;
                     fnMenuFormat16_9();//Функция включение границ формата 16:9.
                 }
                 if(ntNomer === 5){//Выход
