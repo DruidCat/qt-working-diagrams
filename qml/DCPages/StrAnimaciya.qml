@@ -24,6 +24,7 @@ Item {
     property alias toolbarHeight: tmToolbar.height
     property int ntLogoTMK: 32
     property int startSec: 3
+    property bool blStop: true//true - анимация не запущена.
     property bool borderOff: true//Без рамки.
     property bool border16_9: false//Рамка 16х9
     //Настройки.
@@ -72,7 +73,10 @@ Item {
         fnMenuStart();//Запускаем обратный отсчёт.
     }
     function fnMenuStart(){//Функция обработки нажатия меню Старт.
-        tmrStart.running = true;
+        if(root.blStop){//Если анимация не запущена, то...
+            root.blStop = false;//Деактивируем флаг.
+            tmrStart.running = true;//Запускаем анимацию
+        }
     }
     function fnMenuFormatOff(){//Функция отключение границ формата.
         rctBorder.border.color = "transparent"//Прозрачный цвет рамки
@@ -164,6 +168,16 @@ Item {
         onTriggered: {
             pctAnimaciya.start();//Запускаем таймер прозрачности текста
             pctImage.start();//Запускаем таймер прозрачности логотипа
+            tmrOpacity.start();//Запускаем таймер ожидания окончания анимации прозрачности.
+        }
+    }
+    Timer {
+        id: tmrOpacity
+        property int msecOpacity: 1000
+        interval: msecOpacity; running: false; repeat: false
+        onTriggered: {
+            root.blStop = true;//Окончание анимации, взводим флаг.
+            root.signalToolbar(qsTr("Стоп анимации."));//Сообщение в Toolbar.
         }
     }
 
@@ -287,15 +301,6 @@ Item {
                 fnMenuFormat16_9();//Перерасчитываем рамку 16:9 размера окна.
             }
         }
-        /*
-        DCLogoTMK {//Логотип до flZona, чтоб не перекрывать список.
-            id: lgTMK
-            ntCoff: root.ntLogoTMK
-            anchors.centerIn: tmZona
-            visible: true
-            clrLogo: root.clrTexta; clrFona: root.clrFona
-        }
-        */
         Image {
             id: imgTMK
             property int ntCoff: root.ntLogoTMK
@@ -311,7 +316,7 @@ Item {
             NumberAnimation on opacity {//Анимация прозрачности от 1 до 0 за 1000мс, не запущенная.
                 id: pctImage
                 from: 1.0; to: 0.0
-                duration: 1000; running: false
+                duration: tmrOpacity.msecOpacity; running: false
             }
         }
         Rectangle {//Прямоугольник формата записываемого видео. Выставляет границы.
@@ -336,7 +341,6 @@ Item {
                 anchors.verticalCenter: rctZona.verticalCenter
                 color: root.clrTexta
 
-                //font.capitalization: Font.AllUppercase//Текст ЗАГЛАВНЫМИ буквами.
                 horizontalAlignment: Text.AlignHCenter//Выровнять текст по центру по горизонтали
                 verticalAlignment: Text.AlignVCenter//Выровнять текст по центру по вертикали
 
@@ -403,7 +407,7 @@ Item {
                 anchors.verticalCenter: rctZona.verticalCenter
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                 color: root.clrTexta
-                //font.capitalization: Font.AllUppercase//Текст ЗАГЛАВНЫМИ буквами.
+
                 horizontalAlignment: Text.AlignHCenter//Выровнять текст по центру по горизонтали
                 verticalAlignment: Text.AlignVCenter//Выровнять текст по центру по вертикали
 
@@ -411,11 +415,7 @@ Item {
                 NumberAnimation on opacity {//Анимация прозрачности от 1 до 0 за 1000мс, не запущенная.
                     id: pctAnimaciya
                     from: 1.0; to: 0.0
-                    duration: 1000; running: false
-                }
-                onOpacityChanged: {//Если прозрачность изменилась, то...
-                    if(opacity === 0)//Если полностью прозрачный текст, то...
-                        root.signalToolbar(qsTr("Стоп анимации."));//Сообщение в Toolbar.
+                    duration: tmrOpacity.msecOpacity; running: false
                 }
 
                 visible: false;//Невидимый.
