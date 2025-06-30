@@ -239,8 +239,9 @@ Item {
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: qsTr("Логи")
-                    bold: true; italic: true
+                    text: qsTr("логи")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
                     onClicked: {
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.clickedLogi();//Сигнал нажатия кнопки Логи.
@@ -253,8 +254,9 @@ Item {
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: qsTr("О приложении")
-                    bold: true; italic: true
+                    text: qsTr("о приложении")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
                     onClicked: {
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
@@ -268,8 +270,9 @@ Item {
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: qsTr("Участки")
-                    bold: true; italic: true
+                    text: qsTr("участки")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
                         //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
@@ -284,8 +287,9 @@ Item {
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: qsTr("О Qt")
-                    bold: true; italic: true
+                    text: qsTr("о Qt")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.clickedQt();//Сигнал нажатия кнопки об Qt.
@@ -298,8 +302,9 @@ Item {
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: root.pdfViewer ? qsTr("ViewerPDF: вкл") : qsTr("ViewerPDF: выкл")
-                    bold: true; italic: true
+                    text: root.pdfViewer ? qsTr("viewerPDF: вкл") : qsTr("viewerPDF: выкл")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
@@ -313,8 +318,9 @@ Item {
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"
                     clrTexta: root.clrTexta
-                    text: root.appRedaktor ? qsTr("Редактор: вкл") : qsTr("Редактор: выкл")
-                    bold: true; italic: true
+                    text: root.appRedaktor ? qsTr("редактор: вкл") : qsTr("редактор: выкл")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
@@ -333,8 +339,9 @@ Item {
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: qsTr("Создание каталога документов")
-                    bold: true; italic: true
+                    text: qsTr("создание каталога документов")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
                     }
@@ -347,8 +354,9 @@ Item {
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: qsTr("Анимация")
-                    bold: true; italic: true
+                    text: qsTr("анимация")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.

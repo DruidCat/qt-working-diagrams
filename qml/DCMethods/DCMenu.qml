@@ -77,7 +77,7 @@ Item {
 				}
 				onWidthChanged: {//Если длина строки изменилась, то...
                     if(rctText.width > txtText.width){//Если длина строки больше длины текста, то...
-                        for(let ltShag=txtText.font.pixelSize; ltShag<rctText.height-root.ntCoff; ltShag++){
+                        for(var ltShag=txtText.font.pixelSize; ltShag<rctText.height-root.ntCoff; ltShag++){
                             if(txtText.width < rctText.width){//Если длина текста меньше динны строки
 								txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
                                 if(txtText.width > rctText.width){//Но, если переборщили
