@@ -9,7 +9,7 @@ ApplicationWindow {
     property int ntWidth: 4
     property int ntCoff: 8
     property color clrKnopok: "#ee732d"//Корпаративный оранжевый
-    property color clrFona: "grey"
+    property color clrFona: "#5a6673"//Серый цвет более мягкий, подходящий под оранжевый корпаративный
     property color clrFaila: "yellow"
     property color clrStranic: "black"
     property bool pdfViewer: true//false - Отключить pdf просмоторщик.
