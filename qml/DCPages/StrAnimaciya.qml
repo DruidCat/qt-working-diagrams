@@ -75,22 +75,30 @@ Item {
         tmrStart.running = true;
     }
     function fnMenuFormatOff(){//Функция отключение границ формата.
+        rctBorder.border.color = "transparent"//Прозрачный цвет рамки
         rctBorder.width = tmZona.width;
         rctBorder.height = tmZona.height;
-        rctBorder.border.color = "transparent"
     }
     function fnMenuFormat16_9(){//Функция включение границ формата 16:9.
         let ltProporciya = 16/9;//Пропорция.
-        //Вычисляем ширину как минимум из ширины внешнего прямоугольника и высоты * ltProporciya
-        rctBorder.width = Math.min(tmZona.width, tmZona.height*ltProporciya)
-        // Высота вычисляется на основе ширины, чтобы сохранить соотношение сторон
-        rctBorder.height = rctBorder.width/ltProporciya
-        rctBorder.border.color = "orange"
+        rctBorder.border.color = root.clrTexta;//свет рамки.
+        if(tmZona.width > tmZona.height){//Горизонтальное расположение экрана.
+            //Вычисляем ширину как минимум из ширины внешнего прямоугольника и высоты * ltProporciya
+            rctBorder.width = Math.min(tmZona.width, tmZona.height*ltProporciya)
+            //Высота вычисляется на основе ширины, чтобы сохранить соотношение сторон
+            rctBorder.height = rctBorder.width/ltProporciya
+        }
+        else{//Вертикальное расположение экрана.
+            //Вычисляем высоту как минимум из высоту внешнего прямоугольника и ширину * ltProporciya
+            rctBorder.height = Math.min(tmZona.height, tmZona.width*ltProporciya)
+            //Ширина вычисляется на основе высоты, чтобы сохранить соотношение сторон
+            rctBorder.width = rctBorder.height/ltProporciya
+        }
     }
     function fnClickedSozdat(){//Функция обработки нажатия меню Добавить.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
         menuSpisok.visible = false;//Делаем невидимым меню.
-        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ТЕКС АНИМАЦИИ");//Подсказка пользователю,что вводить нужн
+        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ТЕКСТ АНИМАЦИИ");//Подсказка пользователю,что вводить нужн
         txnZagolovok.visible = true;//Режим добавления текста Анимации ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
         root.signalToolbar(qsTr("Введите текст анимации.")) 
         txtZona.visible = false;//Невидимый текст.
