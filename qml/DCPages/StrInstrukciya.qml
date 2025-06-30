@@ -70,7 +70,7 @@ Item {
 			txdZona.text = qsTr("
 				<html>
 					<body>
-<p><center><font color=\"black\">.<img src = \"/images/ru.WorkingDiagrams.png\">.</font></center></p>
+<p><center><font color=\"black\">.<img src = \"/images/ts-rus-color.svg\">.</font></center></p>
 <p><center>Приложение: <b>Ментор</b></center></p>
 <p><center>Версия: <b>v0.33</b></center></p>
 <p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
