@@ -12,6 +12,8 @@ Item {
     property alias pixelSize: txtText.font.pixelSize
 	property color clrKnopki: "transparent"
 	property color clrTexta: "black"
+    property real opacityKnopki: 1
+    property real opacityTexta: 1
     //Настройки.
     height: ntHeight*ntCoff+ntCoff
 	//Длина кнопки расчитывается автоматически в слоте onCompleted в конце файла.
@@ -38,6 +40,7 @@ Item {
         //color: maKnopkaOriginal.containsPress ? Qt.darker(clrKnopki, 1.3) : clrKnopki
         radius: height/4
 		smooth: true//Сглаживание.
+        opacity: root.opacityKnopki//Прозрачность Кнопки.
 		border.color: Qt.darker(clrKnopki, 1.3)//Граница чуть темнее цвета кнопки
         border.width: 1//Толщина граници кнопки один пиксель
         clip: true//Всё, что будет внутри прямоугольника и будет выходить за границы обрезается.
@@ -52,6 +55,7 @@ Item {
             font.pixelSize: root.height - root.ntCoff
 			font.bold: false//Не жирный текст
             font.italic: false//Не курсивный текст
+            opacity: root.opacityTexta//Прозрачность Текста.
             onTextChanged: {//Если поменяется текст в кнопке, то и размер шрифта пересчитается.
                 if(rctKnopka.width > txtText.width){//Если длина строки больше длины текста, то...
                     for(var ltShag=txtText.font.pixelSize; ltShag<rctKnopka.height-root.ntCoff; ltShag++){
