@@ -6,6 +6,19 @@ Item {
     property int ntCoff: 1
     property color clrFona: "black"
     property color clrLogo: "orange"
+    /*
+    width: ntCoff*11
+    height: ntCoff*14.875
+    Image {
+        id: imgTMK
+        source: "qrc:/images/ts-rus-orange-1.svg"
+        sourceSize: Qt.size(88, 119)
+        anchors.fill: root
+        //Это свойство важно для качественного рендеринга SVG. Мы указываем исходный размер изображения.
+        fillMode: Image.PreserveAspectFit//Сохраняем пропорции
+        opacity: 1
+    }
+    */
     //Настройки.
     width: 16*ntCoff
     height: width
