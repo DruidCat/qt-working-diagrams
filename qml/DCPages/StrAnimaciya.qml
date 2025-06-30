@@ -305,7 +305,7 @@ Item {
             id: imgTMK
             property int ntCoff: root.ntLogoTMK
             source: "qrc:/images/ts-rus-color.svg"
-            sourceSize: Qt.size(88, 119)
+            sourceSize: Qt.size(176, 238)
             width: ntCoff*5.5
             height: ntCoff*7.4375
             anchors.centerIn: tmZona
@@ -487,6 +487,7 @@ Item {
                 txnZagolovok.visible = false;//Отключаем ввод текста анимации.
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
+                root.forceActiveFocus();//Придудительный фокус на root, чтоб тут же работало собыние клавишь.
             }
         }
     } 
