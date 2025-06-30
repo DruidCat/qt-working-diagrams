@@ -8,7 +8,7 @@ ApplicationWindow {
     //Свойства.
     property int ntWidth: 4
     property int ntCoff: 8
-    property color clrKnopok: "orange"
+    property color clrKnopok: "#ee732d"//Корпаративный оранжевый
     property color clrFona: "grey"
     property color clrFaila: "yellow"
     property color clrStranic: "black"
