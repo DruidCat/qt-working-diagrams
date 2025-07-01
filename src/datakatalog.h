@@ -18,6 +18,7 @@ public:
     void		ustPDBDannie(DCDB* pdbDannie);//Устанавливаем указатель БД Данных.
 
     int 		polPdfSummu();//Возвратим приблизительную сумму всех pdf документов в Менторе.
+    void		dataStart();//Первоначальные значения переменных.
     void		copyStart();//Старт копирования документов в каталог.
 
 private:
@@ -54,8 +55,8 @@ private:
     uint		m_untDannie;//Суммарное количество документов в БД.
 
     bool		m_blDataEmpty;//Пустые данные, true - не излучает сигнала Копирования данных в UI.
-    bool 		m_blNazadSpisok;//true - разрешено назад к Списку.
-    bool		m_blNazadElement;//true - разрешено назад в Элементам.
+
+    uint 		m_untCd;//Считает,вкаком слое папок находится m_pdrPut(4Start-3Mentor-2Titul-1Spisok-0Element)
 
     QString 	m_strWorkingData;//Путь к каталогу, где находится БД и документы Ментора.
 

@@ -66,6 +66,9 @@ Item {
                 tmrLogo.running = false;//Останавливаем анимацию Логотипа.
             }
         }
+        function onUntKatalogCopyChanged(){//Слот счётчика скопированных документов в каталоге.
+            console.error(cppqml.untKatalogCopy);
+        }
     }
     function fnZakrit(){//Функция закрыти страницы.
         menuMenu.visible = false;//Делаем невидимым меню.

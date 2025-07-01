@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QThread>
 #include <QFile>
+#include <QDebug>
 
 class CopyKatalog: public QThread{
     Q_OBJECT
