@@ -20,7 +20,6 @@ void CopyKatalog::run(){//Перегружаемый метод, который 
 //---К О П И Р У Е М   Ф А Й Л   В   П О Т О К Е---//
 /////////////////////////////////////////////////////
     QFile flDannie (m_strAbsolutPutFaila);//Файл, который мы хотим скопировать, расположенный...
-    qDebug()<<"23:copykatalog.cpp "<<m_strAbsolutPutFaila;
     emit signalCopyDannie(flDannie.copy(m_strWorkingDiagramsPutFaila));//файл скопировался или нет
 }
 

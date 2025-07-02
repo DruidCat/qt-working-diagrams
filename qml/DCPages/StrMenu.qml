@@ -25,6 +25,8 @@ Item {
     property int ntLogoTMK: 16
     property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
     property bool appRedaktor: cppqml.blAppRedaktor//true - включен Редактор приложения.
+    property real rlLoader: 1//Коэффкициент загрузчика.
+    property real rlProgress: 0//Прогресс загрузчика.
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     //Сигналы.
@@ -55,7 +57,8 @@ Item {
         signalZagolovok(qsTr("ПРОЦЕСС СОЗДАНИЯ КАТАЛОГА"));//Надпись в заголовке
         copyStart.visible = false;//Делаем невидимый запрос с Вопросом начать создание каталога.
         tmrLogo.running = true;//Запустить анимацию Логотипа.
-        console.error(cppqml.polKatalogSummu());//Получаем количество документов в БД Ментора.
+        root.rlProgress = 0;//Обнуляем линию прогресса.
+        root.rlLoader = 100/cppqml.polKatalogSummu();//Считаем коэффициент загрузчика, на который он увелич.
         cppqml.copyKatalogStart();//Начинаем создание каталога
     }
     Connections {//Соединяем сигнал из C++ с действием в QML, перерисовываем, в зависимости от Элемента.
@@ -67,7 +70,11 @@ Item {
             }
         }
         function onUntKatalogCopyChanged(){//Слот счётчика скопированных документов в каталоге.
-            console.error(cppqml.untKatalogCopy);
+            root.rlProgress += root.rlLoader;//Увеличиваем на root.ntLoader.
+            if(ldrProgress.item)
+                ldrProgress.item.progress = root.rlProgress;//Отправляем прогресс загрузки в DCProgress.
+            if(ldrProgress.item)
+                ldrProgress.item.text = cppqml.untKatalogCopy;//Выводим номер копируемого документа.
         }
     }
     function fnZakrit(){//Функция закрыти страницы.

@@ -9,7 +9,7 @@ Item {
     property alias clrProgress: rctProgress.color//цвет фона
     property alias clrTexta: txtProgress.color//цвет фона
     property alias running: tmrProgress.running//флаг который запускает таймер пролосы прогресса.
-    property int progress: 0//Свойство прогресса от 0 до 100
+    property real progress: 0//Свойство прогресса от 0 до 100
     property alias text: txtProgress.text
     //Настройки.
     visible:  true//Видимость процесса загрузки.
