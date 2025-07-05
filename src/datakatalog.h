@@ -18,7 +18,6 @@ public:
     void		ustPDBDannie(DCDB* pdbDannie);//Устанавливаем указатель БД Данных.
 
     int 		polPdfSummu();//Возвратим приблизительную сумму всех pdf документов в Менторе.
-    void		dataStart();//Первоначальные значения переменных.
     void		copyStart();//Старт копирования документов в каталог.
 
 private:
@@ -29,11 +28,13 @@ private:
     CopyKatalog* m_pcopykatalog = nullptr;//Указатель на поток копирования файла.
 
     QDir*		m_pdrPut = nullptr;//Указатель на путь каталогов, в которых заместится документация.
+    void		dataStart();//Первоначальные значения переменных.
     bool		sozdatKatalogMentor();//Создаём каталог Ментор.
     bool		sozdatTitul();//Создаём каталог Титул.
     bool		sozdatSpisok(const uint untSpisokNomer);//Создаём список по его Номеру.
     bool		sozdatElement(const uint untElementNomer);//Создаём Элемент по Номеру.
     bool		sozdatDannie(const uint untDannieNomer);//Копирование документа по Номеру.
+    bool		sozdatOpisanie(const uint untSpisokKod);//Создаём ОПИСАНИЕ.txt
     bool		sozdatOpisanie(const uint untSpisokKod, const uint untElementKod);//Создаём ОПИСАНИЕ.txt
 
     bool		nazadSpisok();//Переходим назад в папку со Списками.
@@ -56,6 +57,7 @@ private:
     uint 		m_untDannieNomer;//Это номер в БД, Данные Элемента которох нужно прочитать.
 
     QString		m_strMentor;//Имя создаваемой папки с каталогом документов.
+    QString		m_strSpisok;//Имя создаваемой папки Списка.
     QString		m_strElement;//Имя создаваемой папки Элемента.
     uint		m_untDannie;//Суммарное количество документов в БД.
 
