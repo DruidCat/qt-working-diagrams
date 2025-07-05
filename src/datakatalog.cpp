@@ -259,50 +259,34 @@ bool DataKatalog::sozdatElement(const uint untElementNomer){//Создать Э�
 
     m_untElementNomer = untElementNomer;//Приравниваем параметры в начале метода.
     m_untElementKod = m_pdbElement->SELECT("Номер", QString::number(m_untElementNomer), "Код").toUInt();
-    static uint untElementMax = 0;//Статическая переменная Максимального количества Элементов в Списке. 
+    static uint untElementMax = 0;//Статическая переменная Максимального количества Элементов в Списке.
     if(!untElementMax){//ВАЖНО! Если = 0, то читаем из БД, Но при последнем Элементе в Списке ОБНУЛЯЕМ!!!
-        /*
-        for(uint untShagSpiska = m_untSpisokKod; untShagSpiska <= m_untSpisokMax; untShagSpiska++){
-            m_untSpisokKod = untShagSpiska;
-            QString strImyaTablici = "элемент_"+QString::number(untShagSpiska);
-            qDebug()<<strImyaTablici;
+        for(uint untShagSpiska = m_untSpisokKod; untShagSpiska <= m_untSpisokMax; untShagSpiska++){//Цикл.
+            m_untSpisokKod = untShagSpiska;//Приравниваем значение Кода Списка.
+            QString strImyaTablici = "элемент_" + QString::number(untShagSpiska);//Имя таблицы собираем.
             if(m_pdbElement->SELECT(strImyaTablici)){//Если есть такая таблица, то....
                 m_pdbElement->ustImyaTablici(strImyaTablici);//Задаём таблицу Элемента
-                untElementMax = m_pdbElement->SELECTPK();//Подсчитываем количество Элементов в каждом из Списков.
-                if(untElementMax){//Если не ноль элементов, то...
-                    untShagSpiska = (m_untSpisokMax+1);//Выходим из цикла.
-                }
+                untElementMax = m_pdbElement->SELECTPK();//Считаем количество Элементов в каждом из Списков.
+                if(untElementMax)//Если не ноль элементов, то...
+                    untShagSpiska = (m_untSpisokMax+1);//Выходим из цикла и передаём в метод m_untSpisokMax.
+                else//Если 0, то...
+                    m_untElementNomer = 0;//Ноль элементов в в данной таблице.
             }
-        }
-        */
-        QString strImyaTablici = "элемент_"+QString::number(m_untSpisokKod);
-        if(m_pdbElement->SELECT(strImyaTablici)){//Если есть такая таблица, то....
-            m_pdbElement->ustImyaTablici(strImyaTablici);//Задаём таблицу Элемента
-            untElementMax = m_pdbElement->SELECTPK();//Подсчитываем количество Элементов в каждом из Списков.
-            if(!untElementMax){//Если ноль элементов, то...
-                m_blElementMax = true;//Последний Элемент в Списке.
-                m_blDataEmpty = true;//Пустые данные.
-                qDebug()<<"Сука";
-                slotCopyDannie(true);//Слот статуса скопированного документа.
-                qDebug()<<"Базука";
-                return true;//Успех, выходим из метода.
-            }
-        }
-        else{//Если нет такой таблици, то...
-            m_blElementMax = true;//Последний Элемент в Списке.
-            m_blDataEmpty = true;//Пустые данные.
-            qDebug()<<"Ебака";
-            slotCopyDannie(true);//Слот статуса скопированного документа.
-            qDebug()<<"Собака";
-            return true;//Успех, выходим из метода.
+            else//Если нет такой таблицы, то...
+                m_untElementNomer = 0;//Ноль элементов, нет такой таблицы
         }
     }
-    if((untElementNomer > untElementMax)||(untElementNomer <= 0)){//Если Номер не в эти рамках, то...
+    if(m_untElementNomer == 0){//Если 0 равняется, то такой таблицы или нет или в ней 0 элементов.
+        m_blElementMax = true;//Последний Элемент в Списке.
+        untElementMax = 0;//ОБНУЛЯЕМ ОБЯЗАТЕЛЬНО!!!
+        return true;//Выходим из метода с Успехом.
+    }
+    if((m_untElementNomer > untElementMax)||(m_untElementNomer < 0)){//Если Номер не в эти рамках, то...
         qdebug(tr("Не правильной номер элемента для его создания."));
         return false;//Ошибка.
     }
     else{//Если нет, то...
-        for(uint untShag = untElementNomer; untShag <= untElementMax; untShag++){
+        for(uint untShag = m_untElementNomer; untShag <= untElementMax; untShag++){
             m_untElementNomer = untShag;
             if(untShag == untElementMax){//Если равняется, значит это последний Элемент в Списке
                 m_blElementMax = true;//Последний Элемент в Списке.
