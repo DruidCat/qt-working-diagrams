@@ -34,8 +34,9 @@ private:
     bool		sozdatSpisok(const uint untSpisokNomer);//Создаём список по его Номеру.
     bool		sozdatElement(const uint untElementNomer);//Создаём Элемент по Номеру.
     bool		sozdatDannie(const uint untDannieNomer);//Копирование документа по Номеру.
-    bool		sozdatOpisanie(const uint untSpisokKod);//Создаём ОПИСАНИЕ.txt
-    bool		sozdatOpisanie(const uint untSpisokKod, const uint untElementKod);//Создаём ОПИСАНИЕ.txt
+    bool		sozdatOpisanie();//Создаём ОПИСАНИЕ Титула.txt
+    bool		sozdatOpisanie(const uint untSpisokKod);//Создаём ОПИСАНИЕ Списка.txt
+    bool		sozdatOpisanie(const uint untSpisokKod, const uint untElementKod);//Создаём ОПИСАНИЕ Элемента.
 
     bool		nazadSpisok();//Переходим назад в папку со Списками.
     bool		nazadElement();//Переходим назад в папку в Элементами.
@@ -57,6 +58,7 @@ private:
     uint 		m_untDannieNomer;//Это номер в БД, Данные Элемента которох нужно прочитать.
 
     QString		m_strMentor;//Имя создаваемой папки с каталогом документов.
+    QString		m_strTitul;//Имя создаваемой папки Титула.
     QString		m_strSpisok;//Имя создаваемой папки Списка.
     QString		m_strElement;//Имя создаваемой папки Элемента.
     uint		m_untDannie;//Суммарное количество документов в БД.
