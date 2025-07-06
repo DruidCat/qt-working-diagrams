@@ -70,5 +70,6 @@
         <file>images/ts-rus-orange-1.jpg</file>
         <file>images/ts-rus-orange-1.svg</file>
         <file>fonts/verdana.ttf</file>
+        <file>images/tmk-color.svg</file>
     </qresource>
 </RCC>
