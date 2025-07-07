@@ -11,8 +11,8 @@ Item{
     property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
     property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.
-	width: ntWidth*ntCoff
-	height: width
+    height: tapHeight
+    width: tapWidth
     //Сигналы.
 	signal clicked();
     //Функции.
@@ -30,14 +30,16 @@ Item{
     */
     Rectangle {
 		id: rctKnopkaVverh
-        anchors.fill: root
+        height: root.ntWidth*root.ntCoff
+        width: height
+        anchors.centerIn: root
 
         color: tphKnopkaVverh.pressed ? Qt.darker(clrFona, 1.3) : clrFona
         //color: maKnopkaVverh.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
         border.color: tphKnopkaVverh.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
         //border.color: maKnopkaVverh.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        border.width: root.width/8/4
-        radius: root.width/4
+        border.width: width/8/4
+        radius: width/4
 
 		Rectangle {
 			id: rctStrelkaNizPravo
