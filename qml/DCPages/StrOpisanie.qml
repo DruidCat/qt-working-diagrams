@@ -23,6 +23,10 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: txdZona.radius
+    property real zagolovokLevi: 1
+    property real zagolovokPravi: 1
+    property real toolbarLevi: 1
+    property real toolbarPravi: 1
     property bool appRedaktor: false//true - включить Редактор приложения.
 	property alias textTextEdit: txdZona.text
 	property string strOpisanie: "titul"
@@ -76,8 +80,9 @@ Item {
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left: tmZagolovok.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
 			onClicked: {
                 txdZona.readOnly = true;//запрещаем редактировать текст.
                 root.clickedNazad();//Сигнал, что кнопка Назад нажата.
@@ -89,10 +94,11 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.right: tmZagolovok.right
-            anchors.margins: root.ntCoff/2
             visible: true
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 root.clickedPlan();//Сигнал нажатия кнопки План.
             }
@@ -104,9 +110,10 @@ Item {
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.left: tmZagolovok.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedOtmena();//Функция обрабатывающая кнопку Отмена.
             }
@@ -117,10 +124,11 @@ Item {
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-            anchors.margins: root.ntCoff/2
 			visible: false 
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
 			onClicked: {
 				fnClickedOk();//Нажата кнопка Ок.
 			}
@@ -187,10 +195,11 @@ Item {
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.left: tmToolbar.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
 			onClicked: {
                 root.signalToolbar(qsTr("Для окончания редактирования нажмите ОК."));//Подсказка.
 				txdZona.readOnly = false;//Разрешить редактировать.

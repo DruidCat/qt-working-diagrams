@@ -22,6 +22,10 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
+    property real zagolovokLevi: 1
+    property real zagolovokPravi: 1
+    property real toolbarLevi: 1
+    property real toolbarPravi: 1
     property int ntLogoTMK: 16
     property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
     property bool appRedaktor: cppqml.blAppRedaktor//true - включен Редактор приложения.
@@ -121,8 +125,9 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left: tmZagolovok.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
 			onClicked: {
                 if(tmrLogo.running){//Если запущен процесс создания каталогов документов, то...
                     copyStop.visible = true;//Задаём вопрос "Остановить создание каталога?"
@@ -421,9 +426,10 @@ Item {
             id: knopkaMenu
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter; anchors.right: tmToolbar.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {//Слот сигнала нажатия на кнопку Меню.
                 menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость
             }

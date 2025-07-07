@@ -15,8 +15,10 @@ Page {
 	property alias rctStrZagolovok: rctStrZagolovok
 	property alias rctStrZona: rctStrZona
     property alias rctStrToolbar: rctStrToolbar
-    property int leftToolbar: 1
-    property int rightToolbar: 1
+    property real zagolovokLevi: 1//Коэффициент ширины левой кнопки в заголовке.
+    property real zagolovokPravi: 1//Коэффициент ширины правой кнопки в заголовке.
+    property real toolbarLevi: 1//Коэффициент ширины левой кнопки в тулбар.
+    property real toolbarPravi: 1//Коэффициент ширины правой кнопки в тулбар.
     //Функции.
 	Item{
 		id: tmStr
@@ -38,16 +40,16 @@ Page {
 				Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
                     id: tmZagolovokKnopkaCleva
 					height: rctStrZagolovok.height
-					width: height
+                    width: height*root.zagolovokLevi//Длина левой кнопки в перерасчёта на коэффициент.
 					anchors.top: rctStrZagolovok.top
                     anchors.left: rctStrZagolovok.left
                     anchors.bottom: rctStrZagolovok.bottom
 				}
 				Rectangle {
                     id: rctStrZagolovokText
-                    width: rctStrZagolovok.width-2*tmZagolovokKnopkaCleva.width
                     height: rctStrZagolovok.height-root.ntCoff
                     anchors.left: tmZagolovokKnopkaCleva.right
+                    anchors.right: tmZagolovokKnopkaCprava.left
                     anchors.verticalCenter: rctStrZagolovok.verticalCenter
 					color: "transparent"
 					Text {
@@ -102,9 +104,8 @@ Page {
                 Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
                     id: tmZagolovokKnopkaCprava
                     height: rctStrZagolovok.height
-                    width: height
+                    width: height*root.zagolovokPravi//Длина правой кнопки в перерасчёте на коэффициент.
                     anchors.top: rctStrZagolovok.top
-                    anchors.left: rctStrZagolovokText.right
                     anchors.right: rctStrZagolovok.right
                     anchors.bottom: rctStrZagolovok.bottom
                 }
@@ -134,7 +135,7 @@ Page {
 				Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
                     id: tmToolbarKnopkaCleva
 					height: rctStrToolbar.height
-                    width: height*root.leftToolbar//Длина левой кнопки в перерасчёта на коэффициент.
+                    width: height*root.toolbarLevi//Длина левой кнопки в перерасчёта на коэффициент.
 					anchors.top: rctStrToolbar.top
                     anchors.left: rctStrToolbar.left
                     anchors.bottom: rctStrToolbar.bottom
@@ -197,7 +198,7 @@ Page {
                 Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
                     id: tmToolbarKnopkaCprava
                     height: rctStrToolbar.height
-                    width: height*root.rightToolbar//Длина правой кнопки в перерасчёте на коэффициент.
+                    width: height*root.toolbarPravi//Длина правой кнопки в перерасчёте на коэффициент.
                     anchors.top: rctStrToolbar.top
                     anchors.right: rctStrToolbar.right
                     anchors.bottom: rctStrToolbar.bottom

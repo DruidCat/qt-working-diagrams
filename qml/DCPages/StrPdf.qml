@@ -22,6 +22,10 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
+    property real zagolovokLevi: 1
+    property real zagolovokPravi: 1
+    property real toolbarLevi: 1
+    property real toolbarPravi: 1
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
     property int ntLogoTMK: 16
     //Настройки
@@ -149,8 +153,9 @@ Item {
 			id: knopkaNazad
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
-			anchors.margins: root.ntCoff/2
 			clrKnopki: root.clrTexta
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
 			onClicked: {
                 cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
@@ -161,8 +166,9 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: fnClickedZakrit()//Функция обрабатывающая кнопку Закрыть.
         }
 		Item {
@@ -205,8 +211,9 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
-			anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: fnClickedOk()//Функция отправить запрос на поиск
 		}	
         DCPoisk {
@@ -239,8 +246,9 @@ Item {
             id: knopkaPoisk
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Поиск.
                 txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
                 txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет

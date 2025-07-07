@@ -8,6 +8,8 @@ Item {
 	property int ntCoff: 8
 	property color clrKnopki: "grey"
     property color clrFona: "white"
+    property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
+    property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.
     width: ntWidth*ntCoff
     height: width

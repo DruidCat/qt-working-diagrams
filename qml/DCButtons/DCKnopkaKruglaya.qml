@@ -12,6 +12,8 @@ Item{
 	property alias bold: txtKnopkaKruglaya.font.bold
 	property alias italic: txtKnopkaKruglaya.font.italic
 	property alias pixelSize: txtKnopkaKruglaya.font.pixelSize
+    property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
+    property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.
 	width:  ntWidth*ntCoff
 	height: width

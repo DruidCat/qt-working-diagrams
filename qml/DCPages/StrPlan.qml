@@ -22,6 +22,10 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
+    property real zagolovokLevi: 1
+    property real zagolovokPravi: 1
+    property real toolbarLevi: 1
+    property real toolbarPravi: 1
     property bool appRedaktor: false//true - включить Редактор приложения.
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
     property int ntLogoTMK: 16
@@ -117,8 +121,9 @@ Item {
         DCKnopkaNazad {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left:tmZagolovok.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
                 root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
@@ -217,9 +222,10 @@ Item {
             id: knopkaSozdat
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter; anchors.left: tmToolbar.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
                 root.clickedSozdat();//Сигнал нажатия кнопки Создать

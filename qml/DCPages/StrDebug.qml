@@ -13,7 +13,7 @@ Item {
 	property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
-	property alias zagolovokHeight: tmZagolovok.height
+	property alias zagolovokHeight: tmZagolovok.height 
 	property alias zonaX: tmZona.x
 	property alias zonaY: tmZona.y
 	property alias zonaWidth: tmZona.width
@@ -22,6 +22,10 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
+    property real zagolovokLevi: 1
+    property real zagolovokPravi: 1
+    property real toolbarLevi: 1
+    property real toolbarPravi: 1
 	property alias radiusZona: txdZona.radius
 	property string strDebug: ""//Глобальная переменная, в ней собирается строка со всеми Сообщениями.
     //Настройки.
@@ -36,8 +40,9 @@ Item {
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left:tmZagolovok.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 root.clickedNazad();
             }

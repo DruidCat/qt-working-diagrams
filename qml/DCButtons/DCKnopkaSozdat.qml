@@ -9,6 +9,8 @@ Item {
 	property color clrKnopki: "black"
     property color clrFona: "white"
     property bool blKrug: true
+    property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
+    property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.
 	width: ntWidth*ntCoff
 	height: width

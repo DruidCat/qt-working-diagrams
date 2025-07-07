@@ -25,6 +25,10 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
+    property real zagolovokLevi: 1
+    property real zagolovokPravi: 1
+    property real toolbarLevi: 1
+    property real toolbarPravi: 1
     property bool pdfViewer: false//true - включить собственный pdf просмотрщик.
     property bool appRedaktor: false//true - включить Редактор приложения.
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
@@ -117,8 +121,9 @@ Item {
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left:tmZagolovok.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.	
@@ -132,9 +137,10 @@ Item {
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.left: tmZagolovok.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
@@ -146,9 +152,10 @@ Item {
 			visible: true
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
 			clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
@@ -162,9 +169,10 @@ Item {
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.right: tmZagolovok.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 fnClickedOk();//Функция переименование данных.
             }
@@ -377,11 +385,12 @@ Item {
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.left: tmToolbar.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrFaila//Цвет файлов
 			clrFona: root.clrFona
             blKrug: false//Не круглая кнопка.
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 fnClickedSozdat();//Функция нажатия кнопки Создать.
             }
@@ -391,11 +400,12 @@ Item {
 			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter
 			anchors.right: tmToolbar.right
-			anchors.margins: root.ntCoff/2
 			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
 			onClicked: {
                 txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
                 menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;

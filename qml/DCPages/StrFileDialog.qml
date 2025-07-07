@@ -25,6 +25,10 @@ Item {
     property alias toolbarWidth: tmToolbar.width
     property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctZona.radius//Радиус Зоны рабочей
+    property real zagolovokLevi: 1
+    property real zagolovokPravi: 1
+    property real toolbarLevi: 1
+    property real toolbarPravi: 1
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
     property int ntLogoTMK: 16
 	property bool blPlan: false//true - проводник открыт для Плана. false - проводник открыт для Данных.
@@ -87,8 +91,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.left:tmZagolovok.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 fnClickedNazad();//Функция клика Назад.
             }
@@ -99,9 +104,10 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.right: tmZagolovok.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 fnClickedEscape();//Меню сворачиваем
                 root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
@@ -215,9 +221,10 @@ Item {
             visible: true
             anchors.verticalCenter: tmToolbar.verticalCenter
             anchors.left: tmToolbar.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
@@ -228,10 +235,11 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: tmToolbar.verticalCenter
             anchors.right: tmToolbar.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {
                 menuFileDialog.visible ? menuFileDialog.visible = false : menuFileDialog.visible = true;
             }
