@@ -15,6 +15,8 @@ Item {
     property alias clrBorder: rctTextInput.border.color//цвет границы
     property int  ntWidth: 2
     property int ntCoff: 8
+    property real tapKnopkaZakrit: 1
+    property real tapKnopkaOk: 1
     property string placeholderTextTrue: ""//Текст в строке, подсказывающий, что нужно вводить юзеру
     property string placeholderTextFalse: ""//Текст в строке,подсказывающий,что нужно вводить юзеру при ошибке
     property alias placeholderColor: txtTextInput.color//Цвет текста подсказки
@@ -45,8 +47,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctPassword.verticalCenter
             anchors.left:rctPassword.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrKnopki
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.tapKnopkaZakrit
             onClicked: {
                 root.clickedOtmena();//Запускаем сигнал Отмены удаления.
             }
@@ -57,8 +60,8 @@ Item {
             anchors.bottom: rctPassword.bottom
             anchors.left: knopkaOtmena.right
             anchors.right: knopkaOk.left
-            anchors.leftMargin: root.ntCoff/2
-            anchors.rightMargin: root.ntCoff/2
+            //anchors.leftMargin: root.ntCoff/2
+            //anchors.rightMargin: root.ntCoff/2
 
 			color: "transparent"//Текст фона прозрачный.
 			border.color: "transparent"
@@ -178,8 +181,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctPassword.verticalCenter
             anchors.right: rctPassword.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrKnopki
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.tapKnopkaOk
             onClicked: {
 				var password = txnTextInput.text;
 				txnTextInput.text = "";

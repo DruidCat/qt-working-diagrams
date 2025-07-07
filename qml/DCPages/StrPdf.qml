@@ -263,9 +263,12 @@ Item {
             anchors.leftMargin: root.ntCoff/2; anchors.rightMargin: root.ntCoff/2
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false//Невидимый виджет.
-            clrFona: "black"; clrFonaPass: "orange"; clrTexta: "black"; clrKnopki: "yellow";clrBorder:"yellow"
+            clrFona: root.clrFona; clrFonaPass: root.clrTexta; clrTexta: root.clrFona
+            clrKnopki: "yellow";clrBorder:"yellow"
             placeholderTextTrue: qsTr("ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА")
             placeholderTextFalse: qsTr("НЕВЕРНЫЙ ПАРОЛЬ ДОКУМЕНТА")
+            tapKnopkaZakrit: root.zagolovokLevi
+            tapKnopkaOk: root.zagolovokPravi
             onClickedOk: function (strPassword)  {//Слот нажатия кнопки Ок
                 pssPassword.visible = false;//Невидимым ввода пароля.
                 pdfLoader.item.password = strPassword;//Передаём пароль в документ.
