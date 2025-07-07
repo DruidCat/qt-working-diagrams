@@ -14,8 +14,6 @@ Item {
 	property color clrTexta: "black"
     property real opacityKnopki: 1
     property real opacityTexta: 1
-    property real tapHeight: ntHeight*ntCoff//Высота зоны нажатия пальцем или мышкой
-    property real tapWidth: ntHeight*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.
     height: ntHeight*ntCoff+ntCoff
 	//Длина кнопки расчитывается автоматически в слоте onCompleted в конце файла.
