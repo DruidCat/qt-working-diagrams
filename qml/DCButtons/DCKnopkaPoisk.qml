@@ -11,8 +11,8 @@ Item {
     property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
     property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.
-    width: ntWidth*ntCoff
-    height: width
+    height: tapHeight
+    width: tapWidth
     //Сигналы.
 	signal clicked();
     //Функции.
@@ -28,19 +28,19 @@ Item {
         onClicked: root.clicked()
     }
     */
-    Rectangle {
-        id: rctKnopkaPoisk
-        anchors.fill: root
-
-        color: clrFona
+    Item {
+        id: tmKnopkaPoisk
+        height: root.ntWidth*root.ntCoff
+        width: height
+        anchors.centerIn: root
 
 		Rectangle {
             id: rctKrugBolshoi
             z: 1
-            width: rctKnopkaPoisk.width/4*3
+            width: tmKnopkaPoisk.width/4*3
             height: width
-            anchors.top: rctKnopkaPoisk.top
-            anchors.left: rctKnopkaPoisk.left
+            anchors.top: tmKnopkaPoisk.top
+            anchors.left: tmKnopkaPoisk.left
 
             color: tphKnopkaPoisk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             //color: maKnopkaPoisk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
@@ -49,7 +49,7 @@ Item {
 		Rectangle {
             id: rctKrugMali
             z: 4
-            width: rctKnopkaPoisk.width/2
+            width: tmKnopkaPoisk.width/2
             height: width
             anchors.centerIn: rctKrugBolshoi
 
@@ -59,7 +59,7 @@ Item {
 		Rectangle {
             id: rctRuchkaOdin
             z: 2
-            width: rctKnopkaPoisk.width/4
+            width: tmKnopkaPoisk.width/4
             height: width
             anchors.top: rctKrugMali.bottom
             anchors.left: rctKrugMali.right
@@ -71,7 +71,7 @@ Item {
 		Rectangle {
             id: rctRuchkaDva
             z: 3
-            width: rctKnopkaPoisk.width/4
+            width: tmKnopkaPoisk.width/4
             height: width
             anchors.verticalCenter: rctRuchkaOdin.top
             anchors.horizontalCenter: rctRuchkaOdin.left
