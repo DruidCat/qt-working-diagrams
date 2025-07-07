@@ -11,8 +11,8 @@ Item{
     property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
     property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.
-    width: ntWidth*ntCoff
-    height: width
+    height: tapHeight
+    width: tapWidth
     //Сигналы.
     signal clicked();
     //Функции. 
@@ -28,125 +28,132 @@ Item{
         onClicked: root.clicked()
     }
     */
-    Rectangle {
-		id: rctOLevaVerh
-        width: root.width/8
-        height: root.height/2
-        anchors.top: root.top
-        anchors.left: root.left
-        anchors.topMargin: root.height/8
+    Item {
+        id: tmKnopkaOk
+        height: root.ntWidth*root.ntCoff
+        width: height
+        anchors.centerIn: root
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
-	Rectangle {
-		id: rctOLevaNiz
-        width: root.width/8
-        height: root.height/4
-		anchors.top: rctOLevaVerh.bottom
-        anchors.left: root.left
+        Rectangle {
+            id: rctOLevaVerh
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/2
+            anchors.top: tmKnopkaOk.top
+            anchors.left: tmKnopkaOk.left
+            anchors.topMargin: tmKnopkaOk.height/8
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
-	Rectangle {
-		id: rctOVerh
-        width: root.width/8
-        height: root.height/8
-        anchors.top: root.top
-		anchors.left: rctOLevaVerh.right
-        anchors.topMargin: root.height/8
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
+        Rectangle {
+            id: rctOLevaNiz
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/4
+            anchors.top: rctOLevaVerh.bottom
+            anchors.left: tmKnopkaOk.left
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
-	Rectangle {
-		id: rctONiz
-        width: root.width/8
-        height: root.height/8
-        anchors.bottom: root.bottom
-		anchors.left: rctOLevaNiz.right
-        anchors.bottomMargin: root.height/8
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
+        Rectangle {
+            id: rctOVerh
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/8
+            anchors.top: tmKnopkaOk.top
+            anchors.left: rctOLevaVerh.right
+            anchors.topMargin: tmKnopkaOk.height/8
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
-	Rectangle {
-		id: rctOPravaVerh
-        width: root.width/8
-        height: root.height/2
-        anchors.top: root.top
-		anchors.left: rctOVerh.right
-        anchors.topMargin: root.height/8
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
+        Rectangle {
+            id: rctONiz
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/8
+            anchors.bottom: tmKnopkaOk.bottom
+            anchors.left: rctOLevaNiz.right
+            anchors.bottomMargin: tmKnopkaOk.height/8
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
-	Rectangle {
-		id: rctOPravaNiz
-        width: root.width/8
-        height: root.height/4
-		anchors.top: rctOPravaVerh.bottom
-		anchors.left: rctOVerh.right
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
+        Rectangle {
+            id: rctOPravaVerh
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/2
+            anchors.top: tmKnopkaOk.top
+            anchors.left: rctOVerh.right
+            anchors.topMargin: tmKnopkaOk.height/8
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
+        Rectangle {
+            id: rctOPravaNiz
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/4
+            anchors.top: rctOPravaVerh.bottom
+            anchors.left: rctOVerh.right
 
-	Rectangle {
-		id: rctKVerh
-        width: root.width/8
-        height: root.height/4
-        anchors.top: root.top
-        anchors.right: root.right
-        anchors.topMargin: root.height/8
-        anchors.rightMargin: root.height/8
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
-	Rectangle {
-		id: rctKNiz
-        width: root.width/8
-        height: root.height/4
-        anchors.bottom: root.bottom
-        anchors.right: root.right
-        anchors.bottomMargin: root.height/8
-        anchors.rightMargin: root.height/8
+        Rectangle {
+            id: rctKVerh
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/4
+            anchors.top: tmKnopkaOk.top
+            anchors.right: tmKnopkaOk.right
+            anchors.topMargin: tmKnopkaOk.height/8
+            anchors.rightMargin: tmKnopkaOk.height/8
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
-	Rectangle {
-		id: rctKCentr
-        width: root.width/8
-        height: root.height/4
-        anchors.verticalCenter: root.verticalCenter
-		anchors.right: rctKNiz.left
-        anchors.topMargin: root.height/8
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
+        Rectangle {
+            id: rctKNiz
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/4
+            anchors.bottom: tmKnopkaOk.bottom
+            anchors.right: tmKnopkaOk.right
+            anchors.bottomMargin: tmKnopkaOk.height/8
+            anchors.rightMargin: tmKnopkaOk.height/8
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
-	Rectangle {
-		id: rctKLevaVerh
-        width: root.width/8
-        height: root.height/2
-        anchors.top: root.top
-		anchors.right: rctKCentr.left
-        anchors.topMargin: root.height/8
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
+        Rectangle {
+            id: rctKCentr
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/4
+            anchors.verticalCenter: tmKnopkaOk.verticalCenter
+            anchors.right: rctKNiz.left
+            anchors.topMargin: tmKnopkaOk.height/8
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-    }
-	Rectangle {
-		id: rctKLevaNiz
-        width: root.width/8
-        height: root.height/4
-		anchors.top: rctKLevaVerh.bottom
-		anchors.right: rctKCentr.left
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
+        Rectangle {
+            id: rctKLevaVerh
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/2
+            anchors.top: tmKnopkaOk.top
+            anchors.right: rctKCentr.left
+            anchors.topMargin: tmKnopkaOk.height/8
 
-        color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
+        Rectangle {
+            id: rctKLevaNiz
+            width: tmKnopkaOk.width/8
+            height: tmKnopkaOk.height/4
+            anchors.top: rctKLevaVerh.bottom
+            anchors.right: rctKCentr.left
+
+            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        }
     }
 }
