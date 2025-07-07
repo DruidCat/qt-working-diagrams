@@ -26,7 +26,7 @@ Item {
                 width: lsvZona.width
                 height: root.ntWidth*root.ntCoff+root.ntCoff
                 radius: (width/(root.ntWidth*root.ntCoff))/root.ntCoff
-                opacity: 0.9//Небольшая прозрачность, чтоб был виден Логотип под надписями.
+                opacity: 0.95//Небольшая прозрачность, чтоб был виден Логотип под надписями.
                 clip: true//Обрезаем лишний текст в прямоугольнике.
                 color: maZona.containsPress
                        ? Qt.darker(root.clrFona, 1.3) : root.clrFona
