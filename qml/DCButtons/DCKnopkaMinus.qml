@@ -37,7 +37,7 @@ Item{
 
         color: tphKnopkaMinus.pressed ? Qt.darker(clrFona, 1.3) : clrFona
         //color: maKnopkaMinus.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
-        radius: root.width/4
+        radius: width/4
 
         Rectangle {
             id: rctCentor
@@ -54,7 +54,7 @@ Item{
         if(root.border){
             rctKnopkaMinus.border.color = tphKnopkaMinus.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             //rctKnopkaMinus.border.color = maKnopkaMinus.containsMouse ? Qt.darker(clrKnopki,1.3) : clrKnopki
-            rctKnopkaMinus.border.width = root.width/8/4;
+            rctKnopkaMinus.border.width = rctKnopkaMinus.width/8/4;
 		}
 	} 
 }
