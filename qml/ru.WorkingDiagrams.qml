@@ -71,7 +71,7 @@ ApplicationWindow {
 			clrTexta: root.clrKnopok
             clrRabOblasti: "black"
             textZagolovok: qsTr("МЕНЮ")
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrMenu {
 				id: tmMenu
 				ntWidth: pgStrMenu.ntWidth; ntCoff: pgStrMenu.ntCoff
@@ -131,7 +131,7 @@ ApplicationWindow {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "MidnightBlue"
             textZagolovok: qsTr("ЛОГИ")
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrDebug {
 				id: tmDebug
 				ntWidth: pgStrDebug.ntWidth; ntCoff: pgStrDebug.ntCoff
@@ -164,7 +164,7 @@ ApplicationWindow {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
             textZagolovok: qsTr("О ПРИЛОЖЕНИИ")
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
 				id: tmWorkingDiagrams
                 strInstrukciya: "oprilojenii"
@@ -202,7 +202,7 @@ ApplicationWindow {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
             textZagolovok: qsTr("О Qt")
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
 				id: tmQt
                 strInstrukciya: "oqt"
@@ -236,7 +236,7 @@ ApplicationWindow {
             clrTexta: root.clrKnopok
             clrRabOblasti: "black"
             textZagolovok: qsTr("АНИМАЦИЯ")
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrAnimaciya {
                 id: tmAnimaciya
                 ntWidth: pgStrAnimaciya.ntWidth; ntCoff: pgStrAnimaciya.ntCoff
@@ -274,7 +274,7 @@ ApplicationWindow {
             clrTexta: root.clrKnopok
             clrRabOblasti: "black"
             textZagolovok: qsTr("ИНСТРУКЦИЯ ПО АНИМАЦИИ")
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
                 id: tmAnimaciyaInstrukciya
                 strInstrukciya: "animaciya"
@@ -313,7 +313,7 @@ ApplicationWindow {
 			clrTexta: root.clrKnopok
 			clrRabOblasti: "black"
             textZagolovok: cppqml.strTitul
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrSpisok {
                 id: tmSpisok
                 ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
@@ -363,7 +363,7 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: root.clrStranic
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrElement {
 				id: tmElement
 				ntWidth: pgStrElement.ntWidth; ntCoff: pgStrElement.ntCoff
@@ -413,7 +413,7 @@ ApplicationWindow {
 			clrTexta: root.clrKnopok
             clrFaila: root.clrFaila
 			clrRabOblasti: root.clrStranic
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
 				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
 				clrTexta: pgStrDannie.clrTexta; clrFona: pgStrDannie.clrRabOblasti
@@ -471,7 +471,7 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: "black"
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 4; toolbarPravi: 4
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 4; toolbarPravi: 4
             StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
@@ -505,7 +505,7 @@ ApplicationWindow {
             clrTexta: root.clrKnopok
             clrFaila: root.clrFaila
             clrRabOblasti: root.clrStranic
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
@@ -565,7 +565,7 @@ ApplicationWindow {
             clrTexta: root.clrKnopok
             clrRabOblasti: "black"
             textZagolovok: qsTr("ИНСТРУКЦИЯ ПО ПРОВОДНИКУ")
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
                 id: tmFDInstrukciya
                 strInstrukciya: "fdinstrukciya"
@@ -602,7 +602,7 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
 			clrRabOblasti: root.clrStranic
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1.5; toolbarPravi: 1.5
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             onVisibleChanged: {
                 if(visible){
                     if(root.appRedaktor)//Если Редактор приложения включен, то...
@@ -662,7 +662,7 @@ ApplicationWindow {
             clrTexta: root.clrKnopok
             clrRabOblasti: "black"
             textZagolovok: qsTr("ПЛАН")
-            zagolovokLevi: 1.5; zagolovokPravi: 1.5; toolbarLevi: 1; toolbarPravi: 4
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 4
             StrPlan {
                 id: tmPlan
                 ntWidth: pgStrPlan.ntWidth; ntCoff: pgStrPlan.ntCoff
