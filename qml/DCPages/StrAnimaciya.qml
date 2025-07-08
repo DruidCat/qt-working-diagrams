@@ -286,6 +286,7 @@ Item {
                         knopkaInfo.visible = false;//Конопка Информация Невидимая.
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
+                        txnZagolovok.forceActiveFocus();//Делаем придудительный фокус, чтоб вирт клав работала
                     }
                     else{//Если DCTextInput не видим, то...
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
