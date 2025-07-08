@@ -144,11 +144,6 @@ Item {
             anchors.left: tmZagolovok.left
             anchors.right: tmZagolovok.right
 
-            anchors.topMargin: root.ntCoff/4
-            anchors.bottomMargin: root.ntCoff/4
-            anchors.leftMargin: root.ntCoff/2
-            anchors.rightMargin: root.ntCoff/2
-
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 
@@ -159,6 +154,8 @@ Item {
             clrTexta: "black"
             clrKnopki: "black"
             clrBorder: "black"
+
+            tapKnopkaZakrit: root.zagolovokLevi; tapKnopkaOk: root.zagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
                     knopkaZakrit.visible = false;//Конопка Закрыть Невидимая.
@@ -189,11 +186,6 @@ Item {
             anchors.left: tmZagolovok.left
             anchors.right: tmZagolovok.right
 
-            anchors.topMargin: root.ntCoff/4
-            anchors.bottomMargin: root.ntCoff/4
-            anchors.leftMargin: root.ntCoff/2
-            anchors.rightMargin: root.ntCoff/2
-
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 
@@ -204,6 +196,8 @@ Item {
             clrTexta: "black"
             clrKnopki: "black"
             clrBorder: "black"
+
+            tapKnopkaZakrit: root.zagolovokLevi; tapKnopkaOk: root.zagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
                     knopkaZakrit.visible = false;//Конопка Закрыть Невидимая.

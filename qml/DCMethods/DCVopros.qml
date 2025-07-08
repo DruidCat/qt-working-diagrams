@@ -16,6 +16,8 @@ Item {
     property alias bold: txtVopros.font.bold
     property alias italic: txtVopros.font.italic
     property alias textVopros: txtVopros//Передаём в виде свойства весь объект Text
+    property real tapKnopkaZakrit: 1
+    property real tapKnopkaOk: 1
     //Сигналы.
     signal clickedOk();//Сигнал Подтверждения.
     signal clickedOtmena();//Сигнал Отмены.
@@ -52,11 +54,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctVopros.verticalCenter
             anchors.left:rctVopros.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrKnopki
-            onClicked: {
-                fnClickedZakrit();//Функция Закрытия виджета.
-            }
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
+            onClicked: fnClickedZakrit();//Функция Закрытия виджета.
         }
         Rectangle {
             id: rctText
@@ -129,11 +129,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctVopros.verticalCenter
             anchors.right: rctVopros.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrKnopki
-            onClicked: {
-                root.clickedOk();//Сигнал Подтверждения.
-            }
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaOk
+            onClicked: root.clickedOk();//Сигнал Подтверждения.
         }
     }
 }
