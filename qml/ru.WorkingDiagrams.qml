@@ -37,7 +37,7 @@ ApplicationWindow {
     }
     minimumWidth: {//Минимальная ширина не для мобильных платформ.
         if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
-            return ntWidth*ntCoff*11;//Расчёт по виджету DCSpinBox и DCScale.
+            return ntWidth*ntCoff*12.4;//Расчёт по виджету DCSpinBox и DCScale.
     }
     minimumHeight: {//Минимальная высота не для мобильных платформ.
         if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
@@ -471,7 +471,7 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: "black"
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 4; toolbarPravi: 4.8
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 4.7; toolbarPravi: 4.8
             StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff

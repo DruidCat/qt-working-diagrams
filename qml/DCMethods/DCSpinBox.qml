@@ -17,9 +17,11 @@ Item {
 	property int from: 0//Задаём значение по умолчанию.
 	property int to: 32767//Задаём значение по умолчанию.
 	property int stepSize: 1//Шаг увеличения и уменьшения value
+    property real tapKnopkaMinus: 1
+    property real tapKnopkaPlus: 1
     //Настройки
     height: ntWidth*ntCoff
-    width:	height*5
+    width:	height*3.4*tapKnopkaMinus*tapKnopkaPlus
     //Сигналы.
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
     //Функции.
@@ -124,8 +126,8 @@ Item {
 			id: knopkaMinus
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: rctSpinBox.verticalCenter; anchors.left:rctSpinBox.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaMinus
             onClicked: fnClickedMinus()//Функция нажатия Минус.
 		}
 		Rectangle {
@@ -133,7 +135,6 @@ Item {
             height: root.ntWidth*root.ntCoff
 			anchors.verticalCenter: rctSpinBox.verticalCenter
             anchors.left: knopkaMinus.right; anchors.right: knopkaPlus.left
-            anchors.margins: root.ntCoff/2
 			color: "transparent"
 			clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
 			TextInput {//Область текста.
@@ -207,8 +208,8 @@ Item {
 			id: knopkaPlus
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: rctSpinBox.verticalCenter; anchors.right:rctSpinBox.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrTexta
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaPlus
             onClicked: fnClickedPlus()//Функция нажатия Плюс.
 		}
     }

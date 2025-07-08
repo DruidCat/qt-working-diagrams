@@ -202,12 +202,6 @@ Page {
                     anchors.top: rctStrToolbar.top
                     anchors.right: rctStrToolbar.right
                     anchors.bottom: rctStrToolbar.bottom
-                    Rectangle {
-                        anchors.fill: parent
-                        border.color: "yellow"
-                        border.width: 1
-                        color: "transparent"
-                    }
                 }
 				Connections {//Соединяем сигнал из C++ с действием в QML
 					target: cppqml;//Цель объект класса С++ DCCppQml

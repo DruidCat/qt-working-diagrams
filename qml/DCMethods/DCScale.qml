@@ -101,11 +101,8 @@ Item {
 			anchors.left:rctScale.left
             clrKnopki: root.clrTexta
 			border: false
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
-            tapWidth: tapHeight*root.tapKnopkaMinus
-			onClicked: {
-				fnClickedMinus();//Функция нажатия Минус.
-			}
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaMinus
+            onClicked: fnClickedMinus();//Функция нажатия Минус.
 		}
 		Rectangle {
 			id: rctTextInput
@@ -171,11 +168,8 @@ Item {
             anchors.right: rctScale.right
             clrKnopki: root.clrTexta
 			border: false
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
-            tapWidth: tapHeight*root.tapKnopkaPlus
-			onClicked: {
-				fnClickedPlus();//Функция нажатия Плюс.
-			}
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaPlus
+            onClicked: fnClickedPlus();//Функция нажатия Плюс.
 		}
     }
 }

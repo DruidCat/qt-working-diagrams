@@ -395,6 +395,7 @@ Item {
 			radius: root.ntCoff/2
             from: 1; value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
+            tapKnopkaMinus: 1.3; tapKnopkaPlus: 1.3
             onValueModified: {
                 pdfLoader.item.currentPage = (spbPdfPage.value-1)//Если изменение страницы пришло из виджета
                 knopkaNazad.focus = true;//Чтоб не было фокуса на DCSpinBox
