@@ -202,20 +202,17 @@ Item {
             anchors.left: tmZagolovok.left
             anchors.right: tmZagolovok.right
 
-            anchors.topMargin: root.ntCoff/4
-            anchors.bottomMargin: root.ntCoff/4
-            anchors.leftMargin: root.ntCoff/2
-            anchors.rightMargin: root.ntCoff/2
-
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 
             visible: false//Невидимый виджет
 
-            clrFona: "orange"//Если не задать цвет, будет видно текст под надписью
-            clrTexta: "black"
-            clrKnopki: "black"
-            clrBorder: "black" 
+            clrFona: root.clrTexta//Если не задать цвет, будет видно текст под надписью
+            clrTexta: root.clrFona
+            clrKnopki: root.clrFona
+            clrBorder: root.clrFona
+
+            tapKnopkaZakrit: root.zagolovokLevi; tapKnopkaOk: root.zagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
                     knopkaMenu.visible = false;//Кнопка Меню Невидимая.

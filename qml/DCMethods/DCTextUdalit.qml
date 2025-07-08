@@ -17,6 +17,8 @@ Item {
     property alias bold: txtTextUdalit.font.bold
     property alias italic: txtTextUdalit.font.italic
     property alias textUdalit: txtTextUdalit//Передаём в виде свойства весь объект Text
+    property real tapKnopkaZakrit: 1
+    property real tapKnopkaOk: 1
     //Сигналы.
     signal clickedUdalit(var strKod);//Сигнал на удаление вместе с кодом удаляемого эдемента.
     signal clickedOtmena();//Сигнал на отмену удаления.
@@ -53,11 +55,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctTextUdalit.verticalCenter
             anchors.left:rctTextUdalit.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrKnopki
-            onClicked: {
-                fnClickedZakrit();//Функция Закрытия виджета.
-            }
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
+            onClicked: fnClickedZakrit();//Функция Закрытия виджета.
         }
         Rectangle {
             id: rctText
@@ -65,8 +65,6 @@ Item {
             anchors.bottom: rctTextUdalit.bottom
             anchors.left: knopkaOtmena.right
             anchors.right: knopkaOk.left
-            anchors.leftMargin: root.ntCoff/2
-            anchors.rightMargin: root.ntCoff/2
 
             color: "transparent"
             border.color: "transparent"
@@ -130,11 +128,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctTextUdalit.verticalCenter
             anchors.right: rctTextUdalit.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrKnopki
-            onClicked: {
-                root.clickedUdalit(root.kod);//Сигнал удаления с кодом удаляемого Элемента.
-            }
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaOk
+            onClicked: root.clickedUdalit(root.kod);//Сигнал удаления с кодом удаляемого Элемента.
         }
     }
 }
