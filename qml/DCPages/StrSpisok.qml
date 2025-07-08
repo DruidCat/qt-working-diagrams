@@ -262,6 +262,7 @@ Item {
 				clrFona: "SlateGray"
 				radius: root.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
+                textInput.inputMethodHints: Qt.ImhUppercaseOnly//Буквы в виртуальной клавиатуре заглавные
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
                 onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видим, то...

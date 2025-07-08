@@ -63,13 +63,13 @@ Item {
             text: ""
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
 			//font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
-			maximumLength: 33//Максимальная длина ввода текста.
+            //inputMethodHints: Qt.ImhUppercaseOnly//Буквы в виртуальной клавиатуре заглавные
+            //cursorPosition: text.length;//Курсор в конец текста
+            maximumLength: 33//Максимальная длина ввода текста.
 			readOnly: true//нельзя редактировать. 
             focus: false//Фокус не на TextInput
 			selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
-			//cursorPosition: text.length;//Курсор в конец текста
 			cursorVisible: true//Курсор сделать видимым
-            inputMethodHints: Qt.ImhUppercaseOnly//Буквы в виртуальной клавиатуре заглавные для Android.
 			Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
 				if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
 					root.clickedEnter();//Излучаем сигнал о том, что нажат Enter.
