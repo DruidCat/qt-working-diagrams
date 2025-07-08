@@ -471,7 +471,7 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: "black"
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 4; toolbarPravi: 4
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 4; toolbarPravi: 4.8
             StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
@@ -662,7 +662,7 @@ ApplicationWindow {
             clrTexta: root.clrKnopok
             clrRabOblasti: "black"
             textZagolovok: qsTr("ПЛАН")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 4
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 4.8
             StrPlan {
                 id: tmPlan
                 ntWidth: pgStrPlan.ntWidth; ntCoff: pgStrPlan.ntCoff

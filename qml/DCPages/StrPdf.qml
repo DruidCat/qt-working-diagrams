@@ -246,8 +246,7 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Поиск.
                 txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
                 txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
@@ -266,8 +265,7 @@ Item {
             clrKnopki: "yellow";clrBorder:"yellow"
             placeholderTextTrue: qsTr("ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА")
             placeholderTextFalse: qsTr("НЕВЕРНЫЙ ПАРОЛЬ ДОКУМЕНТА")
-            tapKnopkaZakrit: root.zagolovokLevi
-            tapKnopkaOk: root.zagolovokPravi
+            tapKnopkaZakrit: root.zagolovokLevi; tapKnopkaOk: root.zagolovokPravi
             onClickedOk: function (strPassword)  {//Слот нажатия кнопки Ок
                 pssPassword.visible = false;//Невидимым ввода пароля.
                 pdfLoader.item.password = strPassword;//Передаём пароль в документ.
@@ -410,6 +408,7 @@ Item {
             clrTexta: root.clrTexta; clrFona: root.clrFona
 			radius: root.ntCoff/2
             from: 1; to: 200; value: 100; stepSize: 25
+            tapKnopkaMinus: 1.3; tapKnopkaPlus: 1.3
             onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
 		}
 	}

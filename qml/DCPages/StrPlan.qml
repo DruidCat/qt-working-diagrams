@@ -239,6 +239,7 @@ Item {
             clrTexta: root.clrTexta; clrFona: root.clrFona
             radius: root.ntCoff/2
             from: 1; to: 200; value: 100; stepSize: 25
+            tapKnopkaMinus: 1.3; tapKnopkaPlus: 1.3
             onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
         }
     }
