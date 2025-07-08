@@ -11,7 +11,7 @@ Item {
     height: ntCoff*14.6875
     Image {
         id: imgTMK
-        source: "qrc:/images/tmk-color.svg"
+        source: "qrc:/images/tmk-color-1.svg"
         sourceSize: Qt.size(232, 232)
         anchors.fill: root
         //Это свойство важно для качественного рендеринга SVG. Мы указываем исходный размер изображения.
