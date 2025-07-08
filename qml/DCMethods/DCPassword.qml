@@ -4,6 +4,7 @@ import DCButtons 1.0//Импортируем кнопки
 //DCPassword - ШАБЛОН ДЛЯ РАБОТЫ С ВВОДОМ ПАРОЛЕЙ.
 Item {
     id: root
+    //Свойства
     property alias password: txnTextInput.text //Текст
 	property alias textInput: txnTextInput//Передаём в виде свойства весь объект TextInput
     property alias radius: rctTextInput.radius//Радиус рабочей зоны
@@ -20,9 +21,10 @@ Item {
     property string placeholderTextTrue: ""//Текст в строке, подсказывающий, что нужно вводить юзеру
     property string placeholderTextFalse: ""//Текст в строке,подсказывающий,что нужно вводить юзеру при ошибке
     property alias placeholderColor: txtTextInput.color//Цвет текста подсказки
+    //Сигналы
 	signal clickedOk(var strPassword);//Сигнал нажатия Enter
 	signal clickedOtmena();//Сигнал нажатия Escape
-
+    //Функции
 	Rectangle {
 		id: rctPassword
 		anchors.fill: root
@@ -48,11 +50,8 @@ Item {
             anchors.verticalCenter: rctPassword.verticalCenter
             anchors.left:rctPassword.left
             clrKnopki: root.clrKnopki
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.tapKnopkaZakrit
-            onClicked: {
-                root.clickedOtmena();//Запускаем сигнал Отмены удаления.
-            }
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
+            onClicked: root.clickedOtmena();//Запускаем сигнал Отмены удаления.
         }
 		Rectangle {
 			id: rctTextInput
@@ -182,8 +181,7 @@ Item {
             anchors.verticalCenter: rctPassword.verticalCenter
             anchors.right: rctPassword.right
             clrKnopki: root.clrKnopki
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.tapKnopkaOk
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaOk
             onClicked: {
 				var password = txnTextInput.text;
 				txnTextInput.text = "";
