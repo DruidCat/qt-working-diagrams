@@ -220,11 +220,10 @@ Item {
             id: pskPoisk
             anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
             anchors.left: tmZagolovok.left; anchors.right: tmZagolovok.right
-            anchors.topMargin: root.ntCoff/4; anchors.bottomMargin: root.ntCoff/4
-            anchors.leftMargin: root.ntCoff/2; anchors.rightMargin: root.ntCoff/2
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false//Невидимый виджет.
-            clrFona: "black"; clrTexta: "yellow"; clrKnopki: "yellow"; clrBorder: "orange"
+            clrFona: root.clrFona; clrTexta: "yellow"; clrKnopki: "yellow"; clrBorder: root.clrTexta
+            tapKnopkaZakrit: 1.3; tapKnopkaVniz: 1.3; tapKnopkaVverh: 1.3
             onClickedNext: {//Слот нажатия кнопки Следующего поиска
                 pdfLoader.item.searchForward();//Показываем следующий результат поиска.
 			}

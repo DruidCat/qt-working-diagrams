@@ -18,6 +18,9 @@ Item {
     property alias bold: txtPoisk.font.bold
     property alias italic: txtPoisk.font.italic
     property alias textUdalit: txtPoisk//Передаём в виде свойства весь объект Text
+    property real tapKnopkaZakrit: 1
+    property real tapKnopkaVniz: 1
+    property real tapKnopkaVverh: 1
     //Сигналы.
     signal clickedNext();//Сигнал на следующий элемент поиска
     signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
@@ -65,8 +68,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctPoisk.verticalCenter
             anchors.left:rctPoisk.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrKnopki
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.tapKnopkaZakrit
             onClicked: {
 				fnClickedZakrit();//Функция закрытия виджета.
             }
@@ -77,8 +81,6 @@ Item {
             anchors.bottom: rctPoisk.bottom
             anchors.left: knopkaZakrit.right
             anchors.right: knopkaVverh.left
-            anchors.leftMargin: root.ntCoff/2
-            anchors.rightMargin: root.ntCoff/2
 
             color: "transparent"
             border.color: "transparent"
@@ -141,8 +143,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctPoisk.verticalCenter
             anchors.right: knopkaVniz.left
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrKnopki
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.tapKnopkaVverh
             onClicked: {
 				fnClickedVverh();//Функция обрабатывающая предыдущий поиск.
             }
@@ -153,8 +156,9 @@ Item {
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctPoisk.verticalCenter
             anchors.right: rctPoisk.right
-            anchors.margins: root.ntCoff/2
             clrKnopki: root.clrKnopki
+            tapHeight: ntWidth*ntCoff+ntCoff
+            tapWidth: tapHeight*root.tapKnopkaVniz
             onClicked: {
 				fnClickedVniz();//Функция обрабатывающая следующий поиск.
             }
