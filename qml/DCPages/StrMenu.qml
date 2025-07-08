@@ -340,6 +340,22 @@ Item {
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
                     }
+                } 
+                DCKnopkaOriginal {
+                    id: knopkaAnimaciya
+                    visible: root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора
+                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
+                    anchors.top: knopkaRedaktor.bottom
+                    anchors.left: rctZona.left; anchors.right: rctZona.right
+                    anchors.margins: root.ntCoff/2
+                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    text: qsTr("анимация")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
+                    onClicked: {//Слот запускающий
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
+                    }
                 }
                 DCKnopkaOriginal {
                     id: knopkaKatalog
@@ -350,7 +366,7 @@ Item {
                             root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора.
                     }
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaRedaktor.bottom
+                    anchors.top: knopkaAnimaciya.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
@@ -359,22 +375,6 @@ Item {
                     //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
-                    }
-                }
-                DCKnopkaOriginal {
-                    id: knopkaAnimaciya
-                    visible: root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора
-                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaKatalog.bottom
-                    anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"; clrTexta: root.clrTexta
-                    text: qsTr("анимация")
-                    opacityKnopki: 0.8
-                    //bold: true; italic: true
-                    onClicked: {//Слот запускающий
-                        menuMenu.visible = false;//Делаем невидимым меню.
-                        root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
                     }
                 }
             }
