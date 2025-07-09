@@ -150,7 +150,7 @@ Item {
         id: tmrLogo
         interval: 33; running: false; repeat: true
         //Math.trunc - только целое число возвращает после татематической операции, дробная отсекается.
-        property int ntShag: Math.trunc((txtZona.font.pixelSize - root.ntWidth*root.ntCoff)/root.ntLogoTMK)
+        property int ntShag: txtZona.font.pixelSize/root.ntLogoTMK
         onTriggered: {
             imgTMK.ntCoff++;//Увелициваем Логотип.
             txtAnimaciya.font.pixelSize += ntShag;//Увеличиваем текст.
@@ -160,15 +160,21 @@ Item {
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
                 txtZona.visible = false;//Делаем невидимым текст, по которому расчитывали размер шрифта.
-                txtAnimaciya.font.pixelSize = root.ntWidth*root.ntCoff;//Устанавливаем стартовый размер шрифта
                 txtAnimaciya.visible = true;//Анимацию видно.
+                if(tmrLogo.ntShag)//Если коэффициент не ноль, то...
+                    txtAnimaciya.font.pixelSize = 1;//Устанавливаем стартовый размер шрифта минимальный.
+                else{//Если ноль, то...
+                    signalToolbar(qsTr("Слишком длинный текст."));//
+                    txtAnimaciya.font.pixelSize = txtZona.font.pixelSize;//Расчётный для красоты, без анимации
+                }
                 imgTMK.ntCoff = 1;//Задаём размер логотипа.
                 txtAnimaciya.opacity = 1;//Полная не прозрачность текста.
                 imgTMK.opacity = 1;//Полная не прозрачность логотипа.
             }
             else{//Если таймер выключен, то...
                 tmrPause.running = true;//Запускаем таймер, чтоб успели прочитать.
-                signalToolbar("");//Очищаем тулбар.
+                if(tmrLogo.ntShag)//Если коэффициент не ноль, то...
+                    signalToolbar("");//Очищаем тулбар.
             }
         }
     }
