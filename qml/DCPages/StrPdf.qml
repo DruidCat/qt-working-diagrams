@@ -405,7 +405,7 @@ Item {
 			radius: root.ntCoff/2
             from: 1; value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
-            tapKnopkaMinus: 1.3; tapKnopkaPlus: 1.3
+            tapKnopkaMinus: 1; tapKnopkaPlus: 1
             onValueModified: {
                 pdfLoader.item.currentPage = (spbPdfPage.value-1)//Если изменение страницы пришло из виджета
                 knopkaNazad.focus = true;//Чтоб не было фокуса на DCSpinBox
@@ -419,7 +419,7 @@ Item {
             clrTexta: root.clrTexta; clrFona: root.clrFona
 			radius: root.ntCoff/2
             from: 1; to: 200; value: 100; stepSize: 25
-            tapKnopkaMinus: 1.3; tapKnopkaPlus: 1.3
+            tapKnopkaMinus: 1.1; tapKnopkaPlus: 1.1
             onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
 		}
 	}

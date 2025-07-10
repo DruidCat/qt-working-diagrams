@@ -18,10 +18,11 @@ Item {
 	property int to: 32767//Задаём значение по умолчанию.
 	property int stepSize: 1//Шаг увеличения и уменьшения value
     property real tapKnopkaMinus: 1
+    property real tapCentor: 2.9
     property real tapKnopkaPlus: 1
     //Настройки
     height: ntWidth*ntCoff
-    width:	height*3.4*tapKnopkaMinus*tapKnopkaPlus
+    width:	height*(tapKnopkaMinus+tapCentor+tapKnopkaPlus)
     //Сигналы.
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
     //Функции.

@@ -471,7 +471,7 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: "black"
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 4.7; toolbarPravi: 4.8
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 4.1; toolbarPravi: 5
             StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
