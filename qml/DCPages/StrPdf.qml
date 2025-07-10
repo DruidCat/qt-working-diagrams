@@ -86,6 +86,7 @@ Item {
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
         }
         else{//Если путь пустая строка, то...
+            pssPassword.strPasswordOld = "";//Обнуляем при закрытии старый пароль.
             root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
             pdfLoader.blClose = true;//Закрываем Загрузчик.
             pdfLoader.active = false;//Деактивируем загрузчик, уничтожаем всё его содержимое.
@@ -255,6 +256,7 @@ Item {
         }
         DCPassword{
             id: pssPassword
+            property string strPasswordOld: ""//Переменная хранящая предыдущий пароль.
             anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
             anchors.left: tmZagolovok.left; anchors.right: tmZagolovok.right
             anchors.topMargin: root.ntCoff/4; anchors.bottomMargin: root.ntCoff/4
@@ -267,11 +269,19 @@ Item {
             placeholderTextFalse: qsTr("НЕВЕРНЫЙ ПАРОЛЬ ДОКУМЕНТА")
             tapKnopkaZakrit: root.zagolovokLevi; tapKnopkaOk: root.zagolovokPravi
             onClickedOk: function (strPassword)  {//Слот нажатия кнопки Ок
-                pssPassword.visible = false;//Невидимым ввода пароля.
-                pdfLoader.item.password = strPassword;//Передаём пароль в документ.
-                pssPassword.password = "";//Обнуляем вводимый пароль в TextInput.
                 pssPassword.passTrue = false;//Делаем крассным, если пароль верный, никто не увидит.
-                spbPdfPage.to = pdfLoader.item.pageCount;//Задаём максимальное количество страниц в DCSpinBox
+                if(strPassword){//Если пользователь ввёл хоть что то, то...
+                    if(strPassword !== strPasswordOld){//Если Пароль введённый не совпадает со старым, то...
+                        strPasswordOld = strPassword;//Запоминаем введённый пароль.
+                        pssPassword.visible = false;//Невидимым ввода пароля.
+                        pdfLoader.item.password = strPassword;//Передаём пароль в документ.
+                        pssPassword.password = "";//Обнуляем вводимый пароль в TextInput.
+                        //pssPassword.passTrue = false;//Делаем крассным, если пароль верный, никто не увидит.
+                        spbPdfPage.to = pdfLoader.item.pageCount;//Задаём максимальное кол-во страниц в DCSpinBox
+                    }
+                    else//Если пароли совпадают, то...
+                        pssPassword.password = "";//Обнуляем вводимый пароль в TextInput.
+                }
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
                 pssPassword.visible = false;//Делаем невидимым виджет
