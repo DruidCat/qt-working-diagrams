@@ -348,7 +348,7 @@ ApplicationWindow {
                     pgStrSpisok.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
                 onSignalZagolovok: function(strZagolovok) {//Слот сигнала signalZagolovok с новым Заголовком.
-                    pgStrSpisok.textZagolovok = cppqml.strTitul;//Выставляем изменённый Заголовок.
+                    pgStrSpisok.textZagolovok = strZagolovok;//Выставляем изменённый Заголовок.
                 }
 			}
 		}

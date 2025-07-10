@@ -76,7 +76,7 @@ Item {
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
         if(blZagolovok){//Если изменить имя заголовка, то...
             cppqml.strTitul = txnZagolovok.text;//Переименовываем Заголовок Списка.
-            root.signalZagolovok(txnZagolovok.text);//Отображаем Заголовок
+            root.signalZagolovok(cppqml.strTitul);//Отображаем Заголовок
         }
         else{//В ином случае...
             if(root.blPereimenovat)//Если запрос на переименовывание.
