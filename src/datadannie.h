@@ -28,6 +28,7 @@ public:
     QString 	polImyaFaila(qint64 ullSpisokKod,qint64 ullElementKod,qint64 ullDannieKod);//Получить имя файл
     bool  		estImyaFaila(QString strImyaFaila);//Есть такой файл в каталоге?
     bool  		udalFail(QString strImyaFaila);//Удалить файл в каталоге.
+    bool  		udalDannieFail(quint64 ullSpisokKod);//Удалить файл Плана Списка.
     bool  		udalDannieFaili(quint64 ullSpisokKod, quint64 ullElementKod);//Удалить все файлы Элемента.
     bool  		udalDannieTablicu(quint64 ullSpisokKod, quint64 ullElementKod);//Удалить таблицу Данных.
     bool 		copyDannie(QString strAbsolutPut, QString strImyaFaila);//Копируем файл в приложение.

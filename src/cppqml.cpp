@@ -308,13 +308,15 @@ bool DCCppQml::delStrSpisok(QString strSpisokKod){//Удалить Список 
             return false;//Ошибка удаления.
         }
     }
-    if(m_pDataElement->udalElementTablicu(ullSpisokKod)){//Если таблица удалилась успешно, то...
-        if(m_pDataSpisok->udalSpisokDB(ullSpisokKod)){
-            emit strSpisokDBChanged();//Излучаем сигнал об изменении аргумента.
-            return true;//Успешно всё удалили
+    if(m_pDataDannie->udalDannieFail(ullSpisokKod)){//Если удалили файлы Плана Списка.
+        if(m_pDataElement->udalElementTablicu(ullSpisokKod)){//Если таблица удалилась успешно, то...
+            if(m_pDataSpisok->udalSpisokDB(ullSpisokKod)){
+                emit strSpisokDBChanged();//Излучаем сигнал об изменении аргумента.
+                return true;//Успешно всё удалили
+            }
+            else//Если ошибка при удалении списка, то...
+                qdebug(tr("Ошибка удаления списка."));
         }
-        else//Если ошибка при удалении списка, то...
-            qdebug(tr("Ошибка удаления списка."));
     }
     return false;//Ошибка удаление Списка.
 }

@@ -241,8 +241,21 @@ bool DataDannie::udalFail(QString strImyaFaila){//Удалить файл в к�
             return false;//Ошибка.
         }
     }
-    qdebug(tr("Внимание, файл ")+strImyaFaila+tr(" был кем то удалён."));
+    //qdebug(tr("Внимание, файл ")+strImyaFaila+tr(" был кем то удалён."));
     return true;//успех, так как кем то удалённый файл не мешает алгоритму.
+}
+bool DataDannie::udalDannieFail(quint64 ullSpisokKod){//Удалить файл Плана Списка.
+ //////////////////////////////////////////////
+//---У Д А Л И Т Ь   П Л А Н   С П И С К А---//
+///////////////////////////////////////////////
+
+    uint ntImyaFaila = ullSpisokKod * 1000;
+    QString strImyaFaila = QString("%1").arg(ntImyaFaila, 6, 10, QLatin1Char('0'))+".pdf";
+    if(estImyaFaila(strImyaFaila)){//Если такой файл есть, то...
+        if(!udalFail(strImyaFaila))//Если файл не удалился, то...
+            return false;//Ошибка удаления.
+    }
+    return true;//Успех удаления.
 }
 bool DataDannie::udalDannieFaili(quint64 ullSpisokKod, quint64 ullElementKod){//Удалить все файлы Элемента.
 /////////////////////////////////////////////////////
