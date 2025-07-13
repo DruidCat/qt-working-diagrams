@@ -20,6 +20,7 @@
         <file>qml/DCButtons/DCKnopkaPlan.qml</file>
         <file>qml/DCButtons/DCKnopkaPlus.qml</file>
         <file>qml/DCButtons/DCKnopkaPoisk.qml</file>
+        <file>qml/DCButtons/DCKnopkaPovorotPo.qml</file>
         <file>qml/DCButtons/DCKnopkaSozdat.qml</file>
         <file>qml/DCButtons/DCKnopkaVniz.qml</file>
         <file>qml/DCButtons/DCKnopkaVpered.qml</file>

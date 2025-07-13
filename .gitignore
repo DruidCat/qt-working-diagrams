@@ -26,6 +26,10 @@
 /build/wget-log
 /build/qml/
 /deploy
+/build/.cmake
+/build/CMakeCache.txt.prev
+/build/qtcsettings.cmake
+
 
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
