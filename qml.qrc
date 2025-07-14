@@ -73,5 +73,6 @@
         <file>fonts/verdana.ttf</file>
         <file>images/tmk-color.svg</file>
         <file>images/tmk-color-1.svg</file>
+        <file>qml/DCButtons/DCKnopkaPovorotProtiv.qml</file>
     </qresource>
 </RCC>

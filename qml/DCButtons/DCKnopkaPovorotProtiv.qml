@@ -129,9 +129,9 @@ Item{
             width: tmKnopkaPovorotPo.width/8
             height: tmKnopkaPovorotPo.height/8*3
             anchors.bottom: tmKnopkaPovorotPo.bottom
-            anchors.right: tmKnopkaPovorotPo.right
+            anchors.left: tmKnopkaPovorotPo.left
             anchors.bottomMargin: tmKnopkaPovorotPo.height/8
-            anchors.rightMargin: tmKnopkaPovorotPo.height/4
+            anchors.leftMargin: tmKnopkaPovorotPo.height/8*3
             radius: tmKnopkaPovorotPo.width/4
 
             color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
@@ -142,8 +142,9 @@ Item{
             width: tmKnopkaPovorotPo.width/8*3
             height: tmKnopkaPovorotPo.height/8
             anchors.bottom: tmKnopkaPovorotPo.bottom
-            anchors.right: tmKnopkaPovorotPo.right
+            anchors.left: tmKnopkaPovorotPo.left
             anchors.bottomMargin: tmKnopkaPovorotPo.height/8
+            anchors.leftMargin: tmKnopkaPovorotPo.height/8
             radius: tmKnopkaPovorotPo.width/4
 
             color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki

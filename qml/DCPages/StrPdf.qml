@@ -254,6 +254,64 @@ Item {
                 txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
             }
         }
+        DCKnopkaPovorotPo {
+            id: knopkaPovorotPo
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPoisk.left
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
+            onClicked: {
+            }
+        }
+        DCKnopkaPovorotProtiv {
+            id: knopkaPovorotProtiv
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
+            onClicked: {
+            }
+        }
+        DCKnopkaPovorotProtiv {
+            id: knopkaPovorotProtiv
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
+            onClicked: {
+                console.error("Я большая кукурузина")
+            }
+        }
+        DCKnopkaPovorotProtiv {
+            id: knopkaPovorotProtiv
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
+            onClicked: {
+                console.error("Я большая кукурузина")
+            }
+        }
+        DCKnopkaPovorotProtiv {
+            id: knopkaPovorotProtiv
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
+            onClicked: {
+                console.error("Я большая кукурузина")
+            }
+        }
+        DCKnopkaPovorotProtiv {
+            id: knopkaPovorotProtiv
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
+            onClicked: {
+                console.error("Я большая кукурузина")
+            }
+        }
         DCPassword{
             id: pssPassword
             property string strPasswordOld: ""//Переменная хранящая предыдущий пароль.

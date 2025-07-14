@@ -179,7 +179,7 @@ Item {
                 fnClickedEscape();//Функция нажатия кнопки Escape.
                 root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
             }
-		} 
+        }
         DCKnopkaOk {
             id: knopkaOk
 			ntWidth: root.ntWidth
