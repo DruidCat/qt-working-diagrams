@@ -12,6 +12,7 @@ Item {
     property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
     property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
     property alias searchString: pmpDoc.searchString//Запрос на поиск.
+    property alias rotation: pmpDoc.rotation//Поворот документа.
     property alias straniciVisible: rctStranici.visible//Вкл/Выкл дополнительное окно с количеством страниц.
     //Настройки
     anchors.fill: parent

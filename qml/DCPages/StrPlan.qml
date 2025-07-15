@@ -22,10 +22,10 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-    property real zagolovokLevi: 1
-    property real zagolovokPravi: 1
-    property real toolbarLevi: 1
-    property real toolbarPravi: 1
+    property real tapZagolovokLevi: 1
+    property real tapZagolovokPravi: 1
+    property real tapToolbarLevi: 1
+    property real tapToolbarPravi: 1
     property bool appRedaktor: false//true - включить Редактор приложения.
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
     property int ntLogoTMK: 16
@@ -75,6 +75,7 @@ Item {
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
         }
         else{//Если путь пустая строка, то...
+            pdfLoader.pdfRotation = 0;//0 градусов.
             pdfLoader.blClose = true;//Закрываем Загрузчик.
             pdfLoader.active = false;//Деактивируем загрузчик, уничтожаем всё его содержимое.
             Qt.callLater(fnGarbageCollector);//Принудительно вызываем сборщик мусора
@@ -105,11 +106,15 @@ Item {
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
                 ldrProgress.active = true;//Запускаем виджет загрузки
+                knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
+                knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
                 pdfScale.visible = false;//Делаем невидимым DCScale
                 knopkaSozdat.visible = false;//Невидимая кнопка Создать.
             }
             else{//Если таймер выключен, то...
                 ldrProgress.active = false;//Отключаем прогресс.
+                knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
+                knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
                 pdfScale.visible = true;//Делаем видимым DCScale
                 if(root.appRedaktor)//Если редактор включен, то...
                     knopkaSozdat.visible = true;//Видимая кнопка Создать.
@@ -122,11 +127,37 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left:tmZagolovok.left
             clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
                 root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
+            }
+        }
+        DCKnopkaPovorotPo {
+            id: knopkaPovorotPo
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
+            onClicked: {
+                pdfLoader.pdfRotation += 90;//Прибавляем по 90 градусов.
+                if(pdfLoader.pdfRotation === 360)//Если 360 градусов, то...
+                    pdfLoader.pdfRotation = 0;//0 градусов.
+                pdfLoader.item.rotation = pdfLoader.pdfRotation;
+            }
+        }
+        DCKnopkaPovorotProtiv {
+            id: knopkaPovorotProtiv
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
+            onClicked: {
+                pdfLoader.pdfRotation -= 90;//Убавляем по 90 градусов.
+                if(pdfLoader.pdfRotation === -90)//Если -90 градусов, то...
+                    pdfLoader.pdfRotation = 270;//270 градусов.
+                pdfLoader.item.rotation = pdfLoader.pdfRotation;
             }
         }
     }
@@ -144,6 +175,7 @@ Item {
             //Свойства.
             property string strPdfPut: ""//Путь к pdf документу, который нужно открыть или пустой путь, чтоб закрыть.
             property bool blClose: true//true - закрываем документ.
+            property int pdfRotation: 0//Угол поворота (может быть: 0, 90, 180, 270)
             //Настройки.
             anchors.fill: tmZona
             source: pdfLoader.blClose ? "" : "qrc:/qml/DCMethods/DCPdfMPV.qml"//Указываем путь отдельному QMl
@@ -225,7 +257,7 @@ Item {
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
                 root.clickedSozdat();//Сигнал нажатия кнопки Создать
@@ -239,7 +271,7 @@ Item {
             clrTexta: root.clrTexta; clrFona: root.clrFona
             radius: root.ntCoff/2
             from: 1; to: 200; value: 100; stepSize: 25
-            tapKnopkaMinus: 1.3; tapKnopkaPlus: 1.3
+            tapKnopkaMinus: root.tapToolbarPravi; tapKnopkaPlus: root.tapToolbarPravi
             onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
         }
     }

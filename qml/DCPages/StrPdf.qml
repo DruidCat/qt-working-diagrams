@@ -22,10 +22,10 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-    property real zagolovokLevi: 1
-    property real zagolovokPravi: 1
-    property real toolbarLevi: 1
-    property real toolbarPravi: 1
+    property real tapZagolovokLevi: 1
+    property real tapZagolovokPravi: 1
+    property real tapToolbarLevi: 1
+    property real tapToolbarPravi: 1
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
     property int ntLogoTMK: 16
     //Настройки
@@ -87,6 +87,7 @@ Item {
         }
         else{//Если путь пустая строка, то...
             pssPassword.strPasswordOld = "";//Обнуляем при закрытии старый пароль.
+            pdfLoader.pdfRotation = 0;//0 градусов.
             root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
             pdfLoader.blClose = true;//Закрываем Загрузчик.
             pdfLoader.active = false;//Деактивируем загрузчик, уничтожаем всё его содержимое.
@@ -135,12 +136,16 @@ Item {
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
                 ldrProgress.active = true;//Запускаем виджет загрузки
+                knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
+                knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
                 spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
                 pdfScale.visible = false;//Делаем невидимым DCScale
                 knopkaPoisk.visible = false;//Делаем невидимым кнопку Поиска.
             }
             else{//Если таймер выключен, то...
                 ldrProgress.active = false;//Отключаем прогресс.
+                knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
+                knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
                 if(!pskPoisk.visible)//Если не видим виджет поиска(например при увеличении), то...
@@ -155,8 +160,7 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
 			clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapHeight: ntWidth*ntCoff+ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
@@ -168,8 +172,7 @@ Item {
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapHeight: ntWidth*ntCoff+ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedZakrit()//Функция обрабатывающая кнопку Закрыть.
         }
 		Item {
@@ -177,7 +180,6 @@ Item {
             anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
             anchors.left: knopkaNazad.right; anchors.right: knopkaPoisk.left
             anchors.topMargin: root.ntCoff/4; anchors.bottomMargin: root.ntCoff/4
-            anchors.leftMargin: root.ntCoff/2; anchors.rightMargin: root.ntCoff/2
             DCTextInput {
 				id: txnZagolovok
                 ntWidth: root.ntWidth; ntCoff: root.ntCoff
@@ -189,6 +191,8 @@ Item {
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
+                        knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
+                        knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
                         knopkaPoisk.visible = false;//Конопка Поиск Невидимая.
                         knopkaZakrit.visible = true;//Кнопка закрыть Видимая
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
@@ -199,6 +203,8 @@ Item {
 						if(!pskPoisk.visible){//Если не открыли Режим поиска, то...
 							knopkaNazad.visible = true;//Кнопка назад видимая.
                             knopkaNazad.focus = true;//Фокус на кнопке Назад, чтоб не работал Enter.
+                            knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
+                            knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
                             knopkaPoisk.visible = true;//Конопка Поиск Видимая.
                         	txnZagolovok.text = "";//Текст обнуляем вводимый.
 						}
@@ -213,8 +219,7 @@ Item {
 			visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapHeight: ntWidth*ntCoff+ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
             onClicked: fnClickedOk()//Функция отправить запрос на поиск
 		}	
         DCPoisk {
@@ -237,6 +242,8 @@ Item {
                 knopkaOk.visible = false;//Кнопка Ок Невидимая.
 				knopkaNazad.visible = true;//Кнопка назад видимая.
                 knopkaNazad.focus = true;//Фокус на кнопке Назад, чтоб не работал Enter.
+                knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
+                knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
                 knopkaPoisk.visible = true;//Конопка Поиск Видимая.
                 txnZagolovok.text = "";//Текст обнуляем вводимый.
                 pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
@@ -247,7 +254,7 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
             onClicked: {//Слот сигнала clicked кнопки Поиск.
                 txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
                 txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
@@ -259,8 +266,12 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPoisk.left
             clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
             onClicked: {
+                pdfLoader.pdfRotation += 90;//Прибавляем по 90 градусов.
+                if(pdfLoader.pdfRotation === 360)//Если 360 градусов, то...
+                    pdfLoader.pdfRotation = 0;//0 градусов.
+                pdfLoader.item.rotation = pdfLoader.pdfRotation;
             }
         }
         DCKnopkaPovorotProtiv {
@@ -268,48 +279,12 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
             clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
             onClicked: {
-            }
-        }
-        DCKnopkaPovorotProtiv {
-            id: knopkaPovorotProtiv
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
-            clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
-            onClicked: {
-                console.error("Я большая кукурузина")
-            }
-        }
-        DCKnopkaPovorotProtiv {
-            id: knopkaPovorotProtiv
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
-            clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
-            onClicked: {
-                console.error("Я большая кукурузина")
-            }
-        }
-        DCKnopkaPovorotProtiv {
-            id: knopkaPovorotProtiv
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
-            clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
-            onClicked: {
-                console.error("Я большая кукурузина")
-            }
-        }
-        DCKnopkaPovorotProtiv {
-            id: knopkaPovorotProtiv
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
-            clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.zagolovokLevi
-            onClicked: {
-                console.error("Я большая кукурузина")
+                pdfLoader.pdfRotation -= 90;//Убавляем по 90 градусов.
+                if(pdfLoader.pdfRotation === -90)//Если -90 градусов, то...
+                    pdfLoader.pdfRotation = 270;//270 градусов.
+                pdfLoader.item.rotation = pdfLoader.pdfRotation;
             }
         }
         DCPassword{
@@ -325,7 +300,7 @@ Item {
             clrKnopki: "yellow";clrBorder:"yellow"
             placeholderTextTrue: qsTr("ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА")
             placeholderTextFalse: qsTr("НЕВЕРНЫЙ ПАРОЛЬ ДОКУМЕНТА")
-            tapKnopkaZakrit: root.zagolovokLevi; tapKnopkaOk: root.zagolovokPravi
+            tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onClickedOk: function (strPassword)  {//Слот нажатия кнопки Ок
                 pssPassword.passTrue = false;//Делаем крассным, если пароль верный, никто не увидит.
                 if(strPassword){//Если пользователь ввёл хоть что то, то...
@@ -368,6 +343,7 @@ Item {
             //Свойства.
             property string strPdfPut: ""//Путь к документу,который нужно открыть или пустой путь,чтоб закрыть
             property bool blClose: true//true - закрываем документ.
+            property int pdfRotation: 0//Угол поворота (может быть: 0, 90, 180, 270)
             //Настройки.
             anchors.fill: tmZona
             source: pdfLoader.blClose ? "" : "qrc:/qml/DCMethods/DCPdfMPV.qml"//Указываем путь отдельному QMl
@@ -463,7 +439,7 @@ Item {
 			radius: root.ntCoff/2
             from: 1; value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
-            tapKnopkaMinus: 1; tapKnopkaPlus: 1
+            tapKnopkaMinus: root.tapToolbarLevi; tapKnopkaPlus: root.tapToolbarLevi
             onValueModified: {
                 pdfLoader.item.currentPage = (spbPdfPage.value-1)//Если изменение страницы пришло из виджета
                 knopkaNazad.focus = true;//Чтоб не было фокуса на DCSpinBox
@@ -477,7 +453,7 @@ Item {
             clrTexta: root.clrTexta; clrFona: root.clrFona
 			radius: root.ntCoff/2
             from: 1; to: 200; value: 100; stepSize: 25
-            tapKnopkaMinus: 1.1; tapKnopkaPlus: 1.1
+            tapKnopkaMinus: root.tapToolbarPravi; tapKnopkaPlus: root.tapToolbarPravi
             onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
 		}
 	}
