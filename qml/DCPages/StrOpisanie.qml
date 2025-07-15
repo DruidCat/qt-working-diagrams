@@ -23,10 +23,10 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: txdZona.radius
-    property real zagolovokLevi: 1
-    property real zagolovokPravi: 1
-    property real toolbarLevi: 1
-    property real toolbarPravi: 1
+    property real tapZagolovokLevi: 1
+    property real tapZagolovokPravi: 1
+    property real tapToolbarLevi: 1
+    property real tapToolbarPravi: 1
     property bool appRedaktor: false//true - включить Редактор приложения.
 	property alias textTextEdit: txdZona.text
 	property string strOpisanie: "titul"
@@ -82,7 +82,7 @@ Item {
 			anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 txdZona.readOnly = true;//запрещаем редактировать текст.
                 root.clickedNazad();//Сигнал, что кнопка Назад нажата.
@@ -98,7 +98,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 root.clickedPlan();//Сигнал нажатия кнопки План.
             }
@@ -113,7 +113,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedOtmena();//Функция обрабатывающая кнопку Отмена.
             }
@@ -128,7 +128,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
 				fnClickedOk();//Нажата кнопка Ок.
 			}
@@ -199,7 +199,7 @@ Item {
             clrFona: root.clrFona
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 root.signalToolbar(qsTr("Для окончания редактирования нажмите ОК."));//Подсказка.
 				txdZona.readOnly = false;//Разрешить редактировать.

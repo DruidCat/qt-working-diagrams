@@ -24,10 +24,10 @@ Item {
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
 	property alias radiusZona: rctBorder.radius//Радиус Зоны рабочей
-    property real zagolovokLevi: 1
-    property real zagolovokPravi: 1
-    property real toolbarLevi: 1
-    property real toolbarPravi: 1
+    property real tapZagolovokLevi: 1
+    property real tapZagolovokPravi: 1
+    property real tapToolbarLevi: 1
+    property real tapToolbarPravi: 1
     property bool appRedaktor: false//true - включить Редактор приложения.
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
@@ -122,7 +122,7 @@ Item {
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			clrKnopki: root.clrTexta
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
@@ -139,7 +139,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
@@ -153,7 +153,7 @@ Item {
 			anchors.right: tmZagolovok.right
 			clrKnopki: root.clrTexta
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {//Слот клика кнопки Инфо
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
@@ -170,7 +170,7 @@ Item {
 			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
 				fnClickedOk();//Функция сохранения данных.
 			}
@@ -192,7 +192,7 @@ Item {
             clrKnopki: root.clrFona
             clrBorder: root.clrFona
 
-            tapKnopkaZakrit: root.zagolovokLevi; tapKnopkaOk: root.zagolovokPravi
+            tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
                     knopkaNazad.visible = false;//Кнопка Назад Невидимая.
@@ -381,7 +381,7 @@ Item {
 			clrFona: root.clrFona
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
 				txnZagolovok.visible ? fnClickedZakrit() : fnClickedSozdat()
             }
@@ -396,7 +396,7 @@ Item {
             blVert: true//Вертикольное исполнение
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuElement.visible ? menuElement.visible = false : menuElement.visible = true;

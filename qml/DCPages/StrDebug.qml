@@ -22,10 +22,10 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-    property real zagolovokLevi: 1
-    property real zagolovokPravi: 1
-    property real toolbarLevi: 1
-    property real toolbarPravi: 1
+    property real tapZagolovokLevi: 1
+    property real tapZagolovokPravi: 1
+    property real tapToolbarLevi: 1
+    property real tapToolbarPravi: 1
 	property alias radiusZona: txdZona.radius
 	property string strDebug: ""//Глобальная переменная, в ней собирается строка со всеми Сообщениями.
     //Настройки.
@@ -42,7 +42,7 @@ Item {
 			anchors.left:tmZagolovok.left
             clrKnopki: root.clrTexta
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 root.clickedNazad();
             }

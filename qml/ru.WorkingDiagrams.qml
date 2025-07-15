@@ -84,8 +84,8 @@ ApplicationWindow {
 				toolbarX: pgStrMenu.rctStrToolbar.x; toolbarY: pgStrMenu.rctStrToolbar.y
                 toolbarWidth: pgStrMenu.rctStrToolbar.width
                 toolbarHeight: pgStrMenu.rctStrToolbar.height
-                zagolovokLevi: pgStrMenu.zagolovokLevi; zagolovokPravi: pgStrMenu.zagolovokPravi
-                toolbarLevi: pgStrMenu.toolbarLevi; toolbarPravi: pgStrMenu.toolbarPravi
+                tapZagolovokLevi: pgStrMenu.zagolovokLevi; tapZagolovokPravi: pgStrMenu.zagolovokPravi
+                tapToolbarLevi: pgStrMenu.toolbarLevi; tapToolbarPravi: pgStrMenu.toolbarPravi
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
@@ -140,12 +140,12 @@ ApplicationWindow {
 				zagolovokWidth: pgStrDebug.rctStrZagolovok.width
 				zagolovokHeight: pgStrDebug.rctStrZagolovok.height
 				zonaX: pgStrDebug.rctStrZona.x; zonaY: pgStrDebug.rctStrZona.y 
-                zagolovokLevi: pgStrDebug.zagolovokLevi; zagolovokPravi: pgStrDebug.zagolovokPravi
 				toolbarX: pgStrDebug.rctStrToolbar.x; toolbarY: pgStrDebug.rctStrToolbar.y
                 toolbarWidth: pgStrDebug.rctStrToolbar.width
                 toolbarHeight: pgStrDebug.rctStrToolbar.height
                 radiusZona: pgStrDebug.rctStrZona.radius//Радиус берём из настроек элемента qml
-                toolbarLevi: pgStrDebug.toolbarLevi; toolbarPravi: pgStrDebug.toolbarPravi
+                tapZagolovokLevi: pgStrDebug.zagolovokLevi; tapZagolovokPravi: pgStrDebug.zagolovokPravi
+                tapToolbarLevi: pgStrDebug.toolbarLevi; tapToolbarPravi: pgStrDebug.toolbarPravi
                 zonaWidth: pgStrDebug.rctStrZona.width; zonaHeight: pgStrDebug.rctStrZona.height
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
@@ -181,10 +181,10 @@ ApplicationWindow {
                 toolbarWidth: pgStrWorkingDiagrams.rctStrToolbar.width
 				toolbarHeight: pgStrWorkingDiagrams.rctStrToolbar.height
 				radiusZona: pgStrWorkingDiagrams.rctStrZona.radius//Радиус берём из настроек элемента qml
-                zagolovokLevi: pgStrWorkingDiagrams.zagolovokLevi
-                zagolovokPravi: pgStrWorkingDiagrams.zagolovokPravi
-                toolbarLevi: pgStrWorkingDiagrams.toolbarLevi
-                toolbarPravi: pgStrWorkingDiagrams.toolbarPravi
+                tapZagolovokLevi: pgStrWorkingDiagrams.zagolovokLevi
+                tapZagolovokPravi: pgStrWorkingDiagrams.zagolovokPravi
+                tapToolbarLevi: pgStrWorkingDiagrams.toolbarLevi
+                tapToolbarPravi: pgStrWorkingDiagrams.toolbarPravi
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
@@ -217,8 +217,8 @@ ApplicationWindow {
                 toolbarWidth: pgStrQt.rctStrToolbar.width
                 toolbarHeight: pgStrQt.rctStrToolbar.height
 				radiusZona: pgStrQt.rctStrZona.radius//Радиус берём из настроек элемента qml
-                zagolovokLevi: pgStrQt.zagolovokLevi; zagolovokPravi: pgStrQt.zagolovokPravi
-                toolbarLevi: pgStrQt.toolbarLevi; toolbarPravi: pgStrQt.toolbarPravi
+                tapZagolovokLevi: pgStrQt.zagolovokLevi; tapZagolovokPravi: pgStrQt.zagolovokPravi
+                tapToolbarLevi: pgStrQt.toolbarLevi; tapToolbarPravi: pgStrQt.toolbarPravi
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
@@ -249,8 +249,9 @@ ApplicationWindow {
                 toolbarX: pgStrAnimaciya.rctStrToolbar.x; toolbarY: pgStrAnimaciya.rctStrToolbar.y
                 toolbarWidth: pgStrAnimaciya.rctStrToolbar.width
                 toolbarHeight: pgStrAnimaciya.rctStrToolbar.height
-                zagolovokLevi: pgStrAnimaciya.zagolovokLevi; zagolovokPravi: pgStrAnimaciya.zagolovokPravi
-                toolbarLevi: pgStrAnimaciya.toolbarLevi; toolbarPravi: pgStrAnimaciya.toolbarPravi
+                tapZagolovokLevi: pgStrAnimaciya.zagolovokLevi
+                tapZagolovokPravi: pgStrAnimaciya.zagolovokPravi
+                tapToolbarLevi: pgStrAnimaciya.toolbarLevi; tapToolbarPravi: pgStrAnimaciya.toolbarPravi
                 onClickedNazad: {
                     stvStr.pop()//Назад страницу
                 }
@@ -292,10 +293,10 @@ ApplicationWindow {
                 toolbarWidth: pgStrAnimaciyaInstrukciya.rctStrToolbar.width
                 toolbarHeight: pgStrAnimaciyaInstrukciya.rctStrToolbar.height
                 radiusZona: pgStrAnimaciyaInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
-                zagolovokLevi: pgStrAnimaciyaInstrukciya.zagolovokLevi
-                zagolovokPravi: pgStrAnimaciyaInstrukciya.zagolovokPravi
-                toolbarLevi: pgStrAnimaciyaInstrukciya.toolbarLevi
-                toolbarPravi: pgStrAnimaciyaInstrukciya.toolbarPravi
+                tapZagolovokLevi: pgStrAnimaciyaInstrukciya.zagolovokLevi
+                tapZagolovokPravi: pgStrAnimaciyaInstrukciya.zagolovokPravi
+                tapToolbarLevi: pgStrAnimaciyaInstrukciya.toolbarLevi
+                tapToolbarPravi: pgStrAnimaciyaInstrukciya.toolbarPravi
                 onClickedNazad: {
                     stvStr.pop()//Назад страницу
                 }
@@ -327,8 +328,8 @@ ApplicationWindow {
                 toolbarWidth: pgStrSpisok.rctStrToolbar.width
                 toolbarHeight: pgStrSpisok.rctStrToolbar.height
 				radiusZona: pgStrSpisok.rctStrZona.radius//Радиус берём из настроек элемента qml
-                zagolovokLevi: pgStrSpisok.zagolovokLevi; zagolovokPravi: pgStrSpisok.zagolovokPravi
-                toolbarLevi: pgStrSpisok.toolbarLevi; toolbarPravi: pgStrSpisok.toolbarPravi
+                tapZagolovokLevi: pgStrSpisok.zagolovokLevi; tapZagolovokPravi: pgStrSpisok.zagolovokPravi
+                tapToolbarLevi: pgStrSpisok.toolbarLevi; tapToolbarPravi: pgStrSpisok.toolbarPravi
                 appRedaktor: root.appRedaktor
 				onClickedMenu: {//Слот нажатия кнопки Меню.
 					stvStr.push(pgStrMenu)//Перейти на страницу Меню
@@ -377,8 +378,8 @@ ApplicationWindow {
                 toolbarWidth: pgStrElement.rctStrToolbar.width
 				toolbarHeight: pgStrElement.rctStrToolbar.height
 				radiusZona: pgStrElement.rctStrZona.radius//Радиус берём из настроек элемента qml
-                zagolovokLevi: pgStrElement.zagolovokLevi; zagolovokPravi: pgStrElement.zagolovokPravi
-                toolbarLevi: pgStrElement.toolbarLevi; toolbarPravi: pgStrElement.toolbarPravi
+                tapZagolovokLevi: pgStrElement.zagolovokLevi; tapZagolovokPravi: pgStrElement.zagolovokPravi
+                tapToolbarLevi: pgStrElement.toolbarLevi; tapToolbarPravi: pgStrElement.toolbarPravi
                 appRedaktor: root.appRedaktor
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					cppqml.ullSpisokKod = 0;//НЕ УДАЛЯТЬ! На странице Список код не выбран и равен 0.
@@ -427,8 +428,8 @@ ApplicationWindow {
                 toolbarWidth: pgStrDannie.rctStrToolbar.width
                 toolbarHeight: pgStrDannie.rctStrToolbar.height
 				radiusZona: pgStrDannie.rctStrZona.radius//Радиус берём из настроек элемента qml
-                zagolovokLevi: pgStrDannie.zagolovokLevi; zagolovokPravi: pgStrDannie.zagolovokPravi
-                toolbarLevi: pgStrDannie.toolbarLevi; toolbarPravi: pgStrDannie.toolbarPravi
+                tapZagolovokLevi: pgStrDannie.zagolovokLevi; tapZagolovokPravi: pgStrDannie.zagolovokPravi
+                tapToolbarLevi: pgStrDannie.toolbarLevi; tapToolbarPravi: pgStrDannie.toolbarPravi
                 pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					cppqml.ullElementKod = 0;//НЕ УДАЛЯТЬ! На странице Элемент код не выбран и равен 0.
@@ -471,7 +472,7 @@ ApplicationWindow {
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
             clrRabOblasti: "black"
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 4.1; toolbarPravi: 5
+            zagolovokLevi: 1.3; zagolovokPravi: 3.7; toolbarLevi: 4.1; toolbarPravi: 5
             StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
@@ -484,8 +485,8 @@ ApplicationWindow {
 				toolbarX: pgStrPdf.rctStrToolbar.x; toolbarY: pgStrPdf.rctStrToolbar.y
                 toolbarWidth: pgStrPdf.rctStrToolbar.width
                 toolbarHeight: pgStrPdf.rctStrToolbar.height
-                zagolovokLevi: pgStrPdf.zagolovokLevi; zagolovokPravi: pgStrPdf.zagolovokPravi
-                toolbarLevi: pgStrPdf.toolbarLevi; toolbarPravi: pgStrPdf.toolbarPravi
+                tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
+                tapToolbarLevi: 1; tapToolbarPravi: 1.1
                 pdfViewer: root.pdfViewer
 				onClickedNazad: {
 					cppqml.ullDannieKod = 0;//НЕ УДАЛЯТЬ! На странице Данные код не выбран и равен 0.
@@ -519,8 +520,9 @@ ApplicationWindow {
                 toolbarWidth: pgStrFileDialog.rctStrToolbar.width
 				toolbarHeight: pgStrFileDialog.rctStrToolbar.height
 				radiusZona: pgStrFileDialog.rctStrZona.radius//Радиус берём из настроек элемента qml
-                zagolovokLevi: pgStrFileDialog.zagolovokLevi; zagolovokPravi: pgStrFileDialog.zagolovokPravi
-                toolbarLevi: pgStrFileDialog.toolbarLevi; toolbarPravi: pgStrFileDialog.toolbarPravi
+                tapZagolovokLevi: pgStrFileDialog.zagolovokLevi;
+                tapZagolovokPravi: pgStrFileDialog.zagolovokPravi
+                tapToolbarLevi: pgStrFileDialog.toolbarLevi; tapToolbarPravi: pgStrFileDialog.toolbarPravi
 				blPlan: root.planFileDialog//Выбор режима открытия проводника для Плана или Данных.
                 onClickedZakrit: {//Если нажата кнопка Назад или Закрыть, то...
                     if(root.planFileDialog){//Если открывался План, то...
@@ -582,10 +584,10 @@ ApplicationWindow {
                 toolbarWidth: pgStrFDInstrukciya.rctStrToolbar.width
                 toolbarHeight: pgStrFDInstrukciya.rctStrToolbar.height
                 radiusZona: pgStrFDInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
-                zagolovokLevi: pgStrFDInstrukciya.zagolovokLevi
-                zagolovokPravi: pgStrFDInstrukciya.zagolovokPravi
-                toolbarLevi: pgStrFDInstrukciya.toolbarLevi
-                toolbarPravi: pgStrFDInstrukciya.toolbarPravi
+                tapZagolovokLevi: pgStrFDInstrukciya.zagolovokLevi
+                tapZagolovokPravi: pgStrFDInstrukciya.zagolovokPravi
+                tapToolbarLevi: pgStrFDInstrukciya.toolbarLevi
+                tapToolbarPravi: pgStrFDInstrukciya.toolbarPravi
                 onClickedNazad: {
                     stvStr.pop()//Назад страницу
                 }
@@ -622,8 +624,8 @@ ApplicationWindow {
                 toolbarWidth: pgStrOpisanie.rctStrToolbar.width
 				toolbarHeight: pgStrOpisanie.rctStrToolbar.height
 				radiusZona: pgStrOpisanie.rctStrZona.radius//Радиус берём из настроек элемента qml
-                zagolovokLevi: pgStrOpisanie.zagolovokLevi; zagolovokPravi: pgStrOpisanie.zagolovokPravi
-                toolbarLevi: pgStrOpisanie.toolbarLevi; toolbarPravi: pgStrOpisanie.toolbarPravi
+                tapZagolovokLevi: pgStrOpisanie.zagolovokLevi; tapZagolovokPravi: pgStrOpisanie.zagolovokPravi
+                tapToolbarLevi: pgStrOpisanie.toolbarLevi; tapToolbarPravi: pgStrOpisanie.toolbarPravi
 				strOpisanie: stvStr.strOpisanie//Передаём флаг Отображения конкретного Описания.
                 appRedaktor: root.appRedaktor
 				onClickedNazad: {//Слот нажатия кнопки Назад.
@@ -662,7 +664,7 @@ ApplicationWindow {
             clrTexta: root.clrKnopok
             clrRabOblasti: "black"
             textZagolovok: qsTr("ПЛАН")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 4.8
+            zagolovokLevi: 1.3; zagolovokPravi: 2.6; toolbarLevi: 1.3; toolbarPravi: 4.5
             StrPlan {
                 id: tmPlan
                 ntWidth: pgStrPlan.ntWidth; ntCoff: pgStrPlan.ntCoff
@@ -675,8 +677,8 @@ ApplicationWindow {
                 toolbarX: pgStrPlan.rctStrToolbar.x; toolbarY: pgStrPlan.rctStrToolbar.y
                 toolbarWidth: pgStrPlan.rctStrToolbar.width
                 toolbarHeight: pgStrPlan.rctStrToolbar.height
-                zagolovokLevi: pgStrPlan.zagolovokLevi; zagolovokPravi: pgStrPlan.zagolovokPravi
-                toolbarLevi: pgStrPlan.toolbarLevi; toolbarPravi: pgStrPlan.toolbarPravi
+                tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
+                tapToolbarLevi: 1.3; tapToolbarPravi: 1.3
                 pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
                 onClickedNazad: {
                     stvStr.pop()//Назад страницу

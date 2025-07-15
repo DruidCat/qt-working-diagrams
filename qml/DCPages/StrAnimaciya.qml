@@ -22,10 +22,10 @@ Item {
     property alias toolbarY: tmToolbar.y
     property alias toolbarWidth: tmToolbar.width
     property alias toolbarHeight: tmToolbar.height
-    property real zagolovokLevi: 1
-    property real zagolovokPravi: 1
-    property real toolbarLevi: 1
-    property real toolbarPravi: 1
+    property real tapZagolovokLevi: 1
+    property real tapZagolovokPravi: 1
+    property real tapToolbarLevi: 1
+    property real tapToolbarPravi: 1
     property int ntLogoTMK: 32
     property int startSec: 3
     property bool blStop: true//true - анимация не запущена.
@@ -207,7 +207,7 @@ Item {
             anchors.left:tmZagolovok.left
             clrKnopki: root.clrTexta
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 txtZona.visible = false;//Невидимый текст.
                 txtZona.text = "";//Пустой текст.
@@ -227,7 +227,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
             }
@@ -242,7 +242,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
                 fnClickedEscape();//Функция нажатия кнопки Escape.
@@ -259,7 +259,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Нажимаем Ок.
                 fnClickedOk();//Нажимаем на Ок
             }
@@ -491,7 +491,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 txnZagolovok.visible ? fnClickedZakrit() : fnClickedSozdat()
             }
@@ -506,7 +506,7 @@ Item {
             clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 txnZagolovok.visible = false;//Отключаем ввод текста анимации.
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;

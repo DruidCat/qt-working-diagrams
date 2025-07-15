@@ -22,10 +22,10 @@ Item {
 	property alias toolbarY: tmToolbar.y
 	property alias toolbarWidth: tmToolbar.width
 	property alias toolbarHeight: tmToolbar.height
-    property real zagolovokLevi: 1
-    property real zagolovokPravi: 1
-    property real toolbarLevi: 1
-    property real toolbarPravi: 1
+    property real tapZagolovokLevi: 1
+    property real tapZagolovokPravi: 1
+    property real tapToolbarLevi: 1
+    property real tapToolbarPravi: 1
     property int ntLogoTMK: 16
     property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
     property bool appRedaktor: cppqml.blAppRedaktor//true - включен Редактор приложения.
@@ -127,7 +127,7 @@ Item {
 			anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 if(tmrLogo.running){//Если запущен процесс создания каталогов документов, то...
                     copyStop.visible = true;//Задаём вопрос "Остановить создание каталога?"
@@ -155,7 +155,7 @@ Item {
             clrKnopki: "black"
             clrBorder: "black"
 
-            tapKnopkaZakrit: root.zagolovokLevi; tapKnopkaOk: root.zagolovokPravi
+            tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
                     knopkaZakrit.visible = false;//Конопка Закрыть Невидимая.
@@ -197,7 +197,7 @@ Item {
             clrKnopki: "black"
             clrBorder: "black"
 
-            tapKnopkaZakrit: root.zagolovokLevi; tapKnopkaOk: root.zagolovokPravi
+            tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
                     knopkaZakrit.visible = false;//Конопка Закрыть Невидимая.
@@ -423,7 +423,7 @@ Item {
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
             tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.zagolovokLevi
+            tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала нажатия на кнопку Меню.
                 menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость
             }
