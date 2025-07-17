@@ -30,13 +30,13 @@ Page {
 			Rectangle {
                 id: rctStrZagolovok
 				width: rctStr.width
-				height: ntWidth*ntCoff+ntCoff
+				height: root.ntWidth*root.ntCoff+root.ntCoff
 				anchors.top: rctStr.top
 				anchors.left: rctStr.left
 				anchors.right: rctStr.right
-                anchors.margins: ntCoff
+                anchors.margins: root.ntCoff
 				color: clrRabOblasti
-				radius: (width/(ntWidth*ntCoff))/ntCoff
+				radius: (width/(root.ntWidth*root.ntCoff))/root.ntCoff
 				Item {//Этот элемент невидимой кнопки, чтоб от неё отпозиционировался текст.
                     id: tmZagolovokKnopkaCleva
 					height: rctStrZagolovok.height
@@ -117,8 +117,8 @@ Page {
 				anchors.left: rctStr.left
 				anchors.right: rctStr.right
 				anchors.bottom: rctStrToolbar.top
-				anchors.margins: ntCoff
-				radius: (width/(ntWidth*ntCoff))/ntCoff
+				anchors.margins: root.ntCoff
+				radius: (width/(root.ntWidth*root.ntCoff))/root.ntCoff
 				color: clrRabOblasti
 			}
 			Rectangle {

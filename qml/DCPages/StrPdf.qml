@@ -160,7 +160,7 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
 			clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.
@@ -172,7 +172,7 @@ Item {
             visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedZakrit()//Функция обрабатывающая кнопку Закрыть.
         }
 		Item {
@@ -219,7 +219,7 @@ Item {
 			visible: false
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta; clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
             onClicked: fnClickedOk()//Функция отправить запрос на поиск
 		}	
         DCPoisk {

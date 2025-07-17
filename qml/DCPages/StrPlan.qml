@@ -256,7 +256,7 @@ Item {
             anchors.verticalCenter: tmToolbar.verticalCenter; anchors.left: tmToolbar.left
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 fnPdfSource("");//Пустой путь PDF документа, закрываем.

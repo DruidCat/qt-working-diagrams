@@ -41,7 +41,7 @@ Item {
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left:tmZagolovok.left
             clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 root.clickedNazad();

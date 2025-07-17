@@ -81,7 +81,7 @@ Item {
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 txdZona.readOnly = true;//запрещаем редактировать текст.
@@ -97,7 +97,7 @@ Item {
             visible: true
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 root.clickedPlan();//Сигнал нажатия кнопки План.
@@ -112,7 +112,7 @@ Item {
             anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedOtmena();//Функция обрабатывающая кнопку Отмена.
@@ -127,7 +127,7 @@ Item {
 			visible: false 
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
 				fnClickedOk();//Нажата кнопка Ок.
@@ -198,7 +198,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 root.signalToolbar(qsTr("Для окончания редактирования нажмите ОК."));//Подсказка.

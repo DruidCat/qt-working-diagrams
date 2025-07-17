@@ -92,7 +92,7 @@ Item {
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.left:tmZagolovok.left
             clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 fnClickedNazad();//Функция клика Назад.
@@ -106,7 +106,7 @@ Item {
             anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 fnClickedEscape();//Меню сворачиваем
@@ -223,7 +223,7 @@ Item {
             anchors.left: tmToolbar.left
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
@@ -238,7 +238,7 @@ Item {
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 menuFileDialog.visible ? menuFileDialog.visible = false : menuFileDialog.visible = true;

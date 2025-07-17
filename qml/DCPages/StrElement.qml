@@ -121,7 +121,7 @@ Item {
 			anchors.left: tmZagolovok.left
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
@@ -138,7 +138,7 @@ Item {
             anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
@@ -152,7 +152,7 @@ Item {
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
 			clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {//Слот клика кнопки Инфо
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
@@ -169,7 +169,7 @@ Item {
 			anchors.right: tmZagolovok.right
 			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
 				fnClickedOk();//Функция сохранения данных.
@@ -380,7 +380,7 @@ Item {
 			clrKnopki: root.clrTexta
 			clrFona: root.clrFona
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
 				txnZagolovok.visible ? fnClickedZakrit() : fnClickedSozdat()
@@ -395,7 +395,7 @@ Item {
 			clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.

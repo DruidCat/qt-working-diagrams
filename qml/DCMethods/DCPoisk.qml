@@ -69,11 +69,8 @@ Item {
             anchors.verticalCenter: rctPoisk.verticalCenter
             anchors.left:rctPoisk.left
             clrKnopki: root.clrKnopki
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.tapKnopkaZakrit
-            onClicked: {
-				fnClickedZakrit();//Функция закрытия виджета.
-            }
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
+            onClicked: fnClickedZakrit();//Функция закрытия виджета.
         }
         Rectangle {
             id: rctText
@@ -144,11 +141,8 @@ Item {
             anchors.verticalCenter: rctPoisk.verticalCenter
             anchors.right: knopkaVniz.left
             clrKnopki: root.clrKnopki
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.tapKnopkaVverh
-            onClicked: {
-				fnClickedVverh();//Функция обрабатывающая предыдущий поиск.
-            }
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaVverh
+            onClicked: fnClickedVverh();//Функция обрабатывающая предыдущий поиск.
         }
         DCKnopkaVniz{//Кнопка следующего поиска.
             id: knopkaVniz
@@ -157,11 +151,8 @@ Item {
             anchors.verticalCenter: rctPoisk.verticalCenter
             anchors.right: rctPoisk.right
             clrKnopki: root.clrKnopki
-            tapHeight: ntWidth*ntCoff+ntCoff
-            tapWidth: tapHeight*root.tapKnopkaVniz
-            onClicked: {
-				fnClickedVniz();//Функция обрабатывающая следующий поиск.
-            }
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaVniz
+            onClicked: fnClickedVniz();//Функция обрабатывающая следующий поиск.
         }
     }
 }

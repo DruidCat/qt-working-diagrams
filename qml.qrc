@@ -1,14 +1,26 @@
 <RCC>
     <qresource prefix="/">
+        <file>fonts/verdana.ttf</file> 
         <file>icons/108x108/ru.WorkingDiagrams.png</file>
         <file>icons/128x128/ru.WorkingDiagrams.png</file>
         <file>icons/172x172/ru.WorkingDiagrams.png</file>
         <file>icons/86x86/ru.WorkingDiagrams.png</file>
         <file>images/Qt_logo_2016.png</file>
         <file>images/ru.WorkingDiagrams.png</file>
+        <file>images/tmk-color-1.svg</file>
+		<file>images/tmk-color.svg</file>
+		<file>images/ts-rus-black-and-white-1.jpg</file>
+        <file>images/ts-rus-black-and-white-1.svg</file>
+        <file>images/ts-rus-black-and-white-2.jpg</file>
+        <file>images/ts-rus-black-and-white-2.svg</file>
+        <file>images/ts-rus-color.jpg</file>
+        <file>images/ts-rus-color.svg</file>
+		<file>images/ts-rus-orange-1.jpg</file>
+        <file>images/ts-rus-orange-1.svg</file>
+        <file>images/ts-rus-orange.jpg</file>
+        <file>images/ts-rus-orange.svg</file> 
         <file>js/jsJSON.js</file>
         <file>js/jsProgress.js</file>
-        <file>qml/ru.WorkingDiagrams.qml</file>
         <file>qml/DCButtons/DCKnopkaInfo.qml</file>
         <file>qml/DCButtons/DCKnopkaKruglaya.qml</file>
         <file>qml/DCButtons/DCKnopkaMenu.qml</file>
@@ -21,6 +33,7 @@
         <file>qml/DCButtons/DCKnopkaPlus.qml</file>
         <file>qml/DCButtons/DCKnopkaPoisk.qml</file>
         <file>qml/DCButtons/DCKnopkaPovorotPo.qml</file>
+        <file>qml/DCButtons/DCKnopkaPovorotProtiv.qml</file>
         <file>qml/DCButtons/DCKnopkaSozdat.qml</file>
         <file>qml/DCButtons/DCKnopkaVniz.qml</file>
         <file>qml/DCButtons/DCKnopkaVpered.qml</file>
@@ -38,10 +51,10 @@
         <file>qml/DCMethods/DCTextEdit.qml</file>
         <file>qml/DCMethods/DCTextInput.qml</file>
         <file>qml/DCMethods/DCTextUdalit.qml</file>
+        <file>qml/DCMethods/DCVopros.qml</file>
         <file>qml/DCMethods/PathViewSpisok.qml</file>
         <file>qml/DCMethods/qmldir</file>
-        <file>qml/DCPages/qmldir</file>
-        <file>qml/DCPages/Stranica.qml</file>
+        <file>qml/DCPages/StrAnimaciya.qml</file>
         <file>qml/DCPages/StrDannie.qml</file>
         <file>qml/DCPages/StrDebug.qml</file>
         <file>qml/DCPages/StrElement.qml</file>
@@ -52,27 +65,14 @@
         <file>qml/DCPages/StrPdf.qml</file>
         <file>qml/DCPages/StrPlan.qml</file>
         <file>qml/DCPages/StrSpisok.qml</file>
-        <file>qml/DCZones/qmldir</file>
+        <file>qml/DCPages/Stranica.qml</file>
+        <file>qml/DCPages/qmldir</file>
         <file>qml/DCZones/ZonaDannie.qml</file>
         <file>qml/DCZones/ZonaElement.qml</file>
         <file>qml/DCZones/ZonaFileDialog.qml</file>
         <file>qml/DCZones/ZonaSpisok.qml</file>
-        <file>workingdata/plan.pdf</file>
-        <file>qml/DCMethods/DCVopros.qml</file>
-        <file>qml/DCPages/StrAnimaciya.qml</file>
-        <file>images/ts-rus-black-and-white-1.jpg</file>
-        <file>images/ts-rus-black-and-white-1.svg</file>
-        <file>images/ts-rus-black-and-white-2.jpg</file>
-        <file>images/ts-rus-black-and-white-2.svg</file>
-        <file>images/ts-rus-color.jpg</file>
-        <file>images/ts-rus-color.svg</file>
-        <file>images/ts-rus-orange.jpg</file>
-        <file>images/ts-rus-orange.svg</file>
-        <file>images/ts-rus-orange-1.jpg</file>
-        <file>images/ts-rus-orange-1.svg</file>
-        <file>fonts/verdana.ttf</file>
-        <file>images/tmk-color.svg</file>
-        <file>images/tmk-color-1.svg</file>
-        <file>qml/DCButtons/DCKnopkaPovorotProtiv.qml</file>
+        <file>qml/DCZones/qmldir</file>
+        <file>qml/ru.WorkingDiagrams.qml</file>
+        <file>workingdata/plan.pdf</file> 
     </qresource>
 </RCC>

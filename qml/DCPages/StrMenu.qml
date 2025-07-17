@@ -126,7 +126,7 @@ Item {
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 if(tmrLogo.running){//Если запущен процесс создания каталогов документов, то...
@@ -422,7 +422,7 @@ Item {
             anchors.verticalCenter: tmToolbar.verticalCenter; anchors.right: tmToolbar.right
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала нажатия на кнопку Меню.
                 menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость

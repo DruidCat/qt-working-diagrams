@@ -122,7 +122,7 @@ Item {
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left:tmZagolovok.left
             clrKnopki: root.clrTexta
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
@@ -139,7 +139,7 @@ Item {
             anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала clicked кнопки Создать.
                 fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
@@ -154,7 +154,7 @@ Item {
 			anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta
 			clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
@@ -171,7 +171,7 @@ Item {
             anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 fnClickedOk();//Функция переименование данных.
@@ -387,7 +387,7 @@ Item {
 			clrFona: root.clrFona
             blKrug: false//Не круглая кнопка.
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
                 fnClickedSozdat();//Функция нажатия кнопки Создать.
@@ -402,7 +402,7 @@ Item {
 			clrFona: root.clrFona
             blVert: true//Вертикольное исполнение
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
-            tapHeight: ntWidth*ntCoff+ntCoff
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
 			onClicked: {
                 txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
