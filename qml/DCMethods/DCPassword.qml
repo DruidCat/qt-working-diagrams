@@ -13,7 +13,7 @@ Item {
     property bool passTrue: true;//false - пароль неверный.
     property color clrTexta: "black"//цвет текста
     property color clrKnopki: "yellow"//цвет Кнопок
-    property alias clrBorder: rctTextInput.border.color//цвет границы
+    property color clrBorder: "transparent"//цвет границы
     property int  ntWidth: 2
     property int ntCoff: 8
     property real tapKnopkaZakrit: 1
@@ -59,11 +59,9 @@ Item {
             anchors.bottom: rctPassword.bottom
             anchors.left: knopkaOtmena.right
             anchors.right: knopkaOk.left
-            //anchors.leftMargin: root.ntCoff/2
-            //anchors.rightMargin: root.ntCoff/2
 
 			color: "transparent"//Текст фона прозрачный.
-			border.color: "transparent"
+			border.color: root.clrBorder
             border.width: root.ntCoff/8
             radius: root.ntCoff/2
 			clip: true//Обрезаем текст, который выходит за границы этого прямоугольника.

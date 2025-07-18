@@ -11,7 +11,7 @@ Item {
     property alias clrFona: rctPoisk.color//цвет фона
     property alias clrTexta: txtPoisk.color//цвет текста
     property color clrKnopki: "red"//цвет Кнопок
-    property alias clrBorder: rctText.border.color//цвет границы
+    property color clrBorder: "transparent"//цвет границы
     property string text: ""//элемент поиска
     property int sumPoisk: 0//суммарный результат поиска
     property int nomerPoisk: 0//номер поиска
@@ -80,7 +80,7 @@ Item {
             anchors.right: knopkaVverh.left
 
             color: "transparent"
-            border.color: "transparent"
+            border.color: root.clrBorder
             border.width: root.ntCoff/8
             radius: root.ntCoff/2
             clip: true//Обрезаем всё что больше этого прямоугольника.

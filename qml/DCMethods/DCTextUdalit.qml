@@ -11,7 +11,7 @@ Item {
     property alias clrFona: rctTextUdalit.color//цвет фона
     property alias clrTexta: txtTextUdalit.color//цвет текста
     property color clrKnopki: "red"//цвет Кнопок
-    property alias clrBorder: rctText.border.color//цвет границы
+    property color clrBorder: "transparent"//цвет границы
     property string kod: ""//Код удаляемого элемента
     property string text: "" //Имя элемента на удаление
     property alias bold: txtTextUdalit.font.bold
@@ -67,7 +67,7 @@ Item {
             anchors.right: knopkaOk.left
 
             color: "transparent"
-            border.color: "transparent"
+            border.color: root.clrBorder
             border.width: root.ntCoff/8
             radius: root.ntCoff/2
             clip: true//Обрезаем всё что больше этого прямоугольника.

@@ -11,7 +11,7 @@ Item {
     property alias clrFona: rctVopros.color//цвет фона
     property alias clrTexta: txtVopros.color//цвет текста
     property color clrKnopki: "red"//цвет Кнопок
-    property alias clrBorder: rctText.border.color//цвет границы
+    property color clrBorder: "transparent"//цвет границы
     property string text: "?" //Вопрос.
     property alias bold: txtVopros.font.bold
     property alias italic: txtVopros.font.italic
@@ -68,7 +68,7 @@ Item {
             anchors.rightMargin: root.ntCoff/2
 
             color: "transparent"
-            border.color: "transparent"
+            border.color: root.clrBorder
             border.width: root.ntCoff/8
             radius: root.ntCoff/2
             clip: true//Обрезаем всё что больше этого прямоугольника.
