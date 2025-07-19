@@ -51,7 +51,7 @@ Item {
             if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
                 pdfLoader.item.currentPage = ntStrUp;
             event.accepted = true;//Завершаем обработку эвента.
-        }
+        } 
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_Equal){//Если нажата "+",то.
                 var ntScaleUp = pdfScale.value + 25;
@@ -74,6 +74,27 @@ Item {
                     }
                     event.accepted = true;//Завершаем обработку эвента.
                 }
+                else{
+
+                    if(event.key === 70){//Если нажат "F", то.
+                        fnClickedPoisk();//Запускаем режим поиска
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+            }
+        }
+        if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+            if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                if(pskPoisk.visible)//Если виджет поиска видимый, то...
+                    fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        }
+        else{//Если не нажат shift, то...
+            if(event.key === 16777266){//Если нажата "F3", то.
+                if(pskPoisk.visible)//Если режим поиска видимый, то...
+                    fnClickedPoiskNext();//Функция нажатия кнопки Следующего поиска
+                event.accepted = true;//Завершаем обработку эвента.
             }
         }
         //cppqml.strDebug = event.key;
@@ -117,6 +138,17 @@ Item {
             pdfLoader.item.searchForward();//Показываем следующий результат поиска.
 		}
 	}
+    function fnClickedPoisk(){//Функция запуска режима поиска.
+        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
+        txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
+        txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
+    }
+    function fnClickedPoiskNext(){//Функция нажатия кнопки Следующего поиска
+        pdfLoader.item.searchForward();//Показываем следующий результат поиска.
+    }
+    function fnClickedPoiskPrevious(){//Функция нажатия кнопки Предыдущего поиска
+        pdfLoader.item.searchBack();//Показываем предыдущий результат поиска.
+    }
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
         id: tmrLogo
         interval: 110; running: false; repeat: true
@@ -230,12 +262,8 @@ Item {
 			visible: false//Невидимый виджет.
             clrFona: root.clrFona; clrTexta: "yellow"; clrKnopki: "yellow"; clrBorder: root.clrTexta
             tapKnopkaZakrit: 1.3; tapKnopkaVniz: 1.3; tapKnopkaVverh: 1.3
-            onClickedNext: {//Слот нажатия кнопки Следующего поиска
-                pdfLoader.item.searchForward();//Показываем следующий результат поиска.
-			}
-			onClickedPrevious: {//Слот нажатия кнопки Предыдущего поиска
-                pdfLoader.item.searchBack();//Показываем предыдущий результат поиска.
-            }
+            onClickedNext: fnClickedPoiskNext()//Функция нажатия кнопки Следующего поиска
+			onClickedPrevious: fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
             onClickedZakrit: {//Слот нажатия кнопки Отмены режима поиска. 
                 pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
                 knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
@@ -255,11 +283,7 @@ Item {
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
-            onClicked: {//Слот сигнала clicked кнопки Поиск.
-                txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
-                txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
-                txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
-            }
+            onClicked: fnClickedPoisk();//Запускаем режим поиска 
         }
         DCKnopkaPovorotPo {
             id: knopkaPovorotPo
