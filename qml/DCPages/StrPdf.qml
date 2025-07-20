@@ -118,7 +118,7 @@ Item {
 				}
 			}
 		}
-        cppqml.strDebug = event.key;
+        //cppqml.strDebug = event.key;
     }
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
         spbPdfPage.value = 1;//Задаём первую страницу в DCSpinBox до открытия документа по умолчанию, ВАЖНО!
