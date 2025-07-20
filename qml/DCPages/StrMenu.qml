@@ -29,7 +29,8 @@ Item {
     property int ntLogoTMK: 16
     property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
     property bool appRedaktor: cppqml.blAppRedaktor//true - включен Редактор приложения.
-    property real rlLoader: 1//Коэффкициент загрузчика.
+	property bool isMobile: true;//true - мобильная платформа.
+    property real rlLoader: 1//Коэффициент загрузчика.
     property real rlProgress: 0//Прогресс загрузчика.
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
@@ -232,10 +233,11 @@ Item {
         }
         Flickable {//Рабочая Зона скроллинга
             id: flZona
+			property int kolichestvoKnopok: 8
             anchors.fill: tmZona//Расстягиваемся по всей рабочей зоне
             contentWidth: tmZona.width//Ширина контента, который будет вложен равен ширине Рабочей Зоны
-            contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*7//7 - количество кнопок.
-
+            contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*kolichestvoKnopok//8 - количество кнопок.
+	
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
                 id: rctZona
                 width: tmZona.width; height: flZona.contentHeight
@@ -271,6 +273,27 @@ Item {
                         root.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
                     }
                 }
+				DCKnopkaOriginal {
+                    id: knopkaHotKey
+                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
+                    anchors.top: knopkaAvtor.bottom
+                    anchors.left: rctZona.left; anchors.right: rctZona.right
+                    anchors.margins: root.ntCoff/2
+                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    text: qsTr("горячие клавиши")
+                    opacityKnopki: 0.8
+                    //bold: true; italic: true
+                    onClicked: {
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        //root.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
+                    }
+					Component.onCompleted:{//Когда отрисуется Рабочая Зона Скролинга, то...
+						if(root.isMobile){//Если мобильная ,то.
+							flZona.kolichestvoKnopok -= 1;//Удаляем -1 кнопку идущую на Горячие клавиши.
+							visible = false;//В мобильной платформе делаем эту кнопку невидимой.
+						}
+					}	
+				}
                 /*
                 DCKnopkaOriginal {
                     id: knopkaSpisok
@@ -292,7 +315,12 @@ Item {
                 DCKnopkaOriginal {
                     id: knopkaQt
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaAvtor.bottom
+					anchors.top: {
+        				if(root.isMobile)//Если мобильная платформа, то...
+							return knopkaAvtor.bottom
+						else//Если не мобильная платформа, то...
+							return knopkaHotKey.bottom
+					}
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrKnopki: "slategray"; clrTexta: root.clrTexta
@@ -354,7 +382,7 @@ Item {
                 DCKnopkaOriginal {
                     id: knopkaKatalog
                     visible: {
-                        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Мобильное устройство
+                        if(root.isMobile)//Мобильное устройство
                             return false;//невидимая кнопка.
                         else//Если это ПК, то...
                             root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора.
@@ -367,9 +395,11 @@ Item {
                     text: qsTr("создание каталога документов")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
-                    onClicked: {//Слот запускающий
-                        copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
-                    }
+                    onClicked: copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
+					Component.onCompleted: {
+						if(root.isMobile)//Мобильное устройство
+							flZona.kolichestvoKnopok -= 1;//Удаляем -1 кнопку идущую на Создание каталога.
+					}
                 }
             }
         }

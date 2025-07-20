@@ -14,6 +14,12 @@ ApplicationWindow {
     property color clrStranic: "black"
     property bool pdfViewer: true//false - Отключить pdf просмоторщик.
     property bool appRedaktor: true//false - Отключить Редактор приложения.
+	property bool isMobile: {//Переменная определяющая, мобильная это платформа или нет. true - мобильная.
+        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
+			return true;//Это мобильная платформа.
+		else//Эсли не мобильная, то...
+			return false;//Это не мобильная платформа.
+	}
 	property bool planFileDialog: false//Проводник false - открыт для Данных. true - открыт для Плана.
     //Настройки.
     visible: true
@@ -21,34 +27,32 @@ ApplicationWindow {
     title: qsTr("Ментор от druidcat@yandex.ru")
     width: {
         var vrWidth = Screen.desktopAvailableWidth;//Расчитываем доступную ширину экрана
-        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
+        if(isMobile)//Если мобильная платформа, то...
             return vrWidth;//Масимально возможная ширина.
-        else{
+        else
             return cppqml.untWidth;//Считываем из реестра ширину окна.
-        }
     }
     height: {
         var vrHeight = Screen.desktopAvailableHeight//Расчитываем доступную высоту экрана
-        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
+        if(isMobile)//Если мобильная платформа, то...
             return vrHeight;//Масимально возможная ширина.
-        else{
+        else
             return cppqml.untHeight;//Считываем из реестра высоту окна.
-        }
     }
     minimumWidth: {//Минимальная ширина не для мобильных платформ.
-        if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
+        if(!isMobile)//Если не мобильная платформа, то...
             return ntWidth*ntCoff*12.4;//Расчёт по виджету DCSpinBox и DCScale.
     }
     minimumHeight: {//Минимальная высота не для мобильных платформ.
-        if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
+        if(!isMobile)//Если не мобильная платформа, то...
             return 330;
     }
     onWidthChanged: {//Если Ширина поменялась, то...
-        if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
+        if(!isMobile)//Если не мобильная платформа, то...
             cppqml.untWidth = width;//Отправляем в бизнес логику ширину окна, для обработки.
     }
     onHeightChanged: {//Если Высота поменялась, то...
-        if((Qt.platform.os !== "android") && (Qt.platform.os !== "ios"))//Если не мобильная платформа, то...
+        if(!isMobile)//Если не мобильная платформа, то...
             cppqml.untHeight = height;//Отправляем в бизнес логику высоту окна, для обработки.
     }
 
@@ -86,6 +90,7 @@ ApplicationWindow {
                 toolbarHeight: pgStrMenu.rctStrToolbar.height
                 tapZagolovokLevi: pgStrMenu.zagolovokLevi; tapZagolovokPravi: pgStrMenu.zagolovokPravi
                 tapToolbarLevi: pgStrMenu.toolbarLevi; tapToolbarPravi: pgStrMenu.toolbarPravi
+				isMobile: root.isMobile
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
