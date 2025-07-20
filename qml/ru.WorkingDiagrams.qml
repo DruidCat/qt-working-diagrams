@@ -100,6 +100,9 @@ ApplicationWindow {
 				onClickedWorkingDiagrams: {
 					stvStr.push(pgStrWorkingDiagrams)//Переходим на страницу об Рабочих Схемах.
 				}
+				onClickedHotKey: {
+					stvStr.push(pgStrHotKey)//Переходим на страницу горячих клавиш.
+                }
 				onClickedQt: {
 					stvStr.push(pgStrQt)//Переходим на страницу об Qt.
                 } 
@@ -190,6 +193,40 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrWorkingDiagrams.zagolovokPravi
                 tapToolbarLevi: pgStrWorkingDiagrams.toolbarLevi
                 tapToolbarPravi: pgStrWorkingDiagrams.toolbarPravi
+				onClickedNazad: {
+					stvStr.pop()//Назад страницу
+				}
+			}
+		}
+		Stranica {//Горячие Клавиши.
+		///////////////////////////////////
+		///Г О Р Я Ч И Е   К Л А В И Ш И///
+		///////////////////////////////////
+			id: pgStrHotKey
+			visible: false
+            ntWidth: root.ntWidth
+			ntCoff: root.ntCoff
+			clrFona: root.clrFona
+			clrTexta: root.clrKnopok
+			clrRabOblasti: "black"
+            textZagolovok: qsTr("ГОРЯЧИЕ КЛАВИШИ")
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
+            StrInstrukciya {
+				id: tmHotKey
+                strInstrukciya: "hotkey"
+                ntWidth: pgStrHotKey.ntWidth; ntCoff: pgStrHotKey.ntCoff
+				clrTexta: pgStrHotKey.clrTexta; clrFona: pgStrHotKey.clrRabOblasti
+				zagolovokX: pgStrHotKey.rctStrZagolovok.x; zagolovokY: pgStrHotKey.rctStrZagolovok.y
+				zagolovokWidth: pgStrHotKey.rctStrZagolovok.width
+				zagolovokHeight: pgStrHotKey.rctStrZagolovok.height
+				zonaX: pgStrHotKey.rctStrZona.x; zonaY: pgStrHotKey.rctStrZona.y
+				zonaWidth: pgStrHotKey.rctStrZona.width; zonaHeight: pgStrHotKey.rctStrZona.height
+				toolbarX: pgStrHotKey.rctStrToolbar.x; toolbarY: pgStrHotKey.rctStrToolbar.y
+                toolbarWidth: pgStrHotKey.rctStrToolbar.width
+                toolbarHeight: pgStrHotKey.rctStrToolbar.height
+				radiusZona: pgStrHotKey.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrHotKey.zagolovokLevi; tapZagolovokPravi: pgStrHotKey.zagolovokPravi
+                tapToolbarLevi: pgStrHotKey.toolbarLevi; tapToolbarPravi: pgStrHotKey.toolbarPravi
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}

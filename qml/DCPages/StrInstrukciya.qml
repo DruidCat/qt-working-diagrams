@@ -166,6 +166,26 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                                 </body>
                             </html>");
                     }
+					else{
+						if(strInstrukciya === "hotkey"){
+							txdZona.text = qsTr("
+								<html>
+									<body>
+	<p>Горячие клавиши просмотщика документов:</p>
+	<p>[Escape] - Отмена действия.</p>
+	<p>[PgUp] - Страница вверх.</p>
+	<p>[PgDn] - Страница вниз.</p>
+	<p>[Ctrl +] - Масштаб увеличить.</p>
+	<p>[Ctrl -] - Масштаб уменьшить.</p>
+	<p>[Ctrl F] - Поиск.</p>
+	<p>[F3] - Поиск следующий.</p>
+	<p>[Shift F3] - Поиск предыдущий.</p>
+	<p>[Shift Ctrl +] - Поворот документа по часовой стрелки.</p>
+	<p>[Shift Ctrl -] - Поворот документа против часовой стрелки.</p>
+									</body>
+								</html>");
+						}
+					}
                 }
 			}
         }

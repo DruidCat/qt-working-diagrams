@@ -38,6 +38,7 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
 	signal clickedWorkingDiagrams();//Сигнал нажатия кнопки об Рабочих Схемах.
+	signal clickedHotKey();//Сигнал о нажатии кнопки Горячие Клавиши.
     signal clickedQt();//Сигнал нажатия кнопки Об Qt.
     signal clickedAnimaciya();//Сигнал нажития кнопки Анимация.
     signal signalZagolovok(var strZagolovok);//Сигнал, когда передаём новую надпись в Заголовок.
@@ -285,10 +286,10 @@ Item {
                     //bold: true; italic: true
                     onClicked: {
                         menuMenu.visible = false;//Делаем невидимым меню.
-                        //root.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
+                        root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
                     }
-					Component.onCompleted:{//Когда отрисуется Рабочая Зона Скролинга, то...
-						if(root.isMobile){//Если мобильная ,то.
+					Component.onCompleted:{//Когда отрисуется Кнопка, то...
+						if(root.isMobile){//Если мобильная платформа, то...
 							flZona.kolichestvoKnopok -= 1;//Удаляем -1 кнопку идущую на Горячие клавиши.
 							visible = false;//В мобильной платформе делаем эту кнопку невидимой.
 						}
