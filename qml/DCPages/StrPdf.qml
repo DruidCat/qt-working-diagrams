@@ -40,64 +40,85 @@ Item {
 				fnClickedZakrit();//Закрываем эту строку
             event.accepted = true;//Завершаем обработку эвента.
         }
-        if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
-            var ntStrDown = pdfLoader.item.nomerStranici + 1;
-            if(ntStrDown < pdfLoader.item.pageCount)
-                pdfLoader.item.currentPage = ntStrDown;
-            event.accepted = true;//Завершаем обработку эвента.
-        }
-		if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
-            var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
-            if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                pdfLoader.item.currentPage = ntStrUp;
-            event.accepted = true;//Завершаем обработку эвента.
-        } 
-        if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
-            if(event.key === Qt.Key_Equal){//Если нажата "+",то.
-                var ntScaleUp = pdfScale.value + 25;
-                if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
-                    pdfLoader.item.renderScale = ntScaleUp/100;
-                else{//Если больше максимального масштаба, то...
-                    if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения, то
-                        pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
-                }
+		if (event.modifiers & Qt.ControlModifier && event.modifiers & Qt.ShiftModifier){//Если "Ctrl + Shift"
+            if(event.key === 43){//Если нажата клавиша "+", то...
+				if(knopkaPovorotPo.visible)//Если кнопка видимая, то...
+					fnClickedPovorotPo()//Функция нажатия кнопки поворота по часовой стрелке.
                 event.accepted = true;//Завершаем обработку эвента.
             }
-            else{
-                if(event.key === Qt.Key_Minus){//Если нажат "-", то.
-                    var ntScaleDown = pdfScale.value - 25;//-1 страница
-                    if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
-                        pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
-                    else{
-                        if(pdfScale.value !== pdfScale.from)
-                            pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем минимальное значение.
-                    }
-                    event.accepted = true;//Завершаем обработку эвента.
-                }
-                else{
-
-                    if(event.key === 70){//Если нажат "F", то.
-                        fnClickedPoisk();//Запускаем режим поиска
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                }
-            }
+			else{
+				if(event.key === 95){//Если нажата клавиша "-", то...
+					if(knopkaPovorotProtiv.visible)//Если кнопка видимая, то...
+						fnClickedPovorotProtiv()//Функция нажатия кнопки поворота против часовой стрелке.
+					event.accepted = true;//Завершаем обработку эвента.
+				}
+			}
         }
-        if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-            if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                if(pskPoisk.visible)//Если виджет поиска видимый, то...
-                    fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
-                event.accepted = true;//Завершаем обработку эвента.
-            }
-        }
-        else{//Если не нажат shift, то...
-            if(event.key === 16777266){//Если нажата "F3", то.
-                if(pskPoisk.visible)//Если режим поиска видимый, то...
-                    fnClickedPoiskNext();//Функция нажатия кнопки Следующего поиска
-                event.accepted = true;//Завершаем обработку эвента.
-            }
-        }
-        //cppqml.strDebug = event.key;
+		else{
+			if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+				if(event.key === Qt.Key_Equal){//Если нажата "+",то.
+					var ntScaleUp = pdfScale.value + 25;
+					if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
+						pdfLoader.item.renderScale = ntScaleUp/100;
+					else{//Если больше максимального масштаба, то...
+						if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения, то
+							pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
+					}
+					event.accepted = true;//Завершаем обработку эвента.
+				}
+				else{
+					if(event.key === Qt.Key_Minus){//Если нажат "-", то.
+						var ntScaleDown = pdfScale.value - 25;//-1 страница
+						if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
+							pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
+						else{
+							if(pdfScale.value !== pdfScale.from)
+								pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем мин значение.
+						}
+						event.accepted = true;//Завершаем обработку эвента.
+					}
+					else{
+						if(event.key === 70){//Если нажат "F", то.
+							fnClickedPoisk();//Запускаем режим поиска
+							event.accepted = true;//Завершаем обработку эвента.
+						}
+					}
+				}
+			}
+			else{
+				if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+					if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+						if(pskPoisk.visible)//Если виджет поиска видимый, то...
+							fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
+						event.accepted = true;//Завершаем обработку эвента.
+					}
+				}
+				else{//Если не нажат shift, то...
+					if(event.key === 16777266){//Если нажата "F3", то.
+						if(pskPoisk.visible)//Если режим поиска видимый, то...
+							fnClickedPoiskNext();//Функция нажатия кнопки Следующего поиска
+						event.accepted = true;//Завершаем обработку эвента.
+					}
+					else{
+						if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
+							var ntStrDown = pdfLoader.item.nomerStranici + 1;
+							if(ntStrDown < pdfLoader.item.pageCount)
+								pdfLoader.item.currentPage = ntStrDown;
+							event.accepted = true;//Завершаем обработку эвента.
+						}
+						else{
+							if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up",то.
+								var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
+								if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+									pdfLoader.item.currentPage = ntStrUp;
+								event.accepted = true;//Завершаем обработку эвента.
+							}
+						}
+					}
+				}
+			}
+		}
+        cppqml.strDebug = event.key;
     }
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
         spbPdfPage.value = 1;//Задаём первую страницу в DCSpinBox до открытия документа по умолчанию, ВАЖНО!
@@ -137,6 +158,18 @@ Item {
             pdfLoader.item.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
             pdfLoader.item.searchForward();//Показываем следующий результат поиска.
 		}
+	}
+	function fnClickedPovorotPo(){//Функция нажатия кнопки поворота по часовой стрелке.
+		pdfLoader.pdfRotation += 90;//Прибавляем по 90 градусов.
+		if(pdfLoader.pdfRotation === 360)//Если 360 градусов, то...
+			pdfLoader.pdfRotation = 0;//0 градусов.
+		pdfLoader.item.rotation = pdfLoader.pdfRotation;
+	}
+	function fnClickedPovorotProtiv(){//Функция нажатия кнопки поворота против часовой стрелке.
+		pdfLoader.pdfRotation -= 90;//Убавляем по 90 градусов.
+		if(pdfLoader.pdfRotation === -90)//Если -90 градусов, то...
+			pdfLoader.pdfRotation = 270;//270 градусов.
+		pdfLoader.item.rotation = pdfLoader.pdfRotation;
 	}
     function fnClickedPoisk(){//Функция запуска режима поиска.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
@@ -291,12 +324,7 @@ Item {
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPoisk.left
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
-            onClicked: {
-                pdfLoader.pdfRotation += 90;//Прибавляем по 90 градусов.
-                if(pdfLoader.pdfRotation === 360)//Если 360 градусов, то...
-                    pdfLoader.pdfRotation = 0;//0 градусов.
-                pdfLoader.item.rotation = pdfLoader.pdfRotation;
-            }
+            onClicked: fnClickedPovorotPo();//Функция нажатия кнопки поворота по часовой стрелке. 
         }
         DCKnopkaPovorotProtiv {
             id: knopkaPovorotProtiv
@@ -304,12 +332,7 @@ Item {
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
-            onClicked: {
-                pdfLoader.pdfRotation -= 90;//Убавляем по 90 градусов.
-                if(pdfLoader.pdfRotation === -90)//Если -90 градусов, то...
-                    pdfLoader.pdfRotation = 270;//270 градусов.
-                pdfLoader.item.rotation = pdfLoader.pdfRotation;
-            }
+            onClicked: fnClickedPovorotProtiv();//Функция нажатия кнопки поворота против часовой стрелке. 
         }
         DCPassword{
             id: pssPassword

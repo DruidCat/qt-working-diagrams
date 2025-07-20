@@ -37,30 +37,47 @@ Item {
     signal clickedSozdat();//Сигнал нажатия кнопки Создать
     //Функции
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
-            if(event.key === Qt.Key_Equal){//Если нажата "+",то.
-                var ntScaleUp = pdfScale.value + 25;
-                if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
-                    pdfLoader.item.renderScale = ntScaleUp/100;
-                else{//Если больше максимального масштаба, то...
-                    if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения, то
-                        pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
-                }
+		if (event.modifiers & Qt.ControlModifier && event.modifiers & Qt.ShiftModifier){//Если "Ctrl + Shift"
+            if(event.key === 43){//Если нажата клавиша "+", то...
+				if(knopkaPovorotPo.visible)//Если кнопка видимая, то...
+					fnClickedPovorotPo()//Функция нажатия кнопки поворота по часовой стрелке.
                 event.accepted = true;//Завершаем обработку эвента.
             }
-            else{//Если не нажата клавиша "+"
-                 if(event.key === Qt.Key_Minus){//Если нажат "-", то.
-                    var ntScaleDown = pdfScale.value - 25;//-1 страница
-                    if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
-                        pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
-                    else{
-                        if(pdfScale.value !== pdfScale.from)
-                            pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем минимальное значение.
-                    }
-                    event.accepted = true;//Завершаем обработку эвента.
-                }
-            }
+			else{
+				if(event.key === 95){//Если нажата клавиша "-", то...
+					if(knopkaPovorotProtiv.visible)//Если кнопка видимая, то...
+						fnClickedPovorotProtiv()//Функция нажатия кнопки поворота против часовой стрелке.
+					event.accepted = true;//Завершаем обработку эвента.
+				}
+			}
         }
+		else{
+			if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+				if(event.key === Qt.Key_Equal){//Если нажата "+",то.
+					var ntScaleUp = pdfScale.value + 25;
+					if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
+						pdfLoader.item.renderScale = ntScaleUp/100;
+					else{//Если больше максимального масштаба, то...
+						if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения, то
+							pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
+					}
+					event.accepted = true;//Завершаем обработку эвента.
+				}
+				else{//Если не нажата клавиша "+"
+					 if(event.key === Qt.Key_Minus){//Если нажат "-", то.
+						var ntScaleDown = pdfScale.value - 25;//-1 страница
+						if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
+							pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
+						else{
+							if(pdfScale.value !== pdfScale.from)
+								pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем минимальное значение.
+						}
+						event.accepted = true;//Завершаем обработку эвента.
+					}
+				}
+			}
+		}
+        
     }
     function ustSource(strPdfUrl) {//Передаём адрес pdf документа.
 		tmrLogo.running = true;//Запускаем таймер анимации логотипа
@@ -87,6 +104,18 @@ Item {
         else//Если это метод, то...
             Qt.gc();
     }
+	function fnClickedPovorotPo(){//Функция нажатия кнопки поворота по часовой стрелке.
+		pdfLoader.pdfRotation += 90;//Прибавляем по 90 градусов.
+		if(pdfLoader.pdfRotation === 360)//Если 360 градусов, то...
+			pdfLoader.pdfRotation = 0;//0 градусов.
+		pdfLoader.item.rotation = pdfLoader.pdfRotation;
+	}
+	function fnClickedPovorotProtiv(){//Функция нажатия кнопки поворота против часовой стрелке.
+		pdfLoader.pdfRotation -= 90;//Убавляем по 90 градусов.
+		if(pdfLoader.pdfRotation === -90)//Если -90 градусов, то...
+			pdfLoader.pdfRotation = 270;//270 градусов.
+		pdfLoader.item.rotation = pdfLoader.pdfRotation;
+	}
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
         id: tmrLogo
         interval: 110; running: false; repeat: true
@@ -140,12 +169,7 @@ Item {
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
-            onClicked: {
-                pdfLoader.pdfRotation += 90;//Прибавляем по 90 градусов.
-                if(pdfLoader.pdfRotation === 360)//Если 360 градусов, то...
-                    pdfLoader.pdfRotation = 0;//0 градусов.
-                pdfLoader.item.rotation = pdfLoader.pdfRotation;
-            }
+            onClicked: fnClickedPovorotPo();//Функция нажатия кнопки поворота по часовой стрелке.
         }
         DCKnopkaPovorotProtiv {
             id: knopkaPovorotProtiv
@@ -153,12 +177,7 @@ Item {
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
-            onClicked: {
-                pdfLoader.pdfRotation -= 90;//Убавляем по 90 градусов.
-                if(pdfLoader.pdfRotation === -90)//Если -90 градусов, то...
-                    pdfLoader.pdfRotation = 270;//270 градусов.
-                pdfLoader.item.rotation = pdfLoader.pdfRotation;
-            }
+            onClicked: fnClickedPovorotProtiv();//Функция нажатия кнопки поворота против часовой стрелке.
         }
     }
     Item {
