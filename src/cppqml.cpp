@@ -763,7 +763,8 @@ QString DCCppQml::polPutImyaPlan(){//Получить полный путь с �
     QString strPutImya = m_pDataPlan->polWorkingDiagrams()
                          +QDir::separator()
                          +m_pDataPlan->polImyaFaila(m_ullSpisokKod, m_ullElementKod);
-    return strPutImya;
+	QUrl rlPutImyaUrl = QUrl::fromUserInput(strPutImya);//Переводим в формат Url адреса.
+    return rlPutImyaUrl.toString();//Перефодим адресс Url в строку и возвращаем.
 }
 QString DCCppQml::strDebug(){//Возвращает ошибку.
 ///////////////////////////////////////////////////
