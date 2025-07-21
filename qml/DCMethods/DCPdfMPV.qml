@@ -357,13 +357,6 @@ Item {
             pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг. 
         }
     }
-    property PdfSearchModel searchModel: PdfSearchModel {
-        document: pdfDoc//Модель завязана на документ внутри этого скоупа
-    }
-    function setSearchText(text) {
-        searchModel.searchString = text
-    }
-
     Rectangle {//Дополнительный элементы управления.
         id: rctStranici
         anchors.bottom: root.bottom; anchors.horizontalCenter: root.horizontalCenter; anchors.bottomMargin: 22

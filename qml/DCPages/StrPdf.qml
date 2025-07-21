@@ -208,13 +208,18 @@ Item {
                 knopkaPoisk.visible = false;//Делаем невидимым кнопку Поиска.
             }
             else{//Если таймер выключен, то...
-                ldrProgress.active = false;//Отключаем прогресс.
-                knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
-                knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
+                ldrProgress.active = false;//Отключаем прогресс. 
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
-                if(!pskPoisk.visible)//Если не видим виджет поиска(например при увеличении), то...
+                if(pskPoisk.visible){//Если видим виджет поиска, то...
+					knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
+                	knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
+				}
+				else{//Если не видим виджет поиска(например при увеличении), то...
                     knopkaPoisk.visible = true;//Делаем видимым кнопку Поиска.
+					knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
+                	knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
+				}
             }
         }
     }
