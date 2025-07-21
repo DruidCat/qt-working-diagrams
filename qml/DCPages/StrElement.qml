@@ -309,7 +309,7 @@ Item {
                             root.signalToolbar(qsTr("Переименуйте выбранный элемент."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strElement = strElement;//Присваиваем Элемент списка к свойству Q_PROPERTY
-                            txnZagolovok.text = strElement;//Добавляем в строку выбранный Элемент списка.
+                            txnZagolovok.ustText(strElement);//Добавляем в строку выбранный Элемент списка.
                             lsvZona.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...

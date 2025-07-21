@@ -137,7 +137,7 @@ Item {
     function fnMenuZagolovok(){//Нажат пункт меню Изменить Заголовок.
         blZagolovok = true;//Изменить заголовок.
         menuSpisok.visible = false;//Делаем невидимым меню.
-        txnZagolovok.text = cppqml.strTitul;//Добавляем в строку Заголовок, для более понятного редактирования
+        txnZagolovok.ustText(cppqml.strTitul);//Добавляем в строку Заголовок, для понятного редактирования
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЗАГОЛОВКА");//Подсказка пользователю,что вводить нужн
         txnZagolovok.visible = true;//Показ текстового редактора Заголовка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
         lsvZona.enabled = false;//Делаем не кликабельную Зону.
@@ -332,7 +332,7 @@ Item {
                             root.signalToolbar(qsTr("Переименуйте выбранный список."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strSpisok = strSpisok;//Присваиваем элемент списка к свойству Q_PROPERTY
-                            txnZagolovok.text = strSpisok;//Добавляем в строку выбранный элемент Списка.
+                            txnZagolovok.ustText(strSpisok);//Добавляем в строку выбранный элемент Списка.
                             lsvZona.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор Списка переименования, то ...

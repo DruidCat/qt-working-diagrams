@@ -311,7 +311,7 @@ Item {
                             root.signalToolbar(qsTr("Переименуйте выбранный документ."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             strDannieRen = strDannie;//Присваиваем переменной имя Документа.
-                            txnZagolovok.text = strDannie;//Добавляем в строку выбранный Документ.
+                            txnZagolovok.ustText(strDannie);//Добавляем в строку выбранный Документ.
                             lsvZona.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...

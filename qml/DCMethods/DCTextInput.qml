@@ -21,6 +21,11 @@ Item {
 	signal clickedEnter();//Сигнал нажатия Enter
 	signal clickedEscape();//Сигнал нажатия Escape
     //Функции.
+	function ustText (strText){//Функция вставления текста, нужна для Android и обновления вирт клавиатуры.
+		txnTextInput.text = strText//Вставляем текст
+		txnTextInput.cursorPosition = txnTextInput.length//Установить курсор в конец текста вставленного.
+		txnTextInput.forceActiveFocus()//Принудительно активируем фокус.
+	}
     Rectangle {
         id: rctTextInput
 		anchors.fill: root
