@@ -61,8 +61,21 @@ Item {
             event.accepted = true;//Завершаем обработку эвента.
         }
     }
-    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: root
+    MouseArea {//Если кликнуть на tmZagolovok, свернётся Меню. Объявлять в начале Item.
+        anchors.fill: tmZagolovok
+		enabled:{
+			if(txnZagolovok.visible || txuUdalit.visible)//Если DCTextInput или DCUdalit видимы, то...
+				return false//Деактивируем зону мышки Заголовка.
+			else//Если не видима, то...
+				return true//Активируем зону мышки Заголовка.
+		}
+        onClicked: {
+            root.signalToolbar("");//Делаем пустую строку в Toolbar.
+            fnClickedEscape();//Функция нажатия кнопки Escape.
+        }
+    }
+	MouseArea {//Если кликнуть на tmToolbar, свернётся Меню. Объявлять в начале Item.
+        anchors.fill: tmToolbar
         onClicked: {
             root.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
