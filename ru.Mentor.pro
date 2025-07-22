@@ -1,5 +1,5 @@
 # Название исполняемого файла.
-TARGET = ru.WorkingDiagrams
+TARGET = ru.Mentor
 
 # В свойстве файла Версия приложения.
 VERSION = 0.1.1.0
@@ -8,7 +8,7 @@ VERSION = 0.1.1.0
 QMAKE_TARGET_COMPANY = DruidCat Co
 
 # В свойстве файла Название приложения.
-QMAKE_TARGET_PRODUCT = Working Diagrams
+QMAKE_TARGET_PRODUCT = Mentor
 
 # В свойстве файла Описание.
 QMAKE_TARGET_DESCRIPTION = For working with the document catalog.
@@ -26,7 +26,7 @@ QT += \
 CONFIG += c++11
 
 # Иконка для exe файла в Windows.
-win32: RC_ICONS += ru.WorkingDiagrams.ico
+win32: RC_ICONS += ru.Mentor.ico
 
 # Следующее определение заставляет ваш компьютер выдавать предупреждения,
 # если вы используете какую-либо функцию Qt,
@@ -41,9 +41,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
 		src/copydannie.cpp \
+		src/copykatalog.cpp \
+		src/copyplan.cpp \
 		src/cppqml.cpp \
 		src/datadannie.cpp \
 		src/dataelement.cpp \
+		src/datakatalog.cpp \
+		src/dataplan.cpp \
 		src/dataspisok.cpp \
 		src/datatitul.cpp \
 		src/dcclass.cpp \
@@ -69,9 +73,13 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
 	src/copydannie.h \
+	src/copykatalog.h \
+	src/copyplan.h \
 	src/cppqml.h \
 	src/datadannie.h \
 	src/dataelement.h \
+	src/datakatalog.cpp \
+	src/dataplan.cpp \
 	src/dataspisok.h \
 	src/datatitul.h \
 	src/dcclass.h \

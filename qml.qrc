@@ -1,12 +1,12 @@
 <RCC>
     <qresource prefix="/">
         <file>fonts/verdana.ttf</file>
-        <file>icons/108x108/ru.WorkingDiagrams.png</file>
-        <file>icons/128x128/ru.WorkingDiagrams.png</file>
-        <file>icons/172x172/ru.WorkingDiagrams.png</file>
-        <file>icons/86x86/ru.WorkingDiagrams.png</file>
+        <file>icons/108x108/ru.Mentor.png</file>
+        <file>icons/128x128/ru.Mentor.png</file>
+        <file>icons/172x172/ru.Mentor.png</file>
+        <file>icons/86x86/ru.Mentor.png</file>
         <file>images/Qt_logo_2016.png</file>
-        <file>images/ru.WorkingDiagrams.png</file>
+        <file>images/ru.Mentor.png</file>
         <file>images/tmk-color-1.svg</file>
         <file>images/tmk-color.svg</file>
         <file>images/ts-rus-black-and-white-1.jpg</file>
