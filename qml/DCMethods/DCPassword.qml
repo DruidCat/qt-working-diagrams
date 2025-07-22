@@ -97,7 +97,7 @@ Item {
                     font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                     horizontalAlignment: Text.AlignHCenter
 					verticalAlignment: Text.AlignVCenter
-                    color: root.passTrue ? "#aaa" : "#9c3a3a"//Светло серый цвет или серо красный
+                    color: root.passTrue ? "#F0F0F0" : "#9c3a3a"//Светло серый цвет или серо красный
 					visible: !txnTextInput.text
 					onVisibleChanged: {//Если изменилась видимость, то...
 						if(text){//(Защита от пустого текста) Если не пустой текст, то...
