@@ -1,6 +1,6 @@
 ﻿cmake_minimum_required(VERSION 3.14)
 
-set (EXECUTABLE_NAME "ru.WorkingDiagrams") # Задаём имя проекта.
+set (EXECUTABLE_NAME "ru.Mentor") # Задаём имя проекта.
 
 project(${EXECUTABLE_NAME} VERSION 0.1 LANGUAGES CXX)
 
@@ -13,7 +13,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(RES_FILES "${PROJECT_SOURCE_DIR}/icons/ico/ru.WorkingDiagrams.rc")
+set(RES_FILES "${PROJECT_SOURCE_DIR}/icons/ico/ru.Mentor.rc")
 
 # Установить Qt5 или Qt6 в зависимости от версии Qt, под которую будет собираться проект.
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 Sql)

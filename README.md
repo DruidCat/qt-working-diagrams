@@ -24,7 +24,7 @@ expectations for interaction between community members when communicating and wo
 
 The project has a standard application structure based on C++ and QML.
 
-* File **[ru.WorkingDiagrams.pro](ru.WorkingDiagrams.pro)**
+* File **[ru.Mentor.pro](ru.Mentor.pro)**
         describes the project structure for the qmake build system.
 * File **[CMakeLists.txt](CMakeLists.txt)**
         describes the project structure for the cmake build system.
@@ -34,7 +34,7 @@ The project has a standard application structure based on C++ and QML.
 	* Catalog **[DCMethods](qml/DCMethods)** directory contains the app's methods.
 	* Catalog **[DCPages](qml/DCPages)** contains application pages (Menu, List, Items, Data, Explorer).
 	* Catalog **[DCZones](qml/DCZones)** contains the main page zones (List, Items, Data, Explorer).
-    * File **[ru.WorkingDiagrams.qml](qml/ru.WorkingDiagrams.qml)**
+	* File **[ru.Mentor.qml](qml/ru.Mentor.qml)**
                 provides an implementation of the application window.
 * Catalog **[js](js)** contains java script files.
 	* File **[jsJSON.js](js/jsJSON.js)**
@@ -42,7 +42,7 @@ The project has a standard application structure based on C++ and QML.
 * Catalog **[src](src)** directory contains the C++source code.
     * File **[main.cpp](src/main.cpp)** is the entry point to the app.
 * Catalog **[translations](translations)** contains user interface translation files.
-* File **[ru.WorkingDiagrams.desktop](ru.WorkingDiagrams.desktop)**
+* File **[ru.Mentor.desktop](ru.Mentor.desktop)**
         defines the display and launch parameters of the app.
 
 ## Compatibility

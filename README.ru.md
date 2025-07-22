@@ -24,7 +24,7 @@ https://github.com/DruidCat/qt-working-diagrams
 
 Проект имеет стандартную структуру приложения на базе C++ и QML.
 
-* Файл **[ru.WorkingDiagrams.pro](ru.WorkingDiagrams.pro)**
+* Файл **[ru.Mentor.pro](ru.Mentor.pro)**
         описывает структуру проекта для системы сборки qmake.
 * Файл **[CMakeLists.txt](CMakeLists.txt)**
         описывает структуру проекта для системы сборки cmake.
@@ -34,7 +34,7 @@ https://github.com/DruidCat/qt-working-diagrams
 	* Каталог **[DCMethods](qml/DCMethods)** содержит методы приложения.
 	* Каталог **[DCPages](qml/DCPages)** содержит страницы приложения (Меню, Список, Элементы, Данные, Проводник).
 	* Каталог **[DCZones](qml/DCZones)** содержит основные зоны страниц (Список, Элементы, Данные, Проводник).
-	* Файл **[ru.WorkingDiagrams.qml](qml/ru.WorkingDiagrams.qml)**
+	* Файл **[ru.Mentor.qml](qml/ru.Mentor.qml)**
                 предоставляет реализацию окна приложения.
 * Каталог **[js](js)** содержит java script файлы.
 	* Файл **[jsJSON.js](js/jsJSON.js)**
@@ -42,7 +42,7 @@ https://github.com/DruidCat/qt-working-diagrams
 * Каталог **[src](src)** содержит исходный код на C++.
     * Файл **[main.cpp](src/main.cpp)** является точкой входа в приложение.
 * Каталог **[translations](translations)** содержит файлы перевода интерфейса пользователя.
-* Файл **[ru.WorkingDiagrams.desktop](ru.WorkingDiagrams.desktop)**
+* Файл **[ru.Mentor.desktop](ru.Mentor.desktop)**
         определяет отображение и параметры запуска приложения.
         
 ## Совместимость

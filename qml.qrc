@@ -1,6 +1,6 @@
 <RCC>
     <qresource prefix="/">
-        <file>fonts/verdana.ttf</file> 
+        <file>fonts/verdana.ttf</file>
         <file>icons/108x108/ru.WorkingDiagrams.png</file>
         <file>icons/128x128/ru.WorkingDiagrams.png</file>
         <file>icons/172x172/ru.WorkingDiagrams.png</file>
@@ -8,17 +8,17 @@
         <file>images/Qt_logo_2016.png</file>
         <file>images/ru.WorkingDiagrams.png</file>
         <file>images/tmk-color-1.svg</file>
-		<file>images/tmk-color.svg</file>
-		<file>images/ts-rus-black-and-white-1.jpg</file>
+        <file>images/tmk-color.svg</file>
+        <file>images/ts-rus-black-and-white-1.jpg</file>
         <file>images/ts-rus-black-and-white-1.svg</file>
         <file>images/ts-rus-black-and-white-2.jpg</file>
         <file>images/ts-rus-black-and-white-2.svg</file>
         <file>images/ts-rus-color.jpg</file>
         <file>images/ts-rus-color.svg</file>
-		<file>images/ts-rus-orange-1.jpg</file>
+        <file>images/ts-rus-orange-1.jpg</file>
         <file>images/ts-rus-orange-1.svg</file>
         <file>images/ts-rus-orange.jpg</file>
-        <file>images/ts-rus-orange.svg</file> 
+        <file>images/ts-rus-orange.svg</file>
         <file>js/jsJSON.js</file>
         <file>js/jsProgress.js</file>
         <file>qml/DCButtons/DCKnopkaInfo.qml</file>
@@ -72,7 +72,7 @@
         <file>qml/DCZones/ZonaFileDialog.qml</file>
         <file>qml/DCZones/ZonaSpisok.qml</file>
         <file>qml/DCZones/qmldir</file>
-        <file>qml/ru.WorkingDiagrams.qml</file>
-        <file>workingdata/plan.pdf</file> 
+        <file>qml/ru.Mentor.qml</file>
+        <file>workingdata/plan.pdf</file>
     </qresource>
 </RCC>
