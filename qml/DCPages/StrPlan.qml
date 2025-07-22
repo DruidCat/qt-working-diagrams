@@ -109,13 +109,15 @@ Item {
 		pdfLoader.pdfRotation += 90;//Прибавляем по 90 градусов.
 		if(pdfLoader.pdfRotation === 360)//Если 360 градусов, то...
 			pdfLoader.pdfRotation = 0;//0 градусов.
-		pdfLoader.item.rotation = pdfLoader.pdfRotation;
+		//pdfLoader.item.rotation = pdfLoader.pdfRotation;//Поворот сцены документа.
+		pdfLoader.item.pageRotation = pdfLoader.pdfRotation;//Поворот страниц документа.
 	}
 	function fnClickedPovorotProtiv(){//Функция нажатия кнопки поворота против часовой стрелке.
 		pdfLoader.pdfRotation -= 90;//Убавляем по 90 градусов.
 		if(pdfLoader.pdfRotation === -90)//Если -90 градусов, то...
 			pdfLoader.pdfRotation = 270;//270 градусов.
-		pdfLoader.item.rotation = pdfLoader.pdfRotation;
+		//pdfLoader.item.rotation = pdfLoader.pdfRotation;//Поворот сцены документа.
+		pdfLoader.item.pageRotation = pdfLoader.pdfRotation;//Поворот страниц документа.
 	}
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
         id: tmrLogo

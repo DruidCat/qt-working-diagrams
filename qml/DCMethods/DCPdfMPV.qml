@@ -12,7 +12,8 @@ Item {
     property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
     property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
     property alias searchString: pmpDoc.searchString//Запрос на поиск.
-    property alias rotation: pmpDoc.rotation//Поворот документа.
+    property alias rotation: pmpDoc.rotation//Поворот сцены документа.
+    property alias pageRotation: pmpDoc.pageRotation//Поворот страниц документа.
     property alias straniciVisible: rctStranici.visible//Вкл/Выкл дополнительное окно с количеством страниц.
     //Настройки
     anchors.fill: parent
@@ -63,13 +64,15 @@ Item {
             fnGoToPage(root.currentPage);//Переходим на заданную страницу.
     }
 	onRotationChanged:{//Изменение поворота документа.
-			pmpDoc.blRotation = true;//Изменился поворот документа.
+        Qt.callLater(function() {//Пауза в такт. Чтоб успела повернуться сцена, и перерасчет сторон произошёл.
+            pmpDoc.blRotation = true;//Изменился поворот документа.
 			pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
             pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
             console.error("69: 3. Старт таймера масштабирования.");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
-            tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
+            tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть. 
+        })
 	}
     onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
         if(width > 0){//Если ширина больше 0, это не формирование при старте окна, то...
