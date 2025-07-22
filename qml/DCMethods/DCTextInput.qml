@@ -22,9 +22,12 @@ Item {
 	signal clickedEscape();//Сигнал нажатия Escape
     //Функции.
 	function ustText (strText){//Функция вставления текста, нужна для Android и обновления вирт клавиатуры.
-		txnTextInput.text = strText//Вставляем текст
-		txnTextInput.cursorPosition = txnTextInput.length//Установить курсор в конец текста вставленного.
-		txnTextInput.forceActiveFocus()//Принудительно активируем фокус.
+        txnTextInput.focus = false//Убрать фокус.
+        txnTextInput.text = strText//Вставить текст.
+        Qt.callLater(function() {//Пауза в такт.
+            txnTextInput.focus = true//Установить фокус.
+            Qt.inputMethod.reset();//Сбросить виртуальную клавиатуру, чтоб при удалении обновлялся текст.
+        })
 	}
     Rectangle {
         id: rctTextInput
