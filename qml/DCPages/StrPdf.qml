@@ -122,7 +122,8 @@ Item {
     }
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
         spbPdfPage.value = 1;//Задаём первую страницу в DCSpinBox до открытия документа по умолчанию, ВАЖНО!
-        pdfLoader.strPdfPut = urlPdfPut;//Устанавливаем путь.
+        let uniqueUrl = urlPdfPut + "?t=" + Date.now();//Уникальный путь, чтоб не кешировался документ в Qml
+        pdfLoader.strPdfPut = uniqueUrl;//Устанавливаем уникальный путь.
         if(urlPdfPut){//Если путь не пустая строка, то...
             pdfLoader.blClose = false;//Не закрываем Загрузчик.
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.

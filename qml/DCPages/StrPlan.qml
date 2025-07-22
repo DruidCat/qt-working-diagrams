@@ -86,7 +86,8 @@ Item {
 		fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
     }
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
-        pdfLoader.strPdfPut = urlPdfPut;//Устанавливаем путь.
+        let uniqueUrl = urlPdfPut + "?t=" + Date.now();//Уникальный путь, чтоб не кешировался документ в Qml
+        pdfLoader.strPdfPut = uniqueUrl;//Устанавливаем уникальный путь.
         if(urlPdfPut){//Если путь не пустая строка, то...
             pdfLoader.blClose = false;//Не закрываем Загрузчик.
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
