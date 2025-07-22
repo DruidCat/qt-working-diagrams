@@ -9,6 +9,8 @@ Item {
 	property int ntCoff: 8
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
+    property real pctTexta: 1//Прозрачность текста меню.
+    property real pctFona: 1//Прозрачность фона меню.
     property string imyaMenu: ""
     //Сигналы.
 	signal clicked(int ntNomer, var strMenu)
@@ -46,12 +48,13 @@ Item {
                     color: maMenu.containsPress ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
                     anchors.left: rctText.left
                     anchors.verticalCenter: rctText.verticalCenter
+                    opacity: root.pctTexta//Прозрачность текста.
                     text: modelData.menu
                     font.pixelSize: rctText.height-root.ntCoff
                 }
                 Component.onCompleted: {//Когда текст нарисовался, расчитываю его длину.
                     if(rctText.width > txtText.width){//Если длина строки больше длины текста, то...
-                        for(let ltShag=txtText.font.pixelSize; ltShag<rctText.height-root.ntCoff; ltShag++){
+                        for(var ltShag=txtText.font.pixelSize; ltShag<rctText.height-root.ntCoff; ltShag++){
                             if(txtText.width < rctText.width){//Если длина текста меньше динны строки
                                 txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
                                 if(txtText.width > rctText.width){//Но, если переборщили
@@ -101,7 +104,7 @@ Item {
         anchors.bottomMargin:root.ntCoff
         anchors.leftMargin:root.width/2//Отступ отлевого края половина длины экрана.
         anchors.rightMargin:root.ntCoff/2//Отступ от правого края пол коэффициента
-        opacity: 0.9//Прозрачность.
+        opacity: root.pctFona//Прозрачность фона.
 		interactive: false//Запретить листать.
 
 		delegate: cmpMenu

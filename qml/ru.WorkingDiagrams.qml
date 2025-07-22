@@ -12,6 +12,7 @@ ApplicationWindow {
     property color clrFona: "#5a6673"//Серый цвет более мягкий, подходящий под оранжевый корпаративный
     property color clrFaila: "yellow"
     property color clrStranic: "black"
+    property color clrMenuText: "#F0F0F0"//Светло серый контрастен к оранжевому.
     property bool pdfViewer: true//false - Отключить pdf просмоторщик.
     property bool appRedaktor: true//false - Отключить Редактор приложения.
 	property bool isMobile: {//Переменная определяющая, мобильная это платформа или нет. true - мобильная.
@@ -137,7 +138,7 @@ ApplicationWindow {
 			ntCoff: root.ntCoff
 			clrFona: root.clrFona
 			clrTexta: root.clrKnopok
-			clrRabOblasti: "MidnightBlue"
+            clrRabOblasti: "MidnightBlue"
             textZagolovok: qsTr("ЛОГИ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrDebug {
@@ -360,7 +361,8 @@ ApplicationWindow {
             StrSpisok {
                 id: tmSpisok
                 ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
-				clrTexta: pgStrSpisok.clrTexta; clrFona: pgStrSpisok.clrRabOblasti
+                clrTexta: pgStrSpisok.clrTexta; clrFona: pgStrSpisok.clrRabOblasti
+                clrMenuText: root.clrMenuText
 				zagolovokX: pgStrSpisok.rctStrZagolovok.x; zagolovokY: pgStrSpisok.rctStrZagolovok.y
 				zagolovokWidth: pgStrSpisok.rctStrZagolovok.width
 				zagolovokHeight: pgStrSpisok.rctStrZagolovok.height
@@ -411,7 +413,8 @@ ApplicationWindow {
 				id: tmElement
 				ntWidth: pgStrElement.ntWidth; ntCoff: pgStrElement.ntCoff
 				clrTexta: pgStrElement.clrTexta; clrFona: pgStrElement.clrRabOblasti
-				zagolovokX: pgStrElement.rctStrZagolovok.x; zagolovokY: pgStrElement.rctStrZagolovok.y
+                clrMenuText: root.clrMenuText
+                zagolovokX: pgStrElement.rctStrZagolovok.x; zagolovokY: pgStrElement.rctStrZagolovok.y
 				zagolovokWidth: pgStrElement.rctStrZagolovok.width
 				zagolovokHeight: pgStrElement.rctStrZagolovok.height
 				zonaX: pgStrElement.rctStrZona.x; zonaY: pgStrElement.rctStrZona.y
@@ -460,8 +463,8 @@ ApplicationWindow {
             StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
 				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
 				clrTexta: pgStrDannie.clrTexta; clrFona: pgStrDannie.clrRabOblasti
-                clrFaila: pgStrDannie.clrFaila
-				zagolovokX: pgStrDannie.rctStrZagolovok.x; zagolovokY: pgStrDannie.rctStrZagolovok.y
+                clrFaila: pgStrDannie.clrFaila; clrMenuText: root.clrMenuText
+                zagolovokX: pgStrDannie.rctStrZagolovok.x; zagolovokY: pgStrDannie.rctStrZagolovok.y
 				zagolovokWidth: pgStrDannie.rctStrZagolovok.width;
 				zagolovokHeight: pgStrDannie.rctStrZagolovok.height
 				zonaX: pgStrDannie.rctStrZona.x; zonaY: pgStrDannie.rctStrZona.y

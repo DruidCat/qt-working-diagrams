@@ -11,7 +11,8 @@ Item {
     property int ntCoff: 8
     property color clrTexta: "orange"
 	property color clrFona: "black"
-	property alias zagolovokX: tmZagolovok.x
+    property color clrMenuText: "orange"
+    property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
 	property alias zagolovokHeight: tmZagolovok.height
@@ -315,8 +316,9 @@ Item {
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
-				clrTexta: root.clrTexta
-				clrFona: "SlateGray" 
+                //clrTexta: "#00CC99"//Интересный изумрудный цвет.
+                clrTexta: root.clrTexta
+                clrFona: "SlateGray"
                 onClicked: function(ntKod, strSpisok) {//Слот clicked нажатия на один из элементов Списка.
                     if(cppqml.blSpisokPervi){//Если это первый в Списке, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
@@ -367,8 +369,10 @@ Item {
 				anchors.right: rctZona.right
 				anchors.bottom: rctZona.bottom
 				anchors.margins: root.ntCoff
-				clrTexta: root.clrTexta
-				clrFona: "SlateGray"
+                pctFona: 0.90//Прозрачность фона меню.
+                clrTexta: root.clrMenuText
+                //clrTexta: root.clrTexta
+                clrFona: "SlateGray"
 				imyaMenu: "spisok"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
                     menuSpisok.visible = false;//Делаем невидимым меню.
