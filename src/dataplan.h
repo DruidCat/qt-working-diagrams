@@ -10,11 +10,11 @@
 class DataPlan : public QObject {
      Q_OBJECT
 public:
-    explicit	DataPlan(QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject* proditel = nullptr);
+    explicit	DataPlan(QString strMentorPut, quint64 ullDannieMax, QObject* proditel = nullptr);
     ~			DataPlan();//Деструктор
     bool 		dbStart();//Создать первоначальные Данные.
-	void 		ustWorkingDiagrams(QString strWorkingDiagramsPut);//Задаём каталог хранения Документов.
-	QString 	polWorkingDiagrams(void){ return m_strWorkingDiagramsPut; }//Получить путь к каталогу файлов
+    void 		ustMentor(QString strMentorPut);//Задаём каталог хранения Документов.
+    QString 	polMentor(void){ return m_strMentorPut; }//Получить путь к каталогу файлов
     bool 		ustPlan(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail);
     bool 		polPlanPervi(qint64 ullSpisokKod,qint64 ullElementKod);//Первый План?
 	void 		ustFileDialogPut(QString strFileDialogPut);//Задать путь к каталогу, в котором файл записи.
@@ -30,7 +30,7 @@ private:
     CopyPlan*	m_pcopyplan = nullptr;//Указатель на поток копирования файла.
 
 	QString 	m_strFileDialogPut;//Путь к каталогу, в котором лежит файл для записи.
-    QString 	m_strWorkingDiagramsPut;//Каталог хранения документов.
+    QString 	m_strMentorPut;//Каталог хранения документов.
 
 private slots:
     void 		qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог

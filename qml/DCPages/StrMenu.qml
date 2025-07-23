@@ -37,7 +37,7 @@ Item {
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
-	signal clickedWorkingDiagrams();//Сигнал нажатия кнопки об Рабочих Схемах.
+    signal clickedMentor();//Сигнал нажатия кнопки об Менторе.
 	signal clickedHotKey();//Сигнал о нажатии кнопки Горячие Клавиши.
     signal clickedQt();//Сигнал нажатия кнопки Об Qt.
     signal clickedAnimaciya();//Сигнал нажития кнопки Анимация.
@@ -271,7 +271,7 @@ Item {
                     //bold: true; italic: true
                     onClicked: {
                         menuMenu.visible = false;//Делаем невидимым меню.
-                        root.clickedWorkingDiagrams();//Сигнал нажатия кнопки об приложении Рабочие Схемы.
+                        root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
                     }
                 }
 				DCKnopkaOriginal {

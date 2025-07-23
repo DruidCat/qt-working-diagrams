@@ -11,11 +11,11 @@ class DataDannie : public QObject {
      Q_OBJECT
 public:
     explicit	DataDannie(QString strImyaDB, QString strImyaDBData, QString strLoginDB, QString strParolDB,
-                           QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject* proditel = nullptr);
+                           QString strMentorPut, quint64 ullDannieMax, QObject* proditel = nullptr);
     ~			DataDannie();//Деструктор
     bool 		dbStart();//Создать первоначальные Данные.
-	void 		ustWorkingDiagrams(QString strWorkingDiagramsPut);//Задаём каталог хранения Документов.
-	QString 	polWorkingDiagrams(void){ return m_strWorkingDiagramsPut; }//Получить путь к каталогу файлов
+    void 		ustMentor(QString strMentorPut);//Задаём каталог хранения Документов.
+    QString 	polMentor(void){ return m_strMentorPut; }//Получить путь к каталогу файлов
     QStringList	polDannie(quint64 ullSpisokKod, quint64 ullElementKod);//Получить список всех Данных.
     bool 		ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail, QString strDannie);
     bool 		renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString strDannie,QString strDannieNovi);
@@ -46,7 +46,7 @@ private:
     QString 	m_strLoginDB;//Логин БД
     QString 	m_strParolDB;//Пароль БД
 	QString 	m_strFileDialogPut;//Путь к каталогу, в котором лежит файл для записи.
-    QString 	m_strWorkingDiagramsPut;//Каталог хранения документов.
+    QString 	m_strMentorPut;//Каталог хранения документов.
     QStringList m_slsINSERT;//Строка, хранящая данные для Запроса записи в БД.
 
 private slots:

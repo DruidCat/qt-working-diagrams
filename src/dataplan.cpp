@@ -1,6 +1,6 @@
 ﻿#include "dataplan.h"
 
-DataPlan::DataPlan(	QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject* proditel):QObject{proditel}{
+DataPlan::DataPlan(	QString strMentorPut, quint64 ullDannieMax, QObject* proditel):QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
@@ -12,7 +12,7 @@ DataPlan::DataPlan(	QString strWorkingDiagramsPut, quint64 ullDannieMax, QObject
 	//qdebug(); не работает, пока конструктор cppqml полностью не создастся.
     m_blPlanPervi = true;//Первый План.(true)
 	m_strFileDialogPut = "";//Путь к каталогу, где лежит файл для записи.	
-    m_strWorkingDiagramsPut = strWorkingDiagramsPut;//Присваеваем переменной каталог приложения.
+    m_strMentorPut = strMentorPut;//Присваеваем переменной каталог приложения.
     m_ullDannieMax = ullDannieMax;//Приравниваем максимальное количество Данных.
     if(m_ullDannieMax > 999)//Если больше 999, то...
         m_ullDannieMax = 999;//то 999, больше нельзя, алгоритмя приложения не будут работать.
@@ -33,11 +33,11 @@ bool DataPlan::dbStart(){//Создать первоначальные Данн�
 
     return true;
 }
-void DataPlan::ustWorkingDiagrams(QString strWorkingDiagramsPut){//Задаём каталог хранения Документов.
+void DataPlan::ustMentor(QString strMentorPut){//Задаём каталог хранения Документов.
 /////////////////////////////////////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   К А Т А Л О Г   Х Р А Н Е Н И Я   Д О К У М Е Н Т О В---//
 /////////////////////////////////////////////////////////////////////////////////////
-	m_strWorkingDiagramsPut = strWorkingDiagramsPut;//Приравниваем пути
+    m_strMentorPut = strMentorPut;//Приравниваем пути
 }
 bool DataPlan::ustPlan(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail){
 ///////////////////////////////////////
@@ -76,7 +76,7 @@ bool DataPlan::estImyaFaila(QString strImyaFaila){//Есть такой файл
 /////////////////////////////////////////
 //---Е С Т Ь   Т А К О Й   Ф А Й Л ?---//
 /////////////////////////////////////////
-    QFile flImyaFaila(m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
+    QFile flImyaFaila(m_strMentorPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
     if(flImyaFaila.exists())//Есть такой файл, то...
         return true;
     return false;
@@ -85,7 +85,7 @@ bool DataPlan::udalFail(QString strImyaFaila){//Удалить файл в ка�
 /////////////////////////////////////////////
 //---У Д А Л И Т Ь   Т А К О Й   Ф А Й Л---//
 /////////////////////////////////////////////
-    QFile flImyaFaila(m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
+    QFile flImyaFaila(m_strMentorPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
     if(flImyaFaila.exists()){//Есть такой файл, то...
         if(flImyaFaila.remove())//Если файл удалился, то...
             return true;//Успех
@@ -102,7 +102,7 @@ bool DataPlan::udalDannieFaili(quint64 ullSpisokKod, quint64 ullElementKod){//У
 /////////////////////////////////////////////////////
 //---У Д А Л И Т Ь   Ф А Й Л Ы   Э Л Е М Е Н Т А---//
 /////////////////////////////////////////////////////
-    QDir odrPut(m_strWorkingDiagramsPut);//Создаём объект Дериктории с папкой, где хранятся Документы.
+    QDir odrPut(m_strMentorPut);//Создаём объект Дериктории с папкой, где хранятся Документы.
     QStringList slsFaili = odrPut.entryList(QStringList()<<"*.pdf", QDir::Files);//Задаём маску файлов
     int ntRazmer = slsFaili.size();//Количество элементов в списке.
     for(int ntShag = 0; ntShag<ntRazmer; ntShag++){//Цикл перебора списка на наличие нужных Документов.
@@ -125,7 +125,7 @@ bool DataPlan::copyPlan(QString strAbsolutPut, QString strImyaFaila){//Копи�
             if(!udalFail(strImyaFaila))//Удаляем файл с таким же именем. Если файл не удалился, то...
                 return false;//Ошибка удаления.
         }
-        m_pcopyplan->ustPutiFailov(strAbsolutPut, m_strWorkingDiagramsPut+QDir::separator()+strImyaFaila);
+        m_pcopyplan->ustPutiFailov(strAbsolutPut, m_strMentorPut+QDir::separator()+strImyaFaila);
         m_pcopyplan->start();//Запускаем поток и ждём сигнала о завершении копирования.
         return true;
 	}

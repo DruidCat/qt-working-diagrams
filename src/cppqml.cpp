@@ -58,28 +58,28 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     QString strKatalogDB = "workingdata";//Имя дериктория хранения данных
     QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf"<<"*.m4b";
 
-    QDir odrWorkingDiagrams = QDir::current();//Объект каталога приложения.
-    if(!odrWorkingDiagrams.cd(strKatalogDB)){//Если перейти к это папке не получается, то...
-        if(odrWorkingDiagrams.mkdir(strKatalogDB)){//Создаём начальную дерикторию хранения данных
-            if(!odrWorkingDiagrams.cd(strKatalogDB))
+    QDir odrMentor = QDir::current();//Объект каталога приложения.
+    if(!odrMentor.cd(strKatalogDB)){//Если перейти к это папке не получается, то...
+        if(odrMentor.mkdir(strKatalogDB)){//Создаём начальную дерикторию хранения данных
+            if(!odrMentor.cd(strKatalogDB))
                 qWarning()<<tr("DataDannie::DataDannie: ошибка перехода в созданную папку хранения "
                         "документов!");
         }
         else
             qWarning()<<tr("DataDannie::DataDannie: ошибка создания папки хранения документов.");
     }
-    QString strWorkingDiagramsPut = odrWorkingDiagrams.path();//Присваеваем переменной каталог приложения.
+    QString strMentorPut = odrMentor.path();//Присваеваем переменной каталог приложения.
 
-    strImyaDB = strWorkingDiagramsPut + QDir::separator() + strImyaDB;
-    strImyaDBData  = strWorkingDiagramsPut + QDir::separator() + strImyaDBData;
+    strImyaDB = strMentorPut + QDir::separator() + strImyaDB;
+    strImyaDBData  = strMentorPut + QDir::separator() + strImyaDBData;
 
     m_pDataTitul = new DataTitul(strImyaDB, strLoginDB, strParolDB);//Титул.
     m_pDataSpisok = new DataSpisok(strImyaDB, strLoginDB, strParolDB, ullSpisokMax);//Список.
     m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
-    m_pDataDannie = new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strWorkingDiagramsPut,
+    m_pDataDannie = new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strMentorPut,
                                    ullDannieMax);//Данные.
-    m_pDataKatalog = new DataKatalog(strWorkingDiagramsPut);//Каталог.
-    m_pDataPlan = new DataPlan(strWorkingDiagramsPut, ullDannieMax);//План.
+    m_pDataKatalog = new DataKatalog(strMentorPut);//Каталог.
+    m_pDataPlan = new DataPlan(strMentorPut, ullDannieMax);//План.
     m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
     //---передаём-указатели-бд---//
     m_pDataKatalog->ustPDBTitul(m_pDataTitul->polPDB());//Передаем указатель на БД из класса в класс.
@@ -672,7 +672,7 @@ QString DCCppQml::strDannieUrl(){//Возвратить Url файла.
     QString strImyaFaila = m_pDataDannie->polImyaFaila(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod);
     if(!strImyaFaila.isEmpty()){//ЭТО ВАЖНАЯ СТРОКА. Если не пустая строка, то...
         if(m_pDataDannie->estImyaFaila(strImyaFaila)){//Если есть такой файл, то...
-            QString strDannieUrl = m_pDataDannie->polWorkingDiagrams() + QDir::separator() + strImyaFaila;
+            QString strDannieUrl = m_pDataDannie->polMentor() + QDir::separator() + strImyaFaila;
             QUrl rlDannieUrl = QUrl::fromUserInput(strDannieUrl);//Переводим в формат Url адреса.
             m_strDannieUrl = rlDannieUrl.toString();//Перефодим адресс Url в строку.
             return m_strDannieUrl;//Возращаем Url адресс в виде строки.
@@ -760,7 +760,7 @@ QString DCCppQml::polPutImyaPlan(){//Получить полный путь с �
 ///////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   П У Т Ь   И   И М Я   Ф А Й Л А---//
 ///////////////////////////////////////////////////////////
-    QString strPutImya = m_pDataPlan->polWorkingDiagrams()
+    QString strPutImya = m_pDataPlan->polMentor()
                          +QDir::separator()
                          +m_pDataPlan->polImyaFaila(m_ullSpisokKod, m_ullElementKod);
 	QUrl rlPutImyaUrl = QUrl::fromUserInput(strPutImya);//Переводим в формат Url адреса.

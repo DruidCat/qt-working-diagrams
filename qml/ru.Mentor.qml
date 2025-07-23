@@ -98,8 +98,8 @@ ApplicationWindow {
 				onClickedLogi: {
 					stvStr.push(pgStrDebug)//Переходим на страницу Логи.
 				}
-				onClickedWorkingDiagrams: {
-					stvStr.push(pgStrWorkingDiagrams)//Переходим на страницу об Рабочих Схемах.
+                onClickedMentor: {
+                    stvStr.push(pgStrMentor)//Переходим на страницу об Менторе.
 				}
 				onClickedHotKey: {
 					stvStr.push(pgStrHotKey)//Переходим на страницу горячих клавиш.
@@ -165,7 +165,7 @@ ApplicationWindow {
 		/////////////////////////////
 		///О   П Р И Л О Ж Е Н И И///
 		/////////////////////////////
-			id: pgStrWorkingDiagrams
+            id: pgStrMentor
 			visible: false
             ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
@@ -175,25 +175,25 @@ ApplicationWindow {
             textZagolovok: qsTr("О ПРИЛОЖЕНИИ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
-				id: tmWorkingDiagrams
+                id: tmMentor
                 strInstrukciya: "oprilojenii"
-                ntWidth: pgStrWorkingDiagrams.ntWidth; ntCoff: pgStrWorkingDiagrams.ntCoff
-				clrTexta: pgStrWorkingDiagrams.clrTexta; clrFona: pgStrWorkingDiagrams.clrRabOblasti
-				zagolovokX: pgStrWorkingDiagrams.rctStrZagolovok.x;
-				zagolovokY: pgStrWorkingDiagrams.rctStrZagolovok.y
-				zagolovokWidth: pgStrWorkingDiagrams.rctStrZagolovok.width
-				zagolovokHeight: pgStrWorkingDiagrams.rctStrZagolovok.height
-				zonaX: pgStrWorkingDiagrams.rctStrZona.x; zonaY: pgStrWorkingDiagrams.rctStrZona.y 
-				zonaWidth: pgStrWorkingDiagrams.rctStrZona.width;
-				zonaHeight: pgStrWorkingDiagrams.rctStrZona.height
-				toolbarX: pgStrWorkingDiagrams.rctStrToolbar.x; toolbarY: pgStrWorkingDiagrams.rctStrToolbar.y
-                toolbarWidth: pgStrWorkingDiagrams.rctStrToolbar.width
-				toolbarHeight: pgStrWorkingDiagrams.rctStrToolbar.height
-				radiusZona: pgStrWorkingDiagrams.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrWorkingDiagrams.zagolovokLevi
-                tapZagolovokPravi: pgStrWorkingDiagrams.zagolovokPravi
-                tapToolbarLevi: pgStrWorkingDiagrams.toolbarLevi
-                tapToolbarPravi: pgStrWorkingDiagrams.toolbarPravi
+                ntWidth: pgStrMentor.ntWidth; ntCoff: pgStrMentor.ntCoff
+                clrTexta: pgStrMentor.clrTexta; clrFona: pgStrMentor.clrRabOblasti
+                zagolovokX: pgStrMentor.rctStrZagolovok.x;
+                zagolovokY: pgStrMentor.rctStrZagolovok.y
+                zagolovokWidth: pgStrMentor.rctStrZagolovok.width
+                zagolovokHeight: pgStrMentor.rctStrZagolovok.height
+                zonaX: pgStrMentor.rctStrZona.x; zonaY: pgStrMentor.rctStrZona.y
+                zonaWidth: pgStrMentor.rctStrZona.width;
+                zonaHeight: pgStrMentor.rctStrZona.height
+                toolbarX: pgStrMentor.rctStrToolbar.x; toolbarY: pgStrMentor.rctStrToolbar.y
+                toolbarWidth: pgStrMentor.rctStrToolbar.width
+                toolbarHeight: pgStrMentor.rctStrToolbar.height
+                radiusZona: pgStrMentor.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrMentor.zagolovokLevi
+                tapZagolovokPravi: pgStrMentor.zagolovokPravi
+                tapToolbarLevi: pgStrMentor.toolbarLevi
+                tapToolbarPravi: pgStrMentor.toolbarPravi
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
