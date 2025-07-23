@@ -28,7 +28,8 @@ Item {
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
     property bool appRedaktor: false//true - включить Редактор приложения.
-	property alias textTextEdit: txdZona.text
+    property bool isMobile: true//true - мобильная платформа.
+    property alias textTextEdit: txdZona.text
 	property string strOpisanie: "titul"
     //Настройки
     anchors.fill: parent//Растянется по Родителю.
@@ -142,7 +143,7 @@ Item {
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 			readOnly: true//Запрещено редактировать текст
-            textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
+            textEdit.selectByMouse: !root.isMobile//Запрещаем выделять текст в Android из-за свайпа. На ПК нет
             radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
             clrFona: root.clrFona//Цвет фона рабочей области
             clrTexta: root.clrTexta//Цвет текста

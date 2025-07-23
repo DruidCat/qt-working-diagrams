@@ -672,8 +672,8 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrOpisanie.zagolovokLevi; tapZagolovokPravi: pgStrOpisanie.zagolovokPravi
                 tapToolbarLevi: pgStrOpisanie.toolbarLevi; tapToolbarPravi: pgStrOpisanie.toolbarPravi
 				strOpisanie: stvStr.strOpisanie//Передаём флаг Отображения конкретного Описания.
-                appRedaktor: root.appRedaktor
-				onClickedNazad: {//Слот нажатия кнопки Назад.
+                appRedaktor: root.appRedaktor; isMobile: root.isMobile
+                onClickedNazad: {//Слот нажатия кнопки Назад.
 					stvStr.pop()//Назад страницу
 				}
                 onClickedPlan: {//Слот нажатия Плана.
