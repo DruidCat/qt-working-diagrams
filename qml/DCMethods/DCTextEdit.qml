@@ -49,7 +49,7 @@ Item {
                 id: txdTextEdit
                 width: flcListat.width//Передаём ширину из зоны прокрутки, нельзя через якорь.
                 height: flcListat.height//Передаём высоту из зоны прокрутки, нельзя через якорь.
-				textFormat: TextEdit.AutoText//Формат текста АВТОМАТИЧЕСКИ определяется. Предпочтителен HTML4.
+                //textFormat: TextEdit.AutoText//Формат текста АВТОМАТИЧЕСКИ определяется.Предпочтителен HTML4
                 color: "black"//цвет текста
                 text: ""
                 font.pixelSize: root.pixelSize//размер шрифта текста.

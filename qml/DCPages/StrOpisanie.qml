@@ -38,7 +38,7 @@ Item {
     signal clickedPlan();//Сигнал нажатия кнопки План.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции
-	function fnClickedOtmena(){//Отмена редакрирования
+    function fnClickedOtmena(){//Отмена редакрирования
         root.signalToolbar("");//Удаляем надпись Подсказки.
         txdZona.readOnly = true;//запрещаем редактировать текст.
 		if(strOpisanie == "titul"){//Если Титул, то...
