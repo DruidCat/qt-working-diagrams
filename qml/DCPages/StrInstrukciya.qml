@@ -57,6 +57,7 @@ Item {
             ntCoff: root.ntCoff
 			readOnly: true//Запрещено редактировать текст
             textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
+			textEdit.textFormat: TextEdit.AutoText//Формат АВТОМАТИЧЕСКИ определяется. Предпочтителен HTML4
             pixelSize: root.ntWidth/2*root.ntCoff//размер шрифта текста в два раза меньше.
             text: 	""//По умолчанию пустая строка.
             radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
