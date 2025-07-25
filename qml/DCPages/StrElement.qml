@@ -49,6 +49,13 @@ Item {
             fnClickedEscape();//Функция нажатия кнопки Escape.
             event.accepted = true;//Завершаем обработку эвента.
         }
+		else{
+			if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+				if(knopkaInfo.visible)
+					fnClickedInfo();//Функция нажатия на кнопку Информация.
+				event.accepted = true;//Завершаем обработку эвента.
+			}
+		}
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
                 if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
@@ -60,13 +67,6 @@ Item {
                     if(knopkaOk.visible)//Если кнопка Ок видимая, то...
                         fnClickedOk();//Функция нажатия кнопки Ok.
                     event.accepted = true;//Завершаем обработку эвента.
-                }
-                else{
-                    if(event.key === Qt.Key_I){//Если нажат "I", то.
-                        if(knopkaInfo.visible)
-                            fnClickedInfo();//Функция нажатия на кнопку Информация.
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
                 }
             }
         }

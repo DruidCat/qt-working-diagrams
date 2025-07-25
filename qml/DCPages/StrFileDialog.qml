@@ -44,9 +44,29 @@ Item {
 	onBlPlanChanged: {//Если переменная изменилась, то...
 		cppqml.blFileDialogPlan = root.blPlan;//В бизнес логику настройки копирования Плана или Данных.
 	}
+	Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+            fnClickedEscape();//Функция нажатия кнопки Escape.
+        }
+		else{
+			if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+				if(knopkaInfo.visible)
+					fnClickedInfo();//Функция нажатия на кнопку Информация.
+				event.accepted = true;//Завершаем обработку эвента.
+			}
+		}
+    }
+    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
+        anchors.fill: root
+        onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
         menuFileDialog.visible = false;//Делаем невидимым всплывающее меню.
     }
+	function fnClickedInfo() {//Функция нажатия на Информацию
+		fnClickedEscape();//Меню сворачиваем
+		root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
+	}
     function fnCopyStop(){//Останавливаем анимацию копирования.
         tmrLogoTMK.running = false;//Останавливаем таймер анимации логотипа ТМК.
         lgTMK.ntCoff = root.ntLogoTMK;//По умолчанию размер логотипа ТМК.
@@ -56,16 +76,7 @@ Item {
         knopkaNastroiki.visible = true//Делаем кнопку настройки видимой.
         knopkaInfo.visible = true//Делаем кнопку информации видимой.
         fnClickedZakrit();//ОБЯЗАТЕЛЬНО задаём дерикторию! Сворачиваем, закрываем.
-    }
-    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            fnClickedEscape();//Функция нажатия кнопки Escape.
-        }
-    }
-    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: root
-        onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
-    }
+    } 
     function fnClickedNazad(){//Функция нажатия кнопки Назад или клика папки [..]
         if(cppqml.strFileDialogPut === root.strPutDom){//Если каталог совпадает с домашним, то...
             fnClickedZakrit();//Закрываем проводник.
@@ -108,10 +119,7 @@ Item {
             clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                fnClickedEscape();//Меню сворачиваем
-                root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
-            }
+			onClicked: fnClickedInfo();//Функция нажатия на Информацию 
         }
     }
     Item {//Данные Зона

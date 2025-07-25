@@ -51,10 +51,19 @@ Item {
             fnClickedEscape();//Функция нажатия кнопки Escape.
             event.accepted = true;//Завершаем обработку эвента.
         }
-        if(event.key === Qt.Key_Space){//Если нажата на странице кнопка Пробел, то...
-            fnMenuStart();//Функция обработки нажатия меню Старт.
-            event.accepted = true;//Завершаем обработку эвента.
-        }
+		else{
+			if(event.key === Qt.Key_Space){//Если нажата на странице кнопка Пробел, то...
+				fnMenuStart();//Функция обработки нажатия меню Старт.
+				event.accepted = true;//Завершаем обработку эвента.
+			}
+			else{
+				if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+					if(knopkaInfo.visible)
+						fnClickedInfo();//Функция нажатия на кнопку Информация.
+					event.accepted = true;//Завершаем обработку эвента.
+				}
+			}
+		}
     } 
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
@@ -63,6 +72,11 @@ Item {
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
+	function fnClickedInfo() {//Функция нажатия Информации.
+		cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+		fnClickedEscape();//Функция нажатия кнопки Escape.
+		root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
+	}
     function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
         root.signalToolbar("");//Делаем пустую строку в Toolbar. 
         fnClickedEscape();//Функция нажатия кнопки Escape.
@@ -243,11 +257,7 @@ Item {
             clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                fnClickedEscape();//Функция нажатия кнопки Escape.
-                root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
-            }
+			onClicked: fnClickedInfo();//Функция нажатия Информации. 
         }
         DCKnopkaOk {
             id: knopkaOk
