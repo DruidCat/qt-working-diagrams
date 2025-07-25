@@ -42,22 +42,44 @@ Item {
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedElement(var strElement);//Сигнал когда нажат один из Элементов.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
-    //Функции.
-    function fnClickedEscape(){//Функция нажатия кнопки Escape.
-        txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
-        menuElement.visible = false;//Делаем невидимым всплывающее меню.
-        root.blPereimenovat = false;//Запрещаем выбор переименовывания.
-        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        root.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
-        txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-        lsvZona.enabled = true;//Делаем кликабельную Зону.
-    }
+    //Функции. 
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             root.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
             event.accepted = true;//Завершаем обработку эвента.
         }
+        if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+            if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
+                if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                    fnClickedSozdat();//Функция создания Списка.
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+            else{
+                if(event.key === Qt.Key_S){//Если нажат "S", то.
+                    if(knopkaOk.visible)//Если кнопка Ок видимая, то...
+                        fnClickedOk();//Функция нажатия кнопки Ok.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+                else{
+                    if(event.key === Qt.Key_I){//Если нажат "I", то.
+                        if(knopkaInfo.visible)
+                            fnClickedInfo();//Функция нажатия на кнопку Информация.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+            }
+        }
+        else{
+            if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
+                    if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                        fnClickedSozdat();//Функция редактирования текста.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+        }
+        //cppqml.strDebug = event.key;
     }
 	MouseArea {//Если кликнуть на tmZagolovok, свернётся Меню. Объявлять в начале Item.
         anchors.fill: tmZagolovok
@@ -79,9 +101,23 @@ Item {
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
+    function fnClickedEscape(){//Функция нажатия кнопки Escape.
+        txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+        menuElement.visible = false;//Делаем невидимым всплывающее меню.
+        root.blPereimenovat = false;//Запрещаем выбор переименовывания.
+        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        root.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
+        txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+        lsvZona.enabled = true;//Делаем кликабельную Зону.
+    }
     function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
         fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
+    function fnClickedInfo(){//Функция нажатия кнопки Информация
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+        root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
     }
     function fnClickedOk(){//Функция сохранения/переименования Элементов списка.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -154,9 +190,7 @@ Item {
             clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {//Слот сигнала clicked кнопки Создать.
-                fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
-            }
+            onClicked: fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
         }
         DCKnopkaInfo {
 			id: knopkaInfo
@@ -168,11 +202,7 @@ Item {
 			clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-			onClicked: {//Слот клика кнопки Инфо
-                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                fnClickedEscape();//Функция нажатия кнопки Escape.
-				root.clickedInfo();//Излучаем сигнал, что кнопка в блоке кода нажата.
-			}
+            onClicked: fnClickedInfo();//Функция нажатия на кнопку Информации.
 		} 
         DCKnopkaOk{
 			id: knopkaOk
@@ -185,9 +215,7 @@ Item {
 			clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-			onClicked: {
-				fnClickedOk();//Функция сохранения данных.
-			}
+            onClicked: fnClickedOk();//Нажимаем на Ок(Сохранить/Переименовать)
 		}
         DCTextUdalit {
             id: txuUdalit
@@ -262,17 +290,18 @@ Item {
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
 					}
                     else{//Если DCTextInput не видим, то...
+                        root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
                         knopkaNazad.visible = true;//Кнопка назад видимая.
                         knopkaInfo.visible = true;//Конопка Информация Видимая.
                         txnZagolovok.text = "";//Текст обнуляем вводимый.
-                        knopkaInfo.focus = true;//Фокус на кнопке Информация, чтоб не работал Enter.
 					}
 				}
-				onClickedEnter: {//слот нажатия кнопки Enter.
-					fnClickedOk();//Функция сохранения данных.
-				}
+                onClickedEnter: {//слот нажатия кнопки Enter.
+                    if(knopkaOk.visible)
+                        fnClickedOk();//Функция сохранения данных.
+                }
 			}
 		}
 	} 
@@ -347,7 +376,6 @@ Item {
 				anchors.margins: root.ntCoff
                 pctFona: 0.90//Прозрачность фона меню.
                 clrTexta: root.clrMenuText
-                //clrTexta: root.clrTexta
                 clrFona: "SlateGray"
 				imyaMenu: "element"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
@@ -379,11 +407,11 @@ Item {
 	}
 	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
         root.blPereimenovatVibor ? rctBorder.border.color=clrTexta:rctBorder.border.color="transparent";
-        root.focus = true;//Фокус на головном элементе, чтоб работал Escape.
+        root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
     }
     onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
         root.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
-        root.focus = true;//Фокус на головном элементе, чтоб работал Escape.
+        root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
     }
 	Item {//Состава Тулбар
 		id: tmToolbar 
