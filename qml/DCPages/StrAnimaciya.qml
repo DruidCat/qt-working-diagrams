@@ -35,18 +35,12 @@ Item {
     property bool border16_9: false//Рамка 16х9
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
+	focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
     //Сигналы.
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedInfo();//Сигнал  нажатия кнопки Инструкция.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
-    //Функции.
-    function fnClickedEscape(){//Функция нажатия кнопки Escape.
-        txtAnimaciya.opacity = 1;//Непрозрачный текст.
-        imgTMK.opacity = 1;//Непрозрачный логотип.
-        txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
-        menuSpisok.visible = false;//Делаем невидимым всплывающее меню. 
-    }
-    focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
+    //Функции. 
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             root.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -66,6 +60,30 @@ Item {
 				}
 			}
 		}
+		if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+            if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
+                if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                    fnClickedSozdat();//Функция создания Списка.
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+            else{
+                if(event.key === Qt.Key_S){//Если нажат "S", то.
+                    if(knopkaOk.visible)//Если кнопка Ок видимая, то...
+                        fnClickedOk();//Функция нажатия кнопки Ok.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+        }
+        else{
+            if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
+                    if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                        fnClickedSozdat();//Функция редактирования текста.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+        }
+        //cppqml.strDebug = event.key;
     } 
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
@@ -73,6 +91,12 @@ Item {
             root.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
+    }
+	function fnClickedEscape(){//Функция нажатия кнопки Escape.
+        txtAnimaciya.opacity = 1;//Непрозрачный текст.
+        imgTMK.opacity = 1;//Непрозрачный логотип.
+        txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+        menuSpisok.visible = false;//Делаем невидимым всплывающее меню. 
     }
 	function fnClickedInfo() {//Функция нажатия Информации.
 		cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
@@ -272,9 +296,7 @@ Item {
             clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {//Нажимаем Ок.
-                fnClickedOk();//Нажимаем на Ок
-            }
+            onClicked: fnClickedOk();//Нажимаем на Ок
         }
         Item {
             id: tmTextInput
@@ -312,11 +334,12 @@ Item {
                         knopkaNazad.visible = true;//Кнопка Назад видимая.
                         knopkaInfo.visible = true;//Конопка Информация Видимая.
                         txnZagolovok.text = "";//Текст обнуляем вводимый.
-                        knopkaInfo.focus = true;//Фокус на кнопке Информация, чтоб не работал Enter.
+                        root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
                     }
                 }
                 onClickedEnter: {//Если нажата Enter, то такое же действие, как и при нажатии кнопки Ок.
-                    fnClickedOk();//Нажимаем Ок.
+					if(knopkaOk.visible)//Если кнопка Ок видимая, то...
+                    	fnClickedOk();//Нажимаем Ок.
                 }
             }
         }

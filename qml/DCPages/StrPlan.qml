@@ -74,6 +74,22 @@ Item {
 						}
 						event.accepted = true;//Завершаем обработку эвента.
 					}
+					else{
+						if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
+							if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+								fnClickedSozdat();//Функция добавления Плана.
+							event.accepted = true;//Завершаем обработку эвента.
+						}
+					}
+				}
+			}
+			else{
+				if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+					if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
+						if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+							fnClickedSozdat();//Функция добавления Плана.
+						event.accepted = true;//Завершаем обработку эвента.
+					}
 				}
 			}
 		}
@@ -118,6 +134,10 @@ Item {
 			pdfLoader.pdfRotation = 270;//270 градусов.
 		//pdfLoader.item.rotation = pdfLoader.pdfRotation;//Поворот сцены документа.
 		pdfLoader.item.pageRotation = pdfLoader.pdfRotation;//Поворот страниц документа.
+	}
+	function fnClickedSozdat(){//Функция добавления Плана.
+		fnPdfSource("");//Пустой путь PDF документа, закрываем.
+		root.clickedSozdat();//Сигнал нажатия кнопки Создать
 	}
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
         id: tmrLogo
@@ -280,10 +300,7 @@ Item {
             visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                fnPdfSource("");//Пустой путь PDF документа, закрываем.
-                root.clickedSozdat();//Сигнал нажатия кнопки Создать
-            }
+			onClicked: fnClickedSozdat();//Функция добавления Плана. 
         }
         DCScale{
             id: pdfScale
