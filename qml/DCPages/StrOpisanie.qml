@@ -42,19 +42,19 @@ Item {
     focus: true//Чтоб горячие клавиши работали.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
-            if(event.key === 78){//Если нажата клавиша N, то...
+            if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
                 if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
                     fnClickedSozdat();//Функция редактирования текста.
                 event.accepted = true;//Завершаем обработку эвента.
             }
             else{
-                if(event.key === 83){//Если нажат "S", то.
+                if(event.key === Qt.Key_S){//Если нажат "S", то.
                     if(knopkaOk.visible)//Если кнопка Ок видимая, то...
                         fnClickedOk();//Функция сохранения изменений
                     event.accepted = true;//Завершаем обработку эвента.
                 }
                 else{
-                    if(event.key === 70){//Если нажат "F", то.
+                    if(event.key === Qt.Key_F){//Если нажат "F", то.
                         if(knopkaPlan.visible)
                             fnClickedPlan();//Функция нажатия на кнопку План.
                         event.accepted = true;//Завершаем обработку эвента.
@@ -64,7 +64,7 @@ Item {
         }
         else{
             if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                if(event.key === 1064){//Если нажата клавиша I, то...
+                if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
                     if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
                         fnClickedSozdat();//Функция редактирования текста.
                     event.accepted = true;//Завершаем обработку эвента.
