@@ -31,13 +31,13 @@ Item {
     property int ntLogoTMK: 16
     //Настройки
     anchors.fill: parent//Растянется по Родителю.
-    focus: true//Чтоб кнопки работали.
+    focus: true//Чтоб работали горячие клавиши.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-			if(txnZagolovok.visible)//Если строка ввода запроса на поиск видима, то...
+			if(knopkaZakrit.visible)//Если кнопка Закрыть на поиск видима, то...
 				fnClickedZakrit();//Закрываем эту строку
             event.accepted = true;//Завершаем обработку эвента.
         }
@@ -79,9 +79,17 @@ Item {
 						event.accepted = true;//Завершаем обработку эвента.
 					}
 					else{
-						if(event.key === 70){//Если нажат "F", то.
-							fnClickedPoisk();//Запускаем режим поиска
+						if(event.key === Qt.Key_F){//Если нажат "F", то.
+							if(knopkaPoisk.visible)//Если кнопка поиск видимая, то...
+								fnClickedPoisk();//Запускаем режим поиска
 							event.accepted = true;//Завершаем обработку эвента.
+						}
+						else{
+							if(event.key === Qt.Key_S){
+								if(knopkaOk.visible)//Если кнопка Ок видимая, то...
+									fnClickedOk();//Функция нажатия кнопки Ок
+								event.accepted = true;//Завершаем обработку эвента.
+							}
 						}
 					}
 				}
@@ -95,7 +103,7 @@ Item {
 					}
 				}
 				else{//Если не нажат shift, то...
-					if(event.key === 16777266){//Если нажата "F3", то.
+					if(event.key === Qt.Key_F3){//Если нажата "F3", то.
 						if(pskPoisk.visible)//Если режим поиска видимый, то...
 							fnClickedPoiskNext();//Функция нажатия кнопки Следующего поиска
 						event.accepted = true;//Завершаем обработку эвента.
@@ -275,8 +283,8 @@ Item {
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
 						if(!pskPoisk.visible){//Если не открыли Режим поиска, то...
+                            root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
 							knopkaNazad.visible = true;//Кнопка назад видимая.
-                            knopkaNazad.focus = true;//Фокус на кнопке Назад, чтоб не работал Enter.
                             knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
                             knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
                             knopkaPoisk.visible = true;//Конопка Поиск Видимая.
@@ -284,7 +292,10 @@ Item {
 						}
 					}
 				}
-                onClickedEnter: fnClickedOk()//Функция отправить запрос на поиск
+				onClickedEnter: {
+					if(knopkaOk.visible)//Если кнопка Ок видимая, то...
+						fnClickedOk()//Функция отправить запрос на поиск
+				}
 			}
 		}	
         DCKnopkaOk{
@@ -307,11 +318,11 @@ Item {
             onClickedNext: fnClickedPoiskNext()//Функция нажатия кнопки Следующего поиска
 			onClickedPrevious: fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
             onClickedZakrit: {//Слот нажатия кнопки Отмены режима поиска. 
+                root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
                 pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
                 knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                 knopkaOk.visible = false;//Кнопка Ок Невидимая.
 				knopkaNazad.visible = true;//Кнопка назад видимая.
-                knopkaNazad.focus = true;//Фокус на кнопке Назад, чтоб не работал Enter.
                 knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
                 knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
                 knopkaPoisk.visible = true;//Конопка Поиск Видимая.
@@ -498,7 +509,7 @@ Item {
             tapKnopkaMinus: root.tapToolbarLevi; tapKnopkaPlus: root.tapToolbarLevi
             onValueModified: {
                 pdfLoader.item.currentPage = (spbPdfPage.value-1)//Если изменение страницы пришло из виджета
-                knopkaNazad.focus = true;//Чтоб не было фокуса на DCSpinBox
+                root.focus = true;//Фокус на основной странице, чтоб не было фокуса на DCSpinBox.
             }
 		}
         DCScale{
