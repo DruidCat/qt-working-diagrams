@@ -80,7 +80,8 @@ ApplicationWindow {
             StrMenu {
 				id: tmMenu
 				ntWidth: pgStrMenu.ntWidth; ntCoff: pgStrMenu.ntCoff
-				clrTexta: pgStrMenu.clrTexta; clrFona: pgStrMenu.clrRabOblasti; clrMenuText: root.clrMenuText
+				clrTexta: pgStrMenu.clrTexta; clrFona: pgStrMenu.clrRabOblasti
+				clrMenuText: root.clrMenuText; clrMenuFon: pgStrMenu.clrFona
 				zagolovokX: pgStrMenu.rctStrZagolovok.x; zagolovokY: pgStrMenu.rctStrZagolovok.y
 				zagolovokWidth: pgStrMenu.rctStrZagolovok.width
 				zagolovokHeight: pgStrMenu.rctStrZagolovok.height
@@ -284,7 +285,7 @@ ApplicationWindow {
                 id: tmAnimaciya
                 ntWidth: pgStrAnimaciya.ntWidth; ntCoff: pgStrAnimaciya.ntCoff
                 clrTexta: pgStrAnimaciya.clrTexta; clrFona: pgStrAnimaciya.clrRabOblasti
-				clrMenuText: root.clrMenuText
+				clrMenuText: root.clrMenuText; clrMenuFon: pgStrAnimaciya.clrFona
                 zagolovokX: pgStrAnimaciya.rctStrZagolovok.x; zagolovokY: pgStrAnimaciya.rctStrZagolovok.y
                 zagolovokWidth: pgStrAnimaciya.rctStrZagolovok.width
                 zagolovokHeight: pgStrAnimaciya.rctStrZagolovok.height
@@ -363,7 +364,7 @@ ApplicationWindow {
                 id: tmSpisok
                 ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
                 clrTexta: pgStrSpisok.clrTexta; clrFona: pgStrSpisok.clrRabOblasti
-                clrMenuText: root.clrMenuText
+                clrMenuText: root.clrMenuText; clrMenuFon: pgStrSpisok.clrFona
 				zagolovokX: pgStrSpisok.rctStrZagolovok.x; zagolovokY: pgStrSpisok.rctStrZagolovok.y
 				zagolovokWidth: pgStrSpisok.rctStrZagolovok.width
 				zagolovokHeight: pgStrSpisok.rctStrZagolovok.height
@@ -414,7 +415,7 @@ ApplicationWindow {
 				id: tmElement
 				ntWidth: pgStrElement.ntWidth; ntCoff: pgStrElement.ntCoff
 				clrTexta: pgStrElement.clrTexta; clrFona: pgStrElement.clrRabOblasti
-                clrMenuText: root.clrMenuText
+                clrMenuText: root.clrMenuText; clrMenuFon: pgStrElement.clrFona
                 zagolovokX: pgStrElement.rctStrZagolovok.x; zagolovokY: pgStrElement.rctStrZagolovok.y
 				zagolovokWidth: pgStrElement.rctStrZagolovok.width
 				zagolovokHeight: pgStrElement.rctStrZagolovok.height
@@ -464,7 +465,8 @@ ApplicationWindow {
             StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
 				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
 				clrTexta: pgStrDannie.clrTexta; clrFona: pgStrDannie.clrRabOblasti
-                clrFaila: pgStrDannie.clrFaila; clrMenuText: root.clrMenuText
+				clrFaila: pgStrDannie.clrFaila
+				clrMenuText: root.clrMenuText; clrMenuFon: pgStrDannie.clrFona
                 zagolovokX: pgStrDannie.rctStrZagolovok.x; zagolovokY: pgStrDannie.rctStrZagolovok.y
 				zagolovokWidth: pgStrDannie.rctStrZagolovok.width;
 				zagolovokHeight: pgStrDannie.rctStrZagolovok.height
@@ -522,7 +524,7 @@ ApplicationWindow {
             StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
-				clrTexta: pgStrPdf.clrTexta; clrFona: pgStrPdf.clrRabOblasti
+				clrTexta: pgStrPdf.clrTexta; clrFona: pgStrPdf.clrRabOblasti; clrMenuFon: pgStrPdf.clrFona
 				zagolovokX: pgStrPdf.rctStrZagolovok.x; zagolovokY: pgStrPdf.rctStrZagolovok.y
 				zagolovokWidth: pgStrPdf.rctStrZagolovok.width
 				zagolovokHeight: pgStrPdf.rctStrZagolovok.height
@@ -556,7 +558,8 @@ ApplicationWindow {
             StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
-                clrFaila: pgStrFileDialog.clrFaila; clrMenuText: root.clrMenuText
+				clrFaila: pgStrFileDialog.clrFaila
+				clrMenuText: root.clrMenuText; clrMenuFon: pgStrFileDialog.clrFona
                 zagolovokX: pgStrFileDialog.rctStrZagolovok.x; zagolovokY: pgStrFileDialog.rctStrZagolovok.y
                 zagolovokWidth: pgStrFileDialog.rctStrZagolovok.width;
                 zagolovokHeight: pgStrFileDialog.rctStrZagolovok.height

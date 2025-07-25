@@ -9,9 +9,10 @@ Item {
     //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
-    property color clrTexta: "orange"
-	property color clrFona: "black"
-    property color clrMenuText: "orange"
+    property color clrTexta: "Orange"
+	property color clrFona: "Black"
+    property color clrMenuText: "Orange"
+	property color clrMenuFon: "SlateGray"
     property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
@@ -277,8 +278,7 @@ Item {
 				anchors.fill: tmTextInput
 				visible: false
 				blSqlProtect: true//Активируем Sql защиту от ввода нежелательных символов для запроса Sql.
-                clrTexta: root.clrTexta
-				clrFona: "SlateGray"
+                clrTexta: root.clrTexta; clrFona: root.clrMenuFon
 				radius: root.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
                 textInput.inputMethodHints: Qt.ImhUppercaseOnly//Буквы в виртуальной клавиатуре заглавные
@@ -324,8 +324,7 @@ Item {
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
-				clrTexta: root.clrTexta
-				clrFona: "SlateGray"
+				clrTexta: root.clrTexta; clrFona: root.clrMenuFon
                 onClicked: function(ntKod, strElement) {//Слот нажатия на один из Элементов списка.
 					if(cppqml.blElementPervi){//Если это первый элемент, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
@@ -376,8 +375,7 @@ Item {
 				anchors.bottom: rctZona.bottom
 				anchors.margins: root.ntCoff
                 pctFona: 0.90//Прозрачность фона меню.
-                clrTexta: root.clrMenuText
-                clrFona: "SlateGray"
+                clrTexta: root.clrMenuText; clrFona: root.clrMenuFon
 				imyaMenu: "element"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
 					menuElement.visible = false;//Делаем невидимым меню.

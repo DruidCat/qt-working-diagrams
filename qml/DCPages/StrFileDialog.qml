@@ -9,10 +9,11 @@ Item {
     //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
-    property color clrTexta: "orange"
-    property color clrFaila: "yellow"//Цвет файлов в проводнике.
-    property color clrFona: "black"
-    property color clrMenuText: "orange"
+    property color clrTexta: "Orange"
+    property color clrFaila: "Yellow"//Цвет файлов в проводнике.
+    property color clrFona: "Black"
+    property color clrMenuText: "Orange"
+	property color clrMenuFon: "SlateGray"
     property alias zagolovokX: tmZagolovok.x
     property alias zagolovokY: tmZagolovok.y
     property alias zagolovokWidth: tmZagolovok.width
@@ -164,7 +165,7 @@ Item {
                 anchors.fill: rctZona
                 clrPapki: root.clrTexta//Цвет папок в проводнике.
                 clrFaila: root.clrFaila//Цвет файлов в проводнике
-                clrFona: "SlateGray"
+                clrFona: root.clrMenuFon
                 onClicked: function(ntTip, strFileDialog) {//Слот нажатия на один из Элементов Проводника.
                     if(!ntTip){//Если Тип = 0, это нажатие кнопки Назад
                         fnClickedNazad();//Функция клика назад.
@@ -210,7 +211,7 @@ Item {
                 anchors.bottom: rctZona.bottom
                 anchors.margins: root.ntCoff	
                 pctFona: 0.90//Прозрачность фона меню.
-                clrTexta: root.clrMenuText; clrFona: "SlateGray"
+                clrTexta: root.clrMenuText; clrFona: root.clrMenuFon
                 imyaMenu: "filedialog"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
                 onClicked: function(ntNomer, strMenu) {
                     menuFileDialog.visible = false;//Делаем невидимым меню.

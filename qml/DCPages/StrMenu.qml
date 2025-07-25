@@ -8,9 +8,10 @@ Item {
     //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
-    property color clrTexta: "orange"
-	property color clrFona: "black"
-    property color clrMenuText: "orange"
+    property color clrTexta: "Orange"
+	property color clrFona: "Black"
+    property color clrMenuText: "Orange"
+	property color clrMenuFon: "SlateGray"
 	property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
@@ -251,7 +252,7 @@ Item {
                     anchors.top: rctZona.top
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("логи")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
@@ -266,7 +267,7 @@ Item {
                     anchors.top: knopkaLogi.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о приложении")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
@@ -281,7 +282,7 @@ Item {
                     anchors.top: knopkaAvtor.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("горячие клавиши")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
@@ -303,7 +304,7 @@ Item {
                     anchors.top: knopkaAvtor.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("участки")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
@@ -325,7 +326,7 @@ Item {
 					}
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о Qt")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
@@ -340,7 +341,7 @@ Item {
                     anchors.top: knopkaQt.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.pdfViewer ? qsTr("viewerPDF: вкл") : qsTr("viewerPDF: выкл")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
@@ -355,8 +356,7 @@ Item {
                     anchors.top: knopkaPdfViewer.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"
-                    clrTexta: root.clrTexta
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.appRedaktor ? qsTr("редактор: вкл") : qsTr("редактор: выкл")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
@@ -372,7 +372,7 @@ Item {
                     anchors.top: knopkaRedaktor.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("анимация")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
@@ -393,7 +393,7 @@ Item {
                     anchors.top: knopkaAnimaciya.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
-                    clrKnopki: "slategray"; clrTexta: root.clrTexta
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("создание каталога документов")
                     opacityKnopki: 0.8
                     //bold: true; italic: true
@@ -412,7 +412,7 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
             anchors.margins: root.ntCoff
-            clrTexta: root.clrTexta; clrFona: "SlateGray"
+            clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
             onSSpisok: function(strSpisok) {
                 pvSpisok.visible = false;
                 knopkaSpisok.text = strSpisok;
@@ -426,7 +426,7 @@ Item {
             anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
             anchors.margins: root.ntCoff
             pctFona: 0.90//Прозрачность фона меню.
-            clrTexta: root.clrMenuText; clrFona: "SlateGray"
+            clrTexta: root.clrMenuText; clrFona: root.clrMenuFon 
             imyaMenu: "vihod"//Глянь в DCMenu все варианты меню в слоте окончательной отрисовки.
             onClicked: function(ntNomer, strMenu) {//Слот сигнала клика по пункту меню.
                 menuMenu.visible = false;//Делаем невидимым меню.

@@ -8,9 +8,10 @@ Item {
     //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
-    property color clrTexta: "orange"
-    property color clrFona: "black"
-    property color clrMenuText: "orange"
+    property color clrTexta: "Orange"
+    property color clrFona: "Black"
+    property color clrMenuText: "Orange"
+	property color clrMenuFon: "SlateGray"
     property alias zagolovokX: tmZagolovok.x
     property alias zagolovokY: tmZagolovok.y
     property alias zagolovokWidth: tmZagolovok.width
@@ -292,8 +293,7 @@ Item {
                 ntCoff: root.ntCoff
                 anchors.fill: tmTextInput
                 visible: false
-                clrTexta: root.clrTexta
-                clrFona: "SlateGray"
+                clrTexta: root.clrTexta; clrFona: root.clrMenuFon
                 radius: root.ntCoff/2
                 //textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
                 //textInput.inputMethodHints: Qt.ImhUppercaseOnly//Буквы в виртуальной клавиатуре заглавные
@@ -465,7 +465,7 @@ Item {
             anchors.bottom: tmZona.bottom
             anchors.margins: root.ntCoff
             pctFona: 0.90//Прозрачность фона меню.
-            clrTexta: root.clrMenuText; clrFona: "SlateGray"
+            clrTexta: root.clrMenuText; clrFona: root.clrMenuFon
             imyaMenu: "animaciya"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
             onClicked: function(ntNomer, strMenu) {
                 menuSpisok.visible = false;//Делаем невидимым меню.

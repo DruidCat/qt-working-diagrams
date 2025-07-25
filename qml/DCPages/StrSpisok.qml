@@ -9,9 +9,10 @@ Item {
     //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
-    property color clrTexta: "orange"
-	property color clrFona: "black"
-    property color clrMenuText: "orange"
+    property color clrTexta: "Orange"
+	property color clrFona: "Black"
+    property color clrMenuText: "Orange"
+	property color clrMenuFon: "SlateGray"
     property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
@@ -303,8 +304,7 @@ Item {
 				anchors.fill: tmTextInput
 				visible: false
 				blSqlProtect: true//Активируем Sql защиту от ввода нежелательных символов для запроса Sql.
-                clrTexta: root.clrTexta
-				clrFona: "SlateGray"
+                clrTexta: root.clrTexta; clrFona: root.clrMenuFon
 				radius: root.ntCoff/2
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
                 textInput.inputMethodHints: Qt.ImhUppercaseOnly//Буквы в виртуальной клавиатуре заглавные
@@ -352,8 +352,7 @@ Item {
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
                 //clrTexta: "#00CC99"//Интересный изумрудный цвет.
-                clrTexta: root.clrTexta
-                clrFona: "SlateGray"
+                clrTexta: root.clrTexta; clrFona: root.clrMenuFon
                 onClicked: function(ntKod, strSpisok) {//Слот clicked нажатия на один из элементов Списка.
                     if(cppqml.blSpisokPervi){//Если это первый в Списке, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
@@ -405,8 +404,7 @@ Item {
 				anchors.bottom: rctZona.bottom
 				anchors.margins: root.ntCoff
                 pctFona: 0.90//Прозрачность фона меню.
-                clrTexta: root.clrMenuText
-                clrFona: "SlateGray"
+                clrTexta: root.clrMenuText; clrFona: root.clrMenuFon
 				imyaMenu: "spisok"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
 				onClicked: function(ntNomer, strMenu) {
                     menuSpisok.visible = false;//Делаем невидимым меню.

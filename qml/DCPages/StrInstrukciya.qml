@@ -8,8 +8,8 @@ Item {
     //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
-    property color clrTexta: "orange"
-	property color clrFona: "black"
+    property color clrTexta: "Orange"
+	property color clrFona: "Black"
 	property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width

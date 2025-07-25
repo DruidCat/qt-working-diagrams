@@ -8,8 +8,9 @@ Item {
     //Свойства
     property int ntWidth: 2
     property int ntCoff: 8
-    property color clrTexta: "orange"
-	property color clrFona: "black"
+    property color clrTexta: "Orange"
+	property color clrFona: "Black"
+	property color clrMenuFon: "SlateGray"
 	property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
@@ -258,7 +259,7 @@ Item {
                 ntWidth: root.ntWidth; ntCoff: root.ntCoff
 				anchors.fill: tmTextInput
                 visible: false; radius: root.ntCoff/2
-                clrTexta: root.clrTexta; clrFona: "SlateGray"
+                clrTexta: root.clrTexta; clrFona: root.clrMenuFon
 				blSqlProtect: false//Отключаем защиту от Sql инъекций, вводить можно любой текст.
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
