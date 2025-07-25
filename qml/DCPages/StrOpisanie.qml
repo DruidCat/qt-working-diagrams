@@ -39,7 +39,46 @@ Item {
     signal clickedPlan();//Сигнал нажатия кнопки План.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции
+    focus: true//Чтоб горячие клавиши работали.
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+        if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+            if(event.key === 78){//Если нажата клавиша N, то...
+                if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                    fnClickedSozdat();//Функция редактирования текста.
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+            else{
+                if(event.key === 83){//Если нажат "S", то.
+                    if(knopkaOk.visible)//Если кнопка Ок видимая, то...
+                        fnClickedOk();//Функция сохранения изменений
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+                else{
+                    if(event.key === 70){//Если нажат "F", то.
+                        if(knopkaPlan.visible)
+                            fnClickedPlan();//Функция нажатия на кнопку План.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+            }
+        }
+        else{
+            if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                if(event.key === 1064){//Если нажата клавиша I, то...
+                    if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                        fnClickedSozdat();//Функция редактирования текста.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+        }
+        //cppqml.strDebug = event.key;
+    }
+
+    function fnClickedPlan(){//Нажитие кнопки План.
+        root.clickedPlan();//Сигнал нажатия кнопки План.
+    }
     function fnClickedOtmena(){//Отмена редакрирования
+        root.focus = true;//Фокус на главном окне, чтоб работали горячие клавиши.
         root.signalToolbar("");//Удаляем надпись Подсказки.
         txdZona.readOnly = true;//запрещаем редактировать текст.
 		if(strOpisanie == "titul"){//Если Титул, то...
@@ -57,6 +96,7 @@ Item {
 		}
 	}
     function fnClickedOk(){//Сохранение редакрированного описания.
+        root.focus = true;//Фокус на главном окне, чтоб работали горячие клавиши.
         root.signalToolbar("");//Удаляем надпись Подсказки.
         txdZona.readOnly = true;//Запрещаем редактировать текст.
 		if(strOpisanie == "titul"){//Если Титул, то...
@@ -71,8 +111,14 @@ Item {
 					cppqml.strElementOpisanie = txdZona.text;//Отправляем текст в бизнес логику.
                 }
 			}
-		}
-	}	
+		} 
+    }
+    function fnClickedSozdat(){//Функция нажатия кнопки Создать, для редактирования текста.
+        root.signalToolbar(qsTr("Для окончания редактирования нажмите ОК."));//Подсказка.
+        txdZona.readOnly = false;//Разрешить редактировать.
+        root.clickedSozdat();//Излучаем сигнал Создать
+    }
+
 	Item {
 		id: tmZagolovok
         DCKnopkaNazad {
@@ -100,9 +146,7 @@ Item {
             clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                root.clickedPlan();//Сигнал нажатия кнопки План.
-            }
+            onClicked: fnClickedPlan();//Функция нажатия кнопки План.
         }
         DCKnopkaZakrit {
             id: knopkaOtmena
@@ -115,9 +159,7 @@ Item {
             clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {//Слот сигнала clicked кнопки Создать.
-                fnClickedOtmena();//Функция обрабатывающая кнопку Отмена.
-            }
+            onClicked: fnClickedOtmena();//Функция обрабатывающая кнопку Отмена.
         }
         DCKnopkaOk {
 			id: knopkaOk
@@ -130,9 +172,7 @@ Item {
             clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-			onClicked: {
-				fnClickedOk();//Нажата кнопка Ок.
-			}
+            onClicked: fnClickedOk();//Нажата кнопка Ок.
 		}
 	}
 	Item {
@@ -201,11 +241,7 @@ Item {
 			visible: root.appRedaktor ? true : false//Настройка вкл/вык Редактор приложения.
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-			onClicked: {
-                root.signalToolbar(qsTr("Для окончания редактирования нажмите ОК."));//Подсказка.
-				txdZona.readOnly = false;//Разрешить редактировать.
-                root.clickedSozdat();//Излучаем сигнал Создать
-            }
+            onClicked: fnClickedSozdat();//Функция нажатия кнопки Создать.
 		}
 	}
 }
