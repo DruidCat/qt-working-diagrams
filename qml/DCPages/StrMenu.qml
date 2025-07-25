@@ -10,6 +10,7 @@ Item {
     property int ntCoff: 8
     property color clrTexta: "orange"
 	property color clrFona: "black"
+    property color clrMenuText: "orange"
 	property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
@@ -424,7 +425,8 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
             anchors.margins: root.ntCoff
-            clrTexta: root.clrTexta; clrFona: "SlateGray"
+            pctFona: 0.90//Прозрачность фона меню.
+            clrTexta: root.clrMenuText; clrFona: "SlateGray"
             imyaMenu: "vihod"//Глянь в DCMenu все варианты меню в слоте окончательной отрисовки.
             onClicked: function(ntNomer, strMenu) {//Слот сигнала клика по пункту меню.
                 menuMenu.visible = false;//Делаем невидимым меню.

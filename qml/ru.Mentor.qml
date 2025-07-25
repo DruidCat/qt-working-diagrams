@@ -80,7 +80,7 @@ ApplicationWindow {
             StrMenu {
 				id: tmMenu
 				ntWidth: pgStrMenu.ntWidth; ntCoff: pgStrMenu.ntCoff
-				clrTexta: pgStrMenu.clrTexta; clrFona: pgStrMenu.clrRabOblasti
+				clrTexta: pgStrMenu.clrTexta; clrFona: pgStrMenu.clrRabOblasti; clrMenuText: root.clrMenuText
 				zagolovokX: pgStrMenu.rctStrZagolovok.x; zagolovokY: pgStrMenu.rctStrZagolovok.y
 				zagolovokWidth: pgStrMenu.rctStrZagolovok.width
 				zagolovokHeight: pgStrMenu.rctStrZagolovok.height
@@ -284,6 +284,7 @@ ApplicationWindow {
                 id: tmAnimaciya
                 ntWidth: pgStrAnimaciya.ntWidth; ntCoff: pgStrAnimaciya.ntCoff
                 clrTexta: pgStrAnimaciya.clrTexta; clrFona: pgStrAnimaciya.clrRabOblasti
+				clrMenuText: root.clrMenuText
                 zagolovokX: pgStrAnimaciya.rctStrZagolovok.x; zagolovokY: pgStrAnimaciya.rctStrZagolovok.y
                 zagolovokWidth: pgStrAnimaciya.rctStrZagolovok.width
                 zagolovokHeight: pgStrAnimaciya.rctStrZagolovok.height
@@ -555,7 +556,7 @@ ApplicationWindow {
             StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
-                clrFaila: pgStrFileDialog.clrFaila;
+                clrFaila: pgStrFileDialog.clrFaila; clrMenuText: root.clrMenuText
                 zagolovokX: pgStrFileDialog.rctStrZagolovok.x; zagolovokY: pgStrFileDialog.rctStrZagolovok.y
                 zagolovokWidth: pgStrFileDialog.rctStrZagolovok.width;
                 zagolovokHeight: pgStrFileDialog.rctStrZagolovok.height

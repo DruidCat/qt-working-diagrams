@@ -12,6 +12,7 @@ Item {
     property color clrTexta: "orange"
     property color clrFaila: "yellow"//Цвет файлов в проводнике.
     property color clrFona: "black"
+    property color clrMenuText: "orange"
     property alias zagolovokX: tmZagolovok.x
     property alias zagolovokY: tmZagolovok.y
     property alias zagolovokWidth: tmZagolovok.width
@@ -207,9 +208,9 @@ Item {
                 anchors.left: rctZona.left
                 anchors.right: rctZona.right
                 anchors.bottom: rctZona.bottom
-                anchors.margins: root.ntCoff
-                clrTexta: root.clrTexta
-                clrFona: "SlateGray"
+                anchors.margins: root.ntCoff	
+                pctFona: 0.90//Прозрачность фона меню.
+                clrTexta: root.clrMenuText; clrFona: "SlateGray"
                 imyaMenu: "filedialog"//Глянь в MenuSpisok все варианты меню в слоте окончательной отрисовки.
                 onClicked: function(ntNomer, strMenu) {
                     menuFileDialog.visible = false;//Делаем невидимым меню.
