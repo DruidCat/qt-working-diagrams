@@ -257,7 +257,6 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("логи")
                     opacityKnopki: 0.8
-                    //bold: true; italic: true
                     onClicked: {
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.clickedLogi();//Сигнал нажатия кнопки Логи.
@@ -272,7 +271,6 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о приложении")
                     opacityKnopki: 0.8
-                    //bold: true; italic: true
                     onClicked: {
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
@@ -287,7 +285,6 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("горячие клавиши")
                     opacityKnopki: 0.8
-                    //bold: true; italic: true
                     onClicked: {
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
@@ -309,7 +306,6 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("участки")
                     opacityKnopki: 0.8
-                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
                         //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
@@ -331,22 +327,34 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о Qt")
                     opacityKnopki: 0.8
-                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.clickedQt();//Сигнал нажатия кнопки об Qt.
                     }
                 }
-                DCKnopkaOriginal {
-                    id: knopkaPdfViewer
+				DCKnopkaOriginal {
+                    id: knopkaAnimaciya
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaQt.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
+                    text: qsTr("анимация")
+                    opacityKnopki: 0.8
+                    onClicked: {//Слот запускающий
+                        menuMenu.visible = false;//Делаем невидимым меню.
+                        root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
+                    }
+                }
+                DCKnopkaOriginal {
+                    id: knopkaPdfViewer
+                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
+                    anchors.top: knopkaAnimaciya.bottom
+                    anchors.left: rctZona.left; anchors.right: rctZona.right
+                    anchors.margins: root.ntCoff/2
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.pdfViewer ? qsTr("viewerPDF: вкл") : qsTr("viewerPDF: выкл")
                     opacityKnopki: 0.8
-                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
@@ -361,26 +369,9 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.appRedaktor ? qsTr("редактор: вкл") : qsTr("редактор: выкл")
                     opacityKnopki: 0.8
-                    //bold: true; italic: true
                     onClicked: {//Слот запускающий
                         menuMenu.visible = false;//Делаем невидимым меню.
                         root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
-                    }
-                } 
-                DCKnopkaOriginal {
-                    id: knopkaAnimaciya
-                    visible: root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора
-                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaRedaktor.bottom
-                    anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: root.ntCoff/2
-                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-                    text: qsTr("анимация")
-                    opacityKnopki: 0.8
-                    //bold: true; italic: true
-                    onClicked: {//Слот запускающий
-                        menuMenu.visible = false;//Делаем невидимым меню.
-                        root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
                     }
                 }
                 DCKnopkaOriginal {
@@ -392,13 +383,12 @@ Item {
                             root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора.
                     }
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaAnimaciya.bottom
+                    anchors.top: knopkaRedaktor.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("создание каталога документов")
                     opacityKnopki: 0.8
-                    //bold: true; italic: true
                     onClicked: copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
 					Component.onCompleted: {
 						if(root.isMobile)//Мобильное устройство
