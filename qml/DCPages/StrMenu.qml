@@ -240,7 +240,9 @@ Item {
             anchors.fill: tmZona//Расстягиваемся по всей рабочей зоне
             contentWidth: tmZona.width//Ширина контента, который будет вложен равен ширине Рабочей Зоны
             contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*kolichestvoKnopok//8 - количество кнопок.
-	
+			TapHandler {//Нажимаем не на Кнопки, а на пустую область.
+				onTapped: menuMenu.visible = false//Сворачиваем меню.
+			}
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
                 id: rctZona
                 width: tmZona.width; height: flZona.contentHeight
