@@ -106,6 +106,7 @@ Item {
         }
     }
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
+		root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuDannie.visible = false;//Делаем невидимым всплывающее меню.
         root.blPereimenovat = false;//Запрещаем выбор переименовывания.

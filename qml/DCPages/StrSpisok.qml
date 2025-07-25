@@ -45,12 +45,24 @@ Item {
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     signal signalZagolovok(var strZagolovok);//Сигнал, когда передаём новую надпись в Заголовок.
     //Функции. 
+	Component.onCompleted: {//Когда страница загрузится...
+		Qt.callLater(function () {//Делаем паузу на такт, иначе не сработает фокус.
+			root.forceActiveFocus();//Форсируем фокус, по другому не работают горячие клавиши на старте Ментор
+		})
+	}
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
             root.signalToolbar("");//Делаем пустую строку в Toolbar.
             fnClickedEscape();//Функция нажатия кнопки Escape.
             event.accepted = true;//Завершаем обработку эвента.
         }
+		else{
+			if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+				if(knopkaInfo.visible)
+					fnClickedInfo();//Функция нажатия на кнопку Информация.
+				event.accepted = true;//Завершаем обработку эвента.
+			}
+		}
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
                 if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
@@ -62,13 +74,6 @@ Item {
                     if(knopkaOk.visible)//Если кнопка Ок видимая, то...
                         fnClickedOk();//Функция нажатия кнопки Ok.
                     event.accepted = true;//Завершаем обработку эвента.
-                }
-                else{
-                    if(event.key === Qt.Key_I){//Если нажат "I", то.
-                        if(knopkaInfo.visible)
-                            fnClickedInfo();//Функция нажатия на кнопку Информация.
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
                 }
             }
         }
@@ -104,6 +109,7 @@ Item {
         }
     }
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
+		root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuSpisok.visible = false;//Делаем невидимым всплывающее меню.
         root.blPereimenovat = false;//Запрещаем выбор переименовывания.
@@ -479,5 +485,5 @@ Item {
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}
-    }
+    }	
 }
