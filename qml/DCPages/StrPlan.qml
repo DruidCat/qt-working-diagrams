@@ -84,16 +84,29 @@ Item {
 				}
 			}
 			else{
-				if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-					if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
-						if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
-							fnClickedSozdat();//Функция добавления Плана.
-						event.accepted = true;//Завершаем обработку эвента.
-					}
-				}
+                if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                    if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                        if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                            fnClickedNazad();//Функция нажатия кнопки Назад
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+                else{
+                    if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                        if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
+                            if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                                fnClickedSozdat();//Функция добавления Плана.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
+                }
 			}
 		}
         
+    }
+    function fnClickedNazad(){//Функция нажатия кнопки Назад
+        fnPdfSource("");//Пустой путь PDF документа, закрываем.
+        root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
     }
     function ustSource(strPdfUrl) {//Передаём адрес pdf документа.
 		tmrLogo.running = true;//Запускаем таймер анимации логотипа
@@ -176,15 +189,13 @@ Item {
     Item {//Данные Заголовок
 		id: tmZagolovok
         DCKnopkaNazad {
+            id: knopkaNazad
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left:tmZagolovok.left
             clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                fnPdfSource("");//Пустой путь PDF документа, закрываем.
-                root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
-            }
+            onClicked: fnClickedNazad();//Функция нажатия кнопки Назад
         }
         DCKnopkaPovorotPo {
             id: knopkaPovorotPo

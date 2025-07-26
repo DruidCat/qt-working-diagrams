@@ -30,12 +30,26 @@ Item {
 	property string strDebug: ""//Глобальная переменная, в ней собирается строка со всеми Сообщениями.
     //Настройки.
 	anchors.fill: parent//Растянется по Родителю.
+    focus: true;//Чтоб работали горячие клавиши.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
     //Функции.
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+        if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+            if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                    fnClickedNazad();//Функция нажатия кнопки Назад
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        }
+    }
+    function fnClickedNazad() {//Функция нажатия кнопки Назад
+        root.clickedNazad();
+    }
     Item {//Данные Заголовок
 		id: tmZagolovok
         DCKnopkaNazad {
+            id: knopkaNazad
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -43,9 +57,7 @@ Item {
             clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                root.clickedNazad();
-            }
+            onClicked: fnClickedNazad();//Функция нажатия кнопки Назад
         }
     }
     Item {//Данные Зона

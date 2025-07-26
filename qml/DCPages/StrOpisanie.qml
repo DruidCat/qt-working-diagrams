@@ -63,17 +63,29 @@ Item {
             }
         }
         else{
-            if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
-                    if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
-                        fnClickedSozdat();//Функция редактирования текста.
+            if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                    if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                        fnClickedNazad();//Функция нажатия кнопки Назад
                     event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+            else{
+                if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                    if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
+                        if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                            fnClickedSozdat();//Функция редактирования текста.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
                 }
             }
         }
         //cppqml.strDebug = event.key;
     }
-
+    function fnClickedNazad() {//Функция нажатия кнопки Назад
+        txdZona.readOnly = true;//запрещаем редактировать текст.
+        root.clickedNazad();//Сигнал, что кнопка Назад нажата.
+    }
     function fnClickedPlan(){//Нажитие кнопки План.
         root.clickedPlan();//Сигнал нажатия кнопки План.
     }
@@ -130,10 +142,7 @@ Item {
             clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-			onClicked: {
-                txdZona.readOnly = true;//запрещаем редактировать текст.
-                root.clickedNazad();//Сигнал, что кнопка Назад нажата.
-			}
+            onClicked: fnClickedNazad();//Функция нажатия кнопки Назад
 		} 
         DCKnopkaPlan {
             id: knopkaPlan

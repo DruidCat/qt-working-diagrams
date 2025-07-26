@@ -36,6 +36,7 @@ Item {
     property real rlProgress: 0//Прогресс загрузчика.
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
+    focus: true;//Чтоб работали горячие клавиши.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedLogi();//Сигнал нажатия кнопки Логи.
@@ -47,19 +48,32 @@ Item {
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            menuMenu.visible = false;//Делаем невидимым всплывающее меню.
+        if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+            if (event.key === Qt.Key_Right){//Если нажата клавиша стрелка вправо, то...
+                if(knopkaVpered.visible)//Если кнопка Вперёд видимая, то...
+                    fnClickedVpered();//Функция нажатия кнопки Вперёд
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        }
+        else{
+            if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                fnClickedEscape()//Функция нажатия кнопки Escape
+            }
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
-        onClicked: menuMenu.visible = false
+        onClicked: fnClickedEscape()//Функция нажатия кнопки Escape
     }
     onPdfViewerChanged: {//Если просмотрщик поменялся, то...
         cppqml.blPdfViewer = root.pdfViewer;//Отправляем в бизнес логику просмотрщик pdf документов.
     }
     onAppRedaktorChanged: {//Если Редактор изменился вкл/выкл, то...
         cppqml.blAppRedaktor = root.appRedaktor;//Отправляем в бизнес логику флаг редактора вкл/выкл.
+    }
+    function fnClickedEscape() {//Функция нажатия кнопки Escape
+        root.focus = true;//Чтоб горячие клавиши работали.
+        menuMenu.visible = false
     }
     function fnKatalog(){//Функция создания каталога pdf документов. 
         signalZagolovok(qsTr("ПРОЦЕСС СОЗДАНИЯ КАТАЛОГА"));//Надпись в заголовке
@@ -85,10 +99,14 @@ Item {
                 ldrProgress.item.text = cppqml.untKatalogCopy;//Выводим номер копируемого документа.
         }
     }
-    function fnZakrit(){//Функция закрыти страницы.
-        menuMenu.visible = false;//Делаем невидимым меню.
-        signalZagolovok(qsTr("МЕНЮ"));//Надпись в заголовке, чтоб при следующем открытии меню видеть заголовок
-        root.clickedNazad();//Сигнал нажатия кнопки Назад.
+    function fnClickedVpered(){//Функция закрыти страницы.
+        if(tmrLogo.running)//Если запущен процесс создания каталогов документов, то...
+            copyStop.visible = true;//Задаём вопрос "Остановить создание каталога?"
+        else{//Если нет, то...
+            fnClickedEscape()//Функция нажатия кнопки Escape
+            signalZagolovok(qsTr("МЕНЮ"));//Надпись в заголовке, чтоб при следующем открытии меню видеть заголовок
+            root.clickedNazad();//Сигнал нажатия кнопки Назад.
+        }
     }
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
         id: tmrLogo
@@ -125,21 +143,14 @@ Item {
 	Item {
 		id: tmZagolovok
         DCKnopkaVpered{
-            id: knopkaZakrit
+            id: knopkaVpered
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.left: tmZagolovok.left
             clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-			onClicked: {
-                if(tmrLogo.running){//Если запущен процесс создания каталогов документов, то...
-                    copyStop.visible = true;//Задаём вопрос "Остановить создание каталога?"
-                }
-                else{//Если нет, то...
-                    fnZakrit();//Закрываем окно Меню
-                }
-			}
+            onClicked: fnClickedVpered();//Закрываем окно Меню
 		}
         DCVopros{
             id: copyStart
@@ -162,14 +173,14 @@ Item {
             tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
-                    knopkaZakrit.visible = false;//Конопка Закрыть Невидимая.
+                    knopkaVpered.visible = false;//Конопка Закрыть Невидимая.
                     flZona.visible = false;//невидимые кнопки меню.
                     lgTMK.visible = true;//Видимый логотип.
                     knopkaMenu.visible = false;//Кнопка Меню не видимая.
                     root.signalToolbar("Начать процесс создения каталога документов?");//Вопрос.
                 }
                 else{//Если невидимый виджет, то...
-                    knopkaZakrit.visible = true;//Конопка Закрыть Видимая.
+                    knopkaVpered.visible = true;//Конопка Закрыть Видимая.
                     flZona.visible = true;//видимые кнопки меню.
                     lgTMK.visible = false;//Невидимый логотип.
                     knopkaMenu.visible = true;//Кнопка Меню видимая.
@@ -204,11 +215,11 @@ Item {
             tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
-                    knopkaZakrit.visible = false;//Конопка Закрыть Невидимая.
+                    knopkaVpered.visible = false;//Конопка Закрыть Невидимая.
                     ldrProgress.item.text = qsTr("Остановить процесс создания каталога документов?")
                 }
                 else{//Если невидимый виджет, то...
-                    knopkaZakrit.visible = true;//Конопка Закрыть Видимая.
+                    knopkaVpered.visible = true;//Конопка Закрыть Видимая.
                     if(ldrProgress.item)//Если загрузчик существует, то...
                         ldrProgress.item.text = ""//Удаляем сообщение в Загрузчике.
                 }
@@ -216,7 +227,7 @@ Item {
             onClickedOk: {//Слот нажатия кнопки Ок
                 tmrLogo.running = false;//Останавливаем анимацию Логотипа.
                 copyStop.visible = false;//Делаем невидимый запрос с Вопросом остановки создания каталога.
-                fnZakrit();//Закрываем окно Меню
+                fnClickedVpered();//Закрываем окно Меню ТОЛЬКО ПОСЛЕ tmrLogo.running = false
                 cppqml.strDebug = qsTr("Принудительная остановка создания каталога документов.");
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены
@@ -241,8 +252,8 @@ Item {
             contentWidth: tmZona.width//Ширина контента, который будет вложен равен ширине Рабочей Зоны
             contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*kolichestvoKnopok//8 - количество кнопок.
 			TapHandler {//Нажимаем не на Кнопки, а на пустую область.
-				onTapped: menuMenu.visible = false//Сворачиваем меню.
-			}
+                onTapped: fnClickedEscape();//Функция нажатия кнопки Escape
+            }
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
                 id: rctZona
                 width: tmZona.width; height: flZona.contentHeight
@@ -258,7 +269,7 @@ Item {
                     text: qsTr("логи")
                     opacityKnopki: 0.8
                     onClicked: {
-                        menuMenu.visible = false;//Делаем невидимым меню.
+                        fnClickedEscape();//Функция нажатия кнопки Escape
                         root.clickedLogi();//Сигнал нажатия кнопки Логи.
                     }
                 }
@@ -272,7 +283,7 @@ Item {
                     text: qsTr("о приложении")
                     opacityKnopki: 0.8
                     onClicked: {
-                        menuMenu.visible = false;//Делаем невидимым меню.
+                        fnClickedEscape();//Функция нажатия кнопки Escape
                         root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
                     }
                 }
@@ -286,7 +297,7 @@ Item {
                     text: qsTr("горячие клавиши")
                     opacityKnopki: 0.8
                     onClicked: {
-                        menuMenu.visible = false;//Делаем невидимым меню.
+                        fnClickedEscape();//Функция нажатия кнопки Escape
                         root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
                     }
 					Component.onCompleted:{//Когда отрисуется Кнопка, то...
@@ -307,7 +318,7 @@ Item {
                     text: qsTr("участки")
                     opacityKnopki: 0.8
                     onClicked: {//Слот запускающий
-                        menuMenu.visible = false;//Делаем невидимым меню.
+                        fnClickedEscape();//Функция нажатия кнопки Escape
                         //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
                         pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
                     }
@@ -328,7 +339,7 @@ Item {
                     text: qsTr("о Qt")
                     opacityKnopki: 0.8
                     onClicked: {//Слот запускающий
-                        menuMenu.visible = false;//Делаем невидимым меню.
+                        fnClickedEscape();//Функция нажатия кнопки Escape
                         root.clickedQt();//Сигнал нажатия кнопки об Qt.
                     }
                 }
@@ -342,7 +353,7 @@ Item {
                     text: qsTr("анимация")
                     opacityKnopki: 0.8
                     onClicked: {//Слот запускающий
-                        menuMenu.visible = false;//Делаем невидимым меню.
+                        fnClickedEscape();//Функция нажатия кнопки Escape
                         root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
                     }
                 }
@@ -356,7 +367,7 @@ Item {
                     text: root.pdfViewer ? qsTr("viewerPDF: вкл") : qsTr("viewerPDF: выкл")
                     opacityKnopki: 0.8
                     onClicked: {//Слот запускающий
-                        menuMenu.visible = false;//Делаем невидимым меню.
+                        fnClickedEscape();//Функция нажатия кнопки Escape
                         root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
                     }
                 }
@@ -370,7 +381,7 @@ Item {
                     text: root.appRedaktor ? qsTr("редактор: вкл") : qsTr("редактор: выкл")
                     opacityKnopki: 0.8
                     onClicked: {//Слот запускающий
-                        menuMenu.visible = false;//Делаем невидимым меню.
+                        fnClickedEscape();//Функция нажатия кнопки Escape
                         root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
                     }
                 }
@@ -421,7 +432,7 @@ Item {
             clrTexta: root.clrMenuText; clrFona: root.clrMenuFon 
             imyaMenu: "vihod"//Глянь в DCMenu все варианты меню в слоте окончательной отрисовки.
             onClicked: function(ntNomer, strMenu) {//Слот сигнала клика по пункту меню.
-                menuMenu.visible = false;//Делаем невидимым меню.
+                fnClickedEscape();//Функция нажатия кнопки Escape
                 if(ntNomer === 1){//Выход
                     Qt.quit();//Закрыть приложение.
                 }

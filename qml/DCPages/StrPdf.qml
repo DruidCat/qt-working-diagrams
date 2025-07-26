@@ -35,12 +35,7 @@ Item {
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
     //Функции.
-    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-			if(knopkaZakrit.visible)//Если кнопка Закрыть на поиск видима, то...
-				fnClickedZakrit();//Закрываем эту строку
-            event.accepted = true;//Завершаем обработку эвента.
-        }
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
 		if (event.modifiers & Qt.ControlModifier && event.modifiers & Qt.ShiftModifier){//Если "Ctrl + Shift"
             if(event.key === 43){//Если нажата клавиша "+", то...
 				if(knopkaPovorotPo.visible)//Если кнопка видимая, то...
@@ -95,36 +90,52 @@ Item {
 				}
 			}
 			else{
-				if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-					if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-						if(pskPoisk.visible)//Если виджет поиска видимый, то...
-							fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
-						event.accepted = true;//Завершаем обработку эвента.
-					}
-				}
-				else{//Если не нажат shift, то...
-					if(event.key === Qt.Key_F3){//Если нажата "F3", то.
-						if(pskPoisk.visible)//Если режим поиска видимый, то...
-							fnClickedPoiskNext();//Функция нажатия кнопки Следующего поиска
-						event.accepted = true;//Завершаем обработку эвента.
-					}
-					else{
-						if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
-							var ntStrDown = pdfLoader.item.nomerStranici + 1;
-							if(ntStrDown < pdfLoader.item.pageCount)
-								pdfLoader.item.currentPage = ntStrDown;
-							event.accepted = true;//Завершаем обработку эвента.
-						}
-						else{
-							if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up",то.
-								var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
-								if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-									pdfLoader.item.currentPage = ntStrUp;
-								event.accepted = true;//Завершаем обработку эвента.
-							}
-						}
-					}
-				}
+                if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                    if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                        if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                            fnClickedNazad();//Функция нажатия кнопки Назад
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+                else{
+                    if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                        if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                            if(pskPoisk.visible)//Если виджет поиска видимый, то...
+                                fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
+                    else{//Если не нажат shift, то...
+                        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                            if(knopkaZakrit.visible)//Если кнопка Закрыть на поиск видима, то...
+                                fnClickedZakrit();//Закрываем эту строку
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                        else{
+                            if(event.key === Qt.Key_F3){//Если нажата "F3", то.
+                                if(pskPoisk.visible)//Если режим поиска видимый, то...
+                                    fnClickedPoiskNext();//Функция нажатия кнопки Следующего поиска
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
+                            else{
+                                if((event.key === 16777237)||(event.key === 16777239)){//нажата "Page Down",то
+                                    var ntStrDown = pdfLoader.item.nomerStranici + 1;
+                                    if(ntStrDown < pdfLoader.item.pageCount)
+                                        pdfLoader.item.currentPage = ntStrDown;
+                                    event.accepted = true;//Завершаем обработку эвента.
+                                }
+                                else{
+                                    if((event.key === 16777235)||(event.key === 16777238)){//нажата "Page Up"
+                                        var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
+                                        if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+                                            pdfLoader.item.currentPage = ntStrUp;
+                                        event.accepted = true;//Завершаем обработку эвента.
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 			}
 		}
         //cppqml.strDebug = event.key;
@@ -151,6 +162,10 @@ Item {
             gc();//Прямой вызов JavaScript-сборщика мусора.
         else//Если это метод, то...
             Qt.gc();
+    }
+    function fnClickedNazad(){//Функция нажатия кнопки Назад.
+        cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
+        fnPdfSource("");//Пустой путь PDF документа, закрываем.
     }
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
 		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
@@ -243,10 +258,7 @@ Item {
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: tmZagolovok.left
 			clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
-			onClicked: {
-                cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
-                fnPdfSource("");//Пустой путь PDF документа, закрываем.
-			}
+            onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
 		}	
         DCKnopkaZakrit {
             id: knopkaZakrit

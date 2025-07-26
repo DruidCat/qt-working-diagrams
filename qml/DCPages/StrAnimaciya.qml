@@ -41,25 +41,7 @@ Item {
     signal clickedInfo();//Сигнал  нажатия кнопки Инструкция.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции. 
-    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            root.signalToolbar("");//Делаем пустую строку в Toolbar.
-            fnClickedEscape();//Функция нажатия кнопки Escape.
-            event.accepted = true;//Завершаем обработку эвента.
-        }
-		else{
-			if(event.key === Qt.Key_Space){//Если нажата на странице кнопка Пробел, то...
-				fnMenuStart();//Функция обработки нажатия меню Старт.
-				event.accepted = true;//Завершаем обработку эвента.
-			}
-			else{
-				if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
-					if(knopkaInfo.visible)
-						fnClickedInfo();//Функция нажатия на кнопку Информация.
-					event.accepted = true;//Завершаем обработку эвента.
-				}
-			}
-		}
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
 		if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
                 if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
@@ -75,11 +57,40 @@ Item {
             }
         }
         else{
-            if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
-                    if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
-                        fnClickedSozdat();//Функция редактирования текста.
+            if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                    if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                        fnClickedNazad();//Функция нажатия кнопки Назад
                     event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+            else{
+                if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                    if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
+                        if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                            fnClickedSozdat();//Функция редактирования текста.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+                else{//
+                    if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                        root.signalToolbar("");//Делаем пустую строку в Toolbar.
+                        fnClickedEscape();//Функция нажатия кнопки Escape.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                    else{
+                        if(event.key === Qt.Key_Space){//Если нажата на странице кнопка Пробел, то...
+                            fnMenuStart();//Функция обработки нажатия меню Старт.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                        else{
+                            if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+                                if(knopkaInfo.visible)
+                                    fnClickedInfo();//Функция нажатия на кнопку Информация.
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -97,6 +108,14 @@ Item {
         imgTMK.opacity = 1;//Непрозрачный логотип.
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuSpisok.visible = false;//Делаем невидимым всплывающее меню. 
+    }
+    function fnClickedNazad() {//Функция нажатия кнопки Назад.
+        txtZona.visible = false;//Невидимый текст.
+        txtZona.text = "";//Пустой текст.
+        txtAnimaciya.visible = false;//Невидимый текст.
+        txtAnimaciya.text = "";//Пустой текст.
+        fnClickedZakrit();//Сворачиваем все меню.
+        root.clickedNazad();
     }
 	function fnClickedInfo() {//Функция нажатия Информации.
 		cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
@@ -248,14 +267,7 @@ Item {
             clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                txtZona.visible = false;//Невидимый текст.
-                txtZona.text = "";//Пустой текст.
-                txtAnimaciya.visible = false;//Невидимый текст.
-                txtAnimaciya.text = "";//Пустой текст.
-                fnClickedZakrit();//Сворачиваем все меню.
-                root.clickedNazad();
-            }
+            onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
         }
         DCKnopkaZakrit {
             id: knopkaZakrit

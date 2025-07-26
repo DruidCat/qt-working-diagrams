@@ -47,16 +47,25 @@ Item {
 		cppqml.blFileDialogPlan = root.blPlan;//В бизнес логику настройки копирования Плана или Данных.
 	}
 	Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            fnClickedEscape();//Функция нажатия кнопки Escape.
+        if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+            if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                    fnClickedNazad();//Функция нажатия кнопки Назад
+                event.accepted = true;//Завершаем обработку эвента.
+            }
         }
-		else{
-			if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
-				if(knopkaInfo.visible)
-					fnClickedInfo();//Функция нажатия на кнопку Информация.
-				event.accepted = true;//Завершаем обработку эвента.
-			}
-		}
+        else{
+            if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                fnClickedEscape();//Функция нажатия кнопки Escape.
+            }
+            else{
+                if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+                    if(knopkaInfo.visible)
+                        fnClickedInfo();//Функция нажатия на кнопку Информация.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+        }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
@@ -107,9 +116,7 @@ Item {
             clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                fnClickedNazad();//Функция клика Назад.
-            }
+            onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
         }
         DCKnopkaInfo {
             id: knopkaInfo
@@ -168,7 +175,7 @@ Item {
                 clrFona: root.clrMenuFon
                 onClicked: function(ntTip, strFileDialog) {//Слот нажатия на один из Элементов Проводника.
                     if(!ntTip){//Если Тип = 0, это нажатие кнопки Назад
-                        fnClickedNazad();//Функция клика назад.
+                        fnClickedNazad();//Функция нажатия кнопки Назад.
                     }
                     else{
                         if(ntTip === 1){//Если это Папки, то...

@@ -30,12 +30,26 @@ Item {
     property string strInstrukciya: "obavtore"
     //Настройки.
 	anchors.fill: parent//Растянется по Родителю.
+    focus: true;//Чтоб работали горячие клавиши.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
     //Функуции.
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+        if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+            if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                    fnClickedNazad();//Функция нажатия кнопки Назад
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        }
+    }
+    function fnClickedNazad() {//Функция нажатия кнопки Назад
+        root.clickedNazad();
+    }
     Item {//Данные Заголовок
 		id: tmZagolovok
         DCKnopkaNazad {
+            id: knopkaNazad
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 			anchors.verticalCenter: tmZagolovok.verticalCenter
@@ -43,9 +57,7 @@ Item {
             clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                root.clickedNazad();
-            }
+            onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
         }
     }
     Item {//Данные Зона
@@ -175,12 +187,15 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 								<html>
 									<body>
     <p><b>МЕНТОР:</b></p>
-    <p><b>[Escape]</b> - Отмена действия.</p>
     <p><b>[F1]</b> - Описание.</p>
-    <p><b>[Ctrl N]</b> или <b>[Shift I]</b> - Создать новый элемент.</p>
-    <p><b>[Ctrl S]</b> или <b>[Enter]</b> - Сохранить изменения в элементе.</p>
+    <p><b>[Alt F]</b> - Настройки.</p>
+    <p><b>[Alt Стрелка влево]</b> - Нажитие кнопки влево.</p>
+    <p><b>[Alt Стрелка вправо]</b> - Нажитие кнопки вправо.</p>
     <p><b>[Стрелка вверх]</b> или <b>[K]</b> - Листание списка вверх.</p>
     <p><b>[Стрелка вниз]</b> или <b>[J]</b> - Листание списка вниз.</p>
+    <p><b>[Ctrl N]</b> или <b>[Shift I]</b> - Создать новый элемент.</p>
+    <p><b>[Ctrl S]</b> или <b>[Enter]</b> - Сохранить изменения в элементе.</p>
+    <p><b>[Escape]</b> - Отмена действия.</p>
     <p><b>ПРОСМОТРЩИК ДОКУМЕНТОВ:</b></p>
 	<p><b>[PgUp]</b> - Страница вверх.</p>
 	<p><b>[PgDn]</b> - Страница вниз.</p>

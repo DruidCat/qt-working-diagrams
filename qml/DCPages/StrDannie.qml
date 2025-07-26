@@ -48,19 +48,7 @@ Item {
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
     //Функции 
-    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            root.signalToolbar("");//Делаем пустую строку в Toolbar.
-            fnClickedEscape();//Функция нажатия кнопки Escape.
-            event.accepted = true;//Завершаем обработку эвента.
-        }
-		else{
-			if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
-				if(knopkaInfo.visible)
-					fnClickedInfo();//Функция нажатия на кнопку Информация.
-				event.accepted = true;//Завершаем обработку эвента.
-			}
-		}
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
                 if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
@@ -76,11 +64,34 @@ Item {
             }
         }
         else{
-            if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
-                    if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
-                        fnClickedSozdat();//Функция редактирования текста.
+            if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                    if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                        fnClickedNazad();//Функция нажатия кнопки Назад
                     event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+            else{
+                if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                    if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
+                        if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                            fnClickedSozdat();//Функция редактирования текста.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+                else{
+                    if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                        root.signalToolbar("");//Делаем пустую строку в Toolbar.
+                        fnClickedEscape();//Функция нажатия кнопки Escape.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                    else{
+                        if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+                            if(knopkaInfo.visible)
+                                fnClickedInfo();//Функция нажатия на кнопку Информация.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
                 }
             }
         }
@@ -115,6 +126,11 @@ Item {
         root.blUdalitVibor = false;//Запрещаем выбирать документ для удаления.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         lsvZona.enabled = true;//Делаем кликабельную Зону.
+    }
+    function fnClickedNazad() {//Функция нажатия кнопки Назад.
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+        root.clickedNazad();
     }
     function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -176,11 +192,7 @@ Item {
             clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {
-                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                fnClickedEscape();//Функция нажатия кнопки Escape.	
-                root.clickedNazad();
-            }
+            onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
         } 
         DCKnopkaZakrit {
             id: knopkaZakrit
