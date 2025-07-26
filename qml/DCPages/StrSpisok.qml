@@ -51,19 +51,7 @@ Item {
 			root.forceActiveFocus();//Форсируем фокус, по другому не работают горячие клавиши на старте Ментор
 		})
 	}
-    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-            root.signalToolbar("");//Делаем пустую строку в Toolbar.
-            fnClickedEscape();//Функция нажатия кнопки Escape.
-            event.accepted = true;//Завершаем обработку эвента.
-        }
-		else{
-			if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
-				if(knopkaInfo.visible)
-					fnClickedInfo();//Функция нажатия на кнопку Информация.
-				event.accepted = true;//Завершаем обработку эвента.
-			}
-		}
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
                 if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
@@ -79,11 +67,34 @@ Item {
             }
         }
         else{
-            if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
-                    if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
-                        fnClickedSozdat();//Функция редактирования текста.
+            if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                    if(knopkaMenu.visible)//Если кнопка Меню видимая, то...
+                        fnClickedMenu();//Функция нажатия кнопки Меню
                     event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+            else{
+                if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                    if(event.key === Qt.Key_I){//Если нажата клавиша I, то...
+                        if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
+                            fnClickedSozdat();//Функция редактирования текста.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+                else{
+                    if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                        root.signalToolbar("");//Делаем пустую строку в Toolbar.
+                        fnClickedEscape();//Функция нажатия кнопки Escape.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                    else{
+                        if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+                            if(knopkaInfo.visible)
+                                fnClickedInfo();//Функция нажатия на кнопку Информация.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
                 }
             }
         }
@@ -119,6 +130,11 @@ Item {
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         root.blZagolovok = false;//Запрещаем изменять заголовок.
         lsvZona.enabled = true;//Делаем кликабельную Зону.
+    }
+    function fnClickedMenu(){//Функция нажатия кнопки Меню
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+        root.clickedMenu();//Сигнал Меню
     }
     function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -199,11 +215,7 @@ Item {
 			clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-			onClicked: {//Если пришёл сигнал о нажатии кнопки меню, то...
-                cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                fnClickedEscape();//Функция нажатия кнопки Escape.
-				root.clickedMenu();//Сигнал Меню
-            }
+            onClicked: fnClickedMenu();//Функция нажатия кнопки Меню
 		}
         DCKnopkaZakrit {
             id: knopkaZakrit
