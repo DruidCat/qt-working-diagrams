@@ -1,20 +1,21 @@
 ﻿import QtQuick //2.15
-import "qrc:/js/jsJSON.js" as JSSpisok
 
 Item {
     id: root
     //Свойства.
 	property int ntWidth: 2
 	property int ntCoff: 8
-	property color clrTexta: "orange"
-	property color clrFona: "slategray"
+    property color clrTexta: "Orange"
+    property color clrFona: "Slategray"
+    property var modelData: []//Свойства для модели.
+    property alias karusel: pvwKarusel
     //Настройки.
-	height:pvwSpisok.pathItemCount*ntWidth*ntCoff*2
+    height:pvwKarusel.pathItemCount*ntWidth*ntCoff*1.5//Высота виджета
     //Сигналы
-	signal sSpisok(var strSpisok);
+    signal clicked(var strSpisok);//Сигнал нажатия на элемент
     //Функции.
 	Path {//Размеры PathView, и направление бесконечного скролинга.
-		id: pthSpisok
+        id: pthKarusel
 		//Середина - начало.
         startX: root.width/2//Середина строчки списка - это середина Item
         startY: root.height/2
@@ -53,57 +54,51 @@ Item {
 		}
 	}
 	PathView {//Представление модели с бесконечным скролингом.
-		id: pvwSpisok
+        id: pvwKarusel
 		Component {
-			id: cmpPVSpisok
+            id: cmpKarusel
 
 			Rectangle {//Прямоугольник каждой отдельной строчки в модели.
-				id: rctPVSpisok
+                id: rctKarusel
                 width: root.width
-                height: root.ntWidth*root.ntCoff+root.ntCoff
+                height: root.ntWidth*root.ntCoff
 
 				opacity: PathView.prozrachnost//Прозрачность
 				z: PathView.z//Номер отображаемого элемента списка
 				scale: PathView.masshtab//Масштаб
 
-                color: maPVSpisok.containsPress ? Qt.darker(root.clrFona, 1.3) : root.clrFona
+                color: maKarusel.containsPress ? Qt.darker(root.clrFona, 1.3) : root.clrFona
                 radius: (width/(root.ntWidth*root.ntCoff))/root.ntCoff
 
 				Text {//Текст внутри прямоугольника, считанный из модели.
-					anchors.horizontalCenter: rctPVSpisok.horizontalCenter
-					anchors.verticalCenter: rctPVSpisok.verticalCenter
+                    anchors.horizontalCenter: rctKarusel.horizontalCenter
+                    anchors.verticalCenter: rctKarusel.verticalCenter
 
-                    color:maPVSpisok.containsPress ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
-					text: modelData.spisok//Читаем текст из модели.
-					font.pixelSize: (rctPVSpisok.width/text.length>=rctPVSpisok.height)
-                        ? rctPVSpisok.height-root.ntCoff
-                        : rctPVSpisok.width/text.length-root.ntCoff
+                    color:maKarusel.containsPress ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
+                    text: spisok//Читаем текст из модели.
+                    font.pixelSize: (rctKarusel.width/text.length>=rctKarusel.height)
+                        ? rctKarusel.height-root.ntCoff
+                        : rctKarusel.width/text.length-root.ntCoff
 				}
 				MouseArea {
-					id: maPVSpisok
-					anchors.fill: rctPVSpisok
+                    id: maKarusel
+                    anchors.fill: rctKarusel
 					onClicked: {
-                        root.sSpisok(modelData.spisok)
+                        root.clicked(spisok)
 					}
 				}
 			}
 		}
         anchors.fill: root
-        model: JSSpisok.fnSpisokJSON()
-		delegate: cmpPVSpisok
-		path: pthSpisok//Устанавливаем габариты и направление скролинга в представлении
-		pathItemCount: 3//Количество отображаемых элементов в представлении.
-		snapMode: PathView.SnapOneItem
+        model: root.modelData//Добавляем модель из свойства.
+        delegate: cmpKarusel
+        path: pthKarusel//Устанавливаем габариты и направление скролинга в представлении
+        pathItemCount: 3//Количество видимых элементов модели.
+        snapMode: PathView.SnapOneItem
 		Keys.onUpPressed: decrementCurrentIndex();
 		Keys.onDownPressed: incrementCurrentIndex();
-		Connections {//Соединяем сигнал из C++ с действием в QML
-			target: cppqml;//Цель объект класса С++ DCCppQml
-			function onStrSpisokDBChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то...
-                pvwSpisok.model = JSSpisok.fnSpisokJSON();//Перегружаем модель PathView с новыми данными.
-			}
-		}
 	}
 	Component.onCompleted: {//Слот, кода всё представление отрисовалось.
-		pvwSpisok.forceActiveFocus();//Без форсированного фокуса не будут работать клавиши.
+        pvwKarusel.forceActiveFocus();//Без форсированного фокуса не будут работать клавиши.
 	}
 }

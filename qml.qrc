@@ -52,7 +52,7 @@
         <file>qml/DCMethods/DCTextInput.qml</file>
         <file>qml/DCMethods/DCTextUdalit.qml</file>
         <file>qml/DCMethods/DCVopros.qml</file>
-        <file>qml/DCMethods/PathViewSpisok.qml</file>
+        <file>qml/DCMethods/DCPathView.qml</file>
         <file>qml/DCMethods/qmldir</file>
         <file>qml/DCPages/StrAnimaciya.qml</file>
         <file>qml/DCPages/StrDannie.qml</file>

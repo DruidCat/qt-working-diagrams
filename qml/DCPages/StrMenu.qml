@@ -64,7 +64,7 @@ Item {
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
         onClicked: fnClickedEscape()//Функция нажатия кнопки Escape
-    }
+    } 
     onPdfViewerChanged: {//Если просмотрщик поменялся, то...
         cppqml.blPdfViewer = root.pdfViewer;//Отправляем в бизнес логику просмотрщик pdf документов.
     }
@@ -234,7 +234,7 @@ Item {
                 copyStop.visible = false;//Делаем невидимый запрос на удаление.
             }
         }
-	} 
+	}  
     Item {
         id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
@@ -247,10 +247,10 @@ Item {
         }
         Flickable {//Рабочая Зона скроллинга
             id: flZona
-			property int kolichestvoKnopok: 8
+            property int kolichestvoKnopok: 9
             anchors.fill: tmZona//Расстягиваемся по всей рабочей зоне
             contentWidth: tmZona.width//Ширина контента, который будет вложен равен ширине Рабочей Зоны
-            contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*kolichestvoKnopok//8 - количество кнопок.
+            contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*kolichestvoKnopok//9 - количество кнопок.
 			TapHandler {//Нажимаем не на Кнопки, а на пустую область.
                 onTapped: fnClickedEscape();//Функция нажатия кнопки Escape
             }
@@ -307,32 +307,37 @@ Item {
 						}
 					}	
 				}
-                /*
                 DCKnopkaOriginal {
-                    id: knopkaSpisok
+                    id: knopkaFont
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaAvtor.bottom
+                    anchors.top: {
+                        if(root.isMobile)//Если мобильная платформа, то...
+                            return knopkaAvtor.bottom
+                        else//Если не мобильная платформа, то...
+                            return knopkaHotKey.bottom
+                    }
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-                    text: qsTr("участки")
+                    text: qsTr("шрифт")
                     opacityKnopki: 0.8
                     onClicked: {//Слот запускающий
                         fnClickedEscape();//Функция нажатия кнопки Escape
                         //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
-                        pvSpisok.visible ? pvSpisok.visible = false : pvSpisok.visible = true;
+                        if(pvShrift.visible)//Если видимый виджет, то...
+                            pvShrift.visible = false//Делаем невидимым виджет
+                        else{//Если невидимый виджет, то...
+                            pvShrift.visible = true//Делаем видимым виджет
+                            Qt.callLater(function () {//Делаем паузу на такт, иначе не сработает фокус.
+                                pvShrift.karusel.forceActiveFocus()//фокус PathView, чтоб hotkey работали.
+                            })
+                        }
                     }
                 }
-                */
                 DCKnopkaOriginal {
                     id: knopkaQt
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-					anchors.top: {
-        				if(root.isMobile)//Если мобильная платформа, то...
-							return knopkaAvtor.bottom
-						else//Если не мобильная платформа, то...
-							return knopkaHotKey.bottom
-					}
+                    anchors.top: knopkaFont.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
@@ -408,20 +413,24 @@ Item {
                 }
             }
         }
-        /*
-        PathViewSpisok {
-            id: pvSpisok
+        ListModel {//Модель с шриштами
+            id: modelShrift
+            ListElement { spisok: "маленький" }
+            ListElement { spisok: "средний" }
+            ListElement { spisok: "большой" } }
+        DCPathView {
+            id: pvShrift
             visible: false
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
             anchors.margins: root.ntCoff
-            clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-            onSSpisok: function(strSpisok) {
-                pvSpisok.visible = false;
-                knopkaSpisok.text = strSpisok;
+            clrTexta: root.clrMenuText; clrFona: root.clrMenuFon
+            modelData: modelShrift
+            onClicked: function(strShrift) {
+                pvShrift.visible = false;
+                knopkaFont.text = qsTr("шрифт: ") + strShrift;
             }
         }
-        */
         DCMenu {//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
             visible: false//Невидимое меню.
@@ -465,4 +474,6 @@ Item {
             }
         }
 	}
+    Component.onCompleted: {
+    }
 }

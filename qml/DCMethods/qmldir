@@ -3,6 +3,7 @@ module DCMethods
 DCLogoTMK 1.0 DCLogoTMK.qml
 DCMenu 1.0 DCMenu.qml
 DCPassword 1.0 DCPassword.qml
+DCPathView 1.0 DCPathView.qml
 DCPdfMPV 1.0 DCPdfMPV.qml
 DCPoisk 1.0 DCPoisk.qml
 DCProgress 1.0 DCProgress.qml
@@ -12,4 +13,3 @@ DCTextEdit 1.0 DCTextEdit.qml
 DCTextInput 1.0 DCTextInput.qml
 DCTextUdalit 1.0 DCTextUdalit.qml
 DCVopros 1.0 DCVopros.qml
-PathViewSpisok 1.0 PathViewSpisok.qml
