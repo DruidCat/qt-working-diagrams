@@ -31,7 +31,8 @@ Item {
     property int ntLogoTMK: 16
     property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
     property bool appRedaktor: cppqml.blAppRedaktor//true - включен Редактор приложения.
-	property bool isMobile: true;//true - мобильная платформа.
+    property int untShrift: cppqml.untShrift//0-мал, 1-сред, 2-большой.
+    property bool isMobile: true;//true - мобильная платформа.
     property real rlLoader: 1//Коэффициент загрузчика.
     property real rlProgress: 0//Прогресс загрузчика.
     //Настройки.
@@ -57,6 +58,7 @@ Item {
         }
         else{
             if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                pvShrift.visible = false;//Невидимый выбор шрифта
                 fnClickedEscape()//Функция нажатия кнопки Escape
             }
         }
@@ -64,13 +66,17 @@ Item {
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
         onClicked: fnClickedEscape()//Функция нажатия кнопки Escape
-    } 
+    }
     onPdfViewerChanged: {//Если просмотрщик поменялся, то...
         cppqml.blPdfViewer = root.pdfViewer;//Отправляем в бизнес логику просмотрщик pdf документов.
     }
     onAppRedaktorChanged: {//Если Редактор изменился вкл/выкл, то...
         cppqml.blAppRedaktor = root.appRedaktor;//Отправляем в бизнес логику флаг редактора вкл/выкл.
     }
+    onUntShriftChanged: {//Если размер Шрифта изменится, то...
+        cppqml.untShrift = root.untShrift;//Отправляем в бизнес логику размер Шрифта.
+    }
+
     function fnClickedEscape() {//Функция нажатия кнопки Escape
         root.focus = true;//Чтоб горячие клавиши работали.
         menuMenu.visible = false
@@ -251,8 +257,9 @@ Item {
             anchors.fill: tmZona//Расстягиваемся по всей рабочей зоне
             contentWidth: tmZona.width//Ширина контента, который будет вложен равен ширине Рабочей Зоны
             contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*kolichestvoKnopok//9 - количество кнопок.
-			TapHandler {//Нажимаем не на Кнопки, а на пустую область.
-                onTapped: fnClickedEscape();//Функция нажатия кнопки Escape
+            TapHandler {//Нажимаем не на Кнопки, а на пустую область.
+                //ВАЖНО, срабатывает и при нажатии на кнопки!!! Сменяет фокус на root при нажатии на кнопки.
+                onTapped: fnClickedEscape();//Функция нажатия кнопки Escape.
             }
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
                 id: rctZona
@@ -268,10 +275,7 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("логи")
                     opacityKnopki: 0.8
-                    onClicked: {
-                        fnClickedEscape();//Функция нажатия кнопки Escape
-                        root.clickedLogi();//Сигнал нажатия кнопки Логи.
-                    }
+                    onClicked: root.clickedLogi();//Сигнал нажатия кнопки Логи.
                 }
                 DCKnopkaOriginal {
                     id: knopkaAvtor
@@ -282,10 +286,7 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о приложении")
                     opacityKnopki: 0.8
-                    onClicked: {
-                        fnClickedEscape();//Функция нажатия кнопки Escape
-                        root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
-                    }
+                    onClicked: root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
                 }
 				DCKnopkaOriginal {
                     id: knopkaHotKey
@@ -296,10 +297,7 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("горячие клавиши")
                     opacityKnopki: 0.8
-                    onClicked: {
-                        fnClickedEscape();//Функция нажатия кнопки Escape
-                        root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
-                    }
+                    onClicked: root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
 					Component.onCompleted:{//Когда отрисуется Кнопка, то...
 						if(root.isMobile){//Если мобильная платформа, то...
 							flZona.kolichestvoKnopok -= 1;//Удаляем -1 кнопку идущую на Горячие клавиши.
@@ -319,10 +317,20 @@ Item {
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-                    text: qsTr("шрифт")
+                    text: {
+                        let ltShrift = qsTr("шрифт ");//
+                        if(root.untShrift === 0)
+                            ltShrift = ltShrift + qsTr("маленький")
+                        else
+                            if(root.untShrift === 1)
+                                ltShrift = ltShrift + qsTr("средний")
+                            else
+                                ltShrift = ltShrift + qsTr("большой")
+                        pvShrift.currentIndex = root.untShrift
+                        return ltShrift;
+                    }
                     opacityKnopki: 0.8
                     onClicked: {//Слот запускающий
-                        fnClickedEscape();//Функция нажатия кнопки Escape
                         //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
                         if(pvShrift.visible)//Если видимый виджет, то...
                             pvShrift.visible = false//Делаем невидимым виджет
@@ -343,10 +351,7 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о Qt")
                     opacityKnopki: 0.8
-                    onClicked: {//Слот запускающий
-                        fnClickedEscape();//Функция нажатия кнопки Escape
-                        root.clickedQt();//Сигнал нажатия кнопки об Qt.
-                    }
+                    onClicked: root.clickedQt();//Сигнал нажатия кнопки об Qt.
                 }
 				DCKnopkaOriginal {
                     id: knopkaAnimaciya
@@ -357,10 +362,7 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("анимация")
                     opacityKnopki: 0.8
-                    onClicked: {//Слот запускающий
-                        fnClickedEscape();//Функция нажатия кнопки Escape
-                        root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
-                    }
+                    onClicked: root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
                 }
                 DCKnopkaOriginal {
                     id: knopkaPdfViewer
@@ -371,10 +373,7 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.pdfViewer ? qsTr("viewerPDF: вкл") : qsTr("viewerPDF: выкл")
                     opacityKnopki: 0.8
-                    onClicked: {//Слот запускающий
-                        fnClickedEscape();//Функция нажатия кнопки Escape
-                        root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
-                    }
+                    onClicked: root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
                 }
                 DCKnopkaOriginal {
                     id: knopkaRedaktor
@@ -385,10 +384,7 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.appRedaktor ? qsTr("редактор: вкл") : qsTr("редактор: выкл")
                     opacityKnopki: 0.8
-                    onClicked: {//Слот запускающий
-                        fnClickedEscape();//Функция нажатия кнопки Escape
-                        root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
-                    }
+                    onClicked: root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
                 }
                 DCKnopkaOriginal {
                     id: knopkaKatalog
@@ -415,20 +411,21 @@ Item {
         }
         ListModel {//Модель с шриштами
             id: modelShrift
-            ListElement { spisok: "маленький" }
-            ListElement { spisok: "средний" }
-            ListElement { spisok: "большой" } }
+            ListElement { spisok: qsTr("маленький") }
+            ListElement { spisok: qsTr("средний") }
+            ListElement { spisok: qsTr("большой") }
+        }
         DCPathView {
             id: pvShrift
             visible: false
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
             anchors.margins: root.ntCoff
-            clrTexta: root.clrMenuText; clrFona: root.clrMenuFon
+            clrFona: root.clrFona; clrTexta: root.clrMenuText; clrMenuFon: root.clrMenuFon
             modelData: modelShrift
             onClicked: function(strShrift) {
                 pvShrift.visible = false;
-                knopkaFont.text = qsTr("шрифт: ") + strShrift;
+                root.untShrift = pvShrift.currentIndex;//Приравниваем значение к переменной.
             }
         }
         DCMenu {//Меню отображается в Рабочей Зоне приложения.
@@ -441,7 +438,6 @@ Item {
             clrTexta: root.clrMenuText; clrFona: root.clrMenuFon 
             imyaMenu: "vihod"//Глянь в DCMenu все варианты меню в слоте окончательной отрисовки.
             onClicked: function(ntNomer, strMenu) {//Слот сигнала клика по пункту меню.
-                fnClickedEscape();//Функция нажатия кнопки Escape
                 if(ntNomer === 1){//Выход
                     Qt.quit();//Закрыть приложение.
                 }

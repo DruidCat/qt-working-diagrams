@@ -8,6 +8,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_untWidth(0),
                                         m_blPdfViewer(true),
                                         m_blAppRedaktor(true),
+                                        m_untShrift(1),
                                         m_untNastroikiMaxLength(33),
 
 										m_strTitul(""),
@@ -174,6 +175,7 @@ void DCCppQml::ustReestr(){//Запись настроек программы
     m_sttReestr.setValue("/visota_okna", m_untHeight);//Записываем высоту окна
     m_sttReestr.setValue("/pdf_viewer", m_blPdfViewer);//Записываем просмотрщик pdf документов.
     m_sttReestr.setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
+    m_sttReestr.setValue("/shrift", m_untShrift);//Записываем размер Шрифта 0-мал, 1-средний, 2-большой.
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::polReestr(){//Чтение настроек программы
@@ -185,6 +187,7 @@ void DCCppQml::polReestr(){//Чтение настроек программы
     m_untHeight = m_sttReestr.value("/visota_okna", 480).toInt();//Читаем высоту окна, по умолчанию 480
     m_blPdfViewer = m_sttReestr.value("/pdf_viewer", true).toBool();//Читаем просмотрщик документов, по умол 1
     m_blAppRedaktor = m_sttReestr.value("/app_redaktor", true).toBool();//Читаем флаг редактора, по умол 1
+    m_untShrift = m_sttReestr.value("/shrift", 1).toInt();//Читаем шрифт, по умол 1-средний
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::setUntHeight(const uint& untHeight) {//Изменяем высоту окна приложения.
@@ -221,6 +224,20 @@ void DCCppQml::setBlAppRedaktor(const bool& blAppRedaktor){//Изменяем ф
     if (blAppRedaktor != m_blAppRedaktor){//Если не равны значения, то...
         m_blAppRedaktor = blAppRedaktor;//Приравниваем.
         emit blAppRedaktorChanged();//Излучаем сигнал об изменении аргумента.
+    }
+}
+void DCCppQml::setUntShrift(const uint& untShrift){//Изменяем значение шрифта.
+/////////////////////////////////////////////////////////
+//---И З М Е Н Я Е М   З Н А Ч Е Н И Е   Ш Р И Ф Т А---//
+/////////////////////////////////////////////////////////
+    if((untShrift < 0) && (untShrift > 2)){//Если размер шрифта в этих значениях, то...
+        qdebug(tr("Размер шрифта имеет неверное значение."));
+    }
+    else{//Если нет, то...
+        if (untShrift != m_untShrift){//Если не равны значения, то...
+            m_untShrift = untShrift;//Приравниваем.
+            emit untShriftChanged();//Излучаем сигнал об изменении аргумента.
+        }
     }
 }
 QString DCCppQml::strTitul() {//Получить имя Титула.
