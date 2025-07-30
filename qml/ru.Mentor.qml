@@ -5,9 +5,7 @@ import DCPages 1.0//Импортируем Страницы программы.
 
 ApplicationWindow {
 	id: root
-    //Свойства.
-    property int ntWidth: 4
-    property int ntCoff: 8
+    //Свойства. 
     property color clrKnopok: "#ee732d"//Корпаративный оранжевый
     property color clrFona: "#5a6673"//Серый цвет более мягкий, подходящий под оранжевый корпаративный
     property color clrFaila: "yellow"
@@ -15,7 +13,10 @@ ApplicationWindow {
     property color clrMenuText: "#F0F0F0"//Светло серый контрастен к оранжевому.
     property bool pdfViewer: true//false - Отключить pdf просмоторщик.
     property bool appRedaktor: true//false - Отключить Редактор приложения.
-	property bool isMobile: {//Переменная определяющая, мобильная это платформа или нет. true - мобильная.
+    property int shrift: 2;//1 - маленький, 2 - средний, 3 - большой
+    property int ntWidth: 2*shrift
+    property int ntCoff: 8
+    property bool isMobile: {//Переменная определяющая, мобильная это платформа или нет. true - мобильная.
         if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
 			return true;//Это мобильная платформа.
 		else//Эсли не мобильная, то...
@@ -114,6 +115,9 @@ ApplicationWindow {
 				onAppRedaktorChanged: {//Если флаг настройки включения Редактора изменился, то...
                     root.appRedaktor = appRedaktor;//Приравниваем флаг настройки.
                 }
+                onUntShriftChanged: {//Если изменился шрифт в настройках, то...
+                    root.shrift = (untShrift + 1)
+                }
                 onClickedAnimaciya: {
                     stvStr.push(pgStrAnimaciya);//Переходим на страницу Анимация.
                 }
@@ -127,6 +131,7 @@ ApplicationWindow {
             Component.onCompleted: {//После отрисовки страницы...
                 root.pdfViewer = tmMenu.pdfViewer;//Приравниваем флаг настройки. ВАЖНО.
                 root.appRedaktor = tmMenu.appRedaktor;//Приравниваем флаг настройки.
+                root.shrift = (tmMenu.untShrift + 1);//Задаём размер шрифта в приложении.
             }
 		}
 		Stranica {//Debug
