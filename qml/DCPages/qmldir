@@ -7,6 +7,7 @@ StrDebug 1.0 StrDebug.qml
 StrElement 1.0 StrElement.qml
 StrFileDialog 1.0 StrFileDialog.qml
 StrInstrukciya 1.0 StrInstrukciya.qml
+StrKatalog 1.0 StrKatalog.qml
 StrMenu 1.0 StrMenu.qml
 StrOpisanie 1.0 StrOpisanie.qml
 StrPdf 1.0 StrPdf.qml

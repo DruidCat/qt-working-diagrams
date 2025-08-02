@@ -71,11 +71,8 @@ ApplicationWindow {
 		/////////////
 			id: pgStrMenu
 			visible: false
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-            clrRabOblasti: "black"
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             textZagolovok: qsTr("МЕНЮ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrMenu {
@@ -94,24 +91,15 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrMenu.zagolovokLevi; tapZagolovokPravi: pgStrMenu.zagolovokPravi
                 tapToolbarLevi: pgStrMenu.toolbarLevi; tapToolbarPravi: pgStrMenu.toolbarPravi
 				isMobile: root.isMobile
-				onClickedNazad: {
-					stvStr.pop()//Назад страницу
-				}
-                onClickedInfo: {
-                    stvStr.push(pgStrMenuInstrukciya)//Переходим на страницу Инструкции Меню
-                }
-				onClickedLogi: {
-					stvStr.push(pgStrDebug)//Переходим на страницу Логи.
-				}
-                onClickedMentor: {
-                    stvStr.push(pgStrMentor)//Переходим на страницу об Менторе.
-				}
-				onClickedHotKey: {
-					stvStr.push(pgStrHotKey)//Переходим на страницу горячих клавиш.
-                }
-				onClickedQt: {
-					stvStr.push(pgStrQt)//Переходим на страницу об Qt.
-                } 
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+                onClickedInfo: stvStr.push(pgStrInstrukciyaMenu)//Переходим на страницу Инструкции Меню
+                onClickedHotKey: stvStr.push(pgStrHotKey)//Переходим на страницу горячих клавиш.
+                onClickedAnimaciya: stvStr.push(pgStrAnimaciya);//Переходим на страницу Анимация.
+                onClickedLogi: stvStr.push(pgStrLogi)//Переходим на страницу Логи.
+                onClickedMentor: stvStr.push(pgStrMentor)//Переходим на страницу об Менторе.
+                onClickedQt: stvStr.push(pgStrQt)//Переходим на страницу об Qt.
+                onClickedKatalog: stvStr.push(pgStrKatalog)//Переходим на страницу Создать каталог документов
                 onPdfViewerChanged: {//Если флаг настройки pdf Проигрывателя изменился, то...
                     root.pdfViewer = pdfViewer;//Приравниваем флаг настройки.
                 }
@@ -120,9 +108,6 @@ ApplicationWindow {
                 }
                 onUntShriftChanged: {//Если изменился шрифт в настройках, то...
                     root.shrift = (untShrift + 1)
-                }
-                onClickedAnimaciya: {
-                    stvStr.push(pgStrAnimaciya);//Переходим на страницу Анимация.
                 }
                 onSignalZagolovok: function(strZagolovok) {//Слот сигнала signalZagolovok с новым Заголовком.
                     pgStrMenu.textZagolovok = strZagolovok;//Выставляем изменённый Заголовок.
@@ -136,90 +121,108 @@ ApplicationWindow {
                 root.appRedaktor = tmMenu.appRedaktor;//Приравниваем флаг настройки.
                 root.shrift = (tmMenu.untShrift + 1);//Задаём размер шрифта в приложении.
             }
-		}
-        Stranica {//Инструкция Меню.
+        }
+        Stranica {//Горячие Клавиши.
         ///////////////////////////////////
-        ///И Н С Т Р У К Ц И Я   М Е Н Ю///
+        ///Г О Р Я Ч И Е   К Л А В И Ш И///
         ///////////////////////////////////
-            id: pgStrMenuInstrukciya
+            id: pgStrHotKey
             visible: false
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            clrFona: root.clrFona
-            clrTexta: root.clrKnopok
-            clrRabOblasti: "black"
-            textZagolovok: qsTr("ИНСТРУКЦИЯ МЕНЮ")
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
+            textZagolovok: qsTr("ГОРЯЧИЕ КЛАВИШИ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
-                id: tmMenuInstrukciya
-                strInstrukciya: "menu"
-                ntWidth: pgStrMenuInstrukciya.ntWidth; ntCoff: pgStrMenuInstrukciya.ntCoff
-                clrTexta: pgStrMenuInstrukciya.clrTexta; clrFona: pgStrMenuInstrukciya.clrRabOblasti
-                zagolovokX: pgStrMenuInstrukciya.rctStrZagolovok.x;
-                zagolovokY: pgStrMenuInstrukciya.rctStrZagolovok.y
-                zagolovokWidth: pgStrMenuInstrukciya.rctStrZagolovok.width
-                zagolovokHeight: pgStrMenuInstrukciya.rctStrZagolovok.height
-                zonaX: pgStrMenuInstrukciya.rctStrZona.x; zonaY: pgStrMenuInstrukciya.rctStrZona.y
-                zonaWidth: pgStrMenuInstrukciya.rctStrZona.width;
-                zonaHeight: pgStrMenuInstrukciya.rctStrZona.height
-                toolbarX: pgStrMenuInstrukciya.rctStrToolbar.x;
-                toolbarY: pgStrMenuInstrukciya.rctStrToolbar.y
-                toolbarWidth: pgStrMenuInstrukciya.rctStrToolbar.width
-                toolbarHeight: pgStrMenuInstrukciya.rctStrToolbar.height
-                radiusZona: pgStrMenuInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrMenuInstrukciya.zagolovokLevi
-                tapZagolovokPravi: pgStrMenuInstrukciya.zagolovokPravi
-                tapToolbarLevi: pgStrMenuInstrukciya.toolbarLevi
-                tapToolbarPravi: pgStrMenuInstrukciya.toolbarPravi
-                onClickedNazad: {
-                    stvStr.pop()//Назад страницу
+                id: tmHotKey
+                strInstrukciya: "hotkey"
+                ntWidth: pgStrHotKey.ntWidth; ntCoff: pgStrHotKey.ntCoff
+                clrTexta: pgStrHotKey.clrTexta; clrFona: pgStrHotKey.clrRabOblasti
+                zagolovokX: pgStrHotKey.rctStrZagolovok.x; zagolovokY: pgStrHotKey.rctStrZagolovok.y
+                zagolovokWidth: pgStrHotKey.rctStrZagolovok.width
+                zagolovokHeight: pgStrHotKey.rctStrZagolovok.height
+                zonaX: pgStrHotKey.rctStrZona.x; zonaY: pgStrHotKey.rctStrZona.y
+                zonaWidth: pgStrHotKey.rctStrZona.width; zonaHeight: pgStrHotKey.rctStrZona.height
+                toolbarX: pgStrHotKey.rctStrToolbar.x; toolbarY: pgStrHotKey.rctStrToolbar.y
+                toolbarWidth: pgStrHotKey.rctStrToolbar.width
+                toolbarHeight: pgStrHotKey.rctStrToolbar.height
+                radiusZona: pgStrHotKey.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrHotKey.zagolovokLevi; tapZagolovokPravi: pgStrHotKey.zagolovokPravi
+                tapToolbarLevi: pgStrHotKey.toolbarLevi; tapToolbarPravi: pgStrHotKey.toolbarPravi
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+            }
+        }
+        Stranica {//Анимация
+        /////////////////////
+        ///А Н И М А Ц И Я///
+        /////////////////////
+            id: pgStrAnimaciya
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
+            textZagolovok: qsTr("АНИМАЦИЯ")
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
+            StrAnimaciya {
+                id: tmAnimaciya
+                ntWidth: pgStrAnimaciya.ntWidth; ntCoff: pgStrAnimaciya.ntCoff
+                clrTexta: pgStrAnimaciya.clrTexta; clrFona: pgStrAnimaciya.clrRabOblasti
+                clrMenuText: root.clrMenuText; clrMenuFon: pgStrAnimaciya.clrFona
+                zagolovokX: pgStrAnimaciya.rctStrZagolovok.x; zagolovokY: pgStrAnimaciya.rctStrZagolovok.y
+                zagolovokWidth: pgStrAnimaciya.rctStrZagolovok.width
+                zagolovokHeight: pgStrAnimaciya.rctStrZagolovok.height
+                zonaX: pgStrAnimaciya.rctStrZona.x; zonaY: pgStrAnimaciya.rctStrZona.y
+                zonaWidth: pgStrAnimaciya.rctStrZona.width; zonaHeight: pgStrAnimaciya.rctStrZona.height
+                toolbarX: pgStrAnimaciya.rctStrToolbar.x; toolbarY: pgStrAnimaciya.rctStrToolbar.y
+                toolbarWidth: pgStrAnimaciya.rctStrToolbar.width
+                toolbarHeight: pgStrAnimaciya.rctStrToolbar.height
+                tapZagolovokLevi: pgStrAnimaciya.zagolovokLevi
+                tapZagolovokPravi: pgStrAnimaciya.zagolovokPravi
+                tapToolbarLevi: pgStrAnimaciya.toolbarLevi; tapToolbarPravi: pgStrAnimaciya.toolbarPravi
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+                onClickedInfo: stvStr.push(pgStrInstrukciyaAnimacii);//Переключаемся на Инструкцию Анимации.
+                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrAnimaciya.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
             }
         }
-		Stranica {//Debug
-		///////////////
-		///D E B U G///
-		///////////////
-			id: pgStrDebug
+        Stranica {//Логи
+        /////////////
+        ///Л О Г И///
+        /////////////
+            id: pgStrLogi
 			visible: false
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-            clrRabOblasti: "MidnightBlue"
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             textZagolovok: qsTr("ЛОГИ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrDebug {
-				id: tmDebug
-				ntWidth: pgStrDebug.ntWidth; ntCoff: pgStrDebug.ntCoff
-				clrTexta: pgStrDebug.clrTexta; clrFona: pgStrDebug.clrRabOblasti
-				zagolovokX: pgStrDebug.rctStrZagolovok.x; zagolovokY: pgStrDebug.rctStrZagolovok.y
-				zagolovokWidth: pgStrDebug.rctStrZagolovok.width
-				zagolovokHeight: pgStrDebug.rctStrZagolovok.height
-				zonaX: pgStrDebug.rctStrZona.x; zonaY: pgStrDebug.rctStrZona.y 
-				toolbarX: pgStrDebug.rctStrToolbar.x; toolbarY: pgStrDebug.rctStrToolbar.y
-                toolbarWidth: pgStrDebug.rctStrToolbar.width
-                toolbarHeight: pgStrDebug.rctStrToolbar.height
-                radiusZona: pgStrDebug.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrDebug.zagolovokLevi; tapZagolovokPravi: pgStrDebug.zagolovokPravi
-                tapToolbarLevi: pgStrDebug.toolbarLevi; tapToolbarPravi: pgStrDebug.toolbarPravi
-                zonaWidth: pgStrDebug.rctStrZona.width; zonaHeight: pgStrDebug.rctStrZona.height
-				onClickedNazad: {
-					stvStr.pop()//Назад страницу
-				}
+                id: tmLogi
+                ntWidth: pgStrLogi.ntWidth; ntCoff: pgStrLogi.ntCoff
+                clrTexta: pgStrLogi.clrTexta; clrFona: pgStrLogi.clrRabOblasti
+                zagolovokX: pgStrLogi.rctStrZagolovok.x; zagolovokY: pgStrLogi.rctStrZagolovok.y
+                zagolovokWidth: pgStrLogi.rctStrZagolovok.width
+                zagolovokHeight: pgStrLogi.rctStrZagolovok.height
+                zonaX: pgStrLogi.rctStrZona.x; zonaY: pgStrLogi.rctStrZona.y
+                toolbarX: pgStrLogi.rctStrToolbar.x; toolbarY: pgStrLogi.rctStrToolbar.y
+                toolbarWidth: pgStrLogi.rctStrToolbar.width
+                toolbarHeight: pgStrLogi.rctStrToolbar.height
+                radiusZona: pgStrLogi.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrLogi.zagolovokLevi; tapZagolovokPravi: pgStrLogi.zagolovokPravi
+                tapToolbarLevi: pgStrLogi.toolbarLevi; tapToolbarPravi: pgStrLogi.toolbarPravi
+                zonaWidth: pgStrLogi.rctStrZona.width; zonaHeight: pgStrLogi.rctStrZona.height
+
+                onClickedNazad: stvStr.pop()//Назад страницу
 			}
-		}
+        }
         Stranica {//Ментор
-		/////////////////////////////
-		///О   П Р И Л О Ж Е Н И И///
-		/////////////////////////////
+        /////////////////////////////
+        ///О   П Р И Л О Ж Е Н И И///
+        /////////////////////////////
             id: pgStrMentor
-			visible: false
-            ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-			clrRabOblasti: "black"
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             textZagolovok: qsTr("О ПРИЛОЖЕНИИ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
@@ -242,155 +245,73 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrMentor.zagolovokPravi
                 tapToolbarLevi: pgStrMentor.toolbarLevi
                 tapToolbarPravi: pgStrMentor.toolbarPravi
-				onClickedNazad: {
-					stvStr.pop()//Назад страницу
-				}
-			}
-		}
-		Stranica {//Горячие Клавиши.
-		///////////////////////////////////
-		///Г О Р Я Ч И Е   К Л А В И Ш И///
-		///////////////////////////////////
-			id: pgStrHotKey
-			visible: false
-            ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-			clrRabOblasti: "black"
-            textZagolovok: qsTr("ГОРЯЧИЕ КЛАВИШИ")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-				id: tmHotKey
-                strInstrukciya: "hotkey"
-                ntWidth: pgStrHotKey.ntWidth; ntCoff: pgStrHotKey.ntCoff
-				clrTexta: pgStrHotKey.clrTexta; clrFona: pgStrHotKey.clrRabOblasti
-				zagolovokX: pgStrHotKey.rctStrZagolovok.x; zagolovokY: pgStrHotKey.rctStrZagolovok.y
-				zagolovokWidth: pgStrHotKey.rctStrZagolovok.width
-				zagolovokHeight: pgStrHotKey.rctStrZagolovok.height
-				zonaX: pgStrHotKey.rctStrZona.x; zonaY: pgStrHotKey.rctStrZona.y
-				zonaWidth: pgStrHotKey.rctStrZona.width; zonaHeight: pgStrHotKey.rctStrZona.height
-				toolbarX: pgStrHotKey.rctStrToolbar.x; toolbarY: pgStrHotKey.rctStrToolbar.y
-                toolbarWidth: pgStrHotKey.rctStrToolbar.width
-                toolbarHeight: pgStrHotKey.rctStrToolbar.height
-				radiusZona: pgStrHotKey.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrHotKey.zagolovokLevi; tapZagolovokPravi: pgStrHotKey.zagolovokPravi
-                tapToolbarLevi: pgStrHotKey.toolbarLevi; tapToolbarPravi: pgStrHotKey.toolbarPravi
-				onClickedNazad: {
-					stvStr.pop()//Назад страницу
-				}
-			}
-		}
-		Stranica {//Qt
-		/////////////
-		///О   Q T///
-		/////////////
-			id: pgStrQt
-			visible: false
-            ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-			clrRabOblasti: "black"
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+            }
+        }
+        Stranica {//Qt
+        /////////////
+        ///О   Q T///
+        /////////////
+            id: pgStrQt
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             textZagolovok: qsTr("О Qt")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
-				id: tmQt
+                id: tmQt
                 strInstrukciya: "oqt"
                 ntWidth: pgStrQt.ntWidth; ntCoff: pgStrQt.ntCoff
-				clrTexta: pgStrQt.clrTexta; clrFona: pgStrQt.clrRabOblasti
-				zagolovokX: pgStrQt.rctStrZagolovok.x; zagolovokY: pgStrQt.rctStrZagolovok.y
-				zagolovokWidth: pgStrQt.rctStrZagolovok.width
-				zagolovokHeight: pgStrQt.rctStrZagolovok.height
-				zonaX: pgStrQt.rctStrZona.x; zonaY: pgStrQt.rctStrZona.y
-				zonaWidth: pgStrQt.rctStrZona.width; zonaHeight: pgStrQt.rctStrZona.height
-				toolbarX: pgStrQt.rctStrToolbar.x; toolbarY: pgStrQt.rctStrToolbar.y
+                clrTexta: pgStrQt.clrTexta; clrFona: pgStrQt.clrRabOblasti
+                zagolovokX: pgStrQt.rctStrZagolovok.x; zagolovokY: pgStrQt.rctStrZagolovok.y
+                zagolovokWidth: pgStrQt.rctStrZagolovok.width
+                zagolovokHeight: pgStrQt.rctStrZagolovok.height
+                zonaX: pgStrQt.rctStrZona.x; zonaY: pgStrQt.rctStrZona.y
+                zonaWidth: pgStrQt.rctStrZona.width; zonaHeight: pgStrQt.rctStrZona.height
+                toolbarX: pgStrQt.rctStrToolbar.x; toolbarY: pgStrQt.rctStrToolbar.y
                 toolbarWidth: pgStrQt.rctStrToolbar.width
                 toolbarHeight: pgStrQt.rctStrToolbar.height
-				radiusZona: pgStrQt.rctStrZona.radius//Радиус берём из настроек элемента qml
+                radiusZona: pgStrQt.rctStrZona.radius//Радиус берём из настроек элемента qml
                 tapZagolovokLevi: pgStrQt.zagolovokLevi; tapZagolovokPravi: pgStrQt.zagolovokPravi
                 tapToolbarLevi: pgStrQt.toolbarLevi; tapToolbarPravi: pgStrQt.toolbarPravi
-				onClickedNazad: {
-					stvStr.pop()//Назад страницу
-				}
-			}
-		} 
-        Stranica {//Анимация
-        /////////////////////
-        ///А Н И М А Ц И Я///
-        /////////////////////
-            id: pgStrAnimaciya
-            visible: false
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            clrFona: root.clrFona
-            clrTexta: root.clrKnopok
-            clrRabOblasti: "black"
-            textZagolovok: qsTr("АНИМАЦИЯ")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrAnimaciya {
-                id: tmAnimaciya
-                ntWidth: pgStrAnimaciya.ntWidth; ntCoff: pgStrAnimaciya.ntCoff
-                clrTexta: pgStrAnimaciya.clrTexta; clrFona: pgStrAnimaciya.clrRabOblasti
-				clrMenuText: root.clrMenuText; clrMenuFon: pgStrAnimaciya.clrFona
-                zagolovokX: pgStrAnimaciya.rctStrZagolovok.x; zagolovokY: pgStrAnimaciya.rctStrZagolovok.y
-                zagolovokWidth: pgStrAnimaciya.rctStrZagolovok.width
-                zagolovokHeight: pgStrAnimaciya.rctStrZagolovok.height
-                zonaX: pgStrAnimaciya.rctStrZona.x; zonaY: pgStrAnimaciya.rctStrZona.y
-                zonaWidth: pgStrAnimaciya.rctStrZona.width; zonaHeight: pgStrAnimaciya.rctStrZona.height
-                toolbarX: pgStrAnimaciya.rctStrToolbar.x; toolbarY: pgStrAnimaciya.rctStrToolbar.y
-                toolbarWidth: pgStrAnimaciya.rctStrToolbar.width
-                toolbarHeight: pgStrAnimaciya.rctStrToolbar.height
-                tapZagolovokLevi: pgStrAnimaciya.zagolovokLevi
-                tapZagolovokPravi: pgStrAnimaciya.zagolovokPravi
-                tapToolbarLevi: pgStrAnimaciya.toolbarLevi; tapToolbarPravi: pgStrAnimaciya.toolbarPravi
-                onClickedNazad: {
-                    stvStr.pop()//Назад страницу
-                }
-                onClickedInfo: {
-                    stvStr.push(pgStrAnimaciyaInstrukciya);//Переключаемся на страницу Инструкция Анимации.
-                }
-                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
-                    pgStrAnimaciya.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
-                }
+
+                onClickedNazad: stvStr.pop()//Назад страницу
             }
         }
-        Stranica {//Инструкция Анимации.
-        ///////////////////////////////////////////
-        ///И Н С Т Р У К Ц И Я   А Н И М А Ц И И///
-        ///////////////////////////////////////////
-            id: pgStrAnimaciyaInstrukciya
+        Stranica {//Создание Каталога
+        ///////////////////////////////////////
+        ///С О З Д А Н И Е   К А Т А Л О Г А///
+        ///////////////////////////////////////
+            id: pgStrKatalog
             visible: false
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            clrFona: root.clrFona
-            clrTexta: root.clrKnopok
-            clrRabOblasti: "black"
-            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО АНИМАЦИИ")
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
+            textZagolovok: qsTr("СОЗДАНИЕ КАТАЛОГА ДОКУМЕНТОВ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                id: tmAnimaciyaInstrukciya
-                strInstrukciya: "animaciya"
-                ntWidth: pgStrAnimaciyaInstrukciya.ntWidth; ntCoff: pgStrAnimaciyaInstrukciya.ntCoff
-                clrTexta: pgStrAnimaciyaInstrukciya.clrTexta; clrFona: pgStrAnimaciyaInstrukciya.clrRabOblasti
-                zagolovokX: pgStrAnimaciyaInstrukciya.rctStrZagolovok.x;
-                zagolovokY: pgStrAnimaciyaInstrukciya.rctStrZagolovok.y
-                zagolovokWidth: pgStrAnimaciyaInstrukciya.rctStrZagolovok.width
-                zagolovokHeight: pgStrAnimaciyaInstrukciya.rctStrZagolovok.height
-                zonaX: pgStrAnimaciyaInstrukciya.rctStrZona.x; zonaY: pgStrAnimaciyaInstrukciya.rctStrZona.y
-                zonaWidth: pgStrAnimaciyaInstrukciya.rctStrZona.width;
-                zonaHeight: pgStrAnimaciyaInstrukciya.rctStrZona.height
-                toolbarX: pgStrAnimaciyaInstrukciya.rctStrToolbar.x;
-                toolbarY: pgStrAnimaciyaInstrukciya.rctStrToolbar.y
-                toolbarWidth: pgStrAnimaciyaInstrukciya.rctStrToolbar.width
-                toolbarHeight: pgStrAnimaciyaInstrukciya.rctStrToolbar.height
-                radiusZona: pgStrAnimaciyaInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrAnimaciyaInstrukciya.zagolovokLevi
-                tapZagolovokPravi: pgStrAnimaciyaInstrukciya.zagolovokPravi
-                tapToolbarLevi: pgStrAnimaciyaInstrukciya.toolbarLevi
-                tapToolbarPravi: pgStrAnimaciyaInstrukciya.toolbarPravi
-                onClickedNazad: {
-                    stvStr.pop()//Назад страницу
+            StrKatalog {
+                ntWidth: pgStrKatalog.ntWidth; ntCoff: pgStrKatalog.ntCoff
+                clrTexta: pgStrKatalog.clrTexta; clrFona: pgStrKatalog.clrRabOblasti
+                clrMenuText: root.clrMenuText; clrMenuFon: pgStrKatalog.clrFona
+                zagolovokX: pgStrKatalog.rctStrZagolovok.x; zagolovokY: pgStrKatalog.rctStrZagolovok.y
+                zagolovokWidth: pgStrKatalog.rctStrZagolovok.width
+                zagolovokHeight: pgStrKatalog.rctStrZagolovok.height
+                zonaX: pgStrKatalog.rctStrZona.x; zonaY: pgStrKatalog.rctStrZona.y
+                zonaWidth: pgStrKatalog.rctStrZona.width; zonaHeight: pgStrKatalog.rctStrZona.height
+                toolbarX: pgStrKatalog.rctStrToolbar.x; toolbarY: pgStrKatalog.rctStrToolbar.y
+                toolbarWidth: pgStrKatalog.rctStrToolbar.width
+                toolbarHeight: pgStrKatalog.rctStrToolbar.height
+                tapZagolovokLevi: pgStrKatalog.zagolovokLevi
+                tapZagolovokPravi: pgStrKatalog.zagolovokPravi
+                tapToolbarLevi: pgStrKatalog.toolbarLevi; tapToolbarPravi: pgStrKatalog.toolbarPravi
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+                onClickedInfo: stvStr.push(pgStrInstrukciyaKataloga);//Переключаемся на Инструкцию Каталога.
+                onSignalZagolovok: function(strZagolovok) {//Слот сигнала signalZagolovok с новым Заголовком.
+                    pgStrKatalog.textZagolovok = strZagolovok;//Выставляем изменённый Заголовок.
+                }
+                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrKatalog.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
             }
         }
@@ -400,11 +321,8 @@ ApplicationWindow {
 		/////////////////
 			id: pgStrSpisok
             visible: false
-            ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-			clrRabOblasti: "black"
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             textZagolovok: cppqml.strTitul
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrSpisok {
@@ -424,9 +342,8 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrSpisok.zagolovokLevi; tapZagolovokPravi: pgStrSpisok.zagolovokPravi
                 tapToolbarLevi: pgStrSpisok.toolbarLevi; tapToolbarPravi: pgStrSpisok.toolbarPravi
                 appRedaktor: root.appRedaktor
-				onClickedMenu: {//Слот нажатия кнопки Меню.
-					stvStr.push(pgStrMenu)//Перейти на страницу Меню
-				}
+
+                onClickedMenu: stvStr.push(pgStrMenu)//Перейти на страницу Меню
                 onClickedInfo: {
                     tmOpisanie.textTextEdit = cppqml.strTitulOpisanie;//Отправляем текст из бизнес логики.
                     pgStrOpisanie.textZagolovok = pgStrSpisok.textZagolovok;//Заголовок Списка.
@@ -452,11 +369,8 @@ ApplicationWindow {
 		/////////////////////
 			id: pgStrElement
 			visible: false
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-            clrRabOblasti: root.clrStranic
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrElement {
 				id: tmElement
@@ -475,6 +389,7 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrElement.zagolovokLevi; tapZagolovokPravi: pgStrElement.zagolovokPravi
                 tapToolbarLevi: pgStrElement.toolbarLevi; tapToolbarPravi: pgStrElement.toolbarPravi
                 appRedaktor: root.appRedaktor
+
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					cppqml.ullSpisokKod = 0;//НЕ УДАЛЯТЬ! На странице Список код не выбран и равен 0.
 					stvStr.strOpisanie = "titul";//Показываем описание Титульной страницы.
@@ -502,12 +417,9 @@ ApplicationWindow {
 		/////////////////
 			id: pgStrDannie
 			visible: false
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-            clrFaila: root.clrFaila
-			clrRabOblasti: root.clrStranic
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrFaila: root.clrFaila
+            clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
 				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
@@ -526,6 +438,7 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrDannie.zagolovokLevi; tapZagolovokPravi: pgStrDannie.zagolovokPravi
                 tapToolbarLevi: pgStrDannie.toolbarLevi; tapToolbarPravi: pgStrDannie.toolbarPravi
                 pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
+
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					cppqml.ullElementKod = 0;//НЕ УДАЛЯТЬ! На странице Элемент код не выбран и равен 0.
 					stvStr.strOpisanie = "spisok";//Показываем описание элемента Списка.
@@ -562,11 +475,8 @@ ApplicationWindow {
 		///////////
 			id: pgStrPdf
 			visible: false
-			ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-            clrRabOblasti: "black"
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 3.7; toolbarLevi: 4.1; toolbarPravi: 5
             StrPdf {
 				id: tmPdf
@@ -583,6 +493,7 @@ ApplicationWindow {
                 tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
                 tapToolbarLevi: 1; tapToolbarPravi: 1.1
                 pdfViewer: root.pdfViewer
+
 				onClickedNazad: {
 					cppqml.ullDannieKod = 0;//НЕ УДАЛЯТЬ! На странице Данные код не выбран и равен 0.
 					stvStr.pop()//Назад страницу
@@ -595,12 +506,9 @@ ApplicationWindow {
         ///////////////////////////////////
             id: pgStrFileDialog
             visible: false
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            clrFona: root.clrFona
-            clrTexta: root.clrKnopok
-            clrFaila: root.clrFaila
-            clrRabOblasti: root.clrStranic
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok
+            clrFaila: root.clrFaila; clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
@@ -620,6 +528,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrFileDialog.zagolovokPravi
                 tapToolbarLevi: pgStrFileDialog.toolbarLevi; tapToolbarPravi: pgStrFileDialog.toolbarPravi
 				blPlan: root.planFileDialog//Выбор режима открытия проводника для Плана или Данных.
+
                 onClickedZakrit: {//Если нажата кнопка Назад или Закрыть, то...
                     if(root.planFileDialog){//Если открывался План, то...
                         let ltPdfUrl;//Переменная хранящая путь pdf файла.
@@ -647,45 +556,7 @@ ApplicationWindow {
                     pgStrFileDialog.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
                 onClickedInfo: {
-                    stvStr.push(pgStrFDInstrukciya);//Переключаемся на страницу Инструкция проводника.
-                }
-            }
-        }
-        Stranica {//Описание Проводника.
-        ///////////////////////////////////////////////
-        ///И Н С Т Р У К Ц И Я   П Р О В О Д Н И К А///
-        ///////////////////////////////////////////////
-            id: pgStrFDInstrukciya
-            visible: false
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            clrFona: root.clrFona
-            clrTexta: root.clrKnopok
-            clrRabOblasti: "black"
-            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО ПРОВОДНИКУ")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                id: tmFDInstrukciya
-                strInstrukciya: "fdinstrukciya"
-                ntWidth: pgStrFDInstrukciya.ntWidth; ntCoff: pgStrFDInstrukciya.ntCoff
-                clrTexta: pgStrFDInstrukciya.clrTexta; clrFona: pgStrFDInstrukciya.clrRabOblasti
-                zagolovokX: pgStrFDInstrukciya.rctStrZagolovok.x;
-                zagolovokY: pgStrFDInstrukciya.rctStrZagolovok.y
-                zagolovokWidth: pgStrFDInstrukciya.rctStrZagolovok.width
-                zagolovokHeight: pgStrFDInstrukciya.rctStrZagolovok.height
-                zonaX: pgStrFDInstrukciya.rctStrZona.x; zonaY: pgStrFDInstrukciya.rctStrZona.y
-                zonaWidth: pgStrFDInstrukciya.rctStrZona.width;
-                zonaHeight: pgStrFDInstrukciya.rctStrZona.height
-                toolbarX: pgStrFDInstrukciya.rctStrToolbar.x; toolbarY: pgStrFDInstrukciya.rctStrToolbar.y
-                toolbarWidth: pgStrFDInstrukciya.rctStrToolbar.width
-                toolbarHeight: pgStrFDInstrukciya.rctStrToolbar.height
-                radiusZona: pgStrFDInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrFDInstrukciya.zagolovokLevi
-                tapZagolovokPravi: pgStrFDInstrukciya.zagolovokPravi
-                tapToolbarLevi: pgStrFDInstrukciya.toolbarLevi
-                tapToolbarPravi: pgStrFDInstrukciya.toolbarPravi
-                onClickedNazad: {
-                    stvStr.pop()//Назад страницу
+                    stvStr.push(pgStrInstrukciyaFB);//Переключаемся на страницу Инструкция проводника.
                 }
             }
         }
@@ -695,11 +566,8 @@ ApplicationWindow {
 		/////////////////////
 			id: pgStrOpisanie
 			visible: false
-            ntWidth: root.ntWidth
-			ntCoff: root.ntCoff
-			clrFona: root.clrFona
-			clrTexta: root.clrKnopok
-			clrRabOblasti: root.clrStranic
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             onVisibleChanged: {
                 if(visible){
@@ -724,9 +592,8 @@ ApplicationWindow {
                 tapToolbarLevi: pgStrOpisanie.toolbarLevi; tapToolbarPravi: pgStrOpisanie.toolbarPravi
 				strOpisanie: stvStr.strOpisanie//Передаём флаг Отображения конкретного Описания.
                 appRedaktor: root.appRedaktor; isMobile: root.isMobile
-                onClickedNazad: {//Слот нажатия кнопки Назад.
-					stvStr.pop()//Назад страницу
-				}
+
+                onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedPlan: {//Слот нажатия Плана.
 					let ltPdfUrl;//Переменная хранящая путь pdf файла.
                     if(cppqml.blPlanPervi)//Если план еще не задан, то...
@@ -754,11 +621,8 @@ ApplicationWindow {
         /////////////
             id: pgStrPlan
             visible: false
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            clrFona: root.clrFona
-            clrTexta: root.clrKnopok
-            clrRabOblasti: "black"
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             textZagolovok: qsTr("ПЛАН")
             zagolovokLevi: 1.3; zagolovokPravi: 2.6; toolbarLevi: 1.3; toolbarPravi: 4.5
             StrPlan {
@@ -776,9 +640,8 @@ ApplicationWindow {
                 tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
                 tapToolbarLevi: 1.3; tapToolbarPravi: 1.3
                 pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
-                onClickedNazad: {
-                    stvStr.pop()//Назад страницу
-                }
+
+                onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
 					root.planFileDialog = true;//Открываем проводник для План.
                     pgStrFileDialog.textZagolovok = stvStr.infoElement//Заголовок Проводника.
@@ -786,6 +649,141 @@ ApplicationWindow {
                     cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }
+            }
+        }
+        Stranica {//Инструкция Меню.
+        ///////////////////////////////////
+        ///И Н С Т Р У К Ц И Я   М Е Н Ю///
+        ///////////////////////////////////
+            id: pgStrInstrukciyaMenu
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
+            textZagolovok: qsTr("ОПИСАНИЕ НАСТРОЕК МЕНЮ")
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
+            StrInstrukciya {
+                strInstrukciya: "menu"
+                ntWidth: pgStrInstrukciyaMenu.ntWidth; ntCoff: pgStrInstrukciyaMenu.ntCoff
+                clrTexta: pgStrInstrukciyaMenu.clrTexta; clrFona: pgStrInstrukciyaMenu.clrRabOblasti
+                zagolovokX: pgStrInstrukciyaMenu.rctStrZagolovok.x;
+                zagolovokY: pgStrInstrukciyaMenu.rctStrZagolovok.y
+                zagolovokWidth: pgStrInstrukciyaMenu.rctStrZagolovok.width
+                zagolovokHeight: pgStrInstrukciyaMenu.rctStrZagolovok.height
+                zonaX: pgStrInstrukciyaMenu.rctStrZona.x; zonaY: pgStrInstrukciyaMenu.rctStrZona.y
+                zonaWidth: pgStrInstrukciyaMenu.rctStrZona.width;
+                zonaHeight: pgStrInstrukciyaMenu.rctStrZona.height
+                toolbarX: pgStrInstrukciyaMenu.rctStrToolbar.x;
+                toolbarY: pgStrInstrukciyaMenu.rctStrToolbar.y
+                toolbarWidth: pgStrInstrukciyaMenu.rctStrToolbar.width
+                toolbarHeight: pgStrInstrukciyaMenu.rctStrToolbar.height
+                radiusZona: pgStrInstrukciyaMenu.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrInstrukciyaMenu.zagolovokLevi
+                tapZagolovokPravi: pgStrInstrukciyaMenu.zagolovokPravi
+                tapToolbarLevi: pgStrInstrukciyaMenu.toolbarLevi
+                tapToolbarPravi: pgStrInstrukciyaMenu.toolbarPravi
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+            }
+        }
+        Stranica {//Инструкция Анимации.
+        ///////////////////////////////////////////
+        ///И Н С Т Р У К Ц И Я   А Н И М А Ц И И///
+        ///////////////////////////////////////////
+            id: pgStrInstrukciyaAnimacii
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
+            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО АНИМАЦИИ")
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
+            StrInstrukciya {
+                strInstrukciya: "animaciya"
+                ntWidth: pgStrInstrukciyaAnimacii.ntWidth; ntCoff: pgStrInstrukciyaAnimacii.ntCoff
+                clrTexta: pgStrInstrukciyaAnimacii.clrTexta; clrFona: pgStrInstrukciyaAnimacii.clrRabOblasti
+                zagolovokX: pgStrInstrukciyaAnimacii.rctStrZagolovok.x;
+                zagolovokY: pgStrInstrukciyaAnimacii.rctStrZagolovok.y
+                zagolovokWidth: pgStrInstrukciyaAnimacii.rctStrZagolovok.width
+                zagolovokHeight: pgStrInstrukciyaAnimacii.rctStrZagolovok.height
+                zonaX: pgStrInstrukciyaAnimacii.rctStrZona.x; zonaY: pgStrInstrukciyaAnimacii.rctStrZona.y
+                zonaWidth: pgStrInstrukciyaAnimacii.rctStrZona.width;
+                zonaHeight: pgStrInstrukciyaAnimacii.rctStrZona.height
+                toolbarX: pgStrInstrukciyaAnimacii.rctStrToolbar.x;
+                toolbarY: pgStrInstrukciyaAnimacii.rctStrToolbar.y
+                toolbarWidth: pgStrInstrukciyaAnimacii.rctStrToolbar.width
+                toolbarHeight: pgStrInstrukciyaAnimacii.rctStrToolbar.height
+                radiusZona: pgStrInstrukciyaAnimacii.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrInstrukciyaAnimacii.zagolovokLevi
+                tapZagolovokPravi: pgStrInstrukciyaAnimacii.zagolovokPravi
+                tapToolbarLevi: pgStrInstrukciyaAnimacii.toolbarLevi
+                tapToolbarPravi: pgStrInstrukciyaAnimacii.toolbarPravi
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+            }
+        }
+        Stranica {//Описание Создания каталога.
+        ///////////////////////////////////////////
+        ///И Н С Т Р У К Ц И Я   К А Т А Л О Г А///
+        ///////////////////////////////////////////
+            id: pgStrInstrukciyaKataloga
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
+            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО СОЗДАНИЮ КАТАЛОГА ДОКУМЕНТОВ")
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
+            StrInstrukciya {
+                strInstrukciya: "katalog"
+                ntWidth: pgStrInstrukciyaKataloga.ntWidth; ntCoff: pgStrInstrukciyaKataloga.ntCoff
+                clrTexta: pgStrInstrukciyaKataloga.clrTexta; clrFona: pgStrInstrukciyaKataloga.clrRabOblasti
+                zagolovokX: pgStrInstrukciyaKataloga.rctStrZagolovok.x;
+                zagolovokY: pgStrInstrukciyaKataloga.rctStrZagolovok.y
+                zagolovokWidth: pgStrInstrukciyaKataloga.rctStrZagolovok.width
+                zagolovokHeight: pgStrInstrukciyaKataloga.rctStrZagolovok.height
+                zonaX: pgStrInstrukciyaKataloga.rctStrZona.x; zonaY: pgStrInstrukciyaKataloga.rctStrZona.y
+                zonaWidth: pgStrInstrukciyaKataloga.rctStrZona.width;
+                zonaHeight: pgStrInstrukciyaKataloga.rctStrZona.height
+                toolbarX: pgStrInstrukciyaKataloga.rctStrToolbar.x
+                toolbarY: pgStrInstrukciyaKataloga.rctStrToolbar.y
+                toolbarWidth: pgStrInstrukciyaKataloga.rctStrToolbar.width
+                toolbarHeight: pgStrInstrukciyaKataloga.rctStrToolbar.height
+                radiusZona: pgStrInstrukciyaKataloga.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrInstrukciyaKataloga.zagolovokLevi
+                tapZagolovokPravi: pgStrInstrukciyaKataloga.zagolovokPravi
+                tapToolbarLevi: pgStrInstrukciyaKataloga.toolbarLevi
+                tapToolbarPravi: pgStrInstrukciyaKataloga.toolbarPravi
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+            }
+        }
+        Stranica {//Описание Проводника.
+        ///////////////////////////////////////////////
+        ///И Н С Т Р У К Ц И Я   П Р О В О Д Н И К А///
+        ///////////////////////////////////////////////
+            id: pgStrInstrukciyaFB
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
+            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО ПРОВОДНИКУ")
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
+            StrInstrukciya {
+                strInstrukciya: "fdinstrukciya"
+                ntWidth: pgStrInstrukciyaFB.ntWidth; ntCoff: pgStrInstrukciyaFB.ntCoff
+                clrTexta: pgStrInstrukciyaFB.clrTexta; clrFona: pgStrInstrukciyaFB.clrRabOblasti
+                zagolovokX: pgStrInstrukciyaFB.rctStrZagolovok.x;
+                zagolovokY: pgStrInstrukciyaFB.rctStrZagolovok.y
+                zagolovokWidth: pgStrInstrukciyaFB.rctStrZagolovok.width
+                zagolovokHeight: pgStrInstrukciyaFB.rctStrZagolovok.height
+                zonaX: pgStrInstrukciyaFB.rctStrZona.x; zonaY: pgStrInstrukciyaFB.rctStrZona.y
+                zonaWidth: pgStrInstrukciyaFB.rctStrZona.width;
+                zonaHeight: pgStrInstrukciyaFB.rctStrZona.height
+                toolbarX: pgStrInstrukciyaFB.rctStrToolbar.x; toolbarY: pgStrInstrukciyaFB.rctStrToolbar.y
+                toolbarWidth: pgStrInstrukciyaFB.rctStrToolbar.width
+                toolbarHeight: pgStrInstrukciyaFB.rctStrToolbar.height
+                radiusZona: pgStrInstrukciyaFB.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrInstrukciyaFB.zagolovokLevi
+                tapZagolovokPravi: pgStrInstrukciyaFB.zagolovokPravi
+                tapToolbarLevi: pgStrInstrukciyaFB.toolbarLevi
+                tapToolbarPravi: pgStrInstrukciyaFB.toolbarPravi
+
+                onClickedNazad: stvStr.pop()//Назад страницу
             }
         }
 	}  

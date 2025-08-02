@@ -40,7 +40,7 @@
         <file>qml/DCButtons/DCKnopkaVverh.qml</file>
         <file>qml/DCButtons/DCKnopkaZakrit.qml</file>
         <file>qml/DCButtons/qmldir</file>
-        <file>qml/DCMethods/DCLogoTMK.qml</file>
+        <file>qml/DCMethods/DCLogo.qml</file>
         <file>qml/DCMethods/DCMenu.qml</file>
         <file>qml/DCMethods/DCPassword.qml</file>
         <file>qml/DCMethods/DCPdfMPV.qml</file>
@@ -74,5 +74,6 @@
         <file>qml/DCZones/qmldir</file>
         <file>qml/ru.Mentor.qml</file>
         <file>workingdata/plan.pdf</file>
+        <file>qml/DCPages/StrKatalog.qml</file>
     </qresource>
 </RCC>
