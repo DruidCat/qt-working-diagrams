@@ -86,6 +86,28 @@ Item {
 						}
 					}
 				}
+                onHeightChanged: {//Если изменилась высота, значит изменился размер Шрифта в StrMenu.
+                    Qt.callLater(function () {//Делаем паузу на такт,иначе не успеет пересчитаться высота!
+                        txtText.font.pixelSize = rctZona.height-root.ntCoff
+                        if(rctZona.width > txtText.width){//Если длина строки больше длины текста, то...
+                            for(var ltShag=txtText.font.pixelSize; ltShag<rctZona.height-root.ntCoff; ltShag++){
+                                if(txtText.width < rctZona.width){//Если длина текста меньше динны строки
+                                    txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                                    if(txtText.width > rctZona.width){//Но, если переборщили
+                                        txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                                        return;//Выходим из увеличения шрифта.
+                                    }
+                                }
+                            }
+                        }
+                        else{//Если длина строки меньше длины текста, то...
+                            for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                                if(txtText.width > rctZona.width)//Если текст дилиннее строки, то...
+                                    txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                            }
+                        }
+                    })
+                }
 			}
 		}
         anchors.fill: root
