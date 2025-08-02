@@ -109,6 +109,10 @@ Item {
 
 		delegate: cmpMenu
 	}
+    onNtWidthChanged: {//Пересчитывает высоту виджета при изменении масштаба.
+        root.height = lsvMenu.count*(ntWidth*ntCoff+ntCoff)+ntCoff;//Выставляем высоту под размер меню.
+    }
+
 	Component.onCompleted: {//Слот, кода всё представление отрисовалось.
 		if(imyaMenu == "spisok"){//Если это Список, то...
 			lsvMenu.model = JSMenu.vrMenuSpisok;//Перегружаем модель ListView с новыми данными.
