@@ -470,6 +470,4 @@ Item {
             }
         }
 	}
-    Component.onCompleted: {
-    }
 }
