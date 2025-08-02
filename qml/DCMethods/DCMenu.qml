@@ -97,6 +97,28 @@ Item {
 						}
 					}
 				}
+                onHeightChanged: {//Если изменилась высота, значит изменился размер Шрифта в StrMenu.
+                    Qt.callLater(function () {//Делаем паузу на такт,иначе не успеет пересчитаться высота!
+                        txtText.font.pixelSize = rctText.height-root.ntCoff
+                        if(rctText.width > txtText.width){//Если длина строки больше длины текста, то...
+                            for(var ltShag=txtText.font.pixelSize;ltShag<rctText.height-root.ntCoff;ltShag++){
+                                if(txtText.width < rctText.width){//Если длина текста меньше динны строки
+                                    txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                                    if(txtText.width > rctText.width){//Но, если переборщили
+                                        txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                                        return;//Выходим из увеличения шрифта.
+                                    }
+                                }
+                            }
+                        }
+                        else{//Если длина строки меньше длины текста, то...
+                            for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                                if(txtText.width > rctText.width)//Если текст дилиннее строки, то...
+                                    txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                            }
+                        }
+                    })
+                }
 			}
 		}
         anchors.fill: root
@@ -109,10 +131,12 @@ Item {
 
 		delegate: cmpMenu
 	}
-    onNtWidthChanged: {//Пересчитывает высоту виджета при изменении масштаба.
+    onNtWidthChanged: {//Пересчитывает высоту виджета при изменении ntWidth (масштаба).
         root.height = lsvMenu.count*(ntWidth*ntCoff+ntCoff)+ntCoff;//Выставляем высоту под размер меню.
     }
-
+    onNtCoffChanged: {//Пересчитывает высоту виджета при изменении ntCoff (масштаба).
+        root.height = lsvMenu.count*(ntWidth*ntCoff+ntCoff)+ntCoff;//Выставляем высоту под размер меню.
+    }
 	Component.onCompleted: {//Слот, кода всё представление отрисовалось.
 		if(imyaMenu == "spisok"){//Если это Список, то...
 			lsvMenu.model = JSMenu.vrMenuSpisok;//Перегружаем модель ListView с новыми данными.
