@@ -217,7 +217,7 @@ Item {
     Item {
         id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-        DCLogoTMK {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
+        DCLogo {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
             id: lgTMK
             ntCoff: root.ntLogoTMK
             anchors.centerIn: tmZona

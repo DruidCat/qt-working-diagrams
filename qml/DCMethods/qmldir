@@ -1,6 +1,6 @@
 module DCMethods
 
-DCLogoTMK 1.0 DCLogoTMK.qml
+DCLogo 1.0 DCLogo.qml
 DCMenu 1.0 DCMenu.qml
 DCPassword 1.0 DCPassword.qml
 DCPathView 1.0 DCPathView.qml

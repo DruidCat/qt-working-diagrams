@@ -351,7 +351,7 @@ Item {
 			anchors.fill: tmZona
 			color: "transparent"
             clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-            DCLogoTMK {//Логотип до ZonaSpisok, чтоб не перекрывать список.
+            DCLogo {//Логотип до ZonaSpisok, чтоб не перекрывать список.
                 id: lgTMK
                 ntCoff: 16
                 anchors.centerIn: parent

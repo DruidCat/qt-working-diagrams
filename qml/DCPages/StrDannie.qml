@@ -327,7 +327,7 @@ Item {
 			anchors.fill: tmZona
 			color: "transparent"
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-            DCLogoTMK {
+            DCLogo {
                 ntCoff: 16
                 anchors.centerIn: parent
                 clrLogo: tmElement.clrTexta

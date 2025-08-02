@@ -158,7 +158,7 @@ Item {
                     }
                }
             }
-            DCLogoTMK {
+            DCLogo {
                 id: lgTMK
                 ntCoff: root.ntLogoTMK
                 anchors.centerIn: parent
