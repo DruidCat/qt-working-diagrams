@@ -97,6 +97,9 @@ ApplicationWindow {
 				onClickedNazad: {
 					stvStr.pop()//Назад страницу
 				}
+                onClickedInfo: {
+                    stvStr.push(pgStrMenuInstrukciya)//Переходим на страницу Инструкции Меню
+                }
 				onClickedLogi: {
 					stvStr.push(pgStrDebug)//Переходим на страницу Логи.
 				}
@@ -134,6 +137,45 @@ ApplicationWindow {
                 root.shrift = (tmMenu.untShrift + 1);//Задаём размер шрифта в приложении.
             }
 		}
+        Stranica {//Инструкция Меню.
+        ///////////////////////////////////
+        ///И Н С Т Р У К Ц И Я   М Е Н Ю///
+        ///////////////////////////////////
+            id: pgStrMenuInstrukciya
+            visible: false
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            clrFona: root.clrFona
+            clrTexta: root.clrKnopok
+            clrRabOblasti: "black"
+            textZagolovok: qsTr("ИНСТРУКЦИЯ МЕНЮ")
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
+            StrInstrukciya {
+                id: tmMenuInstrukciya
+                strInstrukciya: "menu"
+                ntWidth: pgStrMenuInstrukciya.ntWidth; ntCoff: pgStrMenuInstrukciya.ntCoff
+                clrTexta: pgStrMenuInstrukciya.clrTexta; clrFona: pgStrMenuInstrukciya.clrRabOblasti
+                zagolovokX: pgStrMenuInstrukciya.rctStrZagolovok.x;
+                zagolovokY: pgStrMenuInstrukciya.rctStrZagolovok.y
+                zagolovokWidth: pgStrMenuInstrukciya.rctStrZagolovok.width
+                zagolovokHeight: pgStrMenuInstrukciya.rctStrZagolovok.height
+                zonaX: pgStrMenuInstrukciya.rctStrZona.x; zonaY: pgStrMenuInstrukciya.rctStrZona.y
+                zonaWidth: pgStrMenuInstrukciya.rctStrZona.width;
+                zonaHeight: pgStrMenuInstrukciya.rctStrZona.height
+                toolbarX: pgStrMenuInstrukciya.rctStrToolbar.x;
+                toolbarY: pgStrMenuInstrukciya.rctStrToolbar.y
+                toolbarWidth: pgStrMenuInstrukciya.rctStrToolbar.width
+                toolbarHeight: pgStrMenuInstrukciya.rctStrToolbar.height
+                radiusZona: pgStrMenuInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrMenuInstrukciya.zagolovokLevi
+                tapZagolovokPravi: pgStrMenuInstrukciya.zagolovokPravi
+                tapToolbarLevi: pgStrMenuInstrukciya.toolbarLevi
+                tapToolbarPravi: pgStrMenuInstrukciya.toolbarPravi
+                onClickedNazad: {
+                    stvStr.pop()//Назад страницу
+                }
+            }
+        }
 		Stranica {//Debug
 		///////////////
 		///D E B U G///

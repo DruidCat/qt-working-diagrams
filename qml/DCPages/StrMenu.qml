@@ -40,7 +40,8 @@ Item {
     focus: true;//Чтоб работали горячие клавиши.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
-	signal clickedLogi();//Сигнал нажатия кнопки Логи.
+    signal clickedInfo();//Сигнал нажатия кнопки Информация
+    signal clickedLogi();//Сигнал нажатия кнопки Логи.
     signal clickedMentor();//Сигнал нажатия кнопки об Менторе.
 	signal clickedHotKey();//Сигнал о нажатии кнопки Горячие Клавиши.
     signal clickedQt();//Сигнал нажатия кнопки Об Qt.
@@ -61,6 +62,13 @@ Item {
                 pvShrift.visible = false;//Невидимый выбор шрифта
                 fnClickedEscape()//Функция нажатия кнопки Escape
             }
+            else{//Если не Escape, то...
+                if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+                    if(knopkaInfo.visible)
+                        fnClickedInfo();//Функция нажатия на кнопку Информация.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
@@ -80,6 +88,11 @@ Item {
     function fnClickedEscape() {//Функция нажатия кнопки Escape
         root.focus = true;//Чтоб горячие клавиши работали.
         menuMenu.visible = false
+    }
+    function fnClickedInfo(){//Функция нажатия кнопки Информация
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
+        root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
     }
     function fnKatalog(){//Функция создания каталога pdf документов. 
         signalZagolovok(qsTr("ПРОЦЕСС СОЗДАНИЯ КАТАЛОГА"));//Надпись в заголовке
@@ -132,12 +145,14 @@ Item {
         }
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
+                knopkaInfo.visible = false;//Невидимая кнопка информации.
                 lgTMK.visible = true;//видимый логотип.
                 ldrProgress.active = true;//Запускаем виджет загрузки
                 flZona.visible = false;//невидимые кнопки меню.
                 knopkaMenu.visible = false;//Делаем невидимым кнопку Меню.
             }
             else{//Если таймер выключен, то...
+                knopkaInfo.visible = true;//Видимая кнопка информации.
                 lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
                 lgTMK.visible = false;//Невидимый логотип.
                 ldrProgress.active = false;//Отключаем прогресс.
@@ -158,6 +173,18 @@ Item {
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedVpered();//Закрываем окно Меню
 		}
+        DCKnopkaInfo {
+            id: knopkaInfo
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            visible: true
+            anchors.verticalCenter: tmZagolovok.verticalCenter
+            anchors.right: tmZagolovok.right
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
+            tapWidth: tapHeight*root.tapZagolovokLevi
+            onClicked: fnClickedInfo();//Функция нажатия на кнопку Информации.
+        }
         DCVopros{
             id: copyStart
             anchors.top: tmZagolovok.top
@@ -179,6 +206,7 @@ Item {
             tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
+                    knopkaInfo.visible = false;//Невидимая кнопка информации.
                     knopkaVpered.visible = false;//Конопка Закрыть Невидимая.
                     flZona.visible = false;//невидимые кнопки меню.
                     lgTMK.visible = true;//Видимый логотип.
@@ -186,6 +214,7 @@ Item {
                     root.signalToolbar("Начать процесс создения каталога документов?");//Вопрос.
                 }
                 else{//Если невидимый виджет, то...
+                    knopkaInfo.visible = true;//Видимая кнопка информации.
                     knopkaVpered.visible = true;//Конопка Закрыть Видимая.
                     flZona.visible = true;//видимые кнопки меню.
                     lgTMK.visible = false;//Невидимый логотип.
@@ -221,10 +250,12 @@ Item {
             tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
+                    knopkaInfo.visible = false;//Невидимая кнопка информации.
                     knopkaVpered.visible = false;//Конопка Закрыть Невидимая.
                     ldrProgress.item.text = qsTr("Остановить процесс создания каталога документов?")
                 }
                 else{//Если невидимый виджет, то...
+                    knopkaInfo.visible = true;//Видимая кнопка информации.
                     knopkaVpered.visible = true;//Конопка Закрыть Видимая.
                     if(ldrProgress.item)//Если загрузчик существует, то...
                         ldrProgress.item.text = ""//Удаляем сообщение в Загрузчике.
@@ -267,50 +298,39 @@ Item {
                 color: "transparent"
 
                 DCKnopkaOriginal {
-                    id: knopkaLogi
+                    id: knopkaPdfViewer
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: rctZona.top
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-                    text: qsTr("логи")
+                    text: root.pdfViewer ? qsTr("viewerPDF: вкл") : qsTr("viewerPDF: выкл")
                     opacityKnopki: 0.8
-                    onClicked: root.clickedLogi();//Сигнал нажатия кнопки Логи.
+                    onClicked: root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
                 }
                 DCKnopkaOriginal {
-                    id: knopkaAvtor
-                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaLogi.bottom
-                    anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: root.ntCoff/2
-                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-                    text: qsTr("о приложении")
-                    opacityKnopki: 0.8
-                    onClicked: root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
-                }
-				DCKnopkaOriginal {
                     id: knopkaHotKey
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaAvtor.bottom
+                    anchors.top: knopkaPdfViewer.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("горячие клавиши")
                     opacityKnopki: 0.8
                     onClicked: root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
-					Component.onCompleted:{//Когда отрисуется Кнопка, то...
-						if(root.isMobile){//Если мобильная платформа, то...
-							flZona.kolichestvoKnopok -= 1;//Удаляем -1 кнопку идущую на Горячие клавиши.
-							visible = false;//В мобильной платформе делаем эту кнопку невидимой.
-						}
-					}	
-				}
+                    Component.onCompleted:{//Когда отрисуется Кнопка, то...
+                        if(root.isMobile){//Если мобильная платформа, то...
+                            flZona.kolichestvoKnopok -= 1;//Удаляем -1 кнопку идущую на Горячие клавиши.
+                            visible = false;//В мобильной платформе делаем эту кнопку невидимой.
+                        }
+                    }
+                }
                 DCKnopkaOriginal {
                     id: knopkaFont
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: {
                         if(root.isMobile)//Если мобильная платформа, то...
-                            return knopkaAvtor.bottom
+                            return knopkaRedaktor.bottom
                         else//Если не мобильная платформа, то...
                             return knopkaHotKey.bottom
                     }
@@ -343,20 +363,9 @@ Item {
                     }
                 }
                 DCKnopkaOriginal {
-                    id: knopkaQt
-                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaFont.bottom
-                    anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: root.ntCoff/2
-                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-                    text: qsTr("о Qt")
-                    opacityKnopki: 0.8
-                    onClicked: root.clickedQt();//Сигнал нажатия кнопки об Qt.
-                }
-				DCKnopkaOriginal {
                     id: knopkaAnimaciya
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaQt.bottom
+                    anchors.top: knopkaFont.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
@@ -365,20 +374,42 @@ Item {
                     onClicked: root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
                 }
                 DCKnopkaOriginal {
-                    id: knopkaPdfViewer
+                    id: knopkaLogi
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaAnimaciya.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-                    text: root.pdfViewer ? qsTr("viewerPDF: вкл") : qsTr("viewerPDF: выкл")
+                    text: qsTr("логи")
                     opacityKnopki: 0.8
-                    onClicked: root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
+                    onClicked: root.clickedLogi();//Сигнал нажатия кнопки Логи.
+                }
+                DCKnopkaOriginal {
+                    id: knopkaAvtor
+                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
+                    anchors.top: knopkaLogi.bottom
+                    anchors.left: rctZona.left; anchors.right: rctZona.right
+                    anchors.margins: root.ntCoff/2
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
+                    text: qsTr("о приложении")
+                    opacityKnopki: 0.8
+                    onClicked: root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
+                }
+                DCKnopkaOriginal {
+                    id: knopkaQt
+                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
+                    anchors.top: knopkaAvtor.bottom
+                    anchors.left: rctZona.left; anchors.right: rctZona.right
+                    anchors.margins: root.ntCoff/2
+                    clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
+                    text: qsTr("о Qt")
+                    opacityKnopki: 0.8
+                    onClicked: root.clickedQt();//Сигнал нажатия кнопки об Qt.
                 }
                 DCKnopkaOriginal {
                     id: knopkaRedaktor
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaPdfViewer.bottom
+                    anchors.top: knopkaQt.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
