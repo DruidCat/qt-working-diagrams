@@ -305,7 +305,6 @@ Item {
             anchors.verticalCenter: tmZagolovok.verticalCenter
             anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta
-            clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedOk();//Нажимаем на Ок

@@ -201,7 +201,7 @@ Item {
             id: knopkaPovorotPo
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
-            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
             onClicked: fnClickedPovorotPo();//Функция нажатия кнопки поворота по часовой стрелке.
         }
@@ -209,7 +209,7 @@ Item {
             id: knopkaPovorotProtiv
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: knopkaPovorotPo.left
-            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
             onClicked: fnClickedPovorotProtiv();//Функция нажатия кнопки поворота против часовой стрелке.
         }

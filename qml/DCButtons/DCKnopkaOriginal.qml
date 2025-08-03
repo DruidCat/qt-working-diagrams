@@ -12,6 +12,7 @@ Item {
     property alias pixelSize: txtText.font.pixelSize
 	property color clrKnopki: "transparent"
 	property color clrTexta: "black"
+    property bool enabled: true//true - активирована, false - деактивированна кнопка.
     property real opacityKnopki: 1
     property real opacityTexta: 1
     //Настройки.
@@ -42,26 +43,49 @@ Item {
     }
     //Для Авроры комментируем TapHandler, расскомментируем MouseArea и наоборот.
     TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
-            id: tphKnopkaOriginal
-            onTapped: root.clicked()
+        id: tphKnopkaOriginal
+        onTapped: {
+            if(root.enabled)//Если активирована кнопка, то...
+                root.clicked();//Обрабатываем клик.
+        }
     }
     /*
     MouseArea {
         id: maKnopkaOriginal
         anchors.fill: root
-        onClicked: root.clicked()
+        onClicked: {
+            if(root.enabled)//Если активирована кнопка, то...
+                root.clicked();//Обрабатываем клик.
+        }
     }
     */
     Rectangle {
         id: rctKnopka
         anchors.fill: root
 
-        color: tphKnopkaOriginal.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-        //color: maKnopkaOriginal.containsPress ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+        color: {
+            if(root.enabled)//Если активирована кнопка, то...
+                tphKnopkaOriginal.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            else//Если деактивирована кнопка, то...
+                Qt.darker(clrKnopki, 0.8)
+        }
+        /*
+        color: {
+            if(root.enabled)//Если активирована кнопка, то...
+                maKnopkaOriginal.containsPress ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            else//Если деактивирована кнопка, то...
+                Qt.darker(clrKnopki, 0.8)
+        }
+        */
         radius: height/4
 		smooth: true//Сглаживание.
         opacity: root.opacityKnopki//Прозрачность Кнопки.
-		border.color: Qt.darker(clrKnopki, 1.3)//Граница чуть темнее цвета кнопки
+        border.color: {
+            if(root.enabled)
+                Qt.darker(clrKnopki, 1.3)//Граница чуть темнее цвета кнопки
+            else
+                clrKnopki
+        }
         border.width: 1//Толщина граници кнопки один пиксель
         clip: true//Всё, что будет внутри прямоугольника и будет выходить за границы обрезается.
 
@@ -69,8 +93,20 @@ Item {
             id: txtText
             anchors.horizontalCenter: rctKnopka.horizontalCenter
             anchors.verticalCenter: rctKnopka.verticalCenter
-            color: tphKnopkaOriginal.pressed ? Qt.darker(clrTexta, 1.3) : clrTexta
-            //color: maKnopkaOriginal.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOriginal.pressed ? Qt.darker(clrTexta, 1.3) : clrTexta
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrTexta, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOriginal.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
+                else//Если деактивирована кнопка, то... 
+                    Qt.darker(clrTexta, 0.8)
+            }
+            */
             text: "Кнопка"
             font.pixelSize: root.height - root.ntCoff
 			font.bold: false//Не жирный текст

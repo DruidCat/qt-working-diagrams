@@ -178,7 +178,6 @@ Item {
 			anchors.right: tmZagolovok.right
 			visible: false 
             clrKnopki: root.clrTexta
-            clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedOk();//Нажата кнопка Ок.

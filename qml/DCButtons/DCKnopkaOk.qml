@@ -7,7 +7,7 @@ Item{
     property int ntWidth: 2
     property int ntCoff: 8
     property color clrKnopki: "grey"
-    property color clrFona: "transparent"
+    property bool enabled: true//true - активирована, false - деактивированна кнопка.
     property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
     property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.
@@ -18,14 +18,20 @@ Item{
     //Функции. 
     //Для Авроры комментируем TapHandler, расскомментируем MouseArea и наоборот.
     TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
-            id: tphKnopkaOk
-            onTapped: root.clicked()
+        id: tphKnopkaOk
+        onTapped: {
+            if(root.enabled)//Если активирована кнопка, то...
+                root.clicked();//Обрабатываем клик.
+        }
     }
     /*
     MouseArea {
         id: maKnopkaOk
         anchors.fill: root
-        onClicked: root.clicked()
+        onClicked: {
+            if(root.enabled)//Если активирована кнопка, то...
+                root.clicked();//Обрабатываем клик.
+        }
     }
     */
     Item {
@@ -42,8 +48,20 @@ Item{
             anchors.left: tmKnopkaOk.left
             anchors.topMargin: tmKnopkaOk.height/8
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
         Rectangle {
             id: rctOLevaNiz
@@ -52,8 +70,20 @@ Item{
             anchors.top: rctOLevaVerh.bottom
             anchors.left: tmKnopkaOk.left
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
         Rectangle {
             id: rctOVerh
@@ -63,8 +93,20 @@ Item{
             anchors.left: rctOLevaVerh.right
             anchors.topMargin: tmKnopkaOk.height/8
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
         Rectangle {
             id: rctONiz
@@ -74,8 +116,20 @@ Item{
             anchors.left: rctOLevaNiz.right
             anchors.bottomMargin: tmKnopkaOk.height/8
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
         Rectangle {
             id: rctOPravaVerh
@@ -85,8 +139,20 @@ Item{
             anchors.left: rctOVerh.right
             anchors.topMargin: tmKnopkaOk.height/8
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
         Rectangle {
             id: rctOPravaNiz
@@ -95,8 +161,20 @@ Item{
             anchors.top: rctOPravaVerh.bottom
             anchors.left: rctOVerh.right
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
 
         Rectangle {
@@ -108,8 +186,20 @@ Item{
             anchors.topMargin: tmKnopkaOk.height/8
             anchors.rightMargin: tmKnopkaOk.height/8
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
         Rectangle {
             id: rctKNiz
@@ -120,8 +210,20 @@ Item{
             anchors.bottomMargin: tmKnopkaOk.height/8
             anchors.rightMargin: tmKnopkaOk.height/8
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
         Rectangle {
             id: rctKCentr
@@ -131,8 +233,20 @@ Item{
             anchors.right: rctKNiz.left
             anchors.topMargin: tmKnopkaOk.height/8
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
         Rectangle {
             id: rctKLevaVerh
@@ -142,8 +256,20 @@ Item{
             anchors.right: rctKCentr.left
             anchors.topMargin: tmKnopkaOk.height/8
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
         Rectangle {
             id: rctKLevaNiz
@@ -152,8 +278,20 @@ Item{
             anchors.top: rctKLevaVerh.bottom
             anchors.right: rctKCentr.left
 
-            color: tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            //color: maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    tphKnopkaOk.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            /*
+            color: {
+                if(root.enabled)//Если активирована кнопка, то...
+                    maKnopkaOk.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                else//Если деактивирована кнопка, то...
+                    Qt.darker(clrKnopki, 0.8)
+            }
+            */
         }
     }
 }
