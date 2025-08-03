@@ -48,17 +48,10 @@ Item{
         color: {
             if(root.enabled)//Если активирована кнопка, то...
                 tphKnopkaKruglaya.pressed ?  Qt.darker(clrKnopki, 1.3) : clrKnopki
+                 //maKnopkaKruglaya.containsPress ?  Qt.darker(clrKnopki, 1.3) : clrKnopki
             else//Если деактивирована кнопка, то...
                 Qt.darker(clrKnopki, 0.8)
         }
-        /*
-        color: {
-            if(root.enabled)//Если активирована кнопка, то...
-                 maKnopkaKruglaya.containsPress ?  Qt.darker(clrKnopki, 1.3) : clrKnopki
-            else//Если деактивирована кнопка, то...
-                Qt.darker(clrKnopki, 0.8)
-        }
-        */
         border.width: 1//Толщина границы круга 1
         radius: width/2//Радиус половина ширины, это круг
         smooth: true//сглаживание круглой кнопки
@@ -71,17 +64,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaKruglaya.pressed ? Qt.darker(clrTexta, 1.3) : clrTexta
+                     //maKnopkaKruglaya.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrTexta, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                     maKnopkaKruglaya.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrTexta, 0.8)
-            }
-            */
 			text: "Кнопка"
 			font.bold: false//Не жирный текст
 			font.italic: false//Не курсивный текст

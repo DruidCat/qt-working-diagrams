@@ -45,17 +45,10 @@ Item{
         color: {
             if(root.enabled)//Если активирована кнопка, то...
                 tphKnopkaPlus.pressed ? Qt.darker(clrFona, 1.3) : clrFona
+                //maKnopkaPlus.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
             else//Если деактивирована кнопка, то...
                 Qt.darker(clrFona, 0.8)
         }
-        /*
-        color: {
-            if(root.enabled)//Если активирована кнопка, то...
-                maKnopkaPlus.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
-            else//Если деактивирована кнопка, то...
-                Qt.darker(clrFona, 0.8)
-        }
-        */
         radius: width/4
 
         Rectangle {
@@ -67,17 +60,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPlus.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
             radius: rctKnopkaPlus.width/4
         }
 		Rectangle {
@@ -89,17 +75,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPlus.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPlus.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
             radius: rctKnopkaPlus.width/4
         } 
 	}

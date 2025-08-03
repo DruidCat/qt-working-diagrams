@@ -66,17 +66,10 @@ Item {
         color: {
             if(root.enabled)//Если активирована кнопка, то...
                 tphKnopkaOriginal.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                //maKnopkaOriginal.containsPress ? Qt.darker(clrKnopki, 1.3) : clrKnopki
             else//Если деактивирована кнопка, то...
                 Qt.darker(clrKnopki, 0.8)
         }
-        /*
-        color: {
-            if(root.enabled)//Если активирована кнопка, то...
-                maKnopkaOriginal.containsPress ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-            else//Если деактивирована кнопка, то...
-                Qt.darker(clrKnopki, 0.8)
-        }
-        */
         radius: height/4
 		smooth: true//Сглаживание.
         opacity: root.opacityKnopki//Прозрачность Кнопки.
@@ -96,17 +89,10 @@ Item {
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaOriginal.pressed ? Qt.darker(clrTexta, 1.3) : clrTexta
+                    //maKnopkaOriginal.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrTexta, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaOriginal.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
-                else//Если деактивирована кнопка, то... 
-                    Qt.darker(clrTexta, 0.8)
-            }
-            */
             text: "Кнопка"
             font.pixelSize: root.height - root.ntCoff
 			font.bold: false//Не жирный текст

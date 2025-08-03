@@ -44,17 +44,10 @@ Item{
         color: {
             if(root.enabled)//Если активирована кнопка, то...
                 tphKnopkaMenu.pressed ? Qt.darker(clrFona, 1.3) : clrFona
+                //maKnopkaMenu.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
             else//Если деактивирована кнопка, то...
                 Qt.darker(clrFona, 0.8)
         }
-        /*
-        color: {
-            if(root.enabled)//Если активирована кнопка, то...
-                maKnopkaMenu.containsMouse ? Qt.darker(clrFona, 1.3) : clrFona
-            else//Если деактивирована кнопка, то...
-                Qt.darker(clrFona, 0.8)
-        }
-        */
 		Rectangle{
 			id: rctKnopkaVerh
 			width: rctKnopkaMenu.width
@@ -65,17 +58,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaMenu.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
             radius: rctKnopkaMenu.width/4
 		}
 
@@ -89,17 +75,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaMenu.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
             radius: rctKnopkaMenu.width/4
 		}
 
@@ -113,17 +92,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaMenu.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaMenu.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
             radius: rctKnopkaMenu.width/4
         } 
 	}	

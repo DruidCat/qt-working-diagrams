@@ -52,17 +52,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPovorotProtiv.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
         }
         Rectangle {
             id: rctLeva3
@@ -77,17 +70,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPovorotProtiv.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
         }
         Rectangle {
             id: rctPrava3
@@ -101,17 +87,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPovorotProtiv.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
         }
         Rectangle {
             id: rctVerhLeva
@@ -126,17 +105,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPovorotProtiv.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
         }
         Rectangle {
             id: rctVerhPrava
@@ -151,17 +123,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPovorotProtiv.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
         }
         Rectangle {
             id: rctNizLeva
@@ -176,17 +141,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPovorotProtiv.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
         }
 
         Rectangle {
@@ -202,17 +160,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPovorotProtiv.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
         }
         Rectangle {
             id: rctStrelkaVert
@@ -227,17 +178,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPovorotProtiv.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
         }
         Rectangle {
             id: rctStrelkaGor
@@ -252,17 +196,10 @@ Item{
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
                     tphKnopkaPovorotProtiv.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                    //maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
                 else//Если деактивирована кнопка, то...
                     Qt.darker(clrKnopki, 0.8)
             }
-            /*
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    maKnopkaPovorotProtiv.containsMouse ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, 0.8)
-            }
-            */
         }
     }
 }
