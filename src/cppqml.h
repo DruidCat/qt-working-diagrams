@@ -144,6 +144,10 @@ class DCCppQml : public QObject {
     Q_PROPERTY(bool blKatalogStatus
                     READ blKatalogStatus
                     NOTIFY blKatalogStatusChanged FINAL)
+    Q_PROPERTY(QString strKatalogDocCopy
+                    READ strKatalogDocCopy
+                    WRITE setStrKatalogDocCopy
+                    NOTIFY strKatalogDocCopyChanged FINAL)
 
     Q_PROPERTY(QString strDebug
                     READ strDebug
@@ -225,6 +229,8 @@ public:
 
     uint		untKatalogCopy() { return m_untKatalogCopy; }//Возвращает количество скопированных документов.
     bool		blKatalogStatus() { return m_blKatalogStatus; }//Возвращает статус создания каталога.
+    QString		strKatalogDocCopy() { return m_strKatalogDocCopy; }//Возвращаем путь скопированного документа
+    void		setStrKatalogDocCopy(const QString& strPutNovi);//Установить Новый путь скопированного док.
     Q_INVOKABLE int		polKatalogSummu();//Получить приблизительное сумарное число файлов в менторе.
     Q_INVOKABLE void	copyKatalogStart();//Начать копирование документов в каталог.
 
@@ -275,13 +281,15 @@ signals:
 
     void untKatalogCopyChanged();//Сигнал, что изменился счётчик скопированных документов.
     void blKatalogStatusChanged();//Сигнал, что изменился статус создания каталога.
-                                //
+    void strKatalogDocCopyChanged();//Сигнал, что изменился статус скопированного документа.
+
     void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
 public	slots:
     void slotFileDialogCopy(bool);//Слот обрабатывающий статус скопированного документа из Проводника.
     void slotKatalogCopy(bool);//Слот обрабатывающий статус скопированных pdf документов.
-	void slotDebug(QString strDebug);//Слот обрабатывающий ошибку приходящую по сигналу.
+    void slotKatalogDocCopy(QString);//Слот обрабатывающий путь скопированного документова.
+    void slotDebug(QString strDebug);//Слот обрабатывающий ошибку приходящую по сигналу.
 	void slotTimerDebug();//Слот прерывания от таймена Отладчика.
 
 private:
@@ -329,6 +337,7 @@ private:
 
     uint	m_untKatalogCopy;//Количество скопированных pdf документов.
     bool	m_blKatalogStatus;//Статус создания каталога документов.
+    QString m_strKatalogDocCopy;//Путь скопированного документа.
 
     QString m_strDebug;//Текс ошибки.
 

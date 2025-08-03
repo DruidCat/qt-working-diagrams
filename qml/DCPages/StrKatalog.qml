@@ -79,6 +79,7 @@ Item {
         if(tmrLogo.running)//Если запущен процесс создания каталогов документов, то...
             copyStop.visible = true;//Задаём вопрос "Остановить создание каталога?"
         else{//Если нет, то...
+            txdZona.text = txdZona.strCopy = "";//Отображаем пустую строку в TextEdit модуле.
             fnClickedEscape()//Функция нажатия кнопки Escape
             signalZagolovok(qsTr("СОЗДАНИЕ КАТАЛОГА ДОКУМЕНТОВ"));//при следующем открытии видеть заголовок.
             root.clickedNazad();//Сигнал нажатия кнопки Назад.
@@ -90,6 +91,7 @@ Item {
 		root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
 	}
     function fnClickedKatalog(){//Функция создания каталога pdf документов.
+        txdZona.text = txdZona.strCopy = "";//Отображаем пустую строку в TextEdit модуле.
         signalZagolovok(qsTr("ПРОЦЕСС СОЗДАНИЯ КАТАЛОГА"));//Надпись в заголовке
         copyStart.visible = false;//Делаем невидимый запрос с Вопросом начать создание каталога.
         tmrLogo.running = true;//Запустить анимацию Логотипа.
@@ -185,14 +187,18 @@ Item {
                 if(visible){//Если видимый виджет, то...
                     knopkaInfo.visible = false;//Невидимая кнопка информации.
                     knopkaNazad.visible = false;//Конопка Закрыть Невидимая.
-                    knopkaStart.visible = false;//Невидимая кнопка Старт.
+                    knopkaStart.enabled = false;//Деактивированная кнопка Старт.
+                    knopkaDokumentov.enabled = false;//Деактивированная кнопка
+                    knopkaZadatPut.enabled = false;//Деактивированная кнопка
                     lgTMK.visible = true;//Видимый логотип.
                     root.signalToolbar("Начать процесс создания каталога документов?");//Вопрос.
                 }
                 else{//Если невидимый виджет, то...
                     knopkaInfo.visible = true;//Видимая кнопка информации.
                     knopkaNazad.visible = true;//Конопка Закрыть Видимая.
-                    knopkaStart.visible = true;//Видимая кнопка Старт.
+                    knopkaStart.enabled = true;//Активированная кнопка Старт.
+                    //knopkaDokumentov.enabled = true;//активированная кнопка
+                    //knopkaZadatPut.enabled = true;//активированная кнопка
                     lgTMK.visible = false;//Невидимый логотип.
                     root.signalToolbar("");//Пустое сообщение.
                 }
@@ -247,16 +253,70 @@ Item {
             visible: false
             clrLogo: root.clrTexta; clrFona: root.clrFona
         }
-        DCKnopkaKruglaya {
+        DCKnopkaOriginal {
             id: knopkaStart
-            anchors.centerIn: tmZona
-            clrTexta: root.clrTexta; clrKnopki: "grey"
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight
-            text: "Старт"
+            ntHeight: root.ntWidth; ntCoff: root.ntCoff
+            anchors.top: tmZona.top
+            anchors.left: tmZona.left; anchors.right: tmZona.right
+            anchors.margins: root.ntCoff/2
+            clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
+            text: qsTr("Старт")
+            opacityKnopki: 0.8
             onClicked: copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
         }
+        DCKnopkaOriginal {
+            id: knopkaDokumentov
+            ntHeight: root.ntWidth; ntCoff: root.ntCoff
+            anchors.top: knopkaStart.bottom
+            anchors.left: tmZona.left; anchors.right: tmZona.right
+            anchors.margins: root.ntCoff/2
+            clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
+            text: qsTr("Открыть папку")
+            enabled: false
+            opacityKnopki: 0.8
+            onClicked: {
+
+            }
+        }
+        DCKnopkaOriginal {
+            id: knopkaZadatPut
+            ntHeight: root.ntWidth; ntCoff: root.ntCoff
+            anchors.top: knopkaDokumentov.bottom
+            anchors.left: tmZona.left; anchors.right: tmZona.right
+            anchors.margins: root.ntCoff/2
+            clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
+            text: qsTr("Задать папку сохранения")
+            enabled: false
+            opacityKnopki: 0.8
+            onClicked: {
+
+            }
+        }
+        Rectangle {
+            id: rctTextEdit
+            anchors.top: knopkaZadatPut.bottom; anchors.bottom: tmZona.bottom
+            anchors.left: tmZona.left; anchors.right: tmZona.right
+            border.color: root.clrTexta; border.width: 3
+            color: "transparent"
+            clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
+            DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
+                id: txdZona
+                //Свойства
+                property string strCopy: ""
+                //Настройки
+                ntWidth: root.ntWidth; ntCoff: root.ntCoff
+                readOnly: true//Запрещено редактировать текст
+                textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
+                pixelSize: root.ntWidth/2*root.ntCoff//размер шрифта текста в два раза меньше.
+                radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
+                clrFona: "transparent"//Цвет фона рабочей области
+                clrTexta: root.clrTexta//Цвет текста
+                italic: true//Текст курсивом.
+            }
+        }
+
         DCMenu {
-            id: menuSpisok
+            id: menuSpisok 
             visible: false//Невидимое меню.
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
@@ -298,6 +358,16 @@ Item {
             }
         }
     } 
+    Connections {//Соединяем сигнал из C++ с действием в QML
+        target: cppqml;//Цель объект класса С++ DCCppQml
+        function onStrKatalogDocCopyChanged(){//Слот Если изменилось сообщение в (Q_PROPERTY), то...
+            let ltKatalogDocCopy = cppqml.strKatalogDocCopy;//Считываем сообщение из переменной.
+            if(ltKatalogDocCopy !== ""){//Если не пустая строка, то...
+                txdZona.strCopy = txdZona.strCopy + ltKatalogDocCopy + "\n";//Пишем в переменную из Q_PROPERTY
+                txdZona.text = txdZona.strCopy;//Отображаем собранную строку в TextEdit модуле.
+            }
+        }
+    }
     Component.onCompleted: {//Именно в конце Item, Когда компонет прогрузится полностью...
         root.forceActiveFocus();//Делаем придудительный фокус на root, чтоб тут же работало собыние клавишь.
     }

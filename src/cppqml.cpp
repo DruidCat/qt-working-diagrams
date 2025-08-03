@@ -43,6 +43,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 
                                         m_untKatalogCopy(0),
                                         m_blKatalogStatus(true),
+                                        m_strKatalogDocCopy(""),
 
                                         m_strDebug("")
 {
@@ -125,6 +126,10 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                 SIGNAL(signalKatalogCopy(bool)),
                 this,
                 SLOT(slotKatalogCopy(bool)));//Связываем сигнал статуса скопированного документа в Каталог
+    connect(	m_pDataKatalog,
+                SIGNAL(signalKatalogDocCopy(QString)),
+                this,
+                SLOT(slotKatalogDocCopy(QString)));//Связываем сигнал пути скопированного документа в Каталог
     m_pDataTitul->dbStart();//Записываем первоначальные данные в БД.
     m_pDataSpisok->dbStart();//Записываем первоначальные данные в БД.
     m_pDataElement->dbStart();//Записываем первоначальные данные в БД.
@@ -828,6 +833,16 @@ bool DCCppQml::isPdfPoisk(const QString strPoisk){//Пустой запрос н
 ///////////////////////////////////////////////////
 	return m_pdcclass->isEmpty(strPoisk);//Вернёт true или false.
 }
+
+void DCCppQml::setStrKatalogDocCopy(const QString &strPutNovi){//Установить Новый путь скопированного док.
+ //////////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   П У Т Ь   Д О К У М Е Н Т А---//
+///////////////////////////////////////////////////////////
+    if(strPutNovi != m_strKatalogDocCopy){
+        m_strKatalogDocCopy = strPutNovi;
+        emit strKatalogDocCopyChanged();//Излучаем сигнал в qml с путём скопированного документа.
+    }
+}
 int DCCppQml::polKatalogSummu(){//Получить приблизительное сумарное число файлов в менторе.
 /////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   P D F   С У М М У---//
@@ -873,6 +888,13 @@ void DCCppQml::slotKatalogCopy(bool blStatusCopy){//Обрабатываем с�
             emit blKatalogStatusChanged();//Излучаем сигнал
         }
     }
+}
+
+void DCCppQml::slotKatalogDocCopy(QString strKatalogDocCopy){//Слот обрабатывающий путь скопированного док.
+///////////////////////////////////////////////////////////////////
+//---С Л О Т   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
+///////////////////////////////////////////////////////////////////
+    setStrKatalogDocCopy(strKatalogDocCopy);//Отправляем в Q_PROPERTY путь скопированного документа
 }
 void DCCppQml::slotDebug(QString strDebug){//Слот обрабатывающий ошибку приходящую по сигналу.
 /////////////////////////////////////////////////////////////

@@ -76,6 +76,7 @@ private slots:
 signals:
     void		signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
     void  		signalKatalogCopy(bool);//Сигнал статуса скопированного документа.
+    void  		signalKatalogDocCopy(QString);//Сигнал пути скопированного документа.
     void 		signalKatalogStop();//Окончание процесса копирования.
 };
 
