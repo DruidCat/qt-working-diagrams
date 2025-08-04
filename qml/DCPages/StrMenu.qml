@@ -167,7 +167,7 @@ Item {
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: {
                         if(root.isMobile)//Если мобильная платформа, то...
-                            return knopkaRedaktor.bottom
+                            return knopkaPdfViewer.bottom
                         else//Если не мобильная платформа, то...
                             return knopkaHotKey.bottom
                     }
