@@ -99,6 +99,14 @@ Item {
         root.rlLoader = 100/cppqml.polKatalogSummu();//Считаем коэффициент загрузчика, на который он увелич.
         cppqml.copyKatalogStart();//Начинаем создание каталога
     }
+    function appendDebug(ltDebug) {
+        var lines = txdZona.strCopy.split("\n")
+        lines.push(ltDebug)
+        if (lines.length > 1000)
+            lines = lines.slice(lines.length - 1000)
+        txdZona.strCopy = lines.join("\n")
+        txdZona.text = txdZona.strCopy
+    }
     Connections {//Соединяем сигнал из C++ с действием в QML, перерисовываем, в зависимости от Элемента.
         target: cppqml;//Цель объект класса С++ DCCppQml
         function onBlKatalogStatusChanged(){//Слот Если изменился статус создания каталога(Q_PROPERTY), то...
@@ -146,6 +154,7 @@ Item {
                 knopkaInfo.visible = true;//Видимая кнопка информации.
                 knopkaNastroiki.visible = true;//Видимая кнопка настройки.
                 knopkaStart.visible = true;//Видимая кнопка Старт.
+                txdZona.textEdit.focus = true;//Чтоб работало событие клавишь Листания и всех остальных клавиш
             }
         }
     }
@@ -201,6 +210,7 @@ Item {
                     //knopkaZadatPut.enabled = true;//активированная кнопка
                     lgTMK.visible = false;//Невидимый логотип.
                     root.signalToolbar("");//Пустое сообщение.
+                    txdZona.textEdit.focus = true;//Чтобы работало событие Листания и всех остальных клавиш
                 }
             }
             onClickedOk: fnClickedKatalog();//Функция создания каталога pdf документов.
@@ -232,6 +242,7 @@ Item {
                     knopkaNazad.visible = true;//Конопка Закрыть Видимая.
                     if(ldrProgress.item)//Если загрузчик существует, то...
                         ldrProgress.item.text = ""//Удаляем сообщение в Загрузчике.
+                    txdZona.textEdit.focus = true;//Чтоб работало событие Листания и всех остальных клавиш
                 }
             }
             onClickedOk: {//Слот нажатия кнопки Ок
@@ -306,12 +317,12 @@ Item {
                 //Настройки
                 ntWidth: root.ntWidth; ntCoff: root.ntCoff
                 readOnly: true//Запрещено редактировать текст
+                scrollAuto: true//Автоматически скроллим текст вверх, если он занимает всю область видимости.
                 textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
-                pixelSize: root.ntWidth/2*root.ntCoff//размер шрифта текста в два раза меньше.
+                pixelSize: root.ntWidth/3*root.ntCoff//размер шрифта текста в три раза меньше.
                 radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
                 clrFona: "transparent"//Цвет фона рабочей области
                 clrTexta: root.clrTexta//Цвет текста
-                italic: true//Текст курсивом.
             }
         }
 
@@ -354,7 +365,7 @@ Item {
             onClicked: {
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
-                root.forceActiveFocus();//Придудительный фокус на root, чтоб тут же работало собыние клавишь.
+                txdZona.textEdit.focus = true;//Чтобы работало событие Листания и всех остальных клавиш
             }
         }
     } 
@@ -369,6 +380,6 @@ Item {
         }
     }
     Component.onCompleted: {//Именно в конце Item, Когда компонет прогрузится полностью...
-        root.forceActiveFocus();//Делаем придудительный фокус на root, чтоб тут же работало собыние клавишь.
+        txdZona.textEdit.focus = true;//Чтобы работало событие Листания и всех остальных клавиш
     }
 }
