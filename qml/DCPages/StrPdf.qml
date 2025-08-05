@@ -38,13 +38,13 @@ Item {
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
 		if (event.modifiers & Qt.ControlModifier && event.modifiers & Qt.ShiftModifier){//Если "Ctrl + Shift"
             if(event.key === 43){//Если нажата клавиша "+", то...
-				if(knopkaPovorotPo.visible)//Если кнопка видимая, то...
+                if(knopkaPovorotPo.visible && knopkaPovorotPo.enabled)//Если кнопка видимая, и активная то...
 					fnClickedPovorotPo()//Функция нажатия кнопки поворота по часовой стрелке.
                 event.accepted = true;//Завершаем обработку эвента.
             }
 			else{
 				if(event.key === 95){//Если нажата клавиша "-", то...
-					if(knopkaPovorotProtiv.visible)//Если кнопка видимая, то...
+                    if(knopkaPovorotProtiv.visible && knopkaPovorotProtiv.enabled)//Если видимая и активная,то
 						fnClickedPovorotProtiv()//Функция нажатия кнопки поворота против часовой стрелке.
 					event.accepted = true;//Завершаем обработку эвента.
 				}
@@ -75,7 +75,7 @@ Item {
 					}
 					else{
 						if(event.key === Qt.Key_F){//Если нажат "F", то.
-							if(knopkaPoisk.visible)//Если кнопка поиск видимая, то...
+                            if(knopkaPoisk.visible && knopkaPoisk.enabled)//Если поиск видимый и активный,то..
 								fnClickedPoisk();//Запускаем режим поиска
 							event.accepted = true;//Завершаем обработку эвента.
 						}
@@ -228,11 +228,11 @@ Item {
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
                 ldrProgress.active = true;//Запускаем виджет загрузки
-                knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
-                knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
+                knopkaPovorotPo.enabled = false;//Делаем неактивной кнопку По часовой стрелки.
+                knopkaPovorotProtiv.enabled = false;//Делаем неактивной кнопку Против часовой стрелки.
                 spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
                 pdfScale.visible = false;//Делаем невидимым DCScale
-                knopkaPoisk.visible = false;//Делаем невидимым кнопку Поиска.
+                knopkaPoisk.enabled = false;//Делаем неактивной кнопку Поиска.
             }
             else{//Если таймер выключен, то...
                 ldrProgress.active = false;//Отключаем прогресс. 
@@ -243,9 +243,9 @@ Item {
                 	knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
 				}
 				else{//Если не видим виджет поиска(например при увеличении), то...
-                    knopkaPoisk.visible = true;//Делаем видимым кнопку Поиска.
-					knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
-                	knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
+                    knopkaPoisk.enabled = true;//Делаем активной кнопку Поиска.
+                    knopkaPovorotPo.enabled = true;//Делаем активное кнопку По часовой стрелки.
+                    knopkaPovorotProtiv.enabled = true;//Делаем активной кнопку Против часовой стрелки.
 				}
             }
         }

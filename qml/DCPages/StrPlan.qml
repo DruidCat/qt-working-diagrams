@@ -39,13 +39,13 @@ Item {
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
 		if (event.modifiers & Qt.ControlModifier && event.modifiers & Qt.ShiftModifier){//Если "Ctrl + Shift"
             if(event.key === 43){//Если нажата клавиша "+", то...
-				if(knopkaPovorotPo.visible)//Если кнопка видимая, то...
+                if(knopkaPovorotPo.enabled)//Если кнопка видимая, то...
 					fnClickedPovorotPo()//Функция нажатия кнопки поворота по часовой стрелке.
                 event.accepted = true;//Завершаем обработку эвента.
             }
 			else{
 				if(event.key === 95){//Если нажата клавиша "-", то...
-					if(knopkaPovorotProtiv.visible)//Если кнопка видимая, то...
+                    if(knopkaPovorotProtiv.enabled)//Если кнопка активная, то...
 						fnClickedPovorotProtiv()//Функция нажатия кнопки поворота против часовой стрелке.
 					event.accepted = true;//Завершаем обработку эвента.
 				}
@@ -171,15 +171,15 @@ Item {
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
                 ldrProgress.active = true;//Запускаем виджет загрузки
-                knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
-                knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
+                knopkaPovorotPo.enabled = false;//Делаем неактивной кнопку По часовой стрелки.
+                knopkaPovorotProtiv.enabled = false;//Делаем неактивной кнопку Против часовой стрелки.
                 pdfScale.visible = false;//Делаем невидимым DCScale
                 knopkaSozdat.visible = false;//Невидимая кнопка Создать.
             }
             else{//Если таймер выключен, то...
                 ldrProgress.active = false;//Отключаем прогресс.
-                knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
-                knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
+                knopkaPovorotPo.enabled = true;//Делаем активной кнопку По часовой стрелки.
+                knopkaPovorotProtiv.enabled = true;//Делаем активной кнопку Против часовой стрелки.
                 pdfScale.visible = true;//Делаем видимым DCScale
                 if(root.appRedaktor)//Если редактор включен, то...
                     knopkaSozdat.visible = true;//Видимая кнопка Создать.
