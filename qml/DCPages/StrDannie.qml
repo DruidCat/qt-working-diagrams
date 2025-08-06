@@ -37,7 +37,8 @@ Item {
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого документа, если true
 	property string strDannieRen: "";//Переменная хранит имя Документа, который нужно переименовать
-    property int logoRazmer: 16//Размер Логотипа.
+    property int logoRazmer: 22//Размер Логотипа.
+    property string logoImya: "mentor"//Имя логотипа в DCLogo
     //Настройки
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Не удалять, может Escape не работать.
@@ -328,10 +329,9 @@ Item {
 			color: "transparent"
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
             DCLogo {
-                ntCoff: root.logoRazmer
                 anchors.centerIn: parent
-                clrLogo: tmElement.clrTexta
-                clrFona: tmElement.clrFona
+                ntCoff: root.logoRazmer; logoImya: root.logoImya
+                clrLogo: tmElement.clrTexta; clrFona: tmElement.clrFona
             }
             ZonaDannie {
 				id: lsvZona

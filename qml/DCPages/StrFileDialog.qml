@@ -32,8 +32,9 @@ Item {
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
-    property int logoRazmer: 16//Размер логотипа.
-	property bool blPlan: false//true - проводник открыт для Плана. false - проводник открыт для Данных.
+    property bool blPlan: false//true - проводник открыт для Плана. false - проводник открыт для Данных.
+    property int logoRazmer: 22//Размер Логотипа.
+    property string logoImya: "mentor"//Имя логотипа в DCLogo
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Не удалять, может Escape не работать.
@@ -160,10 +161,9 @@ Item {
             }
             DCLogo {
                 id: lgLogo
-                ntCoff: root.logoRazmer
                 anchors.centerIn: parent
-                clrLogo: root.clrTexta
-                clrFona: root.clrFona
+                ntCoff: root.logoRazmer; logoImya: root.logoImya
+                clrLogo: root.clrTexta; clrFona: root.clrFona
             }
             ZonaFileDialog {
                 id: lsvZona

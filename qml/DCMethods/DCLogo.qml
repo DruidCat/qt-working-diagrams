@@ -6,15 +6,39 @@ Item {
     property int ntCoff: 1
     property color clrFona: "black"
     property color clrLogo: "orange"
-    property string logo: "tmk"
+    property string logoImya: "mentor"
     //Настройки.
     width: ntCoff*14.6875
     height: ntCoff*14.6875
     Image {
         id: imgTMK
         source: {
-            if(logo === "tmk")
-                "qrc:/images/tmk-color-1.svg"
+            if(logoImya === "mentor")
+                return "qrc:/images/tmk-color-1.svg"
+            else{
+                if(logoImya === "tmk")
+                    return "qrc:/images/tmk-color-1.svg"
+                else{
+                    if(logoImya === "tmk-ts")
+                        return "qrc:/images/ts-rus-color.svg"
+                    else{
+                        if(logoImya === "tmk-ts-o")
+                            return "qrc:/images/ts-rus-orange.svg"
+                        else{
+                            if(logoImya === "tmk-ts-o-1")
+                                return "qrc:/images/ts-rus-orange-1.svg"
+                            else{
+                                if(logoImya === "tmk-ts-bw-1")
+                                    return "qrc:/images/ts-rus-black-and-white-1.svg"
+                                else{
+                                    if(logoImya === "tmk-ts-bw-2")
+                                        return "qrc:/images/ts-rus-black-and-white-2.svg"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         sourceSize: Qt.size(232, 232)
         anchors.fill: root

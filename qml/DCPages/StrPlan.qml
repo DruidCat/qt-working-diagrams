@@ -28,8 +28,9 @@ Item {
     property real tapToolbarPravi: 1
     property bool appRedaktor: false//true - включить Редактор приложения.
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
-    property int logoRazmer: 16
     property string source: ""//Путь к pdf документу.
+    property int logoRazmer: 22//Размер Логотипа
+    property string logoImya: "mentor"//Имя логотипа в DCLogo
     //Настройки
 	anchors.fill: parent//Растянется по Родителю.
     //Сигналы
@@ -219,8 +220,8 @@ Item {
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
         DCLogo {//Логотип
             id: lgLogo
-            ntCoff: root.logoRazmer
             anchors.centerIn: tmZona
+            ntCoff: root.logoRazmer; logoImya: root.logoImya
             clrLogo: root.clrTexta; clrFona: root.clrFona
         }
         Loader {//Loader динамической загрузки PDF Viewer

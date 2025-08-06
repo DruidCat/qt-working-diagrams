@@ -34,7 +34,8 @@ Item {
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого Элемента, если true
-    property int logoRazmer: 16//Размер Логотипа.
+    property int logoRazmer: 22//Размер Логотипа.
+    property string logoImya: "mentor"//Имя логотипа в DCLogo
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
@@ -326,10 +327,9 @@ Item {
 			color: "transparent"
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
             DCLogo {//Логотип
-                ntCoff: root.logoRazmer
                 anchors.centerIn: parent
-                clrLogo: root.clrTexta
-                clrFona: root.clrFona
+                ntCoff: root.logoRazmer; logoImya: root.logoImya
+                clrLogo: root.clrTexta; clrFona: root.clrFona
             }
             ZonaElement {
 				id: lsvZona

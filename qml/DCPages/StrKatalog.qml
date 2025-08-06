@@ -28,9 +28,10 @@ Item {
     property real tapZagolovokPravi: 1
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
-    property int logoRazmer: 16//Размер логотипа.
     property real rlLoader: 1//Коэффициент загрузчика.
     property real rlProgress: 0//Прогресс загрузчика.
+    property int logoRazmer: 22//Размер Логотипа.
+    property string logoImya: "mentor"//Имя логотипа в DCLogo
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
 	focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
@@ -259,10 +260,10 @@ Item {
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
         DCLogo {//Логотип
             id: lgLogo
-            ntCoff: root.logoRazmer
             anchors.centerIn: tmZona
-            visible: false
+            ntCoff: root.logoRazmer; logoImya: root.logoImya
             clrLogo: root.clrTexta; clrFona: root.clrFona
+            visible: false
         }
         DCKnopkaOriginal {
             id: knopkaStart
