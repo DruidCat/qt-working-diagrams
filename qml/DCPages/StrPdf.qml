@@ -531,7 +531,7 @@ Item {
 			visible: true
             clrTexta: root.clrTexta; clrFona: root.clrFona
 			radius: root.ntCoff/2
-            from: 1; to: 200; value: 100; stepSize: 25
+            from: 1; to: 300; value: 100; stepSize: 25
             tapKnopkaMinus: root.tapToolbarPravi; tapKnopkaPlus: root.tapToolbarPravi
             onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
 		}

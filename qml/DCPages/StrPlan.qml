@@ -58,7 +58,7 @@ Item {
 					if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
 						pdfLoader.item.renderScale = ntScaleUp/100;
 					else{//Если больше максимального масштаба, то...
-						if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения, то
+                        if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения
 							pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
 					}
 					event.accepted = true;//Завершаем обработку эвента.
@@ -320,7 +320,7 @@ Item {
             visible: true
             clrTexta: root.clrTexta; clrFona: root.clrFona
             radius: root.ntCoff/2
-            from: 1; to: 200; value: 100; stepSize: 25
+            from: 1; to: 300; value: 100; stepSize: 25
             tapKnopkaMinus: root.tapToolbarPravi; tapKnopkaPlus: root.tapToolbarPravi
             onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
         }
