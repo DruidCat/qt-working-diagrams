@@ -27,34 +27,26 @@ Item {
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
     //Функции.
     onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
-        if((value === from) && (value === to)){//Если мин и макс равно значению, то...
+        if(value <= from){//Если число меньше или РАВНО минимального, то...
+            value = from;//Приравниваем минимальному значению число.
             knopkaMinus.enabled = false;//Кнопка Минус не активная.
-            knopkaPlus.enabled = false;//Кнопка Плюс не активная.
+            knopkaPlus.enabled = true;//Кнопка Плюс активная.
         }
         else{
-            if(value <= from){//Если число меньше или РАВНО минимального, то...
-                value = from;//Приравниваем минимальному значению число.
-                knopkaMinus.enabled = false;//Кнопка Минус не активная.
+            if(value >= to){//Если число больше или РАВНО максимально, то...
+                value = to;//Приравниваем максимальное число значению.
+                knopkaPlus.enabled = false;//Кнопка Плюс не активная.
+                knopkaMinus.enabled = true;//Кнопка Минус активная.
+            }
+            else{//Если значение не меньше и не больше заданного, то...
+                knopkaMinus.enabled = true;//Кнопка Минус активная.
                 knopkaPlus.enabled = true;//Кнопка Плюс активная.
             }
-            else{
-                if(value >= to){//Если число больше или РАВНО максимально, то...
-                    value = to;//Приравниваем максимальное число значению.
-                    knopkaPlus.enabled = false;//Кнопка Плюс не активная.
-                    knopkaMinus.enabled = true;//Кнопка Минус активная.
-                }
-                else{//Если значение не меньше и не больше заданного, то...
-                    knopkaMinus.enabled = true;//Кнопка Минус активная.
-                    knopkaPlus.enabled = true;//Кнопка Плюс активная.
-                }
-            }
         }
-
-
-		txnSpinBox.text = value;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
+        txnSpinBox.text = value;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
 	}
 	onFromChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
-		if(from < 0){//С отрицательными числами DCSpinBox не работает.
+        if(from < 0){//С отрицательными числами DCSpinBox не работает.
 			from = 0;//Задаём значение по умолчанию.
 			console.error(qsTr("DCSpinBox.qml::from(int): from - задано отрицательное значение."));
 			if(to < 0){//Если при этом to отрицательное число, то...
@@ -68,10 +60,31 @@ Item {
 				to = 32767;//Задаём значение по умолчанию.
 				console.error(qsTr("DCSpinBox.qml::from(int): from > to."));
 			}
-		}
-	}
+        }
+        //from и to выставленны после не верного ввода свойств, а теперь активируем, деактивируем кнопки.
+        if((from === to)){//Если мин = макс, то...
+            knopkaMinus.enabled = false;//Кнопка Минус не активная.
+            knopkaPlus.enabled = false;//Кнопка Плюс не активная.
+        }
+        else{
+            if(value <= from){//Если число меньше или РАВНО минимального, то...
+                knopkaMinus.enabled = false;//Кнопка Минус не активная.
+                knopkaPlus.enabled = true;//Кнопка Плюс активная.
+            }
+            else {
+                if(value >= to){//Если число больше или РАВНО максимально, то...
+                    knopkaPlus.enabled = false;//Кнопка Плюс не активная.
+                    knopkaMinus.enabled = true;//Кнопка Минус активная.
+                }
+                else{//Если значение не меньше и не больше заданного, то...
+                    knopkaMinus.enabled = true;//Кнопка Минус активная.
+                    knopkaPlus.enabled = true;//Кнопка Плюс активная.
+                }
+            }
+        }
+    }
 	onToChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
-		if(to < 0){//С отрицательными числами DCSpinBox не работает.
+        if(to < 0){//С отрицательными числами DCSpinBox не работает.
 			to = 32767;//Задаём значение по умолчанию.
 			console.error(qsTr("DCSpinBox.qml::to(int): to - задано отрицательное значение."));
 			if(from < 0){//Если при этом from отрицательное число, то...
@@ -85,8 +98,29 @@ Item {
 				to = 32767;//Задаём значение по умолчанию.
 				console.error(qsTr("DCSpinBox.qml::to(int): to < from."));
 			}
-		}
-	}
+        }
+        //from и to выставленны после не верного ввода свойств, а теперь активируем, деактивируем кнопки.
+        if((from === to)){//Если мин = макс, то...
+            knopkaMinus.enabled = false;//Кнопка Минус не активная.
+            knopkaPlus.enabled = false;//Кнопка Плюс не активная.
+        }
+        else{
+            if(value <= from){//Если число меньше или РАВНО минимального, то...
+                knopkaMinus.enabled = false;//Кнопка Минус не активная.
+                knopkaPlus.enabled = true;//Кнопка Плюс активная.
+            }
+            else {
+                if(value >= to){//Если число больше или РАВНО максимально, то...
+                    knopkaPlus.enabled = false;//Кнопка Плюс не активная.
+                    knopkaMinus.enabled = true;//Кнопка Минус активная.
+                }
+                else{//Если значение не меньше и не больше заданного, то...
+                    knopkaMinus.enabled = true;//Кнопка Минус активная.
+                    knopkaPlus.enabled = true;//Кнопка Плюс активная.
+                }
+            }
+        }
+    }
 	onStepSizeChanged: {
 		if(stepSize < 1){
 			stepSize = 1;
