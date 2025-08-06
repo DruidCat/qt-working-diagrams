@@ -70,7 +70,11 @@ Item {
         }
     }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: root
+        anchors.fill: tmZagolovok
+        onClicked: fnClickedEscape()//Функция нажатия кнопки Escape
+    }
+    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
+        anchors.fill: tmToolbar
         onClicked: fnClickedEscape()//Функция нажатия кнопки Escape
     }
     onPdfViewerChanged: {//Если просмотрщик поменялся, то...
@@ -83,6 +87,8 @@ Item {
         cppqml.untShrift = root.untShrift;//Отправляем в бизнес логику размер Шрифта.
     }
     function fnClickedEscape() {//Функция нажатия кнопки Escape
+        if(pvShrift.visible)//Если видимый выбор шрифта, то...
+            pvShrift.visible = false;//Делаем невидимым выбор шрифта.
         root.focus = true;//Чтоб горячие клавиши работали.
         menuMenu.visible = false
     }
@@ -192,8 +198,8 @@ Item {
                         if(pvShrift.visible)//Если видимый виджет, то...
                             pvShrift.visible = false//Делаем невидимым виджет
                         else{//Если невидимый виджет, то...
-                            pvShrift.visible = true//Делаем видимым виджет
-                            Qt.callLater(function () {//Делаем паузу на такт, иначе не сработает фокус.
+                            Qt.callLater(function () {//Делаем паузу,иначе не сработает фокус и pvShrift.ВАЖНО
+                                pvShrift.visible = true//Делаем видимым виджет
                                 pvShrift.karusel.forceActiveFocus()//фокус PathView, чтоб hotkey работали.
                             })
                         }
@@ -323,7 +329,12 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {//Слот сигнала нажатия на кнопку Меню.
-                menuMenu.visible ? menuMenu.visible = false : menuMenu.visible = true;//Изменяем видимость
+                if(menuMenu.visible)//Если меню видимое, то...
+                    menuMenu.visible = false;//То делаем меню невидимым.
+                else {//Если меню невидимое, то...
+                    pvShrift.visible = false;//Делаем невидимым выбор размера Шрифта
+                    menuMenu.visible = true;//Изменяем видимость
+                }
             }
         }
 	}
