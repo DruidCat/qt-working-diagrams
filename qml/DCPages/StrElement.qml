@@ -34,6 +34,7 @@ Item {
     property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
     property bool blPereimenovat: false//Запрос на переименование, если true
     property bool blUdalitVibor: false//Включить режим выбора удаляемого Элемента, если true
+    property int logoRazmer: 16//Размер Логотипа.
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
@@ -325,7 +326,7 @@ Item {
 			color: "transparent"
 			clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
             DCLogo {//Логотип
-                ntCoff: 16
+                ntCoff: root.logoRazmer
                 anchors.centerIn: parent
                 clrLogo: root.clrTexta
                 clrFona: root.clrFona

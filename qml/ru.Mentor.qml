@@ -11,6 +11,7 @@ ApplicationWindow {
     property color clrFaila: "yellow"
     property color clrStranic: "black"
     property color clrMenuText: "#F0F0F0"//Светло серый контрастен к оранжевому.
+    property int logoRazmer: 22//Размер Логотита в приложении.
     property bool pdfViewer: true//false - Отключить pdf просмоторщик.
     property bool appRedaktor: true//false - Отключить Редактор приложения.
     property int shrift: 2;//1 - маленький, 2 - средний, 3 - большой
@@ -22,7 +23,7 @@ ApplicationWindow {
 		else//Эсли не мобильная, то...
 			return false;//Это не мобильная платформа.
 	}
-	property bool planFileDialog: false//Проводник false - открыт для Данных. true - открыт для Плана.
+    property bool planFileDialog: false//Проводник false - открыт для Данных. true - открыт для Плана.
     //Настройки.
     visible: true
 	color: "grey"
@@ -304,6 +305,7 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrKatalog.zagolovokLevi
                 tapZagolovokPravi: pgStrKatalog.zagolovokPravi
                 tapToolbarLevi: pgStrKatalog.toolbarLevi; tapToolbarPravi: pgStrKatalog.toolbarPravi
+                logoRazmer: root.logoRazmer
 
                 onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedInfo: stvStr.push(pgStrInstrukciyaKataloga);//Переключаемся на Инструкцию Каталога.
@@ -342,6 +344,7 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrSpisok.zagolovokLevi; tapZagolovokPravi: pgStrSpisok.zagolovokPravi
                 tapToolbarLevi: pgStrSpisok.toolbarLevi; tapToolbarPravi: pgStrSpisok.toolbarPravi
                 appRedaktor: root.appRedaktor
+                logoRazmer: root.logoRazmer
 
                 onClickedMenu: stvStr.push(pgStrMenu)//Перейти на страницу Меню
                 onClickedInfo: {
@@ -389,6 +392,7 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrElement.zagolovokLevi; tapZagolovokPravi: pgStrElement.zagolovokPravi
                 tapToolbarLevi: pgStrElement.toolbarLevi; tapToolbarPravi: pgStrElement.toolbarPravi
                 appRedaktor: root.appRedaktor
+                logoRazmer: root.logoRazmer
 
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					cppqml.ullSpisokKod = 0;//НЕ УДАЛЯТЬ! На странице Список код не выбран и равен 0.
@@ -438,6 +442,7 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrDannie.zagolovokLevi; tapZagolovokPravi: pgStrDannie.zagolovokPravi
                 tapToolbarLevi: pgStrDannie.toolbarLevi; tapToolbarPravi: pgStrDannie.toolbarPravi
                 pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
+                logoRazmer: root.logoRazmer
 
 				onClickedNazad: {//Слот нажатия кнопки Назад.
 					cppqml.ullElementKod = 0;//НЕ УДАЛЯТЬ! На странице Элемент код не выбран и равен 0.
@@ -493,6 +498,7 @@ ApplicationWindow {
                 tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
                 tapToolbarLevi: 1; tapToolbarPravi: 1.1
                 pdfViewer: root.pdfViewer
+                logoRazmer: root.logoRazmer
 
 				onClickedNazad: {
 					cppqml.ullDannieKod = 0;//НЕ УДАЛЯТЬ! На странице Данные код не выбран и равен 0.
@@ -528,6 +534,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrFileDialog.zagolovokPravi
                 tapToolbarLevi: pgStrFileDialog.toolbarLevi; tapToolbarPravi: pgStrFileDialog.toolbarPravi
 				blPlan: root.planFileDialog//Выбор режима открытия проводника для Плана или Данных.
+                logoRazmer: root.logoRazmer
 
                 onClickedZakrit: {//Если нажата кнопка Назад или Закрыть, то...
                     if(root.planFileDialog){//Если открывался План, то...
@@ -640,6 +647,7 @@ ApplicationWindow {
                 tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
                 tapToolbarLevi: 1.3; tapToolbarPravi: 1.3
                 pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
+                logoRazmer: root.logoRazmer
 
                 onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedSozdat: {//Слот нажатия кнопки Создать.

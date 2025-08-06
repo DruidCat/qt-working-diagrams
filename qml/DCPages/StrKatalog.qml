@@ -28,7 +28,7 @@ Item {
     property real tapZagolovokPravi: 1
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
-    property int ntLogoTMK: 16
+    property int logoRazmer: 16//Размер логотипа.
     property real rlLoader: 1//Коэффициент загрузчика.
     property real rlProgress: 0//Прогресс загрузчика.
     //Настройки.
@@ -129,27 +129,27 @@ Item {
         property bool blLogoTMK: false
         onTriggered: {
             if(blLogoTMK){//Если true, то...
-                lgTMK.ntCoff++;
-                if(lgTMK.ntCoff >= root.ntLogoTMK)
+                lgLogo.ntCoff++;
+                if(lgLogo.ntCoff >= root.logoRazmer)
                     blLogoTMK = false;
             }
             else{
-                lgTMK.ntCoff--;
-                if(lgTMK.ntCoff <= 1)
+                lgLogo.ntCoff--;
+                if(lgLogo.ntCoff <= 1)
                     blLogoTMK = true;
             }
         }
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
-                lgTMK.visible = true;//видимый логотип.
+                lgLogo.visible = true;//видимый логотип.
                 ldrProgress.active = true;//Запускаем виджет загрузки
                 knopkaInfo.visible = false;//Невидимая кнопка информации.
                 knopkaNastroiki.visible = false;//Невидимая кнопка настройки.
                 knopkaStart.visible = false;//Невидимая кнопка Старт.
             }
             else{//Если таймер выключен, то...
-                lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
-                lgTMK.visible = false;//Невидимый логотип.
+                lgLogo.ntCoff = root.logoRazmer;//Задаём размер логотипа.
+                lgLogo.visible = false;//Невидимый логотип.
                 ldrProgress.active = false;//Отключаем прогресс.
                 knopkaInfo.visible = true;//Видимая кнопка информации.
                 knopkaNastroiki.visible = true;//Видимая кнопка настройки.
@@ -199,7 +199,7 @@ Item {
                     knopkaStart.enabled = false;//Деактивированная кнопка Старт.
                     knopkaDokumentov.enabled = false;//Деактивированная кнопка
                     knopkaZadatPut.enabled = false;//Деактивированная кнопка
-                    lgTMK.visible = true;//Видимый логотип.
+                    lgLogo.visible = true;//Видимый логотип.
                     root.signalToolbar("Начать процесс создания каталога документов?");//Вопрос.
                 }
                 else{//Если невидимый виджет, то...
@@ -208,7 +208,7 @@ Item {
                     knopkaStart.enabled = true;//Активированная кнопка Старт.
                     //knopkaDokumentov.enabled = true;//активированная кнопка
                     //knopkaZadatPut.enabled = true;//активированная кнопка
-                    lgTMK.visible = false;//Невидимый логотип.
+                    lgLogo.visible = false;//Невидимый логотип.
                     root.signalToolbar("");//Пустое сообщение.
                     txdZona.textEdit.focus = true;//Чтобы работало событие Листания и всех остальных клавиш
                 }
@@ -257,9 +257,9 @@ Item {
     Item {//Данные Зона
         id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-        DCLogo {//Логотип до flZona, чтоб не перекрывать список.
-            id: lgTMK
-            ntCoff: root.ntLogoTMK
+        DCLogo {//Логотип
+            id: lgLogo
+            ntCoff: root.logoRazmer
             anchors.centerIn: tmZona
             visible: false
             clrLogo: root.clrTexta; clrFona: root.clrFona

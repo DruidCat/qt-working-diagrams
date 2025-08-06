@@ -28,7 +28,7 @@ Item {
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
     property bool pdfViewer: false//true - собственный просмотщик pdf документов.
-    property int ntLogoTMK: 16
+    property int logoRazmer: 16
     //Настройки
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Чтоб работали горячие клавиши.
@@ -215,13 +215,13 @@ Item {
         property bool blLogoTMK: false
         onTriggered: {
             if(blLogoTMK){//Если true, то...
-                lgTMK.ntCoff++;
-                if(lgTMK.ntCoff >= root.ntLogoTMK)
+                lgLogo.ntCoff++;
+                if(lgLogo.ntCoff >= root.logoRazmer)
                     blLogoTMK = false;
             }
             else{
-                lgTMK.ntCoff--;
-                if(lgTMK.ntCoff <= 1)
+                lgLogo.ntCoff--;
+                if(lgLogo.ntCoff <= 1)
                     blLogoTMK = true;
             }
         }
@@ -411,9 +411,9 @@ Item {
 	Item {
 		id: tmZona
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.	
-        DCLogo {//Логотип до ZonaFileDialog, чтоб не перекрывать список.
-			id: lgTMK
-			ntCoff: root.ntLogoTMK
+        DCLogo {//Логотип
+            id: lgLogo
+            ntCoff: root.logoRazmer
 			anchors.centerIn: tmZona
             clrLogo: root.clrTexta; clrFona: root.clrFona
 		}
@@ -457,7 +457,7 @@ Item {
             function onVisibleChanged(){//Изменилась видимость виджета отображения pdf документа.
                 if(pdfLoader.item.visible){//Виджет видимый.
                     tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
-                    lgTMK.ntCoff = root.ntLogoTMK;//Задаём размер логотипа.
+                    lgLogo.ntCoff = root.logoRazmer;//Задаём размер логотипа.
                 }
                 else{//Виджет не видимый. При открытии этот флаг не изменится.
                     if(!pdfLoader.blClose)//Если Pdf загрузчик не закрываем... НЕ УДАЛЯТЬ!

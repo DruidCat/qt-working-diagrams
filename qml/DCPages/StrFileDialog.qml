@@ -32,7 +32,7 @@ Item {
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
-    property int ntLogoTMK: 16
+    property int logoRazmer: 16//Размер логотипа.
 	property bool blPlan: false//true - проводник открыт для Плана. false - проводник открыт для Данных.
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
@@ -80,7 +80,7 @@ Item {
 	}
     function fnCopyStop(){//Останавливаем анимацию копирования.
         tmrLogoTMK.running = false;//Останавливаем таймер анимации логотипа ТМК.
-        lgTMK.ntCoff = root.ntLogoTMK;//По умолчанию размер логотипа ТМК.
+        lgLogo.ntCoff = root.logoRazmer;//По умолчанию размер логотипа ТМК.
         knopkaNazad.visible= true//Делаем кнопку назад видимой.
         knopkaZakrit.visible = true//Делаем кнопку закрыть видимой.
         lsvZona.visible = true;//Делаем видимую зону с Проводником.
@@ -147,20 +147,20 @@ Item {
                 repeat: true
                 onTriggered: {
                     if(blLogoTMK){//Если true, то...
-                        lgTMK.ntCoff++;
-                        if(lgTMK.ntCoff >= root.ntLogoTMK)
+                        lgLogo.ntCoff++;
+                        if(lgLogo.ntCoff >= root.logoRazmer)
                             blLogoTMK = false;
                     }
                     else{
-                        lgTMK.ntCoff--;
-                        if(lgTMK.ntCoff <= 1)
+                        lgLogo.ntCoff--;
+                        if(lgLogo.ntCoff <= 1)
                             blLogoTMK = true;
                     }
                }
             }
             DCLogo {
-                id: lgTMK
-                ntCoff: root.ntLogoTMK
+                id: lgLogo
+                ntCoff: root.logoRazmer
                 anchors.centerIn: parent
                 clrLogo: root.clrTexta
                 clrFona: root.clrFona
