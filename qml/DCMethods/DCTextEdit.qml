@@ -86,7 +86,14 @@ Item {
                 font.pixelSize: root.pixelSize//размер шрифта текста.
                 wrapMode: TextEdit.Wrap//Текст в конце строки переносим на новую строку.
                 readOnly: true//Запрещено редактировать.
-                focus: root.readOnly ? true : true//Чтоб курсор активный был, и горячие клавиши работали.
+                focus: {
+                    if(root.readOnly){//Если режим чтения, то...
+                        flcListat.focus = true;//Чтоб курсор активный был, и горячие клавиши работали.
+                        return false;
+                    }
+                    else//Если режим редактирования текста, то...
+                        return true;//Чтоб виртуальная клавиатура появлялась на Android.
+                }
                 selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
                 onCursorRectangleChanged: flcListat.fnEnsureVisible(cursorRectangle)
                 onTextChanged: {//Если текст изменяется, то...
