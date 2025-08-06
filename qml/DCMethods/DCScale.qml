@@ -28,11 +28,21 @@ Item {
     //Функции.
 	//onValueModified: console.error(value)
 	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
-        if(value < from){
-			value = from;
-		}
-		if(value > to){
-			value = to;
+        if(value <= from){//Если число меньше или РАВНО минимального, то...
+            value = from;//Приравниваем минимальному значению число.
+            knopkaMinus.enabled = false;//Кнопка Минус не активная.
+            knopkaPlus.enabled = true;//Кнопка Плюс активная.
+        }
+        else {
+            if(value >= to){//Если число больше или РАВНО максимально, то...
+                value = to;//Приравниваем максимальное число значению.
+                knopkaPlus.enabled = false;//Кнопка Плюс не активная.
+                knopkaMinus.enabled = true;//Кнопка Минус активная.
+            }
+            else{//Если значение не меньше и не больше заданного, то...
+                knopkaMinus.enabled = true;//Кнопка Минус активная.
+                knopkaPlus.enabled = true;//Кнопка Плюс активная.
+            }
         }
         txtScale.text = value;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
 	}
