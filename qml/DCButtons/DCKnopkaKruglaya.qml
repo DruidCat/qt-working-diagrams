@@ -8,6 +8,8 @@ Item{
 	property int ntCoff: 8
 	property color clrKnopki: "grey"
 	property color clrTexta: "yellow"
+    property real minDarker: 0.7//Миннимальная затемнённость кнопки, когда она не активная.
+    property real maxDarker: 1.3//Максимальная затемнённость кнопки, когда она нажата.
     property bool enabled: true//true - активирована, false - деактивированна кнопка.
     property alias text: txtKnopkaKruglaya.text
 	property alias bold: txtKnopkaKruglaya.font.bold
@@ -47,10 +49,10 @@ Item{
 
         color: {
             if(root.enabled)//Если активирована кнопка, то...
-                tphKnopkaKruglaya.pressed ?  Qt.darker(clrKnopki, 1.3) : clrKnopki
-                 //maKnopkaKruglaya.containsPress ?  Qt.darker(clrKnopki, 1.3) : clrKnopki
+                tphKnopkaKruglaya.pressed ?  Qt.darker(clrKnopki, root.maxDarker) : clrKnopki
+                 //maKnopkaKruglaya.containsPress ?  Qt.darker(clrKnopki, root.maxDarker) : clrKnopki
             else//Если деактивирована кнопка, то...
-                Qt.darker(clrKnopki, 0.8)
+                Qt.darker(clrKnopki, root.minDarker)
         }
         border.width: 1//Толщина границы круга 1
         radius: width/2//Радиус половина ширины, это круг
@@ -63,10 +65,10 @@ Item{
 
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
-                    tphKnopkaKruglaya.pressed ? Qt.darker(clrTexta, 1.3) : clrTexta
-                     //maKnopkaKruglaya.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
+                    tphKnopkaKruglaya.pressed ? Qt.darker(clrTexta, root.maxDarker) : clrTexta
+                     //maKnopkaKruglaya.containsPress ? Qt.darker(clrTexta, root.maxDarker) : clrTexta
                 else//Если деактивирована кнопка, то...
-                    Qt.darker(clrTexta, 0.8)
+                    Qt.darker(clrTexta, root.minDarker)
             }
 			text: "Кнопка"
 			font.bold: false//Не жирный текст

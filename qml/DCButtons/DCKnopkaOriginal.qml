@@ -12,6 +12,8 @@ Item {
     property alias pixelSize: txtText.font.pixelSize
 	property color clrKnopki: "transparent"
 	property color clrTexta: "black"
+    property real minDarker: 0.7//Миннимальная затемнённость кнопки, когда она не активная.
+    property real maxDarker: 1.3//Максимальная затемнённость кнопки, когда она нажата.
     property bool enabled: true//true - активирована, false - деактивированна кнопка.
     property real opacityKnopki: 1
     property real opacityTexta: 1
@@ -65,17 +67,17 @@ Item {
 
         color: {
             if(root.enabled)//Если активирована кнопка, то...
-                tphKnopkaOriginal.pressed ? Qt.darker(clrKnopki, 1.3) : clrKnopki
-                //maKnopkaOriginal.containsPress ? Qt.darker(clrKnopki, 1.3) : clrKnopki
+                tphKnopkaOriginal.pressed ? Qt.darker(clrKnopki, root.maxDarker) : clrKnopki
+                //maKnopkaOriginal.containsPress ? Qt.darker(clrKnopki, root.maxDarker) : clrKnopki
             else//Если деактивирована кнопка, то...
-                Qt.darker(clrKnopki, 0.8)
+                Qt.darker(clrKnopki, root.minDarker)
         }
         radius: height/4
 		smooth: true//Сглаживание.
         opacity: root.opacityKnopki//Прозрачность Кнопки.
         border.color: {
             if(root.enabled)
-                Qt.darker(clrKnopki, 1.3)//Граница чуть темнее цвета кнопки
+                Qt.darker(clrKnopki, root.maxDarker)//Граница чуть темнее цвета кнопки
             else
                 clrKnopki
         }
@@ -88,10 +90,10 @@ Item {
             anchors.verticalCenter: rctKnopka.verticalCenter
             color: {
                 if(root.enabled)//Если активирована кнопка, то...
-                    tphKnopkaOriginal.pressed ? Qt.darker(clrTexta, 1.3) : clrTexta
-                    //maKnopkaOriginal.containsPress ? Qt.darker(clrTexta, 1.3) : clrTexta
+                    tphKnopkaOriginal.pressed ? Qt.darker(clrTexta, root.maxDarker) : clrTexta
+                    //maKnopkaOriginal.containsPress ? Qt.darker(clrTexta, root.maxDarker) : clrTexta
                 else//Если деактивирована кнопка, то...
-                    Qt.darker(clrTexta, 0.8)
+                    Qt.darker(clrTexta, root.minDarker)
             }
             text: "Кнопка"
             font.pixelSize: root.height - root.ntCoff
