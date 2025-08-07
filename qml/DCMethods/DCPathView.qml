@@ -65,6 +65,7 @@ Item {
             ntCoff: root.ntCoff; ntWidth: root.ntWidth
             anchors.centerIn: rctKnopki
             clrKnopki: root.clrTexta; clrFona: root.clrFona
+            onClicked: root.visible = false//Делаем невидимым виджет.
         }
     }
 
