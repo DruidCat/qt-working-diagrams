@@ -1,5 +1,7 @@
 ﻿import QtQuick //2.15
 
+import DCButtons 1.0//Импортируем кнопки
+//DCPathView - каруселька выбора трёх элементов.
 Item {
     id: root
     //Свойства.
@@ -24,10 +26,46 @@ Item {
         }
     }
     Rectangle {
-        anchors.fill: root
+        id: rctKarusel
+        anchors.top: root.top
+        anchors.left: root.left
+        anchors.right: rctKnopki.left
+        anchors.bottom: root.bottom
         color: root.clrFona
-        border.color: root.clrTexta
         border.width: 1
+        border.color: root.clrTexta
+    }
+    Rectangle {
+        id: rctKnopki
+        width: root.ntCoff * root.ntWidth + root.ntCoff
+        height: root.height
+        anchors.top: root.top
+        anchors.right: root.right
+        color: root.clrMenuFon
+        border.width: 1
+        border.color: root.clrTexta
+        DCKnopkaVverh {
+            id: knopkaVverh
+            ntCoff: root.ntCoff; ntWidth: root.ntWidth
+            anchors.top: rctKnopki.top; anchors.left: rctKnopki.left
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            onClicked: pvwKarusel.decrementCurrentIndex()//Прокрутка вверх
+        }
+        DCKnopkaVniz {
+            id: knopkaVniz
+            ntCoff: root.ntCoff; ntWidth: root.ntWidth
+            anchors.bottom: rctKnopki.bottom; anchors.left: rctKnopki.left
+            anchors.margins: root.ntCoff/2
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+            onClicked: pvwKarusel.incrementCurrentIndex()//Прокрутка вниз
+        }
+        DCKnopkaZakrit {
+            id: knopkaZakrit
+            ntCoff: root.ntCoff; ntWidth: root.ntWidth
+            anchors.centerIn: rctKnopki
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
+        }
     }
 
 	Path {//Размеры PathView, и направление бесконечного скролинга.
@@ -74,7 +112,7 @@ Item {
         //Свойства.
         property bool internalChange: false//Синхронизация currentIndex, против самозацикливания.
         //Настройки
-        anchors.fill: root
+        anchors.fill: rctKarusel//Если так сделать, карусель не кликабельная становится.
         model: root.modelData//Добавляем модель из свойства.
         currentIndex: root.currentIndex
         delegate: cmpKarusel
@@ -109,29 +147,29 @@ Item {
     Component {//Делегат
         id: cmpKarusel
         Rectangle {//Прямоугольник каждой отдельной строчки в модели.
-            id: rctKarusel
-            width: root.width
+            id: rctStroka
+            width: rctKarusel.width
             height: root.ntWidth*root.ntCoff
             opacity: PathView.prozrachnost//Прозрачность
             z: PathView.z//Номер отображаемого элемента списка
             scale: PathView.masshtab//Масштаб
 
-            color: maKarusel.containsPress ? Qt.darker(root.clrMenuFon, 1.3) : root.clrMenuFon
+            color: maStroka.containsPress ? Qt.darker(root.clrMenuFon, 1.3) : root.clrMenuFon
             radius: (width/(root.ntWidth*root.ntCoff))/root.ntCoff
 
             Text {//Текст внутри прямоугольника, считанный из модели.
-                anchors.horizontalCenter: rctKarusel.horizontalCenter
-                anchors.verticalCenter: rctKarusel.verticalCenter
+                anchors.horizontalCenter: rctStroka.horizontalCenter
+                anchors.verticalCenter: rctStroka.verticalCenter
 
-                color:maKarusel.containsPress ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
+                color:maStroka.containsPress ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
                 text: spisok//Читаем текст из модели.
-                font.pixelSize: (rctKarusel.width/text.length>=rctKarusel.height)
-                    ? rctKarusel.height-root.ntCoff
-                    : rctKarusel.width/text.length-root.ntCoff
+                font.pixelSize: (rctStroka.width/text.length>=rctStroka.height)
+                    ? rctStroka.height-root.ntCoff
+                    : rctStroka.width/text.length-root.ntCoff
             }
             MouseArea {
-                id: maKarusel
-                anchors.fill: rctKarusel
+                id: maStroka
+                anchors.fill: rctStroka
                 onClicked: {
                     root.clicked(spisok)
                 }

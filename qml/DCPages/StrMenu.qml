@@ -133,7 +133,14 @@ Item {
             contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*kolichestvoKnopok//9 - количество кнопок.
             TapHandler {//Нажимаем не на Кнопки, а на пустую область.
                 //ВАЖНО, срабатывает и при нажатии на кнопки!!! Сменяет фокус на root при нажатии на кнопки.
-                onTapped: fnClickedEscape();//Функция нажатия кнопки Escape.
+                onTapped: function(point) {
+                    if (point.accepted) {
+                        console.log("ФОН: tapMain увидел событие, но оно уже обработано дочерним элементом. Игнорирую.");
+                        return;
+                    }
+                    fnClickedEscape();//Функция нажатия кнопки Escape.
+                    console.error("сука")
+                }
             }
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
                 id: rctZona
