@@ -15,6 +15,8 @@ Item {
     property real minDarker: 0.7//Миннимальная затемнённость кнопки, когда она не активная.
     property real maxDarker: 1.3//Максимальная затемнённость кнопки, когда она нажата.
     property bool enabled: true//true - активирована, false - деактивированна кнопка.
+    property bool pressed: tphKnopkaOriginal.pressed//true - нажали false - не нажали
+    //property bool pressed: maKnopkaOriginal.pressed//true - нажали false - не нажали
     property real opacityKnopki: 1
     property real opacityTexta: 1
     //Настройки.

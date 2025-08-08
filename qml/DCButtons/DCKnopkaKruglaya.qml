@@ -11,6 +11,8 @@ Item{
     property real minDarker: 0.7//Миннимальная затемнённость кнопки, когда она не активная.
     property real maxDarker: 1.3//Максимальная затемнённость кнопки, когда она нажата.
     property bool enabled: true//true - активирована, false - деактивированна кнопка.
+    property bool pressed: tphKnopkaKruglaya.pressed//true - нажали false - не нажали
+    //property bool pressed: maKnopkaKruglaya.pressed//true - нажали false - не нажали
     property alias text: txtKnopkaKruglaya.text
 	property alias bold: txtKnopkaKruglaya.font.bold
 	property alias italic: txtKnopkaKruglaya.font.italic

@@ -11,6 +11,8 @@ Item {
     property real minDarker: 0.7//Миннимальная затемнённость кнопки, когда она не активная.
     property real maxDarker: 1.3//Максимальная затемнённость кнопки, когда она нажата.
     property bool enabled: true//true - активирована, false - деактивированна кнопка.
+    property bool pressed: tphKnopkaPlan.pressed//true - нажали false - не нажали
+    //property bool pressed: maKnopkaPlan.pressed//true - нажали false - не нажали
     property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
     property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.

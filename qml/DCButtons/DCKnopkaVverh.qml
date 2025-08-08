@@ -11,6 +11,8 @@ Item{
     property real minDarker: 0.7//Миннимальная затемнённость кнопки, когда она не активная.
     property real maxDarker: 1.3//Максимальная затемнённость кнопки, когда она нажата.
     property bool enabled: true//true - активирована, false - деактивированна кнопка.
+    property bool pressed: tphKnopkaVverh.pressed//true - нажали false - не нажали
+    //property bool pressed: maKnopkaVverh.pressed//true - нажали false - не нажали
     property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
     property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
     //Настройки.
@@ -22,20 +24,9 @@ Item{
     //Для Авроры комментируем TapHandler, расскомментируем MouseArea и наоборот.
     TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
         id: tphKnopkaVverh
-        /*
-        - PointerHandler.CanTakeOverFromItems: Разрешает этому обработчику "украсть" захват события у других
-        обработчиков, которые находятся на элементах-предках или элементах-сиблингах (братьях). В вашем случае
-        это позволяет tphKnopkaVverh забрать событие у tapMain.
-        - PointerHandler.TakeOverForbidden: Запрещает другим обработчикам забирать событие у этого
-        обработчика, после того как он его захватил. Это обеспечивает эксклюзивность.
-        */
-        grabPermissions: PointerHandler.CanTakeOverFromItems | PointerHandler.TakeOverForbidden
-        onTapped: function(event) {
-        //onTapped: {
-            console.error("клик")
+        onTapped: {
             if(root.enabled)//Если активирована кнопка, то...
                 root.clicked();//Обрабатываем клик.
-            event.accepted = true;
         }
     }
     /*
