@@ -10,6 +10,7 @@ Item {
     property color clrFona: "Black"//Цвет фона, на котором кнопки распологаются.
     property color clrTexta: "Orange"//Цвет текста на кнопках
     property color clrMenuFon: "Slategray"//Цвет кнопок с текстом
+    property bool pressed: (knopkaVverh.pressed || knopkaVniz.pressed || knopkaZakrit.pressed) ? true : false
     property var modelData: []//Свойства для модели.
     property int currentIndex: 0//0-первый элемент отображается....2-третий элемент отображается по умолчанию.
     property alias karusel: pvwKarusel

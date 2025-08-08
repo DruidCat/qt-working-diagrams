@@ -133,13 +133,9 @@ Item {
             contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*kolichestvoKnopok//9 - количество кнопок.
             TapHandler {//Нажимаем не на Кнопки, а на пустую область.
                 //ВАЖНО, срабатывает и при нажатии на кнопки!!! Сменяет фокус на root при нажатии на кнопки.
-                onTapped: function(point) {
-                    if (point.accepted) {
-                        console.log("ФОН: tapMain увидел событие, но оно уже обработано дочерним элементом. Игнорирую.");
-                        return;
-                    }
-                    fnClickedEscape();//Функция нажатия кнопки Escape.
-                    console.error("сука")
+                onPressedChanged: {//Если изменён статус зажатия кнопки, то...
+                    if(pressed && !pvShrift.pressed)//Если нажата область и не нажато на pvShrift, то...
+                        fnClickedEscape();//Функция нажатия кнопки Escape.
                 }
             }
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
@@ -156,7 +152,10 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.pdfViewer ? qsTr("viewerPDF: вкл") : qsTr("viewerPDF: выкл")
                     opacityKnopki: 0.8
-                    onClicked: root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
+                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                            root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
+                    }
                 }
                 DCKnopkaOriginal {
                     id: knopkaHotKey
@@ -167,7 +166,10 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("горячие клавиши")
                     opacityKnopki: 0.8
-                    onClicked: root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
+                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                            root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
+                    }
                     Component.onCompleted:{//Когда отрисуется Кнопка, то...
                         if(root.isMobile){//Если мобильная платформа, то...
                             flZona.kolichestvoKnopok -= 1;//Удаляем -1 кнопку идущую на Горячие клавиши.
@@ -176,7 +178,7 @@ Item {
                     }
                 }
                 DCKnopkaOriginal {
-                    id: knopkaFont
+                    id: knopkaShrift
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: {
                         if(root.isMobile)//Если мобильная платформа, то...
@@ -200,28 +202,33 @@ Item {
                         return ltShrift;
                     }
                     opacityKnopki: 0.8
-                    onClicked: {//Слот запускающий
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
                         //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
-                        if(pvShrift.visible)//Если видимый виджет, то...
-                            pvShrift.visible = false//Делаем невидимым виджет
-                        else{//Если невидимый виджет, то...
-                            Qt.callLater(function () {//Делаем паузу,иначе не сработает фокус и pvShrift.ВАЖНО
-                                pvShrift.visible = true//Делаем видимым виджет
-                                pvShrift.karusel.forceActiveFocus()//фокус PathView, чтоб hotkey работали.
-                            })
+                        if (pressed && !pvShrift.pressed){//Если нажата кнопка и не нажато на pvShrift, то...
+                            if(pvShrift.visible)//Если видимый виджет, то...
+                                pvShrift.visible = false//Делаем невидимым виджет
+                            else{//Если невидимый виджет, то...
+                                Qt.callLater(function(){//пауза, иначе не сработает фокус и pvShrift. ВАЖНО!!!
+                                    pvShrift.visible = true//Делаем видимым виджет
+                                    pvShrift.karusel.forceActiveFocus()//фокус PathView, чтоб hotkey работали.
+                                })
+                            }
                         }
                     }
                 }
                 DCKnopkaOriginal {
                     id: knopkaAnimaciya
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaFont.bottom
+                    anchors.top: knopkaShrift.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("анимация")
                     opacityKnopki: 0.8
-                    onClicked: root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
+                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                            root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
+                    }
                 }
                 DCKnopkaOriginal {
                     id: knopkaLogi
@@ -232,7 +239,10 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("логи")
                     opacityKnopki: 0.8
-                    onClicked: root.clickedLogi();//Сигнал нажатия кнопки Логи.
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
+                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                            root.clickedLogi();//Сигнал нажатия кнопки Логи.
+                    }
                 }
                 DCKnopkaOriginal {
                     id: knopkaAvtor
@@ -243,7 +253,10 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о приложении")
                     opacityKnopki: 0.8
-                    onClicked: root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
+                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                            root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
+                    }
                 }
                 DCKnopkaOriginal {
                     id: knopkaQt
@@ -254,7 +267,10 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о Qt")
                     opacityKnopki: 0.8
-                    onClicked: root.clickedQt();//Сигнал нажатия кнопки об Qt.
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
+                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                            root.clickedQt();//Сигнал нажатия кнопки об Qt.
+                    }
                 }
                 DCKnopkaOriginal {
                     id: knopkaRedaktor
@@ -265,7 +281,10 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.appRedaktor ? qsTr("редактор: вкл") : qsTr("редактор: выкл")
                     opacityKnopki: 0.8
-                    onClicked: root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
+                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                            root.appRedaktor ? root.appRedaktor = false : root.appRedaktor = true
+                    }
                 }
                 DCKnopkaOriginal {
                     id: knopkaKatalog
@@ -282,7 +301,10 @@ Item {
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("создание каталога документов")
                     opacityKnopki: 0.8
-                    onClicked: root.clickedKatalog();//Открываем страницу создания каталога документов.
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
+                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                            root.clickedKatalog();//Открываем страницу создания каталога документов.
+                    }
                     Component.onCompleted: {
 						if(root.isMobile)//Мобильное устройство
 							flZona.kolichestvoKnopok -= 1;//Удаляем -1 кнопку идущую на Создание каталога.
