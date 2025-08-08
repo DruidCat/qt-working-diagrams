@@ -10,6 +10,13 @@ Item {
     property color clrFona: "Black"//Цвет фона, на котором кнопки распологаются.
     property color clrTexta: "Orange"//Цвет текста на кнопках
     property color clrMenuFon: "Slategray"//Цвет кнопок с текстом
+    //Если листается слишком быстро — увеличивай slow (например, 5–6)
+    property real scrollSlow: 4.0//замедление свайпа
+    //Если шаги «слишком рано» срабатывают — подними step до 0.7–0.8.
+    property real stepRatio: 0.6//доля высоты строки для шага
+    //Если жест всё ещё «тяжело» запускается — уменьшай dragThresh до 2–3
+    property int  dragThresh: 5//порог активации жеста
+    property int  highlightMs: 181//длительность снапа
     property bool pressed: (knopkaVverh.pressed || knopkaVniz.pressed || knopkaZakrit.pressed) ? true : false
     property var modelData: []//Свойства для модели.
     property int currentIndex: 0//0-первый элемент отображается....2-третий элемент отображается по умолчанию.
@@ -114,13 +121,45 @@ Item {
         //Свойства.
         property bool internalChange: false//Синхронизация currentIndex, против самозацикливания.
         //Настройки
-        anchors.fill: rctKarusel//Если так сделать, карусель не кликабельная становится.
+        anchors.fill: rctKarusel
         model: root.modelData//Добавляем модель из свойства.
         currentIndex: root.currentIndex
         delegate: cmpKarusel
         path: pthKarusel//Устанавливаем габариты и направление скролинга в представлении
         pathItemCount: 3//Количество видимых элементов модели.
+        interactive: false //отключаем встроенную перетаскиваемость
+        DragHandler {//Шаговое управление свайпом/мышью, «перехватывает» захват у MouseArea
+            id: drhSvaip
+            target: null
+            acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchScreen
+            acceptedButtons: Qt.LeftButton
+            xAxis.enabled: false//Тащить по x запрещено
+            yAxis.enabled: true//Тащить по y разрешено
+            dragThreshold: root.dragThresh//Чтобы жест быстрее «включался»
+            //Разрешаем перехватывать захват у MouseArea
+            grabPermissions: PointerHandler.CanTakeOverFromItems
+                             | PointerHandler.CanTakeOverFromHandlersOfDifferentType
+            property real acc: 0
+            property real prevT: 0//запоминаем предыдущее значение translation.y
+            property real slow: root.scrollSlow//во сколько раз замедлит
+            readonly property real stepBase: root.ntWidth * root.ntCoff
+            readonly property real step: stepBase * root.stepRatio//срабатывание на (0.6)~60% высоты строки
+            onActiveChanged: { acc = 0; prevT = 0 }//важно сбрасывать и prevT
+            onTranslationChanged: {
+                const dy = translation.y - prevT;//дельта с предыдущего события
+                prevT = translation.y
+                acc -= dy/slow//замедляем в slow раз
+                while (acc >= step) { pvwKarusel.decrementCurrentIndex(); acc -= step }
+                while (acc <= -step) { pvwKarusel.incrementCurrentIndex(); acc += step }
+            }
+            onCanceled: { acc = 0; prevT = 0 }//чтобы жесты не «залипали» при прерывании.
+        }
+        //Доснап к центру, чтобы выглядело аккуратно
         snapMode: PathView.SnapOneItem
+        preferredHighlightBegin: height/2
+        preferredHighlightEnd: height/2
+        highlightRangeMode: PathView.StrictlyEnforceRange
+        highlightMoveDuration: root.highlightMs
         //Функции
         onCurrentIndexChanged: {//Если индекс отображаемого элемента изменился, то...
             if (!internalChange && root.currentIndex !== currentIndex) {//Если значение ещё не менялось, то...
@@ -172,9 +211,18 @@ Item {
             MouseArea {
                 id: maStroka
                 anchors.fill: rctStroka
-                onClicked: {
-                    root.clicked(spisok)
+                preventStealing: false
+                onPressed: (mouse) => {
+                    // если DragHandler уже активировался — не «съедаем» события
+                    if (drhSvaip.active) mouse.accepted = false
                 }
+                onPositionChanged: (mouse) => {
+                    if (drhSvaip.active) mouse.accepted = false
+                }
+                onClicked: {
+                    if (!drhSvaip.active)
+                        root.clicked(spisok)
+               }
             }
         }
     }
