@@ -1,5 +1,4 @@
 ﻿import QtQuick //2.15
-import QtQuick.Controls//ScrollBar
 //DCTextEdit - ШАБЛОН РАБОТЫ С ТЕКСТОМ НА СТРАНИЦЕ (ЛИСТАТЬ, РЕДАКТИРОВАТЬ, ВЫДЕЛЯТЬ).
 Item {
     id: root
@@ -9,8 +8,9 @@ Item {
     property bool scrollAuto: false;//true-текст скроллится автоматически вверх, если выходит за рамки экрана.
 	property alias textEdit: txdTextEdit//Передаём в виде свойства весь объект TextEdit
     property alias radius: rctTextEdit.radius//Радиус рабочей зоны
-    property alias clrFona: rctTextEdit.color //цвет фона текста
-    property alias clrTexta: txdTextEdit.color //цвет текста
+    property alias clrFona: rctTextEdit.color//цвет фона текста
+    property alias clrTexta: txdTextEdit.color//цвет текста
+    property color clrPolzunka: "Grey";//Цвет ползунка, когда он не активный.
     property color clrBorder: "transparent"//Цвет границы области текста.
     property alias bold: txdTextEdit.font.bold//Жирный текст.
     property alias italic: txdTextEdit.font.italic//Наклонный текст.
@@ -26,9 +26,7 @@ Item {
     Rectangle {
         id: rctTextEdit
         anchors.fill: root
-		color: "transparent"//Цвет фона прозрачный.
-        border.color: root.readOnly ? "transparent" : root.clrBorder
-        border.width: root.ntCoff/2
+        color: "transparent"//Цвет фона прозрачный.
         Flickable {//Перелистывание
             id: flcListat
             anchors.fill: rctTextEdit
@@ -78,7 +76,7 @@ Item {
             }
             TextEdit {//Область текста.
                 id: txdTextEdit
-                width:  flcListat.width//Передаём ширину из зоны прокрутки, нельзя через якорь.
+                width:  flcListat.width-tmScrollBar.width//Передаём ширину из зоны прокрутки-scrolBar
                 height: Math.max(paintedHeight, flcListat.height)//Высота растёт вместе с текстом
                 //textFormat: TextEdit.AutoText//Формат текста АВТОМАТИЧЕСКИ определяется.Предпочтителен HTML4
                 color: "black"//цвет текста
@@ -109,7 +107,90 @@ Item {
                     }
                 }
             }
-            ScrollBar.vertical: ScrollBar { policy: ScrollBar.AsNeeded }
+        }
+        // Наш кастомный вертикальный скроллбар
+        Item {
+            id: tmScrollBar
+            //Свойства
+            property color clrTrack: "#40000000"//Полупрозрачный трек
+            property color clrPolzunokOff: root.clrPolzunka//Цвет ползунка, когда он не активен.
+            property color clrPolzunokOn: root.clrTexta//оранжевый при наведении
+            readonly property int minVisotaPolzunka: 22//Минимальная высота Позунка
+            //Настройки
+            anchors.right: flcListat.right
+            anchors.top: flcListat.top
+            anchors.bottom: flcListat.bottom
+            width: 11//Ширина Трека
+            visible: flcListat.contentHeight > flcListat.height//Показываем только когда есть что скроллить.
+            Rectangle {//Трек
+                id: rctTrack
+                anchors.fill: tmScrollBar
+                color: tmScrollBar.clrTrack
+                z: 0//Первым создаётся Трек, по верх него всё накладываться будет.
+                MouseArea {//Клик по треку — прыжок к позиции
+                    anchors.fill: rctTrack
+                    acceptedButtons: Qt.LeftButton
+                    onPressed: (mouse) => {
+                        const ch = flcListat.contentHeight
+                        const vh = flcListat.height
+                        const maxY = tmScrollBar.height - rctPolzunok.height
+                        if (ch <= vh || maxY <= 0)
+                            return
+                        const target = Math.max(0, Math.min(mouse.y - rctPolzunok.height/2, maxY))
+                        flcListat.contentY = target / maxY * (ch - vh)
+                    }
+                }
+            }
+            Rectangle {//Ползунок
+                id: rctPolzunok
+                x: 0
+                width: tmScrollBar.width
+                color: (maPolzunka.containsMouse || maPolzunka.pressed) ? tmScrollBar.clrPolzunokOn
+                                                                        : tmScrollBar.clrPolzunokOff
+                z: 1//Поверх трека накладывается ползунок.
+                height: {//Высота ползунка пропорциональна видимой части
+                    const ch = flcListat.contentHeight
+                    const vh = flcListat.height
+                    if (ch <= 0) return tmScrollBar.minVisotaPolzunka
+                    const ratio = Math.min(1, vh / ch)
+                    return Math.max(tmScrollBar.minVisotaPolzunka, tmScrollBar.height * ratio)
+                }
+                y: {//Позиция ползунка синхронизируется со скроллом
+                    const ch = flcListat.contentHeight
+                    const vh = flcListat.height
+                    const maxY = tmScrollBar.height - height
+                    if (ch <= vh || maxY <= 0)
+                        return 0
+                    return flcListat.contentY / (ch - vh) * maxY
+                }
+                MouseArea {//Претаскивание ползунка мышью
+                    id: maPolzunka
+                    anchors.fill: rctPolzunok
+                    hoverEnabled: true
+                    cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor
+                    drag.target: parent
+                    drag.axis: Drag.YAxis
+                    drag.minimumY: 0
+                    drag.maximumY: tmScrollBar.height - parent.height
+
+                    onPositionChanged: if (pressed) {
+                        const ch = flcListat.contentHeight
+                        const vh = flcListat.height
+                        const maxY = tmScrollBar.height - parent.height
+                        if (ch > vh && maxY > 0)
+                            flcListat.contentY = parent.y / maxY * (ch - vh)
+                    }
+                }
+            }
+        }
+        Rectangle {
+            id: rctBorder
+            anchors.fill: parent
+            color: "transparent"
+            radius: rctTextEdit.radius
+            border.color: root.readOnly ? "transparent" : root.clrBorder
+            border.width: root.ntCoff/2
+            z: 2//Поверх Трека и Ползунка, чтоб ползунок не наезжал на Границу.
         }
     }
 }

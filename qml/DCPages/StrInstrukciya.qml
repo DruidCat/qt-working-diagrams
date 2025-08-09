@@ -10,7 +10,8 @@ Item {
     property int ntCoff: 8
     property color clrTexta: "Orange"
 	property color clrFona: "Black"
-	property alias zagolovokX: tmZagolovok.x
+    property color clrPolzunka: "Grey"
+    property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
 	property alias zagolovokHeight: tmZagolovok.height
@@ -75,6 +76,7 @@ Item {
             radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
             clrFona: root.clrFona//Цвет фона рабочей области
             clrTexta: root.clrTexta//Цвет текста
+            clrPolzunka: root.clrPolzunka//Цвет ползунка scrollbar, когда он не активен
             clrBorder: root.clrTexta//Цвет бардюра при редактировании текста.
 			italic: true//Текст курсивом.
 		}

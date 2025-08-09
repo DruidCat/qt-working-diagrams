@@ -139,6 +139,7 @@ ApplicationWindow {
                 strInstrukciya: "hotkey"
                 ntWidth: pgStrHotKey.ntWidth; ntCoff: pgStrHotKey.ntCoff
                 clrTexta: pgStrHotKey.clrTexta; clrFona: pgStrHotKey.clrRabOblasti
+                clrPolzunka: pgStrHotKey.clrFona
                 zagolovokX: pgStrHotKey.rctStrZagolovok.x; zagolovokY: pgStrHotKey.rctStrZagolovok.y
                 zagolovokWidth: pgStrHotKey.rctStrZagolovok.width
                 zagolovokHeight: pgStrHotKey.rctStrZagolovok.height
@@ -232,6 +233,7 @@ ApplicationWindow {
                 strInstrukciya: "oprilojenii"
                 ntWidth: pgStrMentor.ntWidth; ntCoff: pgStrMentor.ntCoff
                 clrTexta: pgStrMentor.clrTexta; clrFona: pgStrMentor.clrRabOblasti
+                clrPolzunka: pgStrMentor.clrFona
                 zagolovokX: pgStrMentor.rctStrZagolovok.x;
                 zagolovokY: pgStrMentor.rctStrZagolovok.y
                 zagolovokWidth: pgStrMentor.rctStrZagolovok.width
@@ -266,6 +268,7 @@ ApplicationWindow {
                 strInstrukciya: "oqt"
                 ntWidth: pgStrQt.ntWidth; ntCoff: pgStrQt.ntCoff
                 clrTexta: pgStrQt.clrTexta; clrFona: pgStrQt.clrRabOblasti
+                clrPolzunka: pgStrQt.clrFona
                 zagolovokX: pgStrQt.rctStrZagolovok.x; zagolovokY: pgStrQt.rctStrZagolovok.y
                 zagolovokWidth: pgStrQt.rctStrZagolovok.width
                 zagolovokHeight: pgStrQt.rctStrZagolovok.height
@@ -587,7 +590,8 @@ ApplicationWindow {
 				id: tmOpisanie
 				ntWidth: pgStrOpisanie.ntWidth; ntCoff: pgStrOpisanie.ntCoff
 				clrTexta: pgStrOpisanie.clrTexta; clrFona: pgStrOpisanie.clrRabOblasti
-				zagolovokX: pgStrOpisanie.rctStrZagolovok.x; zagolovokY: pgStrOpisanie.rctStrZagolovok.y
+                clrPolzunka: pgStrOpisanie.clrFona
+                zagolovokX: pgStrOpisanie.rctStrZagolovok.x; zagolovokY: pgStrOpisanie.rctStrZagolovok.y
 				zagolovokWidth: pgStrOpisanie.rctStrZagolovok.width
 				zagolovokHeight: pgStrOpisanie.rctStrZagolovok.height
 				zonaX: pgStrOpisanie.rctStrZona.x; zonaY: pgStrOpisanie.rctStrZona.y
@@ -674,6 +678,7 @@ ApplicationWindow {
                 strInstrukciya: "menu"
                 ntWidth: pgStrInstrukciyaMenu.ntWidth; ntCoff: pgStrInstrukciyaMenu.ntCoff
                 clrTexta: pgStrInstrukciyaMenu.clrTexta; clrFona: pgStrInstrukciyaMenu.clrRabOblasti
+                clrPolzunka: pgStrInstrukciyaMenu.clrFona
                 zagolovokX: pgStrInstrukciyaMenu.rctStrZagolovok.x;
                 zagolovokY: pgStrInstrukciyaMenu.rctStrZagolovok.y
                 zagolovokWidth: pgStrInstrukciyaMenu.rctStrZagolovok.width
@@ -708,6 +713,7 @@ ApplicationWindow {
                 strInstrukciya: "animaciya"
                 ntWidth: pgStrInstrukciyaAnimacii.ntWidth; ntCoff: pgStrInstrukciyaAnimacii.ntCoff
                 clrTexta: pgStrInstrukciyaAnimacii.clrTexta; clrFona: pgStrInstrukciyaAnimacii.clrRabOblasti
+                clrPolzunka: pgStrInstrukciyaAnimacii.clrFona
                 zagolovokX: pgStrInstrukciyaAnimacii.rctStrZagolovok.x;
                 zagolovokY: pgStrInstrukciyaAnimacii.rctStrZagolovok.y
                 zagolovokWidth: pgStrInstrukciyaAnimacii.rctStrZagolovok.width
@@ -742,6 +748,7 @@ ApplicationWindow {
                 strInstrukciya: "katalog"
                 ntWidth: pgStrInstrukciyaKataloga.ntWidth; ntCoff: pgStrInstrukciyaKataloga.ntCoff
                 clrTexta: pgStrInstrukciyaKataloga.clrTexta; clrFona: pgStrInstrukciyaKataloga.clrRabOblasti
+                clrPolzunka: pgStrInstrukciyaKataloga.clrFona
                 zagolovokX: pgStrInstrukciyaKataloga.rctStrZagolovok.x;
                 zagolovokY: pgStrInstrukciyaKataloga.rctStrZagolovok.y
                 zagolovokWidth: pgStrInstrukciyaKataloga.rctStrZagolovok.width
@@ -776,6 +783,7 @@ ApplicationWindow {
                 strInstrukciya: "fdinstrukciya"
                 ntWidth: pgStrInstrukciyaFB.ntWidth; ntCoff: pgStrInstrukciyaFB.ntCoff
                 clrTexta: pgStrInstrukciyaFB.clrTexta; clrFona: pgStrInstrukciyaFB.clrRabOblasti
+                clrPolzunka: pgStrInstrukciyaFB.clrFona
                 zagolovokX: pgStrInstrukciyaFB.rctStrZagolovok.x;
                 zagolovokY: pgStrInstrukciyaFB.rctStrZagolovok.y
                 zagolovokWidth: pgStrInstrukciyaFB.rctStrZagolovok.width
