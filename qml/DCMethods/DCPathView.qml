@@ -86,7 +86,7 @@ Item {
         startX: root.width/2//Середина строчки списка - это середина Item
         startY: root.height/2
 		PathAttribute { name: "prozrachnost"; value: 1.0 }
-        PathAttribute { name: "masshtab"; value: 0.95 }
+        PathAttribute { name: "masshtab"; value: 0.85 }
 		PathAttribute { name: "z"; value: 0 }//0 (+1 - это передний слой, -1 - это занлий слой)
 		//Верх
 		PathQuad {
@@ -97,7 +97,7 @@ Item {
 		}
 
 		PathAttribute { name: "prozrachnost"; value: 0.5 }
-        PathAttribute { name: "masshtab"; value: 0.94 }
+        PathAttribute { name: "masshtab"; value: 0.83 }
 		PathAttribute { name: "z"; value: -1 }
 		//Низ
 		PathQuad {
@@ -108,7 +108,7 @@ Item {
 		}
 
 		PathAttribute { name: "prozrachnost"; value: 0.5 }
-        PathAttribute { name: "masshtab"; value: 0.94 }
+        PathAttribute { name: "masshtab"; value: 0.83 }
 		PathAttribute { name: "z"; value: -1 }
 
 		PathQuad{//Переход к началу в середину.
@@ -133,6 +133,13 @@ Item {
         interactive: false //отключаем встроенную перетаскиваемость
         DragHandler {//Шаговое управление свайпом/мышью, «перехватывает» захват у MouseArea
             id: drhSvaip
+            //Свойства
+            property real acc: 0
+            property real prevT: 0//запоминаем предыдущее значение translation.y
+            property real slow: root.scrollSlow//во сколько раз замедлит
+            readonly property real stepBase: root.ntWidth * root.ntCoff
+            readonly property real step: stepBase * root.stepRatio//срабатывание на (0.6)~60% высоты строки
+            //Настройки
             target: null
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchScreen
             acceptedButtons: Qt.LeftButton
@@ -142,11 +149,7 @@ Item {
             //Разрешаем перехватывать захват у MouseArea
             grabPermissions: PointerHandler.CanTakeOverFromItems
                              | PointerHandler.CanTakeOverFromHandlersOfDifferentType
-            property real acc: 0
-            property real prevT: 0//запоминаем предыдущее значение translation.y
-            property real slow: root.scrollSlow//во сколько раз замедлит
-            readonly property real stepBase: root.ntWidth * root.ntCoff
-            readonly property real step: stepBase * root.stepRatio//срабатывание на (0.6)~60% высоты строки
+            //Функции.
             onActiveChanged: { acc = 0; prevT = 0 }//важно сбрасывать и prevT
             onTranslationChanged: {
                 const dy = translation.y - prevT;//дельта с предыдущего события
@@ -155,7 +158,7 @@ Item {
                 while (acc >= step) { pvwKarusel.decrementCurrentIndex(); acc -= step }
                 while (acc <= -step) { pvwKarusel.incrementCurrentIndex(); acc += step }
             }
-            onCanceled: { acc = 0; prevT = 0 }//чтобы жесты не «залипали» при прерывании.
+            onCanceled: { acc = 0; prevT = 0 }//Чтобы жесты не «залипали» при прерывании, обнуляем.
         }
         //Доснап к центру, чтобы выглядело аккуратно
         snapMode: PathView.SnapOneItem
@@ -193,7 +196,7 @@ Item {
         Rectangle {//Прямоугольник каждой отдельной строчки в модели.
             id: rctStroka
             width: rctKarusel.width
-            height: root.ntWidth*root.ntCoff
+            height: root.ntWidth*root.ntCoff+root.ntCoff
             opacity: PathView.prozrachnost//Прозрачность
             z: PathView.z//Номер отображаемого элемента списка
             scale: PathView.masshtab//Масштаб
@@ -202,14 +205,73 @@ Item {
             radius: (width/(root.ntWidth*root.ntCoff))/root.ntCoff
 
             Text {//Текст внутри прямоугольника, считанный из модели.
+                id: txtText
                 anchors.horizontalCenter: rctStroka.horizontalCenter
                 anchors.verticalCenter: rctStroka.verticalCenter
 
                 color:maStroka.containsPress ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
                 text: spisok//Читаем текст из модели.
-                font.pixelSize: (rctStroka.width/text.length>=rctStroka.height)
-                    ? rctStroka.height-root.ntCoff
-                    : rctStroka.width/text.length-root.ntCoff
+                font.pixelSize: rctStroka.height-root.ntCoff
+            }
+            Component.onCompleted:{//Когда текст отрисовался, нужно выставить размер шрифта.
+                if(rctStroka.width > txtText.width){//Если длина строки больше длины текста, то...
+                    for(var ltShag=txtText.font.pixelSize; ltShag<rctStroka.height-root.ntCoff; ltShag++){
+                        if(txtText.width < rctStroka.width){//Если длина текста меньше динны строки
+                            txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                            if(txtText.width > rctStroka.width){//Но, если переборщили
+                                txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                                return;//Выходим из увеличения шрифта.
+                            }
+                        }
+                    }
+                }
+                else{//Если длина строки меньше длины текста, то...
+                    for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                        if(txtText.width > rctStroka.width)//Если текст дилиннее строки, то...
+                            txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                    }
+                }
+            }
+            onWidthChanged: {//Если длина строки изменилась, то...
+                if(rctStroka.width > txtText.width){//Если длина строки больше длины текста, то...
+                    for(var ltShag=txtText.font.pixelSize; ltShag<rctStroka.height-root.ntCoff; ltShag++){
+                        if(txtText.width < rctStroka.width){//Если длина текста меньше динны строки
+                            txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                            if(txtText.width > rctStroka.width){//Но, если переборщили
+                                txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                                return;//Выходим из увеличения шрифта.
+                            }
+                        }
+                    }
+                }
+                else{//Если длина строки меньше длины текста, то...
+                    for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                        if(txtText.width > rctStroka.width)//Если текст дилиннее строки, то...
+                            txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                    }
+                }
+            }
+            onHeightChanged: {//Если изменилась высота, значит изменился размер Шрифта в StrMenu.
+                Qt.callLater(function () {//Делаем паузу на такт,иначе не успеет пересчитаться высота!
+                    txtText.font.pixelSize = rctStroka.height-root.ntCoff
+                    if(rctStroka.width > txtText.width){//Если длина строки больше длины текста, то...
+                        for(var ltShag=txtText.font.pixelSize;ltShag<rctStroka.height-root.ntCoff;ltShag++){
+                            if(txtText.width < rctStroka.width){//Если длина текста меньше динны строки
+                                txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                                if(txtText.width > rctStroka.width){//Но, если переборщили
+                                    txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                                    return;//Выходим из увеличения шрифта.
+                                }
+                            }
+                        }
+                    }
+                    else{//Если длина строки меньше длины текста, то...
+                        for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                            if(txtText.width > rctStroka.width)//Если текст дилиннее строки, то...
+                                txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+                        }
+                    }
+                })
             }
             MouseArea {
                 id: maStroka
