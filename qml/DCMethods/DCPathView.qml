@@ -10,14 +10,11 @@ Item {
     property color clrFona: "Black"//Цвет фона, на котором кнопки распологаются.
     property color clrTexta: "Orange"//Цвет текста на кнопках
     property color clrMenuFon: "Slategray"//Цвет кнопок с текстом
-    //Если листается слишком быстро — увеличивай slow (например, 5–6)
-    property real scrollSlow: 4.0//замедление свайпа
-    //Если шаги «слишком рано» срабатывают — подними step до 0.7–0.8.
-    property real stepRatio: 0.6//доля высоты строки для шага
-    //Если жест всё ещё «тяжело» запускается — уменьшай dragThresh до 2–3
-    property int  dragThresh: 5//порог активации жеста
-    property int  highlightMs: 181//длительность снапа
-    property bool pressed: (knopkaVverh.pressed || knopkaVniz.pressed || knopkaZakrit.pressed) ? true : false
+    property real scrollSlow: 4.0//Замедление свайпа. Если листается слишком быстро — увеличиваем на 5 или 6.
+    property real stepRatio: 0.6//Доля высоты строки для шага. Если шаги «слишком рано» срабатывают - 0.7–0.8.
+    property int  dragThresh: 5//Порог активации жеста. Если жест всё ещё «тяжело» запускается, уменьши до 2–3
+    property int  highlightMs: 181//Длительность снапа.
+    property bool pressed: (tphKarusel.pressed||tphKnopki.pressed)?true:false//if нажата карусель||кнопки?true
     property var modelData: []//Свойства для модели.
     property int currentIndex: 0//0-первый элемент отображается....2-третий элемент отображается по умолчанию.
     property alias karusel: pvwKarusel
@@ -42,6 +39,9 @@ Item {
         color: root.clrFona
         border.width: 1
         border.color: root.clrTexta
+        TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
+            id: tphKarusel//Зону нажатия на карусель отслеживает.
+        }
     }
     Rectangle {
         id: rctKnopki
@@ -74,6 +74,9 @@ Item {
             anchors.centerIn: rctKnopki
             clrKnopki: root.clrTexta; clrFona: root.clrFona
             onClicked: root.visible = false//Делаем невидимым виджет.
+        }
+        TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
+            id: tphKnopki//Зону нажатия на кнопок отслеживает.
         }
     }
 
@@ -212,15 +215,17 @@ Item {
                 id: maStroka
                 anchors.fill: rctStroka
                 preventStealing: false
+                //Если DragHandler уже активировался — не перехватываем события MouseArea
                 onPressed: (mouse) => {
-                    // если DragHandler уже активировался — не «съедаем» события
-                    if (drhSvaip.active) mouse.accepted = false
+                    if(drhSvaip.active)
+                        mouse.accepted = false
                 }
                 onPositionChanged: (mouse) => {
-                    if (drhSvaip.active) mouse.accepted = false
+                    if(drhSvaip.active)
+                        mouse.accepted = false
                 }
                 onClicked: {
-                    if (!drhSvaip.active)
+                    if(!drhSvaip.active)
                         root.clicked(spisok)
                }
             }
