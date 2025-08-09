@@ -195,6 +195,7 @@ Item {
             tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
                 if(visible){//Если видимый виджет, то...
+                    txdZona.text = txdZona.strCopy = "";//Отображаем пустую строку в TextEdit модуле.
                     knopkaInfo.visible = false;//Невидимая кнопка информации.
                     knopkaNazad.visible = false;//Конопка Закрыть Невидимая.
                     knopkaStart.enabled = false;//Деактивированная кнопка Старт.
@@ -249,7 +250,7 @@ Item {
             onClickedOk: {//Слот нажатия кнопки Ок
                 tmrLogo.running = false;//Останавливаем анимацию Логотипа.
                 copyStop.visible = false;//Делаем невидимый запрос с Вопросом остановки создания каталога.
-                //TODO сделать остановку создания каталога.
+                cppqml.copyKatalogStop();//Останавливаем принудительно копирование каталога.
                 cppqml.strDebug = qsTr("Принудительная остановка создания каталога документов.");
             }
             onClickedOtmena: copyStop.visible = false;//Делаем невидимый запрос на удаление.

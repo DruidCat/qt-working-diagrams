@@ -233,6 +233,7 @@ public:
     void		setStrKatalogDocCopy(const QString& strPutNovi);//Установить Новый путь скопированного док.
     Q_INVOKABLE int		polKatalogSummu();//Получить приблизительное сумарное число файлов в менторе.
     Q_INVOKABLE void	copyKatalogStart();//Начать копирование документов в каталог.
+    Q_INVOKABLE void	copyKatalogStop();//Остановить копирование документов в каталог.
 
     QString		strDebug();//Возвращает ошибку.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.

@@ -29,6 +29,7 @@
 /build/.cmake
 /build/CMakeCache.txt.prev
 /build/qtcsettings.cmake
+/build/Desktop_Qt_6_8_2_MinGW_64_bit-Profile
 
 
 # This file is used to ignore files which are generated
