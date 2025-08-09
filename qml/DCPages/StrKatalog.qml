@@ -99,15 +99,7 @@ Item {
         root.rlProgress = 0;//Обнуляем линию прогресса.
         root.rlLoader = 100/cppqml.polKatalogSummu();//Считаем коэффициент загрузчика, на который он увелич.
         cppqml.copyKatalogStart();//Начинаем создание каталога
-    }
-    function appendDebug(ltDebug) {
-        var lines = txdZona.strCopy.split("\n")
-        lines.push(ltDebug)
-        if (lines.length > 1000)
-            lines = lines.slice(lines.length - 1000)
-        txdZona.strCopy = lines.join("\n")
-        txdZona.text = txdZona.strCopy
-    }
+    } 
     Connections {//Соединяем сигнал из C++ с действием в QML, перерисовываем, в зависимости от Элемента.
         target: cppqml;//Цель объект класса С++ DCCppQml
         function onBlKatalogStatusChanged(){//Слот Если изменился статус создания каталога(Q_PROPERTY), то...
@@ -146,7 +138,7 @@ Item {
                 ldrProgress.active = true;//Запускаем виджет загрузки
                 knopkaInfo.visible = false;//Невидимая кнопка информации.
                 knopkaNastroiki.visible = false;//Невидимая кнопка настройки.
-                knopkaStart.visible = false;//Невидимая кнопка Старт.
+                knopkaStart.enabled = false;//Неактивная кнопка Старт.
             }
             else{//Если таймер выключен, то...
                 lgLogo.ntCoff = root.logoRazmer;//Задаём размер логотипа.
@@ -154,7 +146,7 @@ Item {
                 ldrProgress.active = false;//Отключаем прогресс.
                 knopkaInfo.visible = true;//Видимая кнопка информации.
                 knopkaNastroiki.visible = true;//Видимая кнопка настройки.
-                knopkaStart.visible = true;//Видимая кнопка Старт.
+                knopkaStart.enabled = true;//Активная кнопка Старт.
                 txdZona.textEdit.focus = true;//Чтоб работало событие клавишь Листания и всех остальных клавиш
             }
         }

@@ -29,6 +29,7 @@ Item {
         color: "transparent"//Цвет фона прозрачный.
         Flickable {//Перелистывание
             id: flcListat
+            boundsBehavior: Flickable.StopAtBounds//чтобы не было «подпрыгиваний» из‑за овершута
             anchors.fill: rctTextEdit
             anchors.margins: root.ntCoff//Отступ, чтоб текст не налазил на бардюр.
             contentWidth: txdTextEdit.width//ширина вьюпорта
@@ -93,17 +94,15 @@ Item {
                         return true;//Чтоб виртуальная клавиатура появлялась на Android.
                 }
                 selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
-                onCursorRectangleChanged: flcListat.fnEnsureVisible(cursorRectangle)
-                onTextChanged: {//Если текст изменяется, то...
-                    if(root.scrollAuto){//Если настроен авто скролл текста, то...
-                        Qt.callLater(function () {//Делаем паузу на такт, иначе не работает этот код.
-                            if (root.readOnly) {//Если режим чтения активизирован, то...
-                                if (flcListat.contentHeight > flcListat.height)//Если есть что скроллить, то..
-                                    flcListat.contentY = flcListat.contentHeight - flcListat.height;//Скроллим
-                                else//Если нечего скролить, то...
-                                    flcListat.contentY = 0;//фиксируемся у начала
-                            }
-                        })
+                onCursorRectangleChanged: {
+                    if (!root.readOnly)
+                        flcListat.fnEnsureVisible(cursorRectangle)//ensureVisible только в режиме редактирован
+                }
+                onPaintedHeightChanged: {//Авто‑скролл после перерасчёта высоты текста
+                    if (root.scrollAuto && root.readOnly) {
+                        // держим курсор в конце, чтобы даже если ensureVisible где-то сработает — это низ
+                        cursorPosition = length
+                        flcListat.contentY = Math.max(0, flcListat.contentHeight - flcListat.height)
                     }
                 }
             }
@@ -121,7 +120,8 @@ Item {
             anchors.top: flcListat.top
             anchors.bottom: flcListat.bottom
             width: 11//Ширина Трека
-            visible: flcListat.contentHeight > flcListat.height//Показываем только когда есть что скроллить.
+            //Гистерезис, чтобы ползунок не мигал на границе равенства
+            visible: (flcListat.contentHeight - flcListat.height) > 1//Показываем только когда есть что скрол.
             Rectangle {//Трек
                 id: rctTrack
                 anchors.fill: tmScrollBar
