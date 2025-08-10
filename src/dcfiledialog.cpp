@@ -1,15 +1,13 @@
 ﻿#include <QStandardPaths>
 #include "dcfiledialog.h"
 
-DCFileDialog::DCFileDialog(QStringList slsFileDialogMaska, QObject* proditel):QObject(proditel){//Конструктор.
+DCFileDialog::DCFileDialog(QStringList slsFileDialogMaska, const QString strDomPut, QObject* proditel)
+    :QObject(proditel){//Конструктор.
 ////////////////////////////////
 //---К О Н С Т Р У К Т О-Р----//
 ////////////////////////////////
     m_pdcclass = new DCClass();//Указатель на класс по работе с текстом.
-    QStringList slsHomePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);//Документы
-    QString strHomePath = slsHomePath.first();
-    m_pdrPut = new QDir (strHomePath);//Путь дериктории, который необходимо отобразить.
-    //m_pdrPut = new QDir (QDir::home());//Путь дериктории, который необходимо отобразить.
+    m_pdrPut = new QDir (strDomPut);//Путь дериктории, который необходимо отобразить.
     m_strFileDialogImya.clear();//Пустое имя.
     m_strFileDialogPut = m_strFileDialogPutDom = m_pdrPut->absolutePath();//Иннициализируем пути по умолчанию.
     m_slsFileDialogMaska = slsFileDialogMaska;//Задаём параметр маски отображения разширений файлов.
@@ -23,22 +21,32 @@ DCFileDialog::~DCFileDialog(){//Деструктор.
     delete m_pdrPut;//Удаляем указатель.
     m_pdrPut = nullptr;//Обнуляем указатель.
 }
-bool DCFileDialog::ustFileDialogPut(QString strPut){//Устанавливаем фиксированные пути.
+bool DCFileDialog::ustImyaPuti(QString strImyaPuti){//Устанавливаем фиксированные пути.
 /////////////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   П У Т Ь   К   К А Т А Л О Г У---//
 /////////////////////////////////////////////////////////////
-    if (strPut == "dom"){//Если переменная дом, то...
+    if (strImyaPuti == "dom"){//Если переменная дом, то...
         m_strFileDialogImya.clear();//ОБЯЗАТЕЛЬНО!!! Обнуляем строку с именем файла.
         m_pdrPut->setPath(m_strFileDialogPutDom);//Задаём домашний каталог.
         return true;//Истина.
     }
     else{//Если не переменная Дом, то...
-        if(strPut == "sohranit"){//Если переменная Сохранить текущую деррикторию, то...
+        if(strImyaPuti == "sohranit"){//Если переменная Сохранить текущую деррикторию, то...
             m_strFileDialogImya.clear();//ОБЯЗАТЕЛЬНО!!! Обнуляем строку с именем файла.
             return true;//Истина.
         }
     }
     return false;//не успех.
+}
+void DCFileDialog::ustFileDialogPut(const QString strFileDialogPut){//Уст путь папки, которую нужно отобразить
+/////////////////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   П А П К У   О Т О Б Р А Ж Е Н И Я---//
+/////////////////////////////////////////////////////////////////
+
+    if(m_strFileDialogPut != strFileDialogPut){//Если пути не одинаковые, то...
+        m_strFileDialogPut = strFileDialogPut;//Сохраняем новый путь.
+        m_pdrPut->setPath(m_strFileDialogPut);//Задаём новый каталог отображения.
+    }
 }
 QString DCFileDialog::polFileDialogPut(){//Получить путь к каталогу.
 /////////////////////////////////////////////////////////
@@ -47,7 +55,7 @@ QString DCFileDialog::polFileDialogPut(){//Получить путь к ката
     m_strFileDialogPut = m_pdrPut->absolutePath();//Получить Абсолютный путь к дерриктории.
     return m_strFileDialogPut;
 }
-bool DCFileDialog::ustSpisokJSON(QString strFileDialogPut){//Установить новый путь отображаемой папки или Файл.
+bool DCFileDialog::ustSpisokJSON(QString strFileDialogPut){//Установить новый путь отображаемой папки или Файл
 ///////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   П У Т Ь   П А П К И---//
 ///////////////////////////////////////////////////

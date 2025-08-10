@@ -9,12 +9,15 @@
 class DCFileDialog : public QObject {
     Q_OBJECT
 public:
-    explicit	DCFileDialog(QStringList slsFileDialogMaska, QObject* proditel = nullptr);
+    explicit	DCFileDialog(QStringList slsFileDialogMaska, const QString strDomPut,
+                          QObject* proditel = nullptr);
     ~			DCFileDialog();//Деструктор.
-    bool 		ustFileDialogPut(QString strPut);//Устанавливаем фиксированные пути.
+    bool 		ustImyaPuti(QString strImyaPuti);//Устанавливаем фиксированные пути.
+    void		ustFileDialogPut(const QString strFileDialogPut);//Задаём путь папки, которую нужно отобразить
     QString 	polFileDialogPut(void);//Получить путь к каталогу.
     bool 		ustSpisokJSON(QString strFileDialogPut);//Установить значение нового пути папки, или имя файла
     QString 	polSpisokJSON();//Метод создающий список каталогов и файлов конкретной дериктории.
+
 
 private:
     DCClass*	m_pdcclass;//Класс работающий с текстом.

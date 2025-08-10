@@ -10,7 +10,7 @@
 class DataKatalog : public QObject {
     Q_OBJECT
 public:
-    explicit 	DataKatalog(const QString strWorkingData,const QString strHomePut,QObject* proditel=nullptr);
+    explicit 	DataKatalog(const QString strWorkingData,const QString strDomPut,QObject* proditel=nullptr);
     ~			DataKatalog();
     void		ustPDBTitul(DCDB* pdbTitul);//Устанавливаем указатель БД Титула.
     void		ustPDBSpisok(DCDB* pdbSpisok);//Устанавливаем указатель БД Списка.
@@ -21,7 +21,7 @@ public:
     void		copyStart();//Старт копирования документов в каталог.
     void		copyStop();//Стоп копирования документов в каталог.
 
-    void		ustDocPut(const QString strDocPut);//Задаём путь папки, где сохранятся каталоги документов.
+    void		ustDomPut(const QString strDomPut);//Задаём путь папки, где сохранятся каталоги документов.
 
 private:
     DCDB*		m_pdbTitul = nullptr;//Указатель на БД Титула.
@@ -44,7 +44,7 @@ private:
     bool		nazadSpisok();//Переходим назад в папку со Списками.
     bool		nazadElement();//Переходим назад в папку в Элементами.
 
-    QString		m_strDocPut;//Переменная, которая хранит в себе путь к дериктории Документы.
+    QString		m_strDomPut;//Переменная, которая хранит в себе путь к дериктории Документы.
 
     bool 		m_blSpisokMax;//true - Последний элемент Списка.
     bool 		m_blElementMax;//true - Последний Элемент в конкретном Списке.

@@ -60,8 +60,8 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     quint64 ullDannieMax = 999;//Максимальное количество Данных.
     QString strKatalogDB = "workingdata";//Имя дериктория хранения данных
     QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf"<<"*.m4b";
-    QStringList slsDocPut = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
-    m_strDocPut = slsDocPut.first();//Переменная хранящая путь домашнего каталога.
+    QStringList slsDomPut = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
+    m_strDomPut = slsDomPut.first();//Переменная хранящая путь домашнего каталога.
 
     QDir odrMentor = QDir::current();//Объект каталога приложения.
     if(!odrMentor.cd(strKatalogDB)){//Если перейти к это папке не получается, то...
@@ -83,9 +83,9 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
     m_pDataDannie = new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strMentorPut,
                                    ullDannieMax);//Данные.
-    m_pDataKatalog = new DataKatalog(strMentorPut, m_strDocPut);//Каталог.
+    m_pDataKatalog = new DataKatalog(strMentorPut, m_strDomPut);//Каталог.
     m_pDataPlan = new DataPlan(strMentorPut, ullDannieMax);//План.
-    m_pFileDialog = new DCFileDialog(slsFileDialogMaska);//Проводник.
+    m_pFileDialog = new DCFileDialog(slsFileDialogMaska, m_strDomPut);//Проводник.
     //---передаём-указатели-бд---//
     m_pDataKatalog->ustPDBTitul(m_pDataTitul->polPDB());//Передаем указатель на БД из класса в класс.
     m_pDataKatalog->ustPDBSpisok(m_pDataSpisok->polPDB());//Передаем указатель на БД из класса в класс.
@@ -148,7 +148,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 				SLOT(slotTimerDebug()));//При сигнале на прерывание таймера, запускаем слот таймера.
     //---чтение-настроек-из-реестра---//
     polReestr();//Читаем настройки из реестра.
-    m_pDataKatalog->ustDocPut(m_strKatalogPut);//Задаём путь к папке каталога, прочитанный из Реестра.
+    m_pDataKatalog->ustDomPut(m_strKatalogPut);//Задаём путь к папке каталога, прочитанный из Реестра.
 }
 DCCppQml::~DCCppQml(){//Деструктор.
 //////////////////////////////
@@ -198,7 +198,7 @@ void DCCppQml::polReestr(){//Чтение настроек программы
     m_blPdfViewer = m_sttReestr.value("/pdf_viewer", true).toBool();//Читаем просмотрщик документов, по умол 1
     m_blAppRedaktor = m_sttReestr.value("/app_redaktor", true).toBool();//Читаем флаг редактора, по умол 1
     m_untShrift = m_sttReestr.value("/shrift", 1).toInt();//Читаем шрифт, по умол 1-средний
-    m_strKatalogPut = m_sttReestr.value("/katalog_put", m_strDocPut).toString();//Читаем путь катало
+    m_strKatalogPut = m_sttReestr.value("/katalog_put", m_strDomPut).toString();//Читаем путь катало
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::setUntHeight(const uint& untHeight) {//Изменяем высоту окна приложения.
@@ -763,7 +763,7 @@ void DCCppQml::setStrFileDialogPut(const QString& strFileDialogPutNovi){//Зап
         emit strFileDialogPutChanged();//Излучаем сигнал об изменении аргумента и обновляем каталог проводника
     }
     else{//Если это не старт, то...
-     if(m_pFileDialog->ustFileDialogPut(strFileDialogPutNovi)){//Если путь изменился успешно, то...
+     if(m_pFileDialog->ustImyaPuti(strFileDialogPutNovi)){//Если путь изменился успешно, то...
             m_strFileDialogPut = strFileDialogPut();//Изменяем путь переменной.
         }
     }
