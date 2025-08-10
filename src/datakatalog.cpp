@@ -1,14 +1,14 @@
 #include "datakatalog.h"
 
-DataKatalog::DataKatalog(const QString strWorkingData, QObject* proditel) : QObject{proditel}{
+DataKatalog::DataKatalog(const QString strWorkingData, const QString strDocPut, QObject* proditel)
+    : QObject{proditel}{
 ///////////////////////////////
 //---К О Н С Т Р У К Т О Р---//
 ///////////////////////////////
 
     m_untDannie = 0;//Суммарное количество документов в БД.
     dataStart();//Первоначальные значения переменных.
-    QStringList slsHomePath = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);//Документы
-    m_strDocPut = slsHomePath.first();
+    m_strDocPut = strDocPut;//Присваиваем путь в котором будет создавться каталог документов.
     m_pdrPut = new QDir (m_strDocPut);//Путь дериктории Документы, в которой будет создаваться каталог.
     m_pcopykatalog = new CopyKatalog();//Класс потока копирования файла.
     connect(	m_pcopykatalog,
@@ -134,13 +134,20 @@ void DataKatalog::copyStart(){//Старт копирования докумен
         emit signalKatalogCopy(false);//Излучаем сигнал о том, что авария при создании каталога.
     }
 }
-
 void DataKatalog::copyStop(){//Аварийная остановка копирования каталога.
  ////////////////////////////////////////////////////
 //---С Т О П   С О З Д А Н И Я   К А Т А Л О Г А---//
 /////////////////////////////////////////////////////
 
     m_blStopCopy = true;//Флаг остановки копирования каталога, он прервёт копирование в слоте копирования.
+}
+void DataKatalog::ustDocPut(const QString strDocPut){//Задаём путь папки, где сохранятся каталоги документов.
+///////////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   Д О М А Ш Н Ю Ю   П А П К У---//
+///////////////////////////////////////////////////////////
+
+    if(m_strDocPut != strDocPut)//Если пути не одинаковые, то...
+        m_strDocPut = strDocPut;//Сохраняем новый путь.
 }
 void DataKatalog::dataStart(){//Первоначальные значения переменных.
 /////////////////////////////////////////////////////////////////////////////

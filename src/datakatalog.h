@@ -10,7 +10,7 @@
 class DataKatalog : public QObject {
     Q_OBJECT
 public:
-    explicit 	DataKatalog(const QString strWorkingData, QObject* proditel = nullptr);
+    explicit 	DataKatalog(const QString strWorkingData,const QString strHomePut,QObject* proditel=nullptr);
     ~			DataKatalog();
     void		ustPDBTitul(DCDB* pdbTitul);//Устанавливаем указатель БД Титула.
     void		ustPDBSpisok(DCDB* pdbSpisok);//Устанавливаем указатель БД Списка.
@@ -20,6 +20,8 @@ public:
     int 		polPdfSummu();//Возвратим приблизительную сумму всех pdf документов в Менторе.
     void		copyStart();//Старт копирования документов в каталог.
     void		copyStop();//Стоп копирования документов в каталог.
+
+    void		ustDocPut(const QString strDocPut);//Задаём путь папки, где сохранятся каталоги документов.
 
 private:
     DCDB*		m_pdbTitul = nullptr;//Указатель на БД Титула.

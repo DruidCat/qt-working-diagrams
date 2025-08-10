@@ -38,6 +38,10 @@ class DCCppQml : public QObject {
                     READ untShrift
                     WRITE setUntShrift
                     NOTIFY untShriftChanged FINAL)
+    Q_PROPERTY(QString strKatalogPut
+                    READ strKatalogPut
+                    WRITE setStrKatalogPut
+                    NOTIFY strKatalogPutChanged FINAL)
     Q_PROPERTY(uint untNastroikiMaxLength
                     READ untNastroikiMaxLength
                     NOTIFY untNastroikiMaxLengthChanged FINAL)
@@ -167,6 +171,8 @@ public:
     void		setBlAppRedaktor(const bool& blAppRedaktor);//Изменяем редактор Ментора.
     uint 		untShrift() { return m_untShrift; }//Возвращаем размер шрифта.
     void		setUntShrift(const uint& untShrift);//Изменяем размер шрифта.
+    QString 	strKatalogPut() { return m_strKatalogPut; }//Возвращаем путь сохранения каталога.
+    void		setStrKatalogPut(const QString& strKatalogPut);//Изменяем путь сохранения каталога.
     uint 		untNastroikiMaxLength() { return m_untNastroikiMaxLength; }//Максимальная длина строки текста
 
     QString		strTitul();//Получить имя Титула.
@@ -248,6 +254,7 @@ signals:
     void blPdfViewerChanged();//Сигнал о том, что просмотрщик pdf документов поменялся.
     void blAppRedaktorChanged();//Сигнал о том, что флаг Редактора поменялся.
     void untShriftChanged();//Сигнал о том, что размер шрифта поменялся.
+    void strKatalogPutChanged();//Сигнал о том, что путь размещения каталога изменён.
     void untNastroikiMaxLengthChanged();//Сигнал о том, что максимальная длина текста изменилась.
 
     void strTitulChanged();//Сигнал о том, что имя Титула изменилось.
@@ -299,11 +306,14 @@ private:
     void ustReestr();//Запись настроек программы
     void polReestr();//Чтение настроек программы
 
+    QString	m_strDocPut;//Путь который будет хранить домашнюю деррикторию приложения.
+
     uint	m_untHeight;//Высота окна приложения.
     uint	m_untWidth;//Ширина окна приложения.
     bool	m_blPdfViewer;//Флаг pdf просмотрщика.
     bool	m_blAppRedaktor;//Флаг Редактора вкл/выкл.
     uint 	m_untShrift;//Размер шрифта 0-маленький, 1-средний, 2-большой.
+    QString m_strKatalogPut;//Путь сохранения каталога документов.
     uint	m_untNastroikiMaxLength;//Максимальная длина строки текста в Свойстве Q_PROPERTY
 
     QString m_strTitul;//аргумент элемента имени Титула в Свойстве Q_PROPERTY
