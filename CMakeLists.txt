@@ -137,10 +137,65 @@ if(QT_VERSION_MAJOR EQUAL 6)
 	qt_import_qml_plugins(${EXECUTABLE_NAME})
 	qt_finalize_executable(${EXECUTABLE_NAME})
 endif()
-# Автоверсия приложения из git
-set(BUILD_NUM "$ENV{GITHUB_RUN_NUMBER}")
-if(NOT BUILD_NUM)
-	set(BUILD_NUM "0")
+
+# Автоверсия приложения из git (формат: vX.Y.Z[-N-g<sha>[-dirty]])
+find_package(Git QUIET)
+
+set(APP_VERSION "v0.0.0")
+set(APP_SEMVER "0.0.0")
+set(GIT_SHA "")
+
+if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
+  # Короткий SHA
+  execute_process(
+	COMMAND ${GIT_EXECUTABLE} rev-parse --short=7 HEAD
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	OUTPUT_VARIABLE GIT_SHA
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+	ERROR_QUIET
+  )
+
+  # Пытаемся получить версию по тегам вида v1.2.3
+  execute_process(
+	COMMAND ${GIT_EXECUTABLE} describe --tags --match "v[0-9]*" --abbrev=7 --dirty
+	WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	RESULT_VARIABLE DESCRIBE_RESULT
+	OUTPUT_VARIABLE GIT_DESCRIBE
+	OUTPUT_STRIP_TRAILING_WHITESPACE
+	ERROR_QUIET
+  )
+
+  if(DESCRIBE_RESULT EQUAL 0 AND GIT_DESCRIBE MATCHES "^v[0-9]+\\.[0-9]+\\.[0-9]+")
+	# Нашли ближайший тег → vX.Y.Z или vX.Y.Z-N-g<sha>[-dirty]
+	set(APP_VERSION "${GIT_DESCRIBE}")
+
+	# Вытащим чистый семвер без "v"
+	string(REGEX MATCH "^v[0-9]+\\.[0-9]+\\.[0-9]+" APP_TAG_BASE "${GIT_DESCRIBE}")
+	string(REGEX REPLACE "^v" "" APP_SEMVER "${APP_TAG_BASE}")
+  else()
+	# Тегов нет → фоллбек v0.0.0-<count>-g<sha>
+	execute_process(
+	  COMMAND ${GIT_EXECUTABLE} rev-list --count HEAD
+	  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+	  OUTPUT_VARIABLE COMMIT_COUNT
+	  OUTPUT_STRIP_TRAILING_WHITESPACE
+	  ERROR_QUIET
+	)
+	if(NOT COMMIT_COUNT)
+	  set(COMMIT_COUNT 0)
+	endif()
+	if(GIT_SHA)
+	  set(APP_VERSION "v0.0.0-${COMMIT_COUNT}-g${GIT_SHA}")
+	else()
+	  set(APP_VERSION "v0.0.0-${COMMIT_COUNT}")
+	endif()
+	set(APP_SEMVER "0.0.0")
+  endif()
 endif()
-set(APP_VERSION "1.${BUILD_NUM}")
-target_compile_definitions(${EXECUTABLE_NAME} PRIVATE APP_VERSION="${APP_VERSION}")
+
+# Прокидываем в код. ДОЛЖНО стоять после add_executable(...)
+target_compile_definitions(${EXECUTABLE_NAME} PRIVATE
+  APP_VERSION="${APP_VERSION}"      # например: v1.2.3-12-g1a2b3c4
+  APP_SEMVER="${APP_SEMVER}"        # например: 1.2.3
+  GIT_SHA="${GIT_SHA}"              # например: 1a2b3c4
+)
