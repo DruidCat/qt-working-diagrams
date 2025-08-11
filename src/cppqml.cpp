@@ -38,7 +38,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_strFileDialogPut(""),
                                         m_strFileDialogModel(""),
                                         m_blFileDialogCopy(false),
-                                        m_blFileDialogPlan(false),
+                                        m_strFileDialogMode(""),
 
                                         m_blPlanPervi(false),
 
@@ -335,7 +335,7 @@ bool DCCppQml::delStrSpisok(QString strSpisokKod){//Удалить Список 
     for(quint64 ullShag = 0; ullShag < ullKolichestvo; ullShag++){//Перебираем таблицы для удаления.
         quint64 ullElementKod = slsElementKod[ullShag].toULongLong();//Преобразуем строку в число из списка.
         if(m_pDataDannie->udalDannieFaili(ullSpisokKod, ullElementKod)){//Если удалили файлы Элем.
-            if(m_pDataDannie->udalDannieTablicu(ullSpisokKod, ullElementKod)){//Удаляем таблицу Элемента, успех.
+            if(m_pDataDannie->udalDannieTablicu(ullSpisokKod, ullElementKod)){//Удаляем таблицу Элемента,успех
                 if(!m_pDataElement->udalElementDB(ullSpisokKod, ullElementKod)){//Если ошибка Удаления в БД
                     qdebug(tr("Ошибка удаления элемента."));
                     return false;//Ошибка удаления.
@@ -624,7 +624,7 @@ QString DCCppQml::strDannieDB() {//Возвратить JSON строку с Д�
     m_blDanniePervi = m_pDataDannie->polDanniePervi();//Первые Данные или нет? Строчка обязательна тут.
     return m_strDannieDB;//И только после этого возвращаем её, это важно.
 }
-void DCCppQml::setStrDannieDB(const QString& strImyaFaila) {//Запись Данных в БД.
+void DCCppQml::setStrDannieDB(const QString& strImyaFaila) {//Запись Данных в БД.Пользуйся copyDannie(QString)
 ///////////////////////////////////
 //---З А П И С Ь   Д А Н Н Ы Х---//
 ///////////////////////////////////
@@ -646,6 +646,31 @@ void DCCppQml::setStrDannieDB(const QString& strImyaFaila) {//Запись Да�
         //Копируем Документ в Приложение, делаем запись в БД, а сигнал об этих действиях в slotFileDialogCopy
         m_pDataDannie->ustDannie(m_ullSpisokKod, m_ullElementKod, strImyaFaila, strDannie);//Копируем,записыва
     }
+}
+bool DCCppQml::copyDannie(const QString strImyaFaila){//Копировать файл Данных.
+///////////////////////////////////
+//---З А П И С Ь   Д А Н Н Ы Х---//
+///////////////////////////////////
+
+    if(m_pdcclass->isEmpty(strImyaFaila))//Если пустая строка, то...
+        qdebug(tr("Нельзя сохранить пустые данные."));
+    else{
+        QString strDannie = m_pdcclass->baseName(strImyaFaila);//Убираем расширение из имени файла.
+        strDannie = redaktorTexta(strDannie);//Редактируем текст по стандартам приложения.
+        QStringList slsDannie = m_pDataDannie->polDannie(m_ullSpisokKod, m_ullElementKod);//Получить Данные
+        for(int ntShag = 0; ntShag<slsDannie.size(); ntShag++){//Проверка на одинаковые имена Данных
+            if(slsDannie[ntShag] == strDannie){
+                qdebug(tr("Нельзя сохранять одинаковые данные."));
+                return false;//Ошибка.
+            }
+        }
+        //Копируем Документ в Приложение, делаем запись в БД, а сигнал об этих действиях в slotFileDialogCopy
+        if(m_pDataDannie->ustDannie(m_ullSpisokKod, m_ullElementKod, strImyaFaila, strDannie)){//Копир. Успех.
+            qdebug(tr("Успешное добавление документа."));
+            return true;//Успех
+        }
+    }
+    return false;//Ошибка
 }
 bool DCCppQml::renStrDannieDB(QString strDannie, QString strDannieNovi) {//Переименовать Данные.
 /////////////////////////////////////////////////
@@ -746,10 +771,22 @@ QString DCCppQml::strFileDialogPut() {//Возвратить путь отобр
 //---П О Л У Ч И Т Ь   П У Т Ь   F I L E D I A L O G---//
 /////////////////////////////////////////////////////////
     m_strFileDialogPut = m_pFileDialog->polFileDialogPut();//Получить путь каталога.
-	if(m_blFileDialogPlan)//Если выбрано копирование Плана, то...
-		m_pDataPlan->ustFileDialogPut(m_strFileDialogPut);//Задаём путь к каталогу,где лежит файл для записи
-	else//Если выбрано копирование Данных, то...
-		m_pDataDannie->ustFileDialogPut(m_strFileDialogPut);//Задаём путь к каталогу,где лежит файл для записи
+    if(m_strFileDialogMode == "plan")//Если выбрано копирование Плана, то...
+        m_pDataPlan->ustFileDialogPut(m_strFileDialogPut);//Задаём путь к каталогу,где лежит файл для записи
+    else{
+        if(m_strFileDialogMode == "filedialog")//Если выбрано копирование Данных, то...
+            m_pDataDannie->ustFileDialogPut(m_strFileDialogPut);//устпуть к каталогу,где лежит файл для записи
+        else{
+            if(m_strFileDialogMode == "polkatalog"){//Если выбран режим открыть папку каталога, то...
+
+            }
+            else{
+                if(m_strFileDialogMode == "ustkatalog"){//Если выбран режим задать каталог, то...
+
+                }
+            }
+        }
+    }
     return m_strFileDialogPut;//Возвратить путь отображения содержимого папки.
 }
 void DCCppQml::setStrFileDialogPut(const QString& strFileDialogPutNovi){//Запис. новый путь отображения папки.
@@ -777,13 +814,14 @@ void DCCppQml::setStrFileDialogModel(const QString &strFileDialogImya){//При�
     else//Иначе...
         m_strFileDialogModel = "1";//возвращаем 1-файл
 }
-void DCCppQml::setBlFileDialogPlan(const bool& blFileDialogPlanNovi){//Изменение флага Плана или Данных.
+void DCCppQml::setStrFileDialogMode(const QString& strFileDialogModeNovi){//Изменение флага Плана или Данных.
 ///////////////////////////////////////
 //---П Л А Н   И Л И   Д А Н Н Ы Е---//
 ///////////////////////////////////////
-    if(blFileDialogPlanNovi != m_blFileDialogPlan){//Если Данные не равны выбранному до этого, то...
-    	m_blFileDialogPlan = blFileDialogPlanNovi;//Приравниваем.
-        emit blFileDialogPlanChanged();//Излучаем сигнал об изменении аргумента.
+    if(strFileDialogModeNovi != m_strFileDialogMode){//Если Данные не равны выбранному до этого, то...
+        m_strFileDialogMode = strFileDialogModeNovi;//Приравниваем.
+        strFileDialogPut();//ВАЖНО! Задаём режим.
+        emit strFileDialogModeChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
 bool DCCppQml::blPlanPervi(){//Возвращает флаг Первый План?
@@ -797,7 +835,12 @@ bool DCCppQml::copyPlan(QString strImyaFaila){//Копировать файл П
 ///////////////////////////////////////////////
 //---К О П И Р У Е М   Ф А Й Л   П Л А Н А---//
 ///////////////////////////////////////////////
-    return m_pDataPlan->ustPlan(m_ullSpisokKod, m_ullElementKod, strImyaFaila);//Копируем файл и возв. статус.
+
+    if(m_pDataPlan->ustPlan(m_ullSpisokKod, m_ullElementKod, strImyaFaila)){//Если успешно скопировался план.
+        qdebug(tr("Успешное добавление плана."));
+        return true;//Успех.
+    }
+    return false;//Ошибка.
 }
 QString DCCppQml::polPutImyaPlan(){//Получить полный путь с именем Плана.
 ///////////////////////////////////////////////////////////
@@ -891,7 +934,7 @@ void DCCppQml::slotFileDialogCopy(bool blStatusCopy){//Обрабатываем 
 //---С Л О Т   С Т А Т У С А   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
 ///////////////////////////////////////////////////////////////////////////////////
     m_blFileDialogCopy = blStatusCopy;//Приравниваем.
-    if(!m_blFileDialogPlan){//Если копирование Данных, то...
+    if(m_strFileDialogMode == "filedialog"){//Если копирование Данных в проводнике, то...
         if(blStatusCopy){//Если успешно скопировались документы и записались данные, то...
             emit strDannieDBChanged();//Излучаем сигнал об изменении списка Данных.
         }

@@ -24,7 +24,7 @@ ApplicationWindow {
 		else//Эсли не мобильная, то...
 			return false;//Это не мобильная платформа.
 	}
-    property bool planFileDialog: false//Проводник false - открыт для Данных. true - открыт для Плана.
+    property string modeFileDialog: ""//plan, filedialog, polkatalog, ustkatalog
     //Настройки.
     visible: true
 	color: "grey"
@@ -454,7 +454,7 @@ ApplicationWindow {
 					stvStr.pop()//Назад страницу
 				}
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
-					root.planFileDialog = false;//Открываем проводник для Данных.
+                    root.modeFileDialog = "filedialog";//Открываем проводник для Данных.
                     pgStrFileDialog.textZagolovok = pgStrDannie.textZagolovok;//Заголовок Данных.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
                     cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
@@ -537,11 +537,11 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrFileDialog.zagolovokLevi;
                 tapZagolovokPravi: pgStrFileDialog.zagolovokPravi
                 tapToolbarLevi: pgStrFileDialog.toolbarLevi; tapToolbarPravi: pgStrFileDialog.toolbarPravi
-				blPlan: root.planFileDialog//Выбор режима открытия проводника для Плана или Данных.
+                modeFileDialog: root.modeFileDialog//Выбор режима открытия проводника для Плана или Данных.
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
                 onClickedZakrit: {//Если нажата кнопка Назад или Закрыть, то...
-                    if(root.planFileDialog){//Если открывался План, то...
+                    if(root.modeFileDialog === "plan"){//Если открывался План, то...
                         let ltPdfUrl;//Переменная хранящая путь pdf файла.
                         if(cppqml.blPlanPervi)//Если план еще не задан, то...
                             ltPdfUrl = "qrc:///workingdata/plan.pdf";//То открываем инструкцию пользователя.
@@ -556,8 +556,20 @@ ApplicationWindow {
                                 Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
                         }
                     }
-                    else//Если открывались Данные, то...
-                        stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
+                    else{
+                        if(root.modeFileDialog === "filedialog")//Если открывались Данные, то...
+                            stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
+                        else{
+                            if(root.modeFileDialog === "polkatalog"){
+
+                            }
+                            else{
+                                if(root.modeFileDialog === "ustkatalog"){
+
+                                }
+                            }
+                        }
+                    }
                     stvStr.pop()//Назад страницу
                 }
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
@@ -656,7 +668,7 @@ ApplicationWindow {
 
                 onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
-					root.planFileDialog = true;//Открываем проводник для План.
+                    root.modeFileDialog = "plan";//Открываем проводник для План.
                     pgStrFileDialog.textZagolovok = stvStr.infoElement//Заголовок Проводника.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
                     cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника

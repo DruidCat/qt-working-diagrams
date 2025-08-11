@@ -32,7 +32,7 @@ Item {
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
-    property bool blPlan: false//true - проводник открыт для Плана. false - проводник открыт для Данных.
+    property string modeFileDialog: ""//plan, filedialog, polkatalog, ustkatalog
     property int logoRazmer: 22//Размер Логотипа.
     property string logoImya: "mentor"//Имя логотипа в DCLogo
     //Настройки.
@@ -44,8 +44,8 @@ Item {
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 	signal signalToolbar (var strToolbar);//Сигнал излучающий в Toolbar в Проводнике.
     //Функции.
-	onBlPlanChanged: {//Если переменная изменилась, то...
-		cppqml.blFileDialogPlan = root.blPlan;//В бизнес логику настройки копирования Плана или Данных.
+    onModeFileDialogChanged: {//Если режим проводника изменилась, то...
+        cppqml.strFileDialogMode = root.modeFileDialog;//В бизнес логику настройки режима проводника
 	}
 	Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
@@ -194,13 +194,25 @@ Item {
                                 knopkaInfo.visible = false//Делаем кнопку информации невидимой.
                                 tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
                                 cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
-                                if(root.blPlan){//Если выбран режим сохранения документа Плана, то...
-                                    if(!cppqml.copyPlan(strFileDialog)){//Если ошибка Копирования файла Плана.
+                                if(root.modeFileDialog === "plan"){//Если выбран режим сохранения Плана, то...
+                                    if(!cppqml.copyPlan(strFileDialog))//Если ошибка Копирования файла Плана.
                                         fnCopyStop();//Останавливаем анимацию копирования, закрываем проводник
+                                }
+                                else{
+                                    if(root.modeFileDialog === "filedialog"){//Если режим Проводника, то...
+                                        if(!cppqml.copyDannie(strFileDialog))//Если ошибка Копирования файла.
+                                            fnCopyStop();//Останавливаем анимацию копирования,закр. проводник.
                                     }
-								}
-								else{//Если выбран режим сохранения документа Данных, то...
-                                    cppqml.strDannieDB = cppqml.strFileDialog;//Сохранить имя Док. и Документ
+                                    else{
+                                        if(root.modeFileDialog === "polkatalog"){//Отобразить папку Каталог
+
+                                        }
+                                        else{
+                                            if(root.modeFileDialog === "ustkatalog"){//Если задать Каталог
+
+                                            }
+                                        }
+                                    }
 								}
                             }
                         }

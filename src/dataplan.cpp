@@ -130,7 +130,7 @@ bool DataPlan::copyPlan(QString strAbsolutPut, QString strImyaFaila){//Копи�
         return true;
 	}
 	else
-		qdebug(tr("Выбранный файл отсутствует!"));
+        qdebug(tr("Выбранный файл отсутствует!"));
 	
 	return false;
 }
