@@ -179,7 +179,6 @@ if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 		endif()
 	endif()
 endif()
-
 # Прокидываем в код. ДОЛЖНО стоять после add_executable(...)
 target_compile_definitions(${EXECUTABLE_NAME} PRIVATE
   APP_VERSION="${APP_VERSION}"      # например: v1.2.3-12-g1a2b3c4
