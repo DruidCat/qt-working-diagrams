@@ -43,7 +43,7 @@ bool DataPlan::ustPlan(quint64 ullSpisokKod, quint64 ullElementKod, QString strF
 ///////////////////////////////////////
 //---З А П И С А Т Ь   Д А Н Н Ы Х---//
 ///////////////////////////////////////
-    QString strAbsolutPut=m_strFileDialogPut+QDir::separator()+strFail;//Абсолют путь с именем файла+разшире
+    QString strAbsolutPut = QDir(m_strFileDialogPut).filePath(strFail);//Абсолют путь с именем файла+разшире
     QString strImyaFaila(polImyaFaila(ullSpisokKod, ullElementKod));//Задаём имя файла с Док
     return copyPlan(strAbsolutPut, strImyaFaila);//Копируем Документ в отдельном потоке.
 }
@@ -76,7 +76,7 @@ bool DataPlan::estImyaFaila(QString strImyaFaila){//Есть такой файл
 /////////////////////////////////////////
 //---Е С Т Ь   Т А К О Й   Ф А Й Л ?---//
 /////////////////////////////////////////
-    QFile flImyaFaila(m_strMentorPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
+    QFile flImyaFaila(QDir(m_strMentorPut).filePath(strImyaFaila));//Объект на файл в каталоге.
     if(flImyaFaila.exists())//Есть такой файл, то...
         return true;
     return false;
@@ -85,7 +85,7 @@ bool DataPlan::udalFail(QString strImyaFaila){//Удалить файл в ка�
 /////////////////////////////////////////////
 //---У Д А Л И Т Ь   Т А К О Й   Ф А Й Л---//
 /////////////////////////////////////////////
-    QFile flImyaFaila(m_strMentorPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
+    QFile flImyaFaila(QDir(m_strMentorPut).filePath(strImyaFaila));//Объект на файл в каталоге.
     if(flImyaFaila.exists()){//Есть такой файл, то...
         if(flImyaFaila.remove())//Если файл удалился, то...
             return true;//Успех
@@ -125,7 +125,7 @@ bool DataPlan::copyPlan(QString strAbsolutPut, QString strImyaFaila){//Копи�
             if(!udalFail(strImyaFaila))//Удаляем файл с таким же именем. Если файл не удалился, то...
                 return false;//Ошибка удаления.
         }
-        m_pcopyplan->ustPutiFailov(strAbsolutPut, m_strMentorPut+QDir::separator()+strImyaFaila);
+        m_pcopyplan->ustPutiFailov(strAbsolutPut, QDir(m_strMentorPut).filePath(strImyaFaila));
         m_pcopyplan->start();//Запускаем поток и ждём сигнала о завершении копирования.
         return true;
 	}

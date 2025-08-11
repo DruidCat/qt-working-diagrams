@@ -75,8 +75,8 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     }
     QString strMentorPut = odrMentor.path();//Присваеваем переменной каталог приложения.
 
-    strImyaDB = strMentorPut + QDir::separator() + strImyaDB;
-    strImyaDBData  = strMentorPut + QDir::separator() + strImyaDBData;
+    strImyaDB = QDir(strMentorPut).filePath(strImyaDB);//каталог + файл
+    strImyaDBData  = QDir(strMentorPut).filePath(strImyaDBData);//каталог + файл.
 
     m_pDataTitul = new DataTitul(strImyaDB, strLoginDB, strParolDB);//Титул.
     m_pDataSpisok = new DataSpisok(strImyaDB, strLoginDB, strParolDB, ullSpisokMax);//Список.
@@ -185,7 +185,7 @@ void DCCppQml::ustReestr(){//Запись настроек программы
     m_sttReestr.setValue("/pdf_viewer", m_blPdfViewer);//Записываем просмотрщик pdf документов.
     m_sttReestr.setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
     m_sttReestr.setValue("/shrift", m_untShrift);//Записываем размер Шрифта 0-мал, 1-средний, 2-большой.
-    m_sttReestr.setValue("/katalog_put", m_strKatalogPut);//Записываем путь сохранения каталога документов.
+    m_sttReestr.setValue("/katalog_put", QDir::toNativeSeparators(m_strKatalogPut));//Записываем путь каталога
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::polReestr(){//Чтение настроек программы
@@ -198,7 +198,7 @@ void DCCppQml::polReestr(){//Чтение настроек программы
     m_blPdfViewer = m_sttReestr.value("/pdf_viewer", true).toBool();//Читаем просмотрщик документов, по умол 1
     m_blAppRedaktor = m_sttReestr.value("/app_redaktor", true).toBool();//Читаем флаг редактора, по умол 1
     m_untShrift = m_sttReestr.value("/shrift", 1).toInt();//Читаем шрифт, по умол 1-средний
-    m_strKatalogPut = m_sttReestr.value("/katalog_put", m_strDomPut).toString();//Читаем путь катало
+    m_strKatalogPut = m_sttReestr.value("/katalog_put", QDir::toNativeSeparators(m_strDomPut)).toString();
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::setUntHeight(const uint& untHeight) {//Изменяем высоту окна приложения.
@@ -740,7 +740,7 @@ QString DCCppQml::strDannieUrl(){//Возвратить Url файла.
     QString strImyaFaila = m_pDataDannie->polImyaFaila(m_ullSpisokKod, m_ullElementKod, m_ullDannieKod);
     if(!strImyaFaila.isEmpty()){//ЭТО ВАЖНАЯ СТРОКА. Если не пустая строка, то...
         if(m_pDataDannie->estImyaFaila(strImyaFaila)){//Если есть такой файл, то...
-            QString strDannieUrl = m_pDataDannie->polMentor() + QDir::separator() + strImyaFaila;
+            QString strDannieUrl = QDir(m_pDataDannie->polMentor()).filePath(strImyaFaila);//Папка+файл.
             QUrl rlDannieUrl = QUrl::fromUserInput(strDannieUrl);//Переводим в формат Url адреса.
             m_strDannieUrl = rlDannieUrl.toString();//Перефодим адресс Url в строку.
             return m_strDannieUrl;//Возращаем Url адресс в виде строки.
@@ -846,9 +846,8 @@ QString DCCppQml::polPutImyaPlan(){//Получить полный путь с �
 ///////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   П У Т Ь   И   И М Я   Ф А Й Л А---//
 ///////////////////////////////////////////////////////////
-    QString strPutImya = m_pDataPlan->polMentor()
-                         +QDir::separator()
-                         +m_pDataPlan->polImyaFaila(m_ullSpisokKod, m_ullElementKod);
+    QString strPutImya =
+        QDir(m_pDataPlan->polMentor()).filePath(m_pDataPlan->polImyaFaila(m_ullSpisokKod, m_ullElementKod));
 	QUrl rlPutImyaUrl = QUrl::fromUserInput(strPutImya);//Переводим в формат Url адреса.
     return rlPutImyaUrl.toString();//Перефодим адресс Url в строку и возвращаем.
 }

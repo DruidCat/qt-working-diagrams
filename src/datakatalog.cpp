@@ -397,7 +397,7 @@ bool DataKatalog::sozdatDannie(const uint untDannieNomer){//Cкопироват�
                 QString strFailCopyKuda = QDir(m_pdrPut->absolutePath()).filePath(strDannie);
                 m_pcopykatalog->ustPutiFailov(strFailCopyOtkuda, strFailCopyKuda);
                 m_pcopykatalog->start();//Запускаем поток и ждём сигнала о завершении копирования.
-                emit signalKatalogDocCopy(strFailCopyKuda);//Сигнал пути
+                emit signalKatalogDocCopy(QDir::toNativeSeparators(strFailCopyKuda));//Сигнал пути
             }
             else//Если данного файла не существует, то...
                 slotCopyDannie(true);//Слот статуса скопированного документа.
@@ -424,7 +424,7 @@ bool DataKatalog::sozdatDannie(const uint untDannieNomer){//Cкопироват�
                     QString strFailCopyKuda = QDir(m_pdrPut->absolutePath()).filePath(strDannie);//Путь+файл.
                     m_pcopykatalog->ustPutiFailov(strFailCopyOtkuda, strFailCopyKuda);
                     m_pcopykatalog->start();//Запускаем поток и ждём сигнала о завершении копирования.
-                    emit signalKatalogDocCopy(strFailCopyKuda);//Сигнал с Путём
+                    emit signalKatalogDocCopy(QDir::toNativeSeparators(strFailCopyKuda));//Сигнал с Путём
                 }
                 else{
                     qdebug(tr("Выбранный файл отсутствует!"));
@@ -453,7 +453,7 @@ bool DataKatalog::sozdatOpisanie(){//Создаём ОПИСАНИЕ Титул�
         qdebug(tr("Не удалось создать файл: ") + flOpisanie.errorString());
         return false;//Ошибка.
     }
-    emit signalKatalogDocCopy(strFailCopyKuda);//Излучаем сигнал с абсолютным путём скопированного документа.
+    emit signalKatalogDocCopy(QDir::toNativeSeparators(strFailCopyKuda));//Излучаем сигнал с абсолютным путём скопированного документа.
     return true;//Успех создания Описания.
 }
 bool DataKatalog::sozdatOpisanie(const uint untSpisokKod){//Создание Описания Списка.
@@ -473,7 +473,7 @@ bool DataKatalog::sozdatOpisanie(const uint untSpisokKod){//Создание О�
         qdebug(tr("Не удалось создать файл: ") + flOpisanie.errorString());
         return false;//Ошибка.
     }
-    emit signalKatalogDocCopy(strFailCopyKuda);//Излучаем сигнал с абсолютным путём скопированного документа.
+    emit signalKatalogDocCopy(QDir::toNativeSeparators(strFailCopyKuda));//Излучаем сигнал с абсолютным путём скопированного документа.
     return true;//Успех создания Описания.
 }
 bool DataKatalog::sozdatOpisanie(const uint untSpisokKod, const uint untElementKod){//Создаём ОПИСАНИЕ.
@@ -500,7 +500,7 @@ bool DataKatalog::sozdatOpisanie(const uint untSpisokKod, const uint untElementK
         qdebug(tr("Не удалось создать файл: ") + flOpisanie.errorString());
         return false;//Ошибка.
     }
-    emit signalKatalogDocCopy(strFialCopyKuda );//Излучаем сигнал с абсолютным путём скопированного документа.
+    emit signalKatalogDocCopy(QDir::toNativeSeparators(strFialCopyKuda));//Излучаем сигнал с абсолютным путём скопированного документа.
     return true;//Успех создания файла Описания.
 }
 bool DataKatalog::nazadSpisok(){//Переходим назад в папку со Списками.

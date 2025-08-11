@@ -99,7 +99,7 @@ bool DataDannie::ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString 
 ///////////////////////////////////////
 //---З А П И С А Т Ь   Д А Н Н Ы Х---//
 ///////////////////////////////////////
-    QString strAbsolutPut=m_strFileDialogPut+QDir::separator()+strFail;//Абсолют путь с именем файла+разшире
+    QString strAbsolutPut = QDir(m_strFileDialogPut).filePath(strFail);//Абсолют путь с именем файла+разшире
     //Имя таблицы задаём тут, а записываем даные в таблицу в слоте slotCopyDannie(bool).
     m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
     if(!m_pdbDannie->CREATE()){//Если таблица не создалась
@@ -222,7 +222,7 @@ bool DataDannie::estImyaFaila(QString strImyaFaila){//Есть такой фай
 /////////////////////////////////////////
 //---Е С Т Ь   Т А К О Й   Ф А Й Л ?---//
 /////////////////////////////////////////
-    QFile flImyaFaila(m_strMentorPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
+    QFile flImyaFaila(QDir(m_strMentorPut).filePath(strImyaFaila));//Объект на файл в каталоге.
     if(flImyaFaila.exists())//Есть такой файл, то...
         return true;
     return false;
@@ -231,7 +231,7 @@ bool DataDannie::udalFail(QString strImyaFaila){//Удалить файл в к�
 /////////////////////////////////////////////
 //---У Д А Л И Т Ь   Т А К О Й   Ф А Й Л---//
 /////////////////////////////////////////////
-    QFile flImyaFaila(m_strMentorPut+QDir::separator()+strImyaFaila);//Объект на файл в каталоге.
+    QFile flImyaFaila(QDir(m_strMentorPut).filePath(strImyaFaila));//Объект на файл в каталоге.
     if(flImyaFaila.exists()){//Есть такой файл, то...
         if(flImyaFaila.remove())//Если файл удалился, то...
             return true;//Успех
@@ -287,14 +287,13 @@ bool DataDannie::copyDannie(QString strAbsolutPut, QString strImyaFaila){//Ко�
 //---К О П И Р О В А Т Ь   Д А Н Н Ы Е---//
 ///////////////////////////////////////////
 
-    qDebug()<< strAbsolutPut << strImyaFaila;
     QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать, расположенный...
     if(flDannie.exists()){//Если данный файл существует, то...
         if(estImyaFaila(strImyaFaila)){//Если такой файл с таким же именем существует, то...
             if(!udalFail(strImyaFaila))//Удаляем файл с таким же именем. Если файл не удалился, то...
                 return false;//Ошибка удаления.
         }
-        m_pcopydannie->ustPutiFailov(strAbsolutPut, m_strMentorPut+QDir::separator()+strImyaFaila);
+        m_pcopydannie->ustPutiFailov(strAbsolutPut, QDir(m_strMentorPut).filePath(strImyaFaila));
         m_pcopydannie->start();//Запускаем поток и ждём сигнала о завершении копирования.
         return true;
 	}
