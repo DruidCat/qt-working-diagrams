@@ -390,6 +390,7 @@ Item {
                         pdfLoader.item.password = strPassword;//Передаём пароль в документ.
                         pssPassword.password = "";//Обнуляем вводимый пароль в TextInput.
                         //pssPassword.passTrue = false;//Делаем крассным, если пароль верный, никто не увидит.
+                        spbPdfPage.from = 1;//1 страница, это минимум.
                         spbPdfPage.to = pdfLoader.item.pageCount;//Задаём максимальное кол-во страниц в DCSpinBox
                     }
                     else//Если пароли совпадают, то...
