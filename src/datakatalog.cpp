@@ -85,7 +85,7 @@ int DataKatalog::polPdfSummu(){//Возвратим приблизительну
                                         +"_"+QString::number(untElementKod))){//Проверка наличия табл.
                     uint ntImyaFaila = untSpisokKod*1000 + untElementKod;//Имя Плана.
                     QString strImyaFaila = QString("%1").arg(ntImyaFaila, 6, 10, QLatin1Char('0'))+".pdf";
-                    QString strAbsolutPut = m_strWorkingData + QDir::separator() + strImyaFaila;//Абсолют путь
+                    QString strAbsolutPut = QDir(m_strWorkingData).filePath(strImyaFaila);//Папка+файл.
                     QFile flDannie (strAbsolutPut);//Файл Плана, который мы хотим проверить на наличие.
                     if(flDannie.exists())//Если данный файл Плана существует, то...
                         untDannie += 1;//+1 План.
@@ -390,16 +390,14 @@ bool DataKatalog::sozdatDannie(const uint untDannieNomer){//Cкопироват�
             QString strDannie = strDannieNomer + " " + m_strElement + ".pdf";//Собираем имя ПЛАН + pdf.
             uint ntImyaFaila = (m_untSpisokKod*1000)+m_untElementKod;//Имя Плана.
             QString strImyaFaila = QString("%1").arg(ntImyaFaila, 6, 10, QLatin1Char('0'))+".pdf";//имя файла
-            QString strAbsolutPut=m_strWorkingData+QDir::separator()+strImyaFaila;//Абсолют путь с именем файл
+            QString strFailCopyOtkuda = QDir(m_strWorkingData).filePath(strImyaFaila);//Папка + файл.
 
-            QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать, расположенный...
+            QFile flDannie (strFailCopyOtkuda);//Файл, который мы хотим скопировать, расположенный...
             if(flDannie.exists()){//Если данный файл существует, то...
-                m_pcopykatalog->ustPutiFailov(strAbsolutPut, m_pdrPut->absolutePath()+QDir::separator()
-                                                                 +strDannie);
+                QString strFailCopyKuda = QDir(m_pdrPut->absolutePath()).filePath(strDannie);
+                m_pcopykatalog->ustPutiFailov(strFailCopyOtkuda, strFailCopyKuda);
                 m_pcopykatalog->start();//Запускаем поток и ждём сигнала о завершении копирования.
-                QString strNativPut = QDir::toNativeSeparators(m_pdrPut->absolutePath()
-                                                          +QDir::separator()+strDannie);//Нативный Путь ОС
-                emit signalKatalogDocCopy(strNativPut);//Сигнал пути
+                emit signalKatalogDocCopy(strFailCopyKuda);//Сигнал пути
             }
             else//Если данного файла не существует, то...
                 slotCopyDannie(true);//Слот статуса скопированного документа.
@@ -420,16 +418,13 @@ bool DataKatalog::sozdatDannie(const uint untDannieNomer){//Cкопироват�
                 m_untDannieKod = m_pdbDannie->SELECT("Номер",QString::number(untDannieNomer),"Код").toUInt();
                 uint ntImyaFaila = (m_untSpisokKod*1000000)+(m_untElementKod*1000)+m_untDannieKod;
                 QString strImyaFaila = QString("%1").arg(ntImyaFaila, 9, 10, QLatin1Char('0'))+".pdf";//имя
-                QString strAbsolutPut=m_strWorkingData+QDir::separator()+strImyaFaila;//Абсолют путь с именем
-
-                QFile flDannie (strAbsolutPut);//Файл, который мы хотим скопировать, расположенный...
+                QString strFailCopyOtkuda = QDir(m_strWorkingData).filePath(strImyaFaila);//Абсолют путь+файл
+                QFile flDannie (strFailCopyOtkuda);//Файл, который мы хотим скопировать, расположенный...
                 if(flDannie.exists()){//Если данный файл существует, то...
-                    m_pcopykatalog->ustPutiFailov(strAbsolutPut, m_pdrPut->absolutePath()+QDir::separator()
-                                                                     +strDannie);
+                    QString strFailCopyKuda = QDir(m_pdrPut->absolutePath()).filePath(strDannie);//Путь+файл.
+                    m_pcopykatalog->ustPutiFailov(strFailCopyOtkuda, strFailCopyKuda);
                     m_pcopykatalog->start();//Запускаем поток и ждём сигнала о завершении копирования.
-                    QString strNativPut = QDir::toNativeSeparators(m_pdrPut->absolutePath()
-                                                              +QDir::separator()+strDannie);//Нативный Путь ОС
-                    emit signalKatalogDocCopy(strNativPut);//Сигнал с Путём
+                    emit signalKatalogDocCopy(strFailCopyKuda);//Сигнал с Путём
                 }
                 else{
                     qdebug(tr("Выбранный файл отсутствует!"));
@@ -447,8 +442,8 @@ bool DataKatalog::sozdatOpisanie(){//Создаём ОПИСАНИЕ Титул�
 ///////////////////////////////////////////////////////
 
     QString strImyaFaila = tr("ОПИСАНИЕ ") + m_strTitul + ".txt";//имя файла ОПИСАНИЯ Титула.
-    QString strAbsolutPut= m_pdrPut->absolutePath() + QDir::separator() + strImyaFaila;//Абсолют путь с именем
-    QFile flOpisanie(strAbsolutPut);//Файл, в который мы хотим записать данные...
+    QString strFailCopyKuda = QDir(m_pdrPut->absolutePath()).filePath(strImyaFaila);//Соединяем каталог + файл.
+    QFile flOpisanie(strFailCopyKuda);//Файл, в который мы хотим записать данные...
     if(flOpisanie.open(QIODevice::WriteOnly | QIODevice::Text)){//Если файл открылся в режиме записи, то...
         QTextStream out(&flOpisanie);//Создаём текстовый поток для записи.
         out << m_pdbTitul->SELECT("Код", "1", "Описание");//Читаем и записываем.
@@ -458,8 +453,7 @@ bool DataKatalog::sozdatOpisanie(){//Создаём ОПИСАНИЕ Титул�
         qdebug(tr("Не удалось создать файл: ") + flOpisanie.errorString());
         return false;//Ошибка.
     }
-    QString strNativPut = QDir::toNativeSeparators(strAbsolutPut);//Нативный путь ОС.
-    emit signalKatalogDocCopy(strNativPut);//Излучаем сигнал с абсолютным путём скопированного документа.
+    emit signalKatalogDocCopy(strFailCopyKuda);//Излучаем сигнал с абсолютным путём скопированного документа.
     return true;//Успех создания Описания.
 }
 bool DataKatalog::sozdatOpisanie(const uint untSpisokKod){//Создание Описания Списка.
@@ -468,8 +462,8 @@ bool DataKatalog::sozdatOpisanie(const uint untSpisokKod){//Создание О�
 ///////////////////////////////////////////////////////
 
     QString strImyaFaila = tr("ОПИСАНИЕ ") + m_strSpisok + ".txt";//имя файла ОПИСАНИЯ Списка.
-    QString strAbsolutPut= m_pdrPut->absolutePath() + QDir::separator() + strImyaFaila;//Абсолют путь с именем
-    QFile flOpisanie(strAbsolutPut);//Файл, в который мы хотим записать данные...
+    QString strFailCopyKuda = QDir(m_pdrPut->absolutePath()).filePath(strImyaFaila);//Абсолют путь + файл.
+    QFile flOpisanie(strFailCopyKuda);//Файл, в который мы хотим записать данные...
     if(flOpisanie.open(QIODevice::WriteOnly | QIODevice::Text)){//Если файл открылся в режиме записи, то...
         QTextStream out(&flOpisanie);//Создаём текстовый поток для записи.
         out << m_pdbSpisok->SELECT("Код", QString::number(untSpisokKod), "Описание");//Читаем и записываем.
@@ -479,8 +473,7 @@ bool DataKatalog::sozdatOpisanie(const uint untSpisokKod){//Создание О�
         qdebug(tr("Не удалось создать файл: ") + flOpisanie.errorString());
         return false;//Ошибка.
     }
-    QString strNativPut = QDir::toNativeSeparators(strAbsolutPut);//Нативный путь ОС.
-    emit signalKatalogDocCopy(strNativPut);//Излучаем сигнал с абсолютным путём скопированного документа.
+    emit signalKatalogDocCopy(strFailCopyKuda);//Излучаем сигнал с абсолютным путём скопированного документа.
     return true;//Успех создания Описания.
 }
 bool DataKatalog::sozdatOpisanie(const uint untSpisokKod, const uint untElementKod){//Создаём ОПИСАНИЕ.
@@ -496,8 +489,8 @@ bool DataKatalog::sozdatOpisanie(const uint untSpisokKod, const uint untElementK
         return false;//Ошибка.
     }
     QString strImyaFaila = tr("ОПИСАНИЕ ") + m_strElement + ".txt";//имя файла ОПИСАНИЯ Элемента.
-    QString strAbsolutPut= m_pdrPut->absolutePath() + QDir::separator() + strImyaFaila;//Абсолют путь с именем
-    QFile flOpisanie(strAbsolutPut);//Файл, в который мы хотим записать данные...
+    QString strFialCopyKuda = QDir(m_pdrPut->absolutePath()).filePath(strImyaFaila);//Абсолют путь с именем
+    QFile flOpisanie(strFialCopyKuda);//Файл, в который мы хотим записать данные...
     if(flOpisanie.open(QIODevice::WriteOnly | QIODevice::Text)){//Если файл открылся в режиме записи, то...
         QTextStream out(&flOpisanie);//Создаём текстовый поток для записи.
         out << m_pdbElement->SELECT("Код", QString::number(untElementKod), "Описание");//Читаем и записываем.
@@ -507,7 +500,7 @@ bool DataKatalog::sozdatOpisanie(const uint untSpisokKod, const uint untElementK
         qdebug(tr("Не удалось создать файл: ") + flOpisanie.errorString());
         return false;//Ошибка.
     }
-    emit signalKatalogDocCopy(strAbsolutPut);//Излучаем сигнал с абсолютным путём скопированного документа.
+    emit signalKatalogDocCopy(strFialCopyKuda );//Излучаем сигнал с абсолютным путём скопированного документа.
     return true;//Успех создания файла Описания.
 }
 bool DataKatalog::nazadSpisok(){//Переходим назад в папку со Списками.
