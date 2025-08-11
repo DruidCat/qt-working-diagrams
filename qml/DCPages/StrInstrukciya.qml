@@ -92,7 +92,7 @@ Item {
 					<body>
 <p><center><font color=\"black\">.<img src = \"/images/ts-rus-color.svg\">.</font></center></p>
 <p><center>Приложение: <b>Ментор</b></center></p>
-<p><center>Версия: <b>v0.33</b></center></p>
+<p><center>Версия: <b>")+ Qt.application.version +qsTr("</b></center></p>
 <p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
 <p><center>Приложение скомпилированно с <b>Qt версии 6.8.2</b></centers></p>
 <p><center>Лицензия: <b>GPLv3</b></centers></p>
