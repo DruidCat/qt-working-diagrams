@@ -42,7 +42,7 @@ Item {
     //Сигналы.
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть или Назад.
     signal clickedInfo();//Сигнал нажатич кнопки Инфо, где будет описание работы Файлового Диалога.
-    signal clickedDocument(var strDocumentImya);//Сигнал когда нажат один из документов.
+    signal clickedFail(var strImyaFaila);//Сигнал когда нажат один из документов.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 	signal signalToolbar (var strToolbar);//Сигнал излучающий в Toolbar в Проводнике.
     //Функции.
@@ -215,13 +215,8 @@ Item {
                                             fnCopyStop();//Останавливаем анимацию копирования,закр. проводник.
                                     }
                                     else{
-                                        if(root.modeFileDialog === "polkatalog"){//Отобразить папку Каталог
-                                            //Открываем Pdf документ.
-                                            if(root.pdfViewer)//Если собственный pdf просмотрщик,то
-                                                root.clickedDocument(strFileDialog);//сигнал с именем Документ
-                                            //else//Если сторонний просмотщик pdf документов, то...
-                                                //Qt.openUrlExternally(cppqml.strDannieUrl);//Открываем pdf в стороннем app.
-                                        }
+                                        if(root.modeFileDialog === "polkatalog")//Режим отображения Каталога
+                                            root.clickedFail(strFileDialog);//Сигнал с именем Файла
                                         else{
                                             if(root.modeFileDialog === "ustkatalog"){//Если задать Каталог
 

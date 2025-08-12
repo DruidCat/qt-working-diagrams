@@ -582,19 +582,14 @@ ApplicationWindow {
                     }
                     stvStr.pop()//Назад страницу
                 }
-                onClickedDocument: function (strImyaFaila){
+                onClickedFail: function (strImyaFaila){//Если кликнули по документу.
                     pgStrPdf.textZagolovok = strImyaFaila;//Делаем заголовок с именем Документа.
-                    //Механизм открытия инструкции с внешним просмотрщиком документов.
-                    if(root.pdfViewer)//Если выбран в настройках собственный просмотрщик, то...
+                    if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
                         cppqml.strKatalogUrl = strImyaFaila;//Создаём путь+файл и отправляем в pgStrPdf
-                    /*
-                    else{//Если на сторонний просмотщик pdf документов, то...
-                        tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмотор
-                        if(!cppqml.blPlanPervi)//Если план еще не задан, то...
-                            Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
+                        stvStr.push(pgStrPdf);//Переходим на страницу отображения Pdf документа.
                     }
-                    */
-                    stvStr.push(pgStrPdf);//Переходим на страницу отображения Pdf документа.
+                    else//Если на сторонний просмотщик pdf документов, то...
+                        Qt.openUrlExternally(cppqml.polKatalogUrl(strImyaFaila));//Открываем в стороннем app.
                 }
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
                     pgStrFileDialog.textZagolovok = strZagolovok;//Изменяем заголовок.

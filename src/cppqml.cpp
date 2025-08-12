@@ -917,6 +917,16 @@ void DCCppQml::setStrKatalogUrl(const QString &strImyaFaila){//Передаём 
     m_strKatalogUrl = rlPutImyaUrl.toString();//Переводим адресс Url в строку и приравниваем.
     emit strKatalogUrlChanged();//Излучаем сигнал в qml с путём+файл, который нужно открыть.
 }
+
+QString DCCppQml::polKatalogUrl(const QString &strImyaFaila){//Возвращаем путь+файл в Каталоге по Имени.
+/////////////////////////////////////////////////
+//---С О З Д А Ё М   П У Т Ь   К   Ф А Й Л У---//
+/////////////////////////////////////////////////
+
+    QString strPutImyaFaila = QDir(m_pDataKatalog->polFileDialogPut()).filePath(strImyaFaila);
+    QUrl rlPutImyaUrl = QUrl::fromUserInput(strPutImyaFaila);//Переводим в формат Url адреса.
+    return rlPutImyaUrl.toString();//Переводим адресс Url в строку и возвращаем
+}
 int DCCppQml::polKatalogSummu(){//Получить приблизительное сумарное число файлов в менторе.
 /////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   P D F   С У М М У---//

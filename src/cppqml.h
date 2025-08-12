@@ -245,6 +245,7 @@ public:
     void		setStrKatalogDocCopy(const QString& strPutNovi);//Установить Новый путь скопированного док.
     QString 	strKatalogUrl() { return m_strKatalogUrl; }//Возвращаем путь+файл, который нужно открыть
     void		setStrKatalogUrl(const QString& strImyaFaila);//Передаём имя, создаём путь+файл.
+    Q_INVOKABLE QString polKatalogUrl(const QString& strImyaFaila);//Возвращаем путь+файл в Каталоге по Имени.
     Q_INVOKABLE int		polKatalogSummu();//Получить приблизительное сумарное число файлов в менторе.
     Q_INVOKABLE void	copyKatalogStart();//Начать копирование документов в каталог.
     Q_INVOKABLE void	copyKatalogStop();//Остановить копирование документов в каталог.
