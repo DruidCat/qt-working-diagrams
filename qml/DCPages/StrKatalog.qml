@@ -38,6 +38,7 @@ Item {
     //Сигналы.
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedInfo();//Сигнал  нажатия кнопки Инструкция.
+    signal clickedPolKatalog();//Сигнал нажатия кнопки открытия папки в которой сохранён Каталог документов.
     signal signalZagolovok(var strZagolovok);//Сигнал, когда передаём новую надпись в Заголовок.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции. 
@@ -90,7 +91,7 @@ Item {
 		cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
 		fnClickedEscape();//Функция нажатия кнопки Escape.
 		root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
-	}
+	} 
     function fnClickedKatalog(){//Функция создания каталога pdf документов.
         txdZona.text = txdZona.strCopy = "";//Отображаем пустую строку в TextEdit модуле.
         signalZagolovok(qsTr("ПРОЦЕСС СОЗДАНИЯ КАТАЛОГА"));//Надпись в заголовке
@@ -99,7 +100,10 @@ Item {
         root.rlProgress = 0;//Обнуляем линию прогресса.
         root.rlLoader = 100/cppqml.polKatalogSummu();//Считаем коэффициент загрузчика, на который он увелич.
         cppqml.copyKatalogStart();//Начинаем создание каталога
-    } 
+    }
+    function fnClickedPolKatalog(){//Функция открытия папки, в которой создался Каталог с документами.
+        root.clickedPolKatalog();//Сигнал открытия Проводника.
+    }
     Connections {//Соединяем сигнал из C++ с действием в QML, перерисовываем, в зависимости от Элемента.
         target: cppqml;//Цель объект класса С++ DCCppQml
         function onBlKatalogStatusChanged(){//Слот Если изменился статус создания каталога(Q_PROPERTY), то...
@@ -191,8 +195,8 @@ Item {
                     knopkaInfo.visible = false;//Невидимая кнопка информации.
                     knopkaNazad.visible = false;//Конопка Закрыть Невидимая.
                     knopkaStart.enabled = false;//Деактивированная кнопка Старт.
-                    knopkaDokumentov.enabled = false;//Деактивированная кнопка
-                    knopkaZadatPut.enabled = false;//Деактивированная кнопка
+                    knopkaPolKatalog.enabled = false;//Деактивированная кнопка
+                    knopkaUstKatalog.enabled = false;//Деактивированная кнопка
                     lgLogo.visible = true;//Видимый логотип.
                     root.signalToolbar("Начать процесс создания каталога документов?");//Вопрос.
                 }
@@ -200,8 +204,8 @@ Item {
                     knopkaInfo.visible = true;//Видимая кнопка информации.
                     knopkaNazad.visible = true;//Конопка Закрыть Видимая.
                     knopkaStart.enabled = true;//Активированная кнопка Старт.
-                    //knopkaDokumentov.enabled = true;//активированная кнопка
-                    //knopkaZadatPut.enabled = true;//активированная кнопка
+                    knopkaPolKatalog.enabled = true;//активированная кнопка
+                    //knopkaUstKatalog.enabled = true;//активированная кнопка
                     lgLogo.visible = false;//Невидимый логотип.
                     root.signalToolbar("");//Пустое сообщение.
                     txdZona.textEdit.focus = true;//Чтобы работало событие Листания и всех остальных клавиш
@@ -270,23 +274,20 @@ Item {
             onClicked: copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
         }
         DCKnopkaOriginal {
-            id: knopkaDokumentov
+            id: knopkaPolKatalog
             ntHeight: root.ntWidth; ntCoff: root.ntCoff
             anchors.top: knopkaStart.bottom
             anchors.left: tmZona.left; anchors.right: tmZona.right
             anchors.margins: root.ntCoff/2
             clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
             text: qsTr("Открыть папку")
-            enabled: false
             opacityKnopki: 0.8
-            onClicked: {
-
-            }
+            onClicked: fnClickedPolKatalog();//Функция открытия папки, в которой создался каталог документов.
         }
         DCKnopkaOriginal {
-            id: knopkaZadatPut
+            id: knopkaUstKatalog
             ntHeight: root.ntWidth; ntCoff: root.ntCoff
-            anchors.top: knopkaDokumentov.bottom
+            anchors.top: knopkaPolKatalog.bottom
             anchors.left: tmZona.left; anchors.right: tmZona.right
             anchors.margins: root.ntCoff/2
             clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
@@ -299,7 +300,7 @@ Item {
         }
         Rectangle {
             id: rctTextEdit
-            anchors.top: knopkaZadatPut.bottom; anchors.bottom: tmZona.bottom
+            anchors.top: knopkaUstKatalog.bottom; anchors.bottom: tmZona.bottom
             anchors.left: tmZona.left; anchors.right: tmZona.right
             border.color: root.clrTexta; border.width: 3
             color: "transparent"

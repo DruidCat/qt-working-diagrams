@@ -45,7 +45,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_untKatalogCopy(0),
                                         m_blKatalogStatus(true),
                                         m_strKatalogDocCopy(""),
-
+                                        m_strKatalogUrl(""),
                                         m_strDebug("")
 {
 ///////////////////////////////
@@ -778,7 +778,7 @@ QString DCCppQml::strFileDialogPut() {//Возвратить путь отобр
             m_pDataDannie->ustFileDialogPut(m_strFileDialogPut);//устпуть к каталогу,где лежит файл для записи
         else{
             if(m_strFileDialogMode == "polkatalog"){//Если выбран режим открыть папку каталога, то...
-
+                m_pDataKatalog->ustFileDialogPut(m_strFileDialogPut);//путь к каталогу,где лежит файл открытия
             }
             else{
                 if(m_strFileDialogMode == "ustkatalog"){//Если выбран режим задать каталог, то...
@@ -905,6 +905,15 @@ void DCCppQml::setStrKatalogDocCopy(const QString &strPutNovi){//Установ�
         m_strKatalogDocCopy = strPutNovi;
         emit strKatalogDocCopyChanged();//Излучаем сигнал в qml с путём скопированного документа.
     }
+}
+void DCCppQml::setStrKatalogUrl(const QString &strImyaFaila){//Передаём имя, создаём путь+файл.
+/////////////////////////////////////////////////
+//---С О З Д А Ё М   П У Т Ь   К   Ф А Й Л У---//
+/////////////////////////////////////////////////
+    QString strPutImyaFaila = QDir(m_pDataKatalog->polFileDialogPut()).filePath(strImyaFaila);
+    QUrl rlPutImyaUrl = QUrl::fromUserInput(strPutImyaFaila);//Переводим в формат Url адреса.
+    m_strKatalogUrl = rlPutImyaUrl.toString();//Переводим адресс Url в строку и приравниваем.
+    emit strKatalogUrlChanged();//Излучаем сигнал в qml с путём+файл, который нужно открыть.
 }
 int DCCppQml::polKatalogSummu(){//Получить приблизительное сумарное число файлов в менторе.
 /////////////////////////////////////////////

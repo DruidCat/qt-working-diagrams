@@ -425,13 +425,18 @@ Item {
             property string strPdfPut: ""//Путь к документу,который нужно открыть или пустой путь,чтоб закрыть
             property bool blClose: true//true - закрываем документ.
             property int pdfRotation: 0//Угол поворота (может быть: 0, 90, 180, 270)
+            property bool isDannie: false//true-открывается файл из Данных
+            property bool isKatalog: false//true-открывается файл из Каталога
             //Настройки.
             anchors.fill: tmZona
             source: pdfLoader.blClose ? "" : "qrc:/qml/DCMethods/DCPdfMPV.qml"//Указываем путь отдельному QMl
             active: false//не активирован.
 
             onLoaded: { 
-                pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
+                if(isDannie)//Если открывается из Данных документ, то...
+                    pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
+                if(isKatalog)//Если открывается из Каталога документ, то...
+                    pdfLoader.item.currentPage = 0;//Всегда с 1 страницы.
                 pdfLoader.item.source = pdfLoader.strPdfPut;// Устанавливаем путь к PDF
             }
         }
@@ -442,8 +447,20 @@ Item {
                     tmrLogo.running = true;//Запускаем таймер анимации логотипа
                     pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
                     var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
+                    pdfLoader.isDannie = true; pdfLoader.isKatalog = false;
                     fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
-                    //console.error("390: Url: " + strPdfUrl);
+                    //console.error("446: Url: " + strPdfUrl);
+                    spbPdfPage.to = pdfLoader.item.pageCount;//Максимальное количество страниц в DCSpinBox
+                }
+            }
+            function onStrKatalogUrlChanged(){//Если изменился элемент списка в strKatalogUrl (Q_PROPERTY), то
+                if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+                    tmrLogo.running = true;//Запускаем таймер анимации логотипа
+                    pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
+                    var strPdfUrl = cppqml.strKatalogUrl;//Считываем путь+документ.pdf
+                    pdfLoader.isKatalog = true; pdfLoader.isDannie = false;
+                    fnPdfSource(strPdfUrl);//Передаём путь к pdf документу и тем самым его открываем.
+                    //console.error("456: Url: " + strPdfUrl);
                     spbPdfPage.to = pdfLoader.item.pageCount;//Максимальное количество страниц в DCSpinBox
                 }
             }

@@ -313,6 +313,13 @@ ApplicationWindow {
 
                 onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedInfo: stvStr.push(pgStrInstrukciyaKataloga);//Переключаемся на Инструкцию Каталога.
+                onClickedPolKatalog: {//Слот нажатия кнопки открытия папки в которой создался каталог док..
+                    root.modeFileDialog = "polkatalog";//Открываем проводник папки где создан каталог докумен.
+                    pgStrFileDialog.textZagolovok = qsTr("ПРОВОДНИК")//Заголовок Проводника.
+                    pgStrFileDialog.textToolbar = qsTr("Выберите документ для просмотра.")
+                    cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
+                    stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
+                }
                 onSignalZagolovok: function(strZagolovok) {//Слот сигнала signalZagolovok с новым Заголовком.
                     pgStrKatalog.textZagolovok = strZagolovok;//Выставляем изменённый Заголовок.
                 }
@@ -506,6 +513,9 @@ ApplicationWindow {
 
 				onClickedNazad: {
 					cppqml.ullDannieKod = 0;//НЕ УДАЛЯТЬ! На странице Данные код не выбран и равен 0.
+                    if(root.modeFileDialog === "polkatalog"){
+
+                    }
 					stvStr.pop()//Назад страницу
 				}
 			}
@@ -538,6 +548,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrFileDialog.zagolovokPravi
                 tapToolbarLevi: pgStrFileDialog.toolbarLevi; tapToolbarPravi: pgStrFileDialog.toolbarPravi
                 modeFileDialog: root.modeFileDialog//Выбор режима открытия проводника для Плана или Данных.
+                pdfViewer: root.pdfViewer
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
                 onClickedZakrit: {//Если нажата кнопка Назад или Закрыть, то...
@@ -571,6 +582,20 @@ ApplicationWindow {
                         }
                     }
                     stvStr.pop()//Назад страницу
+                }
+                onClickedDocument: function (strImyaFaila){
+                    pgStrPdf.textZagolovok = strImyaFaila;//Делаем заголовок с именем Документа.
+                    //Механизм открытия инструкции с внешним просмотрщиком документов.
+                    if(root.pdfViewer)//Если выбран в настройках собственный просмотрщик, то...
+                        cppqml.strKatalogUrl = strImyaFaila;//Создаём путь+файл и отправляем в pgStrPdf
+                    /*
+                    else{//Если на сторонний просмотщик pdf документов, то...
+                        tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмотор
+                        if(!cppqml.blPlanPervi)//Если план еще не задан, то...
+                            Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
+                    }
+                    */
+                    stvStr.push(pgStrPdf);//Переходим на страницу отображения Pdf документа.
                 }
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
                     pgStrFileDialog.textZagolovok = strZagolovok;//Изменяем заголовок.

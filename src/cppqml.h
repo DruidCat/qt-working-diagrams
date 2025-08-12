@@ -153,6 +153,11 @@ class DCCppQml : public QObject {
                     WRITE setStrKatalogDocCopy
                     NOTIFY strKatalogDocCopyChanged FINAL)
 
+    Q_PROPERTY(QString strKatalogUrl
+                    READ strKatalogUrl
+                    WRITE setStrKatalogUrl
+                    NOTIFY strKatalogUrlChanged FINAL)
+
     Q_PROPERTY(QString strDebug
                     READ strDebug
                     WRITE setStrDebug
@@ -238,6 +243,8 @@ public:
     bool		blKatalogStatus() { return m_blKatalogStatus; }//Возвращает статус создания каталога.
     QString		strKatalogDocCopy() { return m_strKatalogDocCopy; }//Возвращаем путь скопированного документа
     void		setStrKatalogDocCopy(const QString& strPutNovi);//Установить Новый путь скопированного док.
+    QString 	strKatalogUrl() { return m_strKatalogUrl; }//Возвращаем путь+файл, который нужно открыть
+    void		setStrKatalogUrl(const QString& strImyaFaila);//Передаём имя, создаём путь+файл.
     Q_INVOKABLE int		polKatalogSummu();//Получить приблизительное сумарное число файлов в менторе.
     Q_INVOKABLE void	copyKatalogStart();//Начать копирование документов в каталог.
     Q_INVOKABLE void	copyKatalogStop();//Остановить копирование документов в каталог.
@@ -291,6 +298,7 @@ signals:
     void untKatalogCopyChanged();//Сигнал, что изменился счётчик скопированных документов.
     void blKatalogStatusChanged();//Сигнал, что изменился статус создания каталога.
     void strKatalogDocCopyChanged();//Сигнал, что изменился статус скопированного документа.
+    void strKatalogUrlChanged();//Сигнал, что изменился статус открываемого документа.
 
     void strDebugChanged();//Сигнал, что новая ошибка появилась.
 
@@ -350,6 +358,7 @@ private:
     uint	m_untKatalogCopy;//Количество скопированных pdf документов.
     bool	m_blKatalogStatus;//Статус создания каталога документов.
     QString m_strKatalogDocCopy;//Путь скопированного документа.
+    QString m_strKatalogUrl;//Путь+файл который нужно открыть.
 
     QString m_strDebug;//Текс ошибки.
 

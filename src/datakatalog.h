@@ -17,6 +17,8 @@ public:
     void		ustPDBElement(DCDB* pdbElement);//Устанавливаем указатель БД Элемента.
     void		ustPDBDannie(DCDB* pdbDannie);//Устанавливаем указатель БД Данных.
 
+    QString 	polFileDialogPut() { return m_strFileDialogPut; }//Получить путь к файлам из проводника.
+    void 		ustFileDialogPut(QString strFileDialogPut);//Задать путь к каталогу, в котором файл.
     int 		polPdfSummu();//Возвратим приблизительную сумму всех pdf документов в Менторе.
     void		copyStart();//Старт копирования документов в каталог.
     void		copyStop();//Стоп копирования документов в каталог.
@@ -74,6 +76,7 @@ private:
 
     uint 		m_untCd;//Считает,вкаком слое папок находится m_pdrPut(4Start-3Mentor-2Titul-1Spisok-0Element)
 
+    QString 	m_strFileDialogPut;//Путь к каталогу, в котором лежит файл для открытия.
     QString 	m_strWorkingData;//Путь к каталогу, где находится БД и документы Ментора.
 
     bool 		m_blStopCopy;//true - остановка копирования каталога.

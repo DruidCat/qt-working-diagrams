@@ -31,6 +31,7 @@ Item {
     property real tapZagolovokPravi: 1
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
+    property bool pdfViewer: false//true - включить собственный pdf просмотрщик.
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
     property string modeFileDialog: ""//plan, filedialog, polkatalog, ustkatalog
     property int logoRazmer: 22//Размер Логотипа.
@@ -41,6 +42,7 @@ Item {
     //Сигналы.
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть или Назад.
     signal clickedInfo();//Сигнал нажатич кнопки Инфо, где будет описание работы Файлового Диалога.
+    signal clickedDocument(var strDocumentImya);//Сигнал когда нажат один из документов.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 	signal signalToolbar (var strToolbar);//Сигнал излучающий в Toolbar в Проводнике.
     //Функции.
@@ -185,27 +187,40 @@ Item {
                         }
                         else{
                             if(ntTip === 2){//Если это file из Маски, то...
-                                root.signalZagolovok(qsTr("ИДЁТ КОПИРОВАНИЕ ДОКУМЕНТА"));//
-                                root.signalToolbar(qsTr("Копирование."));//Сообщение в Toolbar.
-                                knopkaNazad.visible= false//Делаем кнопку назад невидимой.
-                                knopkaZakrit.visible = false//Делаем кнопку закрыть невидимой.
-                                lsvZona.visible = false;//Делаем невидимую зону с Проводником.
-                                knopkaNastroiki.visible = false//Делаем кнопку настройки невидимой.
-                                knopkaInfo.visible = false//Делаем кнопку информации невидимой.
-                                tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
+
                                 cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
                                 if(root.modeFileDialog === "plan"){//Если выбран режим сохранения Плана, то...
+                                    root.signalZagolovok(qsTr("ИДЁТ КОПИРОВАНИЕ ДОКУМЕНТА"));//
+                                    root.signalToolbar(qsTr("Копирование."));//Сообщение в Toolbar.
+                                    knopkaNazad.visible= false//Делаем кнопку назад невидимой.
+                                    knopkaZakrit.visible = false//Делаем кнопку закрыть невидимой.
+                                    lsvZona.visible = false;//Делаем невидимую зону с Проводником.
+                                    knopkaNastroiki.visible = false//Делаем кнопку настройки невидимой.
+                                    knopkaInfo.visible = false//Делаем кнопку информации невидимой.
+                                    tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
                                     if(!cppqml.copyPlan(strFileDialog))//Если ошибка Копирования файла Плана.
                                         fnCopyStop();//Останавливаем анимацию копирования, закрываем проводник
                                 }
                                 else{
                                     if(root.modeFileDialog === "filedialog"){//Если режим Проводника, то...
+                                        root.signalZagolovok(qsTr("ИДЁТ КОПИРОВАНИЕ ДОКУМЕНТА"));//
+                                        root.signalToolbar(qsTr("Копирование."));//Сообщение в Toolbar.
+                                        knopkaNazad.visible= false//Делаем кнопку назад невидимой.
+                                        knopkaZakrit.visible = false//Делаем кнопку закрыть невидимой.
+                                        lsvZona.visible = false;//Делаем невидимую зону с Проводником.
+                                        knopkaNastroiki.visible = false//Делаем кнопку настройки невидимой.
+                                        knopkaInfo.visible = false//Делаем кнопку информации невидимой.
+                                        tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
                                         if(!cppqml.copyDannie(strFileDialog))//Если ошибка Копирования файла.
                                             fnCopyStop();//Останавливаем анимацию копирования,закр. проводник.
                                     }
                                     else{
                                         if(root.modeFileDialog === "polkatalog"){//Отобразить папку Каталог
-
+                                            //Открываем Pdf документ.
+                                            if(root.pdfViewer)//Если собственный pdf просмотрщик,то
+                                                root.clickedDocument(strFileDialog);//сигнал с именем Документ
+                                            //else//Если сторонний просмотщик pdf документов, то...
+                                                //Qt.openUrlExternally(cppqml.strDannieUrl);//Открываем pdf в стороннем app.
                                         }
                                         else{
                                             if(root.modeFileDialog === "ustkatalog"){//Если задать Каталог
