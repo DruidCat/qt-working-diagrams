@@ -513,10 +513,9 @@ ApplicationWindow {
 
 				onClickedNazad: {
 					cppqml.ullDannieKod = 0;//НЕ УДАЛЯТЬ! На странице Данные код не выбран и равен 0.
-                    if(root.modeFileDialog === "polkatalog"){
-
-                    }
-					stvStr.pop()//Назад страницу
+                    if(root.modeFileDialog === "polkatalog")//Если режим открытия Каталога и документов, то...
+                        cppqml.strFileDialogPut = "sohranit";//ВАЖНО!!! Сохраняем положение в дереве папок.
+                    stvStr.pop()//Назад страницу
 				}
 			}
 		}

@@ -280,7 +280,11 @@ Item {
             anchors.left: tmZona.left; anchors.right: tmZona.right
             anchors.margins: root.ntCoff/2
             clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-            text: qsTr("Открыть папку")
+            text: {
+                let putKatalog = cppqml.strKatalogPut.replace(/\\/g, '/');//Заменяем \ в /
+                let putMassiv = putKatalog.split('/')//Разделяем Путь на слова разделителем /
+                return qsTr("Открыть папку: ") + putMassiv.pop();//Берём последнюю строку в массиве
+            }
             opacityKnopki: 0.8
             onClicked: fnClickedPolKatalog();//Функция открытия папки, в которой создался каталог документов.
         }
