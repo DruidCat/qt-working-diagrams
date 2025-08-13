@@ -143,6 +143,8 @@ Item {
                 knopkaInfo.visible = false;//Невидимая кнопка информации.
                 knopkaNastroiki.visible = false;//Невидимая кнопка настройки.
                 knopkaStart.enabled = false;//Неактивная кнопка Старт.
+                knopkaPolKatalog.enabled = false;//Деактивированная кнопка
+                knopkaUstKatalog.enabled = false;//Деактивированная кнопка
             }
             else{//Если таймер выключен, то...
                 lgLogo.ntCoff = root.logoRazmer;//Задаём размер логотипа.
@@ -151,6 +153,8 @@ Item {
                 knopkaInfo.visible = true;//Видимая кнопка информации.
                 knopkaNastroiki.visible = true;//Видимая кнопка настройки.
                 knopkaStart.enabled = true;//Активная кнопка Старт.
+                knopkaPolKatalog.enabled = true;//активированная кнопка
+                //knopkaUstKatalog.enabled = true;//активированная кнопка
                 txdZona.textEdit.focus = true;//Чтоб работало событие клавишь Листания и всех остальных клавиш
             }
         }
