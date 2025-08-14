@@ -43,24 +43,33 @@ Item {
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции. 
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
-        if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
-            if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
-                if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
-                    fnClickedNazad();//Функция нажатия кнопки Назад
+        if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+            if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
+                if((knopkaSozdat.visible &knopkaSozdat.enabled) && (knopkaStart.visible&&knopkaStart.enabled))
+                    fnClickedSozdat();//Функция создания Каталога документов.
                 event.accepted = true;//Завершаем обработку эвента.
             }
         }
         else{
-            if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-                root.signalToolbar("");//Делаем пустую строку в Toolbar.
-                fnClickedEscape();//Функция нажатия кнопки Escape.
-                event.accepted = true;//Завершаем обработку эвента.
+            if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                    if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                        fnClickedNazad();//Функция нажатия кнопки Назад
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
             }
             else{
-                if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
-                    if(knopkaInfo.visible)
-                        fnClickedInfo();//Функция нажатия на кнопку Информация.
+                if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                    root.signalToolbar("");//Делаем пустую строку в Toolbar.
+                    fnClickedEscape();//Функция нажатия кнопки Escape.
                     event.accepted = true;//Завершаем обработку эвента.
+                }
+                else{
+                    if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+                        if(knopkaInfo.visible)
+                            fnClickedInfo();//Функция нажатия на кнопку Информация.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
                 }
             }
         }
@@ -73,6 +82,7 @@ Item {
             fnClickedEscape();//Функция нажатия кнопки Escape.
         }
     }
+
 	function fnClickedEscape(){//Функция нажатия кнопки Escape.
         copyStart.visible = false;//Делаем невидимый Вопрос "начать создание каталога".
         menuSpisok.visible = false;//Делаем невидимым всплывающее меню. 
@@ -89,9 +99,12 @@ Item {
     }
 	function fnClickedInfo() {//Функция нажатия Информации.
 		cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-		fnClickedEscape();//Функция нажатия кнопки Escape.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
 		root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
 	} 
+    function fnClickedSozdat(){//Функция создания каталога Документов.
+        copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
+    }
     function fnClickedKatalog(){//Функция создания каталога pdf документов.
         txdZona.text = txdZona.strCopy = "";//Отображаем пустую строку в TextEdit модуле.
         signalZagolovok(qsTr("ПРОЦЕСС СОЗДАНИЯ КАТАЛОГА"));//Надпись в заголовке
@@ -103,6 +116,9 @@ Item {
     }
     function fnClickedPolKatalog(){//Функция открытия папки, в которой создался Каталог с документами.
         root.clickedPolKatalog();//Сигнал открытия Проводника.
+    }
+    function fnClickedUstKatalog(){//Функция задания пути, где создаётся каталога документов.
+
     }
     Connections {//Соединяем сигнал из C++ с действием в QML, перерисовываем, в зависимости от Элемента.
         target: cppqml;//Цель объект класса С++ DCCppQml
@@ -143,6 +159,7 @@ Item {
                 knopkaInfo.visible = false;//Невидимая кнопка информации.
                 knopkaNastroiki.visible = false;//Невидимая кнопка настройки.
                 knopkaStart.enabled = false;//Неактивная кнопка Старт.
+                knopkaSozdat.visible = false;//Невидимая кнопка Создать.
                 knopkaPolKatalog.enabled = false;//Деактивированная кнопка
                 knopkaUstKatalog.enabled = false;//Деактивированная кнопка
             }
@@ -153,6 +170,7 @@ Item {
                 knopkaInfo.visible = true;//Видимая кнопка информации.
                 knopkaNastroiki.visible = true;//Видимая кнопка настройки.
                 knopkaStart.enabled = true;//Активная кнопка Старт.
+                knopkaSozdat.visible = true;//Видимая кнопка Создать.
                 knopkaPolKatalog.enabled = true;//активированная кнопка
                 //knopkaUstKatalog.enabled = true;//активированная кнопка
                 txdZona.textEdit.focus = true;//Чтоб работало событие клавишь Листания и всех остальных клавиш
@@ -199,6 +217,7 @@ Item {
                     knopkaInfo.visible = false;//Невидимая кнопка информации.
                     knopkaNazad.visible = false;//Конопка Закрыть Невидимая.
                     knopkaStart.enabled = false;//Деактивированная кнопка Старт.
+                    knopkaSozdat.enabled = false;//Деактивированная кнопку Создать.
                     knopkaPolKatalog.enabled = false;//Деактивированная кнопка
                     knopkaUstKatalog.enabled = false;//Деактивированная кнопка
                     lgLogo.visible = true;//Видимый логотип.
@@ -208,6 +227,7 @@ Item {
                     knopkaInfo.visible = true;//Видимая кнопка информации.
                     knopkaNazad.visible = true;//Конопка Закрыть Видимая.
                     knopkaStart.enabled = true;//Активированная кнопка Старт.
+                    knopkaSozdat.enabled = true;//Активированная кнопку Создать.
                     knopkaPolKatalog.enabled = true;//активированная кнопка
                     //knopkaUstKatalog.enabled = true;//активированная кнопка
                     lgLogo.visible = false;//Невидимый логотип.
@@ -273,9 +293,9 @@ Item {
             anchors.left: tmZona.left; anchors.right: tmZona.right
             anchors.margins: root.ntCoff/2
             clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-            text: qsTr("Старт")
+            text: qsTr("Создать")
             opacityKnopki: 0.8
-            onClicked: copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
+            onClicked: fnClickedSozdat();//Создать каталог данных.
         }
         DCKnopkaOriginal {
             id: knopkaPolKatalog
@@ -302,9 +322,7 @@ Item {
             text: qsTr("Задать папку сохранения")
             enabled: false
             opacityKnopki: 0.8
-            onClicked: {
-
-            }
+            onClicked: fnClickedUstKatalog();//Функция задания пути, где создаётся каталога документов.
         }
         Rectangle {
             id: rctTextEdit
@@ -326,6 +344,8 @@ Item {
                 radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
                 clrFona: "transparent"//Цвет фона рабочей области
                 clrTexta: root.clrTexta//Цвет текста
+                //Функции
+                onPressed: fnClickedEscape();//сворачиваем всё.
             }
         }
 
@@ -357,6 +377,19 @@ Item {
                 ldrProgress.item.ntWidth = root.ntWidth; ldrProgress.item.ntCoff = root.ntCoff;
                 ldrProgress.item.clrProgress = root.clrTexta; ldrProgress.item.clrTexta = "grey";
             }
+        }
+        DCKnopkaSozdat {
+            id: knopkaSozdat
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            anchors.verticalCenter: tmToolbar.verticalCenter
+            anchors.left: tmToolbar.left
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
+            visible: true
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
+            tapWidth: tapHeight*root.tapZagolovokLevi
+            onClicked: fnClickedSozdat();//Создать каталог?
         }
         DCKnopkaNastroiki {
             id: knopkaNastroiki
