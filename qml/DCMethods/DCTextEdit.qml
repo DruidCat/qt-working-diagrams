@@ -22,7 +22,9 @@ Item {
     //TODO Чета этот код не работает, нужно его логировать. Видимо из-за fnEnsureVisible
     //width: Screen.desktopAvailableWidth//ВАЖНО, экранная клавиатура работает корректно с размером приложения.
     height: Screen.desktopAvailableHeight//ВАЖНО,экранная клавиатура работает корректно с размером приложени
-    //Функции.
+    //Сигналы
+    signal pressed();
+    //Функции. 
     Rectangle {
         id: rctTextEdit
         anchors.fill: root
@@ -37,8 +39,7 @@ Item {
             contentHeight: txdTextEdit.paintedHeight//Общая высота листания = высоте всего текста
             interactive: true//Перелистывание активировать.
             clip: true//Обрезаем всё, что выходит за границы этого элемента.
-            focus: true//чтоб обработчик клавиатуры работал
-            //Функции
+            focus: true//чтоб обработчик клавиатуры работал 
             Keys.onPressed: (event) => {//Обработчик клавиатуры.
                 if(event.key === Qt.Key_Up || event.key === Qt.Key_K){
                     const cnShag = root.pixelSize * 1.2;//одна строка
@@ -91,7 +92,7 @@ Item {
                 text: ""
                 font.pixelSize: root.pixelSize//размер шрифта текста.
                 wrapMode: TextEdit.Wrap//Текст в конце строки переносим на новую строку.
-                readOnly: true//Запрещено редактировать.
+                readOnly: true//Запрещено редактировать. 
                 focus: {
                     if(root.readOnly){//Если режим чтения, то...
                         flcListat.focus = true;//Чтоб курсор активный был, и горячие клавиши работали.
@@ -102,6 +103,9 @@ Item {
                 }
                 selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
                 //Функции.
+                TapHandler {//Нажимаем на область TextEdit
+                    onTapped: root.pressed();//Если нажали, то запускаем сигнал вне виджета.
+                }
                 onCursorRectangleChanged: {//Если позиция курсора измениласть, то..
                     if (!root.readOnly)//Если активирован режим редактирования, то...
                         flcListat.fnEnsureVisible(cursorRectangle)//За курсором листается текст.
