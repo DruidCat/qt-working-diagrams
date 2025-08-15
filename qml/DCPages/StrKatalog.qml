@@ -76,14 +76,15 @@ Item {
         //cppqml.strDebug = event.key;
     } 
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
-        anchors.fill: root
-        onClicked: {
-            root.signalToolbar("");//Делаем пустую строку в Toolbar.
-            fnClickedEscape();//Функция нажатия кнопки Escape.
-        }
+        anchors.fill: tmZagolovok
+        onClicked: fnClickedEscape()//Функция нажатия кнопки Escape
     }
-
-	function fnClickedEscape(){//Функция нажатия кнопки Escape.
+    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
+        anchors.fill: tmToolbar
+        onClicked: fnClickedEscape()//Функция нажатия кнопки Escape
+    }
+    function fnClickedEscape(){//Функция нажатия кнопки Escape.
+        root.signalToolbar("");//Делаем пустую строку в Toolbar.
         copyStart.visible = false;//Делаем невидимый Вопрос "начать создание каталога".
         menuSpisok.visible = false;//Делаем невидимым всплывающее меню. 
     }
@@ -103,6 +104,7 @@ Item {
 		root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
 	} 
     function fnClickedSozdat(){//Функция создания каталога Документов.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
         copyStart.visible = true;//Задаём вопрос: "Начать создание каталога?"
     }
     function fnClickedKatalog(){//Функция создания каталога pdf документов.
@@ -115,10 +117,11 @@ Item {
         cppqml.copyKatalogStart();//Начинаем создание каталога
     }
     function fnClickedPolKatalog(){//Функция открытия папки, в которой создался Каталог с документами.
+        fnClickedEscape();//Функция нажатия кнопки Escape.
         root.clickedPolKatalog();//Сигнал открытия Проводника.
     }
     function fnClickedUstKatalog(){//Функция задания пути, где создаётся каталога документов.
-
+        fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     Connections {//Соединяем сигнал из C++ с действием в QML, перерисовываем, в зависимости от Элемента.
         target: cppqml;//Цель объект класса С++ DCCppQml
@@ -206,9 +209,9 @@ Item {
             visible: false//Невидимый виджет
 
             clrFona: "yellow"//Если не задать цвет, будет видно текст под надписью
-            clrTexta: "black"
-            clrKnopki: "black"
-            clrBorder: "black"
+            clrTexta: root.clrFona
+            clrKnopki: root.clrFona
+            clrBorder: root.clrFona
 
             tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
@@ -248,9 +251,9 @@ Item {
             visible: false//Невидимый виджет
 
             clrFona: "red"//Если не задать цвет, будет видно текст под надписью
-            clrTexta: "black"
-            clrKnopki: "black"
-            clrBorder: "black"
+            clrTexta: root.clrFona
+            clrKnopki: root.clrFona
+            clrBorder: root.clrFona
 
             tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
             onVisibleChanged: {//Защита от двойного срабатывания кнопок. Если изменился статус Видимости,то...
@@ -401,6 +404,7 @@ Item {
             onClicked: {
                 menuSpisok.visible ? menuSpisok.visible = false : menuSpisok.visible = true;
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
+                copyStart.visible = false;//Делаем невидимый Вопрос "начать создание каталога".
                 txdZona.textEdit.focus = true;//Чтобы работало событие Листания и всех остальных клавиш
             }
         }
