@@ -29,6 +29,7 @@ Item {
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
     property string strInstrukciya: "obavtore"
+    property bool isFileDialogFailVibor: true;//true - выбор файлов, false - выбор папки
     //Настройки.
 	anchors.fill: parent//Растянется по Родителю.
     focus: true;//Чтоб работали горячие клавиши.
@@ -65,7 +66,7 @@ Item {
 		id: tmZona
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
         DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
-			id: txdZona
+            id: txdZona
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
 			readOnly: true//Запрещено редактировать текст
@@ -124,6 +125,8 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 <p><b>ФУНКЦИОНАЛ:</b></p>
 <p><b>(&lt;)</b> - Вернуться в предыдущую папку.</p>
 <p><b>(Х)</b> - Закрыть ваш проводник.</p>
+<p>или</p>
+<p><b>(OK)</b> - Выбрать папку.</p>
 <p><b>:</b> - Меню вашего проводника.</p>
 <p><b>(i)</b> - Инструкция по проводнику.</p>
 <p><b>[..]</b> - Вернуться в предыдущую папку.</p>

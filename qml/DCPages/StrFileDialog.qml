@@ -42,7 +42,8 @@ Item {
     focus: true//Не удалять, может Escape не работать.
     //Сигналы.
     signal clickedZakrit();//Сигнал нажатия кнопки Закрыть или Назад.
-    signal clickedInfo();//Сигнал нажатич кнопки Инфо, где будет описание работы Файлового Диалога.
+    signal clickedInfo();//Сигнал нажатия кнопки Инфо, где будет описание работы Файлового Диалога.
+    signal clickedOk();//Сигнал нажатия кнопки Ок, где будет сохранён выбранный каталог.
     signal clickedFail(var strImyaFaila);//Сигнал когда нажат один из документов.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
 	signal signalToolbar (var strToolbar);//Сигнал излучающий в Toolbar в Проводнике.
@@ -111,7 +112,7 @@ Item {
     function fnClickedOk(){//Функция выбора папки.
         cppqml.strFileDialogPut = "sohranit";//Закрываем проводник и назначаем текущую деррикторию.
         fnClickedEscape();//Меню сворачиваем
-        root.clickedZakrit();//Излучаем сигнал закрытия проводника.
+        root.clickedOk();//Излучаем сигнал закрытия проводника и сохранения пути выбранной папки.
     }
     Item {//Данные Заголовок
         id: tmZagolovok
@@ -221,11 +222,6 @@ Item {
                                     else{
                                         if(root.modeFileDialog === "polkatalog")//Режим отображения Каталога
                                             root.clickedFail(strFileDialog);//Сигнал с именем Файла
-                                        else{
-                                            if(root.modeFileDialog === "ustkatalog"){//Если задать Каталог
-
-                                            }
-                                        }
                                     }
 								}
                             }

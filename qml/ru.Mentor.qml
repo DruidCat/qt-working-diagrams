@@ -315,7 +315,7 @@ ApplicationWindow {
                 onClickedInfo: stvStr.push(pgStrInstrukciyaKataloga);//Переключаемся на Инструкцию Каталога.
                 onClickedPolKatalog: {//Слот нажатия кнопки открытия папки в которой создался каталог док..
                     root.modeFileDialog = "polkatalog";//Открываем проводник папки где создан каталог докумен.
-                    pgStrFileDialog.textZagolovok = qsTr("ПРОВОДНИК")//Заголовок Проводника.
+                    pgStrFileDialog.textZagolovok = cppqml.strKatalogPut;//Путь в заголовке
                     pgStrFileDialog.textToolbar = qsTr("Выберите документ для просмотра.")
                     cppqml.strFileDialogPut = cppqml.strKatalogPut;//ВАЖНО!Обнов.каталог Проводника сохр путём
                     tmFileDialog.failVibor = true;//Проводник выбирает файлы.
@@ -323,9 +323,9 @@ ApplicationWindow {
                 }
                 onClickedUstKatalog: {//Задаём папку, в которой будет создаваться Каталог.
                     root.modeFileDialog = "ustkatalog";//Открываем проводник,зададим папку сохранения Каталога
-                    pgStrFileDialog.textZagolovok = qsTr("ПРОВОДНИК")//Заголовок Проводника.
+                    pgStrFileDialog.textZagolovok = cppqml.strKatalogPut;//Путь в заголовке
                     pgStrFileDialog.textToolbar = qsTr("<- Выберите папку сохранения и нажмите Ок.")
-                    cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
+                    cppqml.strFileDialogPut = cppqml.strKatalogPut;//ВАЖНО!Обнов.каталог Проводника сохр путём
                     tmFileDialog.failVibor = false;//Проводник выбирает папки.
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }
@@ -580,16 +580,12 @@ ApplicationWindow {
                     else{
                         if(root.modeFileDialog === "filedialog")//Если открывались Данные, то...
                             stvStr.strOpisanie = "element";//Показываем описание Элемента списка.
-                        else{
-                            if(root.modeFileDialog === "polkatalog"){
-
-                            }
-                            else{
-                                if(root.modeFileDialog === "ustkatalog")
-                                    cppqml.strKatalogPut = cppqml.strFileDialogPut;//Запоминаем новый путь.
-                            }
-                        }
                     }
+                    stvStr.pop()//Назад страницу
+                }
+                onClickedOk: {//Если нажата кнопка Ок, то...
+                    if(root.modeFileDialog === "ustkatalog")//Если это установить путь к папке с каталгами, то
+                        cppqml.strKatalogPut = cppqml.strFileDialogPut;//Запоминаем новый путь.
                     stvStr.pop()//Назад страницу
                 }
                 onClickedFail: function (strImyaFaila){//Если кликнули по документу.
