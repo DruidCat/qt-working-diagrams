@@ -148,7 +148,6 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 				SLOT(slotTimerDebug()));//При сигнале на прерывание таймера, запускаем слот таймера.
     //---чтение-настроек-из-реестра---//
     polReestr();//Читаем настройки из реестра.
-    m_pDataKatalog->ustDomPut(m_strKatalogPut);//Задаём путь к папке каталога, прочитанный из Реестра.
 }
 DCCppQml::~DCCppQml(){//Деструктор.
 //////////////////////////////
@@ -770,15 +769,15 @@ QString DCCppQml::strFileDialogPut() {//Возвратить путь отобр
 /////////////////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   П У Т Ь   F I L E D I A L O G---//
 /////////////////////////////////////////////////////////
-    m_strFileDialogPut = m_pFileDialog->polFileDialogPut();//Получить путь каталога.
+    QString strFileDialogPut = m_pFileDialog->polFileDialogPut();//Получить путь каталога.
     if(m_strFileDialogMode == "plan")//Если выбрано копирование Плана, то...
-        m_pDataPlan->ustFileDialogPut(m_strFileDialogPut);//Задаём путь к каталогу,где лежит файл для записи
+        m_pDataPlan->ustFileDialogPut(strFileDialogPut);//Задаём путь к каталогу,где лежит файл для записи
     else{
         if(m_strFileDialogMode == "filedialog")//Если выбрано копирование Данных, то...
-            m_pDataDannie->ustFileDialogPut(m_strFileDialogPut);//устпуть к каталогу,где лежит файл для записи
+            m_pDataDannie->ustFileDialogPut(strFileDialogPut);//устпуть к каталогу,где лежит файл для записи
         else{
             if(m_strFileDialogMode == "polkatalog"){//Если выбран режим открыть папку каталога, то...
-                m_pDataKatalog->ustFileDialogPut(m_strFileDialogPut);//путь к каталогу,где лежит файл открытия
+                m_pDataKatalog->ustFileDialogPut(strFileDialogPut);//путь к каталогу,где лежит файл открытия
             }
             else{
                 if(m_strFileDialogMode == "ustkatalog"){//Если выбран режим задать каталог, то...
@@ -787,7 +786,7 @@ QString DCCppQml::strFileDialogPut() {//Возвратить путь отобр
             }
         }
     }
-    return m_strFileDialogPut;//Возвратить путь отображения содержимого папки.
+    return strFileDialogPut;//Возвратить путь отображения содержимого папки.
 }
 void DCCppQml::setStrFileDialogPut(const QString& strFileDialogPutNovi){//Запис. новый путь отображения папки.
 ///////////////////////////////////////////////////////////
@@ -800,10 +799,15 @@ void DCCppQml::setStrFileDialogPut(const QString& strFileDialogPutNovi){//Зап
         emit strFileDialogPutChanged();//Излучаем сигнал об изменении аргумента и обновляем каталог проводника
     }
     else{//Если это не старт, то...
-    if(strFileDialogPutNovi == "sohranit"){//Если это открывать текущую дерикторию, то...
-        if(m_pFileDialog->ustImyaPuti(strFileDialogPutNovi)){//Если путь изменился успешно, то...
+        if(strFileDialogPutNovi == "sohranit"){//Если это открывать текущую дерикторию, то...
+            if(m_pFileDialog->ustImyaPuti(strFileDialogPutNovi)){//Если путь изменился успешно, то...
                 m_strFileDialogPut = strFileDialogPut();//Изменяем путь переменной.
             }
+        }
+        else{//Пришёл не флаг, а абсолютный путь к каталогу.
+            m_pFileDialog->ustImyaPuti(strFileDialogPutNovi);//Задаём абсолютный путь к каталогу.
+            m_strFileDialogPut = strFileDialogPut();//Изменяем путь переменной.
+            emit strFileDialogPutChanged();//сигнал об изменении аргумента и обновляем каталог проводника
         }
     }
 }
@@ -939,7 +943,7 @@ void DCCppQml::copyKatalogStart(){//Начать копирование доку
 /////////////////////////////////////////////////////////
     m_untKatalogCopy = 0;//Обнуляем обязательно счётчик скопированных документов перед стартом.
     m_blKatalogStatus = true;//Сбрасываем статус на true.
-    m_pDataKatalog->copyStart();//Начинаем создавать каталог.
+    m_pDataKatalog->copyStart(m_strKatalogPut);//Начинаем создавать каталог.
 }
 
 void DCCppQml::copyKatalogStop(){//Остановить копирование документов в каталог.

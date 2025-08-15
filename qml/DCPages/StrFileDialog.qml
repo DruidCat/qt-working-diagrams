@@ -32,6 +32,7 @@ Item {
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
     property bool pdfViewer: false//true - включить собственный pdf просмотрщик.
+    property bool failVibor: true//true - проводник выбирает файлы. false - проводник выбирает папки.
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
     property string modeFileDialog: ""//plan, filedialog, polkatalog, ustkatalog
     property int logoRazmer: 22//Размер Логотипа.
@@ -101,13 +102,17 @@ Item {
             root.signalZagolovok(cppqml.strFileDialogPut);//Передаю имя папки назад [..].
         }
     }
-    function fnClickedZakrit(){
+    function fnClickedZakrit(){//Функция закрытия проводника
         //cppqml.strFileDialogPut = "dom";//Закрываем проводник и назначаем домашнюю деррикторию.
         cppqml.strFileDialogPut = "sohranit";//Закрываем проводник и назначаем текущую деррикторию.
         fnClickedEscape();//Меню сворачиваем
         root.clickedZakrit();//Излучаем сигнал закрытия проводника.
     }
-
+    function fnClickedOk(){//Функция выбора папки.
+        cppqml.strFileDialogPut = "sohranit";//Закрываем проводник и назначаем текущую деррикторию.
+        fnClickedEscape();//Меню сворачиваем
+        root.clickedZakrit();//Излучаем сигнал закрытия проводника.
+    }
     Item {//Данные Заголовок
         id: tmZagolovok
         DCKnopkaNazad {
@@ -187,7 +192,6 @@ Item {
                         }
                         else{
                             if(ntTip === 2){//Если это file из Маски, то...
-
                                 cppqml.strFileDialog = strFileDialog;//Присваиваем имя выбранного файла.
                                 if(root.modeFileDialog === "plan"){//Если выбран режим сохранения Плана, то...
                                     root.signalZagolovok(qsTr("ИДЁТ КОПИРОВАНИЕ ДОКУМЕНТА"));//
@@ -257,16 +261,26 @@ Item {
             id: knopkaZakrit
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
-            visible: true
+            visible: root.failVibor ? true : false
             anchors.verticalCenter: tmToolbar.verticalCenter
             anchors.left: tmToolbar.left
             clrKnopki: root.clrTexta
             clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
-            onClicked: {//Слот сигнала clicked кнопки Создать.
-                fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
-            }
+            onClicked: fnClickedZakrit();//Функция обрабатывающая кнопку Закрыть.
+        }
+        DCKnopkaOk {
+            id: knopkaOk
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            visible: root.failVibor ? false : true
+            anchors.verticalCenter: tmToolbar.verticalCenter
+            anchors.left: tmToolbar.left
+            clrKnopki: root.clrTexta
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
+            tapWidth: tapHeight*root.tapZagolovokLevi
+            onClicked: fnClickedOk();//Выбираем папку и закрываем проводник.
         }
         DCKnopkaNastroiki {
             id: knopkaNastroiki

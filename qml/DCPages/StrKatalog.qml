@@ -39,6 +39,7 @@ Item {
     signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal clickedInfo();//Сигнал  нажатия кнопки Инструкция.
     signal clickedPolKatalog();//Сигнал нажатия кнопки открытия папки в которой сохранён Каталог документов.
+    signal clickedUstKatalog();//Сигнал нажатия кнопки Задать папку сохранения,сохраняем путь папки с Каталога
     signal signalZagolovok(var strZagolovok);//Сигнал, когда передаём новую надпись в Заголовок.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции. 
@@ -122,6 +123,7 @@ Item {
     }
     function fnClickedUstKatalog(){//Функция задания пути, где создаётся каталога документов.
         fnClickedEscape();//Функция нажатия кнопки Escape.
+        root.clickedUstKatalog();//Сигнал нажатия кнопки Задать папку сохранения,сохраняем путь папки с Катало
     }
     Connections {//Соединяем сигнал из C++ с действием в QML, перерисовываем, в зависимости от Элемента.
         target: cppqml;//Цель объект класса С++ DCCppQml
@@ -175,7 +177,7 @@ Item {
                 knopkaStart.enabled = true;//Активная кнопка Старт.
                 knopkaSozdat.visible = true;//Видимая кнопка Создать.
                 knopkaPolKatalog.enabled = true;//активированная кнопка
-                //knopkaUstKatalog.enabled = true;//активированная кнопка
+                knopkaUstKatalog.enabled = true;//активированная кнопка
                 txdZona.textEdit.focus = true;//Чтоб работало событие клавишь Листания и всех остальных клавиш
             }
         }
@@ -232,7 +234,7 @@ Item {
                     knopkaStart.enabled = true;//Активированная кнопка Старт.
                     knopkaSozdat.enabled = true;//Активированная кнопку Создать.
                     knopkaPolKatalog.enabled = true;//активированная кнопка
-                    //knopkaUstKatalog.enabled = true;//активированная кнопка
+                    knopkaUstKatalog.enabled = true;//активированная кнопка
                     lgLogo.visible = false;//Невидимый логотип.
                     root.signalToolbar("");//Пустое сообщение.
                     txdZona.textEdit.focus = true;//Чтобы работало событие Листания и всех остальных клавиш
@@ -323,7 +325,6 @@ Item {
             anchors.margins: root.ntCoff/2
             clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
             text: qsTr("Задать папку сохранения")
-            enabled: false
             opacityKnopki: 0.8
             onClicked: fnClickedUstKatalog();//Функция задания пути, где создаётся каталога документов.
         }

@@ -35,6 +35,10 @@ bool DCFileDialog::ustImyaPuti(QString strImyaPuti){//Устанавливаем
             m_strFileDialogImya.clear();//ОБЯЗАТЕЛЬНО!!! Обнуляем строку с именем файла.
             return true;//Истина.
         }
+        else{//Если это не флаги были, то путь.
+            m_pdrPut->setPath(strImyaPuti);//Задаём путь.
+            return true;//Успех
+        }
     }
     return false;//не успех.
 }

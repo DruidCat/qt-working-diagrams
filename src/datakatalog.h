@@ -20,10 +20,8 @@ public:
     QString 	polFileDialogPut() { return m_strFileDialogPut; }//Получить путь к файлам из проводника.
     void 		ustFileDialogPut(QString strFileDialogPut);//Задать путь к каталогу, в котором файл.
     int 		polPdfSummu();//Возвратим приблизительную сумму всех pdf документов в Менторе.
-    void		copyStart();//Старт копирования документов в каталог.
+    void		copyStart(QString strDomPut);//Старт копирования документов в каталог.
     void		copyStop();//Стоп копирования документов в каталог.
-
-    void		ustDomPut(const QString strDomPut);//Задаём путь папки, где сохранятся каталоги документов.
 
 private:
     DCDB*		m_pdbTitul = nullptr;//Указатель на БД Титула.

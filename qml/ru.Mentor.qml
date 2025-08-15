@@ -317,7 +317,16 @@ ApplicationWindow {
                     root.modeFileDialog = "polkatalog";//Открываем проводник папки где создан каталог докумен.
                     pgStrFileDialog.textZagolovok = qsTr("ПРОВОДНИК")//Заголовок Проводника.
                     pgStrFileDialog.textToolbar = qsTr("Выберите документ для просмотра.")
+                    cppqml.strFileDialogPut = cppqml.strKatalogPut;//ВАЖНО!Обнов.каталог Проводника сохр путём
+                    tmFileDialog.failVibor = true;//Проводник выбирает файлы.
+                    stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
+                }
+                onClickedUstKatalog: {//Задаём папку, в которой будет создаваться Каталог.
+                    root.modeFileDialog = "ustkatalog";//Открываем проводник,зададим папку сохранения Каталога
+                    pgStrFileDialog.textZagolovok = qsTr("ПРОВОДНИК")//Заголовок Проводника.
+                    pgStrFileDialog.textToolbar = qsTr("<- Выберите папку сохранения и нажмите Ок.")
                     cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
+                    tmFileDialog.failVibor = false;//Проводник выбирает папки.
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }
                 onSignalZagolovok: function(strZagolovok) {//Слот сигнала signalZagolovok с новым Заголовком.
@@ -464,7 +473,8 @@ ApplicationWindow {
                     root.modeFileDialog = "filedialog";//Открываем проводник для Данных.
                     pgStrFileDialog.textZagolovok = pgStrDannie.textZagolovok;//Заголовок Данных.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
-                    cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
+                    cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника 
+                    tmFileDialog.failVibor = true;//Проводник выбирает файлы.
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }
 				onClickedInfo: {
@@ -530,6 +540,7 @@ ApplicationWindow {
             clrFaila: root.clrFaila; clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
+                id: tmFileDialog
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
 				clrFaila: pgStrFileDialog.clrFaila
@@ -574,17 +585,17 @@ ApplicationWindow {
 
                             }
                             else{
-                                if(root.modeFileDialog === "ustkatalog"){
-
-                                }
+                                if(root.modeFileDialog === "ustkatalog")
+                                    cppqml.strKatalogPut = cppqml.strFileDialogPut;//Запоминаем новый путь.
                             }
                         }
                     }
                     stvStr.pop()//Назад страницу
                 }
                 onClickedFail: function (strImyaFaila){//Если кликнули по документу.
-                    pgStrPdf.textZagolovok = strImyaFaila;//Делаем заголовок с именем Документа.
                     if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+                        pgStrPdf.textZagolovok = strImyaFaila;//Делаем заголовок с именем Документа.
+                        pgStrPdf.textToolbar = "";//Очищаем
                         cppqml.strKatalogUrl = strImyaFaila;//Создаём путь+файл и отправляем в pgStrPdf
                         stvStr.push(pgStrPdf);//Переходим на страницу отображения Pdf документа.
                     }
@@ -691,6 +702,7 @@ ApplicationWindow {
                     pgStrFileDialog.textZagolovok = stvStr.infoElement//Заголовок Проводника.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
                     cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
+                    tmFileDialog.failVibor = true;//Проводник выбирает файлы.
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
                 }
             }
