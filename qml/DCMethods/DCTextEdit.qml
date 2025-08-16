@@ -117,6 +117,9 @@ Item {
                         flcListat.contentY = Math.max(0, flcListat.contentHeight - flcListat.height)
                     }
                 }
+                onLinkActivated: function(link) {
+                    Qt.openUrlExternally(link)//откроет системный браузер/почту
+                }
             }
         }
         Item {//Самодельный вертикальный скроллбар
