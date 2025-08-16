@@ -6,6 +6,8 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_sttReestr("DruidCat", "Mentor"),
                                         m_untHeight(0),
                                         m_untWidth(0),
+                                        m_untY(0),
+                                        m_untX(0),
                                         m_blPdfViewer(true),
                                         m_blAppRedaktor(true),
                                         m_untShrift(1),
@@ -179,8 +181,10 @@ void DCCppQml::ustReestr(){//Запись настроек программы
 //---З А П И С Ь   Н А С Т Р О Е К   П Р И Л О Ж Е Н И Я---//
 /////////////////////////////////////////////////////////////
     m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-    m_sttReestr.setValue("/shirina_okna", m_untWidth);//Записываем ширину окна
     m_sttReestr.setValue("/visota_okna", m_untHeight);//Записываем высоту окна
+    m_sttReestr.setValue("/shirina_okna", m_untWidth);//Записываем ширину окна
+    m_sttReestr.setValue("/y_okna", m_untY);//Записываем y координату окна
+    m_sttReestr.setValue("/x_okna", m_untX);//Записываем x координату окна
     m_sttReestr.setValue("/pdf_viewer", m_blPdfViewer);//Записываем просмотрщик pdf документов.
     m_sttReestr.setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
     m_sttReestr.setValue("/shrift", m_untShrift);//Записываем размер Шрифта 0-мал, 1-средний, 2-большой.
@@ -192,11 +196,13 @@ void DCCppQml::polReestr(){//Чтение настроек программы
 //---Ч Т Е Н И Е   Н А С Т Р О Е К   П Р И Л О Ж Е Н И Я---//
 /////////////////////////////////////////////////////////////
     m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-    m_untWidth = m_sttReestr.value("/shirina_okna", 640).toInt();//Читаем ширину окна, по умолчанию 640
-    m_untHeight = m_sttReestr.value("/visota_okna", 480).toInt();//Читаем высоту окна, по умолчанию 480
+    m_untHeight = m_sttReestr.value("/visota_okna", 480).toUInt();//Читаем высоту окна, по умолчанию 480
+    m_untWidth = m_sttReestr.value("/shirina_okna", 640).toUInt();//Читаем ширину окна, по умолчанию 640
+    m_untY = m_sttReestr.value("/y_okna", 0).toUInt();//Читаем Y координату окна, по умолчанию 0
+    m_untX = m_sttReestr.value("/x_okna", 0).toUInt();//Читаем X координату окна, по умолчанию 0
     m_blPdfViewer = m_sttReestr.value("/pdf_viewer", true).toBool();//Читаем просмотрщик документов, по умол 1
     m_blAppRedaktor = m_sttReestr.value("/app_redaktor", true).toBool();//Читаем флаг редактора, по умол 1
-    m_untShrift = m_sttReestr.value("/shrift", 1).toInt();//Читаем шрифт, по умол 1-средний
+    m_untShrift = m_sttReestr.value("/shrift", 1).toUInt();//Читаем шрифт, по умол 1-средний
     m_strKatalogPut = m_sttReestr.value("/katalog_put", QDir::toNativeSeparators(m_strDomPut)).toString();
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
@@ -216,6 +222,24 @@ void DCCppQml::setUntWidth(const uint& untWidth) {//Изменяем ширин�
     if(untWidth != m_untWidth){//Если не равны значения, то...
         m_untWidth = untWidth;//Приравниваем.
         emit untWidthChanged();//Излучаем сигнал об изменении аргумента.
+    }
+}
+void DCCppQml::setUntY(const uint& untY) {//Изменяем Y координату окна приложения.
+/////////////////////////////////////////
+//---И З М Е Н Е Н И Е   Y   О К Н А---//
+/////////////////////////////////////////
+    if(untY != m_untY){//Если не равны значения, то...
+        m_untY = untY;//Приравниваем.
+        emit untYChanged();//Излучаем сигнал об изменении аргумента.
+    }
+}
+void DCCppQml::setUntX(const uint& untX) {//Изменяем X координату окна приложения.
+/////////////////////////////////////////
+//---И З М Е Н Е Н И Е   X   О К Н А---//
+/////////////////////////////////////////
+    if(untX != m_untX){//Если не равны значения, то...
+        m_untX = untX;//Приравниваем.
+        emit untXChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
 void DCCppQml::setBlPdfViewer(const bool& blPdfViewer){//Изменяем просмотрщик pdf документов.

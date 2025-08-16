@@ -29,6 +29,8 @@ ApplicationWindow {
     visible: true
 	color: "grey"
     title: qsTr("Ментор от druidcat@yandex.ru")
+    x: isMobile ? 0 : cppqml.untX//Считываем из реестра X (в бизнес-логике)
+    y: isMobile ? 0 : cppqml.untY//Считываем из реестра Y (в бизнес-логике)
     width: {
         var vrWidth = Screen.desktopAvailableWidth;//Расчитываем доступную ширину экрана
         if(isMobile)//Если мобильная платформа, то...
@@ -51,13 +53,59 @@ ApplicationWindow {
         if(!isMobile)//Если не мобильная платформа, то...
             return 330;
     }
+    //Функции
+    function ensureOnScreen() {//Функция не дающая окну оказаться вне видимой области экрана
+        if (isMobile) return//Если мобильное устройство, выходим из функции.
+        // Может быть undefined до показа окна/привязки к монитору
+        var scr = root.screen
+        var a = null
+
+        if (scr && scr.availableGeometry && scr.availableGeometry.width !== undefined) {
+            a = scr.availableGeometry
+        } else if (scr && scr.geometry && scr.geometry.width !== undefined) {
+            a = scr.geometry// fallback #1
+        } else {
+            a = { x: 0, y: 0,
+                  width: Screen.desktopAvailableWidth,
+                  height: Screen.desktopAvailableHeight }//fallback #2 — первичный экран (без учёта панелей)
+        }
+        if (!a || a.width === undefined || a.height === undefined) {// Если всё ещё нет валидной геометрии, то
+            Qt.callLater(ensureOnScreen)//Через паузу попробуем позже
+            return
+        }
+        var maxX = a.x + Math.max(0, a.width  - width)
+        var maxY = a.y + Math.max(0, a.height - height)
+        var nx = Math.min(Math.max(x, a.x), maxX)
+        var ny = Math.min(Math.max(y, a.y), maxY)
+        if (nx !== x) x = nx
+        if (ny !== y) y = ny
+    }
     onWidthChanged: {//Если Ширина поменялась, то...
-        if(!isMobile)//Если не мобильная платформа, то...
+        if(!isMobile){//Если не мобильная платформа, то...
             cppqml.untWidth = width;//Отправляем в бизнес логику ширину окна, для обработки.
+        }
     }
     onHeightChanged: {//Если Высота поменялась, то...
-        if(!isMobile)//Если не мобильная платформа, то...
+        if(!isMobile){//Если не мобильная платформа, то...
             cppqml.untHeight = height;//Отправляем в бизнес логику высоту окна, для обработки.
+        }
+    }
+    onXChanged: {//Если X координата изменилась, то...
+        if (!isMobile)//Если не мобильное устройство, то...
+            cppqml.untX = x;//Сохранение X координаты в бизнес-логику
+    }
+    onYChanged: {//Если Y координата изменилась, то...
+        if (!isMobile)//Если не мобильное устройство, то...
+            cppqml.untY = y;//Сохранение Y координаты в бизнес-логику
+    }
+    onVisibleChanged: {//Вызывать кламп после показа окна
+        if(visible && !isMobile) Qt.callLater(ensureOnScreen)//Если видимое окно и не мобильное устройство
+    }
+    onScreenChanged: {//При смене экрана (перетаскивание между мониторами)
+        if(!isMobile) Qt.callLater(ensureOnScreen)
+    }
+    Component.onCompleted: {//После создания окна
+        if(!isMobile) Qt.callLater(ensureOnScreen)//Немного отложим, чтобы гарантированно применились размеры
     }
 
 	StackView {

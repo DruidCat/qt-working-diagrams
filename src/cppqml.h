@@ -26,6 +26,14 @@ class DCCppQml : public QObject {
                     READ untWidth
                     WRITE setUntWidth
                     NOTIFY untWidthChanged FINAL)
+    Q_PROPERTY(uint	untY
+                    READ untY
+                    WRITE setUntY
+                    NOTIFY untYChanged FINAL)
+    Q_PROPERTY(uint	untX
+                    READ untX
+                    WRITE setUntX
+                    NOTIFY untXChanged FINAL)
     Q_PROPERTY(bool blPdfViewer
                     READ blPdfViewer
                     WRITE setBlPdfViewer
@@ -170,6 +178,10 @@ public:
     void		setUntHeight(const uint& untHeight);//Изменяем высоту окна приложения.
     uint		untWidth() { return m_untWidth; }//Возвращаем ширину окна.
     void		setUntWidth(const uint& untWidth);//Изменяем ширину окна приложения.
+    uint		untY() { return m_untY; }//Возвращаем Y Координату окна.
+    void		setUntY(const uint& untY);//Изменяем Y координату окна приложения.
+    uint		untX() { return m_untX; }//Возвращаем X координату окна.
+    void		setUntX(const uint& untX);//Изменяем X координату окна приложения.
     bool		blPdfViewer() { return m_blPdfViewer; }//Возвращаем флаг просмотщика.
     void		setBlPdfViewer(const bool& blPdfViewer);//Изменяем просмотрщик pdf документов.
     bool		blAppRedaktor() { return m_blAppRedaktor; }//Возвращаем флаг редактора.
@@ -260,6 +272,8 @@ public:
 signals:
     void untHeightChanged();//Сигнал о том, что высота окна изменилась.
     void untWidthChanged();//Сигнал о том, что ширина окна изменилась.
+    void untYChanged();//Сигнал о том, что Y координата окна изменилась.
+    void untXChanged();//Сигнал о том, что X координата окна изменилась.
     void blPdfViewerChanged();//Сигнал о том, что просмотрщик pdf документов поменялся.
     void blAppRedaktorChanged();//Сигнал о том, что флаг Редактора поменялся.
     void untShriftChanged();//Сигнал о том, что размер шрифта поменялся.
@@ -320,6 +334,8 @@ private:
 
     uint	m_untHeight;//Высота окна приложения.
     uint	m_untWidth;//Ширина окна приложения.
+    uint	m_untY;//Y координата окна приложения.
+    uint	m_untX;//X координата окна приложения.
     bool	m_blPdfViewer;//Флаг pdf просмотрщика.
     bool	m_blAppRedaktor;//Флаг Редактора вкл/выкл.
     uint 	m_untShrift;//Размер шрифта 0-маленький, 1-средний, 2-большой.
