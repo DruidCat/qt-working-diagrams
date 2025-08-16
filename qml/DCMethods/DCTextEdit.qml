@@ -117,7 +117,7 @@ Item {
                         flcListat.contentY = Math.max(0, flcListat.contentHeight - flcListat.height)
                     }
                 }
-                onLinkActivated: function(link) {
+                onLinkActivated: function(link) {//Если ссылка активизировалась, то...
                     Qt.openUrlExternally(link)//откроет системный браузер/почту
                 }
             }

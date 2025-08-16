@@ -171,7 +171,8 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>ФУНКЦИОНАЛ:</b></p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNazad.png\"> - Вернуться в Меню программы Ментор.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaInfo.png\"> - Инструкция по анимации.</p>
-<p><img src = \"/images/DCButtons/24x24/DCKnopkaSozdat.png\"> - Добавить текст, который будет увеличиваться с логотипом.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaSozdat.png\"> - Добавить текст, который будет увеличиваться \
+с логотипом.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNastroiki.png\"> - Меню анимации.</p>
 <p><b>ГОРЯЧИЕ КЛАВИШИ:</b></p>
 <p><b>[Ctrl N]</b> или <b>[Shift I]</b> - Режим добавления текста анимации.</p>
