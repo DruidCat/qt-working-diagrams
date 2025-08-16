@@ -66,8 +66,6 @@ The project is compatible with:
 
 ![screenshots](screenshots/ru.Mentor.png)
 	snapshot of the Mentor app.
-![screenshots](screenshots/KnopkiQML.png)
-	a snapshot of the buttons located in (qml/DCBottons).
 
 ## This document in Russia 
 

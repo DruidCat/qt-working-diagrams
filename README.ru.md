@@ -66,8 +66,6 @@ https://github.com/DruidCat/qt-working-diagrams
 
 ![screenshots](screenshots/ru.Mentor.png)
 	снимок приложения Ментор.
-![screenshots](screenshots/KnopkiQML.png)
-	снимок кнопок находящихся в (qml/DCBottons).
 
 ## This document in English
 
