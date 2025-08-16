@@ -18,7 +18,7 @@ Item {
 	property int to: 32767//Задаём значение по умолчанию.
 	property int stepSize: 1
     property real tapKnopkaMinus: 1
-    property real tapCentor: 3.6
+    property real tapCentor: 3.9
     property real tapKnopkaPlus: 1
     //Настройки.
     height: ntWidth*ntCoff

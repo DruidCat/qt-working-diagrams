@@ -565,7 +565,7 @@ ApplicationWindow {
                 toolbarWidth: pgStrPdf.rctStrToolbar.width
                 toolbarHeight: pgStrPdf.rctStrToolbar.height
                 tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
-                tapToolbarLevi: 1; tapToolbarPravi: 1.1
+                tapToolbarLevi: 1; tapToolbarPravi: 1
                 pdfViewer: root.pdfViewer
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
