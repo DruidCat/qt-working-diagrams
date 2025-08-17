@@ -1,6 +1,6 @@
 ﻿import QtQuick //2.15
-import "qrc:/js/jsJSON.js" as JSSpisok
-
+import "qrc:/js/jsJSON.js" as JSZona
+//DCListView -
 Item {
     id: root
     //Свойства.
@@ -9,6 +9,7 @@ Item {
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
     property bool enabled: true
+    property string zona: ""
     //Сигналы.
     signal clicked(int ntNomer, var strSpisok)
     signal tap()//Сигнал нажатия не на элементы.
@@ -22,7 +23,20 @@ Item {
         anchors.fill: root
         anchors.margins: root.ntCoff
         spacing: root.ntCoff//Расстояние между строками
-        model: JSSpisok.fnSpisokJSON()
+        model: {
+            if(root.zona === "spisok"){
+                JSZona.fnSpisokJSON()
+            }
+            else{
+                if(root.zona === "element"){
+                    JSZona.fnElementJSON()
+                }
+                else{
+                    if(root.zona === "dannie")
+                        JSZona.fnDannieJSON()
+                }
+            }
+        }
         delegate: cmpZona
         Keys.priority: Keys.BeforeItem//Чтобы дочерний lsvZona обрабатывал клавиши раньше родителя StrSpisok.
         focus: true//Фокус на lvsZona
@@ -71,10 +85,10 @@ Item {
             //cppqml.strDebug = event.key;
         }
         function fnActivateCurrent(){//Функция активация текущего элемента по Enter/Space (эмулируем клик)
-            const idx = currentIndex
-            if (idx < 0 || idx >= count) return
-            const m = lsvZona.model
-            root.clicked(m[idx].kod, m[idx].spisok)//Модель — JS-массив, берем данные напрямую
+            const cIndex = currentIndex//Индекс действующий
+            if (cIndex < 0 || cIndex >= count) return//Если индекс за пределами, то выходим из функции.
+            const cModel = lsvZona.model//Действующая модель[массив]
+            root.clicked(cModel[cIndex].kod, cModel[cIndex].dannie)//Модель — JS-массив, берем данные напрямую
         }
         TapHandler {//Нажимаем не на элементы, а на пустую область.
             id: tphTap
@@ -99,7 +113,7 @@ Item {
                     color: (ListView.isCurrentItem || maZona.containsPress)
                             ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
                     anchors.centerIn: parent
-                    text: modelData.spisok
+                    text: modelData.dannie
                     font.pixelSize: rctZona.height-root.ntCoff
                 }
                 MouseArea {
@@ -107,8 +121,8 @@ Item {
                     anchors.fill: rctZona
                     enabled: root.enabled ? true : false
                     onClicked: {
-                        fnFocus()
-                        root.clicked(modelData.kod, modelData.spisok)
+                        fnFocus()//Фокус, чтоб горячие клавиши работали.
+                        root.clicked(modelData.kod, modelData.dannie)//Клик возращает код и данные модели.
                     }
                 }
                 Component.onCompleted:{//Когда текст отрисовался, нужно выставить размер шрифта.
@@ -176,10 +190,28 @@ Item {
         Connections {//Соединяем сигнал из C++ с действием в QML
 			target: cppqml;//Цель объект класса С++ DCCppQml
 			function onStrSpisokDBChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то.
-                lsvZona.model = JSSpisok.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
-                if (lsvZona.count > 0 && lsvZona.currentIndex < 0)
-                    lsvZona.currentIndex = 0//Зафиксировать выбор на первом элементе
-			}
+                if(root.zona === "spisok"){//Если Список, то...
+                    lsvZona.model = JSZona.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
+                    if (lsvZona.count > 0 && lsvZona.currentIndex < 0)//Модель не пустая и Индекс не верный,то
+                        lsvZona.currentIndex = 0//Зафиксировать выбор на первом элементе
+                }
+            }
+            function onStrSpisokChanged(){//Слот Если изменился элемент Списка strSpisok (Q_PROPERTY), то...
+                if(root.zona === "element")//Если Элемент, то...
+                    lsvZona.model = JSZona.fnElementJSON();//Перегружаем модель ListView с новыми данными.
+            }
+            function onStrElementDBChanged(){//Слот Если изменился Элемент в strElementDB (Q_PROPERTY), то...
+                if(root.zona === "element")//Если Элемент, то...
+                    lsvZona.model = JSZona.fnElementJSON();//Перегружаем модель ListView с новыми данными.
+            }
+            function onStrElementChanged(){//Слот Если изменился Элемент strElement (Q_PROPERTY), то...
+                if(root.zona === "dannie")//Если Данные, то...
+                    lsvZona.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
+            }
+            function onStrDannieDBChanged(){//Слот Если изменился Документ в strDannieDB (Q_PROPERTY), то...
+                if(root.zona === "dannie")//Если Данные, то...
+                    lsvZona.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
+            }
         }
 	}
 }

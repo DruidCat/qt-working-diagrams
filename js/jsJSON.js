@@ -108,7 +108,7 @@ function fnSpisokJSON () {//Функция чтения JSON запроса Сп
 }
 
 function fnElementJSON () {//Функция чтения JSON запроса Элементов из бизнес логики.
-	return JSON.parse(cppqml.strElementDB);//Читаем JSON запрос.
+    return JSON.parse(cppqml.strElementDB);//Читаем JSON запрос.
 }
 
 function fnDannieJSON () {//Функция чтения JSON запроса Документов из бизнес логики.

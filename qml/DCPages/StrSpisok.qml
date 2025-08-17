@@ -40,6 +40,7 @@ Item {
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     //focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
+    Keys.priority: Keys.AfterItem//Чтобы корневой StrSpisok не перехватывал события раньше списка lsvZona
     //Сигналы.
 	signal clickedMenu();//Сигнал нажатия кнопки Меню. 
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
@@ -53,7 +54,6 @@ Item {
             lsvSpisok.fnFocus();//Установить фокус на lsvZona в lsvSpisok, чтоб клавиши работали листания
 		})
     }
-    Keys.priority: Keys.AfterItem//Чтобы корневой StrSpisok не перехватывал события раньше списка lsvSpisok
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
@@ -293,8 +293,10 @@ Item {
                     root.signalToolbar(qsTr("Успешное удаление списка."));
                 else
                     cppqml.strDebug = qsTr("Ошибка при удалении.");
+                lsvSpisok.fnFocus();//Установить фокус на lsvZona в lsvSpisok, чтоб клавиши работали листания
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
+                lsvSpisok.fnFocus();//Установить фокус на lsvZona в lsvSpisok, чтоб клавиши работали листания
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvSpisok.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
@@ -358,13 +360,14 @@ Item {
                 ntCoff: root.logoRazmer; logoImya: root.logoImya
                 clrLogo: root.clrTexta; clrFona: root.clrFona
             }
-            ZonaSpisok {
+            DCListView {
                 id: lsvSpisok
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
                 //clrTexta: "#00CC99"//Интересный изумрудный цвет.
                 clrTexta: root.clrTexta; clrFona: root.clrMenuFon
+                zona: "spisok"
                 onClicked: function(ntKod, strSpisok) {//Слот clicked нажатия на один из элементов Списка.
                     if(cppqml.blSpisokPervi){//Если это первый в Списке, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...

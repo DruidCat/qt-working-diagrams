@@ -1,5 +1,6 @@
 module DCMethods
 
+DCListView 1.0 DCListView.qml
 DCLogo 1.0 DCLogo.qml
 DCMenu 1.0 DCMenu.qml
 DCPassword 1.0 DCPassword.qml

@@ -142,11 +142,11 @@ QString DataElement::polElementJSON(quint64 ullSpisokKod) {//Получить JS
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
 		m_blElementPervi = true;//Первый элемент записывается (true).
-        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"element\":\"Создайте новый элемент.\"}]");//Возвращаем
+        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"dannie\":\"Создайте новый элемент.\"}]");//Возвращаем
 	}
 	else
 		m_blElementPervi = false;//Не первый элемент записывается.
-    //Пример: [{"kod":"1","nomer":"1","element":"фаска"},{"kod":"2","nomer":"2","element":"торцовка"}]
+    //Пример: [{"kod":"1","nomer":"1","dannie":"фаска"},{"kod":"2","nomer":"2","dannie":"торцовка"}]
     strElementJSON = "[";//Начало массива объектов
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
         QString strNomer = m_pdbElement->SELECT("Код", QString::number(ullShag), "Номер");
@@ -157,7 +157,7 @@ QString DataElement::polElementJSON(quint64 ullSpisokKod) {//Получить JS
 				strElementJSON = strElementJSON + "{";
 				strElementJSON = strElementJSON + "\"kod\":\"" + QString::number(ullShag) + "\",";
 				strElementJSON = strElementJSON + "\"nomer\":\"" + strNomer + "\",";
-				strElementJSON = strElementJSON + "\"element\":\""	+ strElement + "\"";
+                strElementJSON = strElementJSON + "\"dannie\":\""	+ strElement + "\"";
 				strElementJSON = strElementJSON + "}";//Конец списка объектов.
 				if(ullShag<ullKolichestvo)//Если это не последний список объектов, то..
 					strElementJSON = strElementJSON + ",";//ставим запятую.

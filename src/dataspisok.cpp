@@ -105,13 +105,13 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
     quint64 ullKolichestvo = m_pdbSpisok->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
         m_blSpisokPervi = true;//Флаг - это будет первый в списке.
-        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"spisok\":\"Создайте новый элемент.\"}]");//Возвращаем
+        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"dannie\":\"Создайте новый элемент.\"}]");//Возвращаем
 	}
     else
         m_blSpisokPervi = false;//Флаг - не первый в списке.
     QString strSpisokJSON("");//Строка, в которой будет собран JSON запрос.
 	m_slsSpisok.clear();//Пустой список элементов списка.
-    //Пример: [{"kod":"1","nomer":"1","spisok":"формовка"},{"kod":"2","nomer":"2","spisok":"сварка"}]
+    //Пример: [{"kod":"1","nomer":"1","dannie":"формовка"},{"kod":"2","nomer":"2","dannie":"сварка"}]
     strSpisokJSON = "[";//Начало массива объектов
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
         QString strNomer = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Номер");
@@ -122,7 +122,7 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
 				strSpisokJSON = strSpisokJSON + "{";
 				strSpisokJSON = strSpisokJSON + "\"kod\":\"" + QString::number(ullShag) + "\",";
 				strSpisokJSON = strSpisokJSON + "\"nomer\":\"" + strNomer + "\",";
-				strSpisokJSON = strSpisokJSON + "\"spisok\":\""	+ strSpisok + "\"";
+                strSpisokJSON = strSpisokJSON + "\"dannie\":\""	+ strSpisok + "\"";
 				strSpisokJSON = strSpisokJSON + "}";//Конец списка объектов.
 				m_slsSpisok = m_slsSpisok<<strSpisok;//Собираем полный список элементов Списка.
 				if(ullShag<ullKolichestvo)//Если это не последний список объектов, то..

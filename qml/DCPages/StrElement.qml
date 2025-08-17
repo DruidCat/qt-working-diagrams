@@ -39,6 +39,7 @@ Item {
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Обязательно, иначе на Андроид экранная клавиатура не открывается.
+    Keys.priority: Keys.AfterItem//Чтобы корневой StrElement не перехватывал события раньше списка lsvZona
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
@@ -46,7 +47,7 @@ Item {
 	signal clickedElement(var strElement);//Сигнал когда нажат один из Элементов.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции. 
-    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
+    Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
                 if(knopkaSozdat.visible)//Если кнопка Созать видимая, то...
@@ -116,14 +117,14 @@ Item {
         }
     }
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
-		root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
+        lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали листания
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuElement.visible = false;//Делаем невидимым всплывающее меню.
         root.blPereimenovat = false;//Запрещаем выбор переименовывания.
         root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         root.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-        lsvZona.enabled = true;//Делаем кликабельную Зону.
+        lsvElement.enabled = true;//Делаем кликабельную Зону.
     }
     function fnClickedNazad(){//Функция нажатия кнопки Назад
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
@@ -153,7 +154,7 @@ Item {
         txuUdalit.visible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
-        lsvZona.enabled = false;//Делаем не кликабельную Зону.
+        lsvElement.enabled = false;//Делаем не кликабельную Зону.
         root.signalToolbar(qsTr("Удалить данный элемент?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
@@ -164,7 +165,7 @@ Item {
         menuElement.visible = false;//Делаем невидимым меню.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
         txnZagolovok.visible = true;//Режим создания элемента Списка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
-        lsvZona.enabled = false;//Делаем не кликабельную Зону.
+        lsvElement.enabled = false;//Делаем не кликабельную Зону.
         root.signalToolbar(qsTr("Создайте новый элемент."));
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
@@ -262,15 +263,17 @@ Item {
             }
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-                lsvZona.enabled = true;//Делаем кликабельную Зону.
+                lsvElement.enabled = true;//Делаем кликабельную Зону.
                 if(cppqml.delStrElement(strKod))//Запускаю метод удаление Элемента из БД и их Документов.
                     root.signalToolbar(qsTr("Успешное удаление элемента."));
                 else
                     cppqml.strDebug = qsTr("Ошибка при удалении.");
+                lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement,чтоб клавиши работали листания
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
+                lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement,чтоб клавиши работали листания
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-                lsvZona.enabled = true;//Делаем кликабельную Зону.
+                lsvElement.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
@@ -304,7 +307,7 @@ Item {
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
 					}
                     else{//Если DCTextInput не видим, то...
-                        root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
+                        lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали листания
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
                         knopkaNazad.visible = true;//Кнопка назад видимая.
@@ -331,12 +334,13 @@ Item {
                 ntCoff: root.logoRazmer; logoImya: root.logoImya
                 clrLogo: root.clrTexta; clrFona: root.clrFona
             }
-            ZonaElement {
-				id: lsvZona
+            DCListView {
+                id: lsvElement
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
 				clrTexta: root.clrTexta; clrFona: root.clrMenuFon
+                zona: "element"
                 onClicked: function(ntKod, strElement) {//Слот нажатия на один из Элементов списка.
 					if(cppqml.blElementPervi){//Если это первый элемент, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
@@ -352,7 +356,7 @@ Item {
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strElement = strElement;//Присваиваем Элемент списка к свойству Q_PROPERTY
                             txnZagolovok.ustText(strElement);//Добавляем в строку выбранный Элемент списка.
-                            lsvZona.enabled = false;//Делаем не кликабельную Зону.
+                            lsvElement.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...
                             if(root.blUdalitVibor){//Если удалить, то...
@@ -418,11 +422,11 @@ Item {
 	}
 	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
         root.blPereimenovatVibor ? rctBorder.border.color=clrTexta:rctBorder.border.color="transparent";
-        root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
+        lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали листания
     }
     onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
         root.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
-        root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
+        lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали листания
     }
 	Item {//Состава Тулбар
 		id: tmToolbar 
@@ -459,7 +463,7 @@ Item {
                 root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
                 root.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
                 txuUdalit.visible = false;//Убираем запрос на удаление, если он есть.
-                lsvZona.enabled = true;//Делаем кликабельную Зону.
+                lsvElement.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}

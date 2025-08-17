@@ -42,6 +42,7 @@ Item {
     //Настройки
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Не удалять, может Escape не работать.
+    Keys.priority: Keys.AfterItem//Чтобы корневой StrDannie не перехватывал события раньше списка lsvZona
     //Сигналы
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
 	signal clickedSozdat();//Сигнал нажатия кнопки Создать
@@ -120,14 +121,14 @@ Item {
         }
     }
     function fnClickedEscape(){//Функция нажатия кнопки Escape.
-		root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
+        lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали листания
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuDannie.visible = false;//Делаем невидимым всплывающее меню.
         root.blPereimenovat = false;//Запрещаем выбор переименовывания.
         root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
         root.blUdalitVibor = false;//Запрещаем выбирать документ для удаления.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-        lsvZona.enabled = true;//Делаем кликабельную Зону.
+        lsvDannie.enabled = true;//Делаем кликабельную Зону.
     }
     function fnClickedNazad() {//Функция нажатия кнопки Назад.
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
@@ -154,7 +155,7 @@ Item {
         txuUdalit.visible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
-        lsvZona.enabled = false;//Делаем не кликабельную Зону.
+        lsvDannie.enabled = false;//Делаем не кликабельную Зону.
         root.signalToolbar(qsTr("Удалить данный документ?"));//Делаем предупреждение в Toolbar.
     }
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
@@ -164,7 +165,7 @@ Item {
         root.blUdalitVibor = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
         menuDannie.visible = false;//Делаем невидимым меню.
         txnZagolovok.visible = false;//Отключаем переименование Докумена.
-        lsvZona.enabled = true;//Делаем кликабельную Зону.
+        lsvDannie.enabled = true;//Делаем кликабельную Зону.
         root.clickedSozdat();//Излучаем сигнал, что нужно запустить Файловый Диалог.
     }
     function fnMenuSozdat(){//Нажат пункт меню Добавить.
@@ -264,15 +265,17 @@ Item {
             }
             onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-                lsvZona.enabled = true;//Делаем кликабельную Зону.
+                lsvDannie.enabled = true;//Делаем кликабельную Зону.
                 if(cppqml.delStrDannie(strKod))//Запускаю метод удаление записи из БД и самого Документа.
                     root.signalToolbar(qsTr("Успешное удаление документа"));
                 else
                     cppqml.strDebug = qsTr("Ошибка при удалении.");
+                lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie,чтоб клавиши работали листания
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
+                lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie,чтоб клавиши работали листания
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-                lsvZona.enabled = true;//Делаем кликабельную Зону.
+                lsvDannie.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }
@@ -306,7 +309,7 @@ Item {
                         knopkaOk.visible = true;//Кнопка Ок Видимая.
 					}
                     else{//Если DCTextInput не видим, то...
-                        root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
+                        lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали листания
                         knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                         knopkaOk.visible = false;//Кнопка Ок Невидимая.
                         knopkaNazad.visible = true;//Кнопка назад видимая.
@@ -333,12 +336,13 @@ Item {
                 ntCoff: root.logoRazmer; logoImya: root.logoImya
                 clrLogo: tmElement.clrTexta; clrFona: tmElement.clrFona
             }
-            ZonaDannie {
-				id: lsvZona
+            DCListView {
+                id: lsvDannie
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
                 clrTexta: root.clrFaila; clrFona: root.clrMenuFon
+                zona: "dannie"
                 onClicked: function(ntKod, strDannie) {//Слот нажатия на один из Документов списка.
 					if(cppqml.blDanniePervi){//Если это первый Документ, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
@@ -354,7 +358,7 @@ Item {
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             strDannieRen = strDannie;//Присваиваем переменной имя Документа.
                             txnZagolovok.ustText(strDannie);//Добавляем в строку выбранный Документ.
-                            lsvZona.enabled = false;//Делаем не кликабельную Зону.
+                            lsvDannie.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...
                             if(root.blUdalitVibor){//Если удалить, то...
@@ -424,11 +428,11 @@ Item {
     }
 	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
         root.blPereimenovatVibor ? rctBorder.border.color=clrTexta : rctBorder.border.color="transparent";
-        root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
+        lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали листания
     }
     onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
         root.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
-        root.focus = true;//Фокус на главном виджете, чтоб горячие клавиши работали.
+        lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали листания
     }
     Item {//Данные Тулбар
 		id: tmToolbar 
@@ -466,7 +470,7 @@ Item {
                 root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
                 root.blUdalitVibor = false;//Запрещено удалять.
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-                lsvZona.enabled = true;//Делаем кликабельную Зону.
+                lsvDannie.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
 		}
