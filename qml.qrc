@@ -67,8 +67,6 @@
         <file>qml/DCPages/StrSpisok.qml</file>
         <file>qml/DCPages/Stranica.qml</file>
         <file>qml/DCPages/qmldir</file>
-        <file>qml/DCZones/ZonaFileDialog.qml</file>
-        <file>qml/DCZones/qmldir</file>
         <file>qml/ru.Mentor.qml</file>
         <file>workingdata/plan.pdf</file>
         <file>qml/DCPages/StrKatalog.qml</file>
@@ -137,5 +135,6 @@
         <file>images/DCButtons/24x24/DCKnopkaVverh.png</file>
         <file>images/DCButtons/24x24/DCKnopkaZakrit.png</file>
         <file>qml/DCMethods/DCListView.qml</file>
+        <file>qml/DCMethods/DCFileDialog.qml</file>
     </qresource>
 </RCC>

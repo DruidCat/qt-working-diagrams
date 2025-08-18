@@ -88,7 +88,7 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
     QString strFileDialogJSON("");//Строка, собирающая JSON команду.
     quint64 ullKolichestvoPapok = slsPapki.size();//Количество папок.
     quint64 ullKolichestvoFailov = slsFaili.size();//Количество файлов.
-    //При: [{"tip":"0","filedialog":".."},{"tip":"1","filedialog":"Doc"},{"tip":"2","filedialog":"схема.pdf"}]
+    //При: [{"tip":"0","dannie":".."},{"tip":"1","dannie":"Doc"},{"tip":"2","dannie":"схема.pdf"}]
     //Где: 0 - назад в каталоге, 1 - папки, 2 - файл.pdf
     strFileDialogJSON = "[";//Начало массива объектов
     for (quint64 ullShag = 0; ullShag < ullKolichestvoPapok; ullShag++){//Цикл папок.
@@ -99,7 +99,7 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
                     strFileDialogJSON = strFileDialogJSON + "\"tip\":\"0\",";//Папка назад.
                 else//Если нет, то папка
                     strFileDialogJSON = strFileDialogJSON + "\"tip\":\"1\",";//Папка
-                strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\"["	+ slsPapki[ullShag] + "]\"";
+                strFileDialogJSON = strFileDialogJSON + "\"dannie\":\"["	+ slsPapki[ullShag] + "]\"";
                 strFileDialogJSON = strFileDialogJSON + "}";//Конец списка объектов.
                 if (ullShag == (ullKolichestvoPapok-1)){//Если это последняя папка, то...
                     if(!ullKolichestvoFailov)//Если файлов в данной папке нет, то запятую не ставим.
@@ -112,7 +112,7 @@ QString DCFileDialog::polSpisokJSON(){//Метод создающий списо
     for (quint64 ullShag = 0; ullShag < ullKolichestvoFailov ; ullShag++){//Цикл файлов.
         strFileDialogJSON = strFileDialogJSON + "{";//Открываем скобки.
         strFileDialogJSON = strFileDialogJSON + "\"tip\":\"2\",";//files.pdf
-        strFileDialogJSON = strFileDialogJSON + "\"filedialog\":\""	+ slsFaili[ullShag] + "\"";
+        strFileDialogJSON = strFileDialogJSON + "\"dannie\":\""	+ slsFaili[ullShag] + "\"";
         strFileDialogJSON = strFileDialogJSON + "}";//Конец списка объектов.
         if (ullShag == (ullKolichestvoFailov -1))//Если это последний файл, то...
             break;//Выходим из цикла.

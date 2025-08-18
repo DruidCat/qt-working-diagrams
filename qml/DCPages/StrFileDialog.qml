@@ -2,7 +2,6 @@
 
 import DCButtons 1.0//Импортируем кнопки
 import DCMethods 1.0//Импортируем методы написанные мной.
-import DCZones 1.0//Импортируем зону Данных.
 //Страница с отображением каталога папок и файлов
 Item {
     id: root
@@ -173,7 +172,7 @@ Item {
                 ntCoff: root.logoRazmer; logoImya: root.logoImya
                 clrLogo: root.clrTexta; clrFona: root.clrFona
             }
-            ZonaFileDialog {
+            DCFileDialog {
                 id: lsvZona
                 ntWidth: root.ntWidth
                 ntCoff: root.ntCoff

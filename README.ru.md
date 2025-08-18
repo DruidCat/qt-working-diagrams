@@ -33,7 +33,6 @@ https://github.com/DruidCat/qt-working-diagrams
 	* Каталог **[DCButtons](qml/DCButtons)** содержит кнопки приложения.
 	* Каталог **[DCMethods](qml/DCMethods)** содержит методы приложения.
 	* Каталог **[DCPages](qml/DCPages)** содержит страницы приложения (Меню, Список, Элементы, Данные, Проводник).
-	* Каталог **[DCZones](qml/DCZones)** содержит основные зоны страниц (Список, Элементы, Данные, Проводник).
 	* Файл **[ru.Mentor.qml](qml/ru.Mentor.qml)**
                 предоставляет реализацию окна приложения.
 * Каталог **[js](js)** содержит java script файлы.
@@ -42,8 +41,6 @@ https://github.com/DruidCat/qt-working-diagrams
 * Каталог **[src](src)** содержит исходный код на C++.
     * Файл **[main.cpp](src/main.cpp)** является точкой входа в приложение.
 * Каталог **[translations](translations)** содержит файлы перевода интерфейса пользователя.
-* Файл **[ru.Mentor.desktop](ru.Mentor.desktop)**
-        определяет отображение и параметры запуска приложения.
         
 ## Совместимость
 

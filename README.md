@@ -33,7 +33,6 @@ The project has a standard application structure based on C++ and QML.
 	* Catalog **[DCButtons](qml/DCButtons)** directory contains the app's buttons.
 	* Catalog **[DCMethods](qml/DCMethods)** directory contains the app's methods.
 	* Catalog **[DCPages](qml/DCPages)** contains application pages (Menu, List, Items, Data, Explorer).
-	* Catalog **[DCZones](qml/DCZones)** contains the main page zones (List, Items, Data, Explorer).
 	* File **[ru.Mentor.qml](qml/ru.Mentor.qml)**
                 provides an implementation of the application window.
 * Catalog **[js](js)** contains java script files.
@@ -42,8 +41,6 @@ The project has a standard application structure based on C++ and QML.
 * Catalog **[src](src)** directory contains the C++source code.
     * File **[main.cpp](src/main.cpp)** is the entry point to the app.
 * Catalog **[translations](translations)** contains user interface translation files.
-* File **[ru.Mentor.desktop](ru.Mentor.desktop)**
-        defines the display and launch parameters of the app.
 
 ## Compatibility
 
