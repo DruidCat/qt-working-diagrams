@@ -180,7 +180,7 @@ Item {
 		else{
 			pskPoisk.text = txnZagolovok.text;//текст присваиваем.
 			pskPoisk.visible = true;//Делаем видимым режим поиска
-			txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+            txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
             pdfLoader.item.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
             pdfLoader.item.searchForward();//Показываем следующий результат поиска.
 		}
