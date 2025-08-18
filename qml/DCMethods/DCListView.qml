@@ -71,11 +71,13 @@ Item {
                 event.accepted = true;//Завершаем обработку эвента.
             }
             if(event.key === Qt.Key_Home){//Если нажата кнопка Home, то...
-                currentIndex = 0; positionViewAtBeginning();
+                currentIndex = 0;
+                positionViewAtBeginning();
                 event.accepted = true;//Завершаем обработку эвента.
             }
             if(event.key === Qt.Key_End){//Если нажата кнопка End, то...
-                currentIndex = count - 1; positionViewAtEnd();
+                currentIndex = count - 1;
+                positionViewAtEnd();
                 event.accepted = true;//Завершаем обработку эвента.
             }
             if((event.key === Qt.Key_Enter)||(event.key === Qt.Key_Return)||(event.key === Qt.Key_Space)){
@@ -122,6 +124,7 @@ Item {
                     enabled: root.enabled ? true : false
                     onClicked: {
                         fnFocus()//Фокус, чтоб горячие клавиши работали.
+                        lsvZona.currentIndex = index//Индекс Списка через индекс делегата, подсветится делегат
                         root.clicked(modelData.kod, modelData.dannie)//Клик возращает код и данные модели.
                     }
                 }
