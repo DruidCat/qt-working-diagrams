@@ -149,14 +149,14 @@ QString DataElement::polElementJSON(quint64 ullSpisokKod) {//Получить JS
     //Пример: [{"kod":"1","nomer":"1","dannie":"фаска"},{"kod":"2","nomer":"2","dannie":"торцовка"}]
     strElementJSON = "[";//Начало массива объектов
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
-        QString strNomer = m_pdbElement->SELECT("Код", QString::number(ullShag), "Номер");
-		if(strNomer != ""){//Если номер не пустая строка, то...
+        QString strKod = m_pdbElement->SELECT("Номер", QString::number(ullShag), "Код");
+        if(strKod  != ""){//Если номер не пустая строка, то...
 			QString strElement = m_pdcclass->
-                json_encode(m_pdbElement->SELECT("Код", QString::number(ullShag), "Элемент"));
+                json_encode(m_pdbElement->SELECT("Номер", QString::number(ullShag), "Элемент"));
 			if(strElement != ""){//Если Список не пустая строка, то...
 				strElementJSON = strElementJSON + "{";
-				strElementJSON = strElementJSON + "\"kod\":\"" + QString::number(ullShag) + "\",";
-				strElementJSON = strElementJSON + "\"nomer\":\"" + strNomer + "\",";
+                strElementJSON = strElementJSON + "\"kod\":\"" + strKod + "\",";
+                strElementJSON = strElementJSON + "\"nomer\":\"" + QString::number(ullShag)  + "\",";
                 strElementJSON = strElementJSON + "\"dannie\":\""	+ strElement + "\"";
 				strElementJSON = strElementJSON + "}";//Конец списка объектов.
 				if(ullShag<ullKolichestvo)//Если это не последний список объектов, то..
