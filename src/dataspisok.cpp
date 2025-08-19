@@ -113,15 +113,15 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
 	m_slsSpisok.clear();//Пустой список элементов списка.
     //Пример: [{"kod":"1","nomer":"1","dannie":"формовка"},{"kod":"2","nomer":"2","dannie":"сварка"}]
     strSpisokJSON = "[";//Начало массива объектов
-	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
-        QString strNomer = m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Номер");
-		if(strNomer != ""){//Если номер не пустая строка, то...
+    for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){//Сортируем по НОМЕРУ
+        QString strKod = m_pdbSpisok->SELECT("Номер", QString::number(ullShag), "Код");
+        if(strKod  != ""){//Если Код не пустая строка, то...
 			QString strSpisok = m_pdcclass->
-                json_encode(m_pdbSpisok->SELECT("Код", QString::number(ullShag), "Список"));
+                json_encode(m_pdbSpisok->SELECT("Номер", QString::number(ullShag), "Список"));
 			if(strSpisok != ""){//Если Список не пустая строка, то...
 				strSpisokJSON = strSpisokJSON + "{";
-				strSpisokJSON = strSpisokJSON + "\"kod\":\"" + QString::number(ullShag) + "\",";
-				strSpisokJSON = strSpisokJSON + "\"nomer\":\"" + strNomer + "\",";
+                strSpisokJSON = strSpisokJSON + "\"kod\":\"" + strKod  + "\",";
+                strSpisokJSON = strSpisokJSON + "\"nomer\":\"" + QString::number(ullShag) + "\",";
                 strSpisokJSON = strSpisokJSON + "\"dannie\":\""	+ strSpisok + "\"";
 				strSpisokJSON = strSpisokJSON + "}";//Конец списка объектов.
 				m_slsSpisok = m_slsSpisok<<strSpisok;//Собираем полный список элементов Списка.
