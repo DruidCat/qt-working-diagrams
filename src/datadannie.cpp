@@ -161,15 +161,15 @@ QString DataDannie::polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod){/
         m_blDanniePervi = false;//Не первые данные записываются.
     //Пример: [{"kod":"1","nomer":"1","dannie":"план"},{"kod":"2","nomer":"2","dannie":"схема"}]
     strDannieJSON = "[";//Начало массива объектов
-    for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
-        QString strNomer = m_pdbDannie->SELECT("Код", QString::number(ullShag), "Номер");
-        if(strNomer != ""){//Если номер не пустая строка, то...
+    for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){//Сортируем список json по НОМЕР.
+        QString strKod = m_pdbDannie->SELECT("Номер", QString::number(ullShag), "Код");
+        if(strKod != ""){//Если номер не пустая строка, то...
             QString strDannie = m_pdcclass->
-                json_encode(m_pdbDannie->SELECT("Код", QString::number(ullShag), "Данные"));
+                json_encode(m_pdbDannie->SELECT("Номер", QString::number(ullShag), "Данные"));
             if(strDannie != ""){//Если Данные не пустая строка, то...
                 strDannieJSON = strDannieJSON + "{";
-                strDannieJSON = strDannieJSON + "\"kod\":\"" + QString::number(ullShag) + "\",";
-                strDannieJSON = strDannieJSON + "\"nomer\":\"" + strNomer + "\",";
+                strDannieJSON = strDannieJSON + "\"kod\":\"" + strKod + "\",";
+                strDannieJSON = strDannieJSON + "\"nomer\":\"" + QString::number(ullShag) + "\",";
                 strDannieJSON = strDannieJSON + "\"dannie\":\""	+ strDannie + "\"";
                 strDannieJSON = strDannieJSON + "}";//Конец списка объектов.
                 if(ullShag<ullKolichestvo)//Если это не последние данные объектов, то..
