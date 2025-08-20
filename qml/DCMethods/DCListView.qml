@@ -10,7 +10,7 @@ Item {
 	property color clrFona: "SlateGray"
     property bool enabled: true
     property string zona: ""
-    property bool blSort: false//true - Включаем режим сортировки. false - выключаем.
+    property bool isSort: false//true - Включаем режим сортировки. false - выключаем.
     property int ntSortFixed: 0//Сколько верхних элементов «приклеены» (не перетаскиваются)
     //Сигналы.
     signal clicked(int ntNomer, var strSpisok)
@@ -194,7 +194,7 @@ Item {
                 DragHandler {//Перетаскивание
                     id: drhDrag
                     //Настройки
-                    enabled: root.blSort && index >= root.ntSortFixed
+                    enabled: root.isSort && index >= root.ntSortFixed
                     target: null
                     xAxis.enabled: false//По горизонтали X не перетасвиваем.
                     yAxis.enabled: true//По вкртикали Y перетасвиваем.
@@ -239,7 +239,7 @@ Item {
                         var vrListView = rctZona.ListView.view//Это lsvZona
                         if (!vrListView) return//Если зона не создана, выходим.Чтоб не залезть в чужую область
                         if (active) {//Если тап активен, то...
-                            if (root.blSort && index >= root.ntSortFixed)//Если вкл. режим перемещения и fixed
+                            if (root.isSort && index >= root.ntSortFixed)//Если вкл. режим перемещения и fixed
                                 vrListView.interactive = false//Отключаем flickable листания lsvZona
                         }
                         else {//Если Тап не активен, то...
