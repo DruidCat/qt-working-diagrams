@@ -31,10 +31,7 @@ Item {
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
     property bool pdfViewer: false//true - включить собственный pdf просмотрщик.
-    property bool appRedaktor: false//true - включить Редактор приложения.
-    property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
-    property bool blPereimenovat: false//Запрос на переименование, если true
-    property bool blUdalitVibor: false//Включить режим выбора удаляемого документа, если true
+    property bool appRedaktor: false//true - включить Редактор приложения. 
 	property string strDannieRen: "";//Переменная хранит имя Документа, который нужно переименовать
     property int logoRazmer: 22//Размер Логотипа.
     property string logoImya: "mentor"//Имя логотипа в DCLogo
@@ -123,9 +120,9 @@ Item {
         lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали листания
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuDannie.visible = false;//Делаем невидимым всплывающее меню.
-        root.blPereimenovat = false;//Запрещаем выбор переименовывания.
-        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        root.blUdalitVibor = false;//Запрещаем выбирать документ для удаления.
+        lsvDannie.blPereimenovat = false;//Запрещаем выбор переименовывания.
+        lsvDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        lsvDannie.blUdalitVibor = false;//Запрещаем выбирать документ для удаления.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         lsvDannie.enabled = true;//Делаем кликабельную Зону.
     }
@@ -145,12 +142,12 @@ Item {
     }
     function fnClickedOk(){//Функция переименования Данных.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
-        if(root.blPereimenovat)//Если запрос на переименовывание.
+        if(lsvDannie.blPereimenovat)//Если запрос на переименовывание.
             cppqml.renStrDannieDB(strDannieRen, txnZagolovok.text);//Переименовываем имя Документа.
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
-        root.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
+        lsvDannie.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
         txuUdalit.visible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
@@ -160,8 +157,8 @@ Item {
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        root.blUdalitVibor = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
+        lsvDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        lsvDannie.blUdalitVibor = false;//Запрещено выбирать документ на удаление. НЕ УДАЛЯТЬ.
         menuDannie.visible = false;//Делаем невидимым меню.
         txnZagolovok.visible = false;//Отключаем переименование Докумена.
         lsvDannie.enabled = true;//Делаем кликабельную Зону.
@@ -171,12 +168,12 @@ Item {
         fnClickedSozdat();//Функция обработки кнопки Создать.
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
-        root.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
+        lsvDannie.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ДОКУМЕНТА");//Подсказка пользователю,что вводить нужн
         root.signalToolbar(qsTr("Выберите документ для его переименования."))
     }
     function fnMenuUdalit(){//Нажат пункт меню Удалить.
-        root.blUdalitVibor = true;//Включаем режим выбора удаляемого файла
+        lsvDannie.blUdalitVibor = true;//Включаем режим выбора удаляемого файла
         root.signalToolbar(qsTr("Выберите документ для его удаления."))
     }
     function fnMenuSort(){//Функция нажатия пункта меню Сортировать.
@@ -337,11 +334,18 @@ Item {
             }
             DCListView {
                 id: lsvDannie
+                //Свойства
+                property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
+                property bool blPereimenovat: false//Запрос на переименование, если true
+                property bool blUdalitVibor: false//Включить режим выбора удаляемого документа, если true
+                //Настройки
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
                 clrTexta: root.clrFaila; clrFona: root.clrMenuFon
                 zona: "dannie"
+                ntSortFixed: cppqml.blSpisokPervi ? 1 : 0// Если первый элемент, то его нельзя таскать.
+                //Функции
                 onClicked: function(ntKod, strDannie) {//Слот нажатия на один из Документов списка.
 					if(cppqml.blDanniePervi){//Если это первый Документ, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
@@ -350,9 +354,9 @@ Item {
                     		cppqml.strDebug = qsTr("Режим редактора выключен.");
 					}
 					else{//Если не первый элемент, то...
-                        if(root.blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания
-                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
-                            root.blPereimenovat = true;//Переименование (отмена)...(ок)
+                        if(lsvDannie.blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания
+                            lsvDannie.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименования
+                            lsvDannie.blPereimenovat = true;//Переименование (отмена)...(ок)
                             root.signalToolbar(qsTr("Переименуйте выбранный документ."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             strDannieRen = strDannie;//Присваиваем переменной имя Документа.
@@ -360,13 +364,13 @@ Item {
                             lsvDannie.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...
-                            if(root.blUdalitVibor){//Если удалить, то...
+                            if(lsvDannie.blUdalitVibor){//Если удалить, то...
                                 fnUdalit(ntKod, strDannie);
                             }
                             else{//Если не выбор элемента на удаление, то открыть файл к просмотру...
                                 cppqml.strDebug = "";
-                                root.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
-                                root.blUdalitVibor = false;//Запрещено выбирать документ на удаление.
+                                lsvDannie.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
+                                lsvDannie.blUdalitVibor = false;//Запрещено выбирать документ на удаление.
                                 txuUdalit.visible = false;//Убираем запрос на удаление, если он есть.
                                 txnZagolovok.visible = false;//Отключаем создание Элемента.
                                 menuDannie.visible = false;//Делаем невидимым всплывающее меню.
@@ -383,7 +387,17 @@ Item {
 				}
                 onTap: {
                     root.signalToolbar("");//Делаем пустую строку в Toolbar.
-                    fnClickedEscape();//Если нажали на пустое место.
+                    //fnClickedEscape();//Если нажали на пустое место.
+                }
+                onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
+                    lsvDannie.blPereimenovatVibor ? rctBorder.border.color=clrTexta
+                                                  : rctBorder.border.color="transparent";
+                    lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали листания
+                }
+                onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
+                    lsvDannie.blUdalitVibor ? rctBorder.border.color = "red"
+                                            : rctBorder.border.color = "transparent";
+                    lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали листания
                 }
             }
             DCMenu {
@@ -424,15 +438,7 @@ Item {
 				border.width: root.ntCoff/2//Бордюр при переименовании и удалении.
 			}
 		}
-    }
-	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
-        root.blPereimenovatVibor ? rctBorder.border.color=clrTexta : rctBorder.border.color="transparent";
-        lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали листания
-    }
-    onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
-        root.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
-        lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали листания
-    }
+    }	
     Item {//Данные Тулбар
 		id: tmToolbar 
         DCKnopkaSozdat {
@@ -465,9 +471,9 @@ Item {
 			onClicked: {
                 txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
                 menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
-                root.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
-                root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-                root.blUdalitVibor = false;//Запрещено удалять.
+                lsvDannie.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
+                lsvDannie.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+                lsvDannie.blUdalitVibor = false;//Запрещено удалять.
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvDannie.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.

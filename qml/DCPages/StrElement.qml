@@ -29,10 +29,7 @@ Item {
     property real tapZagolovokPravi: 1
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
-    property bool appRedaktor: false//true - включить Редактор приложения.
-    property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
-    property bool blPereimenovat: false//Запрос на переименование, если true
-    property bool blUdalitVibor: false//Включить режим выбора удаляемого Элемента, если true
+    property bool appRedaktor: false//true - включить Редактор приложения. 
     property int logoRazmer: 22//Размер Логотипа.
     property string logoImya: "mentor"//Имя логотипа в DCLogo
     //Настройки.
@@ -119,9 +116,9 @@ Item {
         lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали листания
         txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
         menuElement.visible = false;//Делаем невидимым всплывающее меню.
-        root.blPereimenovat = false;//Запрещаем выбор переименовывания.
-        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        root.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
+        lsvElement.blPereimenovat = false;//Запрещаем выбор переименовывания.
+        lsvElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        lsvElement.blUdalitVibor = false;//Запрещаем выбирать Элемент для удаления.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
         lsvElement.enabled = true;//Делаем кликабельную Зону.
     }
@@ -141,7 +138,7 @@ Item {
     }
     function fnClickedOk(){//Функция сохранения/переименования Элементов списка.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
-        if(root.blPereimenovat)//Если запрос на переименовывание.
+        if(lsvElement.blPereimenovat)//Если запрос на переименовывание.
             cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text);//Переименовываем Элемент списка.
         else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то Сохранить.
             cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
@@ -149,7 +146,7 @@ Item {
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
-        root.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
+        lsvElement.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
         txuUdalit.visible = true;//Делаем видимый запрос на удаление.
         txuUdalit.kod = strKod;//Код на удаление
         txuUdalit.text = strImya;//Имя на удаление
@@ -159,8 +156,8 @@ Item {
     function fnClickedSozdat(){//Функция при нажатии кнопки Создать.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
         txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-        root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-        root.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
+        lsvElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+        lsvElement.blUdalitVibor = false;//Запрещено выбирать элементы на удаление.
         menuElement.visible = false;//Делаем невидимым меню.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
         txnZagolovok.visible = true;//Режим создания элемента Списка ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
@@ -171,12 +168,12 @@ Item {
         fnClickedSozdat();//Функция обработки кнопки Создать.
     }
     function fnMenuPereimenovat(){//Нажат пункт меню Переименовать.
-        root.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
+        lsvElement.blPereimenovatVibor = true;//Разрешаем выбор элементов для переименовывания.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ИМЯ ЭЛЕМЕНТА");//Подсказка пользователю,что вводить нужно
         root.signalToolbar(qsTr("Выберите элемент для его переименования."));
     }
     function fnMenuUdalit(){//Нажат пункт меню Удалить.
-        root.blUdalitVibor = true;//Включаем режим выбора удаляемого Элемента
+        lsvElement.blUdalitVibor = true;//Включаем режим выбора удаляемого Элемента
         root.signalToolbar(qsTr("Выберите элемент для его удаления."))
     }
     function fnMenuSort(){//Функция нажатия пункта меню Сортировать.
@@ -335,11 +332,18 @@ Item {
             }
             DCListView {
                 id: lsvElement
-				ntWidth: root.ntWidth
+                //Свойства
+                property bool blPereimenovatVibor: false//Выбрать элемент для переименования, если true
+                property bool blPereimenovat: false//Запрос на переименование, если true
+                property bool blUdalitVibor: false//Включить режим выбора удаляемого Элемента, если true
+                //Настройки
+                ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
 				clrTexta: root.clrTexta; clrFona: root.clrMenuFon
                 zona: "element"
+                ntSortFixed: cppqml.blSpisokPervi ? 1 : 0// Если первый элемент, то его нельзя таскать.
+                //Функции
                 onClicked: function(ntKod, strElement) {//Слот нажатия на один из Элементов списка.
 					if(cppqml.blElementPervi){//Если это первый элемент, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
@@ -348,9 +352,9 @@ Item {
                     		cppqml.strDebug = qsTr("Режим редактора выключен.");
 					}
 					else{//Если не первый элемент, то...
-                        if(blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания, то...
-                            root.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименовани
-                            root.blPereimenovat = true;//Переименование (отмена)...(ок)
+                        if(lsvElement.blPereimenovatVibor) {//Если разрешён выбор элементов для переименовывания, то...
+                            lsvElement.blPereimenovatVibor = false;//Запрещаем выбор элемента для переименовани
+                            lsvElement.blPereimenovat = true;//Переименование (отмена)...(ок)
                             root.signalToolbar(qsTr("Переименуйте выбранный элемент."));
                             txnZagolovok.visible = true;//Включаем Переименование Элемента списка.
                             cppqml.strElement = strElement;//Присваиваем Элемент списка к свойству Q_PROPERTY
@@ -358,13 +362,13 @@ Item {
                             lsvElement.enabled = false;//Делаем не кликабельную Зону.
                         }
                         else {//Если не выбор элементов переименования, то ...
-                            if(root.blUdalitVibor){//Если удалить, то...
+                            if(lsvElement.blUdalitVibor){//Если удалить, то...
                                 fnUdalit(ntKod, strElement);//Функция удаления
                             }
                             else {//Если не режим выбора элементов Переименования, то перейти к Данным...
                                 cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-                                root.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
-                                root.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
+                                lsvElement.blPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
+                                lsvElement.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
                                 txuUdalit.visible = false;//Убираем запрос на удаление, если он есть.
                                 txnZagolovok.visible = false;//Отключаем создание Элемента.
                                 menuElement.visible = false;//Делаем невидимым всплывающее меню.
@@ -377,7 +381,17 @@ Item {
 				}
                 onTap: {
                     root.signalToolbar("");//Делаем пустую строку в Toolbar.
-                    fnClickedEscape();//Если нажали на пустое место.
+                    //fnClickedEscape();//Если нажали на пустое место.
+                }
+                onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
+                    lsvElement.blPereimenovatVibor ? rctBorder.border.color=clrTexta
+                                                   : rctBorder.border.color="transparent";
+                    lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали листания
+                }
+                onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
+                    lsvElement.blUdalitVibor ? rctBorder.border.color = "red"
+                                             : rctBorder.border.color = "transparent";
+                    lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали листания
                 }
             }
             DCMenu {
@@ -418,15 +432,7 @@ Item {
 				border.width: root.ntCoff/2//Бордюр при переименовании и удалении.
 			}
 		}
-	}
-	onBlPereimenovatViborChanged: {//Слот сигнала изменения property blPereimenovatVibor (on...Changed)
-        root.blPereimenovatVibor ? rctBorder.border.color=clrTexta:rctBorder.border.color="transparent";
-        lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали листания
-    }
-    onBlUdalitViborChanged: {//Слот сигнала изменения property blUdalitVibor(on...Changed)
-        root.blUdalitVibor? rctBorder.border.color = "red" : rctBorder.border.color = "transparent";
-        lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали листания
-    }
+	}	
 	Item {//Состава Тулбар
 		id: tmToolbar 
         DCKnopkaSozdat {
@@ -458,9 +464,9 @@ Item {
             onClicked: {
                 txnZagolovok.visible = false;//Отключаем создание Элемента списка.
                 menuElement.visible ? menuElement.visible = false : menuElement.visible = true;
-                root.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
-                root.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-                root.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
+                lsvElement.blPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
+                lsvElement.blPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+                lsvElement.blUdalitVibor = false;//Запрещено выбирать Элементы на удаление.
                 txuUdalit.visible = false;//Убираем запрос на удаление, если он есть.
                 lsvElement.enabled = true;//Делаем кликабельную Зону.
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
