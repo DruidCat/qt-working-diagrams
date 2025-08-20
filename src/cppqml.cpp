@@ -483,6 +483,13 @@ void DCCppQml::setStrSpisokOpisanie(const QString& strSpisokOpisanieNovi){//Из
 		}
 	}
 }
+void DCCppQml::ustSpisokSort(const QVariantList &order){//Каждый элемент—QVariantMap с ключами "kod" и "nomer"
+/////////////////////////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   О Т С О Р Т И Р О В А Н Ы Й   С П И С О К---//
+/////////////////////////////////////////////////////////////////////////
+
+    qDebug()<<"Записываем ёпта";
+}
 QString DCCppQml::strElement() {//Получить элемент.
 /////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Э Л Е М Е Н Т---//

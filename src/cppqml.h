@@ -208,6 +208,7 @@ public:
     QString		strSpisokOpisanie();//Возвращает Описание элемента Списка
     void		setStrSpisokOpisanie(const QString& strOpisanieNovi);//Изменить описание списка.
     bool 		blSpisokPervi() { return m_blSpisokPervi; }//Возвращает флаг Первый в Списке?
+    Q_INVOKABLE void ustSpisokSort(const QVariantList &order);//каждый элемент — QVariantMap с ключами "kod" и "nomer"
 
     QString		strElement();//Возвратить элемент.
     void		setStrElement(const QString& strElementNovi);//Измененит Элемент.
