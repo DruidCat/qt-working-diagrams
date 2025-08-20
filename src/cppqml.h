@@ -208,7 +208,7 @@ public:
     QString		strSpisokOpisanie();//Возвращает Описание элемента Списка
     void		setStrSpisokOpisanie(const QString& strOpisanieNovi);//Изменить описание списка.
     bool 		blSpisokPervi() { return m_blSpisokPervi; }//Возвращает флаг Первый в Списке?
-    Q_INVOKABLE void ustSpisokSort(const QVariantList &order);//каждый элемент — QVariantMap с ключами "kod" и "nomer"
+    Q_INVOKABLE void ustSpisokSortDB(const QVariantList &jsonSpisok);//Установить отсортированные Списки в БД
 
     QString		strElement();//Возвратить элемент.
     void		setStrElement(const QString& strElementNovi);//Измененит Элемент.
@@ -221,6 +221,7 @@ public:
     QString		strElementOpisanie();//Возвращает Описание Элемента
     void		setStrElementOpisanie(const QString& strOpisanieNovi);//Изменить описание Элемента.
     bool 		blElementPervi() { return m_blElementPervi; }//Возвращает флаг Первый Элемент?
+    Q_INVOKABLE void ustElementSortDB(const QVariantList &jsonElement);//Установ отсортированные Элементы в БД
 
     QString		strDannie();//Возвратить Данные.
     void		setStrDannie(const QString& strDannieNovi);//Измененит Данные.
@@ -235,6 +236,7 @@ public:
     void		setStrDannieStr(const QString& strDannieStrNovi);//Изменение номера страницы Документа.
 	QString 	strDannieUrl();//Возвращаем Url путь с именем файла.
     bool 		blDanniePervi() { return m_blDanniePervi; }//Возвращает флаг Первые Данные?
+    Q_INVOKABLE void ustDannieSortDB(const QVariantList &jsonDannie);//Установить отсортированные Данные в БД
 
     QString		strFileDialog();//Возвратить JSON строку с папками и файлами.
     void		setStrFileDialog(const QString& strFileDialogNovi);//Изменение JSON запроса с папками и файлами.

@@ -19,6 +19,7 @@ public:
     QStringList	polDannie(quint64 ullSpisokKod, quint64 ullElementKod);//Получить список всех Данных.
     bool 		ustDannie(quint64 ullSpisokKod, quint64 ullElementKod, QString strFail, QString strDannie);
     bool 		renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString strDannie,QString strDannieNovi);
+    bool 		renDannie(quint64 ullSpisokKod, quint64 ullElementKod, const QVariantList jsonDannie);
     bool  		udalDannieDB(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod);//Удалить запись
     QString		polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod);//Получить JSON строчку Данных.
 	bool 		ustDannieStr(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod, QString strStr);

@@ -110,6 +110,16 @@ bool DataElement::renElement(quint64 ullSpisokKod, QString strElement, QString s
         return true;//Успех
     return false;//Неудача
 }
+bool DataElement::renElement(quint64 ullSpisokKod, const QVariantList jsonElement){//Перезапис. весь Элемент.
+///////////////////////////////////////////////////////////////
+//---П Е Р Е З А П И С Ы В А Е М   В Е С Ь   Э Л Е М Е Н Т---//
+///////////////////////////////////////////////////////////////
+
+
+    //каждый элемент — QVariantMap с ключами "kod", "nomer", "dannie"
+    qDebug()<<ullSpisokKod << jsonElement;
+    return true;//Успех
+}
 bool DataElement::udalElementDB(quint64 ullSpisokKod,quint64 ullElementKod){//Удалить в БД запись Элемента
 ///////////////////////////////////////////////////////
 //---У Д А Л И Т Ь   З А П И С Ь   Э Л Е М Е Н Т А---//

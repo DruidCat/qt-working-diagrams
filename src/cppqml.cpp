@@ -483,12 +483,13 @@ void DCCppQml::setStrSpisokOpisanie(const QString& strSpisokOpisanieNovi){//Из
 		}
 	}
 }
-void DCCppQml::ustSpisokSort(const QVariantList &order){//Каждый элемент—QVariantMap с ключами "kod" и "nomer"
+void DCCppQml::ustSpisokSortDB(const QVariantList &jsonSpisok){//Установить отсортированные Списки в БД
 /////////////////////////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   О Т С О Р Т И Р О В А Н Ы Й   С П И С О К---//
 /////////////////////////////////////////////////////////////////////////
 
-    qDebug()<<"Записываем ёпта";
+    if(!m_pDataSpisok->renSpisok(jsonSpisok))
+        qdebug("Ошибка записи данных при сортировке в базу данных.");
 }
 QString DCCppQml::strElement() {//Получить элемент.
 /////////////////////////////////////////
@@ -622,6 +623,16 @@ void DCCppQml::setStrElementOpisanie(const QString& strElementOpisanieNovi){//И
 			emit strElementOpisanieChanged();//Сигнал о том, что описание поменялось.
 		}
 	}
+}
+
+void DCCppQml::ustElementSortDB(const QVariantList &jsonElement){//Установить отсортированные элементы в БД
+/////////////////////////////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   О Т С О Р Т И Р О В А Н Ы Е   Э Л Е М Е Н Т Ы---//
+/////////////////////////////////////////////////////////////////////////////
+
+    //каждый элемент — QVariantMap с ключами "kod", "nomer", "dannie"
+    if(!m_pDataElement->renElement(m_ullSpisokKod, jsonElement))
+        qdebug("Ошибка записи данных при сортировке в базу данных.");
 }
 QString DCCppQml::strDannie(){//Получить Данные.
 ///////////////////////////////////////
@@ -780,6 +791,15 @@ QString DCCppQml::strDannieUrl(){//Возвратить Url файла.
     delStrDannie(QString::number(m_ullDannieKod));//Удаляем строку несущуествующий Данных из БД.
     m_strDannieUrl = "file:///";//Возвращаем не пустой путь "", чтоб вызвать ошибку в Qml.
     return m_strDannieUrl;//Возращаем Url адресс в виде строки.
+}
+void DCCppQml::ustDannieSortDB(const QVariantList &jsonDannie){//Установить отсортированные Данные в БД
+/////////////////////////////////////////////////////////////////////////
+//---У С Т А Н О В И Т Ь   О Т С О Р Т И Р О В А Н Ы Е   Д А Н Н Ы Е---//
+/////////////////////////////////////////////////////////////////////////
+
+    //каждый элемент — QVariantMap с ключами "kod", "nomer", "dannie"
+    if(!m_pDataDannie->renDannie(m_ullSpisokKod, m_ullElementKod, jsonDannie))
+        qdebug("Ошибка записи данных при сортировке в базу данных.");
 }
 QString DCCppQml::strFileDialog() {//Возвратить JSON строку с папками и файлами.
 ///////////////////////////////////////////////

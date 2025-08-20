@@ -15,6 +15,7 @@ public:
     QStringList	polElement(quint64 ullSpisokKod);//Получить полный список всех Элементов по Коду Списка.
     bool 		ustElement(quint64 ullSpisokKod, QString strElement);//Записать в БД Элемент.
     bool 		renElement(quint64 ullSpisokKod, QString strElement, QString strElementNovi);//Переименовать.
+    bool 		renElement(quint64 ullSpisokKod, const QVariantList jsonElement);//Перезаписываем весь Элемент
     bool 		udalElementDB(quint64 ullSpisokKod,quint64 ullElementKod);//Удалить в БД запись Элемента
     bool 		udalElementTablicu(quint64 ullSpisokKod);//Удалить Таблицу Элемента.
     QString		polElementJSON(quint64 ullSpisokKod);//Получить JSON строчку Элементов.

@@ -128,6 +128,15 @@ bool DataDannie::renDannie(quint64 ullSpisokKod,quint64 ullElementKod,QString st
         return true;//Успех
     return false;//Неудача
 }
+bool DataDannie::renDannie(quint64 ullSpisokKod, quint64 ullElementKod, const QVariantList jsonDannie){
+///////////////////////////////////////////////////////////////////
+//---П Е Р Е З А П И С Ы В А Е М   Э Л Е М Е Н Т   Д А Н Н Ы Х---//
+///////////////////////////////////////////////////////////////////
+
+    //каждый элемент — QVariantMap с ключами "kod", "nomer", "dannie"
+    qDebug()<< ullSpisokKod << ullElementKod << jsonDannie;
+    return true;//Успех
+}
 bool DataDannie::udalDannieDB(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod){//Удалить запис
 ///////////////////////////////////////////////////////////
 //---У Д А Л И Т Ь   Д А Н Н Ы Е   И   Д О К У М Е Н Т---//

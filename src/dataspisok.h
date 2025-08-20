@@ -17,6 +17,7 @@ public:
 	QStringList	polSpisok();//Получить полный список всех элементов Списка.
 	bool 		ustSpisok(QString strSpisok);//Записать в БД элемент списка.
 	bool 		renSpisok(QString strSpisok, QString strSpisokNovi);//Переименовать в БД элемент списка.
+    bool 		renSpisok(const QVariantList jsonSpisok);//Перезаписываем весь список.
     bool 		udalSpisokDB(quint64 ullSpisokKod);//Удалить в БД запись Списка.
     QString		polSpisokJSON();//Получить JSON строчку Списка
     QString 	polSpisokOpisanie(quint64 ullSpisokKod);//Полчить Описание элемента Списка по Коду.
