@@ -9,9 +9,10 @@ Item {
 	property color clrTexta: "orange"
 	property color clrFona: "SlateGray"
     property bool enabled: true
-    property string zona: ""
+    property alias model: lsvZona.model//Модель
     property bool isSort: false//true - Включаем режим сортировки. false - выключаем.
     property int ntSortFixed: 0//Сколько верхних элементов «приклеены» (не перетаскиваются)
+    property alias lsvZona: lsvZona
     //Сигналы.
     signal clicked(int ntNomer, var strSpisok)
     signal tap()//Сигнал нажатия не на элементы.
@@ -28,74 +29,61 @@ Item {
         anchors.fill: root
         anchors.margins: root.ntCoff
         spacing: root.ntCoff//Расстояние между строками
-        model: {
-            if(root.zona === "spisok"){
-                JSZona.fnSpisokJSON()
-            }
-            else{
-                if(root.zona === "element"){
-                    JSZona.fnElementJSON()
-                }
-                else{
-                    if(root.zona === "dannie")
-                        JSZona.fnDannieJSON()
-                }
-            }
-        }
+        model: "[]"
         delegate: cmpZona
         Keys.priority: Keys.BeforeItem//Чтобы дочерний lsvZona обрабатывал клавиши раньше родителя StrSpisok.
         focus: true//Фокус на lvsZona
         activeFocusOnTab: true//Фокус, если Таб нажат.
         flickableDirection: Flickable.VerticalFlick//Включаем явную вертикальную прокрутку
         //Функции
-        function modelIsListModel() {
-            return lsvZona.model && typeof lsvZona.model.get === "function" && typeof lsvZona.model.move === "function"
+        function fnIsListModel() {//Функция определяющая true - ListModel, false - ListView
+            return lsvZona.model
+                    && typeof lsvZona.model.get === "function" && typeof lsvZona.model.move === "function"
         }
-        function getItemAt(i) {
-            return modelIsListModel() ? lsvZona.model.get(i) : lsvZona.model[i]
+        function fnUstWidget(i) {//Функция задающая  ListModel или ListView
+            return fnIsListModel() ? lsvZona.model.get(i) : lsvZona.model[i]
         }
-        function moveItem(from, to) {
-            if (from === to) return
-            if (from < root.ntSortFixed) return
+        function fnMoveItem(from, to) {//Функция меняющая местами элементы списка.
+            if (from === to) return//Если равны, то выходим.
+            if (from < root.ntSortFixed) return//Если выбранный по счету меньше фиксированых элементов, выход.
             to = Math.max(root.ntSortFixed, Math.min(count - 1, to))
 
-            const isLM = modelIsListModel()
-            if (isLM) {
-                lsvZona.model.move(from, to, 1)
-            } else {
-                // Модель — JS массив: пересобираем и переназначаем
-                var arr = lsvZona.model.slice()
-                var it = arr.splice(from, 1)[0]
-                arr.splice(to, 0, it)
-                lsvZona.model = arr
+            const cIsListModel = fnIsListModel()
+            if (cIsListModel)//Если это ListModel, то...
+                lsvZona.model.move(from, to, 1)//Используем move, который есть в моделе ListModel
+            else {
+                //Модель — JS массив: пересобираем и переназначаем
+                var massivModel = lsvZona.model.slice()//Копируем в массив модель. slice()копирование в массив
+                var it = massivModel.splice(from, 1)[0]//Удаляем один json {} блок from, и запоминаем его.
+                massivModel.splice(to, 0, it)//Вставляем удалённый блок it на позицию to. 0-элементов удалить.
+                lsvZona.model = massivModel//Присваеваем модель массива, где был удалён from и в ставлен в to
             }
 
             // Перенумеровываем "nomer" по новому порядку (1..N)
-            if (isLM) {
-                for (var i = 0; i < lsvZona.model.count; ++i)
-                    lsvZona.model.setProperty(i, "nomer", String(i + 1))
-            } else {
-                for (var j = 0; j < lsvZona.model.length; ++j)
-                    lsvZona.model[j].nomer = String(j + 1)
+            if (cIsListModel) {//Если это ListModel, то...
+                for (let ltShag = 0; ltShag < lsvZona.model.count; ++ltShag)
+                    lsvZona.model.setProperty(ltShag, "nomer", String(ltShag + 1))
             }
-
-            lsvZona.currentIndex = to
+            else {//Если это ListView, то...
+                for (let ltShag = 0; ltShag < lsvZona.model.length; ++ltShag)
+                    lsvZona.model[ltShag].nomer = String(ltShag + 1)
+            }
+            lsvZona.currentIndex = to//Задаём currentIndex и подсвечиваем его, как выбранный.
             lsvZona.positionViewAtIndex(to, ListView.Contain)
-
-            // Собираем порядок и оповещаем наружу
-            var order = []
-            if (isLM) {
-                for (var k = 0; k < lsvZona.model.count; ++k) {
-                    var o = lsvZona.model.get(k)
-                    order.push({ kod: o.kod, nomer: o.nomer })
-                }
-            } else {
-                for (var q = 0; q < lsvZona.model.length; ++q) {
-                    var oo = lsvZona.model[q]
-                    order.push({ kod: oo.kod, nomer: oo.nomer })
+            let ltOrder = []// Собираем порядок
+            if (cIsListModel) {//Если это ListModel, то...
+                for (let ltShag = 0; ltShag < lsvZona.model.count; ++ltShag) {
+                    const cIndex = lsvZona.model.get(ltShag)
+                    ltOrder.push({ kod: cIndex.kod, nomer: cIndex.nomer, dannie: cIndex.dannie })
                 }
             }
-            root.signalSort(order)//Отправляем сигнал о том, что споизошла сортировка.
+            else {//Если это ListView, то...
+                for (var vrShag = 0; vrShag < lsvZona.model.length; ++vrShag) {
+                    const cIndex = lsvZona.model[vrShag]
+                    ltOrder.push({ kod: cIndex.kod, nomer: cIndex.nomer, dannie: cIndex.dannie })
+                }
+            }
+            root.signalSort(ltOrder)//Отправляем сигнал о том, что споизошла сортировка.
         }
         Component.onCompleted: fnFocus()//Когда загрузится Зона, форсируем фокус.
         onModelChanged: {//Если модель перегружается, не уезжать за пределы
@@ -119,16 +107,16 @@ Item {
             }
             if(event.key === Qt.Key_PageUp){//Если нажата кнопка PageUp, то...
                 if(root.enabled){//Если активирован виджет, то
-                    const step = Math.max(1, Math.floor(height / (root.ntWidth*root.ntCoff + root.ntCoff)))
-                    currentIndex = Math.max(0, currentIndex - step)
+                    const cShag = Math.max(1, Math.floor(height / (root.ntWidth*root.ntCoff + root.ntCoff)))
+                    currentIndex = Math.max(0, currentIndex - cShag)
                     positionViewAtIndex(currentIndex, ListView.Beginning)
                 }
                 event.accepted = true;//Завершаем обработку эвента.
             }
             if(event.key === Qt.Key_PageDown){//Если нажата кнопка PageDown, то...
                 if(root.enabled){//Если активирован виджет, то
-                    const step = Math.max(1, Math.floor(height / (root.ntWidth*root.ntCoff + root.ntCoff)))
-                    currentIndex = Math.min(count - 1, currentIndex + step)
+                    const cShag = Math.max(1, Math.floor(height / (root.ntWidth*root.ntCoff + root.ntCoff)))
+                    currentIndex = Math.min(count - 1, currentIndex + cShag)
                     positionViewAtIndex(currentIndex, ListView.End)
                 }
                 event.accepted = true;//Завершаем обработку эвента.
@@ -172,7 +160,6 @@ Item {
         }
         Component {
             id: cmpZona
-
             Rectangle {
                 id: rctZona
                 //Настройки
@@ -225,7 +212,7 @@ Item {
                             }
                             dropIndex = Math.max(root.ntSortFixed, Math.min(vrListView.count - 1, dropIndex))
                             if (vrListView.dragFromIndex !== -1)//Если выбран элемент для перемещения, то...
-                                vrListView.moveItem(vrListView.dragFromIndex, dropIndex)//Перемещаем от -> в
+                                vrListView.fnMoveItem(vrListView.dragFromIndex, dropIndex)//Перемещаем от -> в
 
                             vrListView.dragFromIndex = -1//Обнуляем на значение по умолчанию.
                             vrListView.interactive = true//Разрешаем Flickable листания lvsZona
@@ -256,19 +243,6 @@ Item {
                         root.clicked(modelData.kod, modelData.dannie)//Клик возращает код и данные модели.
                     }
                 }
-                /*
-                MouseArea {
-                    id: maZona
-                    anchors.fill: rctZona
-                    //enabled: root.enabled ? true : false
-                    preventStealing: true
-                    onClicked: {
-                        fnFocus()//Фокус, чтоб горячие клавиши работали.
-                        lsvZona.currentIndex = index//Индекс Списка через индекс делегата, подсветится делегат
-                        root.clicked(modelData.kod, modelData.dannie)//Клик возращает код и данные модели.
-                    }
-                }
-                */
                 Component.onCompleted:{//Когда текст отрисовался, нужно выставить размер шрифта.
                     if(rctZona.width > txtText.width){//Если длина строки больше длины текста, то...
                         for(var ltShag=txtText.font.pixelSize; ltShag<rctZona.height-root.ntCoff; ltShag++){
@@ -329,32 +303,6 @@ Item {
                         }
                     })
                 }
-            }
-        }
-        Connections {//Соединяем сигнал из C++ с действием в QML
-			target: cppqml;//Цель объект класса С++ DCCppQml
-			function onStrSpisokDBChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то.
-                if(root.zona === "spisok"){//Если Список, то...
-                    lsvZona.model = JSZona.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
-                    if (lsvZona.count > 0 && lsvZona.currentIndex < 0)//Модель не пустая и Индекс не верный,то
-                        lsvZona.currentIndex = 0//Зафиксировать выбор на первом элементе
-                }
-            }
-            function onStrSpisokChanged(){//Слот Если изменился элемент Списка strSpisok (Q_PROPERTY), то...
-                if(root.zona === "element")//Если Элемент, то...
-                    lsvZona.model = JSZona.fnElementJSON();//Перегружаем модель ListView с новыми данными.
-            }
-            function onStrElementDBChanged(){//Слот Если изменился Элемент в strElementDB (Q_PROPERTY), то...
-                if(root.zona === "element")//Если Элемент, то...
-                    lsvZona.model = JSZona.fnElementJSON();//Перегружаем модель ListView с новыми данными.
-            }
-            function onStrElementChanged(){//Слот Если изменился Элемент strElement (Q_PROPERTY), то...
-                if(root.zona === "dannie")//Если Данные, то...
-                    lsvZona.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
-            }
-            function onStrDannieDBChanged(){//Слот Если изменился Документ в strDannieDB (Q_PROPERTY), то...
-                if(root.zona === "dannie")//Если Данные, то...
-                    lsvZona.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
             }
         }
 	}

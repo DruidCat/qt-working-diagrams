@@ -1,5 +1,6 @@
 ﻿import QtQuick //2.15
 
+import "qrc:/js/jsJSON.js" as JSZona
 import DCButtons 1.0//Импортируем кнопки
 import DCMethods 1.0//Импортируем методы написанные мной.
 //Страница отображающая Элементы Списка.
@@ -42,7 +43,7 @@ Item {
 	signal clickedInfo();//Сигнал нажатия кнопки Информация
 	signal clickedElement(var strElement);//Сигнал когда нажат один из Элементов.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
-    //Функции. 
+    //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
@@ -344,9 +345,13 @@ Item {
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
 				clrTexta: root.clrTexta; clrFona: root.clrMenuFon
-                zona: "element"
+                model: JSZona.fnElementJSON()
                 ntSortFixed: cppqml.blSpisokPervi ? 1 : 0// Если первый элемент, то его нельзя таскать.
                 //Функции
+                onSignalSort: function(jsonElement) {//Если произошла сортировка, то...
+                    //jsonElement — это QVariantList из QVariantMap'ов ({kod, nomer, dannie}) на стороне C++
+                    cppqml.ustElementSortDB(jsonElement)//Записываем изменения отсортированного списка в БД.
+                }
                 onClicked: function(ntKod, strElement) {//Слот нажатия на один из Элементов списка.
 					if(cppqml.blElementPervi){//Если это первый элемент, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
@@ -382,7 +387,7 @@ Item {
                             }
                         }
 					}
-				}
+                }
                 onTap: {
                     root.signalToolbar("");//Делаем пустую строку в Toolbar.
                     //fnClickedEscape();//Если нажали на пустое место.
@@ -401,6 +406,15 @@ Item {
                     lsvElement.isSort ? rctBorder.border.color="#00CC99"
                                      : rctBorder.border.color="transparent"
                     lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement, чтоб клавиши работали
+                }
+                Connections {//Соединяем сигнал из C++ с действием в QML
+                    target: cppqml;//Цель объект класса С++ DCCppQml
+                    function onStrSpisokChanged(){//Слот Если изменился элемент Списка strSpisok (Q_PROPERTY), то...
+                        lsvElement.model = JSZona.fnElementJSON();//Перегружаем модель ListView с новыми данными.
+                    }
+                    function onStrElementDBChanged(){//Слот Если изменился Элемент в strElementDB (Q_PROPERTY), то...
+                        lsvElement.model = JSZona.fnElementJSON();//Перегружаем модель ListView с новыми данными.
+                    }
                 }
             }
             DCMenu {

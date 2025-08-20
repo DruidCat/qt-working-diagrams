@@ -1,5 +1,6 @@
 ﻿import QtQuick //2.15
 
+import "qrc:/js/jsJSON.js" as JSZona
 import DCButtons 1.0//Импортируем кнопки
 import DCMethods 1.0//Импортируем методы написанные мной.
 //Страниц отображающая Список, первый, главный экран со Списком чего либо.
@@ -371,12 +372,12 @@ Item {
 				anchors.fill: rctZona
                 //clrTexta: "#00CC99"//Интересный изумрудный цвет.
                 clrTexta: root.clrTexta; clrFona: root.clrMenuFon
-                zona: "spisok"
+                model: JSZona.fnSpisokJSON()
                 ntSortFixed: cppqml.blSpisokPervi ? 1 : 0// Если первый элемент, то его нельзя таскать.
                 //Функции.
-                onSignalSort: function(vrSort) {//Если произошла сортировка, то...
-                    //vrSort — это QVariantList из QVariantMap'ов ({kod, nomer}) на стороне C++
-                    cppqml.ustSpisokSort(vrSort)//Записываем изменения отсортированного списка в БД.
+                onSignalSort: function(jsonSpisok) {//Если произошла сортировка, то...
+                    //jsonSpisok — это QVariantList из QVariantMap'ов ({kod, nomer, dannie}) на стороне C++
+                    cppqml.ustSpisokSortDB(jsonSpisok)//Записываем изменения отсортированного списка в БД.
                 }
                 onClicked: function(ntKod, strSpisok) {//Слот clicked нажатия на один из элементов Списка.
                     if(cppqml.blSpisokPervi){//Если это первый в Списке, то...
@@ -414,7 +415,7 @@ Item {
                             }
                         }
                     }
-				}
+                }
                 onTap: {
                     root.signalToolbar("");//Делаем пустую строку в Toolbar.
                     //fnClickedEscape();//Если нажали на пустое место.
@@ -433,6 +434,15 @@ Item {
                     lsvSpisok.isSort ? rctBorder.border.color="#00CC99"
                                      : rctBorder.border.color="transparent"
                     lsvSpisok.fnFocus();//Установить фокус на lsvZona в lsvSpisok, чтоб клавиши работали
+                }
+                Connections {//Соединяем сигнал из C++ с действием в QML
+                    target: cppqml;//Цель объект класса С++ DCCppQml
+                    function onStrSpisokDBChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то.
+                        lsvSpisok.model = JSZona.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
+                        //Фиксация на первом элементе, для работы горячих клавишь. ВАЖНО!!!
+                        if (lsvZona.count > 0 && lsvZona.currentIndex < 0)//Модель не пустая и Индекс не верный,то
+                            lsvZona.currentIndex = 0//Зафиксировать выбор на первом элементе
+                    }
                 }
 			}	
             DCMenu {

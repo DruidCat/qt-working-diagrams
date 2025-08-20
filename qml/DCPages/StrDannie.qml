@@ -1,5 +1,6 @@
 ﻿import QtQuick //2.15
 
+import "qrc:/js/jsJSON.js" as JSZona
 import DCButtons 1.0//Импортируем кнопки
 import DCMethods 1.0//Импортируем методы написанные мной.
 //Страница с Данными, где отображаются сами документы в виде списка.
@@ -46,7 +47,7 @@ Item {
 	signal clickedDannie(var strDannie);//Сигнал когда нажат один из элементов Данных.
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     signal signalZagolovok (var strZagolovok);//Сигнал излучающий имя каталога в Проводнике.
-    //Функции 
+    //Функции
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
@@ -346,9 +347,13 @@ Item {
 				ntCoff: root.ntCoff
 				anchors.fill: rctZona
                 clrTexta: root.clrFaila; clrFona: root.clrMenuFon
-                zona: "dannie"
+                model: JSZona.fnDannieJSON()
                 ntSortFixed: cppqml.blSpisokPervi ? 1 : 0// Если первый элемент, то его нельзя таскать.
                 //Функции
+                onSignalSort: function(jsonDannie) {//Если произошла сортировка, то...
+                    //jsonDannie — это QVariantList из QVariantMap'ов ({kod, nomer, dannie}) на стороне C++
+                    cppqml.ustDannieSortDB(jsonDannie)//Записываем изменения отсортированного списка в БД.
+                }
                 onClicked: function(ntKod, strDannie) {//Слот нажатия на один из Документов списка.
 					if(cppqml.blDanniePervi){//Если это первый Документ, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
@@ -388,7 +393,7 @@ Item {
                             }
                         }
 					}
-				}
+                }
                 onTap: {
                     root.signalToolbar("");//Делаем пустую строку в Toolbar.
                     //fnClickedEscape();//Если нажали на пустое место.
@@ -407,6 +412,15 @@ Item {
                     lsvDannie.isSort ? rctBorder.border.color="#00CC99"
                                      : rctBorder.border.color="transparent"
                     lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie, чтоб клавиши работали
+                }
+                Connections {//Соединяем сигнал из C++ с действием в QML
+                    target: cppqml;//Цель объект класса С++ DCCppQml
+                    function onStrElementChanged(){//Слот Если изменился Элемент strElement (Q_PROPERTY), то...
+                        lsvDannie.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
+                    }
+                    function onStrDannieDBChanged(){//Слот Если изменился Документ в strDannieDB (Q_PROPERTY), то...
+                        lsvDannie.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
+                    }
                 }
             }
             DCMenu {
