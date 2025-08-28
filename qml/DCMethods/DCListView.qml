@@ -58,32 +58,22 @@ Item {
                 massivModel.splice(to, 0, it)//Вставляем удалённый блок it на позицию to. 0-элементов удалить.
                 lsvZona.model = massivModel//Присваеваем модель массива, где был удалён from и в ставлен в to
             }
-
-            // Перенумеровываем "nomer" по новому порядку (1..N)
-            if (cIsListModel) {//Если это ListModel, то...
-                for (let ltShag = 0; ltShag < lsvZona.model.count; ++ltShag)
-                    lsvZona.model.setProperty(ltShag, "nomer", String(ltShag + 1))
-            }
-            else {//Если это ListView, то...
-                for (let ltShag = 0; ltShag < lsvZona.model.length; ++ltShag)
-                    lsvZona.model[ltShag].nomer = String(ltShag + 1)
-            }
             lsvZona.currentIndex = to//Задаём currentIndex и подсвечиваем его, как выбранный.
             lsvZona.positionViewAtIndex(to, ListView.Contain)
             let ltOrder = []// Собираем порядок
             if (cIsListModel) {//Если это ListModel, то...
                 for (let ltShag = 0; ltShag < lsvZona.model.count; ++ltShag) {
                     const cIndex = lsvZona.model.get(ltShag)
-                    ltOrder.push({kod: cIndex.kod, nomer: cIndex.nomer, imya: cIndex.imya})
+                    ltOrder.push({kod: cIndex.kod, nomer: ltShag+1})
                 }
             }
             else {//Если это ListView, то...
                 for (var vrShag = 0; vrShag < lsvZona.model.length; ++vrShag) {
                     const cIndex = lsvZona.model[vrShag]
-                    ltOrder.push({kod: cIndex.kod, nomer: cIndex.nomer, imya: cIndex.imya})
+                    ltOrder.push({kod: cIndex.kod, nomer: vrShag+1})
                 }
             }
-            root.signalSort(ltOrder)//Отправляем сигнал о том, что споизошла сортировка.
+            root.signalSort(ltOrder)//Отправляем сигнал о том, что произошла сортировка.
         }
         Component.onCompleted: fnFocus()//Когда загрузится Зона, форсируем фокус.
         onModelChanged: {//Если модель перегружается, не уезжать за пределы
