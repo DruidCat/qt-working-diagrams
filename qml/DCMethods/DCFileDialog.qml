@@ -76,7 +76,7 @@ Item {
             const cIndex = currentIndex//Индекс действующий
             if (cIndex < 0 || cIndex >= count) return//Если индекс за пределами, то выходим из функции.
             const cModel = lsvZona.model//Действующая модель[массив]
-            root.clicked(cModel[cIndex].tip, cModel[cIndex].dannie)//МодельJS-массив,берем данные напрямую
+            root.clicked(cModel[cIndex].tip, cModel[cIndex].imya)//МодельJS-массив,берем данные напрямую
         }
         TapHandler {//Нажимаем не на элементы, а на пустую область.
             id: tphTap
@@ -100,7 +100,7 @@ Item {
                     elide: Text.ElideMiddle//Обрезаем текст с середины, ставя точки... (Dru..Cat)
                     elideWidth: rctZona.width//Максимальная длина обезания текста.
                     text: {//Пишем функцию на JS для цвета текста папки или файла.
-                        var strModel = modelData.dannie;//Считываем модель с именем папки или файла.
+                        var strModel = modelData.imya;//Считываем модель с именем папки или файла.
                         cppqml.strFileDialogModel = strModel;//Отправляем в бизнес логику.
                         if(cppqml.strFileDialogModel === "0")//Если 0-папка
                             txtText.color = root.clrPapki;//Задаём цвет текста модели для папки.
@@ -122,7 +122,7 @@ Item {
                     onClicked: {//При клике на Элемент
                         fnFocus()//Фокус, чтоб горячие клавиши работали.
                         lsvZona.currentIndex = index//Индекс Списка через индекс делегата, подсветится делегат
-                        root.clicked(modelData.tip, modelData.dannie);//Излучаем сигнал с типом и именем
+                        root.clicked(modelData.tip, modelData.imya);//Излучаем сигнал с типом и именем
                     }
                 }
                 onWidthChanged:{//Длина прямоугольника строки изменилась.

@@ -133,7 +133,7 @@ bool DataDannie::renDannie(quint64 ullSpisokKod, quint64 ullElementKod, const QV
 //---П Е Р Е З А П И С Ы В А Е М   Э Л Е М Е Н Т   Д А Н Н Ы Х---//
 ///////////////////////////////////////////////////////////////////
 
-    //каждый элемент — QVariantMap с ключами "kod", "nomer", "dannie"
+    //каждый элемент — QVariantMap с ключами "kod", "nomer", "imya"
     qDebug()<< ullSpisokKod << ullElementKod << jsonDannie;
     return true;//Успех
 }
@@ -164,11 +164,11 @@ QString DataDannie::polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod){/
     quint64 ullKolichestvo = m_pdbDannie->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
     if (!ullKolichestvo){//Если ноль, то...
         m_blDanniePervi = true;//Первые данные, записывается (true).
-        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"dannie\":\"Добавьте новые данные.\"}]");//Возвращаем
+        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"imya\":\"Добавьте новые данные.\"}]");//Возвращаем
     }
     else
         m_blDanniePervi = false;//Не первые данные записываются.
-    //Пример: [{"kod":"1","nomer":"1","dannie":"план"},{"kod":"2","nomer":"2","dannie":"схема"}]
+    //Пример: [{"kod":"1","nomer":"1","imya":"план"},{"kod":"2","nomer":"2","imya":"схема"}]
     strDannieJSON = "[";//Начало массива объектов
     for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){//Сортируем список json по НОМЕР.
         QString strKod = m_pdbDannie->SELECT("Номер", QString::number(ullShag), "Код");
@@ -179,7 +179,7 @@ QString DataDannie::polDannieJSON(quint64 ullSpisokKod, quint64 ullElementKod){/
                 strDannieJSON = strDannieJSON + "{";
                 strDannieJSON = strDannieJSON + "\"kod\":\"" + strKod + "\",";
                 strDannieJSON = strDannieJSON + "\"nomer\":\"" + QString::number(ullShag) + "\",";
-                strDannieJSON = strDannieJSON + "\"dannie\":\""	+ strDannie + "\"";
+                strDannieJSON = strDannieJSON + "\"imya\":\""	+ strDannie + "\"";
                 strDannieJSON = strDannieJSON + "}";//Конец списка объектов.
                 if(ullShag<ullKolichestvo)//Если это не последние данные объектов, то..
                     strDannieJSON = strDannieJSON + ",";//ставим запятую.

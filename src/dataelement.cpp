@@ -116,7 +116,7 @@ bool DataElement::renElement(quint64 ullSpisokKod, const QVariantList jsonElemen
 ///////////////////////////////////////////////////////////////
 
 
-    //каждый элемент — QVariantMap с ключами "kod", "nomer", "dannie"
+    //каждый элемент — QVariantMap с ключами "kod", "nomer", "imya"
     qDebug()<<ullSpisokKod << jsonElement;
     return true;//Успех
 }
@@ -152,11 +152,11 @@ QString DataElement::polElementJSON(quint64 ullSpisokKod) {//Получить JS
     quint64 ullKolichestvo = m_pdbElement->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
 		m_blElementPervi = true;//Первый элемент записывается (true).
-        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"dannie\":\"Создайте новый элемент.\"}]");//Возвращаем
+        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"imya\":\"Создайте новый элемент.\"}]");//Возвращаем
 	}
 	else
 		m_blElementPervi = false;//Не первый элемент записывается.
-    //Пример: [{"kod":"1","nomer":"1","dannie":"фаска"},{"kod":"2","nomer":"2","dannie":"торцовка"}]
+    //Пример: [{"kod":"1","nomer":"1","imya":"фаска"},{"kod":"2","nomer":"2","imya":"торцовка"}]
     strElementJSON = "[";//Начало массива объектов
 	for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){
         QString strKod = m_pdbElement->SELECT("Номер", QString::number(ullShag), "Код");
@@ -167,7 +167,7 @@ QString DataElement::polElementJSON(quint64 ullSpisokKod) {//Получить JS
 				strElementJSON = strElementJSON + "{";
                 strElementJSON = strElementJSON + "\"kod\":\"" + strKod + "\",";
                 strElementJSON = strElementJSON + "\"nomer\":\"" + QString::number(ullShag)  + "\",";
-                strElementJSON = strElementJSON + "\"dannie\":\""	+ strElement + "\"";
+                strElementJSON = strElementJSON + "\"imya\":\""	+ strElement + "\"";
 				strElementJSON = strElementJSON + "}";//Конец списка объектов.
 				if(ullShag<ullKolichestvo)//Если это не последний список объектов, то..
 					strElementJSON = strElementJSON + ",";//ставим запятую.

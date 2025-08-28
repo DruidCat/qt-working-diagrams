@@ -74,13 +74,13 @@ Item {
             if (cIsListModel) {//Если это ListModel, то...
                 for (let ltShag = 0; ltShag < lsvZona.model.count; ++ltShag) {
                     const cIndex = lsvZona.model.get(ltShag)
-                    ltOrder.push({ kod: cIndex.kod, nomer: cIndex.nomer, dannie: cIndex.dannie })
+                    ltOrder.push({kod: cIndex.kod, nomer: cIndex.nomer, imya: cIndex.imya})
                 }
             }
             else {//Если это ListView, то...
                 for (var vrShag = 0; vrShag < lsvZona.model.length; ++vrShag) {
                     const cIndex = lsvZona.model[vrShag]
-                    ltOrder.push({ kod: cIndex.kod, nomer: cIndex.nomer, dannie: cIndex.dannie })
+                    ltOrder.push({kod: cIndex.kod, nomer: cIndex.nomer, imya: cIndex.imya})
                 }
             }
             root.signalSort(ltOrder)//Отправляем сигнал о том, что споизошла сортировка.
@@ -148,8 +148,8 @@ Item {
             var vrModel = lsvZona.model//Действующая модель
             //Чтобы работало и с ListModel, и с массивом, то...
             var obj = (vrModel && typeof vrModel.get === "function") ? vrModel.get(vrIndex) : vrModel[vrIndex]
-            root.clicked(parseInt(obj.kod), obj.dannie)//Отправляем kod и nomer во вне.
-            //root.clicked(cModel[cIndex].kod, cModel[cIndex].dannie)//Модель JS-массив, берем данные напрямую
+            root.clicked(parseInt(obj.kod), obj.imya)//Отправляем kod и imya во вне.
+            //root.clicked(cModel[cIndex].kod, cModel[cIndex].imya)//Модель JS-массив, берем данные напрямую
         }
         TapHandler {//Нажимаем не на элементы, а на пустую область.
             id: tphTap
@@ -175,7 +175,7 @@ Item {
                     color: (ListView.isCurrentItem || tap.active || drhDrag.active)
                            ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
                     anchors.centerIn: rctZona
-                    text: modelData.dannie//Добавляем данные модели в текст.
+                    text: modelData.imya//Добавляем данные модели в текст.
                     font.pixelSize: rctZona.height - root.ntCoff
                 }
                 DragHandler {//Перетаскивание
@@ -240,7 +240,7 @@ Item {
                         vrListView.interactive = true//Включем flickable листания lvsZona
                         fnFocus()//Фокус, чтоб горячие клавиши работали.
                         vrListView.currentIndex = index//Подсвечиваем выбранный делегат, что он выбран.
-                        root.clicked(modelData.kod, modelData.dannie)//Клик возращает код и данные модели.
+                        root.clicked(modelData.kod, modelData.imya)//Клик возращает код и имя модели.
                     }
                 }
                 Component.onCompleted:{//Когда текст отрисовался, нужно выставить размер шрифта.

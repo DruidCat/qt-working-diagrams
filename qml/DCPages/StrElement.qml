@@ -349,7 +349,7 @@ Item {
                 ntSortFixed: cppqml.blSpisokPervi ? 1 : 0// Если первый элемент, то его нельзя таскать.
                 //Функции
                 onSignalSort: function(jsonElement) {//Если произошла сортировка, то...
-                    //jsonElement — это QVariantList из QVariantMap'ов ({kod, nomer, dannie}) на стороне C++
+                    //jsonElement — это QVariantList из QVariantMap'ов ({kod, nomer, imya})сторона C++
                     cppqml.ustElementSortDB(jsonElement)//Записываем изменения отсортированного списка в БД.
                 }
                 onClicked: function(ntKod, strElement) {//Слот нажатия на один из Элементов списка.

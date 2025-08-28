@@ -96,7 +96,7 @@ bool DataSpisok::renSpisok(const QVariantList jsonSpisok){//Перезаписы
 /////////////////////////////////////////////////////////////
 
 
-    //каждый элемент — QVariantMap с ключами "kod", "nomer", "dannie"
+    //каждый элемент — QVariantMap с ключами "kod", "nomer", "imya"
     qDebug()<<jsonSpisok;
     return true;//Успех
 }
@@ -115,13 +115,13 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
     quint64 ullKolichestvo = m_pdbSpisok->SELECTPK();//максимальне количество созданых PRIMARY KEY в БД.
 	if (!ullKolichestvo){//Если ноль, то...
         m_blSpisokPervi = true;//Флаг - это будет первый в списке.
-        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"dannie\":\"Создайте новый элемент.\"}]");//Возвращаем
+        return tr("[{\"kod\":\"0\",\"nomer\":\"0\",\"imya\":\"Создайте новый элемент.\"}]");//Возвращаем
 	}
     else
         m_blSpisokPervi = false;//Флаг - не первый в списке.
     QString strSpisokJSON("");//Строка, в которой будет собран JSON запрос.
 	m_slsSpisok.clear();//Пустой список элементов списка.
-    //Пример: [{"kod":"1","nomer":"1","dannie":"формовка"},{"kod":"2","nomer":"2","dannie":"сварка"}]
+    //Пример: [{"kod":"1","nomer":"1","imya":"формовка"},{"kod":"2","nomer":"2","imya":"сварка"}]
     strSpisokJSON = "[";//Начало массива объектов
     for (quint64 ullShag = 1; ullShag <= ullKolichestvo; ullShag++){//Сортируем по НОМЕРУ
         QString strKod = m_pdbSpisok->SELECT("Номер", QString::number(ullShag), "Код");
@@ -132,7 +132,7 @@ QString DataSpisok::polSpisokJSON() {//Получить JSON строчку Сп
 				strSpisokJSON = strSpisokJSON + "{";
                 strSpisokJSON = strSpisokJSON + "\"kod\":\"" + strKod  + "\",";
                 strSpisokJSON = strSpisokJSON + "\"nomer\":\"" + QString::number(ullShag) + "\",";
-                strSpisokJSON = strSpisokJSON + "\"dannie\":\""	+ strSpisok + "\"";
+                strSpisokJSON = strSpisokJSON + "\"imya\":\""	+ strSpisok + "\"";
 				strSpisokJSON = strSpisokJSON + "}";//Конец списка объектов.
 				m_slsSpisok = m_slsSpisok<<strSpisok;//Собираем полный список элементов Списка.
 				if(ullShag<ullKolichestvo)//Если это не последний список объектов, то..
