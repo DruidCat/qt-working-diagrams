@@ -95,9 +95,18 @@ bool DataSpisok::renSpisok(const QVariantList jsonSpisok){//Перезаписы
 //---П Е Р Е З А П И С Ы В А Е М   В Е С Ь   С П И С О К---//
 /////////////////////////////////////////////////////////////
 
-
-    //каждый элемент — QVariantMap с ключами "kod", "nomer", "imya"
-    qDebug()<<jsonSpisok;
+    //каждый элемент — QVariantMap с ключами "kod", "nomer"
+    for (const QVariant &vrSpisok: jsonSpisok){//Цикл перебора QVariantList
+        if (vrSpisok.canConvert<QVariantMap>()){//Проверяем, что элемент является QVariantMap
+            QVariantMap vmpSpisok = vrSpisok.value<QVariantMap>();
+            if(!m_pdbSpisok->UPDATE(QStringList()	<<"Код"<<"Номер",
+                                    QStringList()	<<vmpSpisok.value("kod").toString()
+                                                    <<vmpSpisok.value("nomer").toString())){//Если ошибка БДто
+                qdebug(tr("DataSpisok::renSpisok(QVariantList): ошибка записи сортированных данных."));
+                return false;//Ошибка записи.
+            }
+        }
+    }
     return true;//Успех
 }
 bool DataSpisok::udalSpisokDB(quint64 ullSpisokKod){//Удалить в БД запись Списка.

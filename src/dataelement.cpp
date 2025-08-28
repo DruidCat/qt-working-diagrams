@@ -115,9 +115,19 @@ bool DataElement::renElement(quint64 ullSpisokKod, const QVariantList jsonElemen
 //---П Е Р Е З А П И С Ы В А Е М   В Е С Ь   Э Л Е М Е Н Т---//
 ///////////////////////////////////////////////////////////////
 
-
-    //каждый элемент — QVariantMap с ключами "kod", "nomer", "imya"
-    qDebug()<<ullSpisokKod << jsonElement;
+    //каждый элемент — QVariantMap с ключами "kod", "nomer"
+    m_pdbElement->ustImyaTablici("элемент_"+QString::number(ullSpisokKod));//Задаём имя таблицы.
+    for (const QVariant &vrElement: jsonElement){//Цикл перебора QVariantList
+        if (vrElement.canConvert<QVariantMap>()){//Проверяем, что элемент является QVariantMap
+            QVariantMap vmpElement = vrElement.value<QVariantMap>();
+            if(!m_pdbElement->UPDATE(	QStringList()	<<"Код"<<"Номер",
+                                        QStringList()	<<vmpElement.value("kod").toString()
+                                                        <<vmpElement.value("nomer").toString())){//Если Ошибка
+                qdebug(tr("DataElement::renElement(QVariantList): ошибка записи сортированных данных."));
+                return false;//Ошибка записи.
+            }
+        }
+    }
     return true;//Успех
 }
 bool DataElement::udalElementDB(quint64 ullSpisokKod,quint64 ullElementKod){//Удалить в БД запись Элемента

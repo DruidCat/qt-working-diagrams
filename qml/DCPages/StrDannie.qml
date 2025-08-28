@@ -351,7 +351,7 @@ Item {
                 ntSortFixed: cppqml.blSpisokPervi ? 1 : 0// Если первый элемент, то его нельзя таскать.
                 //Функции
                 onSignalSort: function(jsonDannie) {//Если произошла сортировка, то...
-                    //jsonDannie — это QVariantList из QVariantMap'ов ({kod, nomer, imya}) сторона C++
+                    //jsonDannie — это QVariantList из QVariantMap'ов ({kod, nomer}) сторона C++
                     cppqml.ustDannieSortDB(jsonDannie)//Записываем изменения отсортированного списка в БД.
                 }
                 onClicked: function(ntKod, strDannie) {//Слот нажатия на один из Документов списка.

@@ -133,8 +133,19 @@ bool DataDannie::renDannie(quint64 ullSpisokKod, quint64 ullElementKod, const QV
 //---П Е Р Е З А П И С Ы В А Е М   Э Л Е М Е Н Т   Д А Н Н Ы Х---//
 ///////////////////////////////////////////////////////////////////
 
-    //каждый элемент — QVariantMap с ключами "kod", "nomer", "imya"
-    qDebug()<< ullSpisokKod << ullElementKod << jsonDannie;
+    //каждый элемент — QVariantMap с ключами "kod", "nomer"
+    m_pdbDannie->ustImyaTablici("данные_"+QString::number(ullSpisokKod)+"_"+QString::number(ullElementKod));
+    for (const QVariant &vrDannie: jsonDannie){//Цикл перебора QVariantList
+        if (vrDannie.canConvert<QVariantMap>()){//Проверяем, что элемент является QVariantMap
+            QVariantMap vmpDannie = vrDannie.value<QVariantMap>();
+            if(!m_pdbDannie->UPDATE(QStringList()	<<"Код"<<"Номер",
+                                    QStringList()	<<vmpDannie.value("kod").toString()
+                                                    <<vmpDannie.value("nomer").toString())){//Если ошибка,то..
+                qdebug(tr("DataDannie::renDannie(QVariantList): ошибка записи сортированных данных."));
+                return false;//Ошибка записи.
+            }
+        }
+    }
     return true;//Успех
 }
 bool DataDannie::udalDannieDB(quint64 ullSpisokKod,quint64 ullElementKod,quint64 ullDannieKod){//Удалить запис

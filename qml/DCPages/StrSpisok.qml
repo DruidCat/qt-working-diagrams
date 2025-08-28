@@ -376,7 +376,7 @@ Item {
                 ntSortFixed: cppqml.blSpisokPervi ? 1 : 0// Если первый элемент, то его нельзя таскать.
                 //Функции.
                 onSignalSort: function(jsonSpisok) {//Если произошла сортировка, то...
-                    //jsonSpisok — это QVariantList из QVariantMap'ов ({kod, nomer, imya}) сторона C++
+                    //jsonSpisok — это QVariantList из QVariantMap'ов ({kod, nomer}) сторона C++
                     cppqml.ustSpisokSortDB(jsonSpisok)//Записываем изменения отсортированного списка в БД.
                 }
                 onClicked: function(ntKod, strSpisok) {//Слот clicked нажатия на один из элементов Списка.
