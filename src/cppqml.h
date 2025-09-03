@@ -15,6 +15,7 @@
 #include "dataplan.h"
 #include "dcfiledialog.h"
 #include "datakatalog.h"
+#include "dcpdfpoisk.h"
 
 class DCCppQml : public QObject {
     Q_OBJECT

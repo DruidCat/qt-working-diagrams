@@ -16,8 +16,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(RES_FILES "${PROJECT_SOURCE_DIR}/icons/ico/ru.Mentor.rc")
 
 # Установить Qt5 или Qt6 в зависимости от версии Qt, под которую будет собираться проект.
-find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 Sql)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick QuickControls2 Sql)
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 Sql Pdf PdfQuick)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick QuickControls2 Sql Pdf PdfQuick)
 
 # Создаём переменную PROJECT_SOURCES и добавляем в неё файлы *.cpp и *.h
 set(PROJECT_SOURCES
@@ -49,6 +49,8 @@ set(PROJECT_SOURCES
         src/dcdbdata.cpp
         src/dcfiledialog.h
         src/dcfiledialog.cpp
+        src/dcpdfpoisk.h
+        src/dcpdfpoisk.cpp
 		src/main.cpp
 		qml.qrc
 )
@@ -106,7 +108,10 @@ target_link_libraries(${EXECUTABLE_NAME}
         PRIVATE 	Qt${QT_VERSION_MAJOR}::Core
   					Qt${QT_VERSION_MAJOR}::Quick
 					Qt${QT_VERSION_MAJOR}::QuickControls2
-					Qt${QT_VERSION_MAJOR}::Sql)
+                    Qt${QT_VERSION_MAJOR}::Sql
+                    Qt${QT_VERSION_MAJOR}::Pdf # Для поиска в С++
+                    Qt${QT_VERSION_MAJOR}::PdfQuick # Для поиска в С++
+                    )
 
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com

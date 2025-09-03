@@ -245,7 +245,9 @@ Item {
             }
         }
     }
-
+    // Привязываем C++ подсчёт
+    Binding { target: cppqml.pdfSearch; property: "source"; value: pdfDoc.source }
+    Binding { target: cppqml.pdfSearch; property: "query";  value: root.searchString }
     PdfMultiPageView {
         id: pmpDoc
         anchors.fill: root
@@ -370,6 +372,7 @@ Item {
         Text {
             anchors.centerIn: rctStranici
             text: qsTr("Страница ") + (pmpDoc.currentPage+1) + qsTr(" из ") + pdfDoc.pageCount
+                                                            // + qsTr(" Сумма ") + cppqml.pdfSearch.matchCount
         }
     }
 }
