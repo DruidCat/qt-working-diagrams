@@ -396,7 +396,7 @@ Item {
                 }
                 onTap: {
                     root.signalToolbar("");//Делаем пустую строку в Toolbar.
-                    //fnClickedEscape();//Если нажали на пустое место.
+                    menuDannie.visible = false;//Делаем невидимым всплывающее меню.
                 }
                 onIsPereimenovatViborChanged: {//сигнал изменения property isPereimenovatVibor (on...Changed)
                     lsvDannie.isPereimenovatVibor ? rctBorder.border.color=clrTexta
@@ -415,11 +415,15 @@ Item {
                 }
                 Connections {//Соединяем сигнал из C++ с действием в QML
                     target: cppqml;//Цель объект класса С++ DCCppQml
-                    function onStrElementChanged(){//Слот Если изменился Элемент strElement (Q_PROPERTY), то...
-                        lsvDannie.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
+                    function onStrElementChanged(){//Слот Если изменился Элемент strElement (Q_PROPERTY), то..
+                        lsvDannie.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными
+                        if (lsvDannie.count > 0 && lsvDannie.currentIndex < 0)
+                            lsvDannie.currentIndex = 0//Зафиксировать выбор на первом элементе
                     }
-                    function onStrDannieDBChanged(){//Слот Если изменился Документ в strDannieDB (Q_PROPERTY), то...
-                        lsvDannie.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными.
+                    function onStrDannieDBChanged(){//Слот Если изменился Документ в strDannieDB (Q_PROPERTY)
+                        lsvDannie.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными
+                        if (lsvDannie.count > 0 && lsvDannie.currentIndex < 0)
+                            lsvDannie.currentIndex = 0//Зафиксировать выбор на первом элементе
                     }
                 }
             }

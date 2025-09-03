@@ -418,7 +418,7 @@ Item {
                 }
                 onTap: {
                     root.signalToolbar("");//Делаем пустую строку в Toolbar.
-                    //fnClickedEscape();//Если нажали на пустое место.
+                    menuSpisok.visible = false;//Делаем невидимым всплывающее меню.
                 }
                 onIsPereimenovatViborChanged: {//Слот изменения property isPereimenovatVibor (on...Changed)
                     lsvSpisok.isPereimenovatVibor ? rctBorder.border.color=clrTexta

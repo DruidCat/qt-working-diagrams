@@ -390,7 +390,7 @@ Item {
                 }
                 onTap: {
                     root.signalToolbar("");//Делаем пустую строку в Toolbar.
-                    //fnClickedEscape();//Если нажали на пустое место.
+                    menuElement.visible = false;//Делаем невидимым всплывающее меню.
                 }
                 onIsPereimenovatViborChanged: {//сигнала изменения property isPereimenovatVibor (on...Changed)
                     lsvElement.isPereimenovatVibor ? rctBorder.border.color=clrTexta
@@ -409,11 +409,15 @@ Item {
                 }
                 Connections {//Соединяем сигнал из C++ с действием в QML
                     target: cppqml;//Цель объект класса С++ DCCppQml
-                    function onStrSpisokChanged(){//Слот Если изменился элемент Списка strSpisok (Q_PROPERTY), то...
-                        lsvElement.model = JSZona.fnElementJSON();//Перегружаем модель ListView с новыми данными.
+                    function onStrSpisokChanged(){//Слот Если изменился элемент Списка strSpisok (Q_PROPERTY)
+                        lsvElement.model = JSZona.fnElementJSON();//Перегружаем модель ListView с нов данными.
+                        if (lsvElement.count > 0 && lsvElement.currentIndex < 0)
+                            lsvElement.currentIndex = 0//Зафиксировать выбор на первом элементе
                     }
-                    function onStrElementDBChanged(){//Слот Если изменился Элемент в strElementDB (Q_PROPERTY), то...
-                        lsvElement.model = JSZona.fnElementJSON();//Перегружаем модель ListView с новыми данными.
+                    function onStrElementDBChanged(){//Слот Если изменился Элемент в strElementDB (Q_PROPERTY)
+                        lsvElement.model = JSZona.fnElementJSON();//Перегружаем модель ListView с нов данными.
+                        if (lsvElement.count > 0 && lsvElement.currentIndex < 0)
+                            lsvElement.currentIndex = 0//Зафиксировать выбор на первом элементе
                     }
                 }
             }

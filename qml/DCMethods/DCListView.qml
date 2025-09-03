@@ -141,12 +141,8 @@ Item {
             root.clicked(parseInt(obj.kod), obj.imya)//Отправляем kod и imya во вне.
             //root.clicked(cModel[cIndex].kod, cModel[cIndex].imya)//Модель JS-массив, берем данные напрямую
         }
-        TapHandler {//Нажимаем не на элементы, а на пустую область.
-            id: tphTap
-            onTapped: {
-                fnFocus()//Чтобы после клика мышью стрелки сразу работали
-                root.tap()
-            }
+        TapHandler {//Нажимаем на всю область виджета.
+            onTapped: root.tap();
         }
         Component {
             id: cmpZona
@@ -157,12 +153,12 @@ Item {
                 height: root.ntWidth*root.ntCoff + root.ntCoff//Высоту делегата считаем.
                 opacity: 0.95//Прозрачность.
                 clip: true
-                color: (ListView.isCurrentItem || tap.active || drhDrag.active)
+                color: (ListView.isCurrentItem || tphItem.active || drhDrag.active)
                        ? Qt.darker(root.clrFona, 1.3) : root.clrFona
                 //Функции
                 Text {
                     id: txtText
-                    color: (ListView.isCurrentItem || tap.active || drhDrag.active)
+                    color: (ListView.isCurrentItem || tphItem.active || drhDrag.active)
                            ? Qt.darker(root.clrTexta, 1.3) : root.clrTexta
                     anchors.centerIn: rctZona
                     text: modelData.imya//Добавляем данные модели в текст.
@@ -210,7 +206,7 @@ Item {
                     }
                 }
                 TapHandler {//Клик + временная блокировка прокрутки
-                    id: tap
+                    id: tphItem
                     enabled: root.enabled
                     onActiveChanged: {//Если Активность тапа изменилась, то...
                         var vrListView = rctZona.ListView.view//Это lsvZona
