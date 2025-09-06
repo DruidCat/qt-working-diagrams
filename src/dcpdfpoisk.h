@@ -8,42 +8,52 @@
 #include <QtPdf/QPdfSearchModel>
 #include <QVariantList>
 
-class DCPdfPoisk : public QObject
-{
+class DCPdfPoisk : public QObject {
     Q_OBJECT
-    Q_PROPERTY(QUrl source READ source WRITE setSource NOTIFY sourceChanged)
-    Q_PROPERTY(QString query READ query WRITE setQuery NOTIFY queryChanged)
-    Q_PROPERTY(int matchCount READ matchCount NOTIFY matchCountChanged)
-    Q_PROPERTY(QPdfSearchModel* model READ model CONSTANT)
+    Q_PROPERTY(QUrl urlPdf
+                    READ urlPdf
+                    WRITE setUrlPdf
+                    NOTIFY urlPdfChanged)
+    Q_PROPERTY(QString strPoisk
+                    READ strPoisk
+                    WRITE setStrPoisk
+                    NOTIFY strPoiskChanged)
+    Q_PROPERTY(int 	ntSchetchik
+                    READ ntSchetchik
+                    NOTIFY ntSchetchikChanged)
+    Q_PROPERTY(QPdfSearchModel* psmModel
+                    READ psmModel CONSTANT)
 
 public:
-    explicit DCPdfPoisk(QObject* parent=nullptr);
-
-    QUrl source() const { return m_source; }
-    void setSource(const QUrl& url);
-
-    QString query() const { return m_query; }
-    void setQuery(const QString& q);
-
-    int matchCount() const { return m_matchCount; }
-    QPdfSearchModel* model() { return &m_model; }
-
-    // Прямоугольники совпадений на странице (нормализованные 0..1)
-    Q_INVOKABLE QVariantList resultsOnPage(int page) const;
-signals:
-    void sourceChanged();
-    void queryChanged();
-    void matchCountChanged();
+    explicit DCPdfPoisk(QObject* proditel = nullptr);//Конструктор.
+    ~ 		DCPdfPoisk();//Деструктор.
+    //---Методы Q_PROPERTY---//
+    QUrl	urlPdf() const { return m_urlPdf; }//Возвратить путь pdf документа.
+    void	setUrlPdf(const QUrl& urlPdf);//Задаём путь к pdf документу.
+    QString strPoisk() const { return m_strPoisk; }//Возвратить строку запроса на поиск.
+    void 	setStrPoisk(const QString& strPoisk);//Задаём запрос на поиск
+    int 	ntSchetchik() const { return m_ntSchetchik; }//Возвратить счётчик совпадений по поиску.
+    QPdfSearchModel* psmModel() { return &m_psmModel; }
+    Q_INVOKABLE QVariantList resultsOnPage(int ntStranica) const;//Прямоугольники совпадений на странице (нормализованные 0..1)
 
 private:
-    void recomputeMatchCount();
-    void loadFromUrl(const QUrl& url);
+    void 	pereschetSchetchika();//Пересчёт количества совпадений при поиске.
+    bool 	ustPdfDoc(const QUrl& urlPdf);//Задаём pdf документ по ссылке url.
 
-    QUrl m_source;
-    QPdfDocument m_doc;
-    QPdfSearchModel m_model;
-    QString m_query;
-    int m_matchCount = 0;
+    QUrl	m_urlPdf;//Переменная хранящая ссылку на pdf документ.
+    QPdfDocument	m_pdfDoc;//pdf документ, в котором мы будет считать совпадения поиска.
+    QPdfSearchModel	m_psmModel;//Модель поиска.
+    QString	m_strPoisk;//Запрос на поиск. ЧТо будем искать.
+    int		m_ntSchetchik;//Счётчик количества совпадений.
+
+private slots:
+    void	qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
+
+signals:
+    void 	urlPdfChanged();//Сигнал о том, что путь к pdf документу изменилась.
+    void 	strPoiskChanged();//Сигнал о том, что запрос поисковый изменился.
+    void 	ntSchetchikChanged();//Сигнал о том, что Счётчик совпадений поиска изменился.
+    void	signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
 };
 
 #endif // DCPDFPOISK_H

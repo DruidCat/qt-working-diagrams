@@ -175,23 +175,23 @@ public:
     explicit	DCCppQml(QObject* proditel = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
 	//---Методы Q_PROPERTY---//
-    uint		untHeight() { return m_untHeight; }//Возвращаем высоту окна.
+    uint		untHeight() const { return m_untHeight; }//Возвращаем высоту окна.
     void		setUntHeight(const uint& untHeight);//Изменяем высоту окна приложения.
-    uint		untWidth() { return m_untWidth; }//Возвращаем ширину окна.
+    uint		untWidth() const { return m_untWidth; }//Возвращаем ширину окна.
     void		setUntWidth(const uint& untWidth);//Изменяем ширину окна приложения.
-    uint		untY() { return m_untY; }//Возвращаем Y Координату окна.
+    uint		untY() const { return m_untY; }//Возвращаем Y Координату окна.
     void		setUntY(const uint& untY);//Изменяем Y координату окна приложения.
-    uint		untX() { return m_untX; }//Возвращаем X координату окна.
+    uint		untX() const { return m_untX; }//Возвращаем X координату окна.
     void		setUntX(const uint& untX);//Изменяем X координату окна приложения.
-    bool		blPdfViewer() { return m_blPdfViewer; }//Возвращаем флаг просмотщика.
+    bool		blPdfViewer() const { return m_blPdfViewer; }//Возвращаем флаг просмотщика.
     void		setBlPdfViewer(const bool& blPdfViewer);//Изменяем просмотрщик pdf документов.
-    bool		blAppRedaktor() { return m_blAppRedaktor; }//Возвращаем флаг редактора.
+    bool		blAppRedaktor() const { return m_blAppRedaktor; }//Возвращаем флаг редактора.
     void		setBlAppRedaktor(const bool& blAppRedaktor);//Изменяем редактор Ментора.
-    uint 		untShrift() { return m_untShrift; }//Возвращаем размер шрифта.
+    uint 		untShrift() const { return m_untShrift; }//Возвращаем размер шрифта.
     void		setUntShrift(const uint& untShrift);//Изменяем размер шрифта.
-    QString 	strKatalogPut() { return m_strKatalogPut; }//Возвращаем путь сохранения каталога.
+    QString 	strKatalogPut() const { return m_strKatalogPut; }//Возвращаем путь сохранения каталога.
     void		setStrKatalogPut(const QString& strKatalogPut);//Изменяем путь сохранения каталога.
-    uint 		untNastroikiMaxLength() { return m_untNastroikiMaxLength; }//Максимальная длина строки текста
+    uint 		untNastroikiMaxLength() const { return m_untNastroikiMaxLength; }//Макс длина строки текста
 
     QString		strTitul();//Получить имя Титула.
     void		setStrTitul(const QString& strTitulNovi);//Изменение имени Титула.
@@ -208,7 +208,7 @@ public:
     void		setUllSpisokKod(const quint64 ullSpisokKodNovi);//Изменить Код списка.
     QString		strSpisokOpisanie();//Возвращает Описание элемента Списка
     void		setStrSpisokOpisanie(const QString& strOpisanieNovi);//Изменить описание списка.
-    bool 		blSpisokPervi() { return m_blSpisokPervi; }//Возвращает флаг Первый в Списке?
+    bool 		blSpisokPervi() const { return m_blSpisokPervi; }//Возвращает флаг Первый в Списке?
     Q_INVOKABLE void ustSpisokSortDB(const QVariantList &jsonSpisok);//Установить отсортированные Списки в БД
 
     QString		strElement();//Возвратить элемент.
@@ -221,7 +221,7 @@ public:
     void		setUllElementKod(const quint64 ullElementKodNovi);//Изменить Код Элемента.
     QString		strElementOpisanie();//Возвращает Описание Элемента
     void		setStrElementOpisanie(const QString& strOpisanieNovi);//Изменить описание Элемента.
-    bool 		blElementPervi() { return m_blElementPervi; }//Возвращает флаг Первый Элемент?
+    bool 		blElementPervi() const { return m_blElementPervi; }//Возвращает флаг Первый Элемент?
     Q_INVOKABLE void ustElementSortDB(const QVariantList &jsonElement);//Установ отсортированные Элементы в БД
 
     QString		strDannie();//Возвратить Данные.
@@ -236,17 +236,17 @@ public:
     QString		strDannieStr();//Возвратить номер страницы Документа из БД.
     void		setStrDannieStr(const QString& strDannieStrNovi);//Изменение номера страницы Документа.
 	QString 	strDannieUrl();//Возвращаем Url путь с именем файла.
-    bool 		blDanniePervi() { return m_blDanniePervi; }//Возвращает флаг Первые Данные?
+    bool 		blDanniePervi() const { return m_blDanniePervi; }//Возвращает флаг Первые Данные?
     Q_INVOKABLE void ustDannieSortDB(const QVariantList &jsonDannie);//Установить отсортированные Данные в БД
 
     QString		strFileDialog();//Возвратить JSON строку с папками и файлами.
     void		setStrFileDialog(const QString& strFileDialogNovi);//Изменение JSON запроса с папками и файлами.
     QString		strFileDialogPut();//Возвратить путь папки, содержимое которой нужно отобразить.
     void		setStrFileDialogPut(const QString& strFileDialogPutNovi);//Изменение отображаемого пути папки.
-    QString 	strFileDialogModel() { return m_strFileDialogModel; }//Возвращаем 0-папка или 1-файл.
+    QString 	strFileDialogModel() const { return m_strFileDialogModel; }//Возвращаем 0-папка или 1-файл.
     void  		setStrFileDialogModel(const QString& strFileDialogImya);//Принимаем папку или файл.
-    bool 		blFileDialogCopy() { return m_blFileDialogCopy; }//Флаг Копирования Документа, инверсируется.
-    QString 	strFileDialogMode() { return m_strFileDialogMode; }//Возвращает режим работы проводника.
+    bool 		blFileDialogCopy() const { return m_blFileDialogCopy; }//Флаг Копир Документа, инверсируется.
+    QString 	strFileDialogMode() const { return m_strFileDialogMode; }//Возвращает режим работы проводника.
     void  		setStrFileDialogMode(const QString& strFileDialogModeNovi);//Устанавливаем режим проводника.
 
     bool 		blPlanPervi();//Возвращает флаг Первый План?
@@ -255,11 +255,11 @@ public:
                                                            //
     Q_INVOKABLE bool 	isPdfPoisk(const QString strPoisk);//Пустой запрос на поиск?
 
-    uint		untKatalogCopy() { return m_untKatalogCopy; }//Возвращает количество скопированных документов.
-    bool		blKatalogStatus() { return m_blKatalogStatus; }//Возвращает статус создания каталога.
-    QString		strKatalogDocCopy() { return m_strKatalogDocCopy; }//Возвращаем путь скопированного документа
+    uint		untKatalogCopy() const { return m_untKatalogCopy; }//Возвращ кол-во скопированных документо
+    bool		blKatalogStatus() const { return m_blKatalogStatus; }//Возвращает статус создания каталога.
+    QString		strKatalogDocCopy() const { return m_strKatalogDocCopy; }//Возвращ путь скопированного докумен
     void		setStrKatalogDocCopy(const QString& strPutNovi);//Установить Новый путь скопированного док.
-    QString 	strKatalogUrl() { return m_strKatalogUrl; }//Возвращаем путь+файл, который нужно открыть
+    QString 	strKatalogUrl() const { return m_strKatalogUrl; }//Возвращаем путь+файл, который нужно открыть
     void		setStrKatalogUrl(const QString& strImyaFaila);//Передаём имя, создаём путь+файл.
     Q_INVOKABLE QString polKatalogUrl(const QString& strImyaFaila);//Возвращаем путь+файл в Каталоге по Имени.
     Q_INVOKABLE int		polKatalogSummu();//Получить приблизительное сумарное число файлов в менторе.
@@ -390,6 +390,7 @@ private:
     DataKatalog*	m_pDataKatalog = nullptr;//Указатель на класс Каталог с БД.
     DataPlan*		m_pDataPlan = nullptr;//Указатель на таблицу Данных в БД.
     DCFileDialog*	m_pFileDialog = nullptr;//Указатель на Проводник.
+    DCPdfPoisk*		m_pPdfPoisk = nullptr;//Указатель на pdf поиск.
     QTimer*			m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.
     uint 			m_untDebugSec;//Счётчик секунд для таймера отладки.
     DCClass* 		m_pdcclass = nullptr;//Указатель на класс часто используемых методов.

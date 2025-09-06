@@ -88,6 +88,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataKatalog = new DataKatalog(strMentorPut, m_strDomPut);//Каталог.
     m_pDataPlan = new DataPlan(strMentorPut, ullDannieMax);//План.
     m_pFileDialog = new DCFileDialog(slsFileDialogMaska, m_strDomPut);//Проводник.
+    m_pPdfPoisk = new DCPdfPoisk();//Pdf Поиск.
     //---передаём-указатели-бд---//
     m_pDataKatalog->ustPDBTitul(m_pDataTitul->polPDB());//Передаем указатель на БД из класса в класс.
     m_pDataKatalog->ustPDBSpisok(m_pDataSpisok->polPDB());//Передаем указатель на БД из класса в класс.
@@ -115,6 +116,10 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                 this,
                 SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
     connect(	m_pDataKatalog,
+                SIGNAL(signalDebug(QString)),
+                this,
+                SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
+    connect(	m_pPdfPoisk,
                 SIGNAL(signalDebug(QString)),
                 this,
                 SLOT(slotDebug(QString)));//Связываем сигнал ошибки со слотом принимающим ошибку.
@@ -170,6 +175,8 @@ DCCppQml::~DCCppQml(){//Деструктор.
     m_pDataPlan = nullptr;//Указатель на таблицу Данных в БД обнуляем.
     delete m_pFileDialog;//Удаляем указатель.
     m_pFileDialog = nullptr;//Указатель на Проводник в БД обнуляем.
+    delete m_pPdfPoisk;//Удаляем указатель.
+    m_pPdfPoisk = nullptr;//Указатель на Pdf поиск обнуляем.
 	delete m_pTimerDebug;//Удаляем указатель на таймер.
 	m_pTimerDebug = nullptr;//Обнуляем указатель на таймер отладки.
 	delete m_pdcclass;//Удаляем указатель.
@@ -289,12 +296,12 @@ void DCCppQml::setStrKatalogPut(const QString &strKatalogPut){//Изменяем
         }
     }
 }
-QString DCCppQml::strTitul() {//Получить имя Титула.
+QString DCCppQml::strTitul(){//Получить имя Титула.
 ///////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   И М Я   Т И Т У Л А---//
 ///////////////////////////////////////////////
-	QString strTitul = m_pDataTitul->polTitul();
-	m_strTitul = strTitul;
+    QString strTitul = m_pDataTitul->polTitul();
+    m_strTitul = strTitul;
     return m_strTitul;
 }
 void DCCppQml::setStrTitul(const QString& strTitulNovi) {//Переименование имени Титула.
