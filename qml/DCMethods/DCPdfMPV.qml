@@ -12,6 +12,8 @@ Item {
     property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
     property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
     property alias searchString: pmpDoc.searchString//Запрос на поиск.
+    property int searchCount: cppqml.pdfPoisk.ntSchetchik//Количество совпадений при поиске.
+    property bool isSearch: cppqml.pdfPoisk.isPoisk//true - поиск идёт, false - поиск остановлен.
     property alias rotation: pmpDoc.rotation//Поворот сцены документа.
     property alias pageRotation: pmpDoc.pageRotation//Поворот страниц документа.
     property alias straniciVisible: rctStranici.visible//Вкл/Выкл дополнительное окно с количеством страниц.
@@ -74,6 +76,13 @@ Item {
             tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть. 
         })
 	}
+    onSourceChanged: {//Когда меняется источник документа — обновим C++ поиск
+        if(root.source && root.source !== "")
+            cppqml.pdfPoisk.urlPdf = root.source//Отправляем адрес файла в бизнес логику.
+    }
+    onSearchStringChanged: {//Когда меняется поисковая строка — отдадим её в C++
+        cppqml.pdfPoisk.strPoisk = root.searchString;//Отправляем поисковый запрос в бизнес логику.
+    }
     onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
         if(width > 0){//Если ширина больше 0, это не формирование при старте окна, то...
             if(pmpDoc.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
@@ -245,9 +254,6 @@ Item {
             }
         }
     }
-    //Привязываем C++ подсчёт
-    //Binding { target: cppqml.pdfSearch; property: "urlPdf"; value: pdfDoc.source }
-    //Binding { target: cppqml.pdfSearch; property: "strPoisk";  value: root.searchString }
     PdfMultiPageView {
         id: pmpDoc
         anchors.fill: root
@@ -372,7 +378,6 @@ Item {
         Text {
             anchors.centerIn: rctStranici
             text: qsTr("Страница ") + (pmpDoc.currentPage+1) + qsTr(" из ") + pdfDoc.pageCount
-                                                             //+ qsTr(" Сумма ") + cppqml.pdfSearch.ntSchetchik
         }
     }
 }

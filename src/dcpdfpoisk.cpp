@@ -10,6 +10,7 @@ DCPdfPoisk::DCPdfPoisk(QObject* proditel) : QObject(proditel){//Конструк
 
     m_psmModel.setDocument(&m_pdfDoc);//Добавляем pdf документ в Модель Поиска PDF.
     m_ntSchetchik = 0;//Обнуляем счётчик количества совпадений.
+    m_isPoisk = false;//true - поиск идёт, false - поиск окончен.
 
     auto onChanged = [this]{ pereschetSchetchika(); };//СЛОТ пересчёта счётчика совпадений при поиске.
     connect(	&m_psmModel,
@@ -94,6 +95,8 @@ void DCPdfPoisk::pereschetSchetchika(){//Пересчёт количества �
 //---П Е Р Е С Ч Ё Т   К О Л И Ч Е С Т В А   С О В П А Д Е Н И Й--//
 ////////////////////////////////////////////////////////////////////
 
+    m_isPoisk = true;//Поиск начат
+    emit isPoiskChanged();//Сигнал о том, что изменился статус поиска.
     int ntSchetchik = 0;
     const int ntKolichestvoStrok = m_psmModel.rowCount(QModelIndex());//Считаем количество строк в Модели.
     const auto utRoli = m_psmModel.roleNames();
@@ -115,6 +118,8 @@ void DCPdfPoisk::pereschetSchetchika(){//Пересчёт количества �
                 ntSchetchik += 1;//фоллбек
         }
     }
+    m_isPoisk = false;//Поиск окончен
+    emit isPoiskChanged();//Сигнал о том, что изменился статус поиска.
     if (m_ntSchetchik != ntSchetchik){//Если счётчик изменился, то...
         m_ntSchetchik = ntSchetchik;//Приравниваем счётчик.
         emit ntSchetchikChanged();//Излучаем сигнал о том, что счётчик изменился.

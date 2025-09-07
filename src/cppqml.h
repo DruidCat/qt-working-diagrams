@@ -19,6 +19,8 @@
 
 class DCCppQml : public QObject {
     Q_OBJECT
+    Q_PROPERTY(DCPdfPoisk* pdfPoisk READ pdfPoisk CONSTANT)
+
     Q_PROPERTY(uint	untHeight
                     READ untHeight
                     WRITE setUntHeight
@@ -175,6 +177,7 @@ public:
     explicit	DCCppQml(QObject* proditel = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
 	//---Методы Q_PROPERTY---//
+    DCPdfPoisk* pdfPoisk() const { return m_pPdfPoisk; }//Возвращаем указатель на класс DCPdfPoisk.
     uint		untHeight() const { return m_untHeight; }//Возвращаем высоту окна.
     void		setUntHeight(const uint& untHeight);//Изменяем высоту окна приложения.
     uint		untWidth() const { return m_untWidth; }//Возвращаем ширину окна.

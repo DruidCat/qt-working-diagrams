@@ -182,8 +182,7 @@ Item {
 			pskPoisk.visible = true;//Делаем видимым режим поиска
             txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
             pdfLoader.item.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
-            pdfLoader.item.searchForward();//Показываем следующий результат поиска.
-		}
+        }
 	}
 	function fnClickedPovorotPo(){//Функция нажатия кнопки поворота по часовой стрелке.
 		pdfLoader.pdfRotation += 90;//Прибавляем по 90 градусов.
@@ -205,11 +204,26 @@ Item {
         txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
     }
     function fnClickedPoiskNext(){//Функция нажатия кнопки Следующего поиска
+        pskPoisk.nomerPoisk += 1;
         pdfLoader.item.searchForward();//Показываем следующий результат поиска.
     }
     function fnClickedPoiskPrevious(){//Функция нажатия кнопки Предыдущего поиска
+        pskPoisk.nomerPoisk -= 1;
         pdfLoader.item.searchBack();//Показываем предыдущий результат поиска.
     }
+    function fnClickedPoiskZakrit(){//Функция нажатия кнопки Закрытия поиска.
+        root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
+        pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
+        knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
+        knopkaOk.visible = false;//Кнопка Ок Невидимая.
+        knopkaNazad.visible = true;//Кнопка назад видимая.
+        knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
+        knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
+        knopkaPoisk.visible = true;//Конопка Поиск Видимая.
+        txnZagolovok.text = "";//Текст обнуляем вводимый.
+        pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
+    }
+
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
         id: tmrLogo
         interval: 110; running: false; repeat: true
@@ -322,6 +336,9 @@ Item {
 		}	
         DCPoisk {
             id: pskPoisk
+            //Свойства
+            sumPoisk: pdfLoader.item ? pdfLoader.item.searchCount : 0
+            //Настройки
             anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
             anchors.left: tmZagolovok.left; anchors.right: tmZagolovok.right
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
@@ -330,18 +347,7 @@ Item {
             tapKnopkaZakrit: 1.3; tapKnopkaVniz: 1.3; tapKnopkaVverh: 1.3
             onClickedNext: fnClickedPoiskNext()//Функция нажатия кнопки Следующего поиска
 			onClickedPrevious: fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
-            onClickedZakrit: {//Слот нажатия кнопки Отмены режима поиска. 
-                root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
-                pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
-                knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
-                knopkaOk.visible = false;//Кнопка Ок Невидимая.
-				knopkaNazad.visible = true;//Кнопка назад видимая.
-                knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
-                knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
-                knopkaPoisk.visible = true;//Конопка Поиск Видимая.
-                txnZagolovok.text = "";//Текст обнуляем вводимый.
-                pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
-            }
+            onClickedZakrit: fnClickedPoiskZakrit()//Функция нажатия кнопки Закрытия поиска.
         }
         DCKnopkaPoisk{
             id: knopkaPoisk
@@ -463,7 +469,7 @@ Item {
                     //console.error("456: Url: " + strPdfUrl);
                     spbPdfPage.to = pdfLoader.item.pageCount;//Максимальное количество страниц в DCSpinBox
                 }
-            }
+            } 
         }
         Connections {//Соединение сигналов из qml файла со слотами.
             target: pdfLoader.item
@@ -500,6 +506,12 @@ Item {
                     ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки в DCProgress.
                 if(ldrProgress.item)
                     ldrProgress.item.text = strStatus;//Выводим статус загрузки документа.
+            }
+            function onIsSearchChanged(){//Если статус поиска изменился, то...
+                if(pdfLoader.item.isSearch)//Если поиск идёт, то...
+                    pskPoisk.enabled = false;//Деактивируем кнопки в виджете поиска.
+                else//Если поиск окончился, то...
+                    pskPoisk.enabled = true;//Активируем кнопки в виджете поиска.
             }
         }
         Timer{//Таймер нужен, чтоб виджет успел исчезнуть и потом появиться, если пароль неверный.

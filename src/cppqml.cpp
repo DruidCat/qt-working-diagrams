@@ -80,15 +80,15 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     strImyaDB = QDir(strMentorPut).filePath(strImyaDB);//каталог + файл
     strImyaDBData  = QDir(strMentorPut).filePath(strImyaDBData);//каталог + файл.
 
-    m_pDataTitul = new DataTitul(strImyaDB, strLoginDB, strParolDB);//Титул.
-    m_pDataSpisok = new DataSpisok(strImyaDB, strLoginDB, strParolDB, ullSpisokMax);//Список.
-    m_pDataElement = new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
-    m_pDataDannie = new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strMentorPut,
+    m_pDataTitul	= new DataTitul(strImyaDB, strLoginDB, strParolDB);//Титул.
+    m_pDataSpisok	= new DataSpisok(strImyaDB, strLoginDB, strParolDB, ullSpisokMax);//Список.
+    m_pDataElement	= new DataElement(strImyaDB, strLoginDB, strParolDB, ullElementMax);//Элементы.
+    m_pDataDannie	= new DataDannie(strImyaDB, strImyaDBData, strLoginDB, strParolDB, strMentorPut,
                                    ullDannieMax);//Данные.
-    m_pDataKatalog = new DataKatalog(strMentorPut, m_strDomPut);//Каталог.
-    m_pDataPlan = new DataPlan(strMentorPut, ullDannieMax);//План.
-    m_pFileDialog = new DCFileDialog(slsFileDialogMaska, m_strDomPut);//Проводник.
-    m_pPdfPoisk = new DCPdfPoisk();//Pdf Поиск.
+    m_pDataKatalog	= new DataKatalog(strMentorPut, m_strDomPut);//Каталог.
+    m_pDataPlan		= new DataPlan(strMentorPut, ullDannieMax);//План.
+    m_pFileDialog	= new DCFileDialog(slsFileDialogMaska, m_strDomPut);//Проводник.
+    m_pPdfPoisk		= new DCPdfPoisk();//Pdf Поиск.
     //---передаём-указатели-бд---//
     m_pDataKatalog->ustPDBTitul(m_pDataTitul->polPDB());//Передаем указатель на БД из класса в класс.
     m_pDataKatalog->ustPDBSpisok(m_pDataSpisok->polPDB());//Передаем указатель на БД из класса в класс.

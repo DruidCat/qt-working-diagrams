@@ -21,6 +21,9 @@ class DCPdfPoisk : public QObject {
     Q_PROPERTY(int 	ntSchetchik
                     READ ntSchetchik
                     NOTIFY ntSchetchikChanged)
+    Q_PROPERTY(bool isPoisk
+                    READ isPoisk
+                    NOTIFY isPoiskChanged)
     Q_PROPERTY(QPdfSearchModel* psmModel
                     READ psmModel CONSTANT)
 
@@ -33,6 +36,7 @@ public:
     QString strPoisk() const { return m_strPoisk; }//Возвратить строку запроса на поиск.
     void 	setStrPoisk(const QString& strPoisk);//Задаём запрос на поиск
     int 	ntSchetchik() const { return m_ntSchetchik; }//Возвратить счётчик совпадений по поиску.
+    bool 	isPoisk() const { return m_isPoisk; }//Возвращает статус поиска.
     QPdfSearchModel* psmModel() { return &m_psmModel; }
     Q_INVOKABLE QVariantList resultsOnPage(int ntStranica) const;//Прямоугольники совпадений на странице (нормализованные 0..1)
 
@@ -45,6 +49,7 @@ private:
     QPdfSearchModel	m_psmModel;//Модель поиска.
     QString	m_strPoisk;//Запрос на поиск. ЧТо будем искать.
     int		m_ntSchetchik;//Счётчик количества совпадений.
+    bool 	m_isPoisk;//Статус поиска. true - поиск идёт, false - поиск окончен.
 
 private slots:
     void	qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
@@ -53,6 +58,7 @@ signals:
     void 	urlPdfChanged();//Сигнал о том, что путь к pdf документу изменилась.
     void 	strPoiskChanged();//Сигнал о том, что запрос поисковый изменился.
     void 	ntSchetchikChanged();//Сигнал о том, что Счётчик совпадений поиска изменился.
+    void 	isPoiskChanged();//Сигнал о том, что статус поиска изменился.
     void	signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
 };
 

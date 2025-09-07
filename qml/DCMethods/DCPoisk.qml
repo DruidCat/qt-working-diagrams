@@ -8,6 +8,7 @@ Item {
     property int  ntWidth: 2
     property int ntCoff: 8
     property alias radius: rctPoisk.radius//Радиус зоны отображения виджета поиска.
+    property bool enabled: true;//true - активны кнопки вверх и вниз, false - не активны.
     property alias clrFona: rctPoisk.color//цвет фона
     property alias clrTexta: txtPoisk.color//цвет текста
     property color clrKnopki: "red"//цвет Кнопок
@@ -26,11 +27,37 @@ Item {
     signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
     signal clickedZakrit();//Сигнал на отмену поиска.
     //Функции.
+    onNomerPoiskChanged: {//Если номер поиска изменился, то...
+        if(root.nomerPoisk > root.sumPoisk){//Если номер поиска больше общего колличества совпадений, то...
+            if(root.sumPoisk)//Если не 0, то...
+                root.nomerPoisk = 1
+            else//Если ничего не найдено, то...
+                root.nomerPoisk = 0
+        }
+        else{
+            if(root.nomerPoisk < 1){//Если меньше единицы, то...
+                if(root.sumPoisk)//Если не 0, то...
+                    root.nomerPoisk = root.sumPoisk//Переходим в конец списка.
+                else//Если ничего не нашёл, то...
+                    root.nomerPoisk = 0
+            }
+        }
+    }
+    onTextChanged: {//Если новый текст Поиска, то...
+        root.nomerPoisk = 0;//Обнуляем, от предыдущего поиска.
+    }
+    onSumPoiskChanged: {//Если что то найдено
+        if(!root.nomerPoisk)//И номер поиска равен 0, то это первоначальный старт поиска.
+            fnClickedVniz()//Функция обрабатывающая следующий поиск.
+    }
+
 	function fnClickedVniz() {//Функция обрабатывающая следующий поиск.
+        root.nomerPoisk += 1;
 		root.clickedNext();//Сигнал следующего поиска.
 	}
 	function fnClickedVverh() {//Функция обрабатывающая предыдущий поиск.
-		root.clickedPrevious();//Сигнал предыдущего поиска.
+        root.nomerPoisk -= 1;
+        root.clickedPrevious();//Сигнал предыдущего поиска.
 	}
 	function fnClickedZakrit() {//Функция закрытия виджета.
 		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
@@ -53,10 +80,6 @@ Item {
 			}
 		}
 		Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-			if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
-				fnClickedVniz();//функция следующего поиска.
-				event.accepted = true;//Enter не использовался в сочетания клавишь с другими клавишами
-			}
 			if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
 				fnClickedZakrit();//Функция закрытия виджета.
 			}
@@ -142,6 +165,7 @@ Item {
             anchors.right: knopkaVniz.left
             clrKnopki: root.clrKnopki
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaVverh
+            enabled: root.enabled//активная/неактивная кнопка.
             onClicked: fnClickedVverh();//Функция обрабатывающая предыдущий поиск.
         }
         DCKnopkaVniz{//Кнопка следующего поиска.
@@ -152,6 +176,7 @@ Item {
             anchors.right: rctPoisk.right
             clrKnopki: root.clrKnopki
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaVniz
+            enabled: root.enabled//активная/неактивная кнопка.
             onClicked: fnClickedVniz();//Функция обрабатывающая следующий поиск.
         }
     }
