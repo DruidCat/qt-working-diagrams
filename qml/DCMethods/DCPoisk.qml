@@ -16,6 +16,7 @@ Item {
     property string text: ""//элемент поиска
     property int sumPoisk: 0//суммарный результат поиска
     property int nomerPoisk: 0//номер поиска
+    property bool blNomer: false//true - nomerPoisk обнуляю, false - namerPoisk обнулён.
     property alias bold: txtPoisk.font.bold
     property alias italic: txtPoisk.font.italic
     property alias textUdalit: txtPoisk//Передаём в виде свойства весь объект Text
@@ -28,23 +29,27 @@ Item {
     signal clickedZakrit();//Сигнал на отмену поиска.
     //Функции.
     onNomerPoiskChanged: {//Если номер поиска изменился, то...
-        if(root.nomerPoisk > root.sumPoisk){//Если номер поиска больше общего колличества совпадений, то...
-            if(root.sumPoisk)//Если не 0, то...
-                root.nomerPoisk = 1
-            else//Если ничего не найдено, то...
-                root.nomerPoisk = 0
-        }
-        else{
-            if(root.nomerPoisk < 1){//Если меньше единицы, то...
+        if(!blNomer){//Если это не обнуление nomerPoisk, то...
+            if(root.nomerPoisk > root.sumPoisk){//Если номер поиска больше общего колличества совпадений, то...
                 if(root.sumPoisk)//Если не 0, то...
-                    root.nomerPoisk = root.sumPoisk//Переходим в конец списка.
-                else//Если ничего не нашёл, то...
+                    root.nomerPoisk = 1
+                else//Если ничего не найдено, то...
                     root.nomerPoisk = 0
+            }
+            else{
+                if(root.nomerPoisk < 1){//Если меньше единицы, то...
+                    if(root.sumPoisk)//Если не 0, то...
+                        root.nomerPoisk = root.sumPoisk//Переходим в конец списка.
+                    else//Если ничего не нашёл, то...
+                        root.nomerPoisk = 0
+                }
             }
         }
     }
     onTextChanged: {//Если новый текст Поиска, то...
+        blNomer = true;//Начало обнуления
         root.nomerPoisk = 0;//Обнуляем, от предыдущего поиска.
+        blNomer = false;//Окончание обнуления.
     }
     onSumPoiskChanged: {//Если что то найдено
         if(!root.nomerPoisk)//И номер поиска равен 0, то это первоначальный старт поиска.
@@ -78,11 +83,29 @@ Item {
 				focus = false;//Не фокусируемся.
 				return false;//Невидимый
 			}
-		}
+		}	
 		Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-			if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
-				fnClickedZakrit();//Функция закрытия виджета.
-			}
+            if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                    if(root.visible && knopkaVverh.enabled)//Если виджет поиска видимый, то...
+                        fnClickedVverh()//Функция нажатия кнопки Предыдущего поиска
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
+            else{
+                if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
+                    if(root.visible && knopkaZakrit.enabled)//Если режим поиска видимый, то...
+                        fnClickedZakrit();//Функция закрытия виджета.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+                else{
+                    if(event.key === Qt.Key_F3){//Если нажата "F3", то.
+                        if(root.visible && knopkaVniz.enabled)//Если режим поиска видимый, то...
+                            fnClickedVniz();//Функция нажатия кнопки Следующего поиска
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+            }
 			//console.log(event.key);
 		}
         DCKnopkaZakrit {//Кнопка Отмены поиска.

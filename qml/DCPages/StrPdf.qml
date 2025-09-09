@@ -100,11 +100,7 @@ Item {
                 }
                 else{
                     if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                        if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                            if(pskPoisk.visible)//Если виджет поиска видимый, то...
-                                fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
+
                     }
                     else{//Если не нажат shift, то...
                         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
@@ -113,24 +109,29 @@ Item {
                             event.accepted = true;//Завершаем обработку эвента.
                         }
                         else{
-                            if(event.key === Qt.Key_F3){//Если нажата "F3", то.
-                                if(pskPoisk.visible)//Если режим поиска видимый, то...
-                                    fnClickedPoiskNext();//Функция нажатия кнопки Следующего поиска
+                            if((event.key === 16777237)||(event.key === 16777239)){//нажата "Page Down",то
+                                var ntStrDown = pdfLoader.item.nomerStranici + 1;
+                                if(ntStrDown < pdfLoader.item.pageCount)
+                                    pdfLoader.item.currentPage = ntStrDown;
                                 event.accepted = true;//Завершаем обработку эвента.
                             }
                             else{
-                                if((event.key === 16777237)||(event.key === 16777239)){//нажата "Page Down",то
-                                    var ntStrDown = pdfLoader.item.nomerStranici + 1;
-                                    if(ntStrDown < pdfLoader.item.pageCount)
-                                        pdfLoader.item.currentPage = ntStrDown;
+                                if((event.key === 16777235)||(event.key === 16777238)){//нажата "Page Up"
+                                    var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
+                                    if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+                                        pdfLoader.item.currentPage = ntStrUp;
                                     event.accepted = true;//Завершаем обработку эвента.
                                 }
                                 else{
-                                    if((event.key === 16777235)||(event.key === 16777238)){//нажата "Page Up"
-                                        var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
-                                        if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                                            pdfLoader.item.currentPage = ntStrUp;
+                                    if(event.key === Qt.Key_Home){//Если нажата на странице кнопка Home, то...
+                                        pdfLoader.item.currentPage = 0;//На первую страницу.
                                         event.accepted = true;//Завершаем обработку эвента.
+                                    }
+                                    else{
+                                        if(event.key === Qt.Key_End){//Если нажата на странице кнопка End,то..
+                                            pdfLoader.item.currentPage=pdfLoader.item.pageCount-1;//Последняя.
+                                            event.accepted = true;//Завершаем обработку эвента.
+                                        }
                                     }
                                 }
                             }
@@ -202,26 +203,6 @@ Item {
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
         txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
         txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
-    }
-    function fnClickedPoiskNext(){//Функция нажатия кнопки Следующего поиска
-        pskPoisk.nomerPoisk += 1;
-        pdfLoader.item.searchForward();//Показываем следующий результат поиска.
-    }
-    function fnClickedPoiskPrevious(){//Функция нажатия кнопки Предыдущего поиска
-        pskPoisk.nomerPoisk -= 1;
-        pdfLoader.item.searchBack();//Показываем предыдущий результат поиска.
-    }
-    function fnClickedPoiskZakrit(){//Функция нажатия кнопки Закрытия поиска.
-        root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
-        pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
-        knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
-        knopkaOk.visible = false;//Кнопка Ок Невидимая.
-        knopkaNazad.visible = true;//Кнопка назад видимая.
-        knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
-        knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
-        knopkaPoisk.visible = true;//Конопка Поиск Видимая.
-        txnZagolovok.text = "";//Текст обнуляем вводимый.
-        pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
     }
 
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
@@ -345,9 +326,20 @@ Item {
 			visible: false//Невидимый виджет.
             clrFona: root.clrFona; clrTexta: "yellow"; clrKnopki: "yellow"; clrBorder: root.clrTexta
             tapKnopkaZakrit: 1.3; tapKnopkaVniz: 1.3; tapKnopkaVverh: 1.3
-            onClickedNext: fnClickedPoiskNext()//Функция нажатия кнопки Следующего поиска
-			onClickedPrevious: fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
-            onClickedZakrit: fnClickedPoiskZakrit()//Функция нажатия кнопки Закрытия поиска.
+            onClickedNext: pdfLoader.item.searchForward();//Показываем следующий результат поиска.
+            onClickedPrevious: pdfLoader.item.searchBack();//Показываем предыдущий результат поиска.
+            onClickedZakrit: {//Нажатие кнопки Закрытия поиска.
+                root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
+                pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
+                knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
+                knopkaOk.visible = false;//Кнопка Ок Невидимая.
+                knopkaNazad.visible = true;//Кнопка назад видимая.
+                knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
+                knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
+                knopkaPoisk.visible = true;//Конопка Поиск Видимая.
+                txnZagolovok.text = "";//Текст обнуляем вводимый.
+                pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
+            }
         }
         DCKnopkaPoisk{
             id: knopkaPoisk
