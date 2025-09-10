@@ -411,13 +411,13 @@ Item {
                     target: cppqml;//Цель объект класса С++ DCCppQml
                     function onStrSpisokChanged(){//Слот Если изменился элемент Списка strSpisok (Q_PROPERTY)
                         lsvElement.model = JSZona.fnElementJSON();//Перегружаем модель ListView с нов данными.
-                        if (lsvElement.count > 0 && lsvElement.currentIndex < 0)
+                        if (lsvElement.lsvZona.count > 0 && lsvElement.lsvZona.currentIndex < 0)//Проверка
                             lsvElement.currentIndex = 0//Зафиксировать выбор на первом элементе
                     }
                     function onStrElementDBChanged(){//Слот Если изменился Элемент в strElementDB (Q_PROPERTY)
                         lsvElement.model = JSZona.fnElementJSON();//Перегружаем модель ListView с нов данными.
-                        if (lsvElement.count > 0 && lsvElement.currentIndex < 0)
-                            lsvElement.currentIndex = 0//Зафиксировать выбор на первом элементе
+                        if (lsvElement.lsvZona.count > 0 && lsvElement.lsvZona.currentIndex < 0)//Проверка
+                            lsvElement.lsvZona.currentIndex = 0//Зафиксировать выбор на первом элементе
                     }
                 }
             }

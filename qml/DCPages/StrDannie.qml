@@ -417,13 +417,13 @@ Item {
                     target: cppqml;//Цель объект класса С++ DCCppQml
                     function onStrElementChanged(){//Слот Если изменился Элемент strElement (Q_PROPERTY), то..
                         lsvDannie.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными
-                        if (lsvDannie.count > 0 && lsvDannie.currentIndex < 0)
-                            lsvDannie.currentIndex = 0//Зафиксировать выбор на первом элементе
+                        if (lsvDannie.lsvZona.count > 0 && lsvDannie.lsvZona.currentIndex < 0)//Проверка.
+                            lsvDannie.lsvZona.currentIndex = 0//Зафиксировать выбор на первом элементе
                     }
                     function onStrDannieDBChanged(){//Слот Если изменился Документ в strDannieDB (Q_PROPERTY)
                         lsvDannie.model = JSZona.fnDannieJSON();//Перегружаем модель ListView с новыми данными
-                        if (lsvDannie.count > 0 && lsvDannie.currentIndex < 0)
-                            lsvDannie.currentIndex = 0//Зафиксировать выбор на первом элементе
+                        if (lsvDannie.lsvZona.count > 0 && lsvDannie.lsvZona.currentIndex < 0)//Проверка.
+                            lsvDannie.lsvZona.currentIndex = 0//Зафиксировать выбор на первом элементе
                     }
                 }
             }

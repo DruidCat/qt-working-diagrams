@@ -437,11 +437,10 @@ Item {
                 }
                 Connections {//Соединяем сигнал из C++ с действием в QML
                     target: cppqml;//Цель объект класса С++ DCCppQml
-                    function onStrSpisokDBChanged(){//Слот Если изменился элемент списка в strSpisok (Q_PROPERTY), то.
-                        lsvSpisok.model = JSZona.fnSpisokJSON();//Перегружаем модель ListView с новыми данными.
-                        //Фиксация на первом элементе, для работы горячих клавишь. ВАЖНО!!!
-                        if (lsvZona.count > 0 && lsvZona.currentIndex < 0)//Модель не пустая и Индекс не верный,то
-                            lsvZona.currentIndex = 0//Зафиксировать выбор на первом элементе
+                    function onStrSpisokDBChanged(){//Если изменился элемент списка в strSpisok (Q_PROPERTY)то
+                        lsvSpisok.model = JSZona.fnSpisokJSON();//Перегружаем модель ListView с новыми данными
+                        if (lsvSpisok.lsvZona.count > 0 && lsvSpisok.lsvZona.currentIndex < 0)//Проверка.
+                            lsvSpisok.lsvZona.currentIndex = 0//Зафиксировать выбор на первом элементе
                     }
                 }
 			}	
