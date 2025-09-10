@@ -326,8 +326,16 @@ Item {
 			visible: false//Невидимый виджет.
             clrFona: root.clrFona; clrTexta: "yellow"; clrKnopki: "yellow"; clrBorder: root.clrTexta
             tapKnopkaZakrit: 1.3; tapKnopkaVniz: 1.3; tapKnopkaVverh: 1.3
-            onClickedNext: pdfLoader.item.searchForward();//Показываем следующий результат поиска.
-            onClickedPrevious: pdfLoader.item.searchBack();//Показываем предыдущий результат поиска.
+            onClickedNext: {
+                pdfLoader.item.searchForward();//Показываем следующий результат поиска.
+                pdfLoader.item.currentPage = (spbPdfPage.value-1)//Страница полностью открывается, а не снизу.
+                pskPoisk.fnFocus();//Чтоб работали горячие клавиши виджета, и не переключались на StrPdf
+            }
+            onClickedPrevious: {
+                pdfLoader.item.searchBack();//Показываем предыдущий результат поиска.
+                pdfLoader.item.currentPage = (spbPdfPage.value-1)//Страница полностью открывается, а не снизу.
+                pskPoisk.fnFocus();//Чтоб работали горячие клавиши виджета, и не переключались на StrPdf
+            }
             onClickedZakrit: {//Нажатие кнопки Закрытия поиска.
                 root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
                 pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...

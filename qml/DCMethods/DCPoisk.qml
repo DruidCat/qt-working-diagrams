@@ -23,11 +23,16 @@ Item {
     property real tapKnopkaZakrit: 1
     property real tapKnopkaVniz: 1
     property real tapKnopkaVverh: 1
+    //Настройки
+    focus: true
     //Сигналы.
     signal clickedNext();//Сигнал на следующий элемент поиска
     signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
-    signal clickedZakrit();//Сигнал на отмену поиска.
+    signal clickedZakrit();//Сигнал на отмену поиска. 
     //Функции.
+    function fnFocus() {//Функция для фокусировки ListView
+        rctPoisk.forceActiveFocus();//Чтоб работали кнопки листания поиска.
+    }
     onNomerPoiskChanged: {//Если номер поиска изменился, то...
         if(!blNomer){//Если это не обнуление nomerPoisk, то...
             if(root.nomerPoisk > root.sumPoisk){//Если номер поиска больше общего колличества совпадений, то...
