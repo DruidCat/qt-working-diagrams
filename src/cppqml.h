@@ -256,7 +256,8 @@ public:
     Q_INVOKABLE bool 	copyPlan(QString strImyaFaila);//Копировать файл Плана.
     Q_INVOKABLE QString polPutImyaPlan();//Получить полный путь с именем Плана.
                                                            //
-    Q_INVOKABLE bool 	isPdfPoisk(const QString strPoisk);//Пустой запрос на поиск?
+    Q_INVOKABLE bool 	isPdfPoiskPusto(const QString strPoisk);//Пустой запрос на поиск?
+    Q_INVOKABLE bool 	isPdfPoiskTri(const QString strPoisk);//В запросе три и более символов?
 
     uint		untKatalogCopy() const { return m_untKatalogCopy; }//Возвращ кол-во скопированных документо
     bool		blKatalogStatus() const { return m_blKatalogStatus; }//Возвращает статус создания каталога.

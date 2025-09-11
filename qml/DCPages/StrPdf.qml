@@ -173,16 +173,23 @@ Item {
 		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
 	}
 	function fnClickedOk(){//Функция отправить запрос на поиск
-		if(cppqml.isPdfPoisk(txnZagolovok.text)){//Если пустой запрос с кучей пробелов, то...
+        if(cppqml.isPdfPoiskPusto(txnZagolovok.text)){//Если пустой запрос с кучей пробелов, то...
 			txnZagolovok.text = "";//Делаем поле запроса на поиск полностью пустым.
  			txnZagolovok.placeholderColor = "#9c3a3a";//Серо красный цвет.
         	txnZagolovok.placeholderText = qsTr("ПУСТОЙ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
 		}
 		else{
-			pskPoisk.text = txnZagolovok.text;//текст присваиваем.
-			pskPoisk.visible = true;//Делаем видимым режим поиска
-            txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
-            pdfLoader.item.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
+            if(cppqml.isPdfPoiskTri(txnZagolovok.text)){//Если в запросе три и более символов, то...
+                pskPoisk.text = txnZagolovok.text;//текст присваиваем.
+                pskPoisk.visible = true;//Делаем видимым режим поиска
+                txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+                pdfLoader.item.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
+            }
+            else{//Если менее трёх символов, то...
+                txnZagolovok.text = "";//Делаем поле запроса на поиск полностью пустым.
+                txnZagolovok.placeholderColor = "#9c3a3a";//Серо красный цвет.
+                txnZagolovok.placeholderText = qsTr("В ЗАПРОСЕ МЕНЕЕ ТРЁХ СИМВОЛОВ");//Подсказка пользователю.
+            }
         }
 	}
 	function fnClickedPovorotPo(){//Функция нажатия кнопки поворота по часовой стрелке.
