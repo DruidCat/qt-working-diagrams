@@ -40,6 +40,9 @@
         <file>qml/DCButtons/DCKnopkaVverh.qml</file>
         <file>qml/DCButtons/DCKnopkaZakrit.qml</file>
         <file>qml/DCButtons/qmldir</file>
+        <file>qml/DCMethods/DCFileDialog.qml</file>
+        <file>qml/DCMethods/DCListView.qml</file>
+        <file>qml/DCMethods/DCLoad.qml</file>
         <file>qml/DCMethods/DCLogo.qml</file>
         <file>qml/DCMethods/DCMenu.qml</file>
         <file>qml/DCMethods/DCPassword.qml</file>
@@ -134,7 +137,5 @@
         <file>images/DCButtons/24x24/DCKnopkaVpered.png</file>
         <file>images/DCButtons/24x24/DCKnopkaVverh.png</file>
         <file>images/DCButtons/24x24/DCKnopkaZakrit.png</file>
-        <file>qml/DCMethods/DCListView.qml</file>
-        <file>qml/DCMethods/DCFileDialog.qml</file>
     </qresource>
 </RCC>
