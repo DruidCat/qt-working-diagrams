@@ -72,7 +72,7 @@ Item {
 	function fnClickedZakrit() {//Функция закрытия виджета.
 		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
         root.blNomer = true;//Начало обнуления
-        root.nomerPoisk = 0;//Обнуляем, от предыдущего поиска.
+        root.nomerPoisk = 0;//Обнуляем, от предыдущего поиска. Обнуление при повтороном таком же запросе.
         root.blNomer = false;//Окончание обнуления.
 	}
 
@@ -107,7 +107,7 @@ Item {
                     event.accepted = true;//Завершаем обработку эвента.
                 }
                 else{
-                    if(event.key === Qt.Key_F3){//Если нажата "F3", то.
+                    if((event.key===Qt.Key_F3)||(event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){//F3
                         if(root.visible && knopkaVniz.enabled)//Если режим поиска видимый, то...
                             fnClickedVniz();//Функция нажатия кнопки Следующего поиска
                         event.accepted = true;//Завершаем обработку эвента.
