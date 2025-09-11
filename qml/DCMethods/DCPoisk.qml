@@ -52,9 +52,9 @@ Item {
         }
     }
     onTextChanged: {//Если новый текст Поиска, то...
-        blNomer = true;//Начало обнуления
+        root.blNomer = true;//Начало обнуления
         root.nomerPoisk = 0;//Обнуляем, от предыдущего поиска.
-        blNomer = false;//Окончание обнуления.
+        root.blNomer = false;//Окончание обнуления.
     }
     onSumPoiskChanged: {//Если что то найдено
         if(!root.nomerPoisk)//И номер поиска равен 0, то это первоначальный старт поиска.
@@ -71,6 +71,9 @@ Item {
 	}
 	function fnClickedZakrit() {//Функция закрытия виджета.
 		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
+        root.blNomer = true;//Начало обнуления
+        root.nomerPoisk = 0;//Обнуляем, от предыдущего поиска.
+        root.blNomer = false;//Окончание обнуления.
 	}
 
     Rectangle {//Основной прямоугольник.
