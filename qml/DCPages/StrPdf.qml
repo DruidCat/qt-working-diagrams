@@ -350,8 +350,11 @@ Item {
                 knopkaOk.visible = false;//Кнопка Ок Невидимая.
                 knopkaNazad.visible = true;//Кнопка назад видимая.
                 knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
+                knopkaPovorotPo.enabled = true;//Делаем активной кнопку По часовой стрелки.
                 knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
+                knopkaPovorotProtiv.enabled = true;//Делаем активной кнопку Против часовой стрелки.
                 knopkaPoisk.visible = true;//Конопка Поиск Видимая.
+                knopkaPoisk.enabled = true;//Конопка Поиск активния.
                 txnZagolovok.text = "";//Текст обнуляем вводимый.
                 pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
             }
