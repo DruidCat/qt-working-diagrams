@@ -2,6 +2,7 @@ module DCMethods
 
 DCFileDialog 1.0 DCFileDialog.qml
 DCListView 1.0 DCListView.qml
+DCLoad 1.0 DCLoad.qml
 DCLogo 1.0 DCLogo.qml
 DCMenu 1.0 DCMenu.qml
 DCPassword 1.0 DCPassword.qml
