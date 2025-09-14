@@ -37,10 +37,10 @@ class DCCppQml : public QObject {
                     READ untX
                     WRITE setUntX
                     NOTIFY untXChanged FINAL)
-    Q_PROPERTY(bool blPdfViewer
-                    READ blPdfViewer
-                    WRITE setBlPdfViewer
-                    NOTIFY blPdfViewerChanged FINAL)
+    Q_PROPERTY(bool blPdfMentor
+                    READ blPdfMentor
+                    WRITE setBlPdfMentor
+                    NOTIFY blPdfMentorChanged FINAL)
     Q_PROPERTY(bool blAppRedaktor
                     READ blAppRedaktor
                     WRITE setBlAppRedaktor
@@ -186,8 +186,8 @@ public:
     void		setUntY(const uint& untY);//Изменяем Y координату окна приложения.
     uint		untX() const { return m_untX; }//Возвращаем X координату окна.
     void		setUntX(const uint& untX);//Изменяем X координату окна приложения.
-    bool		blPdfViewer() const { return m_blPdfViewer; }//Возвращаем флаг просмотщика.
-    void		setBlPdfViewer(const bool& blPdfViewer);//Изменяем просмотрщик pdf документов.
+    bool		blPdfMentor() const { return m_blPdfMentor; }//Возвращаем флаг просмотщика.
+    void		setBlPdfMentor(const bool& blPdfMentor);//Изменяем просмотрщик pdf документов.
     bool		blAppRedaktor() const { return m_blAppRedaktor; }//Возвращаем флаг редактора.
     void		setBlAppRedaktor(const bool& blAppRedaktor);//Изменяем редактор Ментора.
     uint 		untShrift() const { return m_untShrift; }//Возвращаем размер шрифта.
@@ -282,7 +282,7 @@ signals:
     void untWidthChanged();//Сигнал о том, что ширина окна изменилась.
     void untYChanged();//Сигнал о том, что Y координата окна изменилась.
     void untXChanged();//Сигнал о том, что X координата окна изменилась.
-    void blPdfViewerChanged();//Сигнал о том, что просмотрщик pdf документов поменялся.
+    void blPdfMentorChanged();//Сигнал о том, что просмотрщик pdf документов поменялся.
     void blAppRedaktorChanged();//Сигнал о том, что флаг Редактора поменялся.
     void untShriftChanged();//Сигнал о том, что размер шрифта поменялся.
     void strKatalogPutChanged();//Сигнал о том, что путь размещения каталога изменён.
@@ -344,7 +344,7 @@ private:
     uint	m_untWidth;//Ширина окна приложения.
     uint	m_untY;//Y координата окна приложения.
     uint	m_untX;//X координата окна приложения.
-    bool	m_blPdfViewer;//Флаг pdf просмотрщика.
+    bool	m_blPdfMentor;//Флаг pdf просмотрщика.
     bool	m_blAppRedaktor;//Флаг Редактора вкл/выкл.
     uint 	m_untShrift;//Размер шрифта 0-маленький, 1-средний, 2-большой.
     QString m_strKatalogPut;//Путь сохранения каталога документов.

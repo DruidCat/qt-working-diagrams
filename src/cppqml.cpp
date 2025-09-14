@@ -8,7 +8,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_untWidth(0),
                                         m_untY(0),
                                         m_untX(0),
-                                        m_blPdfViewer(true),
+                                        m_blPdfMentor(true),
                                         m_blAppRedaktor(true),
                                         m_untShrift(1),
                                         m_strKatalogPut(""),
@@ -192,7 +192,7 @@ void DCCppQml::ustReestr(){//Запись настроек программы
     m_sttReestr.setValue("/shirina_okna", m_untWidth);//Записываем ширину окна
     m_sttReestr.setValue("/y_okna", m_untY);//Записываем y координату окна
     m_sttReestr.setValue("/x_okna", m_untX);//Записываем x координату окна
-    m_sttReestr.setValue("/pdf_viewer", m_blPdfViewer);//Записываем просмотрщик pdf документов.
+    m_sttReestr.setValue("/pdf_mentor", m_blPdfMentor);//Записываем просмотрщик pdf документов.
     m_sttReestr.setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
     m_sttReestr.setValue("/shrift", m_untShrift);//Записываем размер Шрифта 0-мал, 1-средний, 2-большой.
     m_sttReestr.setValue("/katalog_put", QDir::toNativeSeparators(m_strKatalogPut));//Записываем путь каталога
@@ -207,7 +207,7 @@ void DCCppQml::polReestr(){//Чтение настроек программы
     m_untWidth = m_sttReestr.value("/shirina_okna", 640).toUInt();//Читаем ширину окна, по умолчанию 640
     m_untY = m_sttReestr.value("/y_okna", 0).toUInt();//Читаем Y координату окна, по умолчанию 0
     m_untX = m_sttReestr.value("/x_okna", 0).toUInt();//Читаем X координату окна, по умолчанию 0
-    m_blPdfViewer = m_sttReestr.value("/pdf_viewer", true).toBool();//Читаем просмотрщик документов, по умол 1
+    m_blPdfMentor = m_sttReestr.value("/pdf_mentor", true).toBool();//Читаем просмотрщик документов, по умол 1
     m_blAppRedaktor = m_sttReestr.value("/app_redaktor", true).toBool();//Читаем флаг редактора, по умол 1
     m_untShrift = m_sttReestr.value("/shrift", 1).toUInt();//Читаем шрифт, по умол 1-средний
     m_strKatalogPut = m_sttReestr.value("/katalog_put", QDir::toNativeSeparators(m_strDomPut)).toString();
@@ -249,13 +249,13 @@ void DCCppQml::setUntX(const uint& untX) {//Изменяем X координа�
         emit untXChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
-void DCCppQml::setBlPdfViewer(const bool& blPdfViewer){//Изменяем просмотрщик pdf документов.
+void DCCppQml::setBlPdfMentor(const bool& blPdfMentor){//Изменяем просмотрщик pdf документов.
 ///////////////////////////////////////////////////////////////////////
 //---И З М Е Н Я Е М   П Р О С М О Т Р Щ И К   Д О К У М Е Н Т О В---//
 ///////////////////////////////////////////////////////////////////////
-    if (blPdfViewer != m_blPdfViewer){//Если не равны значения, то...
-        m_blPdfViewer = blPdfViewer;//Приравниваем.
-        emit blPdfViewerChanged();//Излучаем сигнал об изменении аргумента.
+    if (blPdfMentor != m_blPdfMentor){//Если не равны значения, то...
+        m_blPdfMentor = blPdfMentor;//Приравниваем.
+        emit blPdfMentorChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
 void DCCppQml::setBlAppRedaktor(const bool& blAppRedaktor){//Изменяем флаг редактора вкл/выкл.

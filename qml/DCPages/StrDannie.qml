@@ -31,7 +31,7 @@ Item {
     property real tapZagolovokPravi: 1
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
-    property bool pdfViewer: false//true - включить собственный pdf просмотрщик.
+    property bool pdfMentor: false//true - включить собственный pdf просмотрщик.
     property bool appRedaktor: false//true - включить Редактор приложения. 
 	property string strDannieRen: "";//Переменная хранит имя Документа, который нужно переименовать
     property int logoRazmer: 22//Размер Логотипа.
@@ -386,7 +386,7 @@ Item {
                                 cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
                                 cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
 								//Открываем Pdf документ.
-                                if(root.pdfViewer)//Если настройка настроена на собственный pdf просмотрщик,то
+                                if(root.pdfMentor)//Если настройка настроена на собственный pdf просмотрщик,то
                                     root.clickedDannie(strDannie);//сигнал с кодом и именем Документа.
                                 else//Если на сторонний просмотщик pdf документов, то...
                                     Qt.openUrlExternally(cppqml.strDannieUrl);//Открываем pdf в стороннем app.

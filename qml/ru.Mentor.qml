@@ -16,7 +16,7 @@ ApplicationWindow {
     readonly property color clrMenuText: "#F0F0F0"//Светло серый контрастен к оранжевому.
     readonly property int logoRazmer: 22//Размер Логотита в приложении.
     readonly property string logoImya: "tmk-ts-bw-1"//Имя логотипа в DCLogo
-    property bool pdfViewer: isAdmin ? true : false//true - включить/false - Отключить pdf просмоторщик.
+    property bool pdfMentor: isAdmin ? true : false//true - включить/false - Отключить pdf просмоторщик.
     property bool appRedaktor: isAdmin ? true : false;//true - включить/false - Отключить Редактор приложения.
     property int shrift: 2;//1 - маленький, 2 - средний, 3 - большой
     property int ntWidth: 2*shrift
@@ -156,8 +156,8 @@ ApplicationWindow {
                 onClickedMentor: stvStr.push(pgStrMentor)//Переходим на страницу об Менторе.
                 onClickedQt: stvStr.push(pgStrQt)//Переходим на страницу об Qt.
                 onClickedKatalog: stvStr.push(pgStrKatalog)//Переходим на страницу Создать каталог документов
-                onPdfViewerChanged: {//Если флаг настройки pdf Проигрывателя изменился, то...
-                    root.pdfViewer = root.isAdmin ? tmMenu.pdfViewer : true;//Приравниваем флаг настройки.
+                onPdfMentorChanged: {//Если флаг настройки pdf Проигрывателя изменился, то...
+                    root.pdfMentor = root.isAdmin ? tmMenu.pdfMentor : true;//Приравниваем флаг настройки.
                 }
 				onAppRedaktorChanged: {//Если флаг настройки включения Редактора изменился, то...
                     root.appRedaktor = root.isAdmin ? tmMenu.appRedaktor : false;//Приравниваем флаг настройки
@@ -173,7 +173,7 @@ ApplicationWindow {
                 }
 			}
             Component.onCompleted: {//После отрисовки страницы...
-                root.pdfViewer = root.isAdmin ? tmMenu.pdfViewer : true;//Приравниваем флаг настройки. ВАЖНО.
+                root.pdfMentor = root.isAdmin ? tmMenu.pdfMentor : true;//Приравниваем флаг настройки. ВАЖНО.
                 root.appRedaktor = root.isAdmin ? tmMenu.appRedaktor : false//Приравниваем флаг настройки.
                 root.shrift = (tmMenu.untShrift + 1);//Задаём размер шрифта в приложении.
             }
@@ -515,7 +515,7 @@ ApplicationWindow {
 				radiusZona: pgStrDannie.rctStrZona.radius//Радиус берём из настроек элемента qml
                 tapZagolovokLevi: pgStrDannie.zagolovokLevi; tapZagolovokPravi: pgStrDannie.zagolovokPravi
                 tapToolbarLevi: pgStrDannie.toolbarLevi; tapToolbarPravi: pgStrDannie.toolbarPravi
-                pdfViewer: root.isAdmin ? root.pdfViewer : true;
+                pdfMentor: root.isAdmin ? root.pdfMentor : true;
                 appRedaktor: root.isAdmin ? root.appRedaktor : false;
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
@@ -573,7 +573,7 @@ ApplicationWindow {
                 toolbarHeight: pgStrPdf.rctStrToolbar.height
                 tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
                 tapToolbarLevi: 1; tapToolbarPravi: 1
-                pdfViewer: root.isAdmin ? root.pdfViewer : true
+                pdfMentor: root.isAdmin ? root.pdfMentor : true
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
 				onClickedNazad: {
@@ -613,7 +613,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrFileDialog.zagolovokPravi
                 tapToolbarLevi: pgStrFileDialog.toolbarLevi; tapToolbarPravi: pgStrFileDialog.toolbarPravi
                 modeFileDialog: root.modeFileDialog//Выбор режима открытия проводника для Плана или Данных.
-                pdfViewer: root.isAdmin ? root.pdfViewer : true
+                pdfMentor: root.isAdmin ? root.pdfMentor : true
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
                 onClickedZakrit: {//Если нажата кнопка Назад или Закрыть, то...
@@ -624,7 +624,7 @@ ApplicationWindow {
                         else//Если план уже был задан, то...
                             ltPdfUrl = cppqml.polPutImyaPlan();//Путь и имя файла Плана.
                         //Механизм открытия инструкции с внешним просмотрщиком документов.
-                        if(root.pdfViewer)//Если выбран в настройках собственный просмотрщик, то...
+                        if(root.pdfMentor)//Если выбран в настройках собственный просмотрщик, то...
                             tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.
                         else{//Если на сторонний просмотщик pdf документов, то...
                             tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмотор
@@ -644,7 +644,7 @@ ApplicationWindow {
                     stvStr.pop()//Назад страницу
                 }
                 onClickedFail: function (strImyaFaila){//Если кликнули по документу.
-                    if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+                    if(root.pdfMentor){//Если выбран в настройках собственный просмотрщик, то...
                         pgStrPdf.textZagolovok = strImyaFaila;//Делаем заголовок с именем Документа.
                         pgStrPdf.textToolbar = "";//Очищаем
                         cppqml.strKatalogUrl = strImyaFaila;//Создаём путь+файл и отправляем в pgStrPdf
@@ -707,7 +707,7 @@ ApplicationWindow {
                     else//Если план уже был задан, то...
                         ltPdfUrl = cppqml.polPutImyaPlan();//Путь и имя файла Плана.
                     //Механизм открытия инструкции с внешним просмотрщиком документов.
-                    if(root.pdfViewer)//Если выбран в настройках собственный просмотрщик, то...
+                    if(root.pdfMentor)//Если выбран в настройках собственный просмотрщик, то...
                         tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.
                     else{//Если на сторонний просмотщик pdf документов, то...
                         tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмоторщике
@@ -745,7 +745,7 @@ ApplicationWindow {
                 toolbarHeight: pgStrPlan.rctStrToolbar.height
                 tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
                 tapToolbarLevi: 1.3; tapToolbarPravi: 1.3
-                pdfViewer: root.isAdmin ? root.pdfViewer : true;
+                pdfMentor: root.isAdmin ? root.pdfMentor : true;
                 appRedaktor: root.isAdmin ? root.appRedaktor : false;
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 

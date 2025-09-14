@@ -27,7 +27,7 @@ Item {
     property real tapZagolovokPravi: 1
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
-    property bool pdfViewer: false//true - собственный просмотщик pdf документов.
+    property bool pdfMentor: false//true - собственный просмотщик pdf документов.
     property int logoRazmer: 22//Размер Логотипа
     property string logoImya: "mentor"//Имя логотипа в DCLogo
     //Настройки
@@ -459,7 +459,7 @@ Item {
         Connections {//Соединяем сигнал из C++ с действием в QML
             target: cppqml;//Цель объект класса С++ DCCppQml
             function onStrDannieChanged(){//Слот Если изменился элемент списка в strDannie (Q_PROPERTY), то...
-                if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+                if(root.pdfMentor){//Если выбран в настройках собственный просмотрщик, то...
                     tmrLogo.running = true;//Запускаем таймер анимации логотипа
                     pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
                     var strPdfUrl = cppqml.strDannieUrl;//Считываем путь+документ.pdf
@@ -470,7 +470,7 @@ Item {
                 }
             }
             function onStrKatalogUrlChanged(){//Если изменился элемент списка в strKatalogUrl (Q_PROPERTY), то
-                if(root.pdfViewer){//Если выбран в настройках собственный просмотрщик, то...
+                if(root.pdfMentor){//Если выбран в настройках собственный просмотрщик, то...
                     tmrLogo.running = true;//Запускаем таймер анимации логотипа
                     pssPassword.passTrue = true;//Пароль верный, текс стандартный, надпись стандартная.
                     var strPdfUrl = cppqml.strKatalogUrl;//Считываем путь+документ.pdf

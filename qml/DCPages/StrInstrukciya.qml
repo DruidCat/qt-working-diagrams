@@ -242,7 +242,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                                 txdZona.text = qsTr("
                                     <html>
                                         <body>
-<p><b>viewerPDF</b></p>
+<p><b>менторPDF</b></p>
 <p>- [вкл] включен встроенный просмотщик pdf.</p>
 <p>- [выкл] включен внешний просмотщик pdf.</p>
 <p><b>горячие клавиши</b></p>

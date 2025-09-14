@@ -27,7 +27,7 @@ Item {
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
     property bool appRedaktor: false//true - включить Редактор приложения.
-    property bool pdfViewer: false//true - собственный просмотщик pdf документов.
+    property bool pdfMentor: false//true - собственный просмотщик pdf документов.
     property string source: ""//Путь к pdf документу.
     property int logoRazmer: 22//Размер Логотипа
     property string logoImya: "mentor"//Имя логотипа в DCLogo

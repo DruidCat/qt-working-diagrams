@@ -30,7 +30,7 @@ Item {
     property real tapZagolovokPravi: 1
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
-    property bool pdfViewer: false//true - включить собственный pdf просмотрщик.
+    property bool pdfMentor: false//true - включить собственный pdf просмотрщик.
     property bool failVibor: true//true - проводник выбирает файлы. false - проводник выбирает папки.
     property string strPutDom: ""//Иннициализируется в Component.onComplite домашней дерикторией.
     property string modeFileDialog: ""//plan, filedialog, polkatalog, ustkatalog

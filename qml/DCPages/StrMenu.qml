@@ -28,7 +28,7 @@ Item {
     property real tapZagolovokPravi: 1
     property real tapToolbarLevi: 1
     property real tapToolbarPravi: 1
-    property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
+    property bool pdfMentor: cppqml.blPdfMentor//true - включен собственный просмотрщик.
     property bool appRedaktor: cppqml.blAppRedaktor//true - включен Редактор приложения.
     property bool isAdmin: false;//НЕ ИЗМЕНЯТЬ ЭТОТ ФЛАГ.
     property int untShrift: cppqml.untShrift//0-мал, 1-сред, 2-большой.
@@ -78,8 +78,8 @@ Item {
         anchors.fill: tmToolbar
         onClicked: fnClickedEscape()//Функция нажатия кнопки Escape
     }
-    onPdfViewerChanged: {//Если просмотрщик поменялся, то...
-        cppqml.blPdfViewer = root.pdfViewer;//Отправляем в бизнес логику просмотрщик pdf документов.
+    onPdfMentorChanged: {//Если просмотрщик поменялся, то...
+        cppqml.blPdfMentor = root.pdfMentor;//Отправляем в бизнес логику просмотрщик pdf документов.
     }
     onAppRedaktorChanged: {//Если Редактор изменился вкл/выкл, то...
         cppqml.blAppRedaktor = root.appRedaktor;//Отправляем в бизнес логику флаг редактора вкл/выкл.
@@ -145,24 +145,24 @@ Item {
                 color: "transparent"
 
                 DCKnopkaOriginal {
-                    id: knopkaPdfViewer
+                    id: knopkaMentorPDF
                     visible: root.isAdmin ? true : false;//Показать/не показать в зависимости от Админа.
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: rctZona.top
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-                    text: root.pdfViewer ? qsTr("viewerPDF: вкл") : qsTr("viewerPDF: выкл")
+                    text: root.pdfMentor ? qsTr("менторPDF: вкл") : qsTr("менторPDF: выкл")
                     opacityKnopki: 0.8
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
                         if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
-                            root.pdfViewer ? root.pdfViewer = false : root.pdfViewer = true
+                            root.pdfMentor ? root.pdfMentor = false : root.pdfMentor = true
                     }
                 }
                 DCKnopkaOriginal {
                     id: knopkaHotKey
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: root.isAdmin ? knopkaPdfViewer.bottom : rctZona.top
+                    anchors.top: root.isAdmin ? knopkaMentorPDF.bottom : rctZona.top
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
@@ -184,7 +184,7 @@ Item {
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: {
                         if(root.isMobile)//Если мобильная платформа, то...
-                            return knopkaPdfViewer.bottom
+                            return knopkaMentorPDF.bottom
                         else//Если не мобильная платформа, то...
                             return knopkaHotKey.bottom
                     }
