@@ -376,7 +376,6 @@ Item {
                                 fnUdalit(ntKod, strDannie);
                             }
                             else{//Если не выбор элемента на удаление, то открыть файл к просмотру...
-                                cppqml.strDebug = "";
                                 lsvDannie.isPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
                                 lsvDannie.isUdalitVibor = false;//Запрещено выбирать документ на удаление.
                                 lsvDannie.isSort = false;//Выключаем сортировку элементов.
@@ -386,16 +385,20 @@ Item {
                                 cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
                                 cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
 								//Открываем Pdf документ.
-                                if(root.pdfMentor)//Если настройка настроена на собственный pdf просмотрщик,то
+                                if(root.pdfMentor){//Если настройка настроена на собственный pdf просмотрщик,то
+                                    cppqml.strDebug = "";
                                     root.clickedDannie(strDannie);//сигнал с кодом и именем Документа.
-                                else//Если на сторонний просмотщик pdf документов, то...
+                                }
+                                else{//Если на сторонний просмотщик pdf документов, то...
+                                    cppqml.strDebug = qsTr("Открывается документ: ") + strDannie;
                                     Qt.openUrlExternally(cppqml.strDannieUrl);//Открываем pdf в стороннем app.
+                                }
                             }
                         }
 					}
                 }
                 onTap: {
-                    root.signalToolbar("");//Делаем пустую строку в Toolbar.
+                    //root.signalToolbar("");//Делаем пустую строку в Toolbar.
                     menuDannie.visible = false;//Делаем невидимым всплывающее меню.
                 }
                 onIsPereimenovatViborChanged: {//сигнал изменения property isPereimenovatVibor (on...Changed)

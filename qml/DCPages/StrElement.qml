@@ -389,7 +389,7 @@ Item {
 					}
                 }
                 onTap: {
-                    root.signalToolbar("");//Делаем пустую строку в Toolbar.
+                    //root.signalToolbar("");//Делаем пустую строку в Toolbar.
                     menuElement.visible = false;//Делаем невидимым всплывающее меню.
                 }
                 onIsPereimenovatViborChanged: {//сигнала изменения property isPereimenovatVibor (on...Changed)
