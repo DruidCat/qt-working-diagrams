@@ -5,19 +5,24 @@ import DCPages 1.0//Импортируем Страницы программы.
 
 ApplicationWindow {
 	id: root
-    //Свойства. 
-    property color clrKnopok: "#ee732d"//Корпаративный оранжевый
-    property color clrFona: "#5a6673"//Серый цвет более мягкий, подходящий под оранжевый корпаративный
-    property color clrFaila: "yellow"
-    property color clrStranic: "black"
-    property color clrMenuText: "#F0F0F0"//Светло серый контрастен к оранжевому.
-    property int logoRazmer: 22//Размер Логотита в приложении.
-    property string logoImya: "tmk-ts-bw-1"//Имя логотипа в DCLogo
-    property bool pdfViewer: true//false - Отключить pdf просмоторщик.
-    property bool appRedaktor: true//false - Отключить Редактор приложения.
+    ///////////////////////////////////////////////////////////////////
+    //---О С Н О В Н Ы Е   Н А С Т Р О Й К И   П Р И Л О Ж Е Н И Я---//
+    //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
+    readonly property bool isAdmin: true//true - РЕЖИМ АДМИНИСТРАТОРА, false - РЕЖИМ РАБОТНИКА.
+    readonly property color clrKnopok: "#ee732d"//Корпаративный оранжевый
+    readonly property color clrFona: "#5a6673"//Серый цвет более мягкий,подходящий под оранжевый корпаративный
+    readonly property color clrFaila: "yellow"
+    readonly property color clrStranic: "black"
+    readonly property color clrMenuText: "#F0F0F0"//Светло серый контрастен к оранжевому.
+    readonly property int logoRazmer: 22//Размер Логотита в приложении.
+    readonly property string logoImya: "tmk-ts-bw-1"//Имя логотипа в DCLogo
+    property bool pdfViewer: isAdmin ? true : false//true - включить/false - Отключить pdf просмоторщик.
+    property bool appRedaktor: isAdmin ? true : false;//true - включить/false - Отключить Редактор приложения.
     property int shrift: 2;//1 - маленький, 2 - средний, 3 - большой
     property int ntWidth: 2*shrift
     property int ntCoff: 8
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
+    ///////////////////////////////////////////////////////////////////
     property bool isMobile: {//Переменная определяющая, мобильная это платформа или нет. true - мобильная.
         if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
 			return true;//Это мобильная платформа.
@@ -140,7 +145,8 @@ ApplicationWindow {
                 toolbarHeight: pgStrMenu.rctStrToolbar.height
                 tapZagolovokLevi: pgStrMenu.zagolovokLevi; tapZagolovokPravi: pgStrMenu.zagolovokPravi
                 tapToolbarLevi: pgStrMenu.toolbarLevi; tapToolbarPravi: pgStrMenu.toolbarPravi
-				isMobile: root.isMobile
+                isAdmin: root.isAdmin;//ПЕРЕДАЁМ ФЛАГ АМИНИСТРАТОРА В НАСТРОЙКИ.
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedInfo: stvStr.push(pgStrInstrukciyaMenu)//Переходим на страницу Инструкции Меню
@@ -151,10 +157,10 @@ ApplicationWindow {
                 onClickedQt: stvStr.push(pgStrQt)//Переходим на страницу об Qt.
                 onClickedKatalog: stvStr.push(pgStrKatalog)//Переходим на страницу Создать каталог документов
                 onPdfViewerChanged: {//Если флаг настройки pdf Проигрывателя изменился, то...
-                    root.pdfViewer = pdfViewer;//Приравниваем флаг настройки.
+                    root.pdfViewer = root.isAdmin ? tmMenu.pdfViewer : true;//Приравниваем флаг настройки.
                 }
 				onAppRedaktorChanged: {//Если флаг настройки включения Редактора изменился, то...
-                    root.appRedaktor = appRedaktor;//Приравниваем флаг настройки.
+                    root.appRedaktor = root.isAdmin ? tmMenu.appRedaktor : false;//Приравниваем флаг настройки
                 }
                 onUntShriftChanged: {//Если изменился шрифт в настройках, то...
                     root.shrift = (untShrift + 1)
@@ -167,8 +173,8 @@ ApplicationWindow {
                 }
 			}
             Component.onCompleted: {//После отрисовки страницы...
-                root.pdfViewer = tmMenu.pdfViewer;//Приравниваем флаг настройки. ВАЖНО.
-                root.appRedaktor = tmMenu.appRedaktor;//Приравниваем флаг настройки.
+                root.pdfViewer = root.isAdmin ? tmMenu.pdfViewer : true;//Приравниваем флаг настройки. ВАЖНО.
+                root.appRedaktor = root.isAdmin ? tmMenu.appRedaktor : false//Приравниваем флаг настройки.
                 root.shrift = (tmMenu.untShrift + 1);//Задаём размер шрифта в приложении.
             }
         }
@@ -411,7 +417,7 @@ ApplicationWindow {
 				radiusZona: pgStrSpisok.rctStrZona.radius//Радиус берём из настроек элемента qml
                 tapZagolovokLevi: pgStrSpisok.zagolovokLevi; tapZagolovokPravi: pgStrSpisok.zagolovokPravi
                 tapToolbarLevi: pgStrSpisok.toolbarLevi; tapToolbarPravi: pgStrSpisok.toolbarPravi
-                appRedaktor: root.appRedaktor
+                appRedaktor: root.isAdmin ? root.appRedaktor : false;
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
                 onClickedMenu: stvStr.push(pgStrMenu)//Перейти на страницу Меню
@@ -459,7 +465,7 @@ ApplicationWindow {
 				radiusZona: pgStrElement.rctStrZona.radius//Радиус берём из настроек элемента qml
                 tapZagolovokLevi: pgStrElement.zagolovokLevi; tapZagolovokPravi: pgStrElement.zagolovokPravi
                 tapToolbarLevi: pgStrElement.toolbarLevi; tapToolbarPravi: pgStrElement.toolbarPravi
-                appRedaktor: root.appRedaktor
+                appRedaktor: root.isAdmin ? root.appRedaktor : false;
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
 				onClickedNazad: {//Слот нажатия кнопки Назад.
@@ -509,7 +515,8 @@ ApplicationWindow {
 				radiusZona: pgStrDannie.rctStrZona.radius//Радиус берём из настроек элемента qml
                 tapZagolovokLevi: pgStrDannie.zagolovokLevi; tapZagolovokPravi: pgStrDannie.zagolovokPravi
                 tapToolbarLevi: pgStrDannie.toolbarLevi; tapToolbarPravi: pgStrDannie.toolbarPravi
-                pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
+                pdfViewer: root.isAdmin ? root.pdfViewer : true;
+                appRedaktor: root.isAdmin ? root.appRedaktor : false;
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
 				onClickedNazad: {//Слот нажатия кнопки Назад.
@@ -566,7 +573,7 @@ ApplicationWindow {
                 toolbarHeight: pgStrPdf.rctStrToolbar.height
                 tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
                 tapToolbarLevi: 1; tapToolbarPravi: 1
-                pdfViewer: root.pdfViewer
+                pdfViewer: root.isAdmin ? root.pdfViewer : true
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
 				onClickedNazad: {
@@ -606,7 +613,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrFileDialog.zagolovokPravi
                 tapToolbarLevi: pgStrFileDialog.toolbarLevi; tapToolbarPravi: pgStrFileDialog.toolbarPravi
                 modeFileDialog: root.modeFileDialog//Выбор режима открытия проводника для Плана или Данных.
-                pdfViewer: root.pdfViewer
+                pdfViewer: root.isAdmin ? root.pdfViewer : true
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
                 onClickedZakrit: {//Если нажата кнопка Назад или Закрыть, то...
@@ -668,7 +675,7 @@ ApplicationWindow {
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             onVisibleChanged: {
                 if(visible){
-                    if(root.appRedaktor)//Если Редактор приложения включен, то...
+                    if(root.isAdmin ? root.appRedaktor : false)//Если Редактор приложения включен, то...
                         textToolbar = qsTr("Для изменения описания нажмите иконку (+).");
                 }
             }
@@ -689,7 +696,8 @@ ApplicationWindow {
                 tapZagolovokLevi: pgStrOpisanie.zagolovokLevi; tapZagolovokPravi: pgStrOpisanie.zagolovokPravi
                 tapToolbarLevi: pgStrOpisanie.toolbarLevi; tapToolbarPravi: pgStrOpisanie.toolbarPravi
 				strOpisanie: stvStr.strOpisanie//Передаём флаг Отображения конкретного Описания.
-                appRedaktor: root.appRedaktor; isMobile: root.isMobile
+                appRedaktor: root.isAdmin ? root.appRedaktor : false;
+                isMobile: root.isMobile
 
                 onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedPlan: {//Слот нажатия Плана.
@@ -737,7 +745,8 @@ ApplicationWindow {
                 toolbarHeight: pgStrPlan.rctStrToolbar.height
                 tapZagolovokLevi: 1.3; tapZagolovokPravi: 1.3
                 tapToolbarLevi: 1.3; tapToolbarPravi: 1.3
-                pdfViewer: root.pdfViewer; appRedaktor: root.appRedaktor
+                pdfViewer: root.isAdmin ? root.pdfViewer : true;
+                appRedaktor: root.isAdmin ? root.appRedaktor : false;
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
                 onClickedNazad: stvStr.pop()//Назад страницу

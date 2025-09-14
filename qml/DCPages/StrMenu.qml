@@ -30,6 +30,7 @@ Item {
     property real tapToolbarPravi: 1
     property bool pdfViewer: cppqml.blPdfViewer//true - включен собственный просмотрщик.
     property bool appRedaktor: cppqml.blAppRedaktor//true - включен Редактор приложения.
+    property bool isAdmin: false;//НЕ ИЗМЕНЯТЬ ЭТОТ ФЛАГ.
     property int untShrift: cppqml.untShrift//0-мал, 1-сред, 2-большой.
     property bool isMobile: true;//true - мобильная платформа.
     //Настройки.
@@ -145,6 +146,7 @@ Item {
 
                 DCKnopkaOriginal {
                     id: knopkaPdfViewer
+                    visible: root.isAdmin ? true : false;//Показать/не показать в зависимости от Админа.
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: rctZona.top
                     anchors.left: rctZona.left; anchors.right: rctZona.right
@@ -160,7 +162,7 @@ Item {
                 DCKnopkaOriginal {
                     id: knopkaHotKey
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaPdfViewer.bottom
+                    anchors.top: root.isAdmin ? knopkaPdfViewer.bottom : rctZona.top
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
@@ -218,6 +220,7 @@ Item {
                 }
                 DCKnopkaOriginal {
                     id: knopkaAnimaciya
+                    visible: root.isAdmin ? true : false;//показать/не показать в зависимости от Админа.
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaShrift.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
@@ -231,13 +234,14 @@ Item {
                     }
                 }
                 DCKnopkaOriginal {
-                    id: knopkaLogi
+                    id: knopkaJurnal
+                    visible: root.isAdmin ? true : false;//показать/не показать в зависимости от Админа.
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaAnimaciya.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
-                    text: qsTr("логи")
+                    text: qsTr("журнал")
                     opacityKnopki: 0.8
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
                         if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
@@ -247,7 +251,7 @@ Item {
                 DCKnopkaOriginal {
                     id: knopkaAvtor
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
-                    anchors.top: knopkaLogi.bottom
+                    anchors.top: root.isAdmin ? knopkaJurnal.bottom : knopkaShrift.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
                     anchors.margins: root.ntCoff/2
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
@@ -274,6 +278,7 @@ Item {
                 }
                 DCKnopkaOriginal {
                     id: knopkaRedaktor
+                    visible: root.isAdmin ? true : false//Показываем/не показываем в зависимости от Админа.
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaQt.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
@@ -289,10 +294,14 @@ Item {
                 DCKnopkaOriginal {
                     id: knopkaKatalog
                     visible: {
-                        if(root.isMobile)//Мобильное устройство
-                            return false;//невидимая кнопка.
-                        else//Если это ПК, то...
-                            root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора.
+                        if(root.isAdmin){//Если Администратор, то...
+                            if(root.isMobile)//Мобильное устройство
+                                return false;//невидимая кнопка.
+                            else//Если это ПК, то...
+                                root.appRedaktor ? true : false;//Показываем/Не_показываем кнопку из-за Редактора.
+                        }
+                        else//Если рабочий, то...
+                            return false;
                     }
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaRedaktor.bottom
