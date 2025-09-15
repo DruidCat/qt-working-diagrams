@@ -504,6 +504,7 @@ Item {
             }
 		}
         DCKnopkaNastroiki {
+            id: knopkaNastroiki
 			ntWidth: root.ntWidth
 			ntCoff: root.ntCoff
 			anchors.verticalCenter: tmToolbar.verticalCenter

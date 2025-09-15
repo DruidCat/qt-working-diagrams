@@ -1,87 +1,95 @@
 ﻿import QtQuick //2.15
-//import QtQuick.Handlers//Не требуется в Qt 6.2+
-
+//Виджет анимации загрузки.
 Item{
     id: root
     //Свойства.
-    property int ntWidth: 2
+    property int ntHeight: 2
     property int ntCoff: 8
-    property color clrKnopki: "grey"
-    property color clrFona: "transparent"
-    property real minDarker: 0.7//Миннимальная затемнённость кнопки, когда она не активная.
-    property real maxDarker: 1.3//Максимальная затемнённость кнопки, когда она нажата.
-    property bool enabled: true//true - активирована, false - деактивированна кнопка.
-    property bool pressed: tphKnopkaMinus.pressed//true - нажали false - не нажали
-    //property bool pressed: maKnopkaMinus.pressed//true - нажали false - не нажали
-    property bool border: true
-    property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
-    property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
+    property color clrWidget: "grey"//Цвет виджета
+    property color clrFona: "transparent"//Цвет фона
+    property bool running: false//true - включить анимацию. false - выключить анимацию.
     //Настройки.
-    height: tapHeight
-    width: tapWidth
-    //Сигналы.
-    signal clicked();
-    //Функции.
-    //Для Авроры комментируем TapHandler, расскомментируем MouseArea и наоборот.
-    TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
-        id: tphKnopkaMinus
-        onTapped: {
-            if(root.enabled)//Если активирована кнопка, то...
-                root.clicked();//Обрабатываем клик.
-        }
-    }
-    /*
-    MouseArea {
-        id: maKnopkaMinus
-        anchors.fill: root
-        onClicked: {
-            if(root.enabled)//Если активирована кнопка, то...
-                root.clicked();//Обрабатываем клик.
-        }
-    }
-    */
+    height: ntHeight*ntCoff
+    width: ntHeight*ntCoff*2//Длина в два раза больше чем высота.
+    //Функции. 
     Rectangle {
-        id: rctKnopkaMinus
-        height: root.ntWidth*root.ntCoff
-        width: height
-        anchors.centerIn: root
-
-        color: {
-            if(root.enabled)//Если активирована кнопка, то...
-                tphKnopkaMinus.pressed ? Qt.darker(clrFona, root.maxDarker) : clrFona
-                //maKnopkaMinus.containsMouse ? Qt.darker(clrFona, root.maxDarker) : clrFona
-            else//Если деактивирована кнопка, то...
-                Qt.darker(clrFona, root.minDarker)
-        }
-        radius: width/4
+        id: rctLoad
+        property int ntHeight: root.width/3//Делим длину на три квадрата
+        property int ntShag: ntHeight-root.ntHeight*2//Делаем промежуток между квадратами.
+        anchors.fill: root
+        color: root.clrFona
+        radius: 11//Закруглённость
 
         Rectangle {
+            id: rctSLeva
+            height: rctLoad.ntHeight
+            width: height
+            anchors.verticalCenter: rctLoad.verticalCenter
+            anchors.left: rctLoad.left
+            color: "transparent"
+            Rectangle {
+                id: krugSLeva
+                height: tmrLoad.ntShag
+                width: height
+                anchors.centerIn: rctSLeva
+                color: root.clrWidget
+                radius: 50//Круг
+            }
+        }
+        Rectangle {
             id: rctCentor
-            height: rctKnopkaMinus.width/4
-            width: height*3
-            anchors.centerIn: rctKnopkaMinus
-
-            color: {
-                if(root.enabled)//Если активирована кнопка, то...
-                    tphKnopkaMinus.pressed ? Qt.darker(clrKnopki, root.maxDarker) : clrKnopki
-                    //maKnopkaMinus.containsMouse ? Qt.darker(clrKnopki, root.maxDarker) : clrKnopki
-                else//Если деактивирована кнопка, то...
-                    Qt.darker(clrKnopki, root.minDarker)
+            height: rctLoad.ntHeight
+            width: height
+            anchors.verticalCenter: rctLoad.verticalCenter
+            anchors.left: rctSLeva.right
+            color: "transparent"
+            Rectangle {
+                id: krugCentor
+                height: tmrLoad.ntShag
+                width: height
+                anchors.centerIn: rctCentor
+                color: root.clrWidget
+                radius: 50//Круг
             }
-            radius: rctKnopkaMinus.width/4
-        } 
+        }
+        Rectangle {
+            id: rctSPrava
+            height: rctLoad.ntHeight
+            width: height
+            anchors.verticalCenter: rctLoad.verticalCenter
+            anchors.left: rctCentor.right
+            color: "transparent"
+            Rectangle {
+                id: krugSPrava
+                height: tmrLoad.ntShag
+                width: height
+                anchors.centerIn: rctSPrava
+                color: root.clrWidget
+                radius: 50//Круг
+            }
+        }
+        Timer {//таймер анимации Загрузки.
+            id: tmrLoad
+            //Свойства
+            property int ntShagMax: rctLoad.ntShag;//Максимальный размер круга.
+            property int ntInterval: root.ntHeight*92/ntShagMax//Интервал, за который изменится один шаг.
+            property int ntShag: rctLoad.ntShag;//Считается размер круга.
+            property bool isPlus: false//true - плюсуется рразмер. false - минусуется
+            //Настройки
+            interval: ntInterval; running: root.running; repeat: true
+            //Функции
+            onTriggered: {//Если таймер сработал, то...
+                if(isPlus){//Если true, то...
+                    ntShag++;
+                    if(ntShag >= ntShagMax)
+                        isPlus = false;
+                }
+                else{
+                    ntShag--;
+                    if(ntShag <= 1)
+                        isPlus = true;
+                }
+            }
+        }
 	}
-	Component.onCompleted: {
-        if(root.border){
-            if(root.enabled){//Если активирована кнопка, то...
-                rctKnopkaMinus.border.color = tphKnopkaMinus.pressed
-                        ? Qt.darker(clrKnopki, root.maxDarker) : clrKnopki
-                //rctKnopkaMinus.border.color = maKnopkaMinus.containsMouse
-                          ?Qt.darker(clrKnopki,root.maxDarker):clrKnopki
-            }
-            else//Если деактивирована кнопка, то...
-                rctKnopkaMinus.border.color = Qt.darker(clrKnopki, root.minDarker)
-            rctKnopkaMinus.border.width = rctKnopkaMinus.width/8/4;
-		}
-	} 
 }
