@@ -14,15 +14,15 @@ DCPdfPoisk::DCPdfPoisk(QObject* proditel) : QObject(proditel){//Конструк
 
     auto onChanged = [this]{ pereschetSchetchika(); };//СЛОТ пересчёта счётчика совпадений при поиске.
     connect(	&m_psmModel,
-                &QAbstractItemModel::modelReset,
+                &QAbstractItemModel::modelReset,//Структура всей модели обновляется заново.
                 this,
                 onChanged);
     connect(	&m_psmModel,
-                &QAbstractItemModel::dataChanged,
+                &QAbstractItemModel::dataChanged,//Изменение данных в модели.
                 this,
                 onChanged);
     connect(	&m_psmModel,
-                &QAbstractItemModel::rowsInserted,
+                &QAbstractItemModel::rowsInserted,//Когда вставляются новые строки в модель.
                 this,
                 onChanged);
     connect(	&m_psmModel,
@@ -109,6 +109,7 @@ void DCPdfPoisk::pereschetSchetchika(){//Пересчёт количества �
 
     for (int ntShag = 0; ntShag < ntKolichestvoStrok; ++ntShag){//Цикл подсчёта совпадений при поиске.
         const QModelIndex mdnModel = m_psmModel.index(ntShag, 0);
+        //qDebug()<<"Страница: "<<mdnModel.data(Qt::UserRole).toInt();
         if (hitCountRole >= 0)
             ntSchetchik += m_psmModel.data(mdnModel, hitCountRole).toInt();
         else{
