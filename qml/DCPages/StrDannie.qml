@@ -391,7 +391,9 @@ Item {
                                 }
                                 else{//Если на сторонний просмотщик pdf документов, то...
                                     cppqml.strDebug = qsTr("Открывается документ: ") + strDannie;
-                                    Qt.openUrlExternally(cppqml.strDannieUrl);//Открываем pdf в стороннем app.
+                                    Qt.callLater(function () {//Пауза, чтоб сообщение отобразится успело.
+                                        Qt.openUrlExternally(cppqml.strDannieUrl)//Открываем в стороннем app.
+                                    })
                                 }
                             }
                         }

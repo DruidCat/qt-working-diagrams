@@ -630,7 +630,9 @@ ApplicationWindow {
                             tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмотор
                             if(!cppqml.blPlanPervi){//Если план еще не задан, то...
                                 cppqml.strDebug = qsTr("Открывается план.");//Оповещение пользователю, важно.
-                                Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
+                                Qt.callLater( function () {//Пауза, чтоб сообщение успело отобразиться выше.
+                                    Qt.openUrlExternally(ltPdfUrl)//Открываем pdf в стороннем app.
+                                })
                             }
                         }
                     }
@@ -653,8 +655,11 @@ ApplicationWindow {
                         stvStr.push(pgStrPdf);//Переходим на страницу отображения Pdf документа.
                     }
                     else{//Если на сторонний просмотщик pdf документов, то...
+                        cppqml.strFileDialogPut = "sohranit";//ВАЖНО!!! Сохраняем положение в дереве папок.
                         cppqml.strDebug = qsTr("Открывается документ: ") + strImyaFaila;//Оповещение.
-                        Qt.openUrlExternally(cppqml.polKatalogUrl(strImyaFaila));//Открываем в стороннем app.
+                        Qt.callLater( function() {//Пауза нужна, чтоб сообщение успело отрисоваться выше.
+                            Qt.openUrlExternally(cppqml.polKatalogUrl(strImyaFaila))//В стороннем app.
+                        })
                     }
                 }
                 onSignalZagolovok: function(strZagolovok){//Слот имени Заголовка.
@@ -717,7 +722,9 @@ ApplicationWindow {
                         tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмоторщике
                         if(!cppqml.blPlanPervi){//Если план еще не задан, то...
                             cppqml.strDebug = qsTr("Открывается план.");//Оповещение пользователя.
-                            Qt.openUrlExternally(ltPdfUrl);//Открываем pdf в стороннем app.
+                            Qt.callLater ( function () {//Пауза, чтоб сообщение успело отобразиться выше.
+                                Qt.openUrlExternally(ltPdfUrl)//Открываем pdf в стороннем app.
+                            })
                         }
                     }
                     stvStr.push(pgStrPlan)//Переходим на страницу Плана.
