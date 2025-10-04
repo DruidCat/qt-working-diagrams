@@ -594,7 +594,7 @@ ApplicationWindow {
             clrFona: root.clrFona; clrTexta: root.clrKnopok
             clrFaila: root.clrFaila; clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrFileDialog{//Блок Файлового Диалога, чтоб разгрузить Main.qml
+            StrFileDialog{//Блок Файлового Диалога.
                 id: tmFileDialog
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
@@ -624,8 +624,10 @@ ApplicationWindow {
                         else//Если план уже был задан, то...
                             ltPdfUrl = cppqml.polPutImyaPlan();//Путь и имя файла Плана.
                         //Механизм открытия инструкции с внешним просмотрщиком документов.
-                        if(root.pdfMentor)//Если выбран в настройках собственный просмотрщик, то...
+                        if(root.pdfMentor){//Если выбран в настройках собственный просмотрщик, то...
+                            cppqml.strDebug = qsTr("");//Затираем сообщения,чтоб при загрузке плана не отображ
                             tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.
+                        }
                         else{//Если на сторонний просмотщик pdf документов, то...
                             tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмотор
                             if(!cppqml.blPlanPervi){//Если план еще не задан, то...
@@ -716,8 +718,10 @@ ApplicationWindow {
                     else//Если план уже был задан, то...
                         ltPdfUrl = cppqml.polPutImyaPlan();//Путь и имя файла Плана.
                     //Механизм открытия инструкции с внешним просмотрщиком документов.
-                    if(root.pdfMentor)//Если выбран в настройках собственный просмотрщик, то...
+                    if(root.pdfMentor){//Если выбран в настройках собственный просмотрщик, то...
+                        cppqml.strDebug = qsTr("");//Затираем сообщения, чтоб при загрузке плана не отображ.
                         tmPlan.ustSource(ltPdfUrl);//Открываем во встроеном просмоторщике pdf документов.
+                    }
                     else{//Если на сторонний просмотщик pdf документов, то...
                         tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмоторщике
                         if(!cppqml.blPlanPervi){//Если план еще не задан, то...
@@ -764,6 +768,9 @@ ApplicationWindow {
 
                 onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
+                    tmPlan.fnPdfSource("");//закрываем предыдущий открытый план, чтоб его можно было УДАЛИТЬ!
+                    tmPlan.ustSource("qrc:///workingdata/plan.pdf")//Загружаем план по умолчанию
+                    tmPlan.fnPdfSource("");//закрываем план по умолчанию, чтоб его видно не было.
                     root.modeFileDialog = "plan";//Открываем проводник для План.
                     pgStrFileDialog.textZagolovok = stvStr.infoElement//Заголовок Проводника.
                     pgStrFileDialog.textToolbar = qsTr("Выберите PDF документ для добавления.")
