@@ -253,6 +253,14 @@ bool DataDannie::udalFail(QString strImyaFaila){//Удалить файл в к�
 /////////////////////////////////////////////
     QFile flImyaFaila(QDir(m_strMentorPut).filePath(strImyaFaila));//Объект на файл в каталоге.
     if(flImyaFaila.exists()){//Есть такой файл, то...
+        bool isReadOnly = flImyaFaila.permissions() & QFile::Permission::ReadOwner;//Атрибут ТолькоДляЧтения?
+        if(isReadOnly){//Если документ только для чтени, то...
+            if(!flImyaFaila.setPermissions(QFileDevice::WriteOwner)){//Если атрибут не изменился, то...
+                qdebug(tr("Невозможно удалить файл ")+strImyaFaila
+                      +tr(", так как невозможно поменять атрибут: Только Для Чтения, измените его вручную."));
+                return false;//Ошибка.
+            }
+        }
         if(flImyaFaila.remove())//Если файл удалился, то...
             return true;//Успех
         else{
