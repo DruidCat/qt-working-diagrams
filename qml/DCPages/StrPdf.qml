@@ -153,10 +153,11 @@ Item {
         else{//Если путь пустая строка, то...
             pssPassword.strPasswordOld = "";//Обнуляем при закрытии старый пароль.
             pdfLoader.pdfRotation = 0;//0 градусов.
-            root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
+            pdfLoader.item.source = "qrc:///workingdata/base.pdf";//Чтоб можно было удалить предыдущий doc.pdf
             pdfLoader.blClose = true;//Закрываем Загрузчик.
             pdfLoader.active = false;//Деактивируем загрузчик, уничтожаем всё его содержимое.
             Qt.callLater(fnGarbageCollector);//Принудительно вызываем сборщик мусора
+            root.clickedNazad();//Сигнал нажатия кнопки Назад. А потом обнуление.
         }
     }
     function fnGarbageCollector(){//Функция сборщика мусора, после закрытия документа.
@@ -166,7 +167,8 @@ Item {
             Qt.gc();
     }
     function fnClickedNazad(){//Функция нажатия кнопки Назад.
-        cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
+        if(pdfLoader.item)//Если документ загрузился в загрузчике, то...
+            cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
         fnPdfSource("");//Пустой путь PDF документа, закрываем.
     }
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.

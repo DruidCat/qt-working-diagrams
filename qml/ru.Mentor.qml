@@ -769,7 +769,7 @@ ApplicationWindow {
                 onClickedNazad: stvStr.pop()//Назад страницу
                 onClickedSozdat: {//Слот нажатия кнопки Создать.
                     tmPlan.fnPdfSource("");//закрываем предыдущий открытый план, чтоб его можно было УДАЛИТЬ!
-                    tmPlan.ustSource("qrc:///workingdata/plan.pdf")//Загружаем план по умолчанию
+                    tmPlan.ustSource("qrc:///workingdata/base.pdf")//Загружаем план по умолчанию
                     tmPlan.fnPdfSource("");//закрываем план по умолчанию, чтоб его видно не было.
                     root.modeFileDialog = "plan";//Открываем проводник для План.
                     pgStrFileDialog.textZagolovok = stvStr.infoElement//Заголовок Проводника.
