@@ -20,6 +20,7 @@ Item {
     //Сигналы.
 	signal clickedEnter();//Сигнал нажатия Enter
 	signal clickedEscape();//Сигнал нажатия Escape
+    signal clickedCopyToClipboard();//Скопировать в буфер обмена.
     //Функции.
 	function ustText (strText){//Функция вставления текста, нужна для Android и обновления вирт клавиатуры.
         txnTextInput.focus = false//Убрать фокус.
@@ -49,8 +50,9 @@ Item {
 		}
         TextInput {//Область текста.
             id: txnTextInput
-			anchors.centerIn: rctTextInput
-			color: "black"//цвет текста
+            anchors.centerIn: rctTextInput
+            //anchors.fill: rctTextInput
+            color: "black"//цвет текста
 			horizontalAlignment: TextInput.AlignHCenter
 			verticalAlignment: TextInput.AlignVCenter
 			
@@ -79,22 +81,30 @@ Item {
 			selectByMouse: true//пользователь может использовать мышь/палец для выделения текста.
 			cursorVisible: true//Курсор сделать видимым
 			Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-				if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
-					root.clickedEnter();//Излучаем сигнал о том, что нажат Enter.
-					event.accepted = true;//Enter не использовался в качестве сочетания клавишь с другими клав
-				}
-				if(event.key === Qt.Key_Escape){
-					root.clickedEscape();//Излучаем сигнал о том, что нажат Ecape
-				}
-                if(blSqlProtect&&((event.key === 63)||(event.key === 39)||(event.key === 59)||(event.key === 42)
-                   ||(event.key === 37)||(event.key === 95)||(event.key === 92))){
-                    cppqml.strDebug = "Нельза использовать данные символы ? ' ; * % _ \\ ";
+                if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+                    if(event.key === Qt.Key_C){//Если нажата "C",то...
+                        root.clickedCopyToClipboard();//Копируем выделенный текст в буфер обмена.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+                else{
+                    if((event.key === 16777220)||(event.key === 16777221)){//Код 16777220 и 16777221 - Enter
+                        root.clickedEnter();//Излучаем сигнал о том, что нажат Enter.
+                        event.accepted = true;//Enter не использовался в качестве сочетания клавишь с другими клав
+                    }
+                    if(event.key === Qt.Key_Escape){
+                        root.clickedEscape();//Излучаем сигнал о том, что нажат Ecape
+                    }
+                    if(blSqlProtect&&((event.key===63)||(event.key===39)||(event.key===59)||(event.key===42)
+                                      ||(event.key === 37)||(event.key === 95)||(event.key === 92))){
+                        cppqml.strDebug = "Нельза использовать данные символы ? ' ; * % _ \\ ";
+                    }
                 }
                 //console.log(event.key);
-            }
+            } 
             Text {//Текст, подсказывающий пользователю, что нужно вводить.
                 id: txtTextInput
-				anchors.centerIn: txnTextInput//Обязательно по центру, иначе масштабирование не будет работать
+                anchors.centerIn: txnTextInput//Обязательно по центру, иначе масштабирование не будет работать
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                 text: ""//По умолчанию нет надписи.
                 horizontalAlignment: Text.AlignHCenter
@@ -126,7 +136,7 @@ Item {
 					}
 				}	
             }
-		}
+        }
     }
 	onWidthChanged: {//Если изменилась ширина прямоугольника, то...
 		if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
@@ -223,5 +233,19 @@ Item {
                 }
             }
         })
-	}	
+    }
+    TapHandler {//Обрабатывает нажатие только виджета, но не срабаывает на область txnTextInput
+        id: tphRoot
+        onTapped: {//Если тапнули, то...
+            if(root.visible){//Если виджет видимый, то...
+                var vrX = point.position.x//Координата клика по X в виджете.
+                var vrSeredina = root.width/2//Считаем середину клика
+                txnTextInput.focus = true;//Делаем фокус на вводимом текста, чтоб появился курсор
+                if(vrSeredina < vrX)//Если координата клика больше середины, то...
+                    txnTextInput.cursorPosition = txnTextInput.text.length;//Курсор в конец текста
+                else//Если меньше середины, то...
+                    txnTextInput.cursorPosition = 0;//Курсор в начало текста
+            }
+        }
+    }
 }
