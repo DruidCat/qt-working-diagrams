@@ -17,6 +17,8 @@ Item {
     property alias rotation: pmpDoc.rotation//Поворот сцены документа.
     property alias pageRotation: pmpDoc.pageRotation//Поворот страниц документа.
     property alias straniciVisible: rctStranici.visible//Вкл/Выкл дополнительное окно с количеством страниц.
+    property int ntWidth: 1//Длина символа для боковой панели
+    property int ntCoff: 8//Коэффициент для боковой панели
     //Настройки
     anchors.fill: parent
     visible: false//по умолчанию он невидимый.
@@ -33,6 +35,12 @@ Item {
             if(event.key === Qt.Key_C){//Если нажата "C",то...
                 fnCopyToClipboard();//Копируем выделенный текст в документа в буфер обмена.
                 event.accepted = true;//Завершаем обработку эвента.
+            }
+            else{
+                if(event.key === Qt.Key_B){
+                    fnSidebarOpen();//Открываем боковую панель.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
             }
         }
         else{
@@ -57,6 +65,13 @@ Item {
         if(pmpDoc.selectedText !== "")//Если выбранный текст не пустота, то...
             pmpDoc.copySelectionToClipboard()//Копировать выделенный текст в документе
     }
+    function fnSidebarOpen(){//Функция открывающая боковую панель.
+        if(!drwSidebar.opened)//Если не открыта панель боковая, то открываем.
+            drwSidebar.open()//Открываем боковую панель.
+        else
+            console.error("ШИШ")
+    }
+
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
         if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
@@ -270,6 +285,7 @@ Item {
     PdfMultiPageView {
         id: pmpDoc
         anchors.fill: root
+        anchors.leftMargin: drwSidebar.position * drwSidebar.width
         searchString: ""
         //Иннициализация Свойств при каждой загрузке, от сюда берутся первоначальные данные Свойств.
         property bool blResetScene: false//false - быстрый сброс сцены при первом открытии pdf документа.
@@ -391,6 +407,35 @@ Item {
         Text {
             anchors.centerIn: rctStranici
             text: qsTr("Страница ") + (pmpDoc.currentPage+1) + qsTr(" из ") + pdfDoc.pageCount
+        }
+    }
+    Drawer {
+        id: drwSidebar
+        edge: Qt.LeftEdge
+        modal: false
+        width: 300//Ширина
+        height: pmpDoc.height//Высота по высоте pdf сцены
+        y: root.ntWidth*root.ntCoff+3*root.ntCoff//координату по Y брал из расчёта Stranica.qml
+        dim: false
+        clip: true//Образать всё лишнее.
+        TabBar {
+            id: tbSidebar
+            x: -width
+            rotation: -90
+            transformOrigin: Item.TopRight
+            currentIndex: 2//Закладки выбраны по умолчанию
+            TabButton {
+                text: qsTr("Информ.")
+            }
+            TabButton {
+                text: qsTr("Найдено")
+            }
+            TabButton {
+                text: qsTr("Закладки")
+            }
+            TabButton {
+                text: qsTr("Страницы")
+            }
         }
     }
 }

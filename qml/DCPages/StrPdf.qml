@@ -88,9 +88,14 @@ Item {
 							}
                             else{
                                 if(event.key === Qt.Key_C){
-                                    console.error("StrPdf")
                                     pdfLoader.item.fnCopyToClipboard();//Копируем выделенный текст в file.pdf.
                                     event.accepted = true;//Завершаем обработку эвента.
+                                }
+                                else{
+                                    if(event.key === Qt.Key_B){
+                                        pdfLoader.item.fnSidebarOpen();//Открываем боковую панель.
+                                        event.accepted = true;//Завершаем обработку эвента.
+                                    }
                                 }
                             }
 						}
@@ -177,6 +182,13 @@ Item {
         if(pdfLoader.item)//Если документ загрузился в загрузчике, то...
             cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
         fnPdfSource("");//Пустой путь PDF документа, закрываем.
+    }
+    function fnClickedSidebar(){//Функция нажатия кнопки SideBar.
+        if(pdfLoader.item){//Если загрузчик загрузил документ, то...
+            pdfLoader.item.ntWidth = root.ntWidth//Передаём длину символа для боковой панели
+            pdfLoader.item.ntCoff = root.ntCoff//Передаём коэффициент для боковой панели
+            pdfLoader.item.fnSidebarOpen()//Открываем боковую панель через функцию.
+        }
     }
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
 		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
@@ -271,7 +283,22 @@ Item {
 			clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
-		}	
+        }
+        Rectangle {
+            id: rctKnopka
+            width: root.ntWidth*root.ntCoff
+            height: width
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: knopkaNazad.right
+            color: "transparent"
+        }
+        DCKnopkaMenu {
+            id: knopkaSidebar
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: rctKnopka.right
+            clrKnopki: root.clrTexta
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
+            onClicked: fnClickedSidebar();//Функция нажатия кнопки SideBar.
+        }
         DCKnopkaZakrit {
             id: knopkaZakrit
             ntWidth: root.ntWidth; ntCoff: root.ntCoff

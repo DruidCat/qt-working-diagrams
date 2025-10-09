@@ -558,7 +558,7 @@ ApplicationWindow {
 			visible: false
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            zagolovokLevi: 1.3; zagolovokPravi: 3.7; toolbarLevi: 4.1; toolbarPravi: 5
+            zagolovokLevi: 3.7; zagolovokPravi: 3.7; toolbarLevi: 4.1; toolbarPravi: 5
             StrPdf {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
