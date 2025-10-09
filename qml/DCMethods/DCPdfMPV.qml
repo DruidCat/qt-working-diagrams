@@ -29,21 +29,34 @@ Item {
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
-            var ntStrDown = pmpDoc.currentPage + 1;
-            if(ntStrDown < root.pageCount)
-                root.currentPage = ntStrDown;
-            event.accepted = true;//Завершаем обработку эвента.
+        if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+            if(event.key === Qt.Key_C){//Если нажата "C",то...
+                fnCopyToClipboard();//Копируем выделенный текст в документа в буфер обмена.
+                event.accepted = true;//Завершаем обработку эвента.
+            }
         }
-        if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
-            var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
-            if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                root.currentPage = ntStrUp;
-            event.accepted = true;//Завершаем обработку эвента.
+        else{
+            if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
+                var ntStrDown = pmpDoc.currentPage + 1;
+                if(ntStrDown < root.pageCount)
+                    root.currentPage = ntStrDown;
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+            else{
+                 if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
+                    var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
+                    if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+                        root.currentPage = ntStrUp;
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+            }
         }
         //cppqml.strDebug = event.key;
     }
-
+    function fnCopyToClipboard(){//Функция копирования выделенного текста в буфер обмена.
+        if(pmpDoc.selectedText !== "")//Если выбранный текст не пустота, то...
+            pmpDoc.copySelectionToClipboard()//Копировать выделенный текст в документе
+    }
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
         if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.

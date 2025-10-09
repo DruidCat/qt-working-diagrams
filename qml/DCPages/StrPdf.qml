@@ -86,6 +86,13 @@ Item {
 									fnClickedOk();//Функция нажатия кнопки Ок
 								event.accepted = true;//Завершаем обработку эвента.
 							}
+                            else{
+                                if(event.key === Qt.Key_C){
+                                    console.error("StrPdf")
+                                    pdfLoader.item.fnCopyToClipboard();//Копируем выделенный текст в file.pdf.
+                                    event.accepted = true;//Завершаем обработку эвента.
+                                }
+                            }
 						}
 					}
 				}
@@ -313,6 +320,12 @@ Item {
 					if(knopkaOk.visible)//Если кнопка Ок видимая, то...
 						fnClickedOk()//Функция отправить запрос на поиск
 				}
+                onClickedCopyToClipboard: {//Если нажато в виджете сочетание клавишь Ctrl+C
+                    if(textInput.selectedText)//Если текст в самом виджете выделен, то...
+                        textInput.copy();//Копируем выделенный текст в виджете.
+                    else//Если текст в виджете не выделен, значен он может быть выделен в file.pdf, то...
+                        pdfLoader.item.fnCopyToClipboard();//Копируем выделенный текст в file.pdf.
+                }
 			}
 		}	
         DCKnopkaOk{
