@@ -93,7 +93,7 @@ Item {
                                 }
                                 else{
                                     if(event.key === Qt.Key_B){
-                                        pdfLoader.item.fnSidebarOpen();//Открываем боковую панель.
+                                        fnClickedSidebar()////Функция нажатия кнопки SideBar.
                                         event.accepted = true;//Завершаем обработку эвента.
                                     }
                                 }
@@ -185,9 +185,8 @@ Item {
     }
     function fnClickedSidebar(){//Функция нажатия кнопки SideBar.
         if(pdfLoader.item){//Если загрузчик загрузил документ, то...
-            pdfLoader.item.ntWidth = root.ntWidth//Передаём длину символа для боковой панели
-            pdfLoader.item.ntCoff = root.ntCoff//Передаём коэффициент для боковой панели
-            pdfLoader.item.fnSidebarOpen()//Открываем боковую панель через функцию.
+            pdfLoader.fnNastroiki();//Передаём все настройки в загрузчик.
+            pdfLoader.item.fnSidebar()//Открываем боковую панель через функцию.
         }
     }
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
@@ -485,17 +484,30 @@ Item {
             property int pdfRotation: 0//Угол поворота (может быть: 0, 90, 180, 270)
             property bool isDannie: false//true-открывается файл из Данных
             property bool isKatalog: false//true-открывается файл из Каталога
+            property int ntWidth: root.ntWidth//Передаём длину символа для боковой панели
+            property int ntCoff: root.ntCoff//Передаём коэффициент для боковой панели
+            property color clrTexta: root.clrTexta
+            property color clrFona: root.clrFona
+            property color clrMenuFon: root.clrMenuFon
             //Настройки.
             anchors.fill: tmZona
             source: pdfLoader.blClose ? "" : "qrc:/qml/DCMethods/DCPdfMPV.qml"//Указываем путь отдельному QMl
             active: false//не активирован.
-
+            //Функции
+            function fnNastroiki(){//Функция передающая свойства в загрузчик.
+                item.ntWidth = ntWidth
+                item.ntCoff = ntCoff
+                item.clrTexta = clrTexta
+                item.clrFona = clrFona
+                item.clrMenuFon = clrMenuFon
+            }
             onLoaded: { 
                 if(isDannie)//Если открывается из Данных документ, то...
                     pdfLoader.item.currentPage = cppqml.strDannieStr;//Считываем из БД номер странцы документа.
                 if(isKatalog)//Если открывается из Каталога документ, то...
                     pdfLoader.item.currentPage = 0;//Всегда с 1 страницы.
                 pdfLoader.item.source = pdfLoader.strPdfPut;// Устанавливаем путь к PDF
+                pdfLoader.fnNastroiki();//Передаём настройки в загрузчик.
             }
         }
         Connections {//Соединяем сигнал из C++ с действием в QML
@@ -565,6 +577,9 @@ Item {
                 else//Если поиск окончился, то...
                     pskPoisk.enabled = true;//Активируем кнопки в виджете поиска.
             }
+            function onClickedSidebar(){//Если нажата горячая клавиша Ctrl+B
+                fnClickedSidebar()
+            }
         }
         Timer{//Таймер нужен, чтоб виджет успел исчезнуть и потом появиться, если пароль неверный.
             id: tmrPassword
@@ -575,7 +590,7 @@ Item {
 			anchors.fill: tmZona
 			color: "transparent"
 			border.color: root.clrTexta
-			border.width: root.ntCoff/4//Бордюр при переименовании и удалении.
+            border.width: root.ntCoff/4//Бордюр
 		}	
 	}
     Item {//Тулбар

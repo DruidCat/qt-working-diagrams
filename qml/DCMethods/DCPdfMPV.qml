@@ -19,6 +19,9 @@ Item {
     property alias straniciVisible: rctStranici.visible//Вкл/Выкл дополнительное окно с количеством страниц.
     property int ntWidth: 1//Длина символа для боковой панели
     property int ntCoff: 8//Коэффициент для боковой панели
+    property color clrTexta: "Orange"
+    property color clrFona: "Black"
+    property color clrMenuFon: "SlateGray"
     //Настройки
     anchors.fill: parent
     visible: false//по умолчанию он невидимый.
@@ -29,6 +32,7 @@ Item {
     signal sgnScaleMin(real rlScaleMin)//Сигнал возвращающий минимальный масштаб страницы.
     signal sgnPassword()//Сигнал о том, что запрашивается пароль.
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
+    signal clickedSidebar()//Сигнал о нажатии боковой панели.
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
@@ -37,8 +41,8 @@ Item {
                 event.accepted = true;//Завершаем обработку эвента.
             }
             else{
-                if(event.key === Qt.Key_B){
-                    fnSidebarOpen();//Открываем боковую панель.
+                if(event.key === Qt.Key_B){//Если нажата клавиша "B", то...
+                    root.clickedSidebar();//Сигнал - Открываем боковую панель.
                     event.accepted = true;//Завершаем обработку эвента.
                 }
             }
@@ -65,11 +69,14 @@ Item {
         if(pmpDoc.selectedText !== "")//Если выбранный текст не пустота, то...
             pmpDoc.copySelectionToClipboard()//Копировать выделенный текст в документе
     }
-    function fnSidebarOpen(){//Функция открывающая боковую панель.
-        if(!drwSidebar.opened)//Если не открыта панель боковая, то открываем.
+    function fnSidebar(){//Функция открывающая/закрывающая боковую панель.
+        if(!drwSidebar.position){//Если не открыта панель боковая, то открываем.
             drwSidebar.open()//Открываем боковую панель.
-        else
-            console.error("ШИШ")
+            root.forceActiveFocus()
+        }
+        else{
+            drwSidebar.close()//Закрываем боковую панель
+        }
     }
 
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
@@ -285,7 +292,7 @@ Item {
     PdfMultiPageView {
         id: pmpDoc
         anchors.fill: root
-        anchors.leftMargin: drwSidebar.position * drwSidebar.width
+        anchors.leftMargin: drwSidebar.position * drwSidebar.width-drwSidebar.position*root.ntCoff
         searchString: ""
         //Иннициализация Свойств при каждой загрузке, от сюда берутся первоначальные данные Свойств.
         property bool blResetScene: false//false - быстрый сброс сцены при первом открытии pdf документа.
@@ -411,6 +418,8 @@ Item {
     }
     Drawer {
         id: drwSidebar
+        //Свойства
+        //Настройки
         edge: Qt.LeftEdge
         modal: false
         width: 300//Ширина
@@ -418,23 +427,47 @@ Item {
         y: root.ntWidth*root.ntCoff+3*root.ntCoff//координату по Y брал из расчёта Stranica.qml
         dim: false
         clip: true//Образать всё лишнее.
+        //Функции
+
+        Rectangle {//Прямоугольник узкой полоски интерфейса слева
+            id: rctBorder
+            anchors.top: drwSidebar.top
+            anchors.left: drwSidebar.left
+            width: root.ntCoff
+            height: drwSidebar.height
+            color: root.clrMenuFon
+        }
+        Rectangle {//Прямоугольник всей оставшейся боковой панели.
+            id: rctSibebar
+            anchors.top: drwSidebar.top
+            anchors.left: rctBorder.right
+            width: drwSidebar.width - root.ntCoff
+            height: drwSidebar.height
+            color: root.clrFona
+            border.color: root.clrTexta
+            border.width: root.ntCoff/4//Бордюр
+        }
         TabBar {
             id: tbSidebar
+            anchors.top: drwSidebar.top
+            anchors.right: rctBorder.right
             x: -width
+            y: root.ntCoff/4//Толщина бордюра
             rotation: -90
             transformOrigin: Item.TopRight
-            currentIndex: 2//Закладки выбраны по умолчанию
-            TabButton {
-                text: qsTr("Информ.")
-            }
+            currentIndex: 1//Закладки выбраны по умолчанию
             TabButton {
                 text: qsTr("Найдено")
+                width: (drwSidebar.height-root.ntCoff/4)/tbSidebar.count//-root.ntCoff/4 толщина бардюра
+
             }
             TabButton {
                 text: qsTr("Закладки")
+                width: (drwSidebar.height-root.ntCoff/4)/tbSidebar.count//-root.ntCoff/4 толщина бардюра
             }
             TabButton {
                 text: qsTr("Страницы")
+                width: (drwSidebar.height-root.ntCoff/4)/tbSidebar.count//-root.ntCoff/4 толщина бардюра
             }
         }
     }
