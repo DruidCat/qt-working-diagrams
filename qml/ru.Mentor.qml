@@ -575,6 +575,7 @@ ApplicationWindow {
                 tapToolbarLevi: 1; tapToolbarPravi: 1
                 pdfMentor: root.isAdmin ? root.pdfMentor : true
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
 				onClickedNazad: {
 					cppqml.ullDannieKod = 0;//НЕ УДАЛЯТЬ! На странице Данные код не выбран и равен 0.

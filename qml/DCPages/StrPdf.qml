@@ -30,6 +30,7 @@ Item {
     property bool pdfMentor: false//true - собственный просмотщик pdf документов.
     property int logoRazmer: 22//Размер Логотипа
     property string logoImya: "mentor"//Имя логотипа в DCLogo
+    property bool isMobile: true//true - мобильная платформа.
     //Настройки
     anchors.fill: parent//Растянется по Родителю.
     focus: true//Чтоб работали горячие клавиши.
@@ -489,6 +490,7 @@ Item {
             property color clrTexta: root.clrTexta
             property color clrFona: root.clrFona
             property color clrMenuFon: root.clrMenuFon
+            property bool isMobile: root.isMobile
             //Настройки.
             anchors.fill: tmZona
             source: pdfLoader.blClose ? "" : "qrc:/qml/DCMethods/DCPdfMPV.qml"//Указываем путь отдельному QMl
@@ -500,6 +502,7 @@ Item {
                 item.clrTexta = clrTexta
                 item.clrFona = clrFona
                 item.clrMenuFon = clrMenuFon
+                item.isMobile = isMobile
             }
             onLoaded: { 
                 if(isDannie)//Если открывается из Данных документ, то...
