@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Pdf
 import QtQuick.Controls
+import DCButtons 1.0//Импортируем кнопки
 
 Item {
     id: root
@@ -470,6 +471,7 @@ Item {
             transformOrigin: Item.TopRight//Точка поворота боковой панели верхний правый угол.
             currentIndex: 1//Закладки выбраны по умолчанию
             //Функции
+            /*
             TabButton {
                 id: tbbNaideno
                 text: qsTr("Найдено")
@@ -680,6 +682,60 @@ Item {
                     }
                 }
             }
+            */
+            // ВАЖНО: onPressed не нужен — TabBar сам управляет currentIndex при клике.
+
+                DCTabButton {
+                    text: qsTr("Найдено")
+                    width:  (drwSidebar.height - tbSidebar.ntCoff/2) / tbSidebar.count
+                    height: tbSidebar.height
+                    hoverEnabled: !root.isMobile
+
+                    // пробрасываем тему
+                    clrFonNormal:  tbSidebar.clrFonNormal
+                    clrFonHover:   tbSidebar.clrFonHover
+                    clrFonPressed: tbSidebar.clrFonPressed
+                    clrFonChecked: tbSidebar.clrFonChecked
+                    clrTxtNormal:  tbSidebar.clrTxtNormal
+                    clrTxtPressed: tbSidebar.clrTxtPressed
+                    clrTxtChecked: tbSidebar.clrTxtChecked
+                    clrBorder:     tbSidebar.clrBorder
+                    ntCoff:        tbSidebar.ntCoff
+                }
+
+                DCTabButton {
+                    text: qsTr("Закладки")
+                    width:  (drwSidebar.height - tbSidebar.ntCoff/2) / tbSidebar.count
+                    height: tbSidebar.height
+                    hoverEnabled: !root.isMobile
+
+                    clrFonNormal:  tbSidebar.clrFonNormal
+                    clrFonHover:   tbSidebar.clrFonHover
+                    clrFonPressed: tbSidebar.clrFonPressed
+                    clrFonChecked: tbSidebar.clrFonChecked
+                    clrTxtNormal:  tbSidebar.clrTxtNormal
+                    clrTxtPressed: tbSidebar.clrTxtPressed
+                    clrTxtChecked: tbSidebar.clrTxtChecked
+                    clrBorder:     tbSidebar.clrBorder
+                    ntCoff:        tbSidebar.ntCoff
+                }
+
+                DCTabButton {
+                    text: qsTr("Страницы")
+                    width:  (drwSidebar.height - tbSidebar.ntCoff/2) / tbSidebar.count + tbSidebar.ntCoff/4
+                    height: tbSidebar.height
+                    hoverEnabled: !root.isMobile
+
+                    clrFonNormal:  tbSidebar.clrFonNormal
+                    clrFonHover:   tbSidebar.clrFonHover
+                    clrFonPressed: tbSidebar.clrFonPressed
+                    clrFonChecked: tbSidebar.clrFonChecked
+                    clrTxtNormal:  tbSidebar.clrTxtNormal
+                    clrTxtPressed: tbSidebar.clrTxtPressed
+                    clrTxtChecked: tbSidebar.clrTxtChecked
+                    clrBorder:     tbSidebar.clrBorder
+                    ntCoff:        tbSidebar.ntCoff
+                }
         }
     }
 }
