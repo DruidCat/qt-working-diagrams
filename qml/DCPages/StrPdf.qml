@@ -188,6 +188,7 @@ Item {
         if(pdfLoader.item){//Если загрузчик загрузил документ, то...
             pdfLoader.fnNastroiki();//Передаём все настройки в загрузчик.
             pdfLoader.item.fnSidebar()//Открываем боковую панель через функцию.
+            knopkaSidebar.opened = pdfLoader.item.openedSidebar
         }
     }
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
@@ -291,8 +292,9 @@ Item {
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: knopkaNazad.right
             color: "transparent"
         }
-        DCKnopkaMenu {
+        DCKnopkaSidebar {
             id: knopkaSidebar
+            opened: false//По умолчанию закрыта боковая панель.
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: rctKnopka.right
             clrKnopki: root.clrTexta
@@ -503,6 +505,7 @@ Item {
                 item.clrFona = clrFona
                 item.clrMenuFon = clrMenuFon
                 item.isMobile = isMobile
+                knopkaSidebar.opened = false
             }
             onLoaded: { 
                 if(isDannie)//Если открывается из Данных документ, то...

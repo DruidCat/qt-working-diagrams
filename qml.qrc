@@ -139,5 +139,6 @@
         <file>images/DCButtons/24x24/DCKnopkaZakrit.png</file>
         <file>workingdata/base.pdf</file>
         <file>qml/DCButtons/DCTabButton.qml</file>
+        <file>qml/DCButtons/DCKnopkaSidebar.qml</file>
     </qresource>
 </RCC>

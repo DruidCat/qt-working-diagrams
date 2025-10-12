@@ -24,6 +24,7 @@ Item {
     property color clrFona: "Black"
     property color clrMenuFon: "SlateGray"
     property bool isMobile: true//true - мобильная платформа.
+    property bool openedSidebar: false//false - боковая панель закрыта, true - боковая панель открыта
     //Настройки
     anchors.fill: parent
     visible: false//по умолчанию он невидимый.
@@ -79,6 +80,7 @@ Item {
         else{
             drwSidebar.close()//Закрываем боковую панель
         }
+        root.openedSidebar = !drwSidebar.position//Передаём состояние открыта/закрыта боковая панель
     }
 
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
