@@ -24,7 +24,6 @@ Item {
     property color clrFona: "Black"
     property color clrMenuFon: "SlateGray"
     property bool isMobile: true//true - мобильная платформа.
-    property bool openedSidebar: false//false - боковая панель закрыта, true - боковая панель открыта
     //Настройки
     anchors.fill: parent
     visible: false//по умолчанию он невидимый.
@@ -36,6 +35,7 @@ Item {
     signal sgnPassword()//Сигнал о том, что запрашивается пароль.
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
     signal clickedSidebar()//Сигнал о нажатии боковой панели.
+    signal sgnOpenedSidebar(bool blOpened)//Сигнал о том, что боковая панель открыта/закрыта
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
@@ -77,10 +77,8 @@ Item {
             drwSidebar.open()//Открываем боковую панель.
             root.forceActiveFocus()
         }
-        else{
+        else
             drwSidebar.close()//Закрываем боковую панель
-        }
-        root.openedSidebar = !drwSidebar.position//Передаём состояние открыта/закрыта боковая панель
     }
 
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
@@ -432,6 +430,7 @@ Item {
         dim: false
         clip: true//Образать всё лишнее.
         //Функции
+        onOpenedChanged: root.sgnOpenedSidebar(drwSidebar.opened)//Излучаем сигнал открыта/закрыта панель
         Rectangle {//Прямоугольник узкой полоски интерфейса слева
             id: rctBorder
             anchors.top: drwSidebar.top
@@ -473,78 +472,6 @@ Item {
             transformOrigin: Item.TopRight//Точка поворота боковой панели верхний правый угол.
             currentIndex: 1//Закладки выбраны по умолчанию
             //Функции
-            /*
-            TabButton {
-                id: tbbStranici
-                text: qsTr("Страницы")
-                width: (drwSidebar.height-root.ntCoff/2)/tbSidebar.count+root.ntCoff/4//делим на кол-во кнопок
-                height: tbSidebar.height//Расчитаная высота кнопок относительно размера шрифта
-                hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
-                onPressed: tbSidebar.currentIndex = 2//Меняем индекс сразу при нажатии
-                background: Rectangle{//Фон вкладки Прямоугольник.
-                    radius: 0//Без радиуса.
-                    color: !tbbStranici.enabled		? Qt.darker(tbSidebar.clrFonNormal, 1.25)
-                           : tbbStranici.down		? tbSidebar.clrFonPressed
-                           : tbbStranici.checked	? tbSidebar.clrFonChecked
-                           : tbbStranici.hovered	? tbSidebar.clrFonHover
-                           : 						tbSidebar.clrFonNormal
-                    border.width: tbbStranici.checked || tbbStranici.down ? 0 : root.ntCoff/4
-                    border.color: tbSidebar.clrBorder
-                }
-                contentItem: Label {
-                    id: lblStranici
-                    text: tbbStranici.text
-                    font.pixelSize: tbSidebar.height-root.ntCoff//Задаём размер шрифта.
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    //elide: Text.ElideRight//автоматически сокращает текст, добавляя многоточие (...) в конце
-                    color: !tbbStranici.enabled		? tbSidebar.clrTxtPressed
-                            : tbbStranici.checked	? tbSidebar.clrTxtChecked
-                            : tbbStranici.down		? tbSidebar.clrTxtPressed
-                            :						tbSidebar.clrTxtNormal
-                }
-                Component.onCompleted: {
-                    if(tbbStranici.width > lblStranici.implicitWidth){//Если длина строки больше длины текста
-                        for(var ltShag=lblStranici.font.pixelSize; ltShag<tbbStranici.height-root.ntCoff;
-                                                                                                    ltShag++){
-                            if(lblStranici.implicitWidth< tbbStranici.width){//Если длина txt меньше динны стр
-                                lblStranici.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                                if(lblStranici.implicitWidth > tbbStranici.width){//Но, если переборщили
-                                    lblStranici.font.pixelSize--;//То уменьшаем размер шрифта и...
-                                    return;//Выходим из увеличения шрифта.
-                                }
-                            }
-                        }
-                    }
-                    else{//Если длина строки меньше длины текста, то...
-                        for(let ltShag = lblStranici.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                            if(lblStranici.implicitWidth > tbbStranici.width)//Если текст дилиннее строки, то
-                                lblStranici.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-                        }
-                    }
-                }
-                onWidthChanged: {
-                    if(tbbStranici.width > lblStranici.implicitWidth){//Если длина строки больше длины текста
-                        for(var ltShag=lblStranici.font.pixelSize; ltShag<tbbStranici.height-root.ntCoff;
-                                                                                                    ltShag++){
-                            if(lblStranici.implicitWidth< tbbStranici.width){//Если длина txt меньше динны стр
-                                lblStranici.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                                if(lblStranici.implicitWidth > tbbStranici.width){//Но, если переборщили
-                                    lblStranici.font.pixelSize--;//То уменьшаем размер шрифта и...
-                                    return;//Выходим из увеличения шрифта.
-                                }
-                            }
-                        }
-                    }
-                    else{//Если длина строки меньше длины текста, то...
-                        for(let ltShag = lblStranici.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                            if(lblStranici.implicitWidth > tbbStranici.width)//Если текст дилиннее строки, то
-                                lblStranici.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-                        }
-                    }
-                }
-            }
-            */
             DCTabButton {
                 text: qsTr("Найдено")
                 width:  (drwSidebar.height-root.ntCoff/2)/tbSidebar.count//Длина делется на количество кнопок.

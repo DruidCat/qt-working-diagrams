@@ -188,7 +188,6 @@ Item {
         if(pdfLoader.item){//Если загрузчик загрузил документ, то...
             pdfLoader.fnNastroiki();//Передаём все настройки в загрузчик.
             pdfLoader.item.fnSidebar()//Открываем боковую панель через функцию.
-            knopkaSidebar.opened = pdfLoader.item.openedSidebar
         }
     }
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
@@ -505,7 +504,6 @@ Item {
                 item.clrFona = clrFona
                 item.clrMenuFon = clrMenuFon
                 item.isMobile = isMobile
-                knopkaSidebar.opened = false
             }
             onLoaded: { 
                 if(isDannie)//Если открывается из Данных документ, то...
@@ -585,6 +583,9 @@ Item {
             }
             function onClickedSidebar(){//Если нажата горячая клавиша Ctrl+B
                 fnClickedSidebar()
+            }
+            function onSgnOpenedSidebar(blOpened){//Если боковая панель открыта/закрыта, то...
+                knopkaSidebar.opened = blOpened//Передаём сигнал кнопке, для отображения нужной позиции.
             }
         }
         Timer{//Таймер нужен, чтоб виджет успел исчезнуть и потом появиться, если пароль неверный.
