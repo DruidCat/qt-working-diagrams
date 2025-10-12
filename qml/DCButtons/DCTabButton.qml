@@ -1,87 +1,75 @@
-﻿// DCTabButton.qml
-import QtQuick 2.15
-import QtQuick.Controls 2.15
+﻿//DCTabButton.qml
+import QtQuick
+import QtQuick.Controls
 
 TabButton {
-    id: control
-
-    // Настраиваемые параметры темы/внешнего вида
-    property color clrFonNormal:  "#ffffff"
-    property color clrFonHover:   "#eeeeee"
-    property color clrFonPressed: "#cccccc"
-    property color clrFonChecked: "#333333"
-
-    property color clrTxtNormal:  "#333333"
-    property color clrTxtPressed: "#ffffff"
-    property color clrTxtChecked: "#ffffff"
-
-    property color clrBorder:     "#333333"
-    property real  ntCoff:        4            // коэф/толщина окантовки (как у вас в root.ntCoff)
-
-    // Экспорт вовне: доступ к самому Label и его ширине
-    property alias contentLabel: lbl
-    readonly property real textImplicitWidth: lbl.implicitWidth
-
-    // Автоподгон шрифта под ширину кнопки
-    property bool autoFitFont: true
-    property int  fontMinPixelSize: 8
-    property int  fontMaxPixelSize: Math.max(fontMinPixelSize, height - ntCoff)
-
-    hoverEnabled: true // можно переопределить снаружи
-
-    background: Rectangle {
-        radius: 0
-        color: !control.enabled ? Qt.darker(control.clrFonNormal, 1.25)
-              : control.down     ? control.clrFonPressed
-              : control.checked  ? control.clrFonChecked
-              : control.hovered  ? control.clrFonHover
-              :                    control.clrFonNormal
-        border.width: control.checked || control.down ? 0 : control.ntCoff/4
-        border.color: control.clrBorder
+    id: root
+    //Свойства
+    property color clrTexta:	"Orange"
+    property color clrFona:		"Black"
+    property color clrHover:	"SlateGray"
+    property real  ntCoff:		8//Для автоподгонки шрифта во вкладке
+    property real radius:		0//0 - без радиуса
+    property bool blAutoFont:	true//true - Автоподгон шрифта под ширину кнопки, false - [...]
+    //Настраиваемые параметры внешнего вида TabButton
+    readonly property color clrFonNormal:	clrFona//Цвет фона фкладки, когда она не активна.
+    readonly property color clrFonHover:	clrHover//Цвет фона вкладки при наведении мышки на неё.
+    readonly property color clrFonPressed:	Qt.darker(clrTexta, 1.3)//Цвет фона вкладки,когда нажали на его
+    readonly property color clrFonChecked:	clrTexta//Цвет фона выбранной вкладки пользователем.
+    readonly property color clrTxtNormal:	clrTexta//Цвет текста вкладки, когда она не активна.
+    readonly property color clrTxtPressed:	clrFona//Цвет текста вкладки при нажатии на неё
+    readonly property color clrTxtChecked:	clrFona//Цвет текста вкладки выбранной пользователем постоянно.
+    readonly property color clrBorder:		clrTexta//Цвет оконтовки вкладки.
+    //Настройки
+    hoverEnabled: false//Выкл отслеживание наведения мыши на кнопку в ПК.
+    //Методы
+    background: Rectangle {//Фон вкладки Прямоугольник.
+        radius: root.radius//радиус
+        color: !root.enabled	? Qt.darker(root.clrFonNormal, 1.25)
+            : root.down			? root.clrFonPressed
+            : root.checked		? root.clrFonChecked
+            : root.hovered		? root.clrFonHover
+            :					root.clrFonNormal
+        border.width: root.checked || root.down ? 0 : root.ntCoff/4
+        border.color: root.clrBorder
     }
-
-    contentItem: Label {
-        id: lbl
-        text: control.text
+    contentItem: Label{
+        id: lblText
+        text: root.text//У TabButton есть свойство text, нет смысла его переназначать.
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        // Добавите при желании:
-        // elide: Text.ElideRight
-
-        color: !control.enabled ? control.clrTxtPressed
-              : control.checked ? control.clrTxtChecked
-              : control.down    ? control.clrTxtPressed
-              :                   control.clrTxtNormal
-
-        // начальный размер — в разумных пределах
-        font.pixelSize: Math.min(control.fontMaxPixelSize, Math.max(control.fontMinPixelSize, font.pixelSize || control.fontMaxPixelSize))
+        font.pixelSize: root.height - root.ntCoff//Размер шрифта - это высота вкладки, минус ntCoff
+        color: !root.enabled	? root.clrTxtPressed
+            : root.checked		? root.clrTxtChecked
+            : root.down			? root.clrTxtPressed
+            : 					root.clrTxtNormal
     }
-
-    function adjustFont() {
-        if (!autoFitFont) return;
-
-        var max = fontMaxPixelSize;
-        var min = fontMinPixelSize;
-        var s   = lbl.font.pixelSize > 0 ? lbl.font.pixelSize : max;
-
-        lbl.font.pixelSize = s;
-
-        if (width > lbl.implicitWidth) {
-            for (var x = s; x <= max; ++x) {
-                lbl.font.pixelSize = x;
-                if (lbl.implicitWidth > width) { lbl.font.pixelSize = x - 1; break; }
+    function fnAutoFont(){//Функция авто подгонки размера текста во вкладке
+        if (!blAutoFont){//Если авто подгон размера шрифта отключен, то...
+            lblText.elide = Text.ElideRight//автоматически сокращает текст, добавляя многоточие (...) в конце
+            return;//Выходим из функции.
+        }
+        if(width > lblText.implicitWidth){//Если длина строки больше длины текста
+            for(var ltShag=lblText.font.pixelSize; ltShag<height-root.ntCoff; ltShag++){
+                if(lblText.implicitWidth < width){//Если длина txt меньше динны стр
+                    lblText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                    if(lblText.implicitWidth > width){//Но, если переборщили
+                        lblText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                        return;//Выходим из увеличения шрифта.
+                    }
+                }
             }
-        } else {
-            for (var y = s; y >= min; --y) {
-                lbl.font.pixelSize = y;
-                if (lbl.implicitWidth <= width) break;
+        }
+        else{//Если длина строки меньше длины текста, то...
+            for(let ltShag = lblText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                if(lblText.implicitWidth > width)//Если текст дилиннее строки, то
+                    lblText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
             }
         }
     }
-
-    Component.onCompleted: adjustFont()
-    onWidthChanged:        adjustFont()
-    onHeightChanged:       adjustFont()
-    onTextChanged:         adjustFont()
-    onNtCoffChanged:       adjustFont()
+    Component.onCompleted:	fnAutoFont()//Когда текст отрисовался, то нужно выставить размер шрифта.
+    onWidthChanged:			fnAutoFont()//Если длина строки изменилась, то нужно выставить размер шрифта.
+    onHeightChanged:		fnAutoFont()//Если высота изменилась, значить изменился размер шрифта в настройках
+    onTextChanged:			fnAutoFont()//Если текст изменился, то нужно выставить размер шрифта.
+    onNtCoffChanged:		fnAutoFont()//Если коэффициент изменился, то нужно выставить размер шрифта.
 }

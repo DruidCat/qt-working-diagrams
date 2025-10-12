@@ -473,146 +473,6 @@ Item {
             //Функции
             /*
             TabButton {
-                id: tbbNaideno
-                text: qsTr("Найдено")
-                width: (drwSidebar.height-root.ntCoff/2)/tbSidebar.count//Длина делется на количество кнопок
-                height: tbSidebar.height//Расчитаная высота кнопок относительно размера шрифта
-                hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
-                onPressed: tbSidebar.currentIndex = 0//Меняем индекс сразу при нажатии
-                background: Rectangle{//Фон вкладки Прямоугольник.
-                    radius: 0//Без радиуса.
-                    color: !tbbNaideno.enabled		? Qt.darker(tbSidebar.clrFonNormal, 1.25)
-                            : tbbNaideno.down		? tbSidebar.clrFonPressed
-                            : tbbNaideno.checked	? tbSidebar.clrFonChecked
-                            : tbbNaideno.hovered	? tbSidebar.clrFonHover
-                            :						tbSidebar.clrFonNormal
-                    border.width: tbbNaideno.checked || tbbNaideno.down ? 0 : root.ntCoff/4
-                    border.color: tbSidebar.clrBorder
-                }
-                contentItem: Label {
-                    id: lblNaideno
-                    text: tbbNaideno.text
-                    font.pixelSize: tbSidebar.height-root.ntCoff//Задаём размер шрифта.
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    //elide: Text.ElideRight//автоматически сокращает текст, добавляя многоточие (...) в конце
-                    color: !tbbNaideno.enabled		? tbSidebar.clrTxtPressed
-                            : tbbNaideno.checked	? tbSidebar.clrTxtChecked
-                            : tbbNaideno.down		? tbSidebar.clrTxtPressed
-                            :						tbSidebar.clrTxtNormal
-                }
-                Component.onCompleted: {//Когда текст отрисовался, нужно выставить размер шрифта.
-                    if(tbbNaideno.width > lblNaideno.implicitWidth){//Если длина строки больше длины текста,то
-                        for(var ltShag=lblNaideno.font.pixelSize; ltShag<tbbNaideno.height-root.ntCoff;
-                                                                                                    ltShag++){
-                            if(lblNaideno.implicitWidth< tbbNaideno.width){//Если длина txt меньше динны строк
-                                lblNaideno.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                                if(lblNaideno.implicitWidth > tbbNaideno.width){//Но, если переборщили
-                                    lblNaideno.font.pixelSize--;//То уменьшаем размер шрифта и...
-                                    return;//Выходим из увеличения шрифта.
-                                }
-                            }
-                        }
-                    }
-                    else{//Если длина строки меньше длины текста, то...
-                        for(let ltShag = lblNaideno.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                            if(lblNaideno.implicitWidth > tbbNaideno.width)//Если текст дилиннее строки, то...
-                                lblNaideno.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-                        }
-                    }
-                }
-                onWidthChanged: {//Если длина строки изменилась, то...
-                    if(tbbNaideno.width > lblNaideno.implicitWidth){//Если длина строки больше длины текста,то
-                        for(var ltShag=lblNaideno.font.pixelSize; ltShag<tbbNaideno.height-root.ntCoff;
-                                                                                                    ltShag++){
-                            if(lblNaideno.implicitWidth< tbbNaideno.width){//Если длина txt меньше динны строк
-                                lblNaideno.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                                if(lblNaideno.implicitWidth > tbbNaideno.width){//Но, если переборщили
-                                    lblNaideno.font.pixelSize--;//То уменьшаем размер шрифта и...
-                                    return;//Выходим из увеличения шрифта.
-                                }
-                            }
-                        }
-                    }
-                    else{//Если длина строки меньше длины текста, то...
-                        for(let ltShag = lblNaideno.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                            if(lblNaideno.implicitWidth > tbbNaideno.width)//Если текст дилиннее строки, то...
-                                lblNaideno.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-                        }
-                    }
-                }
-            }
-            TabButton {
-                id: tbbZakladki
-                text: qsTr("Закладки")
-                width: (drwSidebar.height-root.ntCoff/2)/tbSidebar.count//Длина делется на количество кнопок
-                height: tbSidebar.height//Расчитаная высота кнопок относительно размера шрифта
-                hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
-                onPressed: tbSidebar.currentIndex = 1//Меняем индекс сразу при нажатии
-                background: Rectangle{//Фон вкладки Прямоугольник.
-                    radius: 0//Без радиуса.
-                    color: !tbbZakladki.enabled		? Qt.darker(tbSidebar.clrFonNormal, 1.25)
-                            : tbbZakladki.down		? tbSidebar.clrFonPressed
-                            : tbbZakladki.checked	? tbSidebar.clrFonChecked
-                            : tbbZakladki.hovered	? tbSidebar.clrFonHover
-                            : 						tbSidebar.clrFonNormal
-                    border.width: tbbZakladki.checked || tbbZakladki.down ? 0 : root.ntCoff/4
-                    border.color: tbSidebar.clrBorder
-                }
-                contentItem: Label {
-                    id: lblZakladki
-                    text: tbbZakladki.text
-                    font.pixelSize: tbSidebar.height-root.ntCoff//Задаём размер шрифта.
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                    //elide: Text.ElideRight//автоматически сокращает текст, добавляя многоточие (...) в конце
-                    color: !tbbZakladki.enabled		? tbSidebar.clrTxtPressed
-                            : tbbZakladki.checked	? tbSidebar.clrTxtChecked
-                            : tbbZakladki.down		? tbSidebar.clrTxtPressed
-                            :						tbSidebar.clrTxtNormal
-                }
-                Component.onCompleted: {//Когда текст отрисовался, нужно выставить размер шрифта.
-                    if(tbbZakladki.width > lblZakladki.implicitWidth){//Если длина строки больше длины текста
-                        for(var ltShag=lblZakladki.font.pixelSize; ltShag<tbbZakladki.height-root.ntCoff;
-                                                                                                    ltShag++){
-                            if(lblZakladki.implicitWidth< tbbZakladki.width){//Если длина txt меньше динны стр
-                                lblZakladki.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                                if(lblZakladki.implicitWidth > tbbZakladki.width){//Но, если переборщили
-                                    lblZakladki.font.pixelSize--;//То уменьшаем размер шрифта и...
-                                    return;//Выходим из увеличения шрифта.
-                                }
-                            }
-                        }
-                    }
-                    else{//Если длина строки меньше длины текста, то...
-                        for(let ltShag = lblZakladki.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                            if(lblZakladki.implicitWidth > tbbZakladki.width)//Если текст дилиннее строки, то.
-                                lblZakladki.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-                        }
-                    }
-                }
-                onWidthChanged: {//Если длина строки изменилась, то...
-                    if(tbbZakladki.width > lblZakladki.implicitWidth){//Если длина строки больше длины текста
-                        for(var ltShag=lblZakladki.font.pixelSize; ltShag<tbbZakladki.height-root.ntCoff;
-                                                                                                    ltShag++){
-                            if(lblZakladki.implicitWidth< tbbZakladki.width){//Если длина txt меньше динны стр
-                                lblZakladki.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                                if(lblZakladki.implicitWidth > tbbZakladki.width){//Но, если переборщили
-                                    lblZakladki.font.pixelSize--;//То уменьшаем размер шрифта и...
-                                    return;//Выходим из увеличения шрифта.
-                                }
-                            }
-                        }
-                    }
-                    else{//Если длина строки меньше длины текста, то...
-                        for(let ltShag = lblZakladki.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                            if(lblZakladki.implicitWidth > tbbZakladki.width)//Если текст дилиннее строки, то.
-                                lblZakladki.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-                        }
-                    }
-                }
-            }
-            TabButton {
                 id: tbbStranici
                 text: qsTr("Страницы")
                 width: (drwSidebar.height-root.ntCoff/2)/tbSidebar.count+root.ntCoff/4//делим на кол-во кнопок
@@ -641,7 +501,7 @@ Item {
                             : tbbStranici.down		? tbSidebar.clrTxtPressed
                             :						tbSidebar.clrTxtNormal
                 }
-                Component.onCompleted: {//Когда текст отрисовался, нужно выставить размер шрифта.
+                Component.onCompleted: {
                     if(tbbStranici.width > lblStranici.implicitWidth){//Если длина строки больше длины текста
                         for(var ltShag=lblStranici.font.pixelSize; ltShag<tbbStranici.height-root.ntCoff;
                                                                                                     ltShag++){
@@ -661,7 +521,7 @@ Item {
                         }
                     }
                 }
-                onWidthChanged: {//Если длина строки изменилась, то...
+                onWidthChanged: {
                     if(tbbStranici.width > lblStranici.implicitWidth){//Если длина строки больше длины текста
                         for(var ltShag=lblStranici.font.pixelSize; ltShag<tbbStranici.height-root.ntCoff;
                                                                                                     ltShag++){
@@ -683,59 +543,42 @@ Item {
                 }
             }
             */
-            // ВАЖНО: onPressed не нужен — TabBar сам управляет currentIndex при клике.
-
-                DCTabButton {
-                    text: qsTr("Найдено")
-                    width:  (drwSidebar.height - tbSidebar.ntCoff/2) / tbSidebar.count
-                    height: tbSidebar.height
-                    hoverEnabled: !root.isMobile
-
-                    // пробрасываем тему
-                    clrFonNormal:  tbSidebar.clrFonNormal
-                    clrFonHover:   tbSidebar.clrFonHover
-                    clrFonPressed: tbSidebar.clrFonPressed
-                    clrFonChecked: tbSidebar.clrFonChecked
-                    clrTxtNormal:  tbSidebar.clrTxtNormal
-                    clrTxtPressed: tbSidebar.clrTxtPressed
-                    clrTxtChecked: tbSidebar.clrTxtChecked
-                    clrBorder:     tbSidebar.clrBorder
-                    ntCoff:        tbSidebar.ntCoff
-                }
-
-                DCTabButton {
-                    text: qsTr("Закладки")
-                    width:  (drwSidebar.height - tbSidebar.ntCoff/2) / tbSidebar.count
-                    height: tbSidebar.height
-                    hoverEnabled: !root.isMobile
-
-                    clrFonNormal:  tbSidebar.clrFonNormal
-                    clrFonHover:   tbSidebar.clrFonHover
-                    clrFonPressed: tbSidebar.clrFonPressed
-                    clrFonChecked: tbSidebar.clrFonChecked
-                    clrTxtNormal:  tbSidebar.clrTxtNormal
-                    clrTxtPressed: tbSidebar.clrTxtPressed
-                    clrTxtChecked: tbSidebar.clrTxtChecked
-                    clrBorder:     tbSidebar.clrBorder
-                    ntCoff:        tbSidebar.ntCoff
-                }
-
-                DCTabButton {
-                    text: qsTr("Страницы")
-                    width:  (drwSidebar.height - tbSidebar.ntCoff/2) / tbSidebar.count + tbSidebar.ntCoff/4
-                    height: tbSidebar.height
-                    hoverEnabled: !root.isMobile
-
-                    clrFonNormal:  tbSidebar.clrFonNormal
-                    clrFonHover:   tbSidebar.clrFonHover
-                    clrFonPressed: tbSidebar.clrFonPressed
-                    clrFonChecked: tbSidebar.clrFonChecked
-                    clrTxtNormal:  tbSidebar.clrTxtNormal
-                    clrTxtPressed: tbSidebar.clrTxtPressed
-                    clrTxtChecked: tbSidebar.clrTxtChecked
-                    clrBorder:     tbSidebar.clrBorder
-                    ntCoff:        tbSidebar.ntCoff
-                }
+            DCTabButton {
+                text: qsTr("Найдено")
+                width:  (drwSidebar.height-root.ntCoff/2)/tbSidebar.count//Длина делется на количество кнопок.
+                height: tbSidebar.height
+                hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
+                //пробрасываем тему
+                clrTexta: root.clrTexta
+                clrFona: root.clrFona
+                clrHover: root.clrMenuFon
+                ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
+                onPressed: tbSidebar.currentIndex = 0//Меняем индекс сразу при нажатии
+            }
+            DCTabButton {
+                text: qsTr("Закладки")
+                width:  (drwSidebar.height - root.ntCoff/2) / tbSidebar.count
+                height: tbSidebar.height
+                hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
+                //пробрасываем тему
+                clrTexta: root.clrTexta
+                clrFona: root.clrFona
+                clrHover: root.clrMenuFon
+                ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
+                onPressed: tbSidebar.currentIndex = 1//Меняем индекс сразу при нажатии
+            }
+            DCTabButton {
+                text: qsTr("Страницы")
+                width: (drwSidebar.height - root.ntCoff/2) / tbSidebar.count + root.ntCoff/4
+                height: tbSidebar.height
+                hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
+                //пробрасываем тему
+                clrTexta: root.clrTexta
+                clrFona: root.clrFona
+                clrHover: root.clrMenuFon
+                ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
+                onPressed: tbSidebar.currentIndex = 2//Меняем индекс сразу при нажатии
+            }
         }
     }
 }
