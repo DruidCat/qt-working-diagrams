@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Pdf
 import QtQuick.Controls
+import QtQuick.Layouts
 import DCButtons 1.0//Импортируем кнопки
 
 Item {
@@ -420,11 +421,10 @@ Item {
     }
     Drawer {
         id: drwSidebar
-        //Свойства
         //Настройки
         edge: Qt.LeftEdge
         modal: false
-        width: 300//Ширина
+        width: 330//Ширина
         height: pmpDoc.height//Высота по высоте pdf сцены
         y: root.ntWidth*root.ntCoff+3*root.ntCoff//координату по Y брал из расчёта Stranica.qml
         dim: false
@@ -445,10 +445,8 @@ Item {
             anchors.left: rctBorder.right
             width: drwSidebar.width - root.ntCoff
             height: drwSidebar.height
-            color: root.clrFona
-            border.color: root.clrTexta
-            border.width: root.ntCoff/4//Бордюр
-        }
+            color: "transparent"
+        } 
         TabBar {
             id: tbSidebar
             //Свойства
@@ -467,14 +465,37 @@ Item {
                     : ((root.ntWidth-1)*root.ntCoff > 30) 	? 30
                     :										((root.ntWidth-1)*root.ntCoff)
             x: -width//Смещаем х влево в минусовые координаты, для того,чтоб потом повернуть от точки поворота
-            y: root.ntCoff/4//Опускаемся на полщину бардюра
             rotation: -90//Поворачиваем на 90 градусов против часовой стрелки боковую панель
             transformOrigin: Item.TopRight//Точка поворота боковой панели верхний правый угол.
-            currentIndex: 1//Закладки выбраны по умолчанию
+            currentIndex: {//Закладки выбраны по умолчанию
+                rctZakladki.visible = true
+                return 1
+            }
             //Функции
+            onCurrentIndexChanged: {//Если индекс tbSidebar меняется, то делаем видимыми содержимое вкладок.
+                if (currentIndex === 0){//Если выбраны Найдено, то...
+                    rctZakladki.visible = false
+                    rctPoster.visible = false
+                    rctNaideno.visible = true//Видима вкладка Найдено.
+                }
+                else{
+                    if (currentIndex === 1){//Если выбраны Закладки
+                        rctPoster.visible = false
+                        rctNaideno.visible = false
+                        rctZakladki.visible = true//Видима вкладка Закладки
+                    }
+                    else{
+                        if(currentIndex === 2){//Если выбраны Страницы
+                            rctZakladki.visible = false
+                            rctNaideno.visible = false
+                            rctPoster.visible = true//Видима вкладка Страницы
+                        }
+                    }
+                }
+            }
             DCTabButton {
                 text: qsTr("Найдено")
-                width:  (drwSidebar.height-root.ntCoff/2)/tbSidebar.count//Длина делется на количество кнопок.
+                width:  (drwSidebar.height-root.ntCoff/2)/tbSidebar.count + root.ntCoff/4//делим на кол-во кно
                 height: tbSidebar.height
                 hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
                 //пробрасываем тему
@@ -486,7 +507,7 @@ Item {
             }
             DCTabButton {
                 text: qsTr("Закладки")
-                width:  (drwSidebar.height - root.ntCoff/2) / tbSidebar.count
+                width:  (drwSidebar.height - root.ntCoff/2) / tbSidebar.count + root.ntCoff/4
                 height: tbSidebar.height
                 hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
                 //пробрасываем тему
@@ -507,6 +528,143 @@ Item {
                 clrHover: root.clrMenuFon
                 ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
                 onPressed: tbSidebar.currentIndex = 2//Меняем индекс сразу при нажатии
+            }
+        }
+        Rectangle {
+            id: rctNaideno
+            anchors.top: rctSibebar.top
+            anchors.left: rctSibebar.left
+            anchors.leftMargin: tbSidebar.height
+            width: rctSibebar.width - tbSidebar.height
+            height: rctSibebar.height
+            color: root.clrFona
+            visible: false
+            ListView {
+                id: lsvNaideno
+                anchors.fill: rctNaideno
+                implicitHeight: rctNaideno.height
+                model: pmpDoc.searchModel
+                currentIndex: pmpDoc.searchModel.currentResult
+                ScrollBar.vertical: ScrollBar { }
+                delegate: ItemDelegate {
+                    id: dlgResult
+                    required property int index
+                    required property int page
+                    width: lsvNaideno.width
+                    background: Rectangle {
+                        color: root.clrFona
+                    }
+                    contentItem: Label {
+                        text: " Страница " + (dlgResult.page + 1) + ": "+ pmpDoc.searchString
+                        color: root.clrTexta
+                    }
+                    highlighted: ListView.isCurrentItem
+                    onClicked: pmpDoc.searchModel.currentResult = dlgResult.index
+                }
+            }
+            Rectangle {//Оконтовка поверх информации.
+                anchors.fill: rctNaideno
+                color: "transparent"
+                border.color: root.clrTexta
+                border.width: root.ntCoff/4//Бордюр
+            }
+        }
+        Rectangle {
+            id: rctZakladki
+            anchors.top: rctSibebar.top
+            anchors.left: rctSibebar.left
+            anchors.leftMargin: tbSidebar.height
+            width: rctSibebar.width - tbSidebar.height
+            height: rctSibebar.height
+            border.color: root.clrTexta
+            border.width: root.ntCoff/4//Бордюр
+            visible: false
+            TreeView {
+                id: trvZakladki
+                implicitHeight: rctZakladki.height
+                implicitWidth: rctZakladki.width
+                columnWidthProvider: function() { return width }
+                ScrollBar.vertical: ScrollBar { }
+                delegate: TreeViewDelegate {
+                    required property int page
+                    required property point location
+                    required property real zoom
+                    onClicked: pmpDoc.goToLocation(page, location, zoom)
+                }
+                model: PdfBookmarkModel {
+                    document: pdfDoc
+                }
+            }
+            Rectangle {//Оконтовка поверх информации.
+                anchors.fill: rctZakladki
+                color: "transparent"
+                border.color: root.clrTexta
+                border.width: root.ntCoff/4//Бордюр
+            }
+        }
+        Rectangle {
+            id: rctPoster
+            anchors.top: rctSibebar.top
+            anchors.left: rctSibebar.left
+            anchors.leftMargin: tbSidebar.height
+            width: rctSibebar.width - tbSidebar.height
+            height: rctSibebar.height
+            color: root.clrFona
+            border.color: root.clrTexta
+            border.width: root.ntCoff/4//Бордюр
+            visible: false
+            GridView {
+                id: grvPoster
+                implicitWidth: rctPoster.width
+                implicitHeight: rctPoster.height
+                model: pdfDoc.pageModel
+                cellWidth: width / 2
+                cellHeight: cellWidth + 10
+                ScrollBar.vertical: ScrollBar { }
+                delegate: Item {
+                    required property int index
+                    required property string label
+                    required property size pointSize
+                    width: grvPoster.cellWidth
+                    height: grvPoster.cellHeight
+                    Rectangle {
+                        id: rctList
+                        width: rctImage.width
+                        height: rctImage.height
+                        x: (parent.width - width) / 2
+                        y: (parent.height - height - txtNomerStranici.height) / 2
+                        PdfPageImage {
+                            id: rctImage
+                            document: pdfDoc
+                            currentFrame: index
+                            asynchronous: true
+                            fillMode: Image.PreserveAspectFit
+                            property bool landscape: pointSize.width > pointSize.height
+                            width: landscape ? grvPoster.cellWidth - 6
+                                             : height * pointSize.width / pointSize.height
+                            height: landscape ? width * pointSize.height / pointSize.width
+                                             : grvPoster.cellHeight - 14
+                            sourceSize.width: width
+                            sourceSize.height: height
+                        }
+                    }
+                    Text {
+                        id: txtNomerStranici
+                        anchors.bottom: parent.bottom
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        color: root.clrTexta
+                        text: label
+                    }
+                    TapHandler {
+                        onTapped: pmpDoc.goToPage(index)
+                    }
+                }
+            }
+            Rectangle {//Оконтовка поверх информации.
+                anchors.fill: rctPoster
+                color: "transparent"
+                border.color: root.clrTexta
+                border.width: root.ntCoff/4//Бордюр
             }
         }
     }
