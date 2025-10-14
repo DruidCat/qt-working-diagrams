@@ -46,8 +46,16 @@ Item {
             }
             else{
                 if(event.key === Qt.Key_B){//Если нажата клавиша "B", то...
+                    fnSidebarZakladki()//Открыть нужно вкладку ЗАкладки
                     root.clickedSidebar();//Сигнал - Открываем боковую панель.
                     event.accepted = true;//Завершаем обработку эвента.
+                }
+                else{
+                    if(event.key === Qt.Key_T){//Если нажата клавиша "T", то...
+                        fnSidebarPoster()//Открыть нужно вкладку Миниатюры
+                        root.clickedSidebar();//Сигнал - Открываем боковую панель.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
                 }
             }
         }
@@ -72,6 +80,15 @@ Item {
     function fnCopyToClipboard(){//Функция копирования выделенного текста в буфер обмена.
         if(pmpDoc.selectedText !== "")//Если выбранный текст не пустота, то...
             pmpDoc.copySelectionToClipboard()//Копировать выделенный текст в документе
+    }
+    function fnSidebarNaideno(){//Переключение на вкладку Наидено
+        tbSidebar.currentIndex = 0
+    }
+    function fnSidebarZakladki(){//Переключение на вкладку Закладки
+        tbSidebar.currentIndex = 1
+    }
+    function fnSidebarPoster(){//Переключение на вкладку Миниатюры страниц
+        tbSidebar.currentIndex = 3
     }
     function fnSidebar(){//Функция открывающая/закрывающая боковую панель.
         if(!drwSidebar.position){//Если не открыта панель боковая, то открываем.
@@ -449,15 +466,6 @@ Item {
         } 
         TabBar {
             id: tbSidebar
-            //Свойства
-            property color clrFonNormal: root.clrFona//Цвет фона фкладки, когда она не активна.
-            property color clrFonHover: root.clrMenuFon//Цвет фона вкладки при наведении мышки на неё.
-            property color clrFonPressed: Qt.darker(root.clrTexta, 1.3)//Цвет фона вкладки,когда нажали на его
-            property color clrFonChecked: root.clrTexta//Цвет фона выбранной вкладки пользователем.
-            property color clrTxtNormal: root.clrTexta//Цвет текста вкладки, когда она не активна.
-            property color clrTxtPressed: root.clrFona//Цвет текста вкладки при нажатии на неё
-            property color clrTxtChecked: root.clrFona//Цвет текста вкладки выбранной пользователем постоянно.
-            property color clrBorder: root.clrTexta//Цвет оконтовки вкладки.
             //Настройки
             anchors.top: drwSidebar.top
             anchors.right: rctBorder.right
@@ -473,25 +481,9 @@ Item {
             }
             //Функции
             onCurrentIndexChanged: {//Если индекс tbSidebar меняется, то делаем видимыми содержимое вкладок.
-                if (currentIndex === 0){//Если выбраны Найдено, то...
-                    rctZakladki.visible = false
-                    rctPoster.visible = false
-                    rctNaideno.visible = true//Видима вкладка Найдено.
-                }
-                else{
-                    if (currentIndex === 1){//Если выбраны Закладки
-                        rctPoster.visible = false
-                        rctNaideno.visible = false
-                        rctZakladki.visible = true//Видима вкладка Закладки
-                    }
-                    else{
-                        if(currentIndex === 2){//Если выбраны Страницы
-                            rctZakladki.visible = false
-                            rctNaideno.visible = false
-                            rctPoster.visible = true//Видима вкладка Страницы
-                        }
-                    }
-                }
+                rctNaideno.visible = (currentIndex === 0)
+                rctZakladki.visible = (currentIndex === 1)
+                rctPoster.visible = (currentIndex === 2)
             }
             DCTabButton {
                 text: qsTr("Найдено")
@@ -503,6 +495,7 @@ Item {
                 clrFona: root.clrFona
                 clrHover: root.clrMenuFon
                 ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
+                blAutoFont: false
                 onPressed: tbSidebar.currentIndex = 0//Меняем индекс сразу при нажатии
             }
             DCTabButton {
@@ -515,6 +508,7 @@ Item {
                 clrFona: root.clrFona
                 clrHover: root.clrMenuFon
                 ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
+                blAutoFont: false
                 onPressed: tbSidebar.currentIndex = 1//Меняем индекс сразу при нажатии
             }
             DCTabButton {
@@ -527,6 +521,7 @@ Item {
                 clrFona: root.clrFona
                 clrHover: root.clrMenuFon
                 ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
+                blAutoFont: false
                 onPressed: tbSidebar.currentIndex = 2//Меняем индекс сразу при нажатии
             }
         }

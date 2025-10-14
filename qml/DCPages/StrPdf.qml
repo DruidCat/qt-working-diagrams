@@ -190,6 +190,24 @@ Item {
             pdfLoader.item.fnSidebar()//Открываем боковую панель через функцию.
         }
     }
+    function fnClickedNaideno(){//Функция нажатия кнопки SideBar.
+        if(pdfLoader.item){//Если загрузчик загрузил документ, то...
+            pdfLoader.item.fnSidebarNaideno()
+            fnClickedSidebar()//Открываем боковую панель.
+        }
+    }
+    function fnClickedZakladki(){//Функция нажатия кнопки SideBar.
+        if(pdfLoader.item){//Если загрузчик загрузил документ, то...
+            pdfLoader.item.fnSidebarZakladki()
+            fnClickedSidebar()//Открываем боковую панель.
+        }
+    }
+    function fnClickedPoster(){//Функция нажатия кнопки SideBar.
+        if(pdfLoader.item){//Если загрузчик загрузил документ, то...
+            pdfLoader.item.fnSidebarPoster()
+            fnClickedSidebar()//Открываем боковую панель.
+        }
+    }
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
 		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
 	}
