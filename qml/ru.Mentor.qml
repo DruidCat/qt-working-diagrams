@@ -563,6 +563,7 @@ ApplicationWindow {
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
 				clrTexta: pgStrPdf.clrTexta; clrFona: pgStrPdf.clrRabOblasti; clrMenuFon: pgStrPdf.clrFona
+                clrPoisk: root.clrFaila
 				zagolovokX: pgStrPdf.rctStrZagolovok.x; zagolovokY: pgStrPdf.rctStrZagolovok.y
 				zagolovokWidth: pgStrPdf.rctStrZagolovok.width
 				zagolovokHeight: pgStrPdf.rctStrZagolovok.height

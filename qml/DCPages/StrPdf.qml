@@ -11,6 +11,7 @@ Item {
     property color clrTexta: "Orange"
 	property color clrFona: "Black"
 	property color clrMenuFon: "SlateGray"
+    property color clrPoisk: "Yellow"
 	property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
@@ -408,7 +409,7 @@ Item {
             anchors.left: tmZagolovok.left; anchors.right: tmZagolovok.right
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false//Невидимый виджет.
-            clrFona: root.clrFona; clrTexta: "yellow"; clrKnopki: "yellow"; clrBorder: root.clrTexta
+            clrFona: root.clrFona; clrTexta: root.clrPoisk; clrKnopki: root.clrPoisk; clrBorder: root.clrTexta
             tapKnopkaZakrit: 1.3; tapKnopkaVniz: 1.3; tapKnopkaVverh: 1.3
             onClickedNext: {
                 pdfLoader.item.searchForward();//Показываем следующий результат поиска.
@@ -470,7 +471,7 @@ Item {
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
 			visible: false//Невидимый виджет.
             clrFona: root.clrFona; clrFonaPass: root.clrTexta; clrTexta: root.clrFona
-            clrKnopki: "yellow";clrBorder:"yellow"
+            clrKnopki: root.clrPoisk;clrBorder:root.clrPoisk
             placeholderTextTrue: qsTr("ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА")
             placeholderTextFalse: qsTr("НЕВЕРНЫЙ ПАРОЛЬ ДОКУМЕНТА")
             tapKnopkaZakrit: root.tapZagolovokLevi; tapKnopkaOk: root.tapZagolovokPravi
@@ -525,6 +526,7 @@ Item {
             property color clrTexta: root.clrTexta
             property color clrFona: root.clrFona
             property color clrMenuFon: root.clrMenuFon
+            property color clrPois: root.clrPoisk
             property bool isMobile: root.isMobile
             property bool isOpenedSidebar: false//true - открыта боковая панель
             //Настройки.
@@ -538,6 +540,7 @@ Item {
                 item.clrTexta = clrTexta
                 item.clrFona = clrFona
                 item.clrMenuFon = clrMenuFon
+                item.clrPoisk = clrPoisk
                 item.isMobile = isMobile
             }
             onLoaded: { 

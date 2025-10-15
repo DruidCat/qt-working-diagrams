@@ -24,6 +24,7 @@ Item {
     property color clrTexta: "Orange"
     property color clrFona: "Black"
     property color clrMenuFon: "SlateGray"
+    property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
     //Настройки
     anchors.fill: parent
@@ -560,7 +561,7 @@ Item {
                     }
                     contentItem: Label {
                         text: " Страница " + (dlgResult.page + 1) + ": "+ pmpDoc.searchString
-                        color: root.clrTexta
+                        color: root.clrPoisk
                     }
                     highlighted: ListView.isCurrentItem
                     onClicked: pmpDoc.searchModel.currentResult = dlgResult.index
