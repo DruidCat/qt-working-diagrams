@@ -208,20 +208,20 @@ Item {
     }
     function fnClickedNaideno(){//Функция нажатия кнопки SideBar.
         if(pdfLoader.item){//Если загрузчик загрузил документ, то...
-            pdfLoader.item.fnSidebarNaideno()
-            fnClickedSidebar()//Открываем боковую панель.
+            pdfLoader.item.fnSidebarNaideno()//Переключаемся на вкладку Найдено
+            if(!pdfLoader.isOpenedSidebar) fnClickedSidebar()//Открываем боковую панель.
         }
     }
     function fnClickedZakladki(){//Функция нажатия кнопки SideBar.
         if(pdfLoader.item){//Если загрузчик загрузил документ, то...
-            pdfLoader.item.fnSidebarZakladki()
-            fnClickedSidebar()//Открываем боковую панель.
+            pdfLoader.item.fnSidebarZakladki()//Переключаемся на вкладку Закладки
+            if(!pdfLoader.isOpenedSidebar) fnClickedSidebar()//Открываем боковую панель.
         }
     }
     function fnClickedPoster(){//Функция нажатия кнопки SideBar.
         if(pdfLoader.item){//Если загрузчик загрузил документ, то...
-            pdfLoader.item.fnSidebarPoster()
-            fnClickedSidebar()//Открываем боковую панель.
+            pdfLoader.item.fnSidebarPoster()//Переключаемся на вкладку Миниатюр страниц
+            if(!pdfLoader.isOpenedSidebar) fnClickedSidebar()//Открываем боковую панель.
         }
     }
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
@@ -526,6 +526,7 @@ Item {
             property color clrFona: root.clrFona
             property color clrMenuFon: root.clrMenuFon
             property bool isMobile: root.isMobile
+            property bool isOpenedSidebar: false//true - открыта боковая панель
             //Настройки.
             anchors.fill: tmZona
             source: pdfLoader.blClose ? "" : "qrc:/qml/DCMethods/DCPdfMPV.qml"//Указываем путь отдельному QMl
@@ -615,11 +616,12 @@ Item {
                 else//Если поиск окончился, то...
                     pskPoisk.enabled = true;//Активируем кнопки в виджете поиска.
             }
-            function onClickedSidebar(){//Если нажата горячая клавиша Ctrl+B
+            function onClickedSidebar(){//Если нажата горячая клавиша Ctrl+B, Ctrl+T, Atl+F
                 if(knopkaSidebar.visible && knopkaSidebar.enabled)//Кнопка боковой панели видима и активна, то
-                    fnClickedSidebar()//ОТкрываем боковую панель.
+                    if(!pdfLoader.isOpenedSidebar) fnClickedSidebar()//Открываем боковую панель.
             }
             function onSgnOpenedSidebar(blOpened){//Если боковая панель открыта/закрыта, то...
+                pdfLoader.isOpenedSidebar = blOpened;//Приравниваем флаг открыта ли боковая панель?
                 knopkaSidebar.opened = blOpened//Передаём сигнал кнопке, для отображения нужной позиции.
             }
         }
