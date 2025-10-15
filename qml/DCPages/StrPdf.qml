@@ -89,13 +89,22 @@ Item {
 							}
                             else{
                                 if(event.key === Qt.Key_C){
-                                    pdfLoader.item.fnCopyToClipboard();//Копируем выделенный текст в file.pdf.
+                                    if(pdfLoader.item)//Если существует Загрузчик, то...
+                                        pdfLoader.item.fnCopyToClipboard();//Копируем выделенный текст в file.pdf.
                                     event.accepted = true;//Завершаем обработку эвента.
                                 }
                                 else{
-                                    if(event.key === Qt.Key_B){
-                                        fnClickedSidebar()////Функция нажатия кнопки SideBar.
+                                    if(event.key === Qt.Key_B){//Если нажата клавиша B
+                                        if(knopkaSidebar.visible && knopkaSidebar.enabled)//видима,активна
+                                            fnClickedZakladki()//Функция открытия боковой панели на Закладке.
                                         event.accepted = true;//Завершаем обработку эвента.
+                                    }
+                                    else{
+                                        if(event.key === Qt.Key_T){//Если нажата клавиша T
+                                            if(knopkaSidebar.visible && knopkaSidebar.enabled)//видима,активна
+                                                fnClickedPoster()//Открытие боковой панели на Миниатюрах.
+                                            event.accepted = true;//Завершаем обработку эвента.
+                                        }
                                     }
                                 }
                             }
@@ -109,6 +118,13 @@ Item {
                         if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
                             fnClickedNazad();//Функция нажатия кнопки Назад
                         event.accepted = true;//Завершаем обработку эвента.
+                    }
+                    else{
+                        if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                            if(knopkaSidebar.visible && knopkaSidebar.enabled)//Если кнопка видимая и активна.
+                                fnClickedNaideno()//Функция открытия боковой панели на Найдено.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
                     }
                 }
                 else{
@@ -600,7 +616,8 @@ Item {
                     pskPoisk.enabled = true;//Активируем кнопки в виджете поиска.
             }
             function onClickedSidebar(){//Если нажата горячая клавиша Ctrl+B
-                fnClickedSidebar()
+                if(knopkaSidebar.visible && knopkaSidebar.enabled)//Кнопка боковой панели видима и активна, то
+                    fnClickedSidebar()//ОТкрываем боковую панель.
             }
             function onSgnOpenedSidebar(blOpened){//Если боковая панель открыта/закрыта, то...
                 knopkaSidebar.opened = blOpened//Передаём сигнал кнопке, для отображения нужной позиции.

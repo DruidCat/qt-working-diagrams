@@ -60,18 +60,27 @@ Item {
             }
         }
         else{
-            if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
-                var ntStrDown = pmpDoc.currentPage + 1;
-                if(ntStrDown < root.pageCount)
-                    root.currentPage = ntStrDown;
-                event.accepted = true;//Завершаем обработку эвента.
+            if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                    fnSidebarNaideno()//Открыть нужно вкладку Найдено
+                    root.clickedSidebar();//Сигнал - Открываем боковую панель.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
             }
             else{
-                 if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
-                    var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
-                    if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                        root.currentPage = ntStrUp;
+                if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
+                    var ntStrDown = pmpDoc.currentPage + 1;
+                    if(ntStrDown < root.pageCount)
+                        root.currentPage = ntStrDown;
                     event.accepted = true;//Завершаем обработку эвента.
+                }
+                else{
+                     if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
+                        var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
+                        if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+                            root.currentPage = ntStrUp;
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
                 }
             }
         }
@@ -88,7 +97,7 @@ Item {
         tbSidebar.currentIndex = 1
     }
     function fnSidebarPoster(){//Переключение на вкладку Миниатюры страниц
-        tbSidebar.currentIndex = 3
+        tbSidebar.currentIndex = 2
     }
     function fnSidebar(){//Функция открывающая/закрывающая боковую панель.
         if(!drwSidebar.position){//Если не открыта панель боковая, то открываем.
