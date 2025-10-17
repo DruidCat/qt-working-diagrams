@@ -589,17 +589,16 @@ Item {
                     required property int page//Страница, на котором совпадение есть.
                     width: lsvNaideno.width
                     background: Rectangle {
-                        color: root.clrFona
+                        color: (tmdResult.index % 2) ? root.clrFona : "#333333"
                     }
                     contentItem: Label {
                         text: " Страница " + (tmdResult.page + 1)
-                              + ": "+ pmpDoc.searchString
+                              + ": " + pmpDoc.searchString
                               + " [" + (tmdResult.index + 1) + "]"
                         color: root.clrPoisk
                     }
                     highlighted: ListView.isCurrentItem
                     onClicked: {
-                        console.error(tmdResult.index)
                         pmpDoc.searchModel.currentResult = tmdResult.index
                         pmpDoc.goToLocation(tmdResult.page, Qt.point(0, 0), pmpDoc.renderScale)
                     }
