@@ -434,6 +434,8 @@ Item {
                 knopkaPoisk.enabled = true;//Конопка Поиск активния.
                 txnZagolovok.text = "";//Текст обнуляем вводимый.
                 pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
+                if(pskPoisk.isOpenedSidebar)//Если боковая панель открыта, то...
+                    fnSidebarNaideno();//Закрываем боковую панель с вкладкной Найдено.
             }
         }
         DCKnopkaPoisk{
