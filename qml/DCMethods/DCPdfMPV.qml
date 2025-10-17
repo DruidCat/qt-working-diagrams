@@ -585,8 +585,8 @@ Item {
                 ScrollBar.vertical: ScrollBar { }
                 delegate: ItemDelegate {
                     id: tmdResult
-                    required property int index
-                    required property int page
+                    required property int index//Номер совпадения
+                    required property int page//Страница, на котором совпадение есть.
                     width: lsvNaideno.width
                     background: Rectangle {
                         color: root.clrFona
@@ -594,11 +594,12 @@ Item {
                     contentItem: Label {
                         text: " Страница " + (tmdResult.page + 1)
                               + ": "+ pmpDoc.searchString
-                              + " [" + root.searchCount + "]"
+                              + " [" + (tmdResult.index + 1) + "]"
                         color: root.clrPoisk
                     }
                     highlighted: ListView.isCurrentItem
                     onClicked: {
+                        console.error(tmdResult.index)
                         pmpDoc.searchModel.currentResult = tmdResult.index
                         pmpDoc.goToLocation(tmdResult.page, Qt.point(0, 0), pmpDoc.renderScale)
                     }
