@@ -275,6 +275,7 @@ Item {
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
                 ldrProgress.active = true;//Запускаем виджет загрузки
+                knopkaSidebar.enabled = false;//Делаем неактивной кнопку боковой панели.
                 knopkaPovorotPo.enabled = false;//Делаем неактивной кнопку По часовой стрелки.
                 knopkaPovorotProtiv.enabled = false;//Делаем неактивной кнопку Против часовой стрелки.
                 spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
@@ -286,14 +287,16 @@ Item {
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
                 if(pskPoisk.visible){//Если видим виджет поиска, то...
-					knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
+                    knopkaSidebar.visible = false;//Делаем невидимой кнопку боковой панели.
+                    knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
                 	knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
-				}
+                }
 				else{//Если не видим виджет поиска(например при увеличении), то...
-                    knopkaPoisk.enabled = true;//Делаем активной кнопку Поиска.
+                    knopkaSidebar.enabled = true;//Делаем активной кнопку боковой панели.
                     knopkaPovorotPo.enabled = true;//Делаем активное кнопку По часовой стрелки.
                     knopkaPovorotProtiv.enabled = true;//Делаем активной кнопку Против часовой стрелки.
-				}
+                    knopkaPoisk.enabled = true;//Делаем активной кнопку Поиска.
+                }
             }
         }
     }
@@ -348,6 +351,7 @@ Item {
 				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
+                        knopkaSidebar.visible = false;//Делаем невидимым кнопку Боковой панели
                         knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
                         knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
                         knopkaPoisk.visible = false;//Конопка Поиск Невидимая.
@@ -360,6 +364,7 @@ Item {
 						if(!pskPoisk.visible){//Если не открыли Режим поиска, то...
                             root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
 							knopkaNazad.visible = true;//Кнопка назад видимая.
+                            knopkaSidebar.visible = true;//Делаем видимым кнопку Боковой панели
                             knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
                             knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
                             knopkaPoisk.visible = true;//Конопка Поиск Видимая.
@@ -419,6 +424,8 @@ Item {
                 knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                 knopkaOk.visible = false;//Кнопка Ок Невидимая.
                 knopkaNazad.visible = true;//Кнопка назад видимая.
+                knopkaSidebar.visible = true;//Делаем видимым кнопку Боковой панели
+                knopkaSidebar.enabled = true;//Делаем активной кнопку Боковой панели
                 knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
                 knopkaPovorotPo.enabled = true;//Делаем активной кнопку По часовой стрелки.
                 knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
