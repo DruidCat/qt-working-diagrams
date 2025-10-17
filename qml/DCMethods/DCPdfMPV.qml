@@ -174,8 +174,9 @@ Item {
     }
     onSearchStringChanged: {//Когда меняется поисковая строка — отдадим её в C++
         cppqml.pdfPoisk.strPoisk = root.searchString;//Отправляем поисковый запрос в бизнес логику.
-        if(root.searchString)//Если не пустая строка, то...
+        if(root.searchString){//Если не пустая строка, то...
             fnSidebarNaideno();//Открываем боковую панель на вкладке Найдено для отображения результатов поиск
+        }
     }
     onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
         if(width > 0){//Если ширина больше 0, это не формирование при старте окна, то...
@@ -566,6 +567,7 @@ Item {
         }
         Rectangle {
             id: rctNaideno
+            //Настройки
             anchors.top: rctSibebar.top
             anchors.left: rctSibebar.left
             anchors.leftMargin: tbSidebar.height
@@ -575,13 +577,14 @@ Item {
             visible: false
             ListView {
                 id: lsvNaideno
+                property int ntNomer: 1//Номер совпадения
                 anchors.fill: rctNaideno
                 implicitHeight: rctNaideno.height
                 model: pmpDoc.searchModel
                 currentIndex: pmpDoc.searchModel.currentResult
                 ScrollBar.vertical: ScrollBar { }
                 delegate: ItemDelegate {
-                    id: dlgResult
+                    id: tmdResult
                     required property int index
                     required property int page
                     width: lsvNaideno.width
@@ -589,11 +592,16 @@ Item {
                         color: root.clrFona
                     }
                     contentItem: Label {
-                        text: " Страница " + (dlgResult.page + 1) + ": "+ pmpDoc.searchString
+                        text: " Страница " + (tmdResult.page + 1)
+                              + ": "+ pmpDoc.searchString
+                              + " [" + root.searchCount + "]"
                         color: root.clrPoisk
                     }
                     highlighted: ListView.isCurrentItem
-                    onClicked: pmpDoc.searchModel.currentResult = dlgResult.index
+                    onClicked: {
+                        pmpDoc.searchModel.currentResult = tmdResult.index
+                        pmpDoc.goToLocation(tmdResult.page, Qt.point(0, 0), pmpDoc.renderScale)
+                    }
                 }
             }
             Rectangle {//Оконтовка поверх информации.
@@ -622,7 +630,6 @@ Item {
                 delegate: TreeViewDelegate {
                     required property int page
                     required property point location
-                    //required property real zoom//Если это свойство использовать, документ два раза грузится
                     onClicked: pmpDoc.goToLocation(page, location, pmpDoc.renderScale)
                 }
                 model: PdfBookmarkModel {
