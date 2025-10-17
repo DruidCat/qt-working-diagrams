@@ -26,6 +26,7 @@ Item {
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
+    property int sbCurrentIndex: tbSidebar.currentIndex
     //Настройки
     anchors.fill: parent
     visible: false//по умолчанию он невидимый.
@@ -37,6 +38,9 @@ Item {
     signal sgnPassword()//Сигнал о том, что запрашивается пароль.
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
     signal clickedSidebar()//Сигнал о нажатии боковой панели.
+    signal clickedSidebarNaideno()//Сигнал о нажатии боковой панели вкладки Найдено.
+    signal clickedSidebarZakladki()//Сигнал о нажатии боковой панели вкладки Закладки.
+    signal clickedSidebarPoster()//Сигнал о нажатии боковой панели вкладки Миниатюры.
     signal sgnOpenedSidebar(bool blOpened)//Сигнал о том, что боковая панель открыта/закрыта
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -47,14 +51,12 @@ Item {
             }
             else{
                 if(event.key === Qt.Key_B){//Если нажата клавиша "B", то...
-                    fnSidebarZakladki()//Открыть нужно вкладку ЗАкладки
-                    root.clickedSidebar();//Сигнал - Открываем боковую панель.
+                    root.clickedSidebarZakladki();//Сигнал что нужно открывать Закладки
                     event.accepted = true;//Завершаем обработку эвента.
                 }
                 else{
                     if(event.key === Qt.Key_T){//Если нажата клавиша "T", то...
-                        fnSidebarPoster()//Открыть нужно вкладку Миниатюры
-                        root.clickedSidebar();//Сигнал - Открываем боковую панель.
+                        root.clickedSidebarPoster();//Сигнал что нужно открывать Миниатюры
                         event.accepted = true;//Завершаем обработку эвента.
                     }
                 }
@@ -63,8 +65,7 @@ Item {
         else{
             if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
                 if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
-                    fnSidebarNaideno()//Открыть нужно вкладку Найдено
-                    root.clickedSidebar();//Сигнал - Открываем боковую панель.
+                    root.clickedSidebarNaideno();//Сигнал что нужно открывать Найдено
                     event.accepted = true;//Завершаем обработку эвента.
                 }
             }
@@ -91,24 +92,50 @@ Item {
         if(pmpDoc.selectedText !== "")//Если выбранный текст не пустота, то...
             pmpDoc.copySelectionToClipboard()//Копировать выделенный текст в документе
     }
-    function fnSidebarNaideno(){//Переключение на вкладку Наидено
-        tbSidebar.currentIndex = 0
-    }
-    function fnSidebarZakladki(){//Переключение на вкладку Закладки
-        tbSidebar.currentIndex = 1
-    }
-    function fnSidebarPoster(){//Переключение на вкладку Миниатюры страниц
-        tbSidebar.currentIndex = 2
-    }
     function fnSidebar(){//Функция открывающая/закрывающая боковую панель.
-        if(!drwSidebar.position){//Если не открыта панель боковая, то открываем.
-            drwSidebar.open()//Открываем боковую панель.
-            root.forceActiveFocus()
-        }
-        else
+        if(drwSidebar.position)//Если открыта боковая панель, то...
             drwSidebar.close()//Закрываем боковую панель
+        else{//Если закрыта боковая панель, то...
+            drwSidebar.open()//Открываем боковую панель.
+            root.forceActiveFocus()//Форсируем фокус, чтоб можно было закрыть боковую панель с горячих кнопок.
+        }
     }
-
+    function fnSidebarNaideno(){//Функция нажатия кнопки SideBar.
+        if(drwSidebar.opened){//Если боковая панель открыта, то...
+            if(tbSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
+                fnSidebar()//Закрываем боковую панель.
+            else//Если вкладка открыта отличная от Найдено, то...
+                tbSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
+        }
+        else{//Если боковая панель закрыта, то...
+            tbSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
+            fnSidebar()//Открываем боковую панель.
+        }
+    }
+    function fnSidebarZakladki(){//Функция нажатия кнопки SideBar.
+        if(drwSidebar.opened){//Если боковая панель открыта, то...
+            if(tbSidebar.currentIndex === 1)//Если открыта вкладка Закладки, то...
+                fnSidebar()//Закрываем боковую панель.
+            else//Если вкладка открыта отличная от Закладки, то...
+                tbSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
+        }
+        else{//Если боковая панель закрыта, то...
+            tbSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
+            fnSidebar()//Открываем боковую панель.
+        }
+    }
+    function fnSidebarPoster(){//Функция нажатия кнопки SideBar.
+        if(drwSidebar.opened){//Если боковая панель открыта, то...
+            if(tbSidebar.currentIndex === 2)//Если открыта вкладка Миниатюры, то...
+                fnSidebar()//Закрываем боковую панель.
+            else//Если вкладка открыта отличная от Миниатюры, то...
+                tbSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
+        }
+        else{//Если боковая панель закрыта, то...
+            tbSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
+            fnSidebar()//Открываем боковую панель.
+        }
+    }
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
         if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
@@ -147,6 +174,8 @@ Item {
     }
     onSearchStringChanged: {//Когда меняется поисковая строка — отдадим её в C++
         cppqml.pdfPoisk.strPoisk = root.searchString;//Отправляем поисковый запрос в бизнес логику.
+        if(root.searchString)//Если не пустая строка, то...
+            fnSidebarNaideno();//Открываем боковую панель на вкладке Найдено для отображения результатов поиск
     }
     onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
         if(width > 0){//Если ширина больше 0, это не формирование при старте окна, то...

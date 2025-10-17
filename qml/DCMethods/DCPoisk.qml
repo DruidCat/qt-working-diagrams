@@ -23,12 +23,17 @@ Item {
     property real tapKnopkaZakrit: 1
     property real tapKnopkaVniz: 1
     property real tapKnopkaVverh: 1
+    property bool isOpenedSidebar: false//true - открыта боковая панель
     //Настройки
     focus: true
     //Сигналы.
     signal clickedNext();//Сигнал на следующий элемент поиска
     signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
     signal clickedZakrit();//Сигнал на отмену поиска. 
+    signal clickedSidebar();//Сигнал о нажатии на кнопку боковой панели.
+    signal clickedSidebarZakladki();//Сигнал - Открываем боковую панель с Закладками.
+    signal clickedSidebarPoster();//Сигнал - Открываем боковую панель с Миниатюрами страниц
+    signal clickedSidebarNaideno();//Сигнал - Открываем боковую панель с Найдено
     //Функции.
     function fnFocus() {//Функция для фокусировки ListView
         rctPoisk.forceActiveFocus();//Чтоб работали кнопки листания поиска.
@@ -59,6 +64,9 @@ Item {
     onSumPoiskChanged: {//Если что то найдено
         if(!root.nomerPoisk)//И номер поиска равен 0, то это первоначальный старт поиска.
             fnClickedVniz()//Функция обрабатывающая следующий поиск.
+    }
+    onIsOpenedSidebarChanged: {//Если статус флага открыта/закрыта боковая панель изменился, то...
+        knopkaSidebar.opened = root.isOpenedSidebar;//Передаём сигнал кнопке, для отображения нужной позиции.
     }
 
 	function fnClickedVniz() {//Функция обрабатывающая следующий поиск.
@@ -93,27 +101,52 @@ Item {
 			}
 		}	
 		Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-            if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                    if(root.visible && knopkaVverh.enabled)//Если виджет поиска видимый, то...
-                        fnClickedVverh()//Функция нажатия кнопки Предыдущего поиска
-                    event.accepted = true;//Завершаем обработку эвента.
-                }
-            }
-            else{
-                if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
-                    if(root.visible && knopkaZakrit.enabled)//Если режим поиска видимый, то...
-                        fnClickedZakrit();//Функция закрытия виджета.
+            if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+                if(event.key === Qt.Key_B){//Если нажата клавиша "B", то...
+                    root.clickedSidebarZakladki();//Сигнал - Открываем боковую панель с Закладками.
                     event.accepted = true;//Завершаем обработку эвента.
                 }
                 else{
-                    if((event.key===Qt.Key_F3)||(event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){//F3
-                        if(root.visible && knopkaVniz.enabled)//Если режим поиска видимый, то...
-                            fnClickedVniz();//Функция нажатия кнопки Следующего поиска
+                    if(event.key === Qt.Key_T){//Если нажата клавиша "T", то...
+                        root.clickedSidebarPoster();//Сигнал - Открываем боковую панель с Миниатюрами страниц
                         event.accepted = true;//Завершаем обработку эвента.
                     }
                 }
             }
+            else{
+                if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                    if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                        root.clickedSidebarNaideno();//Сигнал - Открываем боковую панель во вкладке Найдено.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+                else{
+                    if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                        if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                            if(root.visible && knopkaVverh.enabled)//Если виджет поиска видимый, то...
+                                fnClickedVverh()//Функция нажатия кнопки Предыдущего поиска
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
+                    else{
+                        if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
+                            if(root.visible && knopkaZakrit.enabled)//Если режим поиска видимый, то...
+                                fnClickedZakrit();//Функция закрытия виджета.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                        else{
+                            if((event.key===Qt.Key_F3)
+                                                    ||(event.key===Qt.Key_Enter)
+                                                    ||(event.key===Qt.Key_Return)){//F3
+                                if(root.visible && knopkaVniz.enabled)//Если режим поиска видимый, то...
+                                    fnClickedVniz();//Функция нажатия кнопки Следующего поиска
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
+                        }
+                    }
+                }
+            }
+
 			//console.log(event.key);
 		}
         DCKnopkaZakrit {//Кнопка Отмены поиска.
@@ -126,11 +159,21 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
             onClicked: fnClickedZakrit();//Функция закрытия виджета.
         }
+        DCKnopkaSidebar{//Кнопка Открытия/Закрытия боковой панели.
+            id: knopkaSidebar
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            anchors.verticalCenter: rctPoisk.verticalCenter
+            anchors.left:knopkaZakrit.right
+            clrKnopki: root.clrKnopki
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
+            onClicked: root.clickedSidebar();//Сигнал о нажатии на кнопку боковой панели.
+        }
         Rectangle {
             id: rctText
             anchors.top: rctPoisk.top
             anchors.bottom: rctPoisk.bottom
-            anchors.left: knopkaZakrit.right
+            anchors.left: knopkaSidebar.right
             anchors.right: knopkaVverh.left
 
             color: "transparent"
