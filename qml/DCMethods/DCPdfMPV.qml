@@ -622,8 +622,8 @@ Item {
                 delegate: TreeViewDelegate {
                     required property int page
                     required property point location
-                    required property real zoom
-                    onClicked: pmpDoc.goToLocation(page, location, zoom)
+                    //required property real zoom//Если это свойство использовать, документ два раза грузится
+                    onClicked: pmpDoc.goToLocation(page, location, pmpDoc.renderScale)
                 }
                 model: PdfBookmarkModel {
                     document: pdfDoc
