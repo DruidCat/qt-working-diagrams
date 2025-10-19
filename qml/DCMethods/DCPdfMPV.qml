@@ -464,6 +464,31 @@ Item {
             pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг. 
         }
     }
+    Connections {//Автовыбор первого совпадения и переход
+        target: pmpDoc.searchModel
+        function onCountChanged() {
+            /*
+            if (pmpDoc.searchModel.count > 0) {
+                pmpDoc.searchModel.currentResult = 0//выделяем первый результат
+            }
+            */
+        }
+        /*
+        function onCurrentResultChanged() {
+            const i = pmpDoc.searchModel.currentResult
+            if (i >= 0 && i < pmpDoc.searchModel.count) {
+                const r = pmpDoc.searchModel.get(i)//{ page, ... }
+                // Если в модели есть координаты совпадения — используем их,
+                // иначе просто переходим в начало нужной страницы.
+                const loc = (r.location !== undefined) ? r.location
+                            : (r.rect !== undefined) ? Qt.point(r.rect.x, r.rect.y)
+                            : Qt.point(0, 0)
+
+                pmpDoc.goToLocation(r.page, loc, pmpDoc.renderScale)
+            }
+        }
+        */
+    }
     Rectangle {//Дополнительный элементы управления.
         id: rctStranici
         anchors.bottom: root.bottom; anchors.horizontalCenter: root.horizontalCenter; anchors.bottomMargin: 22
@@ -589,7 +614,12 @@ Item {
                     required property int page//Страница, на котором совпадение есть.
                     width: lsvNaideno.width
                     background: Rectangle {
-                        color: (tmdResult.index % 2) ? root.clrFona : "#333333"
+                        color: (tmdResult.ListView.isCurrentItem
+                                            ? "#2979FF"//Синий на выделение по клику
+                                            //? "#00FFFF"//Аква
+                                            : ((tmdResult.index % 2)
+                                                ? root.clrFona
+                                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.35))))
                     }
                     contentItem: Label {
                         text: " Страница " + (tmdResult.page + 1)

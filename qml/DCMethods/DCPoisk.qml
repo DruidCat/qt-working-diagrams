@@ -62,8 +62,10 @@ Item {
         root.blNomer = false;//Окончание обнуления.
     }
     onSumPoiskChanged: {//Если что то найдено
+        /*
         if(!root.nomerPoisk)//И номер поиска равен 0, то это первоначальный старт поиска.
             fnClickedVniz()//Функция обрабатывающая следующий поиск.
+        */
     }
     onIsOpenedSidebarChanged: {//Если статус флага открыта/закрыта боковая панель изменился, то...
         knopkaSidebar.opened = root.isOpenedSidebar;//Передаём сигнал кнопке, для отображения нужной позиции.
