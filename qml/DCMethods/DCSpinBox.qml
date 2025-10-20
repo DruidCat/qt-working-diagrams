@@ -7,8 +7,9 @@ Item {
     //Свойства
 	property alias spinBox: txnSpinBox//Передаём в виде свойства весь объект TextInput
     property alias radius: rctSpinBox.radius//Радиус рабочей зоны
-    property color clrFona: "transparent"//цвет текста
-	property color clrTexta: "orange"
+    property color clrTexta: "Orange"//цвет текста
+    property color clrFonaPassive: "Transparent"//Цвет текста в пассивном режиме
+    property color clrFonaActive: "Transparent"//Цвет текста в активном режиме ввода.
     property alias bold: txnSpinBox.font.bold
     property alias italic: txnSpinBox.font.italic
     property int  ntWidth: 2
@@ -176,7 +177,7 @@ Item {
     Rectangle {
         id: rctSpinBox
         anchors.fill: root
-        color: root.clrFona
+        color: root.clrFonaPassive
         DCKnopkaMinus{//Кнопка минус.
 			id: knopkaMinus
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
@@ -191,7 +192,8 @@ Item {
 			anchors.verticalCenter: rctSpinBox.verticalCenter
             anchors.left: knopkaMinus.right; anchors.right: knopkaPlus.left
 			color: "transparent"
-			clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
+            radius: root.ntCoff/2//Так красивее.
+            clip: true//Обрезаем текст, который выходит за границы этогопрямоугольника.
 			TextInput {//Область текста.
                 id: txnSpinBox
                 anchors.left: rctTextInput.left; anchors.right: rctTextInput.right
@@ -220,6 +222,11 @@ Item {
 					//console.error(event.key);
 				}
 				onFocusChanged: {//Если фокус изменился...
+                    if(focus)//Если фокус на вводе текста, то...
+                        rctTextInput.color = root.clrFonaActive
+                    else//Если не в фокусе, то...
+                        rctTextInput.color = root.clrFonaPassive
+
 					if(!text){//Если пустая строчка, то...
 						if(!focus){//Если фокус пропал, то...
 							fnClickedEscape();//То выставляем последнее значение.
