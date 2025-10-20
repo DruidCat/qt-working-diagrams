@@ -684,11 +684,11 @@ Item {
                     width: lsvNaideno.width
                     background: Rectangle {
                         color: (tmdResult.ListView.isCurrentItem
-                                            ? "#2979FF"//Синий на выделение по клику
-                                            //? "#00FFFF"//Аква
+                                            //? "#2979FF"//Синий на выделение по клику
+                                            ? root.clrMenuFon
                                             : ((tmdResult.index % 2)
                                                 ? root.clrFona
-                                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.35))))
+                                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.11))))
                     }
                     contentItem: Label {
                         text: " Страница " + (tmdResult.page + 1)
@@ -703,6 +703,7 @@ Item {
                     Component.onCompleted: {//Если создался элемент делегата, то...
                         lsvNaideno.massStranici.push(tmdResult.page)//Добавляем в массив № страниц совпадений.
                         if(index === 0){//Если index поиска первый (0), то...
+                            pmpDoc.searchModel.currentResult = -1//Чтоб заработало onCurrentResultChanged
                             pmpDoc.searchModel.currentResult = 0//выделяем первый результат
                             pmpDoc.goToLocation(tmdResult.page,Qt.point(0, 0), pmpDoc.renderScale)//Переходим
                         }

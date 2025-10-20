@@ -15,7 +15,7 @@ Item {
     property color clrBorder: "transparent"//цвет границы
     property string text: ""//элемент поиска
     property int sumPoisk: 0//суммарный результат поиска
-    property int currentResult: 0//номер поиска
+    property int currentResult: -1//номер поиска
     property bool blNomer: false//true - nomerPoisk обнуляю, false - namerPoisk обнулён.
     property alias bold: txtPoisk.font.bold
     property alias italic: txtPoisk.font.italic
@@ -55,7 +55,7 @@ Item {
 	function fnClickedZakrit() {//Функция закрытия виджета.
 		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
         root.blNomer = true;//Начало обнуления
-        root.currentResult = 0;//Обнуляем, от предыдущего поиска. Обнуление при повтороном таком же запросе.
+        root.currentResult = -1;//Обнуляем, от предыдущего поиска. Обнуление при повтороном таком же запросе.
         root.blNomer = false;//Окончание обнуления.
 	}
 
