@@ -15,7 +15,7 @@ Item {
     property color clrBorder: "transparent"//цвет границы
     property string text: ""//элемент поиска
     property int sumPoisk: 0//суммарный результат поиска
-    property int nomerPoisk: 0//номер поиска
+    property int currentResult: 0//номер поиска
     property bool blNomer: false//true - nomerPoisk обнуляю, false - namerPoisk обнулён.
     property alias bold: txtPoisk.font.bold
     property alias italic: txtPoisk.font.italic
@@ -38,51 +38,24 @@ Item {
     function fnFocus() {//Функция для фокусировки ListView
         rctPoisk.forceActiveFocus();//Чтоб работали кнопки листания поиска.
     }
-    onNomerPoiskChanged: {//Если номер поиска изменился, то...
-        if(!blNomer){//Если это не обнуление nomerPoisk, то...
-            if(root.nomerPoisk > root.sumPoisk){//Если номер поиска больше общего колличества совпадений, то...
-                if(root.sumPoisk)//Если не 0, то...
-                    root.nomerPoisk = 1
-                else//Если ничего не найдено, то...
-                    root.nomerPoisk = 0
-            }
-            else{
-                if(root.nomerPoisk < 1){//Если меньше единицы, то...
-                    if(root.sumPoisk)//Если не 0, то...
-                        root.nomerPoisk = root.sumPoisk//Переходим в конец списка.
-                    else//Если ничего не нашёл, то...
-                        root.nomerPoisk = 0
-                }
-            }
-        }
-    }
     onTextChanged: {//Если новый текст Поиска, то...
         root.blNomer = true;//Начало обнуления
-        root.nomerPoisk = 0;//Обнуляем, от предыдущего поиска.
         root.blNomer = false;//Окончание обнуления.
-    }
-    onSumPoiskChanged: {//Если что то найдено
-        /*
-        if(!root.nomerPoisk)//И номер поиска равен 0, то это первоначальный старт поиска.
-            fnClickedVniz()//Функция обрабатывающая следующий поиск.
-        */
     }
     onIsOpenedSidebarChanged: {//Если статус флага открыта/закрыта боковая панель изменился, то...
         knopkaSidebar.opened = root.isOpenedSidebar;//Передаём сигнал кнопке, для отображения нужной позиции.
     }
 
 	function fnClickedVniz() {//Функция обрабатывающая следующий поиск.
-        root.nomerPoisk += 1;
 		root.clickedNext();//Сигнал следующего поиска.
 	}
 	function fnClickedVverh() {//Функция обрабатывающая предыдущий поиск.
-        root.nomerPoisk -= 1;
         root.clickedPrevious();//Сигнал предыдущего поиска.
 	}
 	function fnClickedZakrit() {//Функция закрытия виджета.
 		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
         root.blNomer = true;//Начало обнуления
-        root.nomerPoisk = 0;//Обнуляем, от предыдущего поиска. Обнуление при повтороном таком же запросе.
+        root.currentResult = 0;//Обнуляем, от предыдущего поиска. Обнуление при повтороном таком же запросе.
         root.blNomer = false;//Окончание обнуления.
 	}
 
@@ -148,7 +121,6 @@ Item {
                     }
                 }
             }
-
 			//console.log(event.key);
 		}
         DCKnopkaZakrit {//Кнопка Отмены поиска.
@@ -191,7 +163,7 @@ Item {
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: root.text	+ " [" + root.nomerPoisk + "|" + root.sumPoisk + "]"
+                text: root.text	+ " [" + (root.currentResult + 1) + "|" + root.sumPoisk + "]"
 				onTextChanged: {//Если текст изменился, то...
 					if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
                     for(var ltShag=txtPoisk.font.pixelSize; ltShag<root.ntWidth*root.ntCoff; ltShag++){

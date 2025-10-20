@@ -633,6 +633,9 @@ Item {
                 else//Если поиск окончился, то...
                     pskPoisk.enabled = true;//Активируем кнопки в виджете поиска.
             }
+            function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
+                pskPoisk.currentResult = pdfLoader.item.currentResult//Задаём отображение номера поиска.
+            }
             function onClickedSidebar(){//Если нажата горячая клавиша Ctrl+B, Ctrl+T, Atl+F
                 if(knopkaSidebar.visible && knopkaSidebar.enabled)//Кнопка боковой панели видима и активна, то
                     fnClickedSidebar()//Открываем боковую панель.

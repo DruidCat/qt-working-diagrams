@@ -27,6 +27,7 @@ Item {
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
     property int sbCurrentIndex: tbSidebar.currentIndex
+    property int currentResult: -1//Номер Поиска, совпадение от 0....
     //Настройки
     anchors.fill: parent
     visible: false//по умолчанию он невидимый.
@@ -173,6 +174,8 @@ Item {
             cppqml.pdfPoisk.urlPdf = root.source//Отправляем адрес файла в бизнес логику.
     }
     onSearchStringChanged: {//Когда меняется поисковая строка — отдадим её в C++
+        lsvNaideno.massStranici = [];//Удаляем массив страниц перед следующим поиском.
+        root.currentResult = -1//Номер Поиска от 0.......
         cppqml.pdfPoisk.strPoisk = root.searchString;//Отправляем поисковый запрос в бизнес логику.
         if(root.searchString){//Если не пустая строка, то...
             fnSidebarNaideno();//Открываем боковую панель на вкладке Найдено для отображения результатов поиск
@@ -466,15 +469,13 @@ Item {
     }
     Connections {//Автовыбор первого совпадения и переход
         target: pmpDoc.searchModel
-        function onCountChanged() {
-            /*
-            if (pmpDoc.searchModel.count > 0) {
-                pmpDoc.searchModel.currentResult = 0//выделяем первый результат
-            }
-            */
+        function onCountChanged() {//Если счётчик совпадений изменился, то...
         }
+        function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
+            root.currentResult = pmpDoc.searchModel.currentResult//Присваиваем действующий результат поиска.
+            pmpDoc.goToLocation(lsvNaideno.massStranici[root.currentResult],
+                                Qt.point(0, 0), pmpDoc.renderScale)//Переходим на страницу номера поиска.
         /*
-        function onCurrentResultChanged() {
             const i = pmpDoc.searchModel.currentResult
             if (i >= 0 && i < pmpDoc.searchModel.count) {
                 const r = pmpDoc.searchModel.get(i)//{ page, ... }
@@ -486,8 +487,8 @@ Item {
 
                 pmpDoc.goToLocation(r.page, loc, pmpDoc.renderScale)
             }
-        }
         */
+        }
     }
     Rectangle {//Дополнительный элементы управления.
         id: rctStranici
@@ -602,7 +603,7 @@ Item {
             visible: false
             ListView {
                 id: lsvNaideno
-                property int ntNomer: 1//Номер совпадения
+                property var massStranici: []
                 anchors.fill: rctNaideno
                 implicitHeight: rctNaideno.height
                 model: pmpDoc.searchModel
@@ -629,8 +630,14 @@ Item {
                     }
                     highlighted: ListView.isCurrentItem
                     onClicked: {
-                        pmpDoc.searchModel.currentResult = tmdResult.index
-                        pmpDoc.goToLocation(tmdResult.page, Qt.point(0, 0), pmpDoc.renderScale)
+                        pmpDoc.searchModel.currentResult = tmdResult.index//Задаём номер поиска
+                    }
+                    Component.onCompleted: {//Если создался элемент делегата, то...
+                        lsvNaideno.massStranici.push(tmdResult.page)//Добавляем в массив № страниц совпадений.
+                        if(index === 0){//Если index поиска первый (0), то...
+                            pmpDoc.searchModel.currentResult = 0//выделяем первый результат
+                            pmpDoc.goToLocation(tmdResult.page,Qt.point(0, 0), pmpDoc.renderScale)//Переходим
+                        }
                     }
                 }
             }
