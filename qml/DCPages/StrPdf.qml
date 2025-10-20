@@ -51,6 +51,12 @@ Item {
 						fnClickedPovorotProtiv()//Функция нажатия кнопки поворота против часовой стрелке.
 					event.accepted = true;//Завершаем обработку эвента.
 				}
+                else{
+                    if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
+                        fnClickedPage()//Функция клика на ввод номера страницы.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
 			}
         }
 		else{
@@ -250,6 +256,14 @@ Item {
         //pdfLoader.item.rotation = pdfLoader.pdfRotation;//Поворот сцены документа.
         pdfLoader.item.pageRotation = pdfLoader.pdfRotation;//Поворот страниц документа.
 	}
+    function fnClickedPage(){//Функция клика на ввод номера страницы.
+        if(spbPdfPage.visible){//Если видимый виджет выбора страниц, то...
+            if(spbPdfPage.spinBox.focus)//Если фокус на вводе цифр, то...
+                root.focus = true;//Фокусируемся на виджете StrPdf.
+            else//Если фокус не на вводе цифр, то...
+                spbPdfPage.spinBox.focus = true;//Фокусируемся на виджете ввода цифр DCSpinBox.
+        }
+    }
     function fnClickedPoisk(){//Функция запуска режима поиска.
         txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
         txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
@@ -671,7 +685,7 @@ Item {
 			visible: false 
             anchors.verticalCenter: tmToolbar.verticalCenter; anchors.left: tmToolbar.left
             anchors.margins: root.ntCoff/2
-            clrTexta: root.clrTexta; clrFona: root.clrFona
+            clrTexta: root.clrTexta; clrFonaPassive: root.clrFona; clrFonaActive: root.clrMenuFon
 			radius: root.ntCoff/2
             from: 1; value: 1
 			spinBox.cursorVisible: true;//Делаем курсор видимым обязательно.
