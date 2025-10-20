@@ -26,7 +26,7 @@ Item {
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
-    property int sbCurrentIndex: tbSidebar.currentIndex
+    property alias sbCurrentIndex: tbSidebar.currentIndex
     property int currentResult: -1//Номер Поиска, совпадение от 0....
     //Настройки
     anchors.fill: parent
@@ -38,10 +38,11 @@ Item {
     signal sgnScaleMin(real rlScaleMin)//Сигнал возвращающий минимальный масштаб страницы.
     signal sgnPassword()//Сигнал о том, что запрашивается пароль.
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
-    signal clickedSidebar()//Сигнал о нажатии боковой панели.
-    signal clickedSidebarNaideno()//Сигнал о нажатии боковой панели вкладки Найдено.
-    signal clickedSidebarZakladki()//Сигнал о нажатии боковой панели вкладки Закладки.
-    signal clickedSidebarPoster()//Сигнал о нажатии боковой панели вкладки Миниатюры.
+    signal clickedPoiskNext()//Сигнал нажатия кнопки Следующего поиска
+    signal clickedPoiskPrevious()//Сигнал нажатия кнопки Предыдущего поиска
+    signal clickedSidebarNaideno()//Сигнал о нажатии боковой панели вкладки Найдено. ДЛЯ БЛОКИРОВКИ ОТКРЫТИЯ.
+    signal clickedSidebarZakladki()//Сигнал о нажатии боковой панели вкладки Закладки. ДЛЯ БЛОКИРОВКИ ОТКРЫТИЯ
+    signal clickedSidebarPoster()//Сигнал о нажатии боковой панели вкладки Миниатюры. ДЛЯ БЛОКИРОВКИ ОТКРЫТИЯ.
     signal sgnOpenedSidebar(bool blOpened)//Сигнал о том, что боковая панель открыта/закрыта
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
@@ -71,18 +72,52 @@ Item {
                 }
             }
             else{
-                if((event.key === 16777237)||(event.key === 16777239)){//Если нажата "Page Down",то.
-                    var ntStrDown = pmpDoc.currentPage + 1;
-                    if(ntStrDown < root.pageCount)
-                        root.currentPage = ntStrDown;
-                    event.accepted = true;//Завершаем обработку эвента.
+                if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                    if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                        root.clickedPoiskPrevious()//Сигнал нажатия кнопки Предыдущего поиска
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
                 }
                 else{
-                     if((event.key === 16777235)||(event.key === 16777238)){//Если нажата "Page Up", то.
-                        var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
-                        if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                            root.currentPage = ntStrUp;
+                    if(event.key === Qt.Key_Down){//Если нажата Стрелка вниз, то...
+                        fnClickedKeyVniz()//нажатия клавиши вниз
                         event.accepted = true;//Завершаем обработку эвента.
+                    }
+                    else{
+                        if(event.key === Qt.Key_Up){//Если нажата Стрелка вверх, то....
+                            fnClickedKeyVverh()//нажатия клавиши вверх
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                        else{
+                            if(event.key === Qt.Key_PageDown){//Если нажата "Page Down",то.
+                                fnClickedKeyVniz()//нажатия клавиши вниз
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
+                            else{
+                                if(event.key === Qt.Key_PageUp){//Если нажата "Page Up", то.
+                                    fnClickedKeyVverh()//нажатия клавиши вверх
+                                    event.accepted = true;//Завершаем обработку эвента.
+                                }
+                                else{
+                                    if(event.key === Qt.Key_Home){//Если нажата кнопка Home, то...
+                                        fnClickedKeyHome()//нажатия клавиши Home
+                                        event.accepted = true;//Завершаем обработку эвента.
+                                    }
+                                    else{
+                                        if(event.key === Qt.Key_End){//Если нажата кнопка End,то..
+                                            fnClickedKeyEnd()//нажатия клавиши End
+                                            event.accepted = true;//Завершаем обработку эвента.
+                                        }
+                                        else{
+                                            if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
+                                                root.clickedPoiskNext()//Следующий номер поиска.
+                                                event.accepted = true;//Завершаем обработку эвента.
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -93,7 +128,53 @@ Item {
         if(pmpDoc.selectedText !== "")//Если выбранный текст не пустота, то...
             pmpDoc.copySelectionToClipboard()//Копировать выделенный текст в документе
     }
-    function fnSidebar(){//Функция открывающая/закрывающая боковую панель.
+    function fnClickedKeyVniz(){//Функция нажатия клавиши вниз
+        var ntStrDown = pmpDoc.currentPage + 1;
+        if(drwSidebar.opened){//Если открыта боковая панель, то...
+            if(tbSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
+                fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
+            }
+            else{//Временно, чтоб работал скролл страниц
+                if(ntStrDown < pdfDoc.pageCount)
+                    root.currentPage = ntStrDown;//Листаем страницы документа.
+            }
+        }
+        else{//Если боковая панель не открыта, то...
+            if(ntStrDown < pdfDoc.pageCount)
+                root.currentPage = ntStrDown;//Листаем страницы документа.
+        }
+    }
+    function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
+        var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
+        if(drwSidebar.opened){//Если открыта боковая панель, то...
+            if(tbSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
+                fnClickedPoiskPrevious()//Функция перехода к предыдущему номеру поиска
+            }
+            else{//Временно, чтоб работал скролл страниц
+                if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+                    root.currentPage = ntStrUp;//Листаем страницы документа.
+            }
+        }
+        else{//Если боковая панель не открыта, то...
+            if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+                root.currentPage = ntStrUp;//Листаем страницы документа.
+        }
+    }
+    function fnClickedPoiskNext(){//Функция перехода к следующему номеру поиска
+        pmpDoc.searchModel.currentResult += 1;//Выбираем следующий номер поиска
+        root.forceActiveFocus()//Форсируем фокус, чтоб можно было закрыть боковую панель с горячих кнопок.
+    }
+    function fnClickedPoiskPrevious(){//Функция перехода к предыдущему номеру поиска
+        pmpDoc.searchModel.currentResult -= 1;//Выбираем предыдущий номер поиска
+        root.forceActiveFocus()//Форсируем фокус, чтоб можно было закрыть боковую панель с горячих кнопок.
+    }
+    function fnClickedKeyHome(){//Функция нажатия клавиши Home
+        root.currentPage = 0;//На первую страницу.
+    }
+    function fnClickedKeyEnd(){//Функция нажатия клавиши End
+        root.currentPage = pdfDoc.pageCount-1;//На последнюю страницу
+    }
+    function fnClickedSidebar(){//Функция открывающая/закрывающая боковую панель.
         if(drwSidebar.position)//Если открыта боковая панель, то...
             drwSidebar.close()//Закрываем боковую панель
         else{//Если закрыта боковая панель, то...
@@ -104,37 +185,37 @@ Item {
     function fnSidebarNaideno(){//Функция нажатия кнопки SideBar.
         if(drwSidebar.opened){//Если боковая панель открыта, то...
             if(tbSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
-                fnSidebar()//Закрываем боковую панель.
+                fnClickedSidebar()//Закрываем боковую панель.
             else//Если вкладка открыта отличная от Найдено, то...
                 tbSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
         }
         else{//Если боковая панель закрыта, то...
             tbSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
-            fnSidebar()//Открываем боковую панель.
+            fnClickedSidebar()//Открываем боковую панель.
         }
     }
     function fnSidebarZakladki(){//Функция нажатия кнопки SideBar.
         if(drwSidebar.opened){//Если боковая панель открыта, то...
             if(tbSidebar.currentIndex === 1)//Если открыта вкладка Закладки, то...
-                fnSidebar()//Закрываем боковую панель.
+                fnClickedSidebar()//Закрываем боковую панель.
             else//Если вкладка открыта отличная от Закладки, то...
                 tbSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
         }
         else{//Если боковая панель закрыта, то...
             tbSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
-            fnSidebar()//Открываем боковую панель.
+            fnClickedSidebar()//Открываем боковую панель.
         }
     }
     function fnSidebarPoster(){//Функция нажатия кнопки SideBar.
         if(drwSidebar.opened){//Если боковая панель открыта, то...
             if(tbSidebar.currentIndex === 2)//Если открыта вкладка Миниатюры, то...
-                fnSidebar()//Закрываем боковую панель.
+                fnClickedSidebar()//Закрываем боковую панель.
             else//Если вкладка открыта отличная от Миниатюры, то...
                 tbSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
         }
         else{//Если боковая панель закрыта, то...
             tbSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
-            fnSidebar()//Открываем боковую панель.
+            fnClickedSidebar()//Открываем боковую панель.
         }
     }
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
@@ -475,19 +556,6 @@ Item {
             root.currentResult = pmpDoc.searchModel.currentResult//Присваиваем действующий результат поиска.
             pmpDoc.goToLocation(lsvNaideno.massStranici[root.currentResult],
                                 Qt.point(0, 0), pmpDoc.renderScale)//Переходим на страницу номера поиска.
-        /*
-            const i = pmpDoc.searchModel.currentResult
-            if (i >= 0 && i < pmpDoc.searchModel.count) {
-                const r = pmpDoc.searchModel.get(i)//{ page, ... }
-                // Если в модели есть координаты совпадения — используем их,
-                // иначе просто переходим в начало нужной страницы.
-                const loc = (r.location !== undefined) ? r.location
-                            : (r.rect !== undefined) ? Qt.point(r.rect.x, r.rect.y)
-                            : Qt.point(0, 0)
-
-                pmpDoc.goToLocation(r.page, loc, pmpDoc.renderScale)
-            }
-        */
         }
     }
     Rectangle {//Дополнительный элементы управления.

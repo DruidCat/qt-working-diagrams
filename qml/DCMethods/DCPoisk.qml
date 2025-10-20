@@ -105,16 +105,14 @@ Item {
                     }
                     else{
                         if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
-                            if(root.visible && knopkaZakrit.enabled)//Если режим поиска видимый, то...
-                                fnClickedZakrit();//Функция закрытия виджета.
+                            fnClickedZakrit();//Функция закрытия виджета.
                             event.accepted = true;//Завершаем обработку эвента.
                         }
                         else{
                             if((event.key===Qt.Key_F3)
                                                     ||(event.key===Qt.Key_Enter)
                                                     ||(event.key===Qt.Key_Return)){//F3
-                                if(root.visible && knopkaVniz.enabled)//Если режим поиска видимый, то...
-                                    fnClickedVniz();//Функция нажатия кнопки Следующего поиска
+                                fnClickedVniz();//Функция нажатия кнопки Следующего поиска
                                 event.accepted = true;//Завершаем обработку эвента.
                             }
                         }

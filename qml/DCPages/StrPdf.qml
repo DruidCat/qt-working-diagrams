@@ -102,14 +102,12 @@ Item {
                                 }
                                 else{
                                     if(event.key === Qt.Key_B){//Если нажата клавиша B
-                                        if(knopkaSidebar.visible && knopkaSidebar.enabled)//видима,активна
-                                            fnSidebarZakladki()//Функция открытия боковой панели на Закладке.
+                                        fnSidebarZakladki()//Функция открытия боковой панели на Закладке.
                                         event.accepted = true;//Завершаем обработку эвента.
                                     }
                                     else{
                                         if(event.key === Qt.Key_T){//Если нажата клавиша T
-                                            if(knopkaSidebar.visible && knopkaSidebar.enabled)//видима,активна
-                                                fnSidebarPoster()//Открытие боковой панели на Миниатюрах.
+                                            fnSidebarPoster()//Открытие боковой панели на Миниатюрах.
                                             event.accepted = true;//Завершаем обработку эвента.
                                         }
                                     }
@@ -128,15 +126,17 @@ Item {
                     }
                     else{
                         if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
-                            if(knopkaSidebar.visible && knopkaSidebar.enabled)//Если кнопка видимая и активна.
-                                fnSidebarNaideno()//Функция открытия боковой панели на Найдено.
+                            fnSidebarNaideno()//Функция открытия боковой панели на Найдено.
                             event.accepted = true;//Завершаем обработку эвента.
                         }
                     }
                 }
                 else{
                     if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-
+                        if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                            fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
                     }
                     else{//Если не нажат shift, то...
                         if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
@@ -145,28 +145,43 @@ Item {
                             event.accepted = true;//Завершаем обработку эвента.
                         }
                         else{
-                            if((event.key === 16777237)||(event.key === 16777239)){//нажата "Page Down",то
-                                var ntStrDown = pdfLoader.item.nomerStranici + 1;
-                                if(ntStrDown < pdfLoader.item.pageCount)
-                                    pdfLoader.item.currentPage = ntStrDown;
+                            if(event.key === Qt.Key_Down){//нажата "Стрелка вниз",то
+                                fnClickedKeyVniz();//Функция нажатия клавиши вниз
                                 event.accepted = true;//Завершаем обработку эвента.
                             }
                             else{
-                                if((event.key === 16777235)||(event.key === 16777238)){//нажата "Page Up"
-                                    var ntStrUp = pdfLoader.item.nomerStranici - 1;//-1 страница
-                                    if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                                        pdfLoader.item.currentPage = ntStrUp;
+                                if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
+                                    fnClickedKeyVverh();//Функция нажатия клавиши вверх
                                     event.accepted = true;//Завершаем обработку эвента.
                                 }
                                 else{
-                                    if(event.key === Qt.Key_Home){//Если нажата на странице кнопка Home, то...
-                                        pdfLoader.item.currentPage = 0;//На первую страницу.
+                                    if(event.key === Qt.Key_PageDown){//нажата "Page Down",то
+                                        fnClickedKeyVniz();//Функция нажатия клавиши вниз
                                         event.accepted = true;//Завершаем обработку эвента.
                                     }
                                     else{
-                                        if(event.key === Qt.Key_End){//Если нажата на странице кнопка End,то..
-                                            pdfLoader.item.currentPage=pdfLoader.item.pageCount-1;//Последняя.
+                                        if(event.key === Qt.Key_PageUp){//нажата "Page Up"
+                                            fnClickedKeyVverh();//Функция нажатия клавиши вверх
                                             event.accepted = true;//Завершаем обработку эвента.
+                                        }
+                                        else{
+                                            if(event.key === Qt.Key_Home){//Если нажата кнопка Home, то...
+                                                fnClickedKeyHome();//Функция нажатия клавиши Home
+                                                event.accepted = true;//Завершаем обработку эвента.
+                                            }
+                                            else{
+                                                if(event.key === Qt.Key_End){//Если нажата кнопка End,то..
+                                                    fnClickedKeyEnd();//Функция нажатия клавиши End
+                                                    event.accepted = true;//Завершаем обработку эвента.
+                                                }
+                                                else{
+                                                    if((event.key===Qt.Key_F3)||(event.key===Qt.Key_Enter)
+                                                                    ||(event.key===Qt.Key_Return)){//F3
+                                                        fnClickedPoiskNext();//нажатия кнопки Следующего поиск
+                                                        event.accepted = true;//Завершаем обработку эвента.
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -207,17 +222,38 @@ Item {
             cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
         fnPdfSource("");//Пустой путь PDF документа, закрываем.
     }
+    function fnClickedKeyVniz(){//Функция нажатия клавиши вниз
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVniz()//Вниз на одну страницу
+    }
+    function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVverh()//Вверх на одну страницу
+    }
+    function fnClickedKeyHome(){//Функция нажатия клавиши Home
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyHome()//На первую страницу.
+    }
+    function fnClickedKeyEnd(){//Функция нажатия клавиши End
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyEnd()//На последнюю страницу.
+    }
+    function fnClickedPoiskNext(){//Функция следующего номера поиска
+        if(pskPoisk.visible) pdfLoader.item.fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
+    }
+    function fnClickedPoiskPrevious(){//Функция предыдущего номера поиска
+        if(pskPoisk.visible) pdfLoader.item.fnClickedPoiskPrevious()//переход к предыдущему номеру поиска
+    }
     function fnClickedSidebar(){//Функция нажатия кнопки SideBar.
-        if(pdfLoader.item) pdfLoader.item.fnSidebar()//Открываем/закрываем боковую панель через функцию.
+        if(pdfLoader.item) pdfLoader.item.fnClickedSidebar()//Открываем/закрываем боковую панель через функцию
     }
     function fnSidebarNaideno(){//Функция открытия/закрытия вкладки Найдено
-        if(pdfLoader.item) pdfLoader.item.fnSidebarNaideno()//открытие/закрытие вкладки Найдено
+        if((knopkaSidebar.visible && knopkaSidebar.enabled)||pskPoisk.visible)//боковая панель видима/активна
+            if(pdfLoader.item) pdfLoader.item.fnSidebarNaideno()//открытие/закрытие вкладки Найдено
     }
     function fnSidebarZakladki(){//Функция открытия/закрытия вкладки Закладки
-        if(pdfLoader.item) pdfLoader.item.fnSidebarZakladki()//открытие/закрытие вкладки Закладки
+        if((knopkaSidebar.visible && knopkaSidebar.enabled)||pskPoisk.visible)//Боковая панель видима/активна
+            if(pdfLoader.item) pdfLoader.item.fnSidebarZakladki()//открытие/закрытие вкладки Закладки
     }
     function fnSidebarPoster(){//Функция открытия/закрытия вкладки Миниатюр
-        if(pdfLoader.item) pdfLoader.item.fnSidebarPoster()//открытие/закрытие вкладки Миниатюр
+        if((knopkaSidebar.visible && knopkaSidebar.enabled)||pskPoisk.visible)//Боковая панель видима/активна
+            if(pdfLoader.item) pdfLoader.item.fnSidebarPoster()//открытие/закрытие вкладки Миниатюр
     }
 	function fnClickedZakrit(){//Функция обрабатывающая кнопку Закрыть.
 		txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
@@ -422,16 +458,8 @@ Item {
             onClickedSidebarZakladki: fnSidebarZakladki()//Функция нажатия кнопки SideBar.
             onClickedSidebarPoster: fnSidebarPoster()//Функция нажатия кнопки SideBar.
             onClickedSidebarNaideno: fnSidebarNaideno()//Функция нажатия кнопки SideBar.
-            onClickedNext: {
-                pdfLoader.item.searchForward();//Показываем следующий результат поиска.
-                pdfLoader.item.currentPage = (spbPdfPage.value-1)//Страница полностью открывается, а не снизу.
-                pskPoisk.fnFocus();//Чтоб работали горячие клавиши виджета, и не переключались на StrPdf
-            }
-            onClickedPrevious: {
-                pdfLoader.item.searchBack();//Показываем предыдущий результат поиска.
-                pdfLoader.item.currentPage = (spbPdfPage.value-1)//Страница полностью открывается, а не снизу.
-                pskPoisk.fnFocus();//Чтоб работали горячие клавиши виджета, и не переключались на StrPdf
-            }
+            onClickedNext: fnClickedPoiskNext()//Функция следующего номера поиска
+            onClickedPrevious: fnClickedPoiskPrevious()//Функция предыдущего номера поиска
             onClickedZakrit: {//Нажатие кнопки Закрытия поиска.
                 root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
                 pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
@@ -448,7 +476,7 @@ Item {
                 knopkaPoisk.enabled = true;//Конопка Поиск активния.
                 txnZagolovok.text = "";//Текст обнуляем вводимый.
                 pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
-                if(pskPoisk.isOpenedSidebar)//Если боковая панель открыта, то...
+                if(knopkaSidebar.opened)//Если боковая панель открыта, то...
                     fnSidebarNaideno();//Закрываем боковую панель с вкладкной Найдено.
             }
         }
@@ -636,21 +664,20 @@ Item {
             function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
                 pskPoisk.currentResult = pdfLoader.item.currentResult//Задаём отображение номера поиска.
             }
-            function onClickedSidebar(){//Если нажата горячая клавиша Ctrl+B, Ctrl+T, Atl+F
-                if(knopkaSidebar.visible && knopkaSidebar.enabled)//Кнопка боковой панели видима и активна, то
-                    fnClickedSidebar()//Открываем боковую панель.
+            function onClickedPoiskNext(){//Если нажато сочетание клавиш Следующего поиска, то...
+                fnClickedPoiskNext()//Функция Следующего поиска, то...
             }
-            function onClickedSidebarNaideno(){//Если нажата горячая клавиша Ctrl+B, Ctrl+T, Atl+F
-                if(knopkaSidebar.visible && knopkaSidebar.enabled)//Кнопка боковой панели видима и активна, то
-                    fnSidebarNaideno()//Открываем боковую панель.
+            function onClickedPoiskPrevious(){//Если нажато сочетание клавиш Предыдущего поиска, то...
+                fnClickedPoiskPrevious()//Функция Предыдущего поиска, то...
             }
-            function onClickedSidebarZakladki(){//Если нажата горячая клавиша Ctrl+B, Ctrl+T, Atl+F
-                if(knopkaSidebar.visible && knopkaSidebar.enabled)//Кнопка боковой панели видима и активна, то
-                    fnSidebarZakladki()//Открываем боковую панель.
+            function onClickedSidebarNaideno(){//Если нажата горячая клавиша Atl+F
+                fnSidebarNaideno()//Открываем боковую панель.
             }
-            function onClickedSidebarPoster(){//Если нажата горячая клавиша Ctrl+B, Ctrl+T, Atl+F
-                if(knopkaSidebar.visible && knopkaSidebar.enabled)//Кнопка боковой панели видима и активна, то
-                    fnSidebarPoster()//Открываем боковую панель.
+            function onClickedSidebarZakladki(){//Если нажата горячая клавиша Ctrl+B
+                fnSidebarZakladki()//Открываем боковую панель.
+            }
+            function onClickedSidebarPoster(){//Если нажата горячая клавиша Ctrl+T
+                fnSidebarPoster()//Открываем боковую панель.
             }
             function onSgnOpenedSidebar(blOpened){//Если боковая панель открыта/закрыта, то...
                 pskPoisk.isOpenedSidebar = blOpened;//Приравниваем флаг открыта ли боковая панель?
