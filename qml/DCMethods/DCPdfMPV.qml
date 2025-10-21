@@ -228,7 +228,7 @@ Item {
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
             pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
-            console.error("49: 3. Старт таймера масштабирования.");
+            console.error("231: 3. Старт таймера масштабирования.");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
             tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
         }
@@ -238,7 +238,7 @@ Item {
         }
     }
     onCurrentPageChanged: {//Если страница поменялась из вне, то...
-        console.error("59: Страница " + root.currentPage + " из вне.");
+        console.error("241: Страница " + root.currentPage + " из вне.");
         if(pmpDoc.blStranica)//Первоначальная установка страницы при загрузке документа
             pmpDoc.blStranica = false;//Сбрасываем флаг.
         else//Если изменение страницы не в первый раз, то...
@@ -250,7 +250,7 @@ Item {
 			pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
             pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
-            console.error("69: 3. Старт таймера масштабирования.");
+            console.error("253: 3. Старт таймера масштабирования.");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
             tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть. 
         })
@@ -295,7 +295,7 @@ Item {
         if(!pmpDoc.blSize){//Принимаю размеры приложения, пока не запустится обработкик показа документа.
             if(!tmrAppSize.running){//Если таймер еще не запускался, то...
                 pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
-                console.error("100: 4. Изменился размер окна.");
+                console.error("298: 4. Изменился размер окна.");
                 root.sgnProgress(37, "4/11 Изменился размер окна.")
                 root.visible = false;//Невидимым виджет делаем.
             }
@@ -305,35 +305,35 @@ Item {
     function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
         pmpDoc.blScaleStart = true;//Начало масштабирования.
         pmpDoc.goToPage(0);//Переходим на первую страницу, чтоб потом перейти на заданную страницу.
-        console.error("110: 5. Начало масштабирования документа.");
+        console.error("308: 5. Начало масштабирования документа.");
         root.sgnProgress(46, "5/11 Начало масштабирования документа.");
         if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
             var widthRect = pmpDoc.childrenRect.width;
             var heightRect = pmpDoc.childrenRect.height;
-            if(pmpDoc.blDocVert){//Если вертикальная страница, то...
+            if(pdfDoc.isDocVert){//Если вертикальная страница, то...
 				if((root.rotation === 0) || (root.rotation === 180))//Если поворот нулевой или 180 градусов,то
-                	pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
+                    pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
 				else//Если поворот 90 или 270 градусов, то...
-                	pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
+                    pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
 			}
             else{//Если горизонтальная страница, то...
 				if((root.rotation === 0) || (root.rotation === 180))//Если поворот нулевой или 180 градусов,то
-                	pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
+                    pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
 				else//Если поворот 90 или 270 градусов, то...
-                	pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
+                    pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
 			}
         }
         else
             pmpDoc.renderScale = root.renderScale;//Выставляем масштаб из Свойства.
-        console.error("130: 6. Окончание масштабирования документа.")
+        console.error("328: 6. Окончание масштабирования документа.")
         root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
         tmrResetScene.running = true;//запускаем таймер, сброса сцены.
     }
     function fnGoToPage(ntPage){//Функция обрабатывающая переход на новую страницу документа.
-        console.error("135: 10. Переходим на страницу: " + ntPage);
+        console.error("333: 10. Переходим на страницу: " + ntPage);
         root.sgnProgress(91, "10/11 Переходим на страницу.");
         pmpDoc.goToLocation(ntPage, Qt.point(0, 0), pmpDoc.renderScale);//Переходим на страницу.
-        console.error("138: 11. Старт таймера видимости.");
+        console.error("336: 11. Старт таймера видимости.");
         root.sgnProgress(100, "11/11 Старт таймера отображения.");
         tmrVisible.running = true;//Запускаем таймер отображения документа.
     }
@@ -341,7 +341,7 @@ Item {
         id: tmrResetScene
         interval: 3; running: false; repeat: false
         onTriggered: {
-            console.error("146: 7. Сброс сцены документа.")
+            console.error("344: 7. Сброс сцены документа.")
             root.sgnProgress(64, "7/11 Сброс сцены документа.");
             /*
             const curPage   = pmpDoc.currentPage
@@ -364,7 +364,7 @@ Item {
             pmpDoc.height = pdfDoc.pagePointSize(0).height * pmpDoc.renderScale * pdfDoc.pageCount//Ширину
             pmpDoc.anchors.fill = parent;//Растягиваем pmpDoc, и тем самым пересчитываем Сцену.
             */
-            console.error("169: 8. Старт таймера страницы.")
+            console.error("367: 8. Старт таймера страницы.")
             root.sgnProgress(73, "8/11 Старт таймера страницы.");
             tmrGoToPage.running = true;//запускаем таймер, перед переходом на страницу
         }
@@ -382,7 +382,7 @@ Item {
         id: tmrScale
         interval: 111; running: false; repeat: false
         onTriggered: {
-            console.error("187: 4. Стоп таймера масштабирования.");
+            console.error("385: 4. Стоп таймера масштабирования.");
             root.sgnProgress(37, "4/11 Стоп таймера масштабирования.");
             fnScale();//масштабируем документ автоматически/вручную.
         }
@@ -391,7 +391,7 @@ Item {
         id: tmrGoToPage
         interval: 777; running: false; repeat: false
         onTriggered: {
-            console.error("196: 9. Стоп таймера страницы.");
+            console.error("394: 9. Стоп таймера страницы.");
             root.sgnProgress(82, "9/11 Стоп таймера страницы.");
             if(pmpDoc.blPinch){//Если был щипок пользователя с изменением Масштаба, то...
                 pmpDoc.blPinch = false;//Сбрасываем флаг
@@ -417,7 +417,7 @@ Item {
         id: tmrVisible
         interval: 333; running: false; repeat: false
         onTriggered: {
-            console.error("218: Отображаем ваш документ.");
+            console.error("420: Отображаем ваш документ.");
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
@@ -428,7 +428,7 @@ Item {
         id: tmrError
         interval: 111; running: false; repeat: false
         onTriggered: {
-            console.error("228: 11. Ошибка, окончание загрузки.");
+            console.error("431: 11. Ошибка, окончание загрузки.");
             root.sgnProgress(100, "11/11 Ошибка, окончание загрузки.");
             if(pmpDoc.blPassword){//Если был запрос на пароль, то...
                 pmpDoc.blPassword = false;//Сбрасываем флаг.
@@ -446,7 +446,6 @@ Item {
         searchString: ""
         //Иннициализация Свойств при каждой загрузке, от сюда берутся первоначальные данные Свойств.
         property bool blResetScene: false//false - быстрый сброс сцены при первом открытии pdf документа.
-        property bool blDocVert: true//true - вертикальный документ, false - горизонтальный документ.
         property bool blScale: false//true - когда в pdf документе масштабирование произошло.
         property bool blRenderScale: false//Флаг предотвращающий рекурсию root.renderScale
         property bool blScaleAuto: true//true - автоматическое масштабирование. false - ручное масштабирование
@@ -463,52 +462,72 @@ Item {
 
         document: PdfDocument {
             id: pdfDoc
+            //Свойства
+            property bool isDocVert: true//true - вертикальный документ, false - горизонтальный документ.
+            property real rlWidth: 0//Длина текущей страницы
+            property real rlHeight: 0//Высота текущей страницы
+            //Настройки
             source: root.source//Привязываем источник PDF
             password: root.password//Пароль для pdf документа.
             onStatusChanged: {
                 if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
-                    console.error("266: 10. Старт таймера ошибки.");
+                    console.error("474: 10. Старт таймера ошибки.");
                     root.sgnProgress(91, "10/11 Старт таймера ошибки.");
                     tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
                 }
                 else{//Если не ошибка, то...
                     if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
-                        console.error("272: 2. Статус документа: Готов.");
+                        console.error("480: 2. Статус документа: Готов.");
                         root.sgnProgress(19, "2/11 Загрузка большого документа.");
                         //Расчитываем, вертикальный или горизонтальный документ.
-                        if(pdfDoc.pagePointSize(root.currentPage).height
-                                >= pdfDoc.pagePointSize(root.currentPage).width)
-                            pmpDoc.blDocVert = true;//true - вертикальный документ.
+                        pdfDoc.rlWidth = pdfDoc.pagePointSize(root.currentPage).width//Запоминаем первую стр.
+                        pdfDoc.rlHeight = pdfDoc.pagePointSize(root.currentPage).height//Запоминаем первую стр
+                        if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
+                            pdfDoc.isDocVert = true;//true - вертикальный документ.
                         else
-                            pmpDoc.blDocVert = false;//false - горизонтальный документ.
+                            pdfDoc.isDocVert = false;//false - горизонтальный документ.
                     }
                     else{
                         if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
-                            console.error("283: 1. Статус документа: Загрузка.");
+                            console.error("492: 1. Статус документа: Загрузка.");
                             root.sgnProgress(10, "1/11 Статус документа: Загрузка.");
                         }
                     }
                 }
             }
             onPasswordRequired: {//Если пришёл сигнал passwordRequire запроса пароля в pdf документе, то...
-                console.error("290: Запрашиваю пароль.")
+                console.error("499: Запрашиваю пароль.")
                 pmpDoc.blPassword = true;//Запрашиваю пароль.
                 root.sgnPassword();//Сигнал о том, что есть запрос на ввод пароля.
             }
         }
         onCurrentPageChanged: {//Если страница документа изменилась, то...
-            root.sgnCurrentPage(pmpDoc.currentPage)//Сигнал с номером страницы отсылаем.
+            if(!blScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
+                const cnStranica = pmpDoc.currentPage//Номер страницы
+                const cnWidth = pdfDoc.pagePointSize(cnStranica).width
+                const cnHeight = pdfDoc.pagePointSize(cnStranica).height
+                if((pdfDoc.rlWidth !== cnWidth) || (pdfDoc.rlHeight !== cnHeight)){
+                    pdfDoc.rlWidth = cnWidth
+                    pdfDoc.rlHeight = cnHeight
+                    if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
+                        pdfDoc.isDocVert = true;//true - вертикальный документ.
+                    else
+                        pdfDoc.isDocVert = false;//false - горизонтальный документ.
+                    console.error("516: НУЖНО МЕНЯТЬ МАСШТАБ")
+                }
+                root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
+            }
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
             if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
-                console.error("300: Рендер страницы: " + pmpDoc.currentPage + " Загрузка.");
+                console.error("523: Рендер страницы: " + pmpDoc.currentPage + " Загрузка.");
             }
             else{//Если не загружается страница, то...
                 if(pmpDoc.currentPageRenderingStatus === Image.Ready){//Статус рендеринга страницы ОТКРЫТ.
-                    console.error("304: Рендер страницы: " + pmpDoc.currentPage + " Открыт.");
+                    console.error("527: Рендер страницы: " + pmpDoc.currentPage + " Открыт.");
                     if(!pmpDoc.blScale){//Если стартового масштабирование не было, то...
                         pmpDoc.blScale = true;//Активируем флаг, что началось первичное масштабирование.
-                        console.error("307: 3. Старт таймера масштабирования.");
+                        console.error("530: 3. Старт таймера масштабирования.");
                         root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
                         pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером
                         tmrScale.running = true;//запускаем таймер, перед переходом на страницу
@@ -516,7 +535,7 @@ Item {
                     else{//Если это не первичное масштабирование, то...
                         if(pmpDoc.blPinch){//Если щипок был,то страница отрендерилась и нужно сбрасывать сцену
                             pmpDoc.goToPage(0);//Переходим на первую страницу, потом goTo на заданную страницу
-                            console.error("315: 6. Окончание масштабирования документа.")
+                            console.error("538: 6. Окончание масштабирования документа.")
                             root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
                             tmrResetScene.running = true;//запускаем таймер, сброса сцены.
                         }
@@ -524,16 +543,16 @@ Item {
                 }
                 else{//Если не открылась страница, то...
                     if(pmpDoc.currentPageRenderingStatus === Image.Error){//Статус рендеринга страницы ОШИБКА.
-                        console.error("323: Рендер страницы: " + pmpDoc.currentPage + " Ошибка.");
-                        console.error("324: 11. Ошибка рендера страницы.");
+                        console.error("546: Рендер страницы: " + pmpDoc.currentPage + " Ошибка.");
+                        console.error("547: 11. Ошибка рендера страницы.");
                         root.sgnProgress(100, "11/11 Ошибка рендера страницы.");
                         root.sgnDebug(qsTr("Ошибка рендера страницы."));//Передаём ошибку.
                         root.sgnError();//Закрываем документ.
                     }
                     else{
                         if(pmpDoc.currentPageRenderingStatus === Image.Null){//Статус рендеринга страницы Null
-                            console.error("331: Рендер страницы: " + pmpDoc.currentPage + " Null.");
-                            console.error("332: 11. Рендера страницы Null.");
+                            console.error("554: Рендер страницы: " + pmpDoc.currentPage + " Null.");
+                            console.error("555: 11. Рендера страницы Null.");
                             root.sgnProgress(100, "11/11 Рендера страницы Null.");
                             root.sgnDebug(qsTr("Рендера страницы Null."));//Передаём ошибку.
                             root.sgnError();//Закрываем документ.
@@ -570,8 +589,6 @@ Item {
             console.error("Размер документа х:" + docWidth + " y:" + docHeight
                         + " Размер сцены х:" + sceneWidth + " y:" + sceneHeight)
             */
-            console.error(root.currentResult + " длина страниц:" + lsvNaideno.massStranici.length
-                          + " длина координат:" + lsvNaideno.massLocation.length)
             if((root.currentResult >= 0) 	&& (root.currentResult < lsvNaideno.massStranici.length)
                                             && (root.currentResult < lsvNaideno.massLocation.length)){//ВАЖНО!
                 pmpDoc.goToLocation(lsvNaideno.massStranici[root.currentResult],
