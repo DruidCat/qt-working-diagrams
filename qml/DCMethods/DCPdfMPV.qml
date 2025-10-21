@@ -14,7 +14,8 @@ Item {
     property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
     property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
     property alias searchString: pmpDoc.searchString//Запрос на поиск.
-    property int searchCount: cppqml.pdfPoisk.ntSchetchik//Количество совпадений при поиске.
+    //property int searchCount: cppqml.pdfPoisk.ntSchetchik//Количество совпадений при поиске.
+    property int searchCount: pmpDoc.searchModel.count//Количество совпадений при поиске.
     property bool isSearch: cppqml.pdfPoisk.isPoisk//true - поиск идёт, false - поиск остановлен.
     property alias rotation: pmpDoc.rotation//Поворот сцены документа.
     property alias pageRotation: pmpDoc.pageRotation//Поворот страниц документа.
