@@ -475,7 +475,7 @@ Item {
                 knopkaPoisk.visible = true;//Конопка Поиск Видимая.
                 knopkaPoisk.enabled = true;//Конопка Поиск активния.
                 txnZagolovok.text = "";//Текст обнуляем вводимый.
-                pdfLoader.item.searchString = "";//Передаём пустой запрос в поисковую модель.
+                pdfLoader.item.fnClickedPoiskStop()//Передаём пустой запрос в поисковую модель.
                 if(knopkaSidebar.opened)//Если боковая панель открыта, то...
                     fnSidebarNaideno();//Закрываем боковую панель с вкладкной Найдено.
             }
