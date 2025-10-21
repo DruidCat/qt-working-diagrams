@@ -269,6 +269,7 @@ Item {
                 pskPoisk.text = txnZagolovok.text;//текст присваиваем.
                 pskPoisk.visible = true;//Делаем видимым режим поиска
                 txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
+                pdfLoader.item.fnClickedPoiskStop()//ОБЯЗАТЕЛЬНО ВСЁ ОБНУЛЯЕМ ПЕРЕД НОВЫМ ПОИСКОМ.
                 pdfLoader.item.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
             }
             else{//Если менее трёх символов, то...

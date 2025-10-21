@@ -163,8 +163,6 @@ Item {
     }
     function fnClickedPoiskStop(){//Функция остановки поиска.
         pmpDoc.searchModel.currentResult = 0//Переводим курсор на первый элемент поиска
-        lsvNaideno.massStranici = [];//Удаляем массив страниц перед следующим поиском.
-        lsvNaideno.massLocation = [];//Удаляем массив координат совпадения перед следующим поиском.
         root.searchString = "";//Очищаем именно тут запрос на пустой поиск,чтоб очистить старую историю поиска
     }
     function fnClickedPoiskNext(){//Функция перехода к следующему номеру поиска
@@ -258,6 +256,8 @@ Item {
         })
 	}
     onSourceChanged: {//Когда меняется источник документа — обновим C++ поиск
+        lsvNaideno.massStranici = [];//Удаляем массив страниц перед следующим поиском.
+        lsvNaideno.massLocation = [];//Удаляем массив координат совпадения перед следующим поиском.
         if(root.source && root.source !== "")
             cppqml.pdfPoisk.urlPdf = root.source//Отправляем адрес файла в бизнес логику.
     }
@@ -570,10 +570,16 @@ Item {
             console.error("Размер документа х:" + docWidth + " y:" + docHeight
                         + " Размер сцены х:" + sceneWidth + " y:" + sceneHeight)
             */
-            pmpDoc.goToLocation(lsvNaideno.massStranici[root.currentResult],
-                                //lsvNaideno.massLocation[root.currentResult],
-                                Qt.point(0,0),
-                                pmpDoc.renderScale)//Переходим на страницу номера поиска.
+            console.error(root.currentResult + " длина страниц:" + lsvNaideno.massStranici.length
+                          + " длина координат:" + lsvNaideno.massLocation.length)
+            if((root.currentResult >= 0) 	&& (root.currentResult < lsvNaideno.massStranici.length)
+                                            && (root.currentResult < lsvNaideno.massLocation.length)){
+                pmpDoc.goToLocation(lsvNaideno.massStranici[root.currentResult],
+                                    Qt.point(lsvNaideno.massLocation[root.currentResult].x,
+                                            lsvNaideno.massLocation[root.currentResult].y),
+                                    //Qt.point(0,0),
+                                    pmpDoc.renderScale)//Переходим на страницу номера поиска.
+            }
         }
     }
     Rectangle {//Дополнительный элементы управления.
@@ -722,7 +728,7 @@ Item {
                     }
                     Component.onCompleted: {//Если создался элемент делегата, то...
                         lsvNaideno.massStranici.push(tmdResult.page)//Добавляем в массив № страниц совпадений.
-                        lsvNaideno.massLocation.push(tmdResult.location)//Добавляем в массив коорд. совпадений
+                        lsvNaideno.massLocation.push({x: tmdResult.location.x, y: tmdResult.location.y})//Коорд
                         if(index === 0){//Если index поиска первый (0), то...
                             pmpDoc.searchModel.currentResult = -1//Чтоб заработало onCurrentResultChanged
                             pmpDoc.searchModel.currentResult = 0//выделяем первый результат
