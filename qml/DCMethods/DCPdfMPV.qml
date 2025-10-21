@@ -573,11 +573,10 @@ Item {
             console.error(root.currentResult + " длина страниц:" + lsvNaideno.massStranici.length
                           + " длина координат:" + lsvNaideno.massLocation.length)
             if((root.currentResult >= 0) 	&& (root.currentResult < lsvNaideno.massStranici.length)
-                                            && (root.currentResult < lsvNaideno.massLocation.length)){
+                                            && (root.currentResult < lsvNaideno.massLocation.length)){//ВАЖНО!
                 pmpDoc.goToLocation(lsvNaideno.massStranici[root.currentResult],
-                                    Qt.point(lsvNaideno.massLocation[root.currentResult].x,
-                                            lsvNaideno.massLocation[root.currentResult].y),
-                                    //Qt.point(0,0),
+                                    Qt.point(	lsvNaideno.massLocation[root.currentResult].x,
+                                                lsvNaideno.massLocation[root.currentResult].y),
                                     pmpDoc.renderScale)//Переходим на страницу номера поиска.
             }
         }
@@ -714,7 +713,7 @@ Item {
                                             ? root.clrMenuFon
                                             : ((tmdResult.index % 2)
                                                 ? root.clrFona
-                                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.11))))
+                                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))))
                     }
                     contentItem: Label {
                         text: " Страница " + (tmdResult.page + 1)
@@ -728,7 +727,7 @@ Item {
                     }
                     Component.onCompleted: {//Если создался элемент делегата, то...
                         lsvNaideno.massStranici.push(tmdResult.page)//Добавляем в массив № страниц совпадений.
-                        lsvNaideno.massLocation.push({x: tmdResult.location.x, y: tmdResult.location.y})//Коорд
+                        lsvNaideno.massLocation.push({x: tmdResult.location.x,y: tmdResult.location.y})//Коорд
                         if(index === 0){//Если index поиска первый (0), то...
                             pmpDoc.searchModel.currentResult = -1//Чтоб заработало onCurrentResultChanged
                             pmpDoc.searchModel.currentResult = 0//выделяем первый результат
