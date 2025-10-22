@@ -162,8 +162,10 @@ Item {
         }
     }
     function fnClickedPoiskStop(){//Функция остановки поиска.
-        pmpDoc.searchModel.currentResult = 0//Переводим курсор на первый элемент поиска
-        root.searchString = "";//Очищаем именно тут запрос на пустой поиск,чтоб очистить старую историю поиска
+        root.currentResult = -1//Чтоб в пустом поиске не было 1
+        lsvNaideno.massStranici = [];//Удаляем массив страниц перед следующим поиском.
+        lsvNaideno.massLocation = [];//Удаляем массив координат совпадения перед следующим поиском.
+        root.searchString = "";//Очищаем именно тут запрос на пустой поиск, чтоб не было loop цикла.
     }
     function fnClickedPoiskNext(){//Функция перехода к следующему номеру поиска
         pmpDoc.searchModel.currentResult += 1;//Выбираем следующий номер поиска
@@ -256,13 +258,10 @@ Item {
         })
 	}
     onSourceChanged: {//Когда меняется источник документа — обновим C++ поиск
-        lsvNaideno.massStranici = [];//Удаляем массив страниц перед следующим поиском.
-        lsvNaideno.massLocation = [];//Удаляем массив координат совпадения перед следующим поиском.
         if(root.source && root.source !== "")
             cppqml.pdfPoisk.urlPdf = root.source//Отправляем адрес файла в бизнес логику.
     }
-    onSearchStringChanged: {//Когда меняется поисковая строка — отдадим её в C++ 
-
+    onSearchStringChanged: {//Когда меняется поисковая строка — отдадим её в C++
         cppqml.pdfPoisk.strPoisk = root.searchString;//Отправляем поисковый запрос в бизнес логику.
         if(root.searchString){//Если не пустая строка, то...
             fnSidebarNaideno();//Открываем боковую панель на вкладке Найдено для отображения результатов поиск
@@ -579,6 +578,7 @@ Item {
         }
         function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
             root.currentResult = pmpDoc.searchModel.currentResult//Присваиваем действующий результат поиска.
+
             /*
             var sceneWidth = pmpDoc.width;//Длина сцены PdfMultiPageView
             var sceneHeight = pmpDoc.height;//Высота сцены PdfMultiPageView
@@ -746,9 +746,15 @@ Item {
                         lsvNaideno.massStranici.push(tmdResult.page)//Добавляем в массив № страниц совпадений.
                         lsvNaideno.massLocation.push({x: tmdResult.location.x,y: tmdResult.location.y})//Коорд
                         if(index === 0){//Если index поиска первый (0), то...
-                            pmpDoc.searchModel.currentResult = -1//Чтоб заработало onCurrentResultChanged
-                            pmpDoc.searchModel.currentResult = 0//выделяем первый результат
-                            pmpDoc.goToLocation(tmdResult.page,tmdResult.location,pmpDoc.renderScale)//Переход
+                            tmrCurrentResult.running = true//Запускаем таймер,чтоб нет прерывания в прерывании
+                        }
+                    }
+                    Timer {//Таймер необходим, чтоб после перехода на страницу произошла небольшая пауза, минимум 333.
+                        id: tmrCurrentResult
+                        interval: 11; running: false; repeat: false
+                        onTriggered: {
+                            pmpDoc.searchModel.currentResult = -1//Сбрасываем результат прошлого поиска.
+                            pmpDoc.searchModel.currentResult = 0//Переходим на первый результат.
                         }
                     }
                 }

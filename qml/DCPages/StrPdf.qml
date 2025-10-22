@@ -202,6 +202,7 @@ Item {
             pdfLoader.active = true;//Активируем загрузчик, загружаем pdf документ.
         }
         else{//Если путь пустая строка, то...
+            pdfLoader.item.fnClickedPoiskStop()//Передаём пустой запрос в поисковую модель. Обнуляем её.
             pssPassword.strPasswordOld = "";//Обнуляем при закрытии старый пароль.
             pdfLoader.pdfRotation = 0;//0 градусов.
             pdfLoader.item.source = "qrc:///workingdata/base.pdf";//Чтоб можно было удалить предыдущий doc.pdf
@@ -270,7 +271,7 @@ Item {
                 pskPoisk.visible = true;//Делаем видимым режим поиска
                 txnZagolovok.visible = false;//Делаем невидимой строку, остальное onVisibleChanged сделает
                 pdfLoader.item.fnClickedPoiskStop()//ОБЯЗАТЕЛЬНО ВСЁ ОБНУЛЯЕМ ПЕРЕД НОВЫМ ПОИСКОМ.
-                pdfLoader.item.searchString = txnZagolovok.text;//Передаём запрос в поисковую модель.
+                pdfLoader.item.searchString = txnZagolovok.text//Передаём запрос
             }
             else{//Если менее трёх символов, то...
                 txnZagolovok.text = "";//Делаем поле запроса на поиск полностью пустым.
@@ -476,7 +477,7 @@ Item {
                 knopkaPoisk.visible = true;//Конопка Поиск Видимая.
                 knopkaPoisk.enabled = true;//Конопка Поиск активния.
                 txnZagolovok.text = "";//Текст обнуляем вводимый.
-                pdfLoader.item.fnClickedPoiskStop()//Передаём пустой запрос в поисковую модель.
+                pdfLoader.item.fnClickedPoiskStop()//ОБЯЗАТЕЛЬНО ВСЁ ОБНУЛЯЕМ ПЕРЕД НОВЫМ ПОИСКОМ.
                 if(knopkaSidebar.opened)//Если боковая панель открыта, то...
                     fnSidebarNaideno();//Закрываем боковую панель с вкладкной Найдено.
             }
