@@ -616,7 +616,7 @@ Item {
         //Настройки
         edge: Qt.LeftEdge
         modal: false
-        width: root.width/3//Ширина
+        width: root.isMobile ? root.width : root.width/3//Если мобила, то ширина на весь экран,если нет,то 1/3
         height: pmpDoc.height//Высота по высоте pdf сцены
         y: root.ntWidth*root.ntCoff+3*root.ntCoff//координату по Y брал из расчёта Stranica.qml
         dim: false
@@ -742,6 +742,7 @@ Item {
                     highlighted: ListView.isCurrentItem
                     onClicked: {
                         pmpDoc.searchModel.currentResult = tmdResult.index//Задаём номер поиска
+                        if(root.isMobile) drwSidebar.close()//Если мобила, то закрываем боковую панель
                     }
                     Component.onCompleted: {//Если создался элемент делегата, то...
                         lsvNaideno.massStranici.push(tmdResult.page)//Добавляем в массив № страниц совпадений.
@@ -786,7 +787,10 @@ Item {
                 delegate: TreeViewDelegate {
                     required property int page
                     required property point location
-                    onClicked: pmpDoc.goToLocation(page, location, pmpDoc.renderScale)
+                    onClicked: {
+                        pmpDoc.goToLocation(page, location, pmpDoc.renderScale)//Переходим на страницу
+                        if(root.isMobile) drwSidebar.close()//Если мобила, то закрываем боковую панель
+                    }
                 }
                 model: PdfBookmarkModel {
                     document: pdfDoc
@@ -859,6 +863,7 @@ Item {
                         onTapped: {
                             grvPoster.currentIndex = index;//Передаём выбранный индекс, для подсветки текста.
                             pmpDoc.goToPage(index);//Переходим на страницу.
+                            if(root.isMobile) drwSidebar.close()//Если мобила, то закрываем боковую панель
                         }
                     }
                 }
