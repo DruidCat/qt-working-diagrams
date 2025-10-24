@@ -514,8 +514,8 @@ Item {
                         pdfDoc.isDocVert = false;//false - горизонтальный документ.
                     console.error("516: НУЖНО МЕНЯТЬ МАСШТАБ")
                 }
-                grvPoster.currentIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
+                grvPoster.currentIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
             }
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
@@ -831,6 +831,8 @@ Item {
                         height: rctImage.height
                         x: (tmPoster.width - rctList.width)/2
                         y: (tmPoster.height - rctList.height - txtNomerStranici.height)/2
+                        border.color: tmPoster.GridView.isCurrentItem ? root.clrTexta : "transparent"
+                        border.width: root.ntCoff/2
                         PdfPageImage {
                             id: rctImage
                             document: pdfDoc
@@ -850,7 +852,7 @@ Item {
                         id: txtNomerStranici
                         anchors.bottom: tmPoster.bottom
                         anchors.horizontalCenter: tmPoster.horizontalCenter
-                        color: tmPoster.GridView.isCurrentItem ? root.clrPoisk : root.clrTexta//ПодсветНомеров
+                        color: tmPoster.GridView.isCurrentItem ? root.clrTexta: root.clrPoisk
                         text: label
                     }
                     TapHandler {
