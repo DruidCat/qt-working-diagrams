@@ -514,6 +514,7 @@ Item {
                         pdfDoc.isDocVert = false;//false - горизонтальный документ.
                     console.error("516: НУЖНО МЕНЯТЬ МАСШТАБ")
                 }
+                grvPoster.currentIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
             }
         }
@@ -615,7 +616,7 @@ Item {
         //Настройки
         edge: Qt.LeftEdge
         modal: false
-        width: 330//Ширина
+        width: root.width/3//Ширина
         height: pmpDoc.height//Высота по высоте pdf сцены
         y: root.ntWidth*root.ntCoff+3*root.ntCoff//координату по Y брал из расчёта Stranica.qml
         dim: false
@@ -849,7 +850,7 @@ Item {
                         id: txtNomerStranici
                         anchors.bottom: tmPoster.bottom
                         anchors.horizontalCenter: tmPoster.horizontalCenter
-                        color: tmPoster.GridView.isCurrentItem ? root.clrPoisk : root.clrTexta
+                        color: tmPoster.GridView.isCurrentItem ? root.clrPoisk : root.clrTexta//ПодсветНомеров
                         text: label
                     }
                     TapHandler {
