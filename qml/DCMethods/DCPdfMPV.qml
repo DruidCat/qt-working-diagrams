@@ -814,10 +814,11 @@ Item {
                 implicitWidth: rctPoster.width
                 implicitHeight: rctPoster.height
                 model: pdfDoc.pageModel
-                cellWidth: width / 2
-                cellHeight: cellWidth + 10
-                ScrollBar.vertical: ScrollBar { }
+                ScrollBar.vertical: ScrollBar { id: scbVertical }
+                cellWidth: width/2 - scbVertical.width/2//Расчёт длины одного постера
+                cellHeight: cellWidth + 10//Расчёт высоты постера
                 delegate: Item {
+                    id: tmPoster
                     required property int index
                     required property string label
                     required property size pointSize
@@ -827,8 +828,8 @@ Item {
                         id: rctList
                         width: rctImage.width
                         height: rctImage.height
-                        x: (parent.width - width) / 2
-                        y: (parent.height - height - txtNomerStranici.height) / 2
+                        x: (tmPoster.width - rctList.width)/2
+                        y: (tmPoster.height - rctList.height - txtNomerStranici.height)/2
                         PdfPageImage {
                             id: rctImage
                             document: pdfDoc
@@ -840,19 +841,22 @@ Item {
                                              : height * pointSize.width / pointSize.height
                             height: landscape ? width * pointSize.height / pointSize.width
                                              : grvPoster.cellHeight - 14
-                            sourceSize.width: width
-                            sourceSize.height: height
+                            sourceSize.width: rctImage.width
+                            sourceSize.height: rctImage.height
                         }
                     }
                     Text {
                         id: txtNomerStranici
-                        anchors.bottom: parent.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        color: root.clrTexta
+                        anchors.bottom: tmPoster.bottom
+                        anchors.horizontalCenter: tmPoster.horizontalCenter
+                        color: tmPoster.GridView.isCurrentItem ? root.clrPoisk : root.clrTexta
                         text: label
                     }
                     TapHandler {
-                        onTapped: pmpDoc.goToPage(index)
+                        onTapped: {
+                            grvPoster.currentIndex = index;//Передаём выбранный индекс, для подсветки текста.
+                            pmpDoc.goToPage(index);//Переходим на страницу.
+                        }
                     }
                 }
             }
