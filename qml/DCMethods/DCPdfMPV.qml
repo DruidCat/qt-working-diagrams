@@ -764,10 +764,11 @@ Item {
                                                 : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))))
                     }
                     contentItem: Label {
+                        id: lblText
                         text: " Страница " + (tmdResult.page + 1)
-                              + ": " + pmpDoc.searchString
                               + " [" + (tmdResult.index + 1) + "]"
                         color: root.clrPoisk
+                        font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта - это высота вкладки, минус ntCoff
                     }
                     highlighted: ListView.isCurrentItem
                     onClicked: {
@@ -886,6 +887,7 @@ Item {
                         anchors.horizontalCenter: tmPoster.horizontalCenter
                         color: tmPoster.GridView.isCurrentItem ? root.clrTexta: root.clrPoisk
                         text: label
+                        font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта - это высота вкладки, минус ntCoff
                     }
                     TapHandler {
                         onTapped: {
