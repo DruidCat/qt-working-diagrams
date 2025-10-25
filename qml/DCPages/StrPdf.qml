@@ -675,10 +675,12 @@ Item {
                 tmrPassword.running = true;//Делаем видимым поле ввода пароля через небольшую паузу.
             }
             function onSgnProgress(ntProgress, strStatus){//Изменился прогресс документа.
-                if(ldrProgress.item)
+                if(ldrProgress.item){//Если загрузчик создался, то...
+                    ldrProgress.item.ntWidth = root.ntWidth;//ВАЖНО! Для изменения размера шрифта.
+                    ldrProgress.item.ntCoff = root.ntCoff;//ВАЖНО! Для изменения размера шрифта.
                     ldrProgress.item.progress = ntProgress;//Отправляем прогресс загрузки в DCProgress.
-                if(ldrProgress.item)
                     ldrProgress.item.text = strStatus;//Выводим статус загрузки документа.
+                }
             }
             function onIsSearchChanged(){//Если статус поиска изменился, то...
                 if(pdfLoader.item.isSearch)//Если поиск идёт, то...
@@ -731,7 +733,7 @@ Item {
             active: false//не активирован.
             onLoaded: {//Когда загрузчик загрузился, передаём свойства в него.
                 ldrProgress.item.ntWidth = root.ntWidth; ldrProgress.item.ntCoff = root.ntCoff;
-                ldrProgress.item.clrProgress = root.clrTexta; ldrProgress.item.clrTexta = "grey";
+                ldrProgress.item.clrProgress = root.clrTexta; ldrProgress.item.clrTexta = root.clrMenuFon;
             }
         }
         DCSpinBox {
