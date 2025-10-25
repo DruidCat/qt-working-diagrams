@@ -159,3 +159,163 @@ void DCPdfPoisk::qdebug(QString strDebug){//Метод отладки, излу�
 /////////////////////
     emit signalDebug(strDebug);//Испускаем сигнал со строчкой Лог
 }
+
+// ==== Вспомогательные функции ====
+int DCPdfPoisk::findRole(const QAbstractItemModel* model, const QByteArray& roleName)
+{
+    if (!model) return -1;
+    const auto roles = model->roleNames();
+    for (auto it = roles.cbegin(); it != roles.cend(); ++it) {
+        if (it.value() == roleName)
+            return it.key();
+    }
+    return -1;
+}
+
+int DCPdfPoisk::findFirstOfRoles(const QAbstractItemModel* model, std::initializer_list<const char*> names)
+{
+    for (const char* n : names) {
+        const int id = findRole(model, QByteArray(n));
+        if (id >= 0) return id;
+    }
+    return -1;
+}
+
+QVariantMap DCPdfPoisk::rectToMap(const QRectF& r)
+{
+    QVariantMap m;
+    m.insert("x", r.x());
+    m.insert("y", r.y());
+    m.insert("width", r.width());
+    m.insert("height", r.height());
+    return m;
+}
+
+QVariantMap DCPdfPoisk::makeResult(int page, const QRectF& r, int index, bool valid)
+{
+    QVariantMap out;
+    out.insert("page", page);
+    out.insert("location", rectToMap(r));
+    out.insert("index", index);
+    out.insert("valid", valid);
+    return out;
+}
+
+// ==== Новые публичные методы ====
+
+QVariantMap DCPdfPoisk::getFromModel(QObject* modelObj, int row) const
+{
+    QVariantMap out;
+    auto model = qobject_cast<QAbstractItemModel*>(modelObj);
+    if (!model) {
+        out.insert("valid", false);
+        return out;
+    }
+    if (row < 0 || row >= model->rowCount(QModelIndex())) {
+        out.insert("valid", false);
+        return out;
+    }
+
+    const int pageRole = findRole(model, "page");
+    const int locRole  = findFirstOfRoles(model, { "location", "locations", "rect", "rectangle", "rectangles", "bounds" });
+
+    const QModelIndex idx = model->index(row, 0, QModelIndex());
+    int page = -1;
+    if (pageRole >= 0)
+        page = model->data(idx, pageRole).toInt();
+
+    if (locRole >= 0) {
+        const QVariant v = model->data(idx, locRole);
+        if (v.canConvert<QRectF>()) {
+            const QRectF r = v.toRectF();
+            return makeResult(page, r, row, true);
+        }
+        // Если по ошибке пришёл список — возьмём первый элемент как фоллбек
+        const QVariantList lst = v.toList();
+        if (!lst.isEmpty() && lst.first().canConvert<QRectF>()) {
+            const QRectF r = lst.first().toRectF();
+            return makeResult(page, r, row, true);
+        }
+    }
+
+    out.insert("page", page);
+    out.insert("index", row);
+    out.insert("valid", false);
+    return out;
+}
+
+QVariantMap DCPdfPoisk::getCurrentFromModel(QObject* modelObj) const
+{
+    if (!modelObj) return QVariantMap{ { "valid", false } };
+    bool ok = false;
+    const int cur = modelObj->property("currentResult").toInt(&ok);
+    if (!ok || cur < 0) return QVariantMap{ { "valid", false } };
+    return getFromModel(modelObj, cur);
+}
+
+int DCPdfPoisk::modelCount(QObject* modelObj) const
+{
+    auto model = qobject_cast<QAbstractItemModel*>(modelObj);
+    if (!model) return 0;
+    return model->rowCount(QModelIndex());
+}
+
+// Преобразование "глобального" индекса совпадения → (page, rect) через внутренний QPdfSearchModel
+QVariantMap DCPdfPoisk::resultAt(int globalIndex) const
+{
+    QVariantMap out;
+    if (globalIndex < 0) return QVariantMap{ { "valid", false } };
+
+    const auto roles = m_psmModel.roleNames();
+    const int pageRole = roles.key("page", -1);
+
+    // В разных версиях Qt/платформах роль с прямоугольниками могла называться по-разному
+    int regionsRole = roles.key("locations", -1);
+    if (regionsRole < 0) regionsRole = roles.key("rectangles", -1);
+    if (regionsRole < 0) regionsRole = roles.key("bounds", -1);
+
+    const int hitCountRole = roles.key("hitCount", -1);
+
+    const int rows = m_psmModel.rowCount(QModelIndex());
+    int base = 0; // сколько совпадений пропустили до текущей строки
+
+    for (int row = 0; row < rows; ++row) {
+        const QModelIndex idx = m_psmModel.index(row, 0);
+
+        QVariantList rects;
+        if (regionsRole >= 0) {
+            rects = m_psmModel.data(idx, regionsRole).toList();
+        } else if (hitCountRole >= 0) {
+            // Если прямоугольников не дают, но отдают только количество —
+            // то к координатам не подобраться, вернём invalid.
+            const int hits = m_psmModel.data(idx, hitCountRole).toInt();
+            if (globalIndex < base + hits) {
+                // Мы попали в нужную страницу, но координат нет
+                out.insert("page", pageRole >= 0 ? m_psmModel.data(idx, pageRole).toInt() : -1);
+                out.insert("index", globalIndex);
+                out.insert("valid", false);
+                return out;
+            }
+            base += hits;
+            continue;
+        } else {
+            // вообще ничего — допустим, 1 хит на страницу (фоллбек)
+            rects = QVariantList{ QVariant::fromValue(QRectF()) };
+        }
+
+        const int count = rects.size();
+        if (globalIndex < base + count) {
+            const int onPage = globalIndex - base;
+            QRectF r;
+            const QVariant& v = rects.at(onPage);
+            if (v.canConvert<QRectF>())
+                r = v.toRectF();
+
+            const int page = (pageRole >= 0) ? m_psmModel.data(idx, pageRole).toInt() : -1;
+            return makeResult(page, r, globalIndex, true);
+        }
+        base += count;
+    }
+
+    return QVariantMap{ { "valid", false } };
+}

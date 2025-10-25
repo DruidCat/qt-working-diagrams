@@ -163,8 +163,6 @@ Item {
     }
     function fnClickedPoiskStop(){//Функция остановки поиска.
         root.currentResult = -1//Чтоб в пустом поиске не было 1
-        lsvNaideno.massStranici = [];//Удаляем массив страниц перед следующим поиском.
-        lsvNaideno.massLocation = [];//Удаляем массив координат совпадения перед следующим поиском.
         root.searchString = "";//Очищаем именно тут запрос на пустой поиск, чтоб не было loop цикла.
     }
     function fnClickedPoiskNext(){//Функция перехода к следующему номеру поиска
@@ -575,11 +573,40 @@ Item {
     }
     Connections {//Автовыбор первого совпадения и переход
         target: pmpDoc.searchModel
+        function onModelReset() {//Поисковая модель сбрасывается при вызове fnClickedPoiskStop()
+            lsvNaideno.massStranici = [];//Удаляем массив
+            lsvNaideno.massLocation = [];//Удаляем массив
+        }
         function onCountChanged() {//Если счётчик совпадений изменился, то...
+            //if (pmpDoc.searchModel.count > 0 && pmpDoc.searchModel.currentResult === -1)
+            //    pmpDoc.searchModel.currentResult = 0;
         }
         function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
             root.currentResult = pmpDoc.searchModel.currentResult//Присваиваем действующий результат поиска.
+/*
+import QtQml.Models
+//DelegateModel создаст по “легкому” объекту на строку модели, и вы сможете читать роли по любому индексу
+//А для наполнения массивов используйте DelegateModel
+DelegateModel {
+    id: searchDM
+    model: pmpDoc.searchModel
+    delegate: QtObject {        // не Item → ничего не рисуем
+        property int page: model.page
+        property var location: model.location
+    }
+}
 
+function resultAt(i) {
+    const it = searchDM.items.get(i);
+    return it ? it.model : null;    // { page: ..., location: ... }
+}
+
+// пример использования
+const r = resultAt(pmpDoc.searchModel.currentResult);
+if (r) {
+    console.log("page:", r.page, "loc:", r.location.x, r.location.y);
+}
+*/
             /*
             var sceneWidth = pmpDoc.width;//Длина сцены PdfMultiPageView
             var sceneHeight = pmpDoc.height;//Высота сцены PdfMultiPageView
@@ -589,6 +616,22 @@ Item {
                                                                                         * pmpDoc.renderScale
             console.error("Размер документа х:" + docWidth + " y:" + docHeight
                         + " Размер сцены х:" + sceneWidth + " y:" + sceneHeight)
+
+// читать текущий результат из QML-модели
+const r = dcPdfPoisk.getCurrentFromModel(pmpDoc.searchModel);
+if (r.valid) {
+    console.log("Страница:", r.page, "x:", r.location.x, "y:", r.location.y);
+}
+
+//Или по конкретному индексу:
+const r = dcPdfPoisk.getFromModel(pmpDoc.searchModel, pmpDoc.searchModel.currentResult);
+
+//Если хочешь отобразить/перейти по “глобальному” индексу совпадения, опираясь на внутренний C++ QPdfSearchModel (тот, что в DCPdfPoisk)
+const r = dcPdfPoisk.resultAt(pmpDoc.searchModel.currentResult);
+// или любой другой индекс
+
+//resultAt() маппит глобальный индекс совпадения через твой C++ QPdfSearchModel, разрезая его по спискам “locations”/“rectangles” на каждой строке (странице). Это полезно, если хочется полностью обойтись без QML-объекта searchModel.
+//Если попадётся вариант QPdfSearchModel, который не отдаёт список прямоугольников, а только hitCount — координаты извлечь нельзя; в этом случае вернётся valid:false.
             */
             if((root.currentResult >= 0) 	&& (root.currentResult < lsvNaideno.massStranici.length)
                                             && (root.currentResult < lsvNaideno.massLocation.length)){//ВАЖНО!

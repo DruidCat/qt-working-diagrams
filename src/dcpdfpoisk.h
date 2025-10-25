@@ -7,6 +7,8 @@
 #include <QtPdf/QPdfDocument>
 #include <QtPdf/QPdfSearchModel>
 #include <QVariantList>
+#include <QVariantMap>
+#include <QRectF>
 
 class DCPdfPoisk : public QObject {
     Q_OBJECT
@@ -40,9 +42,31 @@ public:
     QPdfSearchModel* psmModel() { return &m_psmModel; }
     Q_INVOKABLE QVariantList resultsOnPage(int ntStranica) const;//Прямоугольники совпадений на странице (нормализованные 0..1)
 
+
+    // === Новые удобные методы для доступа к результатам ===
+    // Прочитать {page, location:{x,y,width,height}, index, valid:true} из любой модели по индексу row
+    Q_INVOKABLE QVariantMap getFromModel(QObject* modelObj, int row) const;
+    // Прочитать текущий результат из любой модели с currentResult
+    Q_INVOKABLE QVariantMap getCurrentFromModel(QObject* modelObj) const;
+    // Кол-во строк в любой модели
+    Q_INVOKABLE int modelCount(QObject* modelObj) const;
+    // Сопоставление "глобального" индекса совпадения → page+rect через наш QPdfSearchModel
+    Q_INVOKABLE QVariantMap resultAt(int globalIndex) const;
+    // Быстрый доступ к общему числу совпадений (то же, что ntSchetchik)
+    Q_INVOKABLE int totalResults() const { return m_ntSchetchik; }
+
+
 private:
     void 	pereschetSchetchika();//Пересчёт количества совпадений при поиске.
     bool 	ustPdfDoc(const QUrl& urlPdf);//Задаём pdf документ по ссылке url.
+
+
+    // Вспомогательные
+    static int findRole(const QAbstractItemModel* model, const QByteArray& roleName);
+    static int findFirstOfRoles(const QAbstractItemModel* model, std::initializer_list<const char*> names);
+    static QVariantMap rectToMap(const QRectF& r);
+    static QVariantMap makeResult(int page, const QRectF& r, int index, bool valid = true);
+
 
     QUrl	m_urlPdf;//Переменная хранящая ссылку на pdf документ.
     QPdfDocument	m_pdfDoc;//pdf документ, в котором мы будет считать совпадения поиска.
