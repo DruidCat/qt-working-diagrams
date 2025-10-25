@@ -87,3 +87,22 @@ signals:
 };
 
 #endif // DCPDFPOISK_H
+
+/*
+// читать текущий результат из QML-модели
+const r = dcPdfPoisk.getCurrentFromModel(pmpDoc.searchModel);
+if (r.valid) {
+    console.log("Страница:", r.page, "x:", r.location.x, "y:", r.location.y);
+}
+//Или по конкретному индексу:
+const r = dcPdfPoisk.getFromModel(pmpDoc.searchModel, pmpDoc.searchModel.currentResult);
+//Если хочешь отобразить/перейти по “глобальному” индексу совпадения, опираясь на внутренний
+    C++ QPdfSearchModel (тот, что в DCPdfPoisk)
+const r = dcPdfPoisk.resultAt(pmpDoc.searchModel.currentResult);
+// или любой другой индекс
+//resultAt() маппит глобальный индекс совпадения через твой C++ QPdfSearchModel, разрезая его по спискам
+    “locations”/“rectangles” на каждой строке (странице). Это полезно, если хочется полностью обойтись
+    без QML-объекта searchModel.
+//Если попадётся вариант QPdfSearchModel, который не отдаёт список прямоугольников, а только
+    hitCount — координаты извлечь нельзя; в этом случае вернётся valid:false.
+*/
