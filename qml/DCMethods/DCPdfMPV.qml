@@ -434,10 +434,10 @@ Item {
                     fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
                 else{//Если нет, то...
                     if(pmpDoc.blScaleAuto){//Если масштабирование Автоматическое при старте, то...
-						if(pmpDoc.blRotation)//Если нажат поворот документа, то..
-                        	fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
-						else//Если не нажат поворот, то это автоматическое масштабирование, и поэтому...
-                        	fnGoToPage(root.currentPage);//Выставляем заданную страницу из вне виджита.
+                        if(pmpDoc.blRotation)//Если нажат поворот документа, то..
+                            fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
+                        else//Если не нажат поворот, то это автоматическое масштабирование, и поэтому...
+                            fnGoToPage(root.currentPage);//Выставляем заданную страницу из вне виджита.
 					}
                     else//Если Ручное масштабирование пользователем, то...
                         fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
@@ -453,6 +453,7 @@ Item {
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
+            grvPoster.currentIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
             //forceActiveFocus();//Виджет видимый, форсируем фокус, чтоб event работал.
         }
     }
@@ -702,7 +703,7 @@ Item {
                 clrFona: root.clrFona
                 clrHover: root.clrMenuFon
                 ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-                blAutoFont: false
+                blAutoFont: false//Отключаем автоподгонку размера шрифта.
                 onPressed: tbSidebar.currentIndex = 0//Меняем индекс сразу при нажатии
             }
             DCTabButton {
@@ -715,7 +716,7 @@ Item {
                 clrFona: root.clrFona
                 clrHover: root.clrMenuFon
                 ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-                blAutoFont: false
+                blAutoFont: false//Отключаем автоподгонку размера шрифта.
                 onPressed: tbSidebar.currentIndex = 1//Меняем индекс сразу при нажатии
             }
             DCTabButton {
@@ -728,13 +729,12 @@ Item {
                 clrFona: root.clrFona
                 clrHover: root.clrMenuFon
                 ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-                blAutoFont: false
+                blAutoFont: false//Отключаем автоподгонку размера шрифта.
                 onPressed: tbSidebar.currentIndex = 2//Меняем индекс сразу при нажатии
             }
         }
         Rectangle {
             id: rctNaideno
-            //Настройки
             anchors.top: rctSibebar.top
             anchors.left: rctSibebar.left
             anchors.leftMargin: tbSidebar.height
@@ -765,10 +765,9 @@ Item {
                     }
                     contentItem: Label {
                         id: lblText
-                        text: " Страница " + (tmdResult.page + 1)
-                              + " [" + (tmdResult.index + 1) + "]"
+                        text: qsTr(" Страница ") + (tmdResult.page + 1) + " [" + (tmdResult.index + 1) + "]"
                         color: root.clrPoisk
-                        font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта - это высота вкладки, минус ntCoff
+                        font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта
                     }
                     highlighted: ListView.isCurrentItem
                     onClicked: {
@@ -777,16 +776,14 @@ Item {
                     }
                     Component.onCompleted: {//Если создался элемент делегата, то...
                         if(index === 0){//Если index поиска первый (0), то...
+                            pmpDoc.searchModel.currentResult = -1//Сбрасываем результат прошлого поиска.
                             tmrCurrentResult.running = true//Запускаем таймер,чтоб нет прерывания в прерывании
                         }
                     }
-                    Timer {//Таймер необходим, чтоб после перехода на страницу произошла небольшая пауза, минимум 333.
+                    Timer {//Таймер необходим, чтобы выйти из прерывания и подсветить первый элемент.
                         id: tmrCurrentResult
-                        interval: 11; running: false; repeat: false
-                        onTriggered: {
-                            pmpDoc.searchModel.currentResult = -1//Сбрасываем результат прошлого поиска.
-                            pmpDoc.searchModel.currentResult = 0//Переходим на первый результат.
-                        }
+                        interval: 3; running: false; repeat: false
+                        onTriggered: pmpDoc.searchModel.currentResult = 0//Переходим на первый результат.
                     }
                 }
             }
@@ -887,7 +884,7 @@ Item {
                         anchors.horizontalCenter: tmPoster.horizontalCenter
                         color: tmPoster.GridView.isCurrentItem ? root.clrTexta: root.clrPoisk
                         text: label
-                        font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта - это высота вкладки, минус ntCoff
+                        font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта
                     }
                     TapHandler {
                         onTapped: {
