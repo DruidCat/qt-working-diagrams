@@ -29,7 +29,11 @@ Item {
     //Сигналы.
     signal clickedNext();//Сигнал на следующий элемент поиска
     signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
-    signal clickedZakrit();//Сигнал на отмену поиска. 
+    signal clickedVverh();//Сигнал нажатия клавиши вверх.
+    signal clickedVniz();//Сигнал нажатия клавиши вниз
+    signal clickedVlevo();//Сигнал нажатия клавиши влево
+    signal clickedVpravo();//Сигнал нажатия клавиши вправо
+    signal clickedZakrit();//Сигнал на отмену поиска.
     signal clickedSidebar();//Сигнал о нажатии на кнопку боковой панели.
     signal clickedSidebarZakladki();//Сигнал - Открываем боковую панель с Закладками.
     signal clickedSidebarPoster();//Сигнал - Открываем боковую панель с Миниатюрами страниц
@@ -52,6 +56,18 @@ Item {
 	function fnClickedVverh() {//Функция обрабатывающая предыдущий поиск.
         root.clickedPrevious();//Сигнал предыдущего поиска.
 	}
+    function fnClickedKeyVniz() {//Функция обрабатывающая клавишу вниз
+        root.clickedVniz();//Сигнал нажатия клавиши вниз
+    }
+    function fnClickedKeyVverh() {//Функция обрабатывающая клавишу вверх.
+        root.clickedVverh();//Сигнал нажатия клавиши вверх
+    }
+    function fnClickedKeyVlevo() {//Функция обрабатывающая клавишу вниз
+        root.clickedVlevo();//Сигнал нажатия клавиши влева
+    }
+    function fnClickedKeyVpavo() {//Функция обрабатывающая клавишу вверх.
+        root.clickedVpravo();//Сигнал нажатия клавиши вправо
+    }
 	function fnClickedZakrit() {//Функция закрытия виджета.
 		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
         root.blNomer = true;//Начало обнуления
@@ -114,6 +130,30 @@ Item {
                                                     ||(event.key===Qt.Key_Return)){//F3
                                 fnClickedVniz();//Функция нажатия кнопки Следующего поиска
                                 event.accepted = true;//Завершаем обработку эвента.
+                            }
+                            else{
+                                if(event.key === Qt.Key_Down){//нажата "Стрелка вниз",то
+                                    fnClickedKeyVniz();//Функция нажатия клавиши вниз
+                                    event.accepted = true;//Завершаем обработку эвента.
+                                }
+                                else{
+                                    if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
+                                        fnClickedKeyVverh();//Функция нажатия клавиши вверх
+                                        event.accepted = true;//Завершаем обработку эвента.
+                                    }
+                                    else{
+                                        if(event.key === Qt.Key_Left){//Если нажата стрелка влево,то.
+                                            fnClickedKeyVlevo()//нажатия клавиши влево
+                                            event.accepted = true;//Завершаем обработку эвента.
+                                        }
+                                        else{
+                                            if(event.key === Qt.Key_Right){//Если нажата стрелка вправо, то.
+                                                fnClickedKeyVpravo()//нажатия клавиши вправо
+                                                event.accepted = true;//Завершаем обработку эвента.
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }

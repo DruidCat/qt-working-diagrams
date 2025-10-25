@@ -91,29 +91,41 @@ Item {
                             event.accepted = true;//Завершаем обработку эвента.
                         }
                         else{
-                            if(event.key === Qt.Key_PageDown){//Если нажата "Page Down",то.
-                                fnClickedKeyVniz()//нажатия клавиши вниз
+                            if(event.key === Qt.Key_Left){//Если нажата стрелка влево,то.
+                                fnClickedKeyVlevo()//нажатия клавиши влево
                                 event.accepted = true;//Завершаем обработку эвента.
                             }
                             else{
-                                if(event.key === Qt.Key_PageUp){//Если нажата "Page Up", то.
-                                    fnClickedKeyVverh()//нажатия клавиши вверх
+                                if(event.key === Qt.Key_Right){//Если нажата стрелка вправо, то.
+                                    fnClickedKeyVpravo()//нажатия клавиши вправо
                                     event.accepted = true;//Завершаем обработку эвента.
                                 }
                                 else{
-                                    if(event.key === Qt.Key_Home){//Если нажата кнопка Home, то...
-                                        fnClickedKeyHome()//нажатия клавиши Home
+                                    if(event.key === Qt.Key_PageDown){//Если нажата "Page Down",то.
+                                        fnClickedKeyVniz()//нажатия клавиши вниз
                                         event.accepted = true;//Завершаем обработку эвента.
                                     }
                                     else{
-                                        if(event.key === Qt.Key_End){//Если нажата кнопка End,то..
-                                            fnClickedKeyEnd()//нажатия клавиши End
+                                        if(event.key === Qt.Key_PageUp){//Если нажата "Page Up", то.
+                                            fnClickedKeyVverh()//нажатия клавиши вверх
                                             event.accepted = true;//Завершаем обработку эвента.
                                         }
                                         else{
-                                            if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
-                                                root.clickedPoiskNext()//Следующий номер поиска.
+                                            if(event.key === Qt.Key_Home){//Если нажата кнопка Home, то...
+                                                fnClickedKeyHome()//нажатия клавиши Home
                                                 event.accepted = true;//Завершаем обработку эвента.
+                                            }
+                                            else{
+                                                if(event.key === Qt.Key_End){//Если нажата кнопка End,то..
+                                                    fnClickedKeyEnd()//нажатия клавиши End
+                                                    event.accepted = true;//Завершаем обработку эвента.
+                                                }
+                                                else{
+                                                    if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
+                                                        root.clickedPoiskNext()//Следующий номер поиска.
+                                                        event.accepted = true;//Завершаем обработку эвента.
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -160,6 +172,24 @@ Item {
         else{//Если боковая панель не открыта, то...
             if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
                 root.currentPage = ntStrUp;//Листаем страницы документа.
+        }
+    }
+    function fnClickedKeyVlevo(){//Функция нажатия клавиши влево
+        if(drwSidebar.opened){//Если открыта боковая панель, то...
+            if(tbSidebar.currentIndex === 2){//Если открыта вкладка Страницы, то...
+                var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
+                if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+                    root.currentPage = ntStrUp;//Листаем страницы документа.
+            }
+        }
+    }
+    function fnClickedKeyVpravo(){//Функция нажатия клавиши вправо
+        if(drwSidebar.opened){//Если открыта боковая панель, то...
+            if(tbSidebar.currentIndex === 2){//Если открыта вкладка Страницы, то...
+                var ntStrDown = pmpDoc.currentPage + 1;
+                if(ntStrDown < pdfDoc.pageCount)
+                    root.currentPage = ntStrDown;//Листаем страницы документа.
+            }
         }
     }
     function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
@@ -563,7 +593,6 @@ Item {
                     }
                 }
             }
-
         }
         onRenderScaleChanged: {//Если масштаб изменился, то...
             if(!pmpDoc.blScaleStart){//Если не была запущена функция масштабирования fnScale(), то...
