@@ -140,5 +140,6 @@
         <file>workingdata/base.pdf</file>
         <file>qml/DCButtons/DCTabButton.qml</file>
         <file>qml/DCButtons/DCKnopkaSidebar.qml</file>
+        <file>qml/DCMethods/DCSidebar.qml</file>
     </qresource>
 </RCC>

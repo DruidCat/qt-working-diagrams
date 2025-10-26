@@ -28,7 +28,8 @@ Item {
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
-    property alias sbCurrentIndex: tbSidebar.currentIndex
+    //property alias sbCurrentIndex: tbSidebar.currentIndex
+    property alias sbCurrentIndex: dcSidebar.currentIndex
     property int currentResult: -1//Номер Поиска, совпадение от 0....
     //Настройки
     anchors.fill: parent
@@ -144,8 +145,8 @@ Item {
     }
     function fnClickedKeyVniz(){//Функция нажатия клавиши вниз
         var ntStrDown = pmpDoc.currentPage + 1;
-        if(drwSidebar.opened){//Если открыта боковая панель, то...
-            if(tbSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
+        if(dcSidebar.opened){//Если открыта боковая панель, то...
+            if(dcSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
                 fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
             }
             else{//Временно, чтоб работал скролл страниц
@@ -160,8 +161,8 @@ Item {
     }
     function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
         var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
-        if(drwSidebar.opened){//Если открыта боковая панель, то...
-            if(tbSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
+        if(dcSidebar.opened){//Если открыта боковая панель, то...
+            if(dcSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
                 fnClickedPoiskPrevious()//Функция перехода к предыдущему номеру поиска
             }
             else{//Временно, чтоб работал скролл страниц
@@ -175,8 +176,8 @@ Item {
         }
     }
     function fnClickedKeyVlevo(){//Функция нажатия клавиши влево
-        if(drwSidebar.opened){//Если открыта боковая панель, то...
-            if(tbSidebar.currentIndex === 2){//Если открыта вкладка Страницы, то...
+        if(dcSidebar.opened){//Если открыта боковая панель, то...
+            if(dcSidebar.currentIndex === 2){//Если открыта вкладка Страницы, то...
                 var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
                 if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
                     root.currentPage = ntStrUp;//Листаем страницы документа.
@@ -184,8 +185,8 @@ Item {
         }
     }
     function fnClickedKeyVpravo(){//Функция нажатия клавиши вправо
-        if(drwSidebar.opened){//Если открыта боковая панель, то...
-            if(tbSidebar.currentIndex === 2){//Если открыта вкладка Страницы, то...
+        if(dcSidebar.opened){//Если открыта боковая панель, то...
+            if(dcSidebar.currentIndex === 2){//Если открыта вкладка Страницы, то...
                 var ntStrDown = pmpDoc.currentPage + 1;
                 if(ntStrDown < pdfDoc.pageCount)
                     root.currentPage = ntStrDown;//Листаем страницы документа.
@@ -215,46 +216,46 @@ Item {
         root.currentPage = pdfDoc.pageCount-1;//На последнюю страницу
     }
     function fnClickedSidebar(){//Функция открывающая/закрывающая боковую панель.
-        if(drwSidebar.position)//Если открыта боковая панель, то...
-            drwSidebar.close()//Закрываем боковую панель
+        if(dcSidebar.position)//Если открыта боковая панель, то...
+            dcSidebar.close()//Закрываем боковую панель
         else{//Если закрыта боковая панель, то...
-            drwSidebar.open()//Открываем боковую панель.
+            dcSidebar.open()//Открываем боковую панель.
             root.forceActiveFocus()//Форсируем фокус, чтоб можно было закрыть боковую панель с горячих кнопок.
         }
     }
     function fnSidebarNaideno(){//Функция нажатия кнопки SideBar.
-        if(drwSidebar.opened){//Если боковая панель открыта, то...
-            if(tbSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
+        if(dcSidebar.opened){//Если боковая панель открыта, то...
+            if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
                 fnClickedSidebar()//Закрываем боковую панель.
             else//Если вкладка открыта отличная от Найдено, то...
-                tbSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
+                dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
         }
         else{//Если боковая панель закрыта, то...
-            tbSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
+            dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
             fnClickedSidebar()//Открываем боковую панель.
         }
     }
     function fnSidebarZakladki(){//Функция нажатия кнопки SideBar.
-        if(drwSidebar.opened){//Если боковая панель открыта, то...
-            if(tbSidebar.currentIndex === 1)//Если открыта вкладка Закладки, то...
+        if(dcSidebar.opened){//Если боковая панель открыта, то...
+            if(dcSidebar.currentIndex === 1)//Если открыта вкладка Закладки, то...
                 fnClickedSidebar()//Закрываем боковую панель.
             else//Если вкладка открыта отличная от Закладки, то...
-                tbSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
+                dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
         }
         else{//Если боковая панель закрыта, то...
-            tbSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
+            dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
             fnClickedSidebar()//Открываем боковую панель.
         }
     }
     function fnSidebarPoster(){//Функция нажатия кнопки SideBar.
-        if(drwSidebar.opened){//Если боковая панель открыта, то...
-            if(tbSidebar.currentIndex === 2)//Если открыта вкладка Миниатюры, то...
+        if(dcSidebar.opened){//Если боковая панель открыта, то...
+            if(dcSidebar.currentIndex === 2)//Если открыта вкладка Миниатюры, то...
                 fnClickedSidebar()//Закрываем боковую панель.
             else//Если вкладка открыта отличная от Миниатюры, то...
-                tbSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
+                dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
         }
         else{//Если боковая панель закрыта, то...
-            tbSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
+            dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
             fnClickedSidebar()//Открываем боковую панель.
         }
     }
@@ -453,7 +454,7 @@ Item {
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
-            grvPoster.currentIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
+            dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
             //forceActiveFocus();//Виджет видимый, форсируем фокус, чтоб event работал.
         }
     }
@@ -475,7 +476,8 @@ Item {
     PdfMultiPageView {
         id: pmpDoc
         anchors.fill: root
-        anchors.leftMargin: drwSidebar.position * drwSidebar.width-drwSidebar.position*root.ntCoff
+        //anchors.leftMargin: drwSidebar.position * drwSidebar.width-drwSidebar.position*root.ntCoff
+        anchors.leftMargin: dcSidebar.position * dcSidebar.width - dcSidebar.position * root.ntCoff
         searchString: ""
         //Иннициализация Свойств при каждой загрузке, от сюда берутся первоначальные данные Свойств.
         property bool blResetScene: false//false - быстрый сброс сцены при первом открытии pdf документа.
@@ -549,7 +551,7 @@ Item {
                     console.error("516: НУЖНО МЕНЯТЬ МАСШТАБ")
                 }
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
-                grvPoster.currentIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
+                dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
             }
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
@@ -644,263 +646,20 @@ Item {
             property var location: model.location
         }
     }
-    Drawer {
-        id: drwSidebar
-        //Настройки
-        edge: Qt.LeftEdge
-        modal: false
-        width: root.isMobile ? root.width : root.width/3//Если мобила, то ширина на весь экран,если нет,то 1/3
-        height: pmpDoc.height//Высота по высоте pdf сцены
-        y: root.ntWidth*root.ntCoff+3*root.ntCoff//координату по Y брал из расчёта Stranica.qml
-        dim: false
-        clip: true//Образать всё лишнее.
-        //Функции
-        onOpenedChanged: root.sgnOpenedSidebar(drwSidebar.opened)//Излучаем сигнал открыта/закрыта панель
-        Rectangle {//Прямоугольник узкой полоски интерфейса слева
-            id: rctBorder
-            anchors.top: drwSidebar.top
-            anchors.left: drwSidebar.left
-            width: root.ntCoff
-            height: drwSidebar.height
-            color: root.clrMenuFon
-        }
-        Rectangle {//Прямоугольник всей оставшейся боковой панели.
-            id: rctSibebar
-            anchors.top: drwSidebar.top
-            anchors.left: rctBorder.right
-            width: drwSidebar.width - root.ntCoff
-            height: drwSidebar.height
-            color: "transparent"
-        } 
-        TabBar {
-            id: tbSidebar
-            //Настройки
-            anchors.top: drwSidebar.top
-            anchors.right: rctBorder.right
-            height: ((root.ntWidth-1)*root.ntCoff < 22)		? 22
-                    : ((root.ntWidth-1)*root.ntCoff > 30) 	? 30
-                    :										((root.ntWidth-1)*root.ntCoff)
-            x: -width//Смещаем х влево в минусовые координаты, для того,чтоб потом повернуть от точки поворота
-            rotation: -90//Поворачиваем на 90 градусов против часовой стрелки боковую панель
-            transformOrigin: Item.TopRight//Точка поворота боковой панели верхний правый угол.
-            currentIndex: {//Закладки выбраны по умолчанию
-                rctZakladki.visible = true
-                return 1
-            }
-            //Функции
-            onCurrentIndexChanged: {//Если индекс tbSidebar меняется, то делаем видимыми содержимое вкладок.
-                rctNaideno.visible = (currentIndex === 0)
-                rctZakladki.visible = (currentIndex === 1)
-                rctPoster.visible = (currentIndex === 2)
-            }
-            DCTabButton {
-                text: qsTr("Найдено")
-                width:  (drwSidebar.height-root.ntCoff/2)/tbSidebar.count + root.ntCoff/4//делим на кол-во кно
-                height: tbSidebar.height
-                hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
-                //пробрасываем тему
-                clrTexta: root.clrTexta
-                clrFona: root.clrFona
-                clrHover: root.clrMenuFon
-                ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-                blAutoFont: false//Отключаем автоподгонку размера шрифта.
-                onPressed: tbSidebar.currentIndex = 0//Меняем индекс сразу при нажатии
-            }
-            DCTabButton {
-                text: qsTr("Закладки")
-                width:  (drwSidebar.height - root.ntCoff/2) / tbSidebar.count + root.ntCoff/4
-                height: tbSidebar.height
-                hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
-                //пробрасываем тему
-                clrTexta: root.clrTexta
-                clrFona: root.clrFona
-                clrHover: root.clrMenuFon
-                ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-                blAutoFont: false//Отключаем автоподгонку размера шрифта.
-                onPressed: tbSidebar.currentIndex = 1//Меняем индекс сразу при нажатии
-            }
-            DCTabButton {
-                text: qsTr("Страницы")
-                width: (drwSidebar.height - root.ntCoff/2) / tbSidebar.count + root.ntCoff/4
-                height: tbSidebar.height
-                hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
-                //пробрасываем тему
-                clrTexta: root.clrTexta
-                clrFona: root.clrFona
-                clrHover: root.clrMenuFon
-                ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-                blAutoFont: false//Отключаем автоподгонку размера шрифта.
-                onPressed: tbSidebar.currentIndex = 2//Меняем индекс сразу при нажатии
-            }
-        }
-        Rectangle {
-            id: rctNaideno
-            anchors.top: rctSibebar.top
-            anchors.left: rctSibebar.left
-            anchors.leftMargin: tbSidebar.height
-            width: rctSibebar.width - tbSidebar.height
-            height: rctSibebar.height
-            color: root.clrFona
-            visible: false
-            ListView {
-                id: lsvNaideno
-                anchors.fill: rctNaideno
-                implicitHeight: rctNaideno.height
-                model: pmpDoc.searchModel
-                currentIndex: pmpDoc.searchModel.currentResult
-                ScrollBar.vertical: ScrollBar { }
-                delegate: ItemDelegate {
-                    id: tmdResult
-                    required property int index//Номер совпадения
-                    required property int page//Страница, на котором совпадение есть.
-                    required property var location//Страница, на котором совпадение есть.
-                    width: lsvNaideno.width
-                    background: Rectangle {
-                        color: (tmdResult.ListView.isCurrentItem
-                                            //? "#2979FF"//Синий на выделение по клику
-                                            ? root.clrMenuFon
-                                            : ((tmdResult.index % 2)
-                                                ? root.clrFona
-                                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))))
-                    }
-                    contentItem: Label {
-                        id: lblText
-                        text: qsTr(" Страница ") + (tmdResult.page + 1) + " [" + (tmdResult.index + 1) + "]"
-                        color: root.clrPoisk
-                        font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта
-                    }
-                    highlighted: ListView.isCurrentItem
-                    onClicked: {
-                        pmpDoc.searchModel.currentResult = tmdResult.index//Задаём номер поиска
-                        if(root.isMobile) drwSidebar.close()//Если мобила, то закрываем боковую панель
-                    }
-                    Component.onCompleted: {//Если создался элемент делегата, то...
-                        if(index === 0){//Если index поиска первый (0), то...
-                            pmpDoc.searchModel.currentResult = -1//Сбрасываем результат прошлого поиска.
-                            tmrCurrentResult.running = true//Запускаем таймер,чтоб нет прерывания в прерывании
-                        }
-                    }
-                    Timer {//Таймер необходим, чтобы выйти из прерывания и подсветить первый элемент.
-                        id: tmrCurrentResult
-                        interval: 3; running: false; repeat: false
-                        onTriggered: pmpDoc.searchModel.currentResult = 0//Переходим на первый результат.
-                    }
-                }
-            }
-            Rectangle {//Оконтовка поверх информации.
-                anchors.fill: rctNaideno
-                color: "transparent"
-                border.color: root.clrTexta
-                border.width: root.ntCoff/4//Бордюр
-            }
-        }
-        Rectangle {
-            id: rctZakladki
-            anchors.top: rctSibebar.top
-            anchors.left: rctSibebar.left
-            anchors.leftMargin: tbSidebar.height
-            width: rctSibebar.width - tbSidebar.height
-            height: rctSibebar.height
-            border.color: root.clrTexta
-            border.width: root.ntCoff/4//Бордюр
-            visible: false
-            TreeView {
-                id: trvZakladki
-                implicitHeight: rctZakladki.height
-                implicitWidth: rctZakladki.width
-                columnWidthProvider: function() { return width }
-                ScrollBar.vertical: ScrollBar { }
-                delegate: TreeViewDelegate {
-                    required property int page
-                    required property point location
-                    onClicked: {
-                        pmpDoc.goToLocation(page, location, pmpDoc.renderScale)//Переходим на страницу
-                        if(root.isMobile) drwSidebar.close()//Если мобила, то закрываем боковую панель
-                    }
-                }
-                model: PdfBookmarkModel {
-                    document: pdfDoc
-                }
-            }
-            Rectangle {//Оконтовка поверх информации.
-                anchors.fill: rctZakladki
-                color: "transparent"
-                border.color: root.clrTexta
-                border.width: root.ntCoff/4//Бордюр
-            }
-        }
-        Rectangle {
-            id: rctPoster
-            anchors.top: rctSibebar.top
-            anchors.left: rctSibebar.left
-            anchors.leftMargin: tbSidebar.height
-            width: rctSibebar.width - tbSidebar.height
-            height: rctSibebar.height
-            color: root.clrFona
-            border.color: root.clrTexta
-            border.width: root.ntCoff/4//Бордюр
-            visible: false
-            GridView {
-                id: grvPoster
-                implicitWidth: rctPoster.width
-                implicitHeight: rctPoster.height
-                model: pdfDoc.pageModel
-                ScrollBar.vertical: ScrollBar { id: scbVertical }
-                cellWidth: width/2 - scbVertical.width/2//Расчёт длины одного постера
-                cellHeight: cellWidth + 10//Расчёт высоты постера
-                delegate: Item {
-                    id: tmPoster
-                    required property int index
-                    required property string label
-                    required property size pointSize
-                    width: grvPoster.cellWidth
-                    height: grvPoster.cellHeight
-                    Rectangle {
-                        id: rctList
-                        width: rctImage.width
-                        height: rctImage.height
-                        x: (tmPoster.width - rctList.width)/2
-                        y: (tmPoster.height - rctList.height - txtNomerStranici.height)/2
-                        border.color: tmPoster.GridView.isCurrentItem ? root.clrTexta : "transparent"
-                        border.width: root.ntCoff/2
-                        PdfPageImage {
-                            id: rctImage
-                            document: pdfDoc
-                            currentFrame: index
-                            asynchronous: true
-                            fillMode: Image.PreserveAspectFit
-                            property bool landscape: pointSize.width > pointSize.height
-                            width: landscape ? grvPoster.cellWidth - 6
-                                             : height * pointSize.width / pointSize.height
-                            height: landscape ? width * pointSize.height / pointSize.width
-                                             : grvPoster.cellHeight - 14
-                            sourceSize.width: rctImage.width
-                            sourceSize.height: rctImage.height
-                        }
-                    }
-                    Text {
-                        id: txtNomerStranici
-                        anchors.bottom: tmPoster.bottom
-                        anchors.horizontalCenter: tmPoster.horizontalCenter
-                        color: tmPoster.GridView.isCurrentItem ? root.clrTexta: root.clrPoisk
-                        text: label
-                        font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта
-                    }
-                    TapHandler {
-                        onTapped: {
-                            grvPoster.currentIndex = index;//Передаём выбранный индекс, для подсветки текста.
-                            pmpDoc.goToPage(index);//Переходим на страницу.
-                            if(root.isMobile) drwSidebar.close()//Если мобила, то закрываем боковую панель
-                        }
-                    }
-                }
-            }
-            Rectangle {//Оконтовка поверх информации.
-                anchors.fill: rctPoster
-                color: "transparent"
-                border.color: root.clrTexta
-                border.width: root.ntCoff/4//Бордюр
-            }
-        }
+    DCSidebar {
+        id: dcSidebar
+        //пробрасываем тему/параметры
+        isMobile: root.isMobile
+        ntWidth: root.ntWidth
+        ntCoff: root.ntCoff
+        clrTexta: root.clrTexta
+        clrFona: root.clrFona
+        clrMenuFon: root.clrMenuFon
+        clrPoisk: root.clrPoisk
+        //пробрасываем ссылки на пдф-вид и документ
+        pmpDoc: pmpDoc//Передаём объект отображения
+        pdfDoc: pdfDoc//Передаём объект документа
+        //чтобы внешний сигнал продолжил работать
+        onOpenedChanged: root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
     }
 }
