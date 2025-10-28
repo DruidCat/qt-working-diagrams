@@ -25,6 +25,7 @@ Drawer {
     edge: Qt.LeftEdge
     modal: false
     dim: false
+    closePolicy: Drawer.CloseOnEscape//Закрываем боковую панель только при нажати Escape, другие политики выкл
     clip: true//Образать всё лишнее.
     width: root.isMobile
            ? (parent ? parent.width : 0)
