@@ -38,10 +38,11 @@ Drawer {
         anchors.left: root.left
         width: root.ntCoff
         height: parent.height
-        color: root.clrMenuFon
+        color: "transparent"
+        //color: root.clrMenuFon
     }
     Rectangle {//Прямоугольник всей оставшейся боковой панели.
-        id: rctSibebar
+        id: rctSidebar
         anchors.top: root.top
         anchors.left: rctBorder.right
         width: root.width - root.ntCoff
@@ -50,14 +51,18 @@ Drawer {
     }
     TabBar {//Вкладки
         id: tbSidebar
-        anchors.top: root.top
-        anchors.right: rctBorder.right
+        //anchors.top: root.top
+        //anchors.right: rctBorder.right
+        anchors.left: rctBorder.right
+        anchors.bottom: rctSidebar.bottom
         height: ((root.ntWidth-1)*root.ntCoff < 22) ? 22
               : ((root.ntWidth-1)*root.ntCoff > 30) ? 30
               : ((root.ntWidth-1)*root.ntCoff)
-        x: -width//Смещаем х влево в минусовые координаты, для того,чтоб потом повернуть от точки поворота
+        //x: -width//Смещаем х влево в минусовые координаты, для того,чтоб потом повернуть от точки поворота
+        //y: rctSidebar.height//Смещаем х влево в минусовые координаты, для того,чтоб потом повернуть от точки поворота
         rotation: -90//Поворачиваем на 90 градусов против часовой стрелки боковую панель
-        transformOrigin: Item.TopRight//Точка поворота боковой панели верхний правый угол.
+        //transformOrigin: Item.TopRight//Точка поворота боковой панели верхний правый угол.
+        transformOrigin: Item.BottomLeft//Точка поворота боковой панели верхний правый угол.
         currentIndex: {//Закладки выбраны по умолчанию
             rctZakladki.visible = true
             return 1
@@ -106,11 +111,11 @@ Drawer {
     }
     Rectangle {//Вкладка "Найдено"
         id: rctNaideno
-        anchors.top: rctSibebar.top
-        anchors.left: rctSibebar.left
+        anchors.top: rctSidebar.top
+        anchors.left: rctSidebar.left
         anchors.leftMargin: tbSidebar.height
-        width: rctSibebar.width - tbSidebar.height
-        height: rctSibebar.height
+        width: rctSidebar.width - tbSidebar.height
+        height: rctSidebar.height
         color: root.clrFona
         visible: false
 
@@ -167,11 +172,11 @@ Drawer {
     }
     Rectangle {//Вкладка "Закладки"
         id: rctZakladki
-        anchors.top: rctSibebar.top
-        anchors.left: rctSibebar.left
+        anchors.top: rctSidebar.top
+        anchors.left: rctSidebar.left
         anchors.leftMargin: tbSidebar.height
-        width: rctSibebar.width - tbSidebar.height
-        height: rctSibebar.height
+        width: rctSidebar.width - tbSidebar.height
+        height: rctSidebar.height
         border.color: root.clrTexta
         border.width: root.ntCoff/4
         visible: false
@@ -202,11 +207,11 @@ Drawer {
     }
     Rectangle {//Вкладка "Страницы"
         id: rctPoster
-        anchors.top: rctSibebar.top
-        anchors.left: rctSibebar.left
+        anchors.top: rctSidebar.top
+        anchors.left: rctSidebar.left
         anchors.leftMargin: tbSidebar.height
-        width: rctSibebar.width - tbSidebar.height
-        height: rctSibebar.height
+        width: rctSidebar.width - tbSidebar.height
+        height: rctSidebar.height
         color: root.clrFona
         border.color: root.clrTexta
         border.width: root.ntCoff/4//Бордюр
