@@ -25,8 +25,16 @@ Item {
     width:	height*(tapKnopkaMinus+tapCentor+tapKnopkaPlus)
     //Сигналы.
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
+    signal tap();//Сигнал о нажатии на любой элемент виджета.
     //Функции.
 	//onValueModified: console.error(value)
+    TapHandler {//Обработка нажатия на весь виджет.
+        id: tphScale
+        onTapped: {
+            if(root.visible)//Если виджет видимый, то...
+                root.tap();//Обрабатываем тап на виджете
+        }
+    }
 	onValueChanged:{//Если значение номера пришло из вне или из нутри метода, то...
         if(value <= from){//Если число меньше или РАВНО минимального, то...
             value = from;//Приравниваем минимальному значению число.
@@ -155,7 +163,10 @@ Item {
             clrKnopki: root.clrTexta
 			border: false
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaMinus
-            onClicked: fnClickedMinus();//Функция нажатия Минус.
+            onClicked: {
+                root.tap();//Тапнули на кнопку.
+                fnClickedMinus();//Функция нажатия Минус.
+            }
 		}
 		Rectangle {
 			id: rctTextInput
@@ -222,7 +233,10 @@ Item {
             clrKnopki: root.clrTexta
 			border: false
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaPlus
-            onClicked: fnClickedPlus();//Функция нажатия Плюс.
+            onClicked: {
+                root.tap();//Тапнули на кнопку.
+                fnClickedPlus();//Функция нажатия Плюс.
+            }
 		}
     }
 }
