@@ -56,18 +56,6 @@ Item {
 	function fnClickedVverh() {//Функция обрабатывающая предыдущий поиск.
         root.clickedPrevious();//Сигнал предыдущего поиска.
 	}
-    function fnClickedKeyVniz() {//Функция обрабатывающая клавишу вниз
-        root.clickedVniz();//Сигнал нажатия клавиши вниз
-    }
-    function fnClickedKeyVverh() {//Функция обрабатывающая клавишу вверх.
-        root.clickedVverh();//Сигнал нажатия клавиши вверх
-    }
-    function fnClickedKeyVlevo() {//Функция обрабатывающая клавишу вниз
-        root.clickedVlevo();//Сигнал нажатия клавиши влева
-    }
-    function fnClickedKeyVpavo() {//Функция обрабатывающая клавишу вверх.
-        root.clickedVpravo();//Сигнал нажатия клавиши вправо
-    }
 	function fnClickedZakrit() {//Функция закрытия виджета.
 		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
         root.blNomer = true;//Начало обнуления
@@ -133,22 +121,23 @@ Item {
                             }
                             else{
                                 if(event.key === Qt.Key_Down){//нажата "Стрелка вниз",то
-                                    fnClickedKeyVniz();//Функция нажатия клавиши вниз
+                                    console.error("Обработчик клавиши")
+                                    root.clickedVniz();//Сигнал нажатия клавиши вниз
                                     event.accepted = true;//Завершаем обработку эвента.
                                 }
                                 else{
                                     if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
-                                        fnClickedKeyVverh();//Функция нажатия клавиши вверх
+                                        root.clickedVverh();//Сигнал нажатия клавиши вверх
                                         event.accepted = true;//Завершаем обработку эвента.
                                     }
                                     else{
                                         if(event.key === Qt.Key_Left){//Если нажата стрелка влево,то.
-                                            fnClickedKeyVlevo()//нажатия клавиши влево
+                                            root.clickedVlevo();//Сигнал нажатия клавиши влева
                                             event.accepted = true;//Завершаем обработку эвента.
                                         }
                                         else{
                                             if(event.key === Qt.Key_Right){//Если нажата стрелка вправо, то.
-                                                fnClickedKeyVpravo()//нажатия клавиши вправо
+                                                root.clickedVpravo();//Сигнал нажатия клавиши вправо
                                                 event.accepted = true;//Завершаем обработку эвента.
                                             }
                                         }
