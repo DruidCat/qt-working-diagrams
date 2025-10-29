@@ -49,11 +49,11 @@ TabButton {
             lblText.elide = Text.ElideRight//автоматически сокращает текст, добавляя многоточие (...) в конце
             return;//Выходим из функции.
         }
-        if(width > lblText.implicitWidth){//Если длина строки больше длины текста
+        if(width > (lblText.implicitWidth+root.ntCoff)){//Если длина строки больше длины текста
             for(var ltShag=lblText.font.pixelSize; ltShag<height-root.ntCoff; ltShag++){
-                if(lblText.implicitWidth < width){//Если длина txt меньше динны стр
+                if((lblText.implicitWidth+root.ntCoff) < width){//Если длина txt меньше динны стр
                     lblText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                    if(lblText.implicitWidth > width){//Но, если переборщили
+                    if((lblText.implicitWidth+root.ntCoff) > width){//Но, если переборщили
                         lblText.font.pixelSize--;//То уменьшаем размер шрифта и...
                         return;//Выходим из увеличения шрифта.
                     }
@@ -62,7 +62,7 @@ TabButton {
         }
         else{//Если длина строки меньше длины текста, то...
             for(let ltShag = lblText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                if(lblText.implicitWidth > width)//Если текст дилиннее строки, то
+                if((lblText.implicitWidth+root.ntCoff) > width)//Если текст дилиннее строки, то
                     lblText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
             }
         }

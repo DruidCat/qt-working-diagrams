@@ -38,31 +38,34 @@ Drawer {
         anchors.left: root.left
         width: root.ntCoff
         height: parent.height
-        color: "transparent"
-        //color: root.clrMenuFon
+        color: root.clrMenuFon
+    }
+    Rectangle {//Прямоугольник Вкладок
+        id: rctTabbar
+        anchors.top: root.top
+        anchors.left: rctBorder.right
+        width: ((root.ntWidth-1)*root.ntCoff<20)?20:(root.ntWidth-1)*root.ntCoff//От слишком маленького шрифта
+        height: root.height
+        color: root.clrTexta
     }
     Rectangle {//Прямоугольник всей оставшейся боковой панели.
         id: rctSidebar
         anchors.top: root.top
-        anchors.left: rctBorder.right
-        width: root.width - root.ntCoff
+        anchors.left: rctTabbar.right
+        width: root.width - rctBorder.width - rctTabbar.width
         height: root.height
         color: "transparent"
     }
     TabBar {//Вкладки
         id: tbSidebar
-        //anchors.top: root.top
-        //anchors.right: rctBorder.right
-        anchors.left: rctBorder.right
-        anchors.bottom: rctSidebar.bottom
-        height: ((root.ntWidth-1)*root.ntCoff < 22) ? 22
-              : ((root.ntWidth-1)*root.ntCoff > 30) ? 30
-              : ((root.ntWidth-1)*root.ntCoff)
-        //x: -width//Смещаем х влево в минусовые координаты, для того,чтоб потом повернуть от точки поворота
-        //y: rctSidebar.height//Смещаем х влево в минусовые координаты, для того,чтоб потом повернуть от точки поворота
+        anchors.left: rctTabbar.right
+        anchors.bottom: rctTabbar.bottom
+        height: rctTabbar.width
+        width: rctTabbar.height
+        //y: rctTabbar.height
+        //x: rctBorder.width+rctTabbar.width
         rotation: -90//Поворачиваем на 90 градусов против часовой стрелки боковую панель
-        //transformOrigin: Item.TopRight//Точка поворота боковой панели верхний правый угол.
-        transformOrigin: Item.BottomLeft//Точка поворота боковой панели верхний правый угол.
+        transformOrigin: Item.BottomLeft//Точка поворота боковой панели нижний левый угол.
         currentIndex: {//Закладки выбраны по умолчанию
             rctZakladki.visible = true
             return 1
@@ -74,38 +77,38 @@ Drawer {
         }
         DCTabButton {
             text: qsTr("Найдено")
-            width:  (root.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4//делим на кол-во кнопок
-            height: tbSidebar.height
+            width:  (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4//делим на кол-во кнопок
+            height: rctTabbar.width
             hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
             clrTexta: root.clrTexta
             clrFona: root.clrFona
             clrHover: root.clrMenuFon
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-            blAutoFont: false//Отключаем автоподгонку размера шрифта.
+            blAutoFont: true//Отключаем автоподгонку размера шрифта.
             onPressed: tbSidebar.currentIndex = 0//Меняем индекс сразу при нажатии
         }
         DCTabButton {
             text: qsTr("Закладки")
-            width:  (root.height - root.ntCoff/2) / tbSidebar.count + root.ntCoff/4
-            height: tbSidebar.height
+            width:  (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
+            height: rctTabbar.width
             hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
             clrTexta: root.clrTexta
             clrFona: root.clrFona
             clrHover: root.clrMenuFon
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-            blAutoFont: false//Отключаем автоподгонку размера шрифта.
+            blAutoFont: true//Отключаем автоподгонку размера шрифта.
             onPressed: tbSidebar.currentIndex = 1//Меняем индекс сразу при нажатии
         }
         DCTabButton {
             text: qsTr("Страницы")
-            width:  (root.height - root.ntCoff/2) / tbSidebar.count + root.ntCoff/4
-            height: tbSidebar.height
+            width:  (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
+            height: rctTabbar.width
             hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
             clrTexta: root.clrTexta
             clrFona: root.clrFona
             clrHover: root.clrMenuFon
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-            blAutoFont: false//Отключаем автоподгонку размера шрифта.
+            blAutoFont: true//Отключаем автоподгонку размера шрифта.
             onPressed: tbSidebar.currentIndex = 2//Меняем индекс сразу при нажатии
         }
     }
@@ -113,8 +116,7 @@ Drawer {
         id: rctNaideno
         anchors.top: rctSidebar.top
         anchors.left: rctSidebar.left
-        anchors.leftMargin: tbSidebar.height
-        width: rctSidebar.width - tbSidebar.height
+        width: rctSidebar.width
         height: rctSidebar.height
         color: root.clrFona
         visible: false
@@ -174,8 +176,7 @@ Drawer {
         id: rctZakladki
         anchors.top: rctSidebar.top
         anchors.left: rctSidebar.left
-        anchors.leftMargin: tbSidebar.height
-        width: rctSidebar.width - tbSidebar.height
+        width: rctSidebar.width
         height: rctSidebar.height
         border.color: root.clrTexta
         border.width: root.ntCoff/4
@@ -209,8 +210,7 @@ Drawer {
         id: rctPoster
         anchors.top: rctSidebar.top
         anchors.left: rctSidebar.left
-        anchors.leftMargin: tbSidebar.height
-        width: rctSidebar.width - tbSidebar.height
+        width: rctSidebar.width
         height: rctSidebar.height
         color: root.clrFona
         border.color: root.clrTexta
