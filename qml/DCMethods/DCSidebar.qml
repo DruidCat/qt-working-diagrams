@@ -120,7 +120,16 @@ Drawer {
         height: rctSidebar.height
         color: root.clrFona
         visible: false
-
+        Text {
+            id: txtNaideno
+            anchors.horizontalCenter: rctNaideno.horizontalCenter
+            anchors.verticalCenter: rctNaideno.verticalCenter
+            color: root.clrMenuFon
+            font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            text: root.pmpDoc.searchModel.count ? "" : qsTr("Не найдено")
+        }
         ListView {
             id: lsvNaideno
             anchors.fill: rctNaideno
@@ -178,9 +187,20 @@ Drawer {
         anchors.left: rctSidebar.left
         width: rctSidebar.width
         height: rctSidebar.height
+        color: root.clrFona
         border.color: root.clrTexta
         border.width: root.ntCoff/4
         visible: false
+        Text {
+            id: txtZakladki
+            anchors.horizontalCenter: rctZakladki.horizontalCenter
+            anchors.verticalCenter: rctZakladki.verticalCenter
+            color: root.clrMenuFon
+            font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            text: qsTr("Пусто")
+        }
         TreeView {
             id: trvZakladki
             implicitHeight: rctZakladki.height
