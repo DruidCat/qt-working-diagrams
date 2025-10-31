@@ -1,5 +1,4 @@
 ﻿import QtQuick //2.15
-import "qrc:/js/jsJSON.js" as JSZona
 //DCListView -
 Item {
     id: root
