@@ -3,6 +3,7 @@ import QtQuick //2.15
 import QtQuick.Controls
 import QtQuick.Pdf
 import DCButtons 1.0
+import DCMethods 1.0//Импортируем методы написанные мной.
 
 Drawer {
     id: root
@@ -84,7 +85,7 @@ Drawer {
             clrFona: root.clrFona
             clrHover: root.clrMenuFon
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-            blAutoFont: true//Отключаем автоподгонку размера шрифта.
+            blFontAuto: true//Включаем автоподгонку размера шрифта.
             onPressed: tbSidebar.currentIndex = 0//Меняем индекс сразу при нажатии
         }
         DCTabButton {
@@ -96,7 +97,7 @@ Drawer {
             clrFona: root.clrFona
             clrHover: root.clrMenuFon
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-            blAutoFont: true//Отключаем автоподгонку размера шрифта.
+            blFontAuto: true//Включаем автоподгонку размера шрифта.
             onPressed: tbSidebar.currentIndex = 1//Меняем индекс сразу при нажатии
         }
         DCTabButton {
@@ -108,7 +109,7 @@ Drawer {
             clrFona: root.clrFona
             clrHover: root.clrMenuFon
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-            blAutoFont: true//Отключаем автоподгонку размера шрифта.
+            blFontAuto: true//Включаем автоподгонку размера шрифта.
             onPressed: tbSidebar.currentIndex = 2//Меняем индекс сразу при нажатии
         }
     }

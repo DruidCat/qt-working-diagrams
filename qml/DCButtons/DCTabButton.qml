@@ -1,6 +1,7 @@
 ﻿//DCTabButton.qml
 import QtQuick
 import QtQuick.Controls
+import DCMethods 1.0//Импортируем методы написанные мной.
 
 TabButton {
     id: root
@@ -8,9 +9,9 @@ TabButton {
     property color clrTexta:	"Orange"
     property color clrFona:		"Black"
     property color clrHover:	"SlateGray"
-    property real  ntCoff:		8//Для автоподгонки шрифта во вкладке
+    property int ntCoff:		8//Для автоподгонки шрифта во вкладке
     property real radius:		0//0 - без радиуса
-    property bool blAutoFont:	true//true - Автоподгон шрифта под ширину кнопки, false - [...]
+    property bool blFontAuto:	true//true - Автоподгон шрифта под ширину кнопки, false - [...]
     //Настраиваемые параметры внешнего вида TabButton
     readonly property color clrFonNormal:	clrFona//Цвет фона фкладки, когда она не активна.
     readonly property color clrFonHover:	clrHover//Цвет фона вкладки при наведении мышки на неё.
@@ -43,9 +44,17 @@ TabButton {
             : root.checked		? root.clrTxtChecked
             : root.down			? root.clrTxtPressed
             : 					root.clrTxtNormal
+        /*
+        wrapMode: Text.NoWrap//ОБЯЗАТЕЛЕН, чтобы implicitWidth был предсказуемым
+        DCFontAuto {
+            target: lblText
+            ntCoff: root.ntCoff
+            blFontAuto: root.blFontAuto
+        }
+        */
     }
     function fnAutoFont(){//Функция авто подгонки размера текста во вкладке
-        if (!blAutoFont){//Если авто подгон размера шрифта отключен, то...
+        if (!blFontAuto){//Если авто подгон размера шрифта отключен, то...
             lblText.elide = Text.ElideRight//автоматически сокращает текст, добавляя многоточие (...) в конце
             return;//Выходим из функции.
         }

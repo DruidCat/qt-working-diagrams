@@ -3,6 +3,7 @@ import QtQuick.Pdf
 import QtQuick.Controls
 import QtQuick.Layouts
 import DCButtons 1.0//Импортируем кнопки
+import DCMethods 1.0//Импортируем методы написанные мной.
 import QtQml.Models//Для DelegateModel
 
 Item {
