@@ -200,7 +200,7 @@ Drawer {
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text: qsTr("Пусто")
+            text: qsTr("Закладки отсутствуют")
         }
         TreeView {
             id: trvZakladki
