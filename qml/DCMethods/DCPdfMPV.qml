@@ -545,6 +545,7 @@ Item {
             }
         }
         onCurrentPageChanged: {//Если страница документа изменилась, то...
+            /*
             if(!blScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
                 const cnStranica = pmpDoc.currentPage//Номер страницы
                 const cnWidth = pdfDoc.pagePointSize(cnStranica).width
@@ -561,6 +562,10 @@ Item {
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
             }
+            */
+            const cnStranica = pmpDoc.currentPage//Номер страницы
+            root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
+            dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
             if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
