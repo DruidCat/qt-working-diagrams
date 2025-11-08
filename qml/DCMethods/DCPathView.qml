@@ -186,10 +186,10 @@ Item {
                 }
             }
         }
-        Keys.onUpPressed: decrementCurrentIndex();//Если нажата стрелка вверх
-        Keys.onDownPressed: incrementCurrentIndex();//Если нажата стрелка вниз
-        Keys.onEnterPressed: activateCurrentItem();//Если нажата Enter, запускаем функцию activateCurrentItem
-        Keys.onReturnPressed: activateCurrentItem()//Если нажата Return,запускаем функцию activateCurrentItem
+        Keys.onUpPressed: if(root.visible) decrementCurrentIndex();//Если нажата стрелка вверх, и видимый, то
+        Keys.onDownPressed: if(root.visible) incrementCurrentIndex();//Если нажата стрелка вниз, и видимый, то
+        Keys.onEnterPressed: if(root.visible) activateCurrentItem();//Если нажата Enter, и видимый, то
+        Keys.onReturnPressed: if(root.visible) activateCurrentItem()//Если нажата Return, и видимый, то
     }
     Component {//Делегат
         id: cmpKarusel
