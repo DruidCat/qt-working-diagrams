@@ -12,6 +12,7 @@ DCPdfMPV 1.0 DCPdfMPV.qml
 DCPoisk 1.0 DCPoisk.qml
 DCProgress 1.0 DCProgress.qml
 DCScale 1.0 DCScale.qml
+DCScrollbar 1.0 DCScrollbar.qml
 DCSidebar 1.0 DCSidebar.qml
 DCSpinBox 1.0 DCSpinBox.qml
 DCTextEdit 1.0 DCTextEdit.qml

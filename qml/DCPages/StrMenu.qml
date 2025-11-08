@@ -132,7 +132,7 @@ Item {
             property int kolichestvoKnopok: rctZona.children.length//Количество детей прямоуголиника rctZona
             anchors.fill: tmZona//Расстягиваемся по всей рабочей зоне
             contentWidth: tmZona.width//Ширина контента, который будет вложен равен ширине Рабочей Зоны
-            contentHeight: (root.ntWidth*root.ntCoff+8+root.ntCoff)*kolichestvoKnopok//9 - количество кнопок.
+            contentHeight: (knopkaQt.height+root.ntWidth)*kolichestvoKnopok//9 - количество кнопок.
             TapHandler {//Нажимаем не на Кнопки, а на пустую область.
                 //ВАЖНО, срабатывает и при нажатии на кнопки!!! Сменяет фокус на root при нажатии на кнопки.
                 onPressedChanged: {//Если изменён статус зажатия кнопки, то...
@@ -151,7 +151,8 @@ Item {
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: rctZona.top
                     anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: tmScrollBar.width
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.pdfMentor ? qsTr("менторPDF: вкл") : qsTr("менторPDF: выкл")
                     opacityKnopki: 0.8
@@ -165,13 +166,16 @@ Item {
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: root.isAdmin ? knopkaMentorPDF.bottom : rctZona.top
                     anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: tmScrollBar.width
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("горячие клавиши")
                     opacityKnopki: 0.8
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                        if (pressed && !pvShrift.pressed){//Если нажата кнопка и не нажато на pvShrift, то...
+                            fnClickedEscape()//Закрываем выбор шрифта и меню открытое.
                             root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
+                        }
                     }
                     Component.onCompleted:{//Когда отрисуется Кнопка, то...
                         if(root.isMobile){//Если мобильная платформа, то...
@@ -190,7 +194,8 @@ Item {
                             return knopkaHotKey.bottom
                     }
                     anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: tmScrollBar.width
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: {
                         let ltShrift = qsTr("шрифт ");//
@@ -224,14 +229,17 @@ Item {
                     visible: root.isAdmin ? true : false;//показать/не показать в зависимости от Админа.
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaShrift.bottom
-                    anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: tmScrollBar.width
+                    anchors.left: rctZona.left; anchors.right: rctZona.right 
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("анимация")
                     opacityKnopki: 0.8
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                        if (pressed && !pvShrift.pressed){//Если нажата кнопка и не нажато на pvShrift, то...
+                            fnClickedEscape()//Закрываем выбор шрифта и меню открытое.
                             root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
+                        }
                     }
                 }
                 DCKnopkaOriginal {
@@ -240,13 +248,16 @@ Item {
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaAnimaciya.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: tmScrollBar.width
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("журнал")
                     opacityKnopki: 0.8
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                        if (pressed && !pvShrift.pressed){//Если нажата кнопка и не нажато на pvShrift, то...
+                            fnClickedEscape()//Закрываем выбор шрифта и меню открытое.
                             root.clickedLogi();//Сигнал нажатия кнопки Логи.
+                        }
                     }
                 }
                 DCKnopkaOriginal {
@@ -254,13 +265,16 @@ Item {
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: root.isAdmin ? knopkaJurnal.bottom : knopkaShrift.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: tmScrollBar.width
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о приложении")
                     opacityKnopki: 0.8
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                        if (pressed && !pvShrift.pressed){//Если нажата кнопка и не нажато на pvShrift, то...
+                            fnClickedEscape()//Закрываем выбор шрифта и меню открытое.
                             root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
+                        }
                     }
                 }
                 DCKnopkaOriginal {
@@ -268,13 +282,16 @@ Item {
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaAvtor.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: tmScrollBar.width
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("о Qt")
                     opacityKnopki: 0.8
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                        if (pressed && !pvShrift.pressed){//Если нажата кнопка и не нажато на pvShrift, то...
+                            fnClickedEscape()//Закрываем выбор шрифта и меню открытое.
                             root.clickedQt();//Сигнал нажатия кнопки об Qt.
+                        }
                     }
                 }
                 DCKnopkaOriginal {
@@ -283,7 +300,8 @@ Item {
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaQt.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: tmScrollBar.width
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: root.appRedaktor ? qsTr("редактор: вкл") : qsTr("редактор: выкл")
                     opacityKnopki: 0.8
@@ -307,13 +325,16 @@ Item {
                     ntHeight: root.ntWidth; ntCoff: root.ntCoff
                     anchors.top: knopkaRedaktor.bottom
                     anchors.left: rctZona.left; anchors.right: rctZona.right
-                    anchors.margins: tmScrollBar.width
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
                     clrTexta: root.clrTexta; clrKnopki: root.clrMenuFon
                     text: qsTr("создание каталога документов")
                     opacityKnopki: 0.8
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed)//Если нажата кнопка и не нажато на pvShrift, то...
+                        if (pressed && !pvShrift.pressed){//Если нажата кнопка и не нажато на pvShrift, то...
+                            fnClickedEscape()//Закрываем выбор шрифта и меню открытое.
                             root.clickedKatalog();//Открываем страницу создания каталога документов.
+                        }
                     }
                     Component.onCompleted: {
 						if(root.isMobile)//Мобильное устройство
@@ -321,93 +342,18 @@ Item {
 					}
                 }
             }
-            Item {//Самодельный вертикальный скроллбар
-                id: tmScrollBar
-                //Свойства
-                property color clrTrack: "#40000000"//Полупрозрачный трек
-                property color clrPolzunokOff: root.clrMenuFon//Цвет ползунка, когда он не активен.
-                property color clrPolzunokOn: root.clrTexta//оранжевый при наведении
-                readonly property int minVisotaPolzunka: 22//Минимальная высота Позунка
+            DCScrollbar {//Скроллбар
+                id: scbScrollbar
                 //Настройки
+                flick: flZona//Передаём объект Flickable
                 anchors.right: rctZona.right
                 anchors.top: rctZona.top
                 anchors.bottom: rctZona.bottom
-                width: 11//Ширина Трека
-                //Гистерезис, чтобы ползунок не мигал на границе равенства
-                visible: (flZona.contentHeight - flZona.height) > 1//Показываем только когда есть что скрол.
-                Rectangle {//Трек
-                    id: rctTrack
-                    anchors.fill: tmScrollBar
-                    color: tmScrollBar.clrTrack
-                    z: 0//Первым создаётся Трек, по верх него всё накладываться будет.
-                    MouseArea {//Клик по треку — прыжок к позиции
-                        anchors.fill: rctTrack
-                        acceptedButtons: Qt.LeftButton//Обрабатываем только левую клавишу мыши.
-                        onPressed: (mouse) => {//Если было нажатие мышкой на треке, то...
-                            const kontentVisota = flZona.contentHeight//Высота всего текста
-                            const flickVisota = flZona.height//Высота боласти пролистывания flickable
-                            const maxY = tmScrollBar.height - rctPolzunok.height
-                            if (kontentVisota <= flickVisota || maxY <= 0)//Если текста меньше выстоты листания,то
-                                return//Ничего не делаем
-                            const target = Math.max(0, Math.min(mouse.y - rctPolzunok.height/2, maxY))
-                            flZona.contentY = target / maxY * (kontentVisota - flickVisota)
-                        }
-                    }
-                }
-                Rectangle {//Ползунок
-                    id: rctPolzunok
-                    color: (maPolzunka.containsMouse || maPolzunka.pressed) ? tmScrollBar.clrPolzunokOn
-                                                                            : tmScrollBar.clrPolzunokOff
-                    width: tmScrollBar.width//Ширина ползунка такая же, как и у всего scrollbar
-                    height: {//Высота ползунка пропорциональна видимой части
-                        const kontentVisota = flZona.contentHeight//Высота всего текста
-                        const flickVisota = tmZona.height//Высота боласти пролистывания flickable
-                        if (kontentVisota <= 0)//Если высота всего текста меньше или равно нулю, то...
-                            return tmScrollBar.minVisotaPolzunka//высота полунка минимально заданная.
-                        const ratio = Math.min(1, flickVisota / kontentVisota)
-                        return Math.max(tmScrollBar.minVisotaPolzunka, flickVisota * ratio)//Расчёт высоты
-                    }
-                    x: 0//верхний левый угол прямогугольника в координате x = 0.
-                    y: {//Позиция ползунка синхронизируется со скроллом
-                        const kontentVisota = flZona.contentHeight//Высота всего текста
-                        const flickVisota = flZona.height//Высота боласти пролистывания flickable
-                        const maxY = tmScrollBar.height - rctPolzunok.height
-                        if (kontentVisota <= flickVisota || maxY <= 0)//Если высота текста меньше зоны листания,то
-                            return 0//То верхний левый угол ползунка растоложить на y = 0
-                        return flZona.contentY / (kontentVisota - flickVisota) * maxY
-                    }
-                    z: 1//Поверх трека накладывается ползунок.
-                    MouseArea {//Претаскивание ползунка мышью
-                        id: maPolzunka
-                        anchors.fill: rctPolzunok
-                        hoverEnabled: true
-                        cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor//При нажатии анимация руки
-                        drag.target: rctPolzunok//Перетаскиваем ползунок
-                        drag.axis: Drag.YAxis
-                        drag.minimumY: 0
-                        drag.maximumY: tmScrollBar.height - rctPolzunok.height
-
-                        onPositionChanged: {//Если позиция изменилась
-                            if (pressed) {//Если мышка нажата, то...
-                                const kontentVisota = flZona.contentHeight//Высота всего текста
-                                const flickVisota = flZona.height//Высота боласти пролистывания flickable
-                                const maxY = tmScrollBar.height - rctPolzunok.height
-                                if (kontentVisota > flickVisota && maxY > 0)
-                                    flZona.contentY = rctPolzunok.y / maxY * (kontentVisota - flickVisota)
-                            }
-                        }
-                    }
-                }
+                clrPolzunokOff: Qt.lighter(root.clrMenuFon, 1.3)//Цвет ползунка, когда он не активен.
+                clrPolzunokOn: root.clrTexta//оранжевый при наведении
+                width: root.ntWidth * root.ntCoff
+                radius: 1//Небольшой радиус
             }
-            /*
-            ScrollBar.vertical: ScrollBar {
-                parent: flZona.parent
-                anchors.top: flZona.top
-                anchors.right: flZona.right
-                anchors.bottom: flZona.bottom
-                policy: ScrollBar.AlwaysOn
-            }
-            */
         }
         ListModel {//Модель с шриштами
             id: modelShrift
@@ -420,7 +366,7 @@ Item {
             visible: false
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
-            anchors.margins: tmScrollBar.width
+            anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
             clrFona: root.clrFona; clrTexta: root.clrMenuText; clrMenuFon: root.clrMenuFon
             modelData: modelShrift
             onClicked: function(strShrift) {
@@ -433,7 +379,7 @@ Item {
             visible: false//Невидимое меню.
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
-            anchors.margins: tmScrollBar.width
+            anchors.bottomMargin: root.ntWidth; anchors.rightMargin: scbScrollbar.width
             pctFona: 0.90//Прозрачность фона меню.
             clrTexta: root.clrMenuText; clrFona: root.clrMenuFon 
             imyaMenu: "vihod"//Глянь в DCMenu все варианты меню в слоте окончательной отрисовки.

@@ -142,5 +142,6 @@
         <file>qml/DCButtons/DCKnopkaSidebar.qml</file>
         <file>qml/DCMethods/DCSidebar.qml</file>
         <file>qml/DCMethods/DCFontAuto.qml</file>
+        <file>qml/DCMethods/DCScrollbar.qml</file>
     </qresource>
 </RCC>
