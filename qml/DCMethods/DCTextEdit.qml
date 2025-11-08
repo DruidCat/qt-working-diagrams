@@ -1,4 +1,5 @@
 ﻿import QtQuick //2.15
+import DCMethods 1.0//Импортируем методы написанные мной. Для DCScrollbar
 //DCTextEdit - ШАБЛОН РАБОТЫ С ТЕКСТОМ НА СТРАНИЦЕ (ЛИСТАТЬ, РЕДАКТИРОВАТЬ, ВЫДЕЛЯТЬ).
 Item {
     id: root
@@ -85,7 +86,7 @@ Item {
             TextEdit {//Область текста.
                 id: txdTextEdit
                 //Настройки
-                width:  flcListat.width - tmScrollBar.width//Передаём ширину из зоны прокрутки - ScrollBar
+                width:  flcListat.width - scbScrollbar.width//Ширина зоны прокрутки и минус ширина ScrollBar.
                 height: Math.max(paintedHeight, flcListat.height)//Высота растёт вместе с текстом
                 //textFormat: TextEdit.AutoText//Формат текста АВТОМАТИЧЕСКИ определяется.Предпочтителен HTML4
                 color: root.clrTexta
@@ -122,83 +123,17 @@ Item {
                 }
             }
         }
-        Item {//Самодельный вертикальный скроллбар
-            id: tmScrollBar
-            //Свойства
-            property color clrTrack: "#40000000"//Полупрозрачный трек
-            property color clrPolzunokOff: root.clrPolzunka//Цвет ползунка, когда он не активен.
-            property color clrPolzunokOn: root.clrTexta//оранжевый при наведении
-            readonly property int minVisotaPolzunka: 22//Минимальная высота Позунка
+        DCScrollbar {//Скроллбар
+            id: scbScrollbar
             //Настройки
+            flick: flcListat//Передаём объект Flickable
             anchors.right: flcListat.right
             anchors.top: flcListat.top
             anchors.bottom: flcListat.bottom
-            width: 11//Ширина Трека
-            //Гистерезис, чтобы ползунок не мигал на границе равенства
-            visible: (flcListat.contentHeight - flcListat.height) > 1//Показываем только когда есть что скрол.
-            Rectangle {//Трек
-                id: rctTrack
-                anchors.fill: tmScrollBar
-                color: tmScrollBar.clrTrack
-                z: 0//Первым создаётся Трек, по верх него всё накладываться будет.
-                MouseArea {//Клик по треку — прыжок к позиции
-                    anchors.fill: rctTrack
-                    acceptedButtons: Qt.LeftButton//Обрабатываем только левую клавишу мыши.
-                    onPressed: (mouse) => {//Если было нажатие мышкой на треке, то...
-                        const kontentVisota = flcListat.contentHeight//Высота всего текста
-                        const flickVisota = flcListat.height//Высота боласти пролистывания flickable
-                        const maxY = tmScrollBar.height - rctPolzunok.height
-                        if (kontentVisota <= flickVisota || maxY <= 0)//Если текста меньше выстоты листания,то
-                            return//Ничего не делаем
-                        const target = Math.max(0, Math.min(mouse.y - rctPolzunok.height/2, maxY))
-                        flcListat.contentY = target / maxY * (kontentVisota - flickVisota)
-                    }
-                }
-            }
-            Rectangle {//Ползунок
-                id: rctPolzunok
-                color: (maPolzunka.containsMouse || maPolzunka.pressed) ? tmScrollBar.clrPolzunokOn
-                                                                        : tmScrollBar.clrPolzunokOff
-                width: tmScrollBar.width//Ширина ползунка такая же, как и у всего scrollbar
-                height: {//Высота ползунка пропорциональна видимой части
-                    const kontentVisota = flcListat.contentHeight//Высота всего текста
-                    const flickVisota = flcListat.height//Высота боласти пролистывания flickable
-                    if (kontentVisota <= 0)//Если высота всего текста меньше или равно нулю, то...
-                        return tmScrollBar.minVisotaPolzunka//высота полунка минимально заданная.
-                    const ratio = Math.min(1, flickVisota / kontentVisota)
-                    return Math.max(tmScrollBar.minVisotaPolzunka, tmScrollBar.height * ratio)//Расчёт высоты
-                }
-                x: 0//верхний левый угол прямогугольника в координате x = 0.
-                y: {//Позиция ползунка синхронизируется со скроллом
-                    const kontentVisota = flcListat.contentHeight//Высота всего текста
-                    const flickVisota = flcListat.height//Высота боласти пролистывания flickable
-                    const maxY = tmScrollBar.height - rctPolzunok.height
-                    if (kontentVisota <= flickVisota || maxY <= 0)//Если высота текста меньше зоны листания,то
-                        return 0//То верхний левый угол ползунка растоложить на y = 0
-                    return flcListat.contentY / (kontentVisota - flickVisota) * maxY
-                }
-                z: 1//Поверх трека накладывается ползунок.
-                MouseArea {//Претаскивание ползунка мышью
-                    id: maPolzunka
-                    anchors.fill: rctPolzunok
-                    hoverEnabled: true
-                    cursorShape: pressed ? Qt.ClosedHandCursor : Qt.OpenHandCursor//При нажатии анимация руки
-                    drag.target: rctPolzunok//Перетаскиваем ползунок
-                    drag.axis: Drag.YAxis
-                    drag.minimumY: 0
-                    drag.maximumY: tmScrollBar.height - rctPolzunok.height
-
-                    onPositionChanged: {//Если позиция изменилась
-                        if (pressed) {//Если мышка нажата, то...
-                            const kontentVisota = flcListat.contentHeight//Высота всего текста
-                            const flickVisota = flcListat.height//Высота боласти пролистывания flickable
-                            const maxY = tmScrollBar.height - rctPolzunok.height
-                            if (kontentVisota > flickVisota && maxY > 0)
-                                flcListat.contentY = rctPolzunok.y / maxY * (kontentVisota - flickVisota)
-                        }
-                    }
-                }
-            }
+            clrPolzunokOff: root.clrPolzunka//Цвет ползунка, когда он не активен.
+            clrPolzunokOn: root.clrTexta//оранжевый при наведении
+            width: root.ntWidth * root.ntCoff
+            radius: 1//Небольшой радиус
         }
         Rectangle {
             id: rctBorder

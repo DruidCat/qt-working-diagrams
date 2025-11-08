@@ -1,9 +1,7 @@
 ﻿import QtQuick //2.15
-import QtQuick.Controls//Для Scrollbar
-
 import DCButtons 1.0//Импортируем кнопки
 import DCMethods 1.0//Импортируем методы написанные мной.
-//Страница отображающая Меню.
+//StrMenu.qml - Страница отображающая Меню.
 Item {
     id: root
     //Свойства.
