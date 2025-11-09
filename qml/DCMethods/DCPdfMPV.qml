@@ -349,7 +349,7 @@ Item {
         console.error("308: 5. Начало масштабирования документа.");
         root.sgnProgress(46, "5/11 Начало масштабирования документа.");
         if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
-            var widthRect = pmpDoc.childrenRect.width;
+            var widthRect = pmpDoc.childrenRect.width-17;//17 это ширина скролл бар, чтоб видно весь документ.
             var heightRect = pmpDoc.childrenRect.height;
             if(pdfDoc.isDocVert){//Если вертикальная страница, то...
 				if((root.rotation === 0) || (root.rotation === 180))//Если поворот нулевой или 180 градусов,то
@@ -615,6 +615,17 @@ Item {
             pmpDoc.blRenderScale = true;//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
             root.renderScale = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
             pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг. 
+        }
+        Component.onCompleted: {//Когда полностью загрузился виджет PdfMultiPageView, то...
+            console.error("Ширина полосы " + pmpDoc.fnPoiskScrollbar(pmpDoc).width)
+        }
+        function fnPoiskScrollbar(target){//Функция поиска Вертикального Scrolbar в детях PdfMultiPageView.
+            for(let ltShag = 0; ltShag < target.children.length; ltShag++){//Цикл поиска в детях.
+                const cnScrollbarID = target.children[ltShag]//Ищем в детях pmpDoc
+                if(cnScrollbarID instanceof ScrollBar && cnScrollbarID.orientation === Qt.Vertical) return cnScrollbarID
+                const cnNashol = pmpDoc.fnPoiskScrollbar(cnScrollbarID)//Рекурсивно ищем в потомках.
+                if(cnNashol) return cnNashol
+            }
         }
     }
     Connections {//Автовыбор первого совпадения и переход
