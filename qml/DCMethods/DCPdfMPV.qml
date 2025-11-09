@@ -545,9 +545,9 @@ Item {
             }
         }
         onCurrentPageChanged: {//Если страница документа изменилась, то...
-            /*
+            const cnStranica = pmpDoc.currentPage//Номер страницы
+            if(cnStranica < 0) return//Если страница -1, выходим из обработчика, так как это ошибка.
             if(!blScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
-                const cnStranica = pmpDoc.currentPage//Номер страницы
                 const cnWidth = pdfDoc.pagePointSize(cnStranica).width
                 const cnHeight = pdfDoc.pagePointSize(cnStranica).height
                 if((pdfDoc.rlWidth !== cnWidth) || (pdfDoc.rlHeight !== cnHeight)){
@@ -562,11 +562,6 @@ Item {
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
             }
-            */
-            const cnStranica = pmpDoc.currentPage//Номер страницы
-            if(cnStranica < 0) return//Если страница -1, выходим из обработчика, так как это ошибка.
-            root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
-            dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
             if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
