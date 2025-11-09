@@ -70,6 +70,7 @@ Item {
                     if(event.key === Qt.Key_Up || event.key === Qt.Key_K){
                         if(tmZona.currentIndex > 0){//Если не ноль, то...
                             tmZona.currentIndex--//Уменьшаем индекс на 1
+                            fnScrollKnopok()//Скроллим экран, чтоб видно было выбранную кнопку
                             event.accepted = true;
                         }
                     }
@@ -77,6 +78,7 @@ Item {
                         if(event.key === Qt.Key_Down || event.key === Qt.Key_J){
                             if(tmZona.currentIndex < (rctZona.children.length-1)){//Если не максимум, то...
                                 tmZona.currentIndex++//Увеличиваем индекс на 1
+                                fnScrollKnopok()//Скроллим экран, чтоб видно было выбранную кнопку
                                 event.accepted = true;
                             }
                         }
@@ -130,6 +132,22 @@ Item {
         if(vrKnopkaID && typeof vrKnopkaID.fnPress === "function" && vrKnopkaID.visible && vrKnopkaID.enabled)
             vrKnopkaID.fnPress()//Запускаем функцию Нажатия, данная функция у каждой кнопки своя.
     }
+    function fnScrollKnopok(){//Функция скролла кнопок на экране при их выборе горячими клавишами.
+        var knopkaID = rctZona.children[tmZona.currentIndex]//Из rctZona берём указатель ребёнка по индексу
+        if(!knopkaID) return//Если пустой указатель выходим из функции.
+
+        var knopkaTop = knopkaID.y//Верхняя координата У кнопки
+        var knopkaBottom = knopkaTop + knopkaID.height+root.ntWidth//Нижняя координата У кнопки.
+        var visibleTop = flcZona.contentY//Верхняя координата У области видимости Flickable
+        var visibleBottom = visibleTop + flcZona.height//Нижняя координата У области видимости Flickable
+
+        if(knopkaTop < visibleTop)//Если выбранная кнопка выше зоны видимости приложения, то...
+            flcZona.contentY = knopkaTop//Зону видимости приложения задаём по верхней точке выбранной кнопки.
+        else//Иначе...
+            if (knopkaBottom > visibleBottom)//Если выбранная кнопка ниже зоны видимости приложения, то...
+                flcZona.contentY = knopkaBottom - flcZona.height//Зону видимости приложения
+    }
+
     Item {
 		id: tmZagolovok
         DCKnopkaVpered{
