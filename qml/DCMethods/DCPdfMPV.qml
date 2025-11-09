@@ -564,6 +564,7 @@ Item {
             }
             */
             const cnStranica = pmpDoc.currentPage//Номер страницы
+            if(cnStranica < 0) return//Если страница -1, выходим из обработчика, так как это ошибка.
             root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
             dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
         }
@@ -648,7 +649,9 @@ Item {
         visible: true//Видим дополнительный элемент управления.
         Text {
             anchors.centerIn: rctStranici
-            text: qsTr("Страница ") + (pmpDoc.currentPage+1) + qsTr(" из ") + pdfDoc.pageCount
+            text: qsTr("Страница ")
+                  + ((pmpDoc.currentPage+1)?(pmpDoc.currentPage+1):(dcSidebar.posterIndex+1))//Проверка на -1
+                  + qsTr(" из ") + pdfDoc.pageCount
         }
     }
     DelegateModel {
