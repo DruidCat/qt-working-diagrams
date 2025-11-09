@@ -68,19 +68,21 @@ Item {
                 }
                 else{
                     if(event.key === Qt.Key_Up || event.key === Qt.Key_K){
-                        if(tmZona.currentIndex > 0){//Если не ноль, то...
-                            tmZona.currentIndex--//Уменьшаем индекс на 1
-                            fnScrollKnopok()//Скроллим экран, чтоб видно было выбранную кнопку
-                            event.accepted = true;
-                        }
+                        if(tmZona.currentIndex > 0)//Если больше нуля, то...
+                            tmZona.currentIndex--//уменьшаем индекс на -1
+                        else//Если нет, то...
+                            tmZona.currentIndex = rctZona.children.length-1//Перескакиваем на нижнюю кнопку.
+                        rctZona.fnScrollKnopok(false)//Скроллим экран, чтоб видно было выбранную кнопку
+                        event.accepted = true;
                     }
                     else{
                         if(event.key === Qt.Key_Down || event.key === Qt.Key_J){
-                            if(tmZona.currentIndex < (rctZona.children.length-1)){//Если не максимум, то...
+                            if(tmZona.currentIndex < (rctZona.children.length-1))//Если не максимум, то...
                                 tmZona.currentIndex++//Увеличиваем индекс на 1
-                                fnScrollKnopok()//Скроллим экран, чтоб видно было выбранную кнопку
-                                event.accepted = true;
-                            }
+                            else//Если нет, то...
+                                tmZona.currentIndex = 0;//Перескакиваем на верхнюю кнопку.
+                            rctZona.fnScrollKnopok(true)//Скроллим экран, чтоб видно было выбранную кнопку
+                            event.accepted = true;
                         }
                         else{
                             if(event.key === Qt.Key_Enter || event.key === Qt.Key_Return){
@@ -131,22 +133,7 @@ Item {
         //Если не пустой указатель, есть функция fnPress, кнопка видимая и активированная, то...
         if(vrKnopkaID && typeof vrKnopkaID.fnPress === "function" && vrKnopkaID.visible && vrKnopkaID.enabled)
             vrKnopkaID.fnPress()//Запускаем функцию Нажатия, данная функция у каждой кнопки своя.
-    }
-    function fnScrollKnopok(){//Функция скролла кнопок на экране при их выборе горячими клавишами.
-        var knopkaID = rctZona.children[tmZona.currentIndex]//Из rctZona берём указатель ребёнка по индексу
-        if(!knopkaID) return//Если пустой указатель выходим из функции.
-
-        var knopkaTop = knopkaID.y//Верхняя координата У кнопки
-        var knopkaBottom = knopkaTop + knopkaID.height+root.ntWidth//Нижняя координата У кнопки.
-        var visibleTop = flcZona.contentY//Верхняя координата У области видимости Flickable
-        var visibleBottom = visibleTop + flcZona.height//Нижняя координата У области видимости Flickable
-
-        if(knopkaTop < visibleTop)//Если выбранная кнопка выше зоны видимости приложения, то...
-            flcZona.contentY = knopkaTop//Зону видимости приложения задаём по верхней точке выбранной кнопки.
-        else//Иначе...
-            if (knopkaBottom > visibleBottom)//Если выбранная кнопка ниже зоны видимости приложения, то...
-                flcZona.contentY = knopkaBottom - flcZona.height//Зону видимости приложения
-    }
+    } 
 
     Item {
 		id: tmZagolovok
@@ -187,9 +174,47 @@ Item {
             }
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
                 id: rctZona
+                //Свойства
+                property int counter: 0//Счётчик вызова функции fnScrollKnopok()
                 width: tmZona.width; height: flcZona.contentHeight
                 color: "transparent"
+                //Функции
+                function fnScrollKnopok(isPlus){//Скролл кнопок на экране при их выборе горячими клавишами.
+                    var knopkaID = rctZona.children[tmZona.currentIndex]//Из rctZona берём ребёнка по индексу
+                    rctZona.counter++//Прибавляем счётчик вызова функции.
+                    if(!knopkaID || (rctZona.counter > rctZona.children.length)){//Если не существует илиМного
+                        rctZona.counter = 0//Обнуляем счётчик.
+                        return//Если пустой указатель или запустилась бесконечная рекурсия,выходим из функции.
+                    }
+                    if(knopkaID.visible){//Если кнопка видимая, то...
+                        rctZona.counter = 0//Обнуляем счётчик, защита от бесконечной рекурсии.
+                        var knopkaTop = knopkaID.y//Верхняя координата У кнопки
+                        var knopkaBottom = knopkaTop + knopkaID.height+root.ntWidth//Нижняя координата Yкнопки
+                        var visibleTop = flcZona.contentY//Верхняя координата У области видимости Flickable
+                        var visibleBottom = visibleTop + flcZona.height//Нижняя координата У области Flickable
 
+                        if(knopkaTop < visibleTop)//Если выбранная кнопка выше зоны видимости приложения,то...
+                            flcZona.contentY=knopkaTop//Зону видимости приложения по верхней точке кнопки
+                        else//Иначе...
+                            if (knopkaBottom > visibleBottom)//выбранная кнопка ниже зоны видимости приложения
+                                flcZona.contentY = knopkaBottom - flcZona.height//Зону видимости приложения
+                    }
+                    else{//Если кнопка невидимая, то...
+                        if(isPlus){//Если нажимали прибавление индекса, то...
+                            if(tmZona.currentIndex < (rctZona.children.length-1))//Если не максимум, то...
+                                tmZona.currentIndex++//Увеличиваем индекс на 1
+                            else//Если нет, то...
+                                tmZona.currentIndex = 0;//Перескакиваем на верхнюю кнопку.
+                        }
+                        else{//Если нажимали уменьшение индекса, то...
+                            if(tmZona.currentIndex > 0)//Если больше нуля, то...
+                                tmZona.currentIndex--//уменьшаем индекс на 1
+                            else//Если нет, то...
+                                tmZona.currentIndex = rctZona.children.length-1//Перескакиваем на нижнюю кнопк
+                        }
+                        fnScrollKnopok(isPlus)//Вызов рекурсивной функции, пока не найдётся видимая кнопка.
+                    }
+                }
                 DCKnopkaOriginal {
                     id: knopkaMentorPDF
                     visible: root.isAdmin ? true : false;//Показать/не показать в зависимости от Админа.
