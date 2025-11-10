@@ -21,7 +21,7 @@ Drawer {
     property color clrPoisk: "Yellow"
     // Публичное API
     property alias currentIndex: tbSidebar.currentIndex
-    property alias posterIndex: grvPoster.currentIndex
+    //property alias posterIndex: grvPoster.currentIndex
 
     edge: Qt.LeftEdge
     modal: false
@@ -237,6 +237,7 @@ Drawer {
         border.color: root.clrTexta
         border.width: root.ntCoff/4//Бордюр
         visible: false
+        /*
         GridView {
             id: grvPoster
             implicitWidth: rctPoster.width
@@ -298,5 +299,6 @@ Drawer {
             border.color: root.clrTexta
             border.width: root.ntCoff/4
         }
+        */
     }
 }
