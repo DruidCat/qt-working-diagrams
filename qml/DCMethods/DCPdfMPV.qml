@@ -281,7 +281,7 @@ Item {
         }
         else{//Если внутреннее изменение масштаба, то...
             if(pmpDoc.blScaleAuto)//Если это автоматическое изменение масштаба, то...
-                    root.sgnScaleMin(pmpDoc.renderScale);//Передаём значение минимального масштаба.
+                root.sgnScaleMin(pmpDoc.renderScale);//Передаём значение минимального масштаба.
         }
     }
     onCurrentPageChanged: {//Если страница поменялась из вне, то...
@@ -385,7 +385,7 @@ Item {
     function fnGoToPage(ntPage){//Функция обрабатывающая переход на новую страницу документа.
         console.error("333: 10. Переходим на страницу: " + ntPage);
         root.sgnProgress(91, "10/11 Переходим на страницу.");
-        pmpDoc.goToLocation(ntPage, Qt.point(0, 0), pmpDoc.renderScale);//Переходим на страницу.
+        pmpDoc.goToLocation(ntPage, Qt.point(pmpDoc.pmpContentX/pmpDoc.renderScale, 0), pmpDoc.renderScale)
         console.error("336: 11. Старт таймера видимости.");
         root.sgnProgress(100, "11/11 Старт таймера отображения.");
         tmrVisible.running = true;//Запускаем таймер отображения документа.
@@ -475,6 +475,7 @@ Item {
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
             dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
+            pdfDoc.pageContentY = pmpDoc.pmpContentY/pmpDoc.renderScale//Запоминаем коорд начала страницы
             //forceActiveFocus();//Виджет видимый, форсируем фокус, чтоб event работал.
         }
     }
@@ -514,9 +515,12 @@ Item {
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
         property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
-        //
+        //Скрытые указатели PdfMultiPageView
         property var verticalScrollbar
         property var flickable
+        //
+        property real pmpContentX: pmpDoc.flickable.contentX//Положение Flickable contentX
+        property real pmpContentY: pmpDoc.flickable.contentY//Положение Flickable contentY
 
         document: PdfDocument {
             id: pdfDoc
@@ -524,6 +528,7 @@ Item {
             property bool isDocVert: true//true - вертикальный документ, false - горизонтальный документ.
             property real rlWidth: 0//Длина текущей страницы
             property real rlHeight: 0//Высота текущей страницы
+            property real pageContentY: 0//Положение координаты contentY на действующей стренице
             //Настройки
             source: root.source//Привязываем источник PDF
             password: root.password//Пароль для pdf документа.
@@ -574,6 +579,7 @@ Item {
                         pdfDoc.isDocVert = false;//false - горизонтальный документ.
                     console.error("516: НУЖНО МЕНЯТЬ МАСШТАБ")
                 }
+                pdfDoc.pageContentY = pmpDoc.pmpContentY/pmpDoc.renderScale//Запоминаем коорд начала страницы
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
             }
