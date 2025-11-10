@@ -104,12 +104,12 @@ Item {
                                 }
                                 else{
                                     if(event.key === Qt.Key_PageDown){//Если нажата "Page Down",то.
-                                        fnClickedKeyVniz()//нажатия клавиши вниз
+                                        fnClickedKeyPgDown()//нажатия клавиши Page Down
                                         event.accepted = true;//Завершаем обработку эвента.
                                     }
                                     else{
                                         if(event.key === Qt.Key_PageUp){//Если нажата "Page Up", то.
-                                            fnClickedKeyVverh()//нажатия клавиши вверх
+                                            fnClickedKeyPgUp()//нажатия клавиши Page Up
                                             event.accepted = true;//Завершаем обработку эвента.
                                         }
                                         else{
@@ -144,6 +144,16 @@ Item {
         if(pmpDoc.selectedText !== "")//Если выбранный текст не пустота, то...
             pmpDoc.copySelectionToClipboard()//Копировать выделенный текст в документе
     }
+    function fnClickedKeyPgDown(){//Функция нажатия клавиши Page Down
+        var ntStrDown = pmpDoc.currentPage + 1;//+1 страница
+        if(ntStrDown < pdfDoc.pageCount)
+            root.currentPage = ntStrDown;//Листаем страницы документа.
+    }
+    function fnClickedKeyPgUp(){//Функция нажатия клавиши Page Up
+        var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
+        if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
+            root.currentPage = ntStrUp;//Листаем страницы документа.
+    }
     function fnClickedKeyVniz(){//Функция нажатия клавиши вниз
         var ntStrDown = pmpDoc.currentPage + 1;
         if(dcSidebar.opened){//Если открыта боковая панель, то...
@@ -175,7 +185,7 @@ Item {
             if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
                 root.currentPage = ntStrUp;//Листаем страницы документа.
         }
-    }
+    } 
     function fnClickedKeyVlevo(){//Функция нажатия клавиши влево
         if(dcSidebar.opened){//Если открыта боковая панель, то...
             if(dcSidebar.currentIndex === 2){//Если открыта вкладка Страницы, то...
@@ -349,7 +359,9 @@ Item {
         console.error("308: 5. Начало масштабирования документа.");
         root.sgnProgress(46, "5/11 Начало масштабирования документа.");
         if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
-            var widthRect = pmpDoc.childrenRect.width-17;//17 это ширина скролл бар, чтоб видно весь документ.
+            var widthScrollbar = 0//По умолчанию равно 0
+            if(pmpDoc.verticalScrollbar) widthScrollbar = pmpDoc.verticalScrollbar.width//Если есть указатель.
+            var widthRect = pmpDoc.childrenRect.width - widthScrollbar//Минус ширина Scrollbar
             var heightRect = pmpDoc.childrenRect.height;
             if(pdfDoc.isDocVert){//Если вертикальная страница, то...
 				if((root.rotation === 0) || (root.rotation === 180))//Если поворот нулевой или 180 градусов,то
@@ -502,6 +514,9 @@ Item {
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
         property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
+        //
+        property var verticalScrollbar
+        property var flickable
 
         document: PdfDocument {
             id: pdfDoc
@@ -617,15 +632,27 @@ Item {
             pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг. 
         }
         Component.onCompleted: {//Когда полностью загрузился виджет PdfMultiPageView, то...
-            console.error("Ширина полосы " + pmpDoc.fnPoiskScrollbar(pmpDoc).width)
+            pmpDoc.verticalScrollbar = pmpDoc.fnPoiskScrollbar(pmpDoc)//Находим указатель на вертикалScrollbar
+            pmpDoc.flickable = pmpDoc.fnPoiskFlickable(pmpDoc)//Находим указатель на Flickable
         }
         function fnPoiskScrollbar(target){//Функция поиска Вертикального Scrolbar в детях PdfMultiPageView.
             for(let ltShag = 0; ltShag < target.children.length; ltShag++){//Цикл поиска в детях.
-                const cnScrollbarID = target.children[ltShag]//Ищем в детях pmpDoc
-                if(cnScrollbarID instanceof ScrollBar && cnScrollbarID.orientation === Qt.Vertical) return cnScrollbarID
-                const cnNashol = pmpDoc.fnPoiskScrollbar(cnScrollbarID)//Рекурсивно ищем в потомках.
-                if(cnNashol) return cnNashol
+                const idScrollbar = target.children[ltShag]//Ищем в детях pmpDoc
+                if(idScrollbar instanceof ScrollBar && idScrollbar.orientation === Qt.Vertical)
+                    return idScrollbar
+                const cnNashel = pmpDoc.fnPoiskScrollbar(idScrollbar)//Рекурсивно ищем в потомках.
+                if(cnNashel) return cnNashel
             }
+            return null//Если ничего не найдено, возвращаем нулевой указатель.
+        }
+        function fnPoiskFlickable(target){//Функция поиска Flickable в детях PdfMultiPageView.
+            for(let ltShag = 0; ltShag < target.children.length; ltShag++){//Цикл поиска в детях.
+                const idFlickable = target.children[ltShag]//Ищем в детях pmpDoc
+                if(idFlickable instanceof Flickable) return idFlickable
+                const cnNashel = pmpDoc.fnPoiskScrollbar(idFlickable)//Рекурсивно ищем в потомках.
+                if(cnNashel) return cnNashel
+            }
+            return null//Если ничего не найдено, возвращаем нулевой указатель.
         }
     }
     Connections {//Автовыбор первого совпадения и переход

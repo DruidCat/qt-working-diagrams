@@ -166,12 +166,12 @@ Item {
                                         }
                                         else{
                                             if(event.key === Qt.Key_PageDown){//нажата "Page Down",то
-                                                fnClickedKeyVniz();//Функция нажатия клавиши вниз
+                                                fnClickedKeyPgDown();//Функция нажатия клавиши Page Down
                                                 event.accepted = true;//Завершаем обработку эвента.
                                             }
                                             else{
                                                 if(event.key === Qt.Key_PageUp){//нажата "Page Up"
-                                                    fnClickedKeyVverh();//Функция нажатия клавиши вверх
+                                                    fnClickedKeyPgUp();//Функция нажатия клавиши Page Up
                                                     event.accepted = true;//Завершаем обработку эвента.
                                                 }
                                                 else{
@@ -235,6 +235,12 @@ Item {
         if(pdfLoader.item)//Если документ загрузился в загрузчике, то...
             cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
         fnPdfSource("");//Пустой путь PDF документа, закрываем.
+    }
+    function fnClickedKeyPgDown(){//Функция нажатия клавиши Page Down
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyPgDown()//Вниз на одну страницу
+    }
+    function fnClickedKeyPgUp(){//Функция нажатия клавиши Page Up
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyPgUp()//Вверх на одну страницу
     }
     function fnClickedKeyVniz(){//Функция нажатия клавиши вниз
         if(pdfLoader.item) pdfLoader.item.fnClickedKeyVniz()//Вниз на одну страницу
