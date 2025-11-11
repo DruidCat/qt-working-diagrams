@@ -21,7 +21,7 @@ Drawer {
     property color clrPoisk: "Yellow"
     // Публичное API
     property alias currentIndex: tbSidebar.currentIndex
-    //property alias posterIndex: grvPoster.currentIndex
+    property alias posterIndex: grvPoster.currentIndex
 
     edge: Qt.LeftEdge
     modal: false
@@ -237,12 +237,23 @@ Drawer {
         border.color: root.clrTexta
         border.width: root.ntCoff/4//Бордюр
         visible: false
-        /*
+        onVisibleChanged: {//Если Видимость Страниц изменилась, то...
+            if(visible){//Если видимая страница, то...
+                if(!grvPoster.model){//Если модель нулевая, то...
+                    if(root.pdfDoc){
+                        grvPoster.model = root.pdfDoc.pageModel//Загружаем документ в модель.
+                        grvPoster.currentIndex = pmpDoc.currentPage//Подсвечиваем открытую страницу.
+                    }
+                    else null//Если документ, то пусто.
+                }
+            }
+        }
         GridView {
             id: grvPoster
             implicitWidth: rctPoster.width
             implicitHeight: rctPoster.height
-            model: root.pdfDoc ? root.pdfDoc.pageModel : null
+            model: null
+            //model: root.pdfDoc ? root.pdfDoc.pageModel : null
             ScrollBar.vertical: ScrollBar { id: scbVertical }
             cellWidth: width/2 - scbVertical.width/2//Расчёт длины одного постера
             cellHeight: cellWidth + 10
@@ -299,6 +310,5 @@ Drawer {
             border.color: root.clrTexta
             border.width: root.ntCoff/4
         }
-        */
     }
 }

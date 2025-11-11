@@ -29,7 +29,6 @@ Item {
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
-    //property alias sbCurrentIndex: tbSidebar.currentIndex
     property alias sbCurrentIndex: dcSidebar.currentIndex
     property int currentResult: -1//Номер Поиска, совпадение от 0....
     //Настройки
@@ -474,9 +473,8 @@ Item {
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
-            //dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
+            dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
             pdfDoc.pageContentY = pmpDoc.pmpContentY/pmpDoc.renderScale//Запоминаем коорд начала страницы
-            //forceActiveFocus();//Виджет видимый, форсируем фокус, чтоб event работал.
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
@@ -581,7 +579,7 @@ Item {
                 }
                 pdfDoc.pageContentY = pmpDoc.pmpContentY/pmpDoc.renderScale//Запоминаем коорд начала страницы
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
-                //dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
+                dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
             }
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
@@ -689,8 +687,7 @@ Item {
         Text {
             anchors.centerIn: rctStranici
             text: qsTr("Страница ")
-                  //+ ((pmpDoc.currentPage+1)?(pmpDoc.currentPage+1):(dcSidebar.posterIndex+1))//Проверка на -1
-                  + (pmpDoc.currentPage+1)//Проверка на -1
+                  + ((pmpDoc.currentPage+1)?(pmpDoc.currentPage+1):(dcSidebar.posterIndex+1))//Проверка на -1
                   + qsTr(" из ") + pdfDoc.pageCount
         }
     }
