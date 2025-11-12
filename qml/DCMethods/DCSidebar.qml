@@ -192,6 +192,12 @@ Drawer {
         border.color: root.clrTexta
         border.width: root.ntCoff/4
         visible: false
+        onVisibleChanged: {//Если Видимость Закладок изменилась, то...
+            if(visible){//Если видимая страница, то...
+                if(!pbmZakladki.document)//Если документ не добавлен, то...
+                    if(root.pdfDoc) pbmZakladki.document = root.pdfDoc//Загружаем документ в закладки.
+            }
+        }
         Text {
             id: txtZakladki
             anchors.horizontalCenter: rctZakladki.horizontalCenter
@@ -217,7 +223,9 @@ Drawer {
                 }
             }
             model: PdfBookmarkModel {
-                document: root.pdfDoc
+                id: pbmZakladki
+                document: null
+                //document: root.pdfDoc
             }
         }
         Rectangle {//Оконтовка поверх информации.
@@ -244,7 +252,6 @@ Drawer {
                         grvPoster.model = root.pdfDoc.pageModel//Загружаем документ в модель.
                         grvPoster.currentIndex = pmpDoc.currentPage//Подсвечиваем открытую страницу.
                     }
-                    else null//Если документ, то пусто.
                 }
             }
         }
