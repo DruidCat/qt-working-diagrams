@@ -13,7 +13,7 @@ Item {
     property alias italic: txtScale.font.italic
     property int  ntWidth: 2
     property int ntCoff: 8
-	property int value: 0
+    property real value: 0//Значение масштаба
 	property int from: 0//Задаём значение по умолчанию.
 	property int to: 32767//Задаём значение по умолчанию.
 	property int stepSize: 1
@@ -27,7 +27,6 @@ Item {
 	signal valueModified();//Сигнал нажатия [-],[+],Enter с изменением значения. А значение по value получить.
     signal tap();//Сигнал о нажатии на любой элемент виджета.
     //Функции.
-	//onValueModified: console.error(value)
     TapHandler {//Обработка нажатия на весь виджет.
         id: tphScale
         onTapped: {
@@ -52,7 +51,7 @@ Item {
                 knopkaPlus.enabled = true;//Кнопка Плюс активная.
             }
         }
-        txtScale.text = value;//Это важная строка, она отображает Номер,когда он приходит из вне или внутри
+        txtScale.text = Math.floor(value)//Округляем дробь,отображаем Номер, когда он приходит из вне/внутри
 	}
 	onFromChanged:{//Защита от неверного ввода max и min значения, которое роняет приложение.
 		if(from < 0){//С отрицательными числами DCScale не работает.
@@ -184,19 +183,19 @@ Item {
                 color: root.clrTexta
                 horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
-                text: root.value
+                text: Math.floor(root.value)//не показываем дробную часть
 				onTextChanged: {//Если текст меняет пользователь вручную или кнопками.
                     let ntValue = parseInt(txtScale.text);//Приравниваем значение.
                     if(ntValue > root.to){//Если пользователь вводит число больше заданного
                         if(root.value !== root.to){//Если нет равенства, то...
                             root.value = root.to;//Выставляем максимальное значение.
-                            text = root.value;//В этом слоте,onValueChanged не срабатывает,приравнив
+                            text = root.value//В этом слоте,onValueChanged не срабатывает,приравни
                             root.valueModified();//Отправляем Сигнал, как в оригинальном Scale.
 						}
 						else{
                             if(ntValue > root.to){
                                 root.value = root.to;//Выставляем максимальное значение.
-                                text = root.value;//В этом слоте,onValueChanged не срабатывает,прирав
+                                text = root.value//В этом слоте,onValueChanged не срабатывает,прир
 							}
 						}
 					}
