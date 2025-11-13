@@ -8,10 +8,8 @@ import DCMethods 1.0//Импортируем методы написанные �
 Drawer {
     id: root
     //Настройки
-    // Внешние ссылки
     property var pmpDoc//PdfMultiPageView (pmpDoc)
     property var pdfDoc//PdfDocument (pdfDoc)
-    // Тема и размеры
     property bool isMobile: true//true - мобильное устройство
     property int ntWidth: 1
     property int ntCoff: 8
@@ -19,7 +17,6 @@ Drawer {
     property color clrFona: "Black"
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
-    // Публичное API
     property alias currentIndex: tbSidebar.currentIndex
     property alias posterIndex: grvPoster.currentIndex
     //Настройки
@@ -27,7 +24,7 @@ Drawer {
     modal: false
     dim: false
     closePolicy: Drawer.CloseOnEscape//Закрываем боковую панель только при нажати Escape, другие политики выкл
-    clip: true//Образать всё лишнее.
+    clip: true//Обрезать всё лишнее.
     width: root.isMobile
            ? (parent ? parent.width : 0)
            : ((parent ? parent.width : 0) / 3)//Если мобила, то ширина на весь экран,если нет,то 1/3
@@ -36,6 +33,7 @@ Drawer {
     //Функции
     onPdfDocChanged: {//Если будет замена на пустой pdf файл, для обнуления открытого файла, то...
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
+        trvZakladki.count = 0;//Обнуляем счётчик закладок.
     }
     Rectangle {//Прямоугольник узкой полоски интерфейса слева
         id: rctBorder
@@ -196,24 +194,48 @@ Drawer {
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text: trvZakladki.count ? "" : qsTr("Закладки отсутствуют")
+            text:  trvZakladki.count ? "" : qsTr("Закладки отсутствуют")
         }
         TreeView {
             id: trvZakladki
+            //Свойства
+            property int count: 0//Счётчик количества вкладок
+            //Настройки
             implicitHeight: rctZakladki.height
             implicitWidth: rctZakladki.width
             columnWidthProvider: function() { return width }
             ScrollBar.vertical: ScrollBar { }
             delegate: TreeViewDelegate {
-                required property int page
-                required property point location
+                id: tvdZakladka
+                //Свойства
+                required property int page//Страница закладки
+                required property point location//Координата закладки
+                required property string title//Текст закладки
+                property bool isPressed: false//Флаг, который запоминает нажатие по вкладке
+                //Настройки
+                //leftPadding: 11//Отступ слева
+                text: title//Отображение текста вкладки.
+                background: Rectangle {//Задний фон вкладки
+                    color: isPressed ? root.clrMenuFon : root.clrFona
+                }
+                contentItem: Text {
+                    text: tvdZakladka.text
+                    color: root.clrTexta
+                    //font.pixelSize: root.ntCoff*(root.ntWidth-1)
+                    elide: Text.ElideRight
+                    verticalAlignment: Text.AlignVCenter
+                }
+                //Функции
+                onPressedChanged: isPressed = true//Если нажали на вкладку, то взводим флаг.
                 onClicked: {
                     if (root.pmpDoc) root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//На Стр
                     if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                 }
+                Component.onCompleted: {//Если создался элемент делегата, то...
+                    trvZakladki.count += 1//Считаем количество вкладок.
+                }
             }
             model: PdfBookmarkModel {
-                id: pbmZakladki
                 document: root.pdfDoc
             }
         }
