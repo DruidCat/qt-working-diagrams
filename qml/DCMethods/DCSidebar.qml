@@ -187,7 +187,6 @@ Drawer {
         border.width: root.ntCoff/4
         visible: currentIndex === 1//Если истина, то видимая вкладка.
         Text {
-            id: txtZakladki
             anchors.horizontalCenter: rctZakladki.horizontalCenter
             anchors.verticalCenter: rctZakladki.verticalCenter
             color: root.clrMenuFon
@@ -200,8 +199,7 @@ Drawer {
             id: trvZakladki
             //Свойства
             property bool isEmpty: true//Есть закладки? true - пусто
-            property int branchIndent: 18//Отступ отступ треугольника от левой кромки
-            property var currentIndex: null//Хранит индекс той закладки, который мы выбрали, кликнув на неё.
+            property int currentIndex: -1//Хранит индекс той закладки, который мы выбрали, кликнув на неё.
             //Настройки
             implicitHeight: rctZakladki.height
             implicitWidth: rctZakladki.width
@@ -213,7 +211,7 @@ Drawer {
                 required property int page//Страница закладки
                 required property point location//Координата закладки
                 required property string title//Текст закладки
-                required property var index//Индекс закладки
+                required property int index//Индекс закладки
                 //Настройки
                 //leftPadding: 11//Отступ слева
                 text: title//Отображение текста вкладки.
@@ -222,24 +220,26 @@ Drawer {
                            ? root.clrMenuFon
                            : (tvdZakladka.row % 2 === 0
                                 ? root.clrFona
-                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22)))
+                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.11)))
                 }
                 contentItem: Text {
                     text: tvdZakladka.text
                     color: root.clrTexta
-                    //font.pixelSize: root.ntCoff*(root.ntWidth-1)
-                    elide: Text.ElideRight
-                    verticalAlignment: Text.AlignVCenter
+                    font.pixelSize: (root.ntWidth<=2) ? root.ntCoff*(root.ntWidth-1)//Защита от нулевой разниц
+                                                      : root.ntCoff*(root.ntWidth-2)
+                    elide: Text.ElideRight//Обрезаем текст по правому краю точками
+                    verticalAlignment: Text.AlignVCenter//По центру вертикальному располагаем текст
                 }
                 indicator: Item {//Индикатор треугольник ▾ / ▸
-                    visible: tvdZakladka.hasChildren//Если нет вложеных закладок, то видимый индикатор
-                    implicitWidth: trvZakladki.branchIndent//отступ от левого края
-                    implicitHeight: 20//фиксируем ненулевую высоту
+                    visible: tvdZakladka.hasChildren//Если есть вложеные закладки, то видимый индикатор
+                    implicitWidth: 22//отступ от левого края
+                    implicitHeight: 22//фиксируем ненулевую высоту
                     Text {
                         anchors.centerIn: parent
                         text: tvdZakladka.expanded ? "\u25BE" : "\u25B8"// ▾ / ▸
                         color: root.clrTexta//Цвет треугольника
-                        font.pixelSize: txtZakladki.font.pixelSize/2//Размер треугольника половина размера txt
+                        font.pixelSize: (root.ntWidth<=2) 	? root.ntCoff*(root.ntWidth-1)//Защита от нулевой
+                                                            : root.ntCoff*(root.ntWidth-2)
                     }
                     MouseArea {
                         anchors.fill: parent
@@ -247,6 +247,8 @@ Drawer {
                         cursorShape: Qt.PointingHandCursor
                         onClicked: function(mouse) {//объявляем параметр mouse
                             if (!tvdZakladka.hasChildren) return//Если нет вложеных закладок, то выходим.
+                            if(trvZakladki.currentIndex !== tvdZakladka.index)//Если это другая вкладка
+                                trvZakladki.currentIndex = -1
                             trvZakladki.toggleExpanded(tvdZakladka.index)//Разворачивает закладку по index
                             mouse.accepted = true
                         }
