@@ -194,12 +194,14 @@ Drawer {
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text:  trvZakladki.isEmpty ? qsTr("Закладки отсутствуют") : ""
+            text:  trvZakladki.isEmpty ? qsTr("Закладки отсутствуют") : ""//Если нет/есть закладки
         }
         TreeView {
             id: trvZakladki
             //Свойства
             property bool isEmpty: true//Есть закладки? true - пусто
+            property int branchIndent: 18//Отступ отступ треугольника от левой кромки
+            property var currentIndex: null//Хранит индекс той закладки, который мы выбрали, кликнув на неё.
             //Настройки
             implicitHeight: rctZakladki.height
             implicitWidth: rctZakladki.width
@@ -211,12 +213,16 @@ Drawer {
                 required property int page//Страница закладки
                 required property point location//Координата закладки
                 required property string title//Текст закладки
-                property bool isPressed: false//Флаг, который запоминает нажатие по вкладке
+                required property var index//Индекс закладки
                 //Настройки
                 //leftPadding: 11//Отступ слева
                 text: title//Отображение текста вкладки.
-                background: Rectangle {//Задний фон вкладки
-                    color: isPressed ? root.clrMenuFon : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.33))
+                background: Rectangle {
+                    color: trvZakladki.currentIndex === tvdZakladka.index
+                           ? root.clrMenuFon
+                           : (tvdZakladka.row % 2 === 0
+                                ? root.clrFona
+                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22)))
                 }
                 contentItem: Text {
                     text: tvdZakladka.text
@@ -225,9 +231,30 @@ Drawer {
                     elide: Text.ElideRight
                     verticalAlignment: Text.AlignVCenter
                 }
+                indicator: Item {//Индикатор треугольник ▾ / ▸
+                    visible: tvdZakladka.hasChildren//Если нет вложеных закладок, то видимый индикатор
+                    implicitWidth: trvZakladki.branchIndent//отступ от левого края
+                    implicitHeight: 20//фиксируем ненулевую высоту
+                    Text {
+                        anchors.centerIn: parent
+                        text: tvdZakladka.expanded ? "\u25BE" : "\u25B8"// ▾ / ▸
+                        color: root.clrTexta//Цвет треугольника
+                        font.pixelSize: txtZakladki.font.pixelSize/2//Размер треугольника половина размера txt
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: function(mouse) {//объявляем параметр mouse
+                            if (!tvdZakladka.hasChildren) return//Если нет вложеных закладок, то выходим.
+                            trvZakladki.toggleExpanded(tvdZakladka.index)//Разворачивает закладку по index
+                            mouse.accepted = true
+                        }
+                    }
+                }
                 //Функции
-                onPressedChanged: isPressed = pressed//Если нажали на вкладку, то взводим флаг.
                 onClicked: {
+                    trvZakladki.currentIndex = tvdZakladka.index//Сохраняем индекс, который мы выбрали
                     if (root.pmpDoc) root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//На Стр
                     if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                 }
