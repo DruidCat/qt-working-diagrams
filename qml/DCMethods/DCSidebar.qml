@@ -33,7 +33,7 @@ Drawer {
     //Функции
     onPdfDocChanged: {//Если будет замена на пустой pdf файл, для обнуления открытого файла, то...
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
-        trvZakladki.count = 0;//Обнуляем счётчик закладок.
+        trvZakladki.isEmpty = true//Пусто
     }
     Rectangle {//Прямоугольник узкой полоски интерфейса слева
         id: rctBorder
@@ -194,12 +194,12 @@ Drawer {
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text:  trvZakladki.count ? "" : qsTr("Закладки отсутствуют")
+            text:  trvZakladki.isEmpty ? qsTr("Закладки отсутствуют") : ""
         }
         TreeView {
             id: trvZakladki
             //Свойства
-            property int count: 0//Счётчик количества вкладок
+            property bool isEmpty: true//Есть закладки? true - пусто
             //Настройки
             implicitHeight: rctZakladki.height
             implicitWidth: rctZakladki.width
@@ -216,7 +216,7 @@ Drawer {
                 //leftPadding: 11//Отступ слева
                 text: title//Отображение текста вкладки.
                 background: Rectangle {//Задний фон вкладки
-                    color: isPressed ? root.clrMenuFon : root.clrFona
+                    color: isPressed ? root.clrMenuFon : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.33))
                 }
                 contentItem: Text {
                     text: tvdZakladka.text
@@ -226,13 +226,13 @@ Drawer {
                     verticalAlignment: Text.AlignVCenter
                 }
                 //Функции
-                onPressedChanged: isPressed = true//Если нажали на вкладку, то взводим флаг.
+                onPressedChanged: isPressed = pressed//Если нажали на вкладку, то взводим флаг.
                 onClicked: {
                     if (root.pmpDoc) root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//На Стр
                     if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                 }
                 Component.onCompleted: {//Если создался элемент делегата, то...
-                    trvZakladki.count += 1//Считаем количество вкладок.
+                    trvZakladki.isEmpty = false//Есть закладки.
                 }
             }
             model: PdfBookmarkModel {
