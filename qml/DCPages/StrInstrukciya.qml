@@ -95,7 +95,7 @@ Item {
 <p><center>Приложение: <b>Ментор</b></center></p>
 <p><center>Версия: <b>")+ Qt.application.version +qsTr("</b></center></p>
 <p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
-<p><center>Приложение скомпилированно с <b>Qt версии 6.8.2</b></center></p>
+<p><center>Приложение скомпилированно с <b>Qt версии ") + cppqml.qtVersion + ("</b></center></p>
 <p><center>Лицензия: <b>GPLv3</b></center></p>
 <p><center>Git URL: <a href=\"https://github.com/DruidCat/qt-working-diagrams\">\
 github.com/DruidCat/qt-working-diagrams</a></center></p>
@@ -141,7 +141,7 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 					<html>
 						<body>
 <p><center><img src = \"/images/Qt_logo_2016.png\"></center></p>
-<p>This program uses Qt version 6.8.2.</p>
+<p>This program uses Qt version ") + cppqml.qtVersion + (".</p>
 <p>Qt is a C++ toolkit for cross-platform application development.</p>
 <p>Qt provides single-source portability across all major desktop operating systems. It is also available \
 for embedded Linux and other embedded and mobile operating systems.</p>

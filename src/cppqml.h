@@ -173,6 +173,9 @@ class DCCppQml : public QObject {
                     READ strDebug
                     WRITE setStrDebug
                     NOTIFY strDebugChanged FINAL)
+
+    Q_PROPERTY(QString qtVersion
+                   READ qtVersion CONSTANT)
 public:
     explicit	DCCppQml(QObject* proditel = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
@@ -271,6 +274,7 @@ public:
     Q_INVOKABLE void	copyKatalogStop();//Остановить копирование документов в каталог.
 
     QString		strDebug();//Возвращает ошибку.
+    QString		qtVersion() const;//Метод возвращающий версию Qt
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//
 	QString 	redaktorTexta(QString strTekst);//Редактор текста по стандартам Приложения.
