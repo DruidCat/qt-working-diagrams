@@ -679,13 +679,16 @@ Item {
     }
     Rectangle {//Дополнительный элементы управления.
         id: rctStranici
-        anchors.bottom: root.bottom; anchors.horizontalCenter: root.horizontalCenter; anchors.bottomMargin: 22
-        width: 220; height: 22
+        anchors.bottom: root.bottom; anchors.horizontalCenter: root.horizontalCenter
+        anchors.bottomMargin: root.ntWidth*root.ntCoff//Отступ от низа
+        width: txtStranici.width+root.ntWidth*root.ntCoff; height: txtStranici.height+root.ntCoff
         color: "lightgray"
         clip: true; opacity: 0.6; radius: 50
         visible: true//Видим дополнительный элемент управления.
         Text {
+            id: txtStranici
             anchors.centerIn: rctStranici
+            font.pixelSize: (root.ntWidth === 2) ? root.ntCoff : root.ntCoff*(root.ntWidth-2)//Размер шрифта
             text: qsTr("Страница ")
                   + ((pmpDoc.currentPage+1)?(pmpDoc.currentPage+1):(dcSidebar.posterIndex+1))//Проверка на -1
                   + qsTr(" из ") + pdfDoc.pageCount
