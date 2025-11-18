@@ -234,6 +234,7 @@ Drawer {
                     visible: tvdZakladka.hasChildren//Если есть вложеные закладки, то видимый индикатор
                     implicitWidth: 22//отступ от левого края
                     implicitHeight: 22//фиксируем ненулевую высоту
+                    x: (tvdZakladka.depth ?? 0) * 16//Добавляем отступ влево, чтоб лесенка была из индикаторов
                     Text {
                         anchors.centerIn: parent
                         text: tvdZakladka.expanded ? "\u25BE" : "\u25B8"// ▾ / ▸
