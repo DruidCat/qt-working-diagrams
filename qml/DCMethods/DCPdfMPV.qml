@@ -717,5 +717,7 @@ Item {
         pdfDoc: pdfDoc//Передаём объект документа
         //чтобы внешний сигнал продолжил работать
         onOpenedChanged: root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
+        onSgnZakladkiEnter: { }
+        onSgnPosterEnter: fnGoToPage(posterIndex);//Переходим на страницу выбранную из Миниатюр.
     }
 }

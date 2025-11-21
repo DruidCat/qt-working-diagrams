@@ -30,6 +30,10 @@ Drawer {
            : ((parent ? parent.width : 0) / 3)//Если мобила, то ширина на весь экран,если нет,то 1/3
     height: root.pmpDoc ? root.pmpDoc.height : (parent ? parent.height : 0)//Высота по высоте pdf сцены
     y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
+    //Сигналы
+    signal sgnNaidenoEnter();//Сигнал нажатия на Enter, фокус на виджете lsvNaideno.focus
+    signal sgnZakladkiEnter();//Сигнал нажатия на Enter, фокус на виджете trvZakladki.focus
+    signal sgnPosterEnter();//Сигнал нажатия на Enter, фокус на виджете grvPoster.focus
     //Функции
     onPdfDocChanged: {//Если будет замена на пустой pdf файл, для обнуления открытого файла, то...
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
@@ -70,7 +74,16 @@ Drawer {
         rotation: -90//Поворачиваем на 90 градусов против часовой стрелки боковую панель
         transformOrigin: Item.BottomLeft//Точка поворота боковой панели нижний левый угол.
         currentIndex: 1//Закладки видимые по умолчанию.
+        Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
+            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                if(tbbNaideno.focus) lsvNaideno.focus = true//Фокус на Найдено
+                else if(tbbZakladki.focus) trvZakladki.focus = true//Фокус на Закладках
+                else if(tbbPoster.focus) grvPoster.focus = true//Фокус на страницах
+                event.accepted = true;//Завер обработку эвента
+            }
+        }
         DCTabButton {
+            id: tbbNaideno
             text: qsTr("Найдено")
             width:  (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4//делим на кол-во кнопок
             height: rctTabbar.width
@@ -83,6 +96,7 @@ Drawer {
             onPressed: tbSidebar.currentIndex = 0//Меняем индекс сразу при нажатии
         }
         DCTabButton {
+            id: tbbZakladki
             text: qsTr("Закладки")
             width:  (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
             height: rctTabbar.width
@@ -95,6 +109,7 @@ Drawer {
             onPressed: tbSidebar.currentIndex = 1//Меняем индекс сразу при нажатии
         }
         DCTabButton {
+            id: tbbPoster
             text: qsTr("Страницы")
             width:  (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
             height: rctTabbar.width
@@ -132,6 +147,13 @@ Drawer {
             model: root.pmpDoc ? root.pmpDoc.searchModel : null//Если есть поисковая модель, то добавляем её
             currentIndex: root.pmpDoc ? root.pmpDoc.searchModel.currentResult : -1
             ScrollBar.vertical: ScrollBar { }
+            Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
+                if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                    if(root.pmpDoc	&& lsvNaideno.model && lsvNaideno.focus)
+                        root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex
+                    event.accepted = true;//Завер обработку эвента
+                }
+            }
             delegate: ItemDelegate {
                 id: tmdResult
                 required property int index//Номер совпадения
@@ -205,6 +227,12 @@ Drawer {
             implicitWidth: rctZakladki.width
             columnWidthProvider: function() { return width }
             ScrollBar.vertical: ScrollBar { }
+            Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
+                if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                    if(trvZakladki.focus) root.sgnZakladkiEnter()//Сигнал, что нажат Enter при фокусе Закладки
+                    event.accepted = true;//Завер обработку эвента
+                }
+            }
             delegate: TreeViewDelegate {
                 id: tvdZakladka
                 //Свойства
@@ -316,6 +344,12 @@ Drawer {
             ScrollBar.vertical: ScrollBar { id: scbVertical }
             cellWidth: width/2 - scbVertical.width/2//Расчёт длины одного постера
             cellHeight: cellWidth + 10
+            Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
+                if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                    if(root.pmpDoc && grvPoster.model && grvPoster.focus) root.sgnPosterEnter()//Сигнал, Enter
+                    event.accepted = true;//Завер обработку эвента
+                }
+            }
             delegate: Item {
                 id: tmPoster
                 required property int index
