@@ -89,6 +89,18 @@ Drawer {
                 else if(tbbPoster.focus) fnPosterOpen()//Функция открытия и фокусировки Страницы
                 event.accepted = true;//Завер обработку эвента
             }
+            else{
+                if(event.key === Qt.Key_Down){//нажата "Стрелка вниз",то
+                    tbSidebar.currentIndex = Math.max(0, tbSidebar.currentIndex -= 1)
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
+                else{
+                    if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
+                        tbSidebar.currentIndex = Math.min(2, tbSidebar.currentIndex += 1)
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                }
+            }
         }
         DCTabButton {
             id: tbbNaideno
