@@ -29,19 +29,9 @@ Item {
     //Сигналы.
     signal clickedNext();//Сигнал на следующий элемент поиска
     signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
-    signal clickedVverh();//Сигнал нажатия клавиши вверх.
-    signal clickedVniz();//Сигнал нажатия клавиши вниз
-    signal clickedVlevo();//Сигнал нажатия клавиши влево
-    signal clickedVpravo();//Сигнал нажатия клавиши вправо
     signal clickedZakrit();//Сигнал на отмену поиска.
     signal clickedSidebar();//Сигнал о нажатии на кнопку боковой панели.
-    signal clickedSidebarZakladki();//Сигнал - Открываем боковую панель с Закладками.
-    signal clickedSidebarPoster();//Сигнал - Открываем боковую панель с Миниатюрами страниц
-    signal clickedSidebarNaideno();//Сигнал - Открываем боковую панель с Найдено
     //Функции.
-    function fnFocus() {//Функция для фокусировки ListView
-        rctPoisk.forceActiveFocus();//Чтоб работали кнопки листания поиска.
-    }
     onTextChanged: {//Если новый текст Поиска, то...
         root.blNomer = true;//Начало обнуления
         root.blNomer = false;//Окончание обнуления.
@@ -50,12 +40,6 @@ Item {
         knopkaSidebar.opened = root.isOpenedSidebar;//Передаём сигнал кнопке, для отображения нужной позиции.
     }
 
-	function fnClickedVniz() {//Функция обрабатывающая следующий поиск.
-		root.clickedNext();//Сигнал следующего поиска.
-	}
-	function fnClickedVverh() {//Функция обрабатывающая предыдущий поиск.
-        root.clickedPrevious();//Сигнал предыдущего поиска.
-	}
 	function fnClickedZakrit() {//Функция закрытия виджета.
 		root.clickedZakrit();//Запускаем сигнал Отмены поиска.
         root.blNomer = true;//Начало обнуления
@@ -68,85 +52,21 @@ Item {
         anchors.fill: root
         color: "transparent"
         radius: root.ntCoff/2
-		visible: {
-			if(root.visible){//Если видимый виджет, то...
-				focus = true;//Фокусируемся.
-				forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
-				return true;//Видимый
-			}
-			else{//Если невидимый виджет, то...
-				focus = false;//Не фокусируемся.
-				return false;//Невидимый
-			}
-		}	
-		Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-            if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
-                if(event.key === Qt.Key_B){//Если нажата клавиша "B", то...
-                    root.clickedSidebarZakladki();//Сигнал - Открываем боковую панель с Закладками.
-                    event.accepted = true;//Завершаем обработку эвента.
-                }
-                else{
-                    if(event.key === Qt.Key_T){//Если нажата клавиша "T", то...
-                        root.clickedSidebarPoster();//Сигнал - Открываем боковую панель с Миниатюрами страниц
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                }
+        visible: {
+            if(root.visible){//Если видимый виджет, то...
+                focus = true;//Фокусируемся.
+                forceActiveFocus();//Напрямую форсируем фокус, по другому не работает.
+                return true;//Видимый
             }
-            else{
-                if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
-                    if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
-                        root.clickedSidebarNaideno();//Сигнал - Открываем боковую панель во вкладке Найдено.
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                }
-                else{
-                    if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                        if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                            if(root.visible && knopkaVverh.enabled)//Если виджет поиска видимый, то...
-                                fnClickedVverh()//Функция нажатия кнопки Предыдущего поиска
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
-                    }
-                    else{
-                        if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
-                            fnClickedZakrit();//Функция закрытия виджета.
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
-                        else{
-                            if((event.key===Qt.Key_F3)
-                                                    ||(event.key===Qt.Key_Enter)
-                                                    ||(event.key===Qt.Key_Return)){//F3
-                                fnClickedVniz();//Функция нажатия кнопки Следующего поиска
-                                event.accepted = true;//Завершаем обработку эвента.
-                            }
-                            else{
-                                if(event.key === Qt.Key_Down){//нажата "Стрелка вниз",то
-                                    console.error("Обработчик клавиши")
-                                    root.clickedVniz();//Сигнал нажатия клавиши вниз
-                                    event.accepted = true;//Завершаем обработку эвента.
-                                }
-                                else{
-                                    if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
-                                        root.clickedVverh();//Сигнал нажатия клавиши вверх
-                                        event.accepted = true;//Завершаем обработку эвента.
-                                    }
-                                    else{
-                                        if(event.key === Qt.Key_Left){//Если нажата стрелка влево,то.
-                                            root.clickedVlevo();//Сигнал нажатия клавиши влева
-                                            event.accepted = true;//Завершаем обработку эвента.
-                                        }
-                                        else{
-                                            if(event.key === Qt.Key_Right){//Если нажата стрелка вправо, то.
-                                                root.clickedVpravo();//Сигнал нажатия клавиши вправо
-                                                event.accepted = true;//Завершаем обработку эвента.
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
+            else{//Если невидимый виджет, то...
+                focus = false;//Не фокусируемся.
+                return false;//Невидимый
+            }
+        }
+        Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
+            if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
+                fnClickedZakrit();//Функция закрытия виджета.
+                event.accepted = true;//Завершаем обработку эвента.
             }
 			//console.log(event.key);
 		}
@@ -241,7 +161,7 @@ Item {
             clrKnopki: root.clrKnopki
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaVverh
             enabled: root.enabled//активная/неактивная кнопка.
-            onClicked: fnClickedVverh();//Функция обрабатывающая предыдущий поиск.
+            onClicked: root.clickedPrevious();//Сигнал предыдущего поиска.
         }
         DCKnopkaVniz{//Кнопка следующего поиска.
             id: knopkaVniz
@@ -252,7 +172,7 @@ Item {
             clrKnopki: root.clrKnopki
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaVniz
             enabled: root.enabled//активная/неактивная кнопка.
-            onClicked: fnClickedVniz();//Функция обрабатывающая следующий поиск.
+            onClicked: root.clickedNext();//Сигнал следующего поиска.
         }
     }
 }

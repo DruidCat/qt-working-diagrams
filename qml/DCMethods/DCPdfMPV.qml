@@ -92,41 +92,29 @@ Item {
                             event.accepted = true;//Завершаем обработку эвента.
                         }
                         else{
-                            if(event.key === Qt.Key_Left){//Если нажата стрелка влево,то.
-                                fnClickedKeyVlevo()//нажатия клавиши влево
+                            if(event.key === Qt.Key_PageDown){//Если нажата "Page Down",то.
+                                fnClickedKeyPgDown()//нажатия клавиши Page Down
                                 event.accepted = true;//Завершаем обработку эвента.
                             }
                             else{
-                                if(event.key === Qt.Key_Right){//Если нажата стрелка вправо, то.
-                                    fnClickedKeyVpravo()//нажатия клавиши вправо
+                                if(event.key === Qt.Key_PageUp){//Если нажата "Page Up", то.
+                                    fnClickedKeyPgUp()//нажатия клавиши Page Up
                                     event.accepted = true;//Завершаем обработку эвента.
                                 }
                                 else{
-                                    if(event.key === Qt.Key_PageDown){//Если нажата "Page Down",то.
-                                        fnClickedKeyPgDown()//нажатия клавиши Page Down
+                                    if(event.key === Qt.Key_Home){//Если нажата кнопка Home, то...
+                                        fnClickedKeyHome()//нажатия клавиши Home
                                         event.accepted = true;//Завершаем обработку эвента.
                                     }
                                     else{
-                                        if(event.key === Qt.Key_PageUp){//Если нажата "Page Up", то.
-                                            fnClickedKeyPgUp()//нажатия клавиши Page Up
+                                        if(event.key === Qt.Key_End){//Если нажата кнопка End,то..
+                                            fnClickedKeyEnd()//нажатия клавиши End
                                             event.accepted = true;//Завершаем обработку эвента.
                                         }
                                         else{
-                                            if(event.key === Qt.Key_Home){//Если нажата кнопка Home, то...
-                                                fnClickedKeyHome()//нажатия клавиши Home
+                                            if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
+                                                root.clickedPoiskNext()//Следующий номер поиска.
                                                 event.accepted = true;//Завершаем обработку эвента.
-                                            }
-                                            else{
-                                                if(event.key === Qt.Key_End){//Если нажата кнопка End,то..
-                                                    fnClickedKeyEnd()//нажатия клавиши End
-                                                    event.accepted = true;//Завершаем обработку эвента.
-                                                }
-                                                else{
-                                                    if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
-                                                        root.clickedPoiskNext()//Следующий номер поиска.
-                                                        event.accepted = true;//Завершаем обработку эвента.
-                                                    }
-                                                }
                                             }
                                         }
                                     }
@@ -157,7 +145,7 @@ Item {
         var ntStrDown = pmpDoc.currentPage + 1;
         if(dcSidebar.opened){//Если открыта боковая панель, то...
             if(dcSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
-                fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
+                fnClickedPoiskNext()//Функция перехода к следующему номеру поиска.
             }
             else{//Временно, чтоб работал скролл страниц
                 if(ntStrDown < pdfDoc.pageCount)
@@ -185,24 +173,6 @@ Item {
                 root.currentPage = ntStrUp;//Листаем страницы документа.
         }
     } 
-    function fnClickedKeyVlevo(){//Функция нажатия клавиши влево
-        if(dcSidebar.opened){//Если открыта боковая панель, то...
-            if(dcSidebar.currentIndex === 2){//Если открыта вкладка Страницы, то...
-                var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
-                if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                    root.currentPage = ntStrUp;//Листаем страницы документа.
-            }
-        }
-    }
-    function fnClickedKeyVpravo(){//Функция нажатия клавиши вправо
-        if(dcSidebar.opened){//Если открыта боковая панель, то...
-            if(dcSidebar.currentIndex === 2){//Если открыта вкладка Страницы, то...
-                var ntStrDown = pmpDoc.currentPage + 1;
-                if(ntStrDown < pdfDoc.pageCount)
-                    root.currentPage = ntStrDown;//Листаем страницы документа.
-            }
-        }
-    }
     function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
         const cnModel = dlmPoisk.items.get(index);//Получаем объект на конкретный currentResult
         return cnModel ? cnModel.model : null;//если модель пустая, возвращаем null, если нет, то модель
@@ -213,11 +183,9 @@ Item {
     }
     function fnClickedPoiskNext(){//Функция перехода к следующему номеру поиска
         pmpDoc.searchModel.currentResult += 1;//Выбираем следующий номер поиска
-        root.forceActiveFocus()//Форсируем фокус, чтоб можно было закрыть боковую панель с горячих кнопок.
     }
     function fnClickedPoiskPrevious(){//Функция перехода к предыдущему номеру поиска
         pmpDoc.searchModel.currentResult -= 1;//Выбираем предыдущий номер поиска
-        root.forceActiveFocus()//Форсируем фокус, чтоб можно было закрыть боковую панель с горячих кнопок.
     }
     function fnClickedKeyHome(){//Функция нажатия клавиши Home
         root.currentPage = 0;//На первую страницу.
@@ -228,21 +196,19 @@ Item {
     function fnClickedSidebar(){//Функция открывающая/закрывающая боковую панель.
         if(dcSidebar.position)//Если открыта боковая панель, то...
             dcSidebar.close()//Закрываем боковую панель
-        else{//Если закрыта боковая панель, то...
+        else//Если закрыта боковая панель, то...
             dcSidebar.open()//Открываем боковую панель.
-            root.forceActiveFocus()//Форсируем фокус, чтоб можно было закрыть боковую панель с горячих кнопок.
-        }
     }
     function fnSidebarNaideno(){//Функция нажатия кнопки SideBar.
         if(dcSidebar.opened){//Если боковая панель открыта, то...
             if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
                 fnClickedSidebar()//Закрываем боковую панель.
             else//Если вкладка открыта отличная от Найдено, то...
-                dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
+                dcSidebar.fnNaidenoOpen()//Открываем и фокусируемся на Найдено
         }
         else{//Если боковая панель закрыта, то...
-            dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
             fnClickedSidebar()//Открываем боковую панель.
+            dcSidebar.fnNaidenoOpen()//Открываем и фокусируемся на Найдено
         }
     }
     function fnSidebarZakladki(){//Функция нажатия кнопки SideBar.
@@ -250,11 +216,11 @@ Item {
             if(dcSidebar.currentIndex === 1)//Если открыта вкладка Закладки, то...
                 fnClickedSidebar()//Закрываем боковую панель.
             else//Если вкладка открыта отличная от Закладки, то...
-                dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
+                dcSidebar.fnZakladkiOpen()//Открываем и фокусируемся на Закладках
         }
         else{//Если боковая панель закрыта, то...
-            dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
             fnClickedSidebar()//Открываем боковую панель.
+            dcSidebar.fnZakladkiOpen()//Открываем и фокусируемся на Закладках
         }
     }
     function fnSidebarPoster(){//Функция нажатия кнопки SideBar.
@@ -262,11 +228,11 @@ Item {
             if(dcSidebar.currentIndex === 2)//Если открыта вкладка Миниатюры, то...
                 fnClickedSidebar()//Закрываем боковую панель.
             else//Если вкладка открыта отличная от Миниатюры, то...
-                dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
+                dcSidebar.fnPosterOpen()//Открываем и фокусируемся на Страницах
         }
         else{//Если боковая панель закрыта, то...
-            dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
             fnClickedSidebar()//Открываем боковую панель.
+            dcSidebar.fnPosterOpen()//Открываем и фокусируемся на Страницах
         }
     }
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
@@ -677,7 +643,7 @@ Item {
             }
         }
     }
-    Rectangle {//Дополнительный элементы управления.
+    Rectangle {//Дополнительный элемент UI отображающий страницы, общее количество и текущую.
         id: rctStranici
         anchors.bottom: root.bottom; anchors.horizontalCenter: root.horizontalCenter
         anchors.bottomMargin: root.ntWidth*root.ntCoff//Отступ от низа
@@ -717,7 +683,5 @@ Item {
         pdfDoc: pdfDoc//Передаём объект документа
         //чтобы внешний сигнал продолжил работать
         onOpenedChanged: root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
-        onSgnZakladkiEnter: { }
-        onSgnPosterEnter: fnGoToPage(posterIndex);//Переходим на страницу выбранную из Миниатюр.
     }
 }

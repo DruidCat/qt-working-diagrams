@@ -30,14 +30,22 @@ Drawer {
            : ((parent ? parent.width : 0) / 3)//Если мобила, то ширина на весь экран,если нет,то 1/3
     height: root.pmpDoc ? root.pmpDoc.height : (parent ? parent.height : 0)//Высота по высоте pdf сцены
     y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
-    //Сигналы
-    signal sgnNaidenoEnter();//Сигнал нажатия на Enter, фокус на виджете lsvNaideno.focus
-    signal sgnZakladkiEnter();//Сигнал нажатия на Enter, фокус на виджете trvZakladki.focus
-    signal sgnPosterEnter();//Сигнал нажатия на Enter, фокус на виджете grvPoster.focus
     //Функции
     onPdfDocChanged: {//Если будет замена на пустой pdf файл, для обнуления открытого файла, то...
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
         trvZakladki.isEmpty = true//Пусто
+    }
+    function fnNaidenoOpen(){//Функция открытия и фокусировки Найдено
+        dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
+        lsvNaideno.focus = true//Фокус на Найдено
+    }
+    function fnZakladkiOpen(){//Функция открытия и фокусировки Закладках
+        dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
+        trvZakladki.focus = true//Фокус на Закладках
+    }
+    function fnPosterOpen(){//Функция открытия и фокусировки Страницы
+        dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
+        grvPoster.focus = true//Фокус на страницах
     }
     Rectangle {//Прямоугольник узкой полоски интерфейса слева
         id: rctBorder
@@ -76,9 +84,9 @@ Drawer {
         currentIndex: 1//Закладки видимые по умолчанию.
         Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
             if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
-                if(tbbNaideno.focus) lsvNaideno.focus = true//Фокус на Найдено
-                else if(tbbZakladki.focus) trvZakladki.focus = true//Фокус на Закладках
-                else if(tbbPoster.focus) grvPoster.focus = true//Фокус на страницах
+                if(tbbNaideno.focus) fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+                else if(tbbZakladki.focus) fnZakladkiOpen()//Функция открытия и фокусировки Закладках
+                else if(tbbPoster.focus) fnPosterOpen()//Функция открытия и фокусировки Страницы
                 event.accepted = true;//Завер обработку эвента
             }
         }
@@ -93,7 +101,7 @@ Drawer {
             clrHover: root.clrMenuFon
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
             blFontAuto: true//Включаем автоподгонку размера шрифта.
-            onPressed: tbSidebar.currentIndex = 0//Меняем индекс сразу при нажатии
+            onPressed: fnNaidenoOpen()//Функция открытия и фокусировки Найдено
         }
         DCTabButton {
             id: tbbZakladki
@@ -106,7 +114,7 @@ Drawer {
             clrHover: root.clrMenuFon
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
             blFontAuto: true//Включаем автоподгонку размера шрифта.
-            onPressed: tbSidebar.currentIndex = 1//Меняем индекс сразу при нажатии
+            onPressed: fnZakladkiOpen()//Функция открытия и фокусировки Закладках
         }
         DCTabButton {
             id: tbbPoster
@@ -119,7 +127,7 @@ Drawer {
             clrHover: root.clrMenuFon
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
             blFontAuto: true//Включаем автоподгонку размера шрифта.
-            onPressed: tbSidebar.currentIndex = 2//Меняем индекс сразу при нажатии
+            onPressed: fnPosterOpen()//Функция открытия и фокусировки Страницы
         }
     }
     Rectangle {//Вкладка "Найдено"
@@ -148,10 +156,51 @@ Drawer {
             currentIndex: root.pmpDoc ? root.pmpDoc.searchModel.currentResult : -1
             ScrollBar.vertical: ScrollBar { }
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
-                if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
-                    if(root.pmpDoc	&& lsvNaideno.model && lsvNaideno.focus)
-                        root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex
-                    event.accepted = true;//Завер обработку эвента
+                if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+                    if(event.key === Qt.Key_B){//Если нажата клавиша B
+                        fnZakladkiOpen()//Функция открытия боковой панели на Закладке.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                    else{
+                        if(event.key === Qt.Key_T){//Если нажата клавиша T
+                            fnPosterOpen()//Открытие боковой панели на Миниатюрах.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
+                }
+                else{
+                    if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                        if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                            dcSidebar.close()//Закрываем боковую панель
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
+                    else{
+                        if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                            if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                                if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                                    root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
+                        }
+                        else{
+                            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                                if(root.pmpDoc//Указатель не null
+                                    && lsvNaideno.model//модель не null
+                                    && lsvNaideno.focus//Фокус на Найдено
+                                    && root.pmpDoc.searchModel.count)//Счётчик поиска не 0
+                                        root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex
+                                event.accepted = true;//Завер обработку эвента
+                            }
+                            else{
+                                if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
+                                    if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                                        root.pmpDoc.searchModel.currentResult += 1//Следующий результат
+                                    event.accepted = true;//Завершаем обработку эвента.
+                                }
+                            }
+                        }
+                    }
                 }
             }
             delegate: ItemDelegate {
@@ -175,7 +224,10 @@ Drawer {
                 }
                 highlighted: ListView.isCurrentItem
                 onClicked: {
-                    if (root.pmpDoc) root.pmpDoc.searchModel.currentResult = tmdResult.index//Задаём № поиска
+                    if (root.pmpDoc){//Если указатель не null. то...
+                        lsvNaideno.focus = true//Фокус на Найдено
+                        root.pmpDoc.searchModel.currentResult = tmdResult.index//Задаём № поиска
+                    }
                     if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                 }
                 Component.onCompleted: {//Если создался элемент делегата, то...
@@ -187,7 +239,12 @@ Drawer {
                 Timer {//Таймер необходим, чтобы выйти из прерывания и подсветить первый элемент.
                     id: tmrCurrentResult
                     interval: 3; running: false; repeat: false
-                    onTriggered: if (root.pmpDoc) root.pmpDoc.searchModel.currentResult = 0//Переход на первый
+                    onTriggered: {//Когда таймер отработает, то...
+                        if (root.pmpDoc){//Если не null, то...
+                            lsvNaideno.focus = true//Фокус на Найдено
+                            root.pmpDoc.searchModel.currentResult = 0//Переход на первый
+                        }
+                    }
                 }
             }
         }
@@ -228,9 +285,47 @@ Drawer {
             columnWidthProvider: function() { return width }
             ScrollBar.vertical: ScrollBar { }
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
-                if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
-                    if(trvZakladki.focus) root.sgnZakladkiEnter()//Сигнал, что нажат Enter при фокусе Закладки
-                    event.accepted = true;//Завер обработку эвента
+                if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+                    if(event.key === Qt.Key_B){//Если нажата клавиша B
+                        dcSidebar.close()//Закрываем боковую панель
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                    else{
+                        if(event.key === Qt.Key_T){//Если нажата клавиша T
+                            fnPosterOpen()//Открытие боковой панели на Миниатюрах.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
+                }
+                else{
+                    if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                        if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                            fnNaidenoOpen()//Функция открытия боковой панели на Найдено.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
+                    else{
+                        if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                            if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                                if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                                    root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
+                        }
+                        else{
+                            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                                //if(trvZakladki.focus) root.pmpDoc.goToPage(currentIndex)
+                                event.accepted = true;//Завер обработку эвента
+                            }
+                            else{
+                                if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
+                                    if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                                        root.pmpDoc.searchModel.currentResult += 1//Следующий результат
+                                    event.accepted = true;//Завершаем обработку эвента.
+                                }
+                            }
+                        }
+                    }
                 }
             }
             delegate: TreeViewDelegate {
@@ -276,6 +371,7 @@ Drawer {
                         cursorShape: Qt.PointingHandCursor
                         onClicked: function(mouse) {//объявляем параметр mouse
                             if (!tvdZakladka.hasChildren) return//Если нет вложеных закладок, то выходим.
+                            trvZakladki.focus = true//Фокус на Закладках
                             if(trvZakladki.currentIndex !== tvdZakladka.index)//Если это другая вкладка
                                 trvZakladki.currentIndex = -1
                             trvZakladki.toggleExpanded(tvdZakladka.index)//Разворачивает закладку по index
@@ -345,9 +441,48 @@ Drawer {
             cellWidth: width/2 - scbVertical.width/2//Расчёт длины одного постера
             cellHeight: cellWidth + 10
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
-                if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
-                    if(root.pmpDoc && grvPoster.model && grvPoster.focus) root.sgnPosterEnter()//Сигнал, Enter
-                    event.accepted = true;//Завер обработку эвента
+                if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+                    if(event.key === Qt.Key_B){//Если нажата клавиша B
+                        fnZakladkiOpen()//Открытие боковой панели на Закладки.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                    else{
+                        if(event.key === Qt.Key_T){//Если нажата клавиша T
+                            dcSidebar.close()//Закрываем боковую панель
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
+                }
+                else{
+                    if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                        if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                            fnNaidenoOpen()//Функция открытия боковой панели на Найдено.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    }
+                    else{
+                        if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                            if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                                if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                                    root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
+                        }
+                        else{
+                            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                                if(root.pmpDoc && grvPoster.model && grvPoster.focus)
+                                    root.pmpDoc.goToPage(currentIndex)
+                                event.accepted = true;//Завер обработку эвента
+                            }
+                            else{
+                                if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
+                                    if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                                        root.pmpDoc.searchModel.currentResult += 1//Следующий результат
+                                    event.accepted = true;//Завершаем обработку эвента.
+                                }
+                            }
+                        }
+                    }
                 }
             }
             delegate: Item {
@@ -391,6 +526,7 @@ Drawer {
                 }
                 TapHandler {
                     onTapped: {
+                        grvPoster.focus = true//Фокус на страницах
                         grvPoster.currentIndex = index//Передаём выбранный индекс, для подсветки текста.
                         if(root.pmpDoc) root.pmpDoc.goToPage(index)//Переходим на страницу.
                         if(root.isMobile) root.close()//Если мобила, то закрываем боковую панель

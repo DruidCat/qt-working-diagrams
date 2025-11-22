@@ -155,43 +155,31 @@ Item {
                                     event.accepted = true;//Завершаем обработку эвента.
                                 }
                                 else{
-                                    if(event.key === Qt.Key_Left){//Если нажата стрелка влево,то.
-                                        fnClickedKeyVlevo()//нажатия клавиши влево
+                                    if(event.key === Qt.Key_PageDown){//нажата "Page Down",то
+                                        fnClickedKeyPgDown();//Функция нажатия клавиши Page Down
                                         event.accepted = true;//Завершаем обработку эвента.
                                     }
                                     else{
-                                        if(event.key === Qt.Key_Right){//Если нажата стрелка вправо, то.
-                                            fnClickedKeyVpravo()//нажатия клавиши вправо
+                                        if(event.key === Qt.Key_PageUp){//нажата "Page Up"
+                                            fnClickedKeyPgUp();//Функция нажатия клавиши Page Up
                                             event.accepted = true;//Завершаем обработку эвента.
                                         }
                                         else{
-                                            if(event.key === Qt.Key_PageDown){//нажата "Page Down",то
-                                                fnClickedKeyPgDown();//Функция нажатия клавиши Page Down
+                                            if(event.key === Qt.Key_Home){//Если нажата кнопка Home,то
+                                                fnClickedKeyHome();//Функция нажатия клавиши Home
                                                 event.accepted = true;//Завершаем обработку эвента.
                                             }
                                             else{
-                                                if(event.key === Qt.Key_PageUp){//нажата "Page Up"
-                                                    fnClickedKeyPgUp();//Функция нажатия клавиши Page Up
-                                                    event.accepted = true;//Завершаем обработку эвента.
+                                                if(event.key === Qt.Key_End){//Если нажата кнопка End
+                                                    fnClickedKeyEnd();//Функция нажатия клавиши End
+                                                    event.accepted = true;//Завершаем обработку эвента
                                                 }
                                                 else{
-                                                    if(event.key === Qt.Key_Home){//Если нажата кнопка Home,то
-                                                        fnClickedKeyHome();//Функция нажатия клавиши Home
-                                                        event.accepted = true;//Завершаем обработку эвента.
-                                                    }
-                                                    else{
-                                                        if(event.key === Qt.Key_End){//Если нажата кнопка End
-                                                            fnClickedKeyEnd();//Функция нажатия клавиши End
-                                                            event.accepted = true;//Завершаем обработку эвента
-                                                        }
-                                                        else{
-                                                            if((event.key===Qt.Key_F3)
-                                                                    ||(event.key===Qt.Key_Enter)
-                                                                    ||(event.key===Qt.Key_Return)){//F3
-                                                                fnClickedPoiskNext();//нажатия Следующий поиск
-                                                                event.accepted = true;//Завер обработку эвента
-                                                            }
-                                                        }
+                                                    if((event.key===Qt.Key_F3)
+                                                            ||(event.key===Qt.Key_Enter)
+                                                            ||(event.key===Qt.Key_Return)){//F3
+                                                        fnClickedPoiskNext();//нажатия Следующий поиск
+                                                        event.accepted = true;//Завер обработку эвента
                                                     }
                                                 }
                                             }
@@ -247,12 +235,6 @@ Item {
     }
     function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
         if(pdfLoader.item) pdfLoader.item.fnClickedKeyVverh()//Вверх на одну страницу
-    }
-    function fnClickedKeyVlevo(){//Функция нажатия клавиши влево
-        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVlevo()//Вверх на одну страницу
-    }
-    function fnClickedKeyVpravo(){//Функция нажатия клавиши вправо
-        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVpravo()//Вниз на одну страницу
     }
     function fnClickedKeyHome(){//Функция нажатия клавиши Home
         if(pdfLoader.item) pdfLoader.item.fnClickedKeyHome()//На первую страницу.
@@ -482,15 +464,8 @@ Item {
             clrFona: root.clrFona; clrTexta: root.clrPoisk; clrKnopki: root.clrPoisk; clrBorder: root.clrTexta
             tapKnopkaZakrit: 1.3; tapKnopkaVniz: 1.3; tapKnopkaVverh: 1.3
             onClickedSidebar: fnClickedSidebar()//Открываем/Закрываем боковую панель.
-            onClickedSidebarZakladki: fnSidebarZakladki()//Функция нажатия кнопки SideBar.
-            onClickedSidebarPoster: fnSidebarPoster()//Функция нажатия кнопки SideBar.
-            onClickedSidebarNaideno: fnSidebarNaideno()//Функция нажатия кнопки SideBar.
             onClickedNext: fnClickedPoiskNext()//Функция следующего номера поиска
             onClickedPrevious: fnClickedPoiskPrevious()//Функция предыдущего номера поиска
-            onClickedVverh: fnClickedKeyVverh()//Функция нажатия клавиши Вверх
-            onClickedVniz: fnClickedKeyVniz()//Функция нажатия клавиши Вниз
-            onClickedVlevo: fnClickedKeyVlevo()//Функция нажатия клавиши Влево
-            onClickedVpravo: fnClickedKeyVpravo()//Функция нажатия клавиши Вправо
             onClickedZakrit: {//Нажатие кнопки Закрытия поиска.
                 root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
                 pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
@@ -510,6 +485,7 @@ Item {
                 if(knopkaSidebar.opened)//Если боковая панель открыта, то...
                     fnSidebarNaideno();//Закрываем боковую панель с вкладкной Найдено.
             }
+            onFocusChanged: if(focus) root.focus = true;//Фокус на странице, чтоб горячие клавиши работали.
         }
         DCKnopkaPoisk{
             id: knopkaPoisk
