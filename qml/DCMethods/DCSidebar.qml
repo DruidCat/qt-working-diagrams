@@ -38,14 +38,17 @@ Drawer {
     function fnNaidenoOpen(){//Функция открытия и фокусировки Найдено
         dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
         lsvNaideno.focus = true//Фокус на Найдено
+        tbbNaideno.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
     }
     function fnZakladkiOpen(){//Функция открытия и фокусировки Закладках
         dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
         trvZakladki.focus = true//Фокус на Закладках
+        tbbZakladki.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
     }
     function fnPosterOpen(){//Функция открытия и фокусировки Страницы
         dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
         grvPoster.focus = true//Фокус на страницах
+        tbbPoster.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
     }
     Rectangle {//Прямоугольник узкой полоски интерфейса слева
         id: rctBorder
@@ -105,7 +108,7 @@ Drawer {
         DCTabButton {
             id: tbbNaideno
             text: qsTr("Найдено")
-            width:  (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4//делим на кол-во кнопок
+            width: (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4//делим на кол-во кнопок
             height: rctTabbar.width
             hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
             clrTexta: root.clrTexta
@@ -114,11 +117,16 @@ Drawer {
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
             blFontAuto: true//Включаем автоподгонку размера шрифта.
             onPressed: fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+            onFocusChanged: {//Если фокус вкладки изменился, то...
+                if(focus) dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено.
+                borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
+            }
+            Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
         }
         DCTabButton {
             id: tbbZakladki
             text: qsTr("Закладки")
-            width:  (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
+            width: (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
             height: rctTabbar.width
             hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
             clrTexta: root.clrTexta
@@ -127,11 +135,16 @@ Drawer {
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
             blFontAuto: true//Включаем автоподгонку размера шрифта.
             onPressed: fnZakladkiOpen()//Функция открытия и фокусировки Закладках
+            onFocusChanged: {//Если фокус вкладки изменился, то...
+                if(focus) dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
+                borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
+            }
+            Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
         }
         DCTabButton {
             id: tbbPoster
             text: qsTr("Страницы")
-            width:  (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
+            width: (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
             height: rctTabbar.width
             hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
             clrTexta: root.clrTexta
@@ -140,6 +153,11 @@ Drawer {
             ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
             blFontAuto: true//Включаем автоподгонку размера шрифта.
             onPressed: fnPosterOpen()//Функция открытия и фокусировки Страницы
+            onFocusChanged: {//Если фокус вкладки изменился, то...
+                if(focus) dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
+                borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
+            }
+            Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
         }
     }
     Rectangle {//Вкладка "Найдено"

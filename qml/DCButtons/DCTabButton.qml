@@ -12,6 +12,7 @@ TabButton {
     property int ntCoff:		8//Для автоподгонки шрифта во вкладке
     property real radius:		0//0 - без радиуса
     property bool blFontAuto:	true//true - Автоподгон шрифта под ширину кнопки, false - [...]
+    property bool borderFocus:	false//true - если фокус на вкладке, то она другого цвета
     //Настраиваемые параметры внешнего вида TabButton
     readonly property color clrFonNormal:	clrFona//Цвет фона фкладки, когда она не активна.
     readonly property color clrFonHover:	clrHover//Цвет фона вкладки при наведении мышки на неё.
@@ -31,8 +32,8 @@ TabButton {
             : root.checked		? root.clrFonChecked
             : root.hovered		? root.clrFonHover
             :					root.clrFonNormal
-        border.width: root.checked || root.down ? 0 : root.ntCoff/4
-        border.color: root.clrBorder
+        border.width: root.ntCoff/4//Толщина бордюра.
+        border.color: root.borderFocus ? root.clrFonPressed : root.clrBorder//При изменении фокуса меняется.
     }
     contentItem: Label{
         id: lblText
