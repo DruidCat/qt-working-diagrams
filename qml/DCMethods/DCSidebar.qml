@@ -2,7 +2,7 @@
 import QtQuick //2.15
 import QtQuick.Controls
 import QtQuick.Pdf
-import DCButtons 1.0
+import DCButtons 1.0//Импортируем кнопки написанные мной.
 import DCMethods 1.0//Импортируем методы написанные мной.
 
 Drawer {
@@ -39,16 +39,19 @@ Drawer {
         dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
         lsvNaideno.focus = true//Фокус на Найдено
         tbbNaideno.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
+        lblZagolovok.text = tbbNaideno.text//Переименовываем заголовок на Найдено
     }
     function fnZakladkiOpen(){//Функция открытия и фокусировки Закладках
         dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
         trvZakladki.focus = true//Фокус на Закладках
         tbbZakladki.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
+        lblZagolovok.text = tbbZakladki.text//Переименовываем заголовок на Закладки
     }
     function fnPosterOpen(){//Функция открытия и фокусировки Страницы
         dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
         grvPoster.focus = true//Фокус на страницах
         tbbPoster.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
+        lblZagolovok.text = tbbPoster.text//Переименовываем заголовок на Страницы
     }
     Rectangle {//Прямоугольник узкой полоски интерфейса слева
         id: rctBorder
@@ -66,12 +69,62 @@ Drawer {
         height: root.height
         color: root.clrTexta
     }
-    Rectangle {//Прямоугольник всей оставшейся боковой панели.
-        id: rctSidebar
+    Rectangle {//Прямоугольник заголовка, для информации и кнопки закрыть.
+        id: rctZagolovok
         anchors.top: root.top
         anchors.left: rctTabbar.right
         width: root.width - rctBorder.width - rctTabbar.width
-        height: root.height
+        height: root.ntCoff*(root.ntWidth-1)+root.ntCoff
+        color: root.clrFona
+        border.color: root.clrTexta
+        border.width: root.ntCoff/4
+        DCKnopkaInfo {
+            id: knopkaInfo
+            ntWidth: (root.ntWidth-1)
+            ntCoff: root.ntCoff
+            anchors.verticalCenter: rctZagolovok.verticalCenter
+            anchors.left: rctZagolovok.left
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
+            tapHeight: (root.ntWidth-1)*root.ntCoff+root.ntCoff
+            tapWidth: tapHeight
+            onClicked: console.log("LOL")//fnClickedInfo();//Функция нажатия на Информацию
+        }
+        DCKnopkaZakrit {
+            id: knopkaZakrit
+            ntWidth: (root.ntWidth-1)
+            ntCoff: root.ntCoff
+            visible: true
+            anchors.verticalCenter: rctZagolovok.verticalCenter
+            anchors.right: rctZagolovok.right
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
+            tapHeight: (root.ntWidth-1)*root.ntCoff+root.ntCoff
+            tapWidth: tapHeight
+            onClicked: root.close();//Метод обрабатывающий кнопку Закрыть.
+        }
+        Label {//Текст вписанный в границы, отображает имя заголовка.
+            id: lblZagolovok
+            anchors.top: rctZagolovok.top
+            anchors.right: knopkaZakrit.left
+            height: rctZagolovok.height
+            width: rctZagolovok.width - knopkaZakrit.width + knopkaInfo.width
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            color: root.clrTexta
+            //font.capitalization: Font.AllUppercase//СЛОВА ЗАГЛАВНЫМИ БУКВАМИ
+            font.bold: true//Жирный текст.
+            font.pixelSize: root.ntCoff*(root.ntWidth-1)
+            elide: Text.ElideRight//Обрезаем текст по правой стороне точками (...)
+            Component.onCompleted: text = tbbZakladki.text//Переименовываем заголовок на Закладки
+        }
+    }
+    Rectangle {//Прямоугольник всей оставшейся боковой панели.
+        id: rctSidebar
+        anchors.top: rctZagolovok.bottom
+        anchors.left: rctTabbar.right
+        width: root.width - rctBorder.width - rctTabbar.width
+        height: root.height-rctZagolovok.height
         color: "transparent"
     }
     TabBar {//Вкладки
@@ -167,6 +220,7 @@ Drawer {
         width: rctSidebar.width
         height: rctSidebar.height
         color: root.clrFona
+        clip: true//Обязательно обрезать всё, что не помещается в этот прямоугольник.
         visible: currentIndex === 0//Если истина, то видимая вкладка.
         Text {
             id: txtNaideno
@@ -278,12 +332,6 @@ Drawer {
                 }
             }
         }
-        Rectangle {//Оконтовка поверх информации.
-            anchors.fill: rctNaideno
-            color: "transparent"
-            border.color: root.clrTexta
-            border.width: root.ntCoff/4//Бордюр
-        }
     }
     Rectangle {//Вкладка "Закладки"
         id: rctZakladki
@@ -292,8 +340,7 @@ Drawer {
         width: rctSidebar.width
         height: rctSidebar.height
         color: root.clrFona
-        border.color: root.clrTexta
-        border.width: root.ntCoff/4
+        clip: true//Обязательно обрезать всё, что не помещается в этот прямоугольник.
         visible: currentIndex === 1//Если истина, то видимая вкладка.
         Text {
             anchors.horizontalCenter: rctZakladki.horizontalCenter
@@ -423,12 +470,6 @@ Drawer {
                 document: root.pdfDoc
             }
         }
-        Rectangle {//Оконтовка поверх информации.
-            anchors.fill: rctZakladki
-            color: "transparent"
-            border.color: root.clrTexta
-            border.width: root.ntCoff/4
-        }
     }
     Rectangle {//Вкладка "Страницы"
         id: rctPoster
@@ -437,8 +478,7 @@ Drawer {
         width: rctSidebar.width
         height: rctSidebar.height
         color: root.clrFona
-        border.color: root.clrTexta
-        border.width: root.ntCoff/4//Бордюр
+        clip: true//Обязательно обрезать всё, что не помещается в этот прямоугольник.
         visible: currentIndex === 2//Если истина, то видимая вкладка.
         onVisibleChanged: {//Если Видимость Страниц изменилась, то...
             if(visible){//Если видимая страница, то...
@@ -461,7 +501,6 @@ Drawer {
                     console.error("254: DCSidebar, попытка перехода на постер, который ещё не создался.")
             }
         }
-
         GridView {
             id: grvPoster
             implicitWidth: rctPoster.width
@@ -563,12 +602,15 @@ Drawer {
                     }
                 }
             }
-        }
-        Rectangle {//Оконтовка поверх информации.
-            anchors.fill: rctPoster
-            color: "transparent"
-            border.color: root.clrTexta
-            border.width: root.ntCoff/4
-        }
+        } 
+    }
+    Rectangle {//Оконтовка поверх всех прямоугольников
+        anchors.top: root.top
+        anchors.right: rctSidebar.right
+        height: root.height
+        width: rctSidebar.width
+        color: "transparent"
+        border.color: root.clrTexta
+        border.width: root.ntCoff/4
     }
 }
