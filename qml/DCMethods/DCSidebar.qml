@@ -4,6 +4,7 @@ import QtQuick.Controls
 import QtQuick.Pdf
 import DCButtons 1.0//Импортируем кнопки написанные мной.
 import DCMethods 1.0//Импортируем методы написанные мной.
+import QtQml.Models//Для DelegateModel
 
 Drawer {
     id: root
@@ -19,6 +20,7 @@ Drawer {
     property color clrPoisk: "Yellow"
     property alias currentIndex: tbSidebar.currentIndex
     property alias posterIndex: grvPoster.currentIndex
+    property var dataZakladki: []//Массив объектов { page, location, index }
     //Настройки
     edge: Qt.LeftEdge
     modal: false
@@ -33,7 +35,6 @@ Drawer {
     //Функции
     onPdfDocChanged: {//Если будет замена на пустой pdf файл, для обнуления открытого файла, то...
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
-        trvZakladki.isEmpty = true//Пусто
     }
     function fnNaidenoOpen(){//Функция открытия и фокусировки Найдено
         dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
@@ -88,7 +89,7 @@ Drawer {
             clrFona: root.clrFona
             tapHeight: (root.ntWidth-1)*root.ntCoff+root.ntCoff
             tapWidth: tapHeight
-            onClicked: console.log("LOL")//fnClickedInfo();//Функция нажатия на Информацию
+            onClicked: console.log("Количество закладок: " + pdfBookmarkModel.rowCount())//fnClickedInfo();//Функция нажатия на Информацию
         }
         DCKnopkaZakrit {
             id: knopkaZakrit
@@ -341,7 +342,7 @@ Drawer {
         height: rctSidebar.height
         color: root.clrFona
         clip: true//Обязательно обрезать всё, что не помещается в этот прямоугольник.
-        visible: currentIndex === 1//Если истина, то видимая вкладка.
+        visible: currentIndex === 1//Если истина, то видимая вкладка. 
         Text {
             anchors.horizontalCenter: rctZakladki.horizontalCenter
             anchors.verticalCenter: rctZakladki.verticalCenter
@@ -349,12 +350,11 @@ Drawer {
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text:  trvZakladki.isEmpty ? qsTr("Закладки отсутствуют") : ""//Если нет/есть закладки
+            text:  pdfBookmarkModel.rowCount() ? "" : qsTr("Закладки отсутствуют")//Если есть/нет закладок
         }
         TreeView {
             id: trvZakladki
             //Свойства
-            property bool isEmpty: true//Есть закладки? true - пусто
             property int currentIndex: -1//Хранит индекс той закладки, который мы выбрали, кликнув на неё.
             //Настройки
             implicitHeight: rctZakladki.height
@@ -391,7 +391,7 @@ Drawer {
                         }
                         else{
                             if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
-                                //if(trvZakladki.focus) root.pmpDoc.goToPage(currentIndex)
+                                if(trvZakladki.focus) fnGoToZakladka(currentIndex)
                                 event.accepted = true;//Завер обработку эвента
                             }
                             else{
@@ -400,10 +400,45 @@ Drawer {
                                         root.pmpDoc.searchModel.currentResult += 1//Следующий результат
                                     event.accepted = true;//Завершаем обработку эвента.
                                 }
+                                else{
+                                    if(event.key === Qt.Key_Up){//нажата "Стрелка вверх",то
+                                        trvZakladki.currentIndex = Math.max(0, trvZakladki.currentIndex -= 1)
+                                        event.accepted = true;//Завершаем обработку эвента.
+                                    }
+                                    else{
+                                        if(event.key === Qt.Key_Down){//нажата "Стрелка вниз"
+                                            trvZakladki.currentIndex = Math.min(
+                                                                (pdfBookmarkModel.rowCount()-1),
+                                                                trvZakladki.currentIndex += 1)
+                                            event.accepted = true;//Завершаем обработку эвента.
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
+            }
+            function fnGoToZakladka(index){//Функция перехода к закладке по индексу
+                if(index >= 0 && index < dataZakladki.length){
+                    //console.log("Страница " + dataZakladki[index].page)
+                    //console.log("Координаты ",dataZakladki[index].location.x,dataZakladki[index].location.y)
+                    console.log("Название " + dataZakladki[index].title)
+                    //root.pmpDoc.goToLocation(cnZakladki.page, cnZakladki.location, root.pmpDoc.renderScale)
+                    //root.pmpDoc.goToPage(index)
+                }
+            }
+            function fnCacheZakladok(){//Функция кеша закладок, заполняет массив { page, location, title }
+                dataZakladki = []//Удаляем данные с массива
+                for(let ltShag = 0; ltShag < pdfBookmarkModel.rowCount(); ltShag++){//Перебираем закладки.
+                    const modelIndex = pdfBookmarkModel.index(ltShag, 0)
+                    dataZakladki.push({//Добавляем в массив данные
+                                        //page: pdfBookmarkModel.data(modelIndex, "page"),//page
+                                        //location: pdfBookmarkModel.data(modelIndex, "location")
+                                        title: pdfBookmarkModel.data(modelIndex, "title")//title
+                                      })
+                }
+                if(pdfBookmarkModel.rowCount()) trvZakladki.currentIndex = 0//Выделяем первую закладку.
             }
             delegate: TreeViewDelegate {
                 id: tvdZakladka
@@ -462,12 +497,11 @@ Drawer {
                     if (root.pmpDoc) root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//На Стр
                     if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                 }
-                Component.onCompleted: {//Если создался элемент делегата, то...
-                    trvZakladki.isEmpty = false//Есть закладки.
-                }
             }
             model: PdfBookmarkModel {
+                id: pdfBookmarkModel
                 document: root.pdfDoc
+                onModelReset: trvZakladki.fnCacheZakladok()//Модель сбрасывается, [] записываем page, location
             }
         }
     }
