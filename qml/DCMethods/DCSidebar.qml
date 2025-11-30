@@ -296,11 +296,9 @@ Drawer {
                 width: lsvNaideno.width
                 background: Rectangle {
                     color: (tmdResult.ListView.isCurrentItem
-                            //? "#2979FF"//Синий на выделение по клику
-                            ? root.clrMenuFon
-                            : ((tmdResult.index % 2)
-                                ? root.clrFona
-                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))))
+                            ? (lsvNaideno.focus ? root.clrMenuFon : Qt.darker(root.clrMenuFon, 1.1))
+                            : ((tmdResult.index % 2) ? root.clrFona
+                                                     : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))))
                 }
                 contentItem: Label {
                     text: qsTr(" Страница ") + (tmdResult.page + 1) + " [" + (tmdResult.index + 1) + "]"
@@ -608,7 +606,8 @@ Drawer {
                     height: rctImage.height
                     x: (tmPoster.width - rctList.width)/2
                     y: (tmPoster.height - rctList.height - txtNomerStranici.height)/2
-                    border.color: tmPoster.GridView.isCurrentItem ? root.clrTexta : "transparent"
+                    border.color: tmPoster.GridView.isCurrentItem ? (grvPoster.focus ? root.clrTexta
+                                : Qt.darker(root.clrTexta, 1.3)) : "transparent"
                     border.width: root.ntCoff/2
                     PdfPageImage {
                         id: rctImage
