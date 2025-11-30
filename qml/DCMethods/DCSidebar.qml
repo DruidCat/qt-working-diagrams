@@ -20,7 +20,7 @@ Drawer {
     property color clrPoisk: "Yellow"
     property alias currentIndex: tbSidebar.currentIndex
     property alias posterIndex: grvPoster.currentIndex
-    property var dataZakladki: []//Массив объектов { page, location, index }
+    property var cacheZakladok: []//Массив объектов { page, location }
     //Настройки
     edge: Qt.LeftEdge
     modal: false
@@ -356,6 +356,7 @@ Drawer {
             id: trvZakladki
             //Свойства
             property int currentIndex: -1//Хранит индекс той закладки, который мы выбрали, кликнув на неё.
+            property bool isIndikator: false;//true - индикатор треугольник нажат хоть один раз.
             //Настройки
             implicitHeight: rctZakladki.height
             implicitWidth: rctZakladki.width
@@ -391,7 +392,8 @@ Drawer {
                         }
                         else{
                             if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
-                                if(trvZakladki.focus) fnGoToZakladka(currentIndex)
+                                if(!isIndikator)//Если индикатор треугольник не был нажат, то...
+                                    if(trvZakladki.focus) fnGoToZakladka(currentIndex)//Переходим на страницу
                                 event.accepted = true;//Завер обработку эвента
                             }
                             else{
@@ -402,14 +404,15 @@ Drawer {
                                 }
                                 else{
                                     if(event.key === Qt.Key_Up){//нажата "Стрелка вверх",то
-                                        trvZakladki.currentIndex = Math.max(0, trvZakladki.currentIndex -= 1)
+                                        if(!isIndikator)//Если индикатор треугольник не был нажат, то...
+                                            currentIndex = Math.max(0, currentIndex -= 1)
                                         event.accepted = true;//Завершаем обработку эвента.
                                     }
                                     else{
                                         if(event.key === Qt.Key_Down){//нажата "Стрелка вниз"
-                                            trvZakladki.currentIndex = Math.min(
-                                                                (pdfBookmarkModel.rowCount()-1),
-                                                                trvZakladki.currentIndex += 1)
+                                            if(!isIndikator)//Если индикатор треугольник не был нажат, то...
+                                                currentIndex = Math.min((pdfBookmarkModel.rowCount()-1),
+                                                                        currentIndex += 1)
                                             event.accepted = true;//Завершаем обработку эвента.
                                         }
                                     }
@@ -420,26 +423,29 @@ Drawer {
                 }
             }
             function fnGoToZakladka(index){//Функция перехода к закладке по индексу
-                if(index >= 0 && index < dataZakladki.length){
-                    //console.log("Страница " + dataZakladki[index].page)
-                    //console.log("Координаты ",dataZakladki[index].location.x,dataZakladki[index].location.y)
-                    console.log("Название " + dataZakladki[index].title)
-                    //root.pmpDoc.goToLocation(cnZakladki.page, cnZakladki.location, root.pmpDoc.renderScale)
-                    //root.pmpDoc.goToPage(index)
+                if(index >= 0 && index < cacheZakladok.length){//Проверка индекса кеша закладок
+                    root.pmpDoc.goToLocation(cacheZakladok[index].page,
+                                    Qt.point(cacheZakladok[index].location.x,cacheZakladok[index].location.y),
+                                    root.pmpDoc.renderScale)//Переходим на заданную страницу закладки.
                 }
             }
-            function fnCacheZakladok(){//Функция кеша закладок, заполняет массив { page, location, title }
-                dataZakladki = []//Удаляем данные с массива
+            function fnCacheZakladok(){//Функция кеша закладок, заполняет массив { page, location }
+                cacheZakladok = []//Удаляем данные с массива
                 for(let ltShag = 0; ltShag < pdfBookmarkModel.rowCount(); ltShag++){//Перебираем закладки.
-                    const modelIndex = pdfBookmarkModel.index(ltShag, 0)
-                    dataZakladki.push({//Добавляем в массив данные
-                                        //page: pdfBookmarkModel.data(modelIndex, "page"),//page
-                                        //location: pdfBookmarkModel.data(modelIndex, "location")
-                                        title: pdfBookmarkModel.data(modelIndex, "title")//title
-                                      })
+                    const modelIndex = pdfBookmarkModel.index(ltShag, 0)//Модель закладки по индексу.
+                    cacheZakladok.push({//title: pdfBookmarkModel.data(modelIndex, PdfBookmarkModel.Title),
+                                        page: pdfBookmarkModel.data(modelIndex, PdfBookmarkModel.Page),//page
+                                        location: pdfBookmarkModel.data(modelIndex,PdfBookmarkModel.Location)
+                                      })//Добавляем в массив данные
                 }
                 if(pdfBookmarkModel.rowCount()) trvZakladki.currentIndex = 0//Выделяем первую закладку.
             }
+            /*
+            onCurrentIndexChanged: {
+                if(currentIndex >= 0 && currentIndex < pdfBookmarkModel.rowCount())
+                    positionViewAtIndex(currentIndex, TreeView.Visible)
+            }
+            */
             delegate: TreeViewDelegate {
                 id: tvdZakladka
                 //Свойства
@@ -451,11 +457,11 @@ Drawer {
                 //leftPadding: 11//Отступ слева
                 text: title//Отображение текста вкладки.
                 background: Rectangle {
-                    color: trvZakladki.currentIndex === tvdZakladka.index
-                           ? root.clrMenuFon
-                           : (tvdZakladka.row % 2 === 0
-                                ? root.clrFona
-                                : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.11)))
+                    color: trvZakladki.currentIndex === tvdZakladka.index//Если индекс равен currentIndex
+                           ? (trvZakladki.focus ? root.clrMenuFon//Если фокус на закладке, то цвет
+                                                : Qt.darker(root.clrMenuFon, 1.3) )//Если нет, то цвет темнее
+                           : (tvdZakladka.row % 2 === 0 ? root.clrFona
+                                                        : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.11)))
                 }
                 contentItem: Text {
                     text: tvdZakladka.text
@@ -487,6 +493,7 @@ Drawer {
                             if(trvZakladki.currentIndex !== tvdZakladka.index)//Если это другая вкладка
                                 trvZakladki.currentIndex = -1
                             trvZakladki.toggleExpanded(tvdZakladka.index)//Разворачивает закладку по index
+                            trvZakladki.isIndikator = true;//Взводим флаг, отключаем горячие клавиши.
                             mouse.accepted = true
                         }
                     }
