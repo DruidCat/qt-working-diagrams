@@ -8,7 +8,7 @@ import QtQml.Models//Для DelegateModel
 
 Drawer {
     id: root
-    //Настройки
+    //Свойства
     property var pmpDoc//PdfMultiPageView (pmpDoc)
     property var pdfDoc//PdfDocument (pdfDoc)
     property bool isMobile: true//true - мобильное устройство
@@ -20,15 +20,18 @@ Drawer {
     property color clrPoisk: "Yellow"
     property alias currentIndex: tbSidebar.currentIndex
     property alias posterIndex: grvPoster.currentIndex
+    property int minSidebarWidth: 200//Минимум ширины боковой панели
+    property int maxSidebarWidth: parent ? parent.width * 0.8 : 1000//Максимум ширины боковой панели
+    property int sidebarWidth: root.isMobile//Если мобила, то ширина на весь экран,если нет,то 1/3
+                               ? (parent ? parent.width : 0)
+                               : Math.max(minSidebarWidth, (parent ? parent.width / 3 : 300))
     //Настройки
     edge: Qt.LeftEdge
     modal: false
     dim: false
     closePolicy: Drawer.CloseOnEscape//Закрываем боковую панель только при нажати Escape, другие политики выкл
     clip: true//Обрезать всё лишнее.
-    width: root.isMobile
-           ? (parent ? parent.width : 0)
-           : ((parent ? parent.width : 0) / 3)//Если мобила, то ширина на весь экран,если нет,то 1/3
+    width: sidebarWidth
     height: root.pmpDoc ? root.pmpDoc.height : (parent ? parent.height : 0)//Высота по высоте pdf сцены
     y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
     //Функции
@@ -73,7 +76,7 @@ Drawer {
         id: rctZagolovok
         anchors.top: root.top
         anchors.left: rctTabbar.right
-        width: root.width - rctBorder.width - rctTabbar.width
+        width: root.width - rctBorder.width - rctTabbar.width - rctRuchka.width
         height: root.ntCoff*(root.ntWidth-1)+root.ntCoff
         color: root.clrFona
         border.color: root.clrTexta
@@ -123,9 +126,47 @@ Drawer {
         id: rctSidebar
         anchors.top: rctZagolovok.bottom
         anchors.left: rctTabbar.right
-        width: root.width - rctBorder.width - rctTabbar.width
+        width: root.width - rctBorder.width - rctTabbar.width - rctRuchka.width
         height: root.height-rctZagolovok.height
         color: "transparent"
+    }
+    Rectangle {
+        id: rctRuchka
+        anchors.top: root.top
+        anchors.left: rctSidebar.right
+        width: 3
+        height: root.height
+        color: "Transparent"
+        border.color: root.clrTexta
+        border.width: root.ntCoff/4
+        MouseArea {
+            id: ruchkaArea
+            //Свойства
+            property bool dragging: false//Свойство перетаскивания. true - началось перетаскивание.
+            property real lastX//Переменная хранящаа предыдущее положение мыши
+            //Настройки
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.SizeHorCursor
+            //Функции
+            onPressed: (mouse) => {
+                if (root.isMobile) return//Если мобильное устройство, то выходим
+                mouse.accepted = true
+                dragging = true
+                lastX = mouse.x
+            }
+            onReleased: dragging = false//При отпускании мыши Окончание перетаскивания
+            onCanceled: dragging = false//Окончание перетаскивания
+            onPositionChanged: (mouse) => {//Если позиция меняется, то...
+                if (!dragging || root.isMobile) return//Если мобильное устройство, выходим
+                const dx = mouse.x - lastX
+                lastX = mouse.x
+                if (dx === 0) return
+                let newWidth = root.sidebarWidth + dx
+                newWidth = Math.max(root.minSidebarWidth, Math.min(root.maxSidebarWidth, newWidth))//Проверка
+                root.sidebarWidth = newWidth//Изменяем длину боковой панели на изменённую
+            }
+        }
     }
     TabBar {//Вкладки
         id: tbSidebar
@@ -477,7 +518,7 @@ Drawer {
                         anchors.fill: parent
                         hoverEnabled: true
                         cursorShape: Qt.PointingHandCursor
-                        onClicked: function(mouse) {//объявляем параметр mouse
+                        onClicked: (mouse) => {//объявляем параметр mouse
                             if (!tvdZakladka.hasChildren) return//Если нет вложеных закладок, то выходим.
                             trvZakladki.focus = true//Фокус на Закладках
                             if(trvZakladki.currentIndex !== tvdZakladka.index)//Если это другая вкладка
@@ -640,6 +681,7 @@ Drawer {
             }
         } 
     }
+
     Rectangle {//Оконтовка поверх всех прямоугольников
         anchors.top: root.top
         anchors.right: rctSidebar.right
