@@ -440,12 +440,13 @@ Drawer {
                 }
                 if(pdfBookmarkModel.rowCount()) trvZakladki.currentIndex = 0//Выделяем первую закладку.
             }
-            /*
-            onCurrentIndexChanged: {
-                if(currentIndex >= 0 && currentIndex < pdfBookmarkModel.rowCount())
-                    positionViewAtIndex(currentIndex, TreeView.Visible)
+            onCurrentIndexChanged: {//Если меняется индекс,то...
+                if(currentIndex >= 0 && currentIndex < pdfBookmarkModel.rowCount()){//Если индекс в габаритах
+                    const modelIndex = pdfBookmarkModel.index(currentIndex, 0)//Получаем модель конкр.закладки
+                    if (modelIndex.valid)//Если эта модель существует и она действительная
+                        positionViewAtIndex(modelIndex, TreeView.Contain)//Делаем ВИДИМОЙ вкладку. Скроллим.
+                }
             }
-            */
             delegate: TreeViewDelegate {
                 id: tvdZakladka
                 //Свойства
