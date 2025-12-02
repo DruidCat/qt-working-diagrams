@@ -130,39 +130,39 @@ Drawer {
         height: root.height-rctZagolovok.height
         color: "transparent"
     }
-    Rectangle {
+    Rectangle {//Прямоугольник ручки, за которую можно тянуть размер боковой панели, для изменения её размеров
         id: rctRuchka
         anchors.top: root.top
         anchors.left: rctSidebar.right
-        width: 3
+        width: root.ntWidth//В зависимости от параметра, изменяется толщина ручки.
         height: root.height
-        color: "Transparent"
+        color: Qt.darker(root.clrTexta, 1.3)
         border.color: root.clrTexta
         border.width: root.ntCoff/4
         MouseArea {
-            id: ruchkaArea
+            id: maRuchka
             //Свойства
-            property bool dragging: false//Свойство перетаскивания. true - началось перетаскивание.
+            property bool isDrag: false//Свойство перетаскивания. true - началось перетаскивание.
             property real lastX//Переменная хранящаа предыдущее положение мыши
             //Настройки
             anchors.fill: parent
-            hoverEnabled: true
-            cursorShape: Qt.SizeHorCursor
+            hoverEnabled: true//При наведении изменение
+            cursorShape: Qt.SizeHorCursor//Курсор в виде изменения горизонтального размера.
             //Функции
-            onPressed: (mouse) => {
+            onPressed: (mouse) => {//Если нажали на ручку
                 if (root.isMobile) return//Если мобильное устройство, то выходим
-                mouse.accepted = true
-                dragging = true
-                lastX = mouse.x
+                mouse.accepted = true//событие не пойдёт в Drawer, но это не точно)
+                isDrag = true//Взводим флаг при нажатии на ручку, идёт изменение размеров.
+                lastX = mouse.x//Запоминаем первоначальное положение боковой панели по координатам мыши.
             }
-            onReleased: dragging = false//При отпускании мыши Окончание перетаскивания
-            onCanceled: dragging = false//Окончание перетаскивания
+            onReleased: isDrag = false//При отпускании мыши Окончание перетаскивания
+            onCanceled: isDrag = false//Окончание перетаскивания
             onPositionChanged: (mouse) => {//Если позиция меняется, то...
-                if (!dragging || root.isMobile) return//Если мобильное устройство, выходим
-                const dx = mouse.x - lastX
-                lastX = mouse.x
-                if (dx === 0) return
-                let newWidth = root.sidebarWidth + dx
+                if (!isDrag || root.isMobile) return//Если мобильное устройство, выходим
+                const dx = mouse.x - lastX//Дельта относительно предыдущей точки
+                lastX = mouse.x//Запоминаем положение мыши.
+                if (dx === 0) return//Если дельта не изменилась, ничего не делаем
+                let newWidth = root.sidebarWidth + dx//Новые размеры длины боковой панели.
                 newWidth = Math.max(root.minSidebarWidth, Math.min(root.maxSidebarWidth, newWidth))//Проверка
                 root.sidebarWidth = newWidth//Изменяем длину боковой панели на изменённую
             }
