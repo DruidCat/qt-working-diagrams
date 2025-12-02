@@ -240,6 +240,7 @@ Drawer {
             model: root.pmpDoc ? root.pmpDoc.searchModel : null//Если есть поисковая модель, то добавляем её
             currentIndex: root.pmpDoc ? root.pmpDoc.searchModel.currentResult : -1
             ScrollBar.vertical: ScrollBar { }
+            KeyNavigation.tab: tbbNaideno//Tab -> кнопка "Найдено"
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
                 if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
                     if(event.key === Qt.Key_B){//Если нажата клавиша B
@@ -360,6 +361,7 @@ Drawer {
             implicitWidth: rctZakladki.width
             columnWidthProvider: function() { return width }
             ScrollBar.vertical: ScrollBar { }
+            KeyNavigation.tab: tbbZakladki//Tab -> кнопка "Закладки"
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
                 if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
                     if(event.key === Qt.Key_B){//Если нажата клавиша B
@@ -548,6 +550,7 @@ Drawer {
             ScrollBar.vertical: ScrollBar { id: scbVertical }
             cellWidth: width/2 - scbVertical.width/2//Расчёт длины одного постера
             cellHeight: cellWidth + 10
+            KeyNavigation.tab: tbbPoster//Tab -> кнопка "Страницы"
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
                 if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
                     if(event.key === Qt.Key_B){//Если нажата клавиша B
