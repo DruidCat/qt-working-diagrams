@@ -20,7 +20,6 @@ Drawer {
     property color clrPoisk: "Yellow"
     property alias currentIndex: tbSidebar.currentIndex
     property alias posterIndex: grvPoster.currentIndex
-    property var cacheZakladok: []//Массив объектов { page, location }
     //Настройки
     edge: Qt.LeftEdge
     modal: false
@@ -423,22 +422,12 @@ Drawer {
                 }
             }
             function fnGoToZakladka(index){//Функция перехода к закладке по индексу
-                if(index >= 0 && index < cacheZakladok.length){//Проверка индекса кеша закладок
-                    root.pmpDoc.goToLocation(cacheZakladok[index].page,
-                                    Qt.point(cacheZakladok[index].location.x,cacheZakladok[index].location.y),
-                                    root.pmpDoc.renderScale)//Переходим на заданную страницу закладки.
-                }
-            }
-            function fnCacheZakladok(){//Функция кеша закладок, заполняет массив { page, location }
-                cacheZakladok = []//Удаляем данные с массива
-                for(let ltShag = 0; ltShag < pdfBookmarkModel.rowCount(); ltShag++){//Перебираем закладки.
-                    const modelIndex = pdfBookmarkModel.index(ltShag, 0)//Модель закладки по индексу.
-                    cacheZakladok.push({//title: pdfBookmarkModel.data(modelIndex, PdfBookmarkModel.Title),
-                                        page: pdfBookmarkModel.data(modelIndex, PdfBookmarkModel.Page),//page
-                                        location: pdfBookmarkModel.data(modelIndex,PdfBookmarkModel.Location)
-                                      })//Добавляем в массив данные
-                }
-                if(pdfBookmarkModel.rowCount()) trvZakladki.currentIndex = 0//Выделяем первую закладку.
+                if (index < 0) return//Если индекс меньше нуля, выходим из функции.
+                const modelIndex = pdfBookmarkModel.index(index, 0)//Получаем модель закладки по индексу.
+                if (!modelIndex.valid) return//Если модель не действительна, выходим из функции.
+                const page = pdfBookmarkModel.data(modelIndex, PdfBookmarkModel.Page)//Получаем Страницу
+                const location = pdfBookmarkModel.data(modelIndex, PdfBookmarkModel.Location)//Координаты
+                root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//Переходим на страницу
             }
             onCurrentIndexChanged: {//Если меняется индекс,то...
                 if(currentIndex >= 0 && currentIndex < pdfBookmarkModel.rowCount()){//Если индекс в габаритах
@@ -509,7 +498,10 @@ Drawer {
             model: PdfBookmarkModel {
                 id: pdfBookmarkModel
                 document: root.pdfDoc
-                onModelReset: trvZakladki.fnCacheZakladok()//Модель сбрасывается, [] записываем page, location
+                onModelReset:{//Если модель сбрасывается
+                    if (pdfBookmarkModel.rowCount() > 0) trvZakladki.currentIndex = 0//Подсвечиваем первую Зак
+                    else trvZakladki.currentIndex = -1//Сбрасываем индекс, если нет ни одной закладки.
+                }
             }
         }
     }
