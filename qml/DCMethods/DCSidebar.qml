@@ -386,13 +386,15 @@ Drawer {
         clip: true//Обязательно обрезать всё, что не помещается в этот прямоугольник.
         visible: currentIndex === 1//Если истина, то видимая вкладка. 
         Text {
-            anchors.horizontalCenter: rctZakladki.horizontalCenter
+            anchors.left: rctZakladki.left
+            anchors.right: rctZakladki.right
             anchors.verticalCenter: rctZakladki.verticalCenter
             color: root.clrMenuFon
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text:  pdfBookmarkModel.rowCount() ? "" : qsTr("Закладки отсутствуют")//Если есть/нет закладок
+            elide: Text.ElideRight//Обрезаем текст по правой стороне точками (...)
+            text:  pdfBookmarkModel.rowCount() ? "" : qsTr("Нет закладок")//Если есть/нет закладок
         }
         TreeView {
             id: trvZakladki
