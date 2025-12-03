@@ -355,7 +355,9 @@ Drawer {
                 contentItem: Label {
                     text: qsTr(" Страница ") + (tmdResult.page + 1) + " [" + (tmdResult.index + 1) + "]"
                     color: root.clrPoisk
-                    font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта
+                    font.pixelSize: (root.ntWidth<=2) ? root.ntCoff*(root.ntWidth-1)//Защита от нулевой разниц
+                                                      : root.ntCoff*(root.ntWidth-2)
+                    //font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта
                 }
                 highlighted: ListView.isCurrentItem
                 onClicked: {
