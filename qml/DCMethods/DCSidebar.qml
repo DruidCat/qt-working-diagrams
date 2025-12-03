@@ -21,8 +21,8 @@ Drawer {
     property alias currentIndex: tbSidebar.currentIndex
     property alias posterIndex: grvPoster.currentIndex
     property int minSidebarWidth: 200//Минимум ширины боковой панели
-    property int maxSidebarWidth: parent ? parent.width * 0.8 : 1000//Максимум ширины боковой панели
-    property int sidebarWidth: root.isMobile//Если мобила, то ширина на весь экран,если нет,то 1/3
+    property int maxSidebarWidth: parent ? parent.width * 0.8 : 640//Максимум ширины боковой панели
+    property int sidebarWidth: root.isMobile//Если мобила, ширина на весь экран, если нет,то данные из Реестра
                                ? (parent ? parent.width : 0)
                                : Math.max(minSidebarWidth, (parent ? cppqml.untSidebarWidth : 330))
     //Настройки
@@ -266,13 +266,15 @@ Drawer {
         visible: currentIndex === 0//Если истина, то видимая вкладка.
         Text {
             id: txtNaideno
-            anchors.horizontalCenter: rctNaideno.horizontalCenter
+            anchors.left: rctNaideno.left
+            anchors.right: rctNaideno.right
             anchors.verticalCenter: rctNaideno.verticalCenter
             color: root.clrMenuFon
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             text: root.pmpDoc.searchModel.count ? "" : qsTr("Не найдено")
+            elide: Text.ElideRight//Обрезаем текст по правой стороне точками (...)
         }
         ListView {
             id: lsvNaideno
