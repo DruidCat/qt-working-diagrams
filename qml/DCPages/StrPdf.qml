@@ -84,8 +84,7 @@ Item {
 					}
 					else{
 						if(event.key === Qt.Key_F){//Если нажат "F", то.
-                            if(knopkaPoisk.visible && knopkaPoisk.enabled)//Если поиск видимый и активный,то..
-								fnClickedPoisk();//Запускаем режим поиска
+                            fnClickedPoisk();//Запускаем режим поиска
 							event.accepted = true;//Завершаем обработку эвента.
 						}
 						else{
@@ -310,9 +309,11 @@ Item {
         }
     }
     function fnClickedPoisk(){//Функция запуска режима поиска.
-        txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
-        txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
-        txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
+        if(knopkaPoisk.visible && knopkaPoisk.enabled){//Если поиск видимый и активный,то..
+            txnZagolovok.placeholderText = qsTr("ВВЕДИТЕ ПОИСКОВЫЙ ЗАПРОС");//Подсказка пользователю.
+            txnZagolovok.placeholderColor = "#aaa";//Светло серый цвет
+            txnZagolovok.visible = true;//Режим запроса на поиск ТОЛЬКО ПОСЛЕ НАЗНАЧЕНИЯ ТЕКСТА!!!
+        }
     }
 
     Timer {//таймер бесконечной анимации логотипа, пока не будет результат.
@@ -672,6 +673,9 @@ Item {
             }
             function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
                 pskPoisk.currentResult = pdfLoader.item.currentResult//Задаём отображение номера поиска.
+            }
+            function onClickedPoisk(){//Если необходима запустить поиск, то...
+                fnClickedPoisk();//Функция запуска режима поиска.
             }
             function onClickedPoiskNext(){//Если нажато сочетание клавиш Следующего поиска, то...
                 fnClickedPoiskNext()//Функция Следующего поиска, то...

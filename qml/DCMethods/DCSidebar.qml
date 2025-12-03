@@ -34,6 +34,8 @@ Drawer {
     width: sidebarWidth//ВАЖНО! ширина боковой панели зависит только от sidebarWidth.
     height: root.pmpDoc ? root.pmpDoc.height : (parent ? parent.height : 0)//Высота по высоте pdf сцены
     y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
+    //Сигналы
+    signal clickedPoisk()//Сигнал запуска режима поиска.
     //Функции
     onPdfDocChanged: {//Если будет замена на пустой pdf файл, для обнуления открытого файла, то...
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
@@ -295,6 +297,12 @@ Drawer {
                             fnPosterOpen()//Открытие боковой панели на Миниатюрах.
                             event.accepted = true;//Завершаем обработку эвента.
                         }
+                        else{
+                            if(event.key === Qt.Key_F){//Если нажата клавиша F
+                                root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
+                        }
                     }
                 }
                 else{
@@ -417,6 +425,12 @@ Drawer {
                         if(event.key === Qt.Key_T){//Если нажата клавиша T
                             fnPosterOpen()//Открытие боковой панели на Миниатюрах.
                             event.accepted = true;//Завершаем обработку эвента.
+                        }
+                        else{
+                            if(event.key === Qt.Key_F){//Если нажата клавиша F
+                                root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
                         }
                     }
                 }
@@ -600,6 +614,12 @@ Drawer {
                         if(event.key === Qt.Key_T){//Если нажата клавиша T
                             dcSidebar.close()//Закрываем боковую панель
                             event.accepted = true;//Завершаем обработку эвента.
+                        }
+                        else{
+                            if(event.key === Qt.Key_F){//Если нажата клавиша F
+                                root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
+                                event.accepted = true;//Завершаем обработку эвента.
+                            }
                         }
                     }
                 }

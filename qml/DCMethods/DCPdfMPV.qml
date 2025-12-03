@@ -41,6 +41,7 @@ Item {
     signal sgnScaleMin(real rlScaleMin)//Сигнал возвращающий минимальный масштаб страницы.
     signal sgnPassword()//Сигнал о том, что запрашивается пароль.
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
+    signal clickedPoisk()//Сигнал о том, что открываем Поиск.
     signal clickedPoiskNext()//Сигнал нажатия кнопки Следующего поиска
     signal clickedPoiskPrevious()//Сигнал нажатия кнопки Предыдущего поиска
     signal clickedSidebarNaideno()//Сигнал о нажатии боковой панели вкладки Найдено. ДЛЯ БЛОКИРОВКИ ОТКРЫТИЯ.
@@ -683,5 +684,6 @@ Item {
         pdfDoc: pdfDoc//Передаём объект документа
         //чтобы внешний сигнал продолжил работать
         onOpenedChanged: root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
+        onClickedPoisk: root.clickedPoisk()//Сигнал о том, что открываем Поиск.
     }
 }
