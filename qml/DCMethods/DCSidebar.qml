@@ -24,14 +24,14 @@ Drawer {
     property int maxSidebarWidth: parent ? parent.width * 0.8 : 1000//Максимум ширины боковой панели
     property int sidebarWidth: root.isMobile//Если мобила, то ширина на весь экран,если нет,то 1/3
                                ? (parent ? parent.width : 0)
-                               : Math.max(minSidebarWidth, (parent ? parent.width / 3 : 300))
+                               : Math.max(minSidebarWidth, (parent ? cppqml.untSidebarWidth : 330))
     //Настройки
     edge: Qt.LeftEdge
     modal: false
     dim: false
     closePolicy: Drawer.CloseOnEscape//Закрываем боковую панель только при нажати Escape, другие политики выкл
     clip: true//Обрезать всё лишнее.
-    width: sidebarWidth
+    width: sidebarWidth//ВАЖНО! ширина боковой панели зависит только от sidebarWidth.
     height: root.pmpDoc ? root.pmpDoc.height : (parent ? parent.height : 0)//Высота по высоте pdf сцены
     y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
     //Функции
@@ -158,13 +158,14 @@ Drawer {
             onReleased: isDrag = false//При отпускании мыши Окончание перетаскивания
             onCanceled: isDrag = false//Окончание перетаскивания
             onPositionChanged: (mouse) => {//Если позиция меняется, то...
-                if (!isDrag || root.isMobile) return//Если мобильное устройство, выходим
-                const dx = mouse.x - lastX//Дельта относительно предыдущей точки
-                lastX = mouse.x//Запоминаем положение мыши.
-                if (dx === 0) return//Если дельта не изменилась, ничего не делаем
-                let newWidth = root.sidebarWidth + dx//Новые размеры длины боковой панели.
-                newWidth = Math.max(root.minSidebarWidth, Math.min(root.maxSidebarWidth, newWidth))//Проверка
-                root.sidebarWidth = newWidth//Изменяем длину боковой панели на изменённую
+                if (!isDrag || root.isMobile) return//Если не перетаскиваем ручку или мобильное устройство,вых
+                const dX = mouse.x - lastX//Дельта Х относительно предыдущей точки Х
+                lastX = mouse.x//Запоминаем положение мыши по Х.
+                if (dX === 0) return//Если дельта не изменилась, ничего не делаем
+                let ltWidth = root.sidebarWidth + dX//Новые размеры ширины боковой панели.
+                ltWidth = Math.max(root.minSidebarWidth, Math.min(root.maxSidebarWidth, ltWidth))//Проверка
+                root.sidebarWidth = ltWidth//Изменяем ширину боковой панели на новую ширину
+                cppqml.untSidebarWidth = ltWidth//Записываем в реестр ширину боковой панели.
             }
         }
     }

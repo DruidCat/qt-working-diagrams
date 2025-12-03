@@ -53,6 +53,10 @@ class DCCppQml : public QObject {
                     READ strKatalogPut
                     WRITE setStrKatalogPut
                     NOTIFY strKatalogPutChanged FINAL)
+    Q_PROPERTY(uint	untSidebarWidth
+                    READ untSidebarWidth
+                    WRITE setUntSidebarWidth
+                    NOTIFY untSidebarWidthChanged FINAL)
     Q_PROPERTY(uint untNastroikiMaxLength
                     READ untNastroikiMaxLength
                     NOTIFY untNastroikiMaxLengthChanged FINAL)
@@ -197,6 +201,8 @@ public:
     void		setUntShrift(const uint& untShrift);//Изменяем размер шрифта.
     QString 	strKatalogPut() const { return m_strKatalogPut; }//Возвращаем путь сохранения каталога.
     void		setStrKatalogPut(const QString& strKatalogPut);//Изменяем путь сохранения каталога.
+    uint 		untSidebarWidth() const { return m_untSidebarWidth; }//Возвращаем размер боковой панели.
+    void		setUntSidebarWidth(const uint& untSidebarWidth);//Изменяем размер боковой панели.
     uint 		untNastroikiMaxLength() const { return m_untNastroikiMaxLength; }//Макс длина строки текста
 
     QString		strTitul();//Получить имя Титула.
@@ -290,6 +296,7 @@ signals:
     void blAppRedaktorChanged();//Сигнал о том, что флаг Редактора поменялся.
     void untShriftChanged();//Сигнал о том, что размер шрифта поменялся.
     void strKatalogPutChanged();//Сигнал о том, что путь размещения каталога изменён.
+    void untSidebarWidthChanged();//Сигнал о том, что ширина боковой панели поменялась.
     void untNastroikiMaxLengthChanged();//Сигнал о том, что максимальная длина текста изменилась.
 
     void strTitulChanged();//Сигнал о том, что имя Титула изменилось.
@@ -352,6 +359,7 @@ private:
     bool	m_blAppRedaktor;//Флаг Редактора вкл/выкл.
     uint 	m_untShrift;//Размер шрифта 0-маленький, 1-средний, 2-большой.
     QString m_strKatalogPut;//Путь сохранения каталога документов.
+    uint 	m_untSidebarWidth;//Ширина боковой панели DCSidebar.qml
     uint	m_untNastroikiMaxLength;//Максимальная длина строки текста в Свойстве Q_PROPERTY
 
     QString m_strTitul;//аргумент элемента имени Титула в Свойстве Q_PROPERTY

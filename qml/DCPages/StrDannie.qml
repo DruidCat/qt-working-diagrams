@@ -355,7 +355,7 @@ Item {
                     cppqml.ustDannieSortDB(jsonDannie)//Записываем изменения отсортированного списка в БД.
                 }
                 onClicked: function(ntKod, strDannie) {//Слот нажатия на один из Документов списка.
-					if(cppqml.blDanniePervi){//Если это первый Документ, то...
+                    if(cppqml.blDanniePervi){//Если это первый Документ, то...
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
                         	fnClickedSozdat();//Функция при нажатии кнопки Создать(Проводник).
 						else
@@ -384,7 +384,7 @@ Item {
                                 menuDannie.visible = false;//Делаем невидимым всплывающее меню.
                                 cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
                                 cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
-								//Открываем Pdf документ.
+                                //Открываем Pdf документ.
                                 if(root.pdfMentor){//Если настройка настроена на собственный pdf просмотрщик,то
                                     cppqml.strDebug = "";
                                     root.clickedDannie(strDannie);//сигнал с кодом и именем Документа.
