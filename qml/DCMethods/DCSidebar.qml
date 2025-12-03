@@ -109,9 +109,9 @@ Drawer {
         Label {//Текст вписанный в границы, отображает имя заголовка.
             id: lblZagolovok
             anchors.top: rctZagolovok.top
+            anchors.left: knopkaInfo.right
             anchors.right: knopkaZakrit.left
             height: rctZagolovok.height
-            width: rctZagolovok.width - knopkaZakrit.width + knopkaInfo.width
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             color: root.clrTexta
