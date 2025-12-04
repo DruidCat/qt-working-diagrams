@@ -174,11 +174,16 @@ Item {
                                                     event.accepted = true;//Завершаем обработку эвента
                                                 }
                                                 else{
-                                                    if((event.key===Qt.Key_F3)
-                                                            ||(event.key===Qt.Key_Enter)
-                                                            ||(event.key===Qt.Key_Return)){//F3
+                                                    if(event.key===Qt.Key_F3){//F3
                                                         fnClickedPoiskNext();//нажатия Следующий поиск
                                                         event.accepted = true;//Завер обработку эвента
+                                                    }
+                                                    else{
+                                                        if((event.key===Qt.Key_Enter)
+                                                                ||(event.key===Qt.Key_Return)){//Enter
+                                                            fnClickedKeyEnter();//Нажитие клавиши Enter
+                                                            event.accepted = true;//Завер обработку эвента
+                                                        }
                                                     }
                                                 }
                                             }
@@ -241,12 +246,15 @@ Item {
     function fnClickedKeyEnd(){//Функция нажатия клавиши End
         if(pdfLoader.item) pdfLoader.item.fnClickedKeyEnd()//На последнюю страницу.
     }
+    function fnClickedKeyEnter(){//Функция нажатия клавиши Enter
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyEnter()//Функция перехода нажатия клавиши Enter.
+    }
     function fnClickedPoiskNext(){//Функция следующего номера поиска
         if(pskPoisk.visible) pdfLoader.item.fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
     }
     function fnClickedPoiskPrevious(){//Функция предыдущего номера поиска
         if(pskPoisk.visible) pdfLoader.item.fnClickedPoiskPrevious()//переход к предыдущему номеру поиска
-    }
+    } 
     function fnClickedSidebar(){//Функция нажатия кнопки SideBar.
         if(pdfLoader.item) pdfLoader.item.fnClickedSidebar()//Открываем/закрываем боковую панель через функцию
     }

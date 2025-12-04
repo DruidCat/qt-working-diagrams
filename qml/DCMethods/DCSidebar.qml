@@ -40,6 +40,24 @@ Drawer {
     onPdfDocChanged: {//Если будет замена на пустой pdf файл, для обнуления открытого файла, то...
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
     }
+    function fnNaidenoEnter(){//Функция выбора результата поиска в боковой панели для перехода к нему.
+        root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex//Переходим к определённому результату.
+    }
+    function fnNaidenoIndex(index){//Функция подсвечивания результата поиска в боковой панели.
+        lsvNaideno.currentIndex = index//Подсвечиваем в списке.
+    }
+    function fnNaidenoNext(){//Функция перехода к следующему результату в списке.
+        if(lsvNaideno.currentIndex === (root.pmpDoc.searchModel.count - 1))//Если максимальный индекс, то...
+            lsvNaideno.currentIndex = 0//Перескок на первый результат.
+        else//Если нет, то...
+            lsvNaideno.currentIndex += 1//То увеличиваем на 1
+    }
+    function fnNaidenoPrevious(){//Функция перехода к предыдущему результату в списке.
+        if(lsvNaideno.currentIndex <= 0)//Если 0 или меньше, то...
+            lsvNaideno.currentIndex = root.pmpDoc.searchModel.count - 1//Перескок на самый большой результат.
+        else//Если нет, то...
+            lsvNaideno.currentIndex -= 1//То уменьшаем на 1
+    }
     function fnNaidenoOpen(){//Функция открытия и фокусировки Найдено
         dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
         lsvNaideno.focus = true//Фокус на Найдено
@@ -353,7 +371,7 @@ Drawer {
                                                      : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))))
                 }
                 contentItem: Label {
-                    text: qsTr(" Страница ") + (tmdResult.page + 1) + " [" + (tmdResult.index + 1) + "]"
+                    text: " " + (tmdResult.index + 1) + ". " + qsTr("Страница ") + (tmdResult.page + 1)
                     color: root.clrPoisk
                     font.pixelSize: (root.ntWidth<=2) ? root.ntCoff*(root.ntWidth-1)//Защита от нулевой разниц
                                                       : root.ntCoff*(root.ntWidth-2)
@@ -430,6 +448,7 @@ Drawer {
                         }
                         else{
                             if(event.key === Qt.Key_F){//Если нажата клавиша F
+                                fnNaidenoOpen()//Функция открытия и фокусировки Найдено
                                 root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
                                 event.accepted = true;//Завершаем обработку эвента.
                             }
@@ -619,6 +638,7 @@ Drawer {
                         }
                         else{
                             if(event.key === Qt.Key_F){//Если нажата клавиша F
+                                fnNaidenoOpen()//Функция открытия и фокусировки Найдено
                                 root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
                                 event.accepted = true;//Завершаем обработку эвента.
                             }

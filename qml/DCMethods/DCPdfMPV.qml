@@ -146,7 +146,8 @@ Item {
         var ntStrDown = pmpDoc.currentPage + 1;
         if(dcSidebar.opened){//Если открыта боковая панель, то...
             if(dcSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
-                fnClickedPoiskNext()//Функция перехода к следующему номеру поиска.
+                //fnClickedPoiskNext()//Функция перехода к следующему номеру поиска.
+                dcSidebar.fnNaidenoNext()//Функция перехода к следующему результату в списке.
             }
             else{//Временно, чтоб работал скролл страниц
                 if(ntStrDown < pdfDoc.pageCount)
@@ -162,7 +163,7 @@ Item {
         var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
         if(dcSidebar.opened){//Если открыта боковая панель, то...
             if(dcSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
-                fnClickedPoiskPrevious()//Функция перехода к предыдущему номеру поиска
+                dcSidebar.fnNaidenoPrevious()//Функция перехода к предыдущему результату в списке.
             }
             else{//Временно, чтоб работал скролл страниц
                 if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
@@ -177,6 +178,14 @@ Item {
     function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
         const cnModel = dlmPoisk.items.get(index);//Получаем объект на конкретный currentResult
         return cnModel ? cnModel.model : null;//если модель пустая, возвращаем null, если нет, то модель
+    }
+    function fnClickedKeyEnter(){//Функция перехода нажатия клавиши Enter.
+        if(dcSidebar.position){//Если открыта боковая панель, то...
+            if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
+                dcSidebar.fnNaidenoEnter()//Функцию нажатия на клавишу Enter.
+        }
+        else//Если боковая панель не открыта
+            fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
     }
     function fnClickedPoiskStop(){//Функция остановки поиска.
         root.currentResult = -1//Чтоб в пустом поиске не было 1
@@ -636,11 +645,13 @@ Item {
             root.currentResult = pmpDoc.searchModel.currentResult//Присваиваем действующий результат поиска.
             if(root.currentResult >= 0){//Проверка на -1, если нет, то...
                 const cnModel = fnModelPoisk(root.currentResult);//Получаем объект модели по currentResult
-                if (cnModel)//Если модень не null, то...
+                if (cnModel){//Если модень не null, то...
+                    dcSidebar.fnNaidenoIndex(root.currentResult)//Подсвечиваем в боковой панели
                     pmpDoc.goToLocation(cnModel.page,//Номер страницы
                                         Qt.point(cnModel.location.x, cnModel.location.y),//Координаты
                                         pmpDoc.renderScale//Масштаю
                                         )//Переходим на страницу номера поиска.
+                }
             }
         }
     }
