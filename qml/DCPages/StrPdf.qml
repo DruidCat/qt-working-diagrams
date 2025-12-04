@@ -644,6 +644,9 @@ Item {
             function onSgnDebug(strDebug){//Пришла ошибка из qml файла.
                 cppqml.strDebug = strDebug;//Отображаем ошибку.
             }
+            function onSgnFocus(){//Сигнал о том, что срабатывает эвент горячих клавишь DCPdfMPV.
+                root.focus = true//Меняем фокус на StrPdf, чтоб обрабатывались горячие клавиши с StrPdf.
+            }
             function onVisibleChanged(){//Изменилась видимость виджета отображения pdf документа.
                 if(pdfLoader.item.visible){//Виджет видимый.
                     tmrLogo.running = false;//отключаем таймер, и тем самым показываем документ и кнопки.
@@ -685,21 +688,6 @@ Item {
             }
             function onClickedPoisk(){//Если необходима запустить поиск, то...
                 fnClickedPoisk();//Функция запуска режима поиска.
-            }
-            function onClickedPoiskNext(){//Если нажато сочетание клавиш Следующего поиска, то...
-                fnClickedPoiskNext()//Функция Следующего поиска, то...
-            }
-            function onClickedPoiskPrevious(){//Если нажато сочетание клавиш Предыдущего поиска, то...
-                fnClickedPoiskPrevious()//Функция Предыдущего поиска, то...
-            }
-            function onClickedSidebarNaideno(){//Если нажата горячая клавиша Atl+F
-                fnSidebarNaideno()//Открываем боковую панель.
-            }
-            function onClickedSidebarZakladki(){//Если нажата горячая клавиша Ctrl+B
-                fnSidebarZakladki()//Открываем боковую панель.
-            }
-            function onClickedSidebarPoster(){//Если нажата горячая клавиша Ctrl+T
-                fnSidebarPoster()//Открываем боковую панель.
             }
             function onSgnOpenedSidebar(blOpened){//Если боковая панель открыта/закрыта, то...
                 pskPoisk.isOpenedSidebar = blOpened;//Приравниваем флаг открыта ли боковая панель?

@@ -42,90 +42,11 @@ Item {
     signal sgnPassword()//Сигнал о том, что запрашивается пароль.
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
     signal clickedPoisk()//Сигнал о том, что открываем Поиск.
-    signal clickedPoiskNext()//Сигнал нажатия кнопки Следующего поиска
-    signal clickedPoiskPrevious()//Сигнал нажатия кнопки Предыдущего поиска
-    signal clickedSidebarNaideno()//Сигнал о нажатии боковой панели вкладки Найдено. ДЛЯ БЛОКИРОВКИ ОТКРЫТИЯ.
-    signal clickedSidebarZakladki()//Сигнал о нажатии боковой панели вкладки Закладки. ДЛЯ БЛОКИРОВКИ ОТКРЫТИЯ
-    signal clickedSidebarPoster()//Сигнал о нажатии боковой панели вкладки Миниатюры. ДЛЯ БЛОКИРОВКИ ОТКРЫТИЯ.
     signal sgnOpenedSidebar(bool blOpened)//Сигнал о том, что боковая панель открыта/закрыта
+    signal sgnFocus()//Сигнал о том, что фокус на DCPdfMPV
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
-            if(event.key === Qt.Key_C){//Если нажата "C",то...
-                fnCopyToClipboard();//Копируем выделенный текст в документа в буфер обмена.
-                event.accepted = true;//Завершаем обработку эвента.
-            }
-            else{
-                if(event.key === Qt.Key_B){//Если нажата клавиша "B", то...
-                    root.clickedSidebarZakladki();//Сигнал что нужно открывать Закладки
-                    event.accepted = true;//Завершаем обработку эвента.
-                }
-                else{
-                    if(event.key === Qt.Key_T){//Если нажата клавиша "T", то...
-                        root.clickedSidebarPoster();//Сигнал что нужно открывать Миниатюры
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                }
-            }
-        }
-        else{
-            if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
-                if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
-                    root.clickedSidebarNaideno();//Сигнал что нужно открывать Найдено
-                    event.accepted = true;//Завершаем обработку эвента.
-                }
-            }
-            else{
-                if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                    if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                        root.clickedPoiskPrevious()//Сигнал нажатия кнопки Предыдущего поиска
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                }
-                else{
-                    if(event.key === Qt.Key_Down){//Если нажата Стрелка вниз, то...
-                        fnClickedKeyVniz()//нажатия клавиши вниз
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                    else{
-                        if(event.key === Qt.Key_Up){//Если нажата Стрелка вверх, то....
-                            fnClickedKeyVverh()//нажатия клавиши вверх
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
-                        else{
-                            if(event.key === Qt.Key_PageDown){//Если нажата "Page Down",то.
-                                fnClickedKeyPgDown()//нажатия клавиши Page Down
-                                event.accepted = true;//Завершаем обработку эвента.
-                            }
-                            else{
-                                if(event.key === Qt.Key_PageUp){//Если нажата "Page Up", то.
-                                    fnClickedKeyPgUp()//нажатия клавиши Page Up
-                                    event.accepted = true;//Завершаем обработку эвента.
-                                }
-                                else{
-                                    if(event.key === Qt.Key_Home){//Если нажата кнопка Home, то...
-                                        fnClickedKeyHome()//нажатия клавиши Home
-                                        event.accepted = true;//Завершаем обработку эвента.
-                                    }
-                                    else{
-                                        if(event.key === Qt.Key_End){//Если нажата кнопка End,то..
-                                            fnClickedKeyEnd()//нажатия клавиши End
-                                            event.accepted = true;//Завершаем обработку эвента.
-                                        }
-                                        else{
-                                            if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
-                                                root.clickedPoiskNext()//Следующий номер поиска.
-                                                event.accepted = true;//Завершаем обработку эвента.
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        root.sgnFocus()//Излучаем сигнал, так как фокус на DCPdfMPV перещёл.
         //cppqml.strDebug = event.key;
     }
     function fnCopyToClipboard(){//Функция копирования выделенного текста в буфер обмена.
@@ -251,7 +172,7 @@ Item {
             fnClickedSidebar()//Открываем боковую панель.
             dcSidebar.fnPosterOpen()//Открываем и фокусируемся на Страницах
         }
-    }
+    } 
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
         if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
@@ -501,8 +422,7 @@ Item {
         property var flickable
         //
         property real pmpContentX: pmpDoc.flickable.contentX//Положение Flickable contentX
-        property real pmpContentY: pmpDoc.flickable.contentY//Положение Flickable contentY
-
+        property real pmpContentY: pmpDoc.flickable.contentY//Положение Flickable contentY 
         document: PdfDocument {
             id: pdfDoc
             //Свойства
