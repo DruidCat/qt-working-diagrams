@@ -41,7 +41,8 @@ Drawer {
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
     }
     function fnNaidenoEnter(){//Функция выбора результата поиска в боковой панели для перехода к нему.
-        root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex//Переходим к определённому результату.
+        if(root.pmpDoc.searchModel.count)//Если счётчик поиска не 0, то...
+            root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex//Переходим к определён результату.
     }
     function fnNaidenoIndex(index){//Функция подсвечивания результата поиска в боковой панели.
         lsvNaideno.currentIndex = index//Подсвечиваем в списке.
@@ -154,11 +155,11 @@ Drawer {
         id: rctRuchka
         anchors.top: root.top
         anchors.left: rctSidebar.right
-        width: root.ntWidth//В зависимости от параметра, изменяется толщина ручки.
+        width: (root.ntWidth < 3) ? 3 : root.ntWidth//В зависимости от параметра, изменяется толщина ручки.
         height: root.height
         color: Qt.darker(root.clrTexta, 1.3)
         border.color: root.clrTexta
-        border.width: root.ntCoff/4
+        border.width: (root.ntWidth < 5) ? 1 : root.ntCoff/4//Чтоб была видна оконтовка ручки.
         MouseArea {
             id: maRuchka
             //Свойства
