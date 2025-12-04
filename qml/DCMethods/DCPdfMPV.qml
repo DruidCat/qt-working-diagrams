@@ -206,8 +206,15 @@ Item {
     function fnClickedSidebar(){//Функция открывающая/закрывающая боковую панель.
         if(dcSidebar.position)//Если открыта боковая панель, то...
             dcSidebar.close()//Закрываем боковую панель
-        else//Если закрыта боковая панель, то...
-            dcSidebar.open()//Открываем боковую панель.
+        else{//Если закрыта боковая панель, то...
+            rctZagruzka.visible = true
+            tmrSidebar.running = true//Открываем боковую панель через задержку таймера.
+        }
+    }
+    Timer {//Таймер необходим, чтоб
+        id: tmrSidebar
+        interval: 3; running: false; repeat: false
+        onTriggered: dcSidebar.open()//Открываем боковую панель.
     }
     function fnSidebarNaideno(){//Функция нажатия кнопки SideBar.
         if(dcSidebar.opened){//Если боковая панель открыта, то...
@@ -672,6 +679,21 @@ Item {
                   + qsTr(" из ") + pdfDoc.pageCount
         }
     }
+    Rectangle{//Надпись ЗАГРУЗКА
+        id: rctZagruzka
+        anchors.centerIn: root
+        width: txtZagruzka.width+root.ntWidth*root.ntCoff; height: txtZagruzka.height+root.ntCoff
+        color: "Lightgray"
+        visible: false
+        clip: true; opacity: 0.6; radius: 50
+        Text{
+            id: txtZagruzka
+            anchors.centerIn: rctZagruzka
+            font.pixelSize: (root.ntWidth === 2) ? root.ntCoff : root.ntCoff*(root.ntWidth-2)//Размер шрифта
+            text: qsTr("Загрузка")
+        }
+    }
+
     DelegateModel {
         id: dlmPoisk
         model: pmpDoc.searchModel
@@ -694,7 +716,10 @@ Item {
         pmpDoc: pmpDoc//Передаём объект отображения
         pdfDoc: pdfDoc//Передаём объект документа
         //чтобы внешний сигнал продолжил работать
-        onOpenedChanged: root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
+        onOpenedChanged: {
+            root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
+            if(dcSidebar.opened) rctZagruzka.visible = false//Если боковая панель открыта, скрываем Загрузку.
+        }
         onClickedPoisk: root.clickedPoisk()//Сигнал о том, что открываем Поиск.
     }
 }
