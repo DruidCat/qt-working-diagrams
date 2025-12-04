@@ -31,6 +31,7 @@ Item {
     signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
     signal clickedZakrit();//Сигнал на отмену поиска.
     signal clickedSidebar();//Сигнал о нажатии на кнопку боковой панели.
+    signal sgnZakritSidebar();//Сигнал закрытия боковой панели.
     //Функции.
     onTextChanged: {//Если новый текст Поиска, то...
         root.blNomer = true;//Начало обнуления
@@ -65,7 +66,8 @@ Item {
         }
         Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
             if(event.key === Qt.Key_Escape){//Если нажат Escape, то...
-                fnClickedZakrit();//Функция закрытия виджета.
+                if(!root.isOpenedSidebar) fnClickedZakrit()//Функция закрытия виджета.
+                else root.sgnZakritSidebar()//Закрыть боковую панель
                 event.accepted = true;//Завершаем обработку эвента.
             }
 			//console.log(event.key);

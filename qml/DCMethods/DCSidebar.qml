@@ -48,15 +48,11 @@ Drawer {
         lsvNaideno.currentIndex = index//Подсвечиваем в списке.
     }
     function fnNaidenoNext(){//Функция перехода к следующему результату в списке.
-        if(lsvNaideno.currentIndex === (root.pmpDoc.searchModel.count - 1))//Если максимальный индекс, то...
-            lsvNaideno.currentIndex = 0//Перескок на первый результат.
-        else//Если нет, то...
+        if(lsvNaideno.currentIndex !== (root.pmpDoc.searchModel.count - 1))//Если не максимальный индекс, то..
             lsvNaideno.currentIndex += 1//То увеличиваем на 1
     }
     function fnNaidenoPrevious(){//Функция перехода к предыдущему результату в списке.
-        if(lsvNaideno.currentIndex <= 0)//Если 0 или меньше, то...
-            lsvNaideno.currentIndex = root.pmpDoc.searchModel.count - 1//Перескок на самый большой результат.
-        else//Если нет, то...
+        if(lsvNaideno.currentIndex > 0)//Если больше или 0, то...
             lsvNaideno.currentIndex -= 1//То уменьшаем на 1
     }
     function fnNaidenoOpen(){//Функция открытия и фокусировки Найдено

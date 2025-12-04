@@ -472,9 +472,10 @@ Item {
 			visible: false//Невидимый виджет.
             clrFona: root.clrFona; clrTexta: root.clrPoisk; clrKnopki: root.clrPoisk; clrBorder: root.clrTexta
             tapKnopkaZakrit: 1.3; tapKnopkaVniz: 1.3; tapKnopkaVverh: 1.3
-            onClickedSidebar: fnClickedSidebar()//Открываем/Закрываем боковую панель.
             onClickedNext: fnClickedPoiskNext()//Функция следующего номера поиска
             onClickedPrevious: fnClickedPoiskPrevious()//Функция предыдущего номера поиска
+            onClickedSidebar: fnClickedSidebar()//Открываем/Закрываем боковую панель.
+            onSgnZakritSidebar: fnClickedSidebar()//Закрываем боковую панель.
             onClickedZakrit: {//Нажатие кнопки Закрытия поиска.
                 root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
                 pskPoisk.visible = false;//Делаем невидимый режим Поиска, и только после этого...
