@@ -342,6 +342,7 @@ Item {
                 property bool isPereimenovatVibor: false//Выбрать элемент для переименования, если true
                 property bool isPereimenovat: false//Запрос на переименование, если true
                 property bool isUdalitVibor: false//Включить режим выбора удаляемого документа, если true
+                property string dannie//Переменная с именем данных, для таймера необходима.
                 //Настройки
 				ntWidth: root.ntWidth
 				ntCoff: root.ntCoff
@@ -376,6 +377,7 @@ Item {
                                 fnUdalit(ntKod, strDannie);
                             }
                             else{//Если не выбор элемента на удаление, то открыть файл к просмотру...
+                                cppqml.strDebug = qsTr("Открывается документ: ") + strDannie;
                                 lsvDannie.isPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
                                 lsvDannie.isUdalitVibor = false;//Запрещено выбирать документ на удаление.
                                 lsvDannie.isSort = false;//Выключаем сортировку элементов.
@@ -383,21 +385,24 @@ Item {
                                 txnZagolovok.visible = false;//Отключаем создание Элемента.
                                 menuDannie.visible = false;//Делаем невидимым всплывающее меню.
                                 cppqml.ullDannieKod = ntKod;//Присваиваем Код Документа к свойству Q_PROPERTY
-                                cppqml.strDannie = strDannie;//Присваиваем имя Документа к свойству Q_PROPERTY
-                                //Открываем Pdf документ.
-                                if(root.pdfMentor){//Если настройка настроена на собственный pdf просмотрщик,то
-                                    cppqml.strDebug = "";
-                                    root.clickedDannie(strDannie);//сигнал с кодом и именем Документа.
-                                }
-                                else{//Если на сторонний просмотщик pdf документов, то...
-                                    cppqml.strDebug = qsTr("Открывается документ: ") + strDannie;
-                                    Qt.callLater(function () {//Пауза, чтоб сообщение отобразится успело.
-                                        Qt.openUrlExternally(cppqml.strDannieUrl)//Открываем в стороннем app.
-                                    })
-                                }
+                                lsvDannie.dannie = strDannie//Запоминаем имя Данных для таймера.
+                                tmrPDF.running = true;//Открываем pdf с паузой, чтоб надпись успела появиться.
                             }
                         }
 					}
+                }
+                Timer {//Таймер необходим, чтоб успела отобразится надпись открытия документа. Защита от фриза
+                    id: tmrPDF
+                    interval: 3; running: false; repeat: false
+                    onTriggered: {//Открываем Pdf документ.
+                        cppqml.strDannie = lsvDannie.dannie;//Присваиваем имя Документа к свойству Q_PROPERTY
+                        if(root.pdfMentor){//Если настройка настроена на собственный pdf просмотрщик,то
+                            cppqml.strDebug = "";
+                            root.clickedDannie(lsvDannie.dannie);//сигнал с именем Документа.
+                        }
+                        else//Если на сторонний просмотщик pdf документов, то...
+                            Qt.openUrlExternally(cppqml.strDannieUrl)//Открываем в стороннем приложении pdf
+                    }
                 }
                 onTap: {
                     //root.signalToolbar("");//Делаем пустую строку в Toolbar.
