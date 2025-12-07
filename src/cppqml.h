@@ -16,6 +16,7 @@
 #include "dcfiledialog.h"
 #include "datakatalog.h"
 #include "dcpdfpoisk.h"
+#include "dclogger.h"
 
 class DCCppQml : public QObject {
     Q_OBJECT
@@ -410,5 +411,6 @@ private:
     QTimer*			m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.
     uint 			m_untDebugSec;//Счётчик секунд для таймера отладки.
     DCClass* 		m_pdcclass = nullptr;//Указатель на класс часто используемых методов.
+    DCLogger* m_pdclogger = nullptr;//Указатель на поток записи логов в файл.
 };
 #endif // CPPQML_H

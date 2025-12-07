@@ -49,6 +49,8 @@ set(PROJECT_SOURCES
         src/dcdbdata.cpp
         src/dcfiledialog.h
         src/dcfiledialog.cpp
+        src/dclogger.h
+        src/dclogger.cpp
         src/dcpdfpoisk.h
         src/dcpdfpoisk.cpp
 		src/main.cpp

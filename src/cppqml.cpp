@@ -62,6 +62,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     quint64 ullElementMax = 999;//Максимальное количество Элементов.
     quint64 ullDannieMax = 999;//Максимальное количество Данных.
     QString strKatalogDB = "workingdata";//Имя дериктория хранения данных
+    QString strKatalogDebug = "log";//Имя дериктория хранения логов
     QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf"<<"*.m4b";
     QStringList slsDomPut = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     m_strDomPut = slsDomPut.first();//Переменная хранящая путь домашнего каталога.
@@ -90,6 +91,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     m_pDataPlan		= new DataPlan(strMentorPut, ullDannieMax);//План.
     m_pFileDialog	= new DCFileDialog(slsFileDialogMaska, m_strDomPut);//Проводник.
     m_pPdfPoisk		= new DCPdfPoisk();//Pdf Поиск.
+    m_pdclogger		= new DCLogger(strKatalogDebug);//Записываем логи в файл.
     //---передаём-указатели-бд---//
     m_pDataKatalog->ustPDBTitul(m_pDataTitul->polPDB());//Передаем указатель на БД из класса в класс.
     m_pDataKatalog->ustPDBSpisok(m_pDataSpisok->polPDB());//Передаем указатель на БД из класса в класс.
@@ -182,6 +184,8 @@ DCCppQml::~DCCppQml(){//Деструктор.
 	m_pTimerDebug = nullptr;//Обнуляем указатель на таймер отладки.
 	delete m_pdcclass;//Удаляем указатель.
 	m_pdcclass = nullptr;//Обнуляем указатель
+    delete m_pdclogger;//Удаляем указатель.
+    m_pdclogger = nullptr;//Обнуляем указатель.
 }
 
 void DCCppQml::ustReestr(){//Запись настроек программы
@@ -956,7 +960,11 @@ void DCCppQml::setStrDebug(QString& strDebugNovi){//Установить Нов�
         m_pTimerDebug->start();//Запустить таймер.
     }
 	m_strDebug = strDebugNovi;
-	qWarning()<<m_strDebug;//Пишем ошибку в отладочную консоль.
+    if(!m_strDebug.isEmpty()){//Если не пустая строка, то...
+        m_pdclogger->ustDebug(m_strDebug);//Добавляем строку для её дальнейшей записи в файл.
+        m_pdclogger->start();//Запускаем в отдельном потоке запись логов в файл.
+        qWarning()<<m_strDebug;//Пишем ошибку в отладочную консоль.
+    }
     emit strDebugChanged();//Излучаем сигнал в qml с ошибкой.
 }
 QString DCCppQml::redaktorTexta(QString strTekst){//Редактор текста по стандартам Приложения.
