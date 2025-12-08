@@ -300,7 +300,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                                         </html>");
                                 }
                                 else{
-                                    if(strInstrukciya === "debug"){//Если это Инструкция Журнал, то...
+                                    if(strInstrukciya === "jurnal"){//Если это Инструкция Журнал, то...
                                         txdZona.text = qsTr("
                                             <html>
                                                 <body>

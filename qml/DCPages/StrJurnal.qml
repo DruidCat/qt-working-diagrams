@@ -10,7 +10,9 @@ Item {
     property int ntCoff: 8
     property color clrTexta: "Orange"
 	property color clrFona: "Black"
-	property alias zagolovokX: tmZagolovok.x
+    property color clrMenuText: "Orange"
+    property color clrMenuFon: "SlateGray"
+    property alias zagolovokX: tmZagolovok.x
 	property alias zagolovokY: tmZagolovok.y
 	property alias zagolovokWidth: tmZagolovok.width
 	property alias zagolovokHeight: tmZagolovok.height 
@@ -45,14 +47,24 @@ Item {
             }
         }
         else{
-            if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
-                if(knopkaInfo.visible)
-                    fnClickedInfo();//Функция нажатия на кнопку Информация.
-                event.accepted = true;//Завершаем обработку эвента.
+            if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                fnClickedEscape();//Функция нажатия кнопки Escape.
+            }
+            else{
+                if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+                    if(knopkaInfo.visible)
+                        fnClickedInfo();//Функция нажатия на кнопку Информация.
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
             }
         }
     }
+    MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
+        anchors.fill: root
+        onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
+    }
     function fnClickedNazad(){//Функция нажатия кнопки Назад
+        fnClickedEscape();//Меню сворачиваем
         root.clickedNazad();
     }
     function fnClickedInfo(){//Функция нажатия на кнопку Информации.
@@ -60,9 +72,10 @@ Item {
         root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
     }
     function fnClickedPoisk(){//Функция нажатия кнопки Poisk.
+        fnClickedEscape();//Меню сворачиваем
     }
     function fnClickedEscape(){//Меню сворачиваем
-        //menuDebug.visible = false;//Делаем невидимым всплывающее меню.
+        menuJurnal.visible = false;//Делаем невидимым всплывающее меню.
     }
     Item {//Данные Заголовок
 		id: tmZagolovok
@@ -106,7 +119,33 @@ Item {
             clrTexta: root.clrTexta//Цвет текста
             clrBorder: root.clrTexta//Цвет бардюра при редактировании текста.
 			italic: true//Текст курсивом.
-		}
+            onPressed: fnClickedEscape();//Если нажали на пустое место.
+        }
+        DCMenu {
+            id: menuJurnal
+            visible: false//Невидимое меню.
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            anchors.left: tmZona.left
+            anchors.right: tmZona.right
+            anchors.bottom: tmZona.bottom
+            anchors.margins: root.ntCoff
+            pctFona: 0.90//Прозрачность фона меню.
+            clrTexta: root.clrMenuText; clrFona: root.clrMenuFon
+            imyaMenu: "jurnal"//Глянь в DCMenu все варианты меню в слоте окончательной отрисовки.
+            onClicked: function(ntNomer, strMenu) {
+                menuJurnal.visible = false;//Делаем невидимым меню.
+                if(ntNomer === 1){//Поиск
+                    fnClickedPoisk();//Поиск.
+                }
+                if(ntNomer === 2){//Информация
+                    fnClickedInfo();//Открываем инструкцию Журнала
+                }
+                if(ntNomer === 3){//Закрыть.
+                    fnClickedNazad();//Закрываем журнал.
+                }
+            }
+        }
     }
     Item {//Данные Тулбар
 		id: tmToolbar
@@ -133,16 +172,7 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
-                /*
-                txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
-                menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
-                lsvDannie.isPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
-                lsvDannie.isPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
-                lsvDannie.isUdalitVibor = false;//Запрещено удалять.
-                lsvDannie.isSort = false;//Выключаем сортировку элементов.
-                txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
-                lsvDannie.enabled = true;//Делаем кликабельную Зону.
-                */
+                menuJurnal.visible ? menuJurnal.visible = false : menuJurnal.visible = true;
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
         }

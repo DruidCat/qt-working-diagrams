@@ -138,26 +138,26 @@ Item {
         root.height = lsvMenu.count*(ntWidth*ntCoff+ntCoff)+ntCoff;//Выставляем высоту под размер меню.
     }
 	Component.onCompleted: {//Слот, кода всё представление отрисовалось.
-		if(imyaMenu == "spisok"){//Если это Список, то...
+        if(imyaMenu == "spisok")//Если это Список, то...
 			lsvMenu.model = JSMenu.vrMenuSpisok;//Перегружаем модель ListView с новыми данными.
-		}
 		else{
-			if(imyaMenu == "element"){//Если это Элемент, то...
+            if(imyaMenu == "element")//Если это Элемент, то...
 				lsvMenu.model = JSMenu.vrMenuElement;//Перегружаем модель ListView с новыми данными.
-			}
 			else{
-				if(imyaMenu == "dannie"){//Если это Данные, то...
+                if(imyaMenu == "dannie")//Если это Данные, то...
 					lsvMenu.model = JSMenu.vrMenuDannie;//Перегружаем модель ListView с новыми данными.
-				}
                 else{
-                    if(imyaMenu == "filedialog"){
+                    if(imyaMenu == "filedialog")
                         lsvMenu.model = JSMenu.vrMenuFileDialog;//Перегружаем модель ListView с новыми данными
-                    }
                     else {
                         if(imyaMenu == "animaciya")
                             lsvMenu.model = JSMenu.vrMenuAnimaciya;//Перегружаем модель ListView с новыми дан.
-                        else
-                            lsvMenu.model = JSMenu.vrMenuVihod;//Перегружаем модель ListView с новыми данными.
+                        else{
+                            if(imyaMenu == "jurnal")
+                                lsvMenu.model = JSMenu.vrMenuJurnal;//Перегружаем модель ListView с новыми дан
+                            else
+                                lsvMenu.model = JSMenu.vrMenuVihod;//Перегружаем модель ListView с новыми дан
+                        }
                     }
                 }
             }

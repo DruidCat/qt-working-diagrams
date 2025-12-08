@@ -59,7 +59,7 @@
         <file>qml/DCMethods/qmldir</file>
         <file>qml/DCPages/StrAnimaciya.qml</file>
         <file>qml/DCPages/StrDannie.qml</file>
-        <file>qml/DCPages/StrDebug.qml</file>
+        <file>qml/DCPages/StrJurnal.qml</file>
         <file>qml/DCPages/StrElement.qml</file>
         <file>qml/DCPages/StrFileDialog.qml</file>
         <file>qml/DCPages/StrInstrukciya.qml</file>
