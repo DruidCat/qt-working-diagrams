@@ -62,7 +62,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     quint64 ullElementMax = 999;//Максимальное количество Элементов.
     quint64 ullDannieMax = 999;//Максимальное количество Данных.
     QString strKatalogDB = "workingdata";//Имя дериктория хранения данных
-    QString strKatalogDebug = "log";//Имя дериктория хранения логов
+    QString strKatalogDebug = "workinglogs";//Имя дериктория хранения логов
     QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf"<<"*.m4b";
     QStringList slsDomPut = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     m_strDomPut = slsDomPut.first();//Переменная хранящая путь домашнего каталога.
@@ -954,8 +954,9 @@ void DCCppQml::setStrDebug(QString& strDebugNovi){//Установить Нов�
     if(strDebugNovi == "")//Стераем сообщение из Toolbar
         m_pTimerDebug->stop();//Останавливаем таймер.
     else{
-        QString strLog = QTime::currentTime().toString("HH:mm:ss");//В строку добавляем текущее время.
-        strDebugNovi = strLog + ": " + strDebugNovi;//Добавляем двоеточие и само Сообщение.
+        QString strVremya = QTime::currentTime().toString("HH:mm:ss");//В строку добавляем текущее время.
+        QString strData = QDate::currentDate().toString("yyyy.MM.dd");
+        strDebugNovi = strData + "-" + strVremya + " " + strDebugNovi;//Добавляем двоеточие и само Сообщение.
         strDebugNovi = strDebugNovi;//Добавляем двоеточие и само Сообщение.
         m_pTimerDebug->start();//Запустить таймер.
     }

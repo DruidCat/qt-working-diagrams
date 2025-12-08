@@ -13,7 +13,8 @@ DCLogger::DCLogger(QString strKatalogDebug){//Конструктор.
         }
         else qWarning()<<tr("DCLogger::DCLogger: ошибка создания папки хранения логов.");
     }
-    QString strFailPut = QDir(odrMentor.path()).filePath("logs.txt");//каталог + файл.
+    QString strImyaFaila = QDate::currentDate().toString("yyyy") + ".txt";
+    QString strFailPut = QDir(odrMentor.path()).filePath(strImyaFaila);//каталог + файл.
 
     m_flLogs.setFileName(strFailPut);
     if(m_flLogs.open(QIODevice::Append | QIODevice::Text)){//Режим добавления в конец файла|перевод строки \n
