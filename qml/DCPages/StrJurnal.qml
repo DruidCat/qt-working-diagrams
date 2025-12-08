@@ -30,6 +30,7 @@ Item {
     property real tapToolbarPravi: 1
 	property alias radiusZona: txdZona.radius
 	property string strDebug: ""//Глобальная переменная, в ней собирается строка со всеми Сообщениями.
+    property int ntPoisk//Переменная, которая будет хранить диапазон поиска по Журналу.
     //Настройки.
 	anchors.fill: parent//Растянется по Родителю.
     focus: true;//Чтоб работали горячие клавиши.
@@ -39,22 +40,31 @@ Item {
     signal clickedInfo();//Сигнал нажатия кнопки Инфо, где будет описание работы Файлового Диалога.
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
-            if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
-                if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
-                    fnClickedNazad();//Функция нажатия кнопки Назад
+        if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+            if(event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                if(knopkaPoisk.visible)//Если кнопка Поиск видимая, то...
+                    fnClickedPoisk();//Функция нажатия Поиска.
                 event.accepted = true;//Завершаем обработку эвента.
             }
         }
         else{
-            if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-                fnClickedEscape();//Функция нажатия кнопки Escape.
+            if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                    if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                        fnClickedNazad();//Функция нажатия кнопки Назад
+                    event.accepted = true;//Завершаем обработку эвента.
+                }
             }
             else{
-                if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
-                    if(knopkaInfo.visible)
-                        fnClickedInfo();//Функция нажатия на кнопку Информация.
-                    event.accepted = true;//Завершаем обработку эвента.
+                if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                    fnClickedEscape();//Функция нажатия кнопки Escape.
+                }
+                else{
+                    if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+                        if(knopkaInfo.visible)
+                            fnClickedInfo();//Функция нажатия на кнопку Информация.
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
                 }
             }
         }
@@ -72,10 +82,12 @@ Item {
         root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
     }
     function fnClickedPoisk(){//Функция нажатия кнопки Poisk.
-        fnClickedEscape();//Меню сворачиваем
+        menuJurnal.visible = false;//Делаем невидимым всплывающее меню.
+        pvPoisk.visible = !pvPoisk.visible
     }
     function fnClickedEscape(){//Меню сворачиваем
         menuJurnal.visible = false;//Делаем невидимым всплывающее меню.
+        pvPoisk.visible = false;//Делаем невидимым выбор поиска.
     }
     Item {//Данные Заголовок
 		id: tmZagolovok
@@ -120,6 +132,25 @@ Item {
             clrBorder: root.clrTexta//Цвет бардюра при редактировании текста.
 			italic: true//Текст курсивом.
             onPressed: fnClickedEscape();//Если нажали на пустое место.
+        }
+        ListModel {//Модель с шриштами
+            id: modelPoisk
+            ListElement { spisok: qsTr("неделя") }
+            ListElement { spisok: qsTr("месяц") }
+            ListElement { spisok: qsTr("год") }
+        }
+        DCPathView {
+            id: pvPoisk
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
+            anchors.leftMargin: 22; anchors.rightMargin:22
+            clrFona: root.clrFona; clrTexta: root.clrMenuText; clrMenuFon: root.clrMenuFon
+            modelData: modelPoisk
+            onClicked: function(strShrift) {
+                pvPoisk.visible = false;
+                root.ntPoisk = pvPoisk.currentIndex;//Приравниваем значение к переменной.
+            }
         }
         DCMenu {
             id: menuJurnal
@@ -172,6 +203,7 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: {
+                if(pvPoisk.visible) pvPoisk.visible = false//Делаем невидимый выбор поиска
                 menuJurnal.visible ? menuJurnal.visible = false : menuJurnal.visible = true;
                 root.signalToolbar("");//Делаем пустую строку в Toolbar.
             }
