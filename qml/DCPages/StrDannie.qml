@@ -377,7 +377,8 @@ Item {
                                 fnUdalit(ntKod, strDannie);
                             }
                             else{//Если не выбор элемента на удаление, то открыть файл к просмотру...
-                                cppqml.strDebug = qsTr("Открывается документ: ") + strDannie;
+                                cppqml.strDebug=cppqml.strSpisok + ", " + cppqml.strElement + ", " + strDannie
+                                root.signalToolbar(qsTr("Открывается документ: ") + strDannie);//Сообщение
                                 lsvDannie.isPereimenovat = false;//Запрещаем переименование (отмена)...(ок)
                                 lsvDannie.isUdalitVibor = false;//Запрещено выбирать документ на удаление.
                                 lsvDannie.isSort = false;//Выключаем сортировку элементов.
@@ -397,6 +398,7 @@ Item {
                     onTriggered: {//Открываем Pdf документ.
                         cppqml.strDannie = lsvDannie.dannie;//Присваиваем имя Документа к свойству Q_PROPERTY
                         if(root.pdfMentor){//Если настройка настроена на собственный pdf просмотрщик,то
+                            //root.signalToolbar("");
                             cppqml.strDebug = "";
                             root.clickedDannie(lsvDannie.dannie);//сигнал с именем Документа.
                         }
