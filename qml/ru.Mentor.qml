@@ -270,6 +270,9 @@ ApplicationWindow {
                 zonaWidth: pgStrLogi.rctStrZona.width; zonaHeight: pgStrLogi.rctStrZona.height
 
                 onClickedNazad: stvStr.pop()//Назад страницу
+                onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
+                    pgStrLogi.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
+                }
 			}
         }
         Stranica {//Ментор

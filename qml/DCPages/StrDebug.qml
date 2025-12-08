@@ -33,6 +33,7 @@ Item {
     focus: true;//Чтоб работали горячие клавиши.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
+    signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
@@ -43,8 +44,12 @@ Item {
             }
         }
     }
-    function fnClickedNazad() {//Функция нажатия кнопки Назад
+    function fnClickedNazad(){//Функция нажатия кнопки Назад
         root.clickedNazad();
+    }
+    function fnClickedInfo(){//Функция нажатия на кнопку Информации.
+    }
+    function fnClickedPoisk(){//Функция нажатия кнопки Poisk.
     }
     Item {//Данные Заголовок
 		id: tmZagolovok
@@ -58,6 +63,19 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedNazad();//Функция нажатия кнопки Назад
+        }
+        DCKnopkaInfo {
+            id: knopkaInfo
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            visible: true
+            anchors.verticalCenter: tmZagolovok.verticalCenter
+            anchors.right: tmZagolovok.right
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
+            tapWidth: tapHeight*root.tapZagolovokLevi
+            onClicked: fnClickedInfo();//Функция нажатия на кнопку Информации.
         }
     }
     Item {//Данные Зона
@@ -79,6 +97,42 @@ Item {
     }
     Item {//Данные Тулбар
 		id: tmToolbar
+        DCKnopkaPoisk{
+            id: knopkaPoisk
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            anchors.verticalCenter: tmToolbar.verticalCenter
+            anchors.left: tmToolbar.left
+            clrKnopki: root.clrTexta//Цвет файлов
+            clrFona: root.clrFona
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
+            tapWidth: tapHeight*root.tapZagolovokLevi
+            onClicked: fnClickedPoisk();//Функция нажатия кнопки Poisk.
+        }
+        DCKnopkaNastroiki {
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            anchors.verticalCenter: tmToolbar.verticalCenter
+            anchors.right: tmToolbar.right
+            clrKnopki: root.clrTexta
+            clrFona: root.clrFona
+            blVert: true//Вертикольное исполнение
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
+            tapWidth: tapHeight*root.tapZagolovokLevi
+            onClicked: {
+                /*
+                txnZagolovok.visible = false;//Отключаем режим ввода данных заголовка.
+                menuDannie.visible ? menuDannie.visible = false : menuDannie.visible = true;
+                lsvDannie.isPereimenovat = false;//Запрещаем переименовывание (отмена)...(ок).
+                lsvDannie.isPereimenovatVibor = false;//Запрещаем выбор элементов для переименовывания.
+                lsvDannie.isUdalitVibor = false;//Запрещено удалять.
+                lsvDannie.isSort = false;//Выключаем сортировку элементов.
+                txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
+                lsvDannie.enabled = true;//Делаем кликабельную Зону.
+                */
+                root.signalToolbar("");//Делаем пустую строку в Toolbar.
+            }
+        }
     }
 	Connections {//Соединяем сигнал из C++ с действием в QML
 		target: cppqml;//Цель объект класса С++ DCCppQml
