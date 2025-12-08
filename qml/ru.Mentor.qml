@@ -270,6 +270,7 @@ ApplicationWindow {
                 zonaWidth: pgStrLogi.rctStrZona.width; zonaHeight: pgStrLogi.rctStrZona.height
 
                 onClickedNazad: stvStr.pop()//Назад страницу
+                onClickedInfo: stvStr.push(pgStrInstrukciyaDebug);//Переключаемся на Инструкцию Журнала.
                 onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
                     pgStrLogi.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
@@ -920,6 +921,41 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrInstrukciyaFB.zagolovokPravi
                 tapToolbarLevi: pgStrInstrukciyaFB.toolbarLevi
                 tapToolbarPravi: pgStrInstrukciyaFB.toolbarPravi
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+            }
+        }
+        Stranica {//Описание Журнала.
+        /////////////////////////////////////////
+        ///И Н С Т Р У К Ц И Я   Ж У Р Н А Л А///
+        /////////////////////////////////////////
+            id: pgStrInstrukciyaDebug
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
+            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО ЖУРНАЛУ")
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
+            StrInstrukciya {
+                strInstrukciya: "debug"
+                ntWidth: pgStrInstrukciyaDebug.ntWidth; ntCoff: pgStrInstrukciyaDebug.ntCoff
+                clrTexta: pgStrInstrukciyaDebug.clrTexta; clrFona: pgStrInstrukciyaDebug.clrRabOblasti
+                clrPolzunka: pgStrInstrukciyaDebug.clrFona
+                zagolovokX: pgStrInstrukciyaDebug.rctStrZagolovok.x;
+                zagolovokY: pgStrInstrukciyaDebug.rctStrZagolovok.y
+                zagolovokWidth: pgStrInstrukciyaDebug.rctStrZagolovok.width
+                zagolovokHeight: pgStrInstrukciyaDebug.rctStrZagolovok.height
+                zonaX: pgStrInstrukciyaDebug.rctStrZona.x; zonaY: pgStrInstrukciyaDebug.rctStrZona.y
+                zonaWidth: pgStrInstrukciyaDebug.rctStrZona.width;
+                zonaHeight: pgStrInstrukciyaDebug.rctStrZona.height
+                toolbarX: pgStrInstrukciyaDebug.rctStrToolbar.x
+                toolbarY: pgStrInstrukciyaDebug.rctStrToolbar.y
+                toolbarWidth: pgStrInstrukciyaDebug.rctStrToolbar.width
+                toolbarHeight: pgStrInstrukciyaDebug.rctStrToolbar.height
+                radiusZona: pgStrInstrukciyaDebug.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrInstrukciyaDebug.zagolovokLevi
+                tapZagolovokPravi: pgStrInstrukciyaDebug.zagolovokPravi
+                tapToolbarLevi: pgStrInstrukciyaDebug.toolbarLevi
+                tapToolbarPravi: pgStrInstrukciyaDebug.toolbarPravi
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }

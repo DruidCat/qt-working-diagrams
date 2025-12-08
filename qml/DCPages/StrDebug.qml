@@ -34,6 +34,7 @@ Item {
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
     signal signalToolbar(var strToolbar);//Сигнал, когда передаём новую надпись в Тулбар.
+    signal clickedInfo();//Сигнал нажатия кнопки Инфо, где будет описание работы Файлового Диалога.
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
@@ -43,13 +44,25 @@ Item {
                 event.accepted = true;//Завершаем обработку эвента.
             }
         }
+        else{
+            if(event.key === Qt.Key_F1){//Если нажата кнопка F1, то...
+                if(knopkaInfo.visible)
+                    fnClickedInfo();//Функция нажатия на кнопку Информация.
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        }
     }
     function fnClickedNazad(){//Функция нажатия кнопки Назад
         root.clickedNazad();
     }
     function fnClickedInfo(){//Функция нажатия на кнопку Информации.
+        fnClickedEscape();//Меню сворачиваем
+        root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
     }
     function fnClickedPoisk(){//Функция нажатия кнопки Poisk.
+    }
+    function fnClickedEscape(){//Меню сворачиваем
+        //menuDebug.visible = false;//Делаем невидимым всплывающее меню.
     }
     Item {//Данные Заголовок
 		id: tmZagolovok
