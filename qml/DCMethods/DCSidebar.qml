@@ -403,103 +403,90 @@ Drawer {
     }
     Rectangle {//Вкладка "Закладки"
         id: rctZakladki
+        //Свойства
+        readonly property int heightScrollBar: 16//Высота горизонтал скроллбара, который нарисуем снизу панели
+        //Настройки
         anchors.top: rctSidebar.top
         anchors.left: rctSidebar.left
         width: rctSidebar.width
         height: rctSidebar.height
         color: root.clrFona
-        clip: true//Обязательно обрезать всё, что не помещается в этот прямоугольник.
-        visible: currentIndex === 1//Если истина, то видимая вкладка. 
-        Text {
+        clip: true//обрезаем всё, что выходит за прямоугольник
+        visible: currentIndex === 1//показываем, только когда выбрана вкладка "Закладки"
+        //Функции
+        Text {//Сообщение "Нет закладок", если модель пуста
             anchors.left: rctZakladki.left
             anchors.right: rctZakladki.right
             anchors.verticalCenter: rctZakladki.verticalCenter
             color: root.clrMenuFon
-            font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
+            font.pixelSize: root.ntWidth * root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight//Обрезаем текст по правой стороне точками (...)
-            text:  pdfBookmarkModel.rowCount() ? "" : qsTr("Нет закладок")//Если есть/нет закладок
+            text: pdfBookmarkModel.rowCount() ? "" : qsTr("Нет закладок")//Если есть/нет закладок
         }
         TreeView {
             id: trvZakladki
             //Свойства
             property int currentIndex: -1//Хранит индекс той закладки, который мы выбрали, кликнув на неё.
-            property bool isIndikator: false;//true - индикатор треугольник нажат хоть один раз.
+            property bool isIndikator: false//true - индикатор треугольник нажат хоть один раз.
+            property real horizontalOffset: 0//Гориз. сдвиг всех строк меняется при движении гориз. ScrollBar.
+            property real maxHorizontalOffset: 0//Маx"хвост"по X среди всех строк который вылез за правый край
             //Настройки
-            implicitHeight: rctZakladki.height
-            implicitWidth: rctZakladki.width
-            columnWidthProvider: function() { return width }
-            ScrollBar.vertical: ScrollBar { }
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: rctZakladki.heightScrollBar//Для полоски под горизонтальный ScrollBar
+            //Функции
+            columnWidthProvider: function(column) { return width }//Ширин единственного столбца=ширинаTreeView
+            ScrollBar.vertical: ScrollBar { }//Вертикальный ScrollBar TreeView по умолчанию
             KeyNavigation.tab: tbbZakladki//Tab -> кнопка "Закладки"
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
                 if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
                     if(event.key === Qt.Key_B){//Если нажата клавиша B
                         dcSidebar.close()//Закрываем боковую панель
-                        event.accepted = true;//Завершаем обработку эвента.
+                        event.accepted = true//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_T){//Если нажата клавиша T
+                        fnPosterOpen()//Открытие боковой панели на Миниатюрах.
+                        event.accepted = true//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_F){//Если нажата клавиша F
+                        fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+                        root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
+                        event.accepted = true//Завершаем обработку эвента.
                     }
-                    else{
-                        if(event.key === Qt.Key_T){//Если нажата клавиша T
-                            fnPosterOpen()//Открытие боковой панели на Миниатюрах.
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
-                        else{
-                            if(event.key === Qt.Key_F){//Если нажата клавиша F
-                                fnNaidenoOpen()//Функция открытия и фокусировки Найдено
-                                root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
-                                event.accepted = true;//Завершаем обработку эвента.
-                            }
-                        }
+                } else if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                    if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                        fnNaidenoOpen()//Функция открытия боковой панели на Найдено.
+                        event.accepted = true//Завершаем обработку эвента.
                     }
-                }
-                else{
-                    if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
-                        if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
-                            fnNaidenoOpen()//Функция открытия боковой панели на Найдено.
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
+                } else if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                    if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                            root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
+                        event.accepted = true//Завершаем обработку эвента.
                     }
-                    else{
-                        if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                            if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                                if(root.pmpDoc.searchModel.count)//Если не 0, то...
-                                    root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
-                                event.accepted = true;//Завершаем обработку эвента.
-                            }
-                        }
-                        else{
-                            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
-                                if(!isIndikator)//Если индикатор треугольник не был нажат, то...
-                                    if(trvZakladki.focus) fnGoToZakladka(currentIndex)//Переходим на страницу
-                                event.accepted = true;//Завер обработку эвента
-                            }
-                            else{
-                                if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
-                                    if(root.pmpDoc.searchModel.count)//Если не 0, то...
-                                        root.pmpDoc.searchModel.currentResult += 1//Следующий результат
-                                    event.accepted = true;//Завершаем обработку эвента.
-                                }
-                                else{
-                                    if(event.key === Qt.Key_Up){//нажата "Стрелка вверх",то
-                                        if(!isIndikator)//Если индикатор треугольник не был нажат, то...
-                                            currentIndex = Math.max(0, currentIndex -= 1)
-                                        event.accepted = true;//Завершаем обработку эвента.
-                                    }
-                                    else{
-                                        if(event.key === Qt.Key_Down){//нажата "Стрелка вниз"
-                                            if(!isIndikator)//Если индикатор треугольник не был нажат, то...
-                                                currentIndex = Math.min((pdfBookmarkModel.rowCount()-1),
-                                                                        currentIndex += 1)
-                                            event.accepted = true;//Завершаем обработку эвента.
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                } else {
+                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                        if(!isIndikator)//Если индикатор треугольник не был нажат, то...
+                            if(trvZakladki.focus) fnGoToZakladka(currentIndex)//Переходим на страницу
+                        event.accepted = true//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
+                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                            root.pmpDoc.searchModel.currentResult += 1//Следующий результат
+                        event.accepted = true//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_Up){//нажата "Стрелка вверх",то
+                        if(!isIndikator)//Если индикатор треугольник не был нажат, то...
+                            currentIndex = Math.max(0, currentIndex - 1)
+                        event.accepted = true//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_Down){//нажата "Стрелка вниз"
+                        if(!isIndikator)//Если индикатор треугольник не был нажат, то...
+                            currentIndex = Math.min(pdfBookmarkModel.rowCount()-1, currentIndex + 1)
+                        event.accepted = true//Завершаем обработку эвента.
                     }
                 }
             }
-            function fnGoToZakladka(index){//Функция перехода к закладке по индексу
+            function fnGoToZakladka(index){//Переход к закладке по индексу (используется клавишами/мышью)
                 if (index < 0) return//Если индекс меньше нуля, выходим из функции.
                 const modelIndex = pdfBookmarkModel.index(index, 0)//Получаем модель закладки по индексу.
                 if (!modelIndex.valid) return//Если модель не действительна, выходим из функции.
@@ -507,79 +494,145 @@ Drawer {
                 const location = pdfBookmarkModel.data(modelIndex, PdfBookmarkModel.Location)//Координаты
                 root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//Переходим на страницу
             }
-            onCurrentIndexChanged: {//Если меняется индекс,то...
+            onCurrentIndexChanged: {//При смене currentIndex скроллим TreeView, чтобы выбранная строка видна
                 if(currentIndex >= 0 && currentIndex < pdfBookmarkModel.rowCount()){//Если индекс в габаритах
                     const modelIndex = pdfBookmarkModel.index(currentIndex, 0)//Получаем модель конкр.закладки
                     if (modelIndex.valid)//Если эта модель существует и она действительная
                         positionViewAtIndex(modelIndex, TreeView.Contain)//Делаем ВИДИМОЙ вкладку. Скроллим.
                 }
             }
-            delegate: TreeViewDelegate {
+            delegate: TreeViewDelegate {//Делегат закладки, отдна строка в TreeView
                 id: tvdZakladka
                 //Свойства
-                required property int page//Страница закладки
-                required property point location//Координата закладки
-                required property string title//Текст закладки
-                required property int index//Индекс закладки
+                required property int page//Приходит из PdfBookmarkModel номер страницы
+                required property point location//Приходит из PdfBookmarkModel координата закладки
+                required property string title//Приходит из PdfBookmarkModel имя закладки
+                required property int index //Приходит из PdfBookmarkModel индекс закладки
+                readonly property int pixelShrift: (root.ntWidth<=2)
+                                                    ? root.ntCoff*(root.ntWidth-1)
+                                                    : root.ntCoff*(root.ntWidth-2)//Размер шрифта строки
                 //Настройки
-                //leftPadding: 11//Отступ слева
-                text: title//Отображение текста вкладки.
-                background: Rectangle {
+                implicitHeight: pixelShrift + root.ntCoff * 1.2//Высота строки—чуть больше шрифта (есть запас)
+                text: title//Текст, который TreeViewDelegate ожидает показывать
+                background: Rectangle {//Подложка строки (подсветка текущей/чётные-нечётные)
                     color: trvZakladki.currentIndex === tvdZakladka.index//Если индекс равен currentIndex
                            ? (trvZakladki.focus ? root.clrMenuFon//Если фокус на закладке, то цвет
-                                                : Qt.darker(root.clrMenuFon, 1.3) )//Если нет, то цвет темнее
+                                                : Qt.darker(root.clrMenuFon, 1.3))//Если нет, то цвет темнее
                            : (tvdZakladka.row % 2 === 0 ? root.clrFona
                                                         : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.11)))
                 }
-                contentItem: Text {
-                    text: tvdZakladka.text
-                    color: root.clrTexta
-                    font.pixelSize: (root.ntWidth<=2) ? root.ntCoff*(root.ntWidth-1)//Защита от нулевой разниц
-                                                      : root.ntCoff*(root.ntWidth-2)
-                    elide: Text.ElideRight//Обрезаем текст по правому краю точками
-                    verticalAlignment: Text.AlignVCenter//По центру вертикальному располагаем текст
-                }
-                indicator: Item {//Индикатор треугольник ▾ / ▸
-                    visible: tvdZakladka.hasChildren//Если есть вложеные закладки, то видимый индикатор
-                    implicitWidth: 22//отступ от левого края
-                    implicitHeight: 22//фиксируем ненулевую высоту
-                    x: (tvdZakladka.depth ?? 0) * 16//Добавляем отступ влево, чтоб лесенка была из индикаторов
-                    Text {
-                        anchors.centerIn: parent
-                        text: tvdZakladka.expanded ? "\u25BE" : "\u25B8"// ▾ / ▸
-                        color: root.clrTexta//Цвет треугольника
-                        font.pixelSize: (root.ntWidth<=2) 	? root.ntCoff*(root.ntWidth-1)//Защита от нулевой
-                                                            : root.ntCoff*(root.ntWidth-2)
+                contentItem: Item {//Всё содержимое строки (индикатор + текст) внутри contentItem
+                    id: rowContent
+                    //Свойства
+                    readonly property real visibleWidth: width//Видимая ширина TreeView для одной колонки
+                    readonly property real depthIndent: (tvdZakladka.depth ?? 0) * 16//Отступ лесенкой по глуб
+                    readonly property real baseIndent: 4//Небольшой отступ слева, текст не прилипал к рамке
+                    readonly property real leftIndent: baseIndent + depthIndent//Общий левый отступ
+                    //Настройки
+                    anchors.fill: parent
+                    clip: true//обрезаем, чтобы текст не вылезал за правый край визуально
+                    //Функции
+                    function fnMaxOffset(){//Функция, которая обновляет глобальный maxHorizontalOffset
+                        //fullWidth — как вы определяете полную ширину строки;
+                        //visibleWidth — сколько реально видно по X;
+                        //over = fullWidth - visibleWidth — сколько нужно ещё «прокрутить» вправо.
+                        //Сейчас эти три величины считаются и используются для настройки maxHorizontalOffset и
+                        //соответственно, поведения горизонтального ScrollBar.
+                        //Полная логич.ширина строки=левый отступ(лесенка)+ширина содержимого(индикатор+текст)
+                        const fullWidth = rowContent.leftIndent + tmContent.width
+                        const visibleWidth = rowContent.visibleWidth//Видимая ширина строки (экран)
+                        const over = fullWidth - visibleWidth//"Хвост"строки,который не помещается в видим обл
+                        if (over > trvZakladki.maxHorizontalOffset)//Если этот "хвост" больше, чем то,что было
+                            trvZakladki.maxHorizontalOffset = over//обновляем максимум
                     }
-                    MouseArea {
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: (mouse) => {//объявляем параметр mouse
-                            if (!tvdZakladka.hasChildren) return//Если нет вложеных закладок, то выходим.
-                            trvZakladki.focus = true//Фокус на Закладках
-                            if(trvZakladki.currentIndex !== tvdZakladka.index)//Если это другая вкладка
-                                trvZakladki.currentIndex = -1
-                            trvZakladki.toggleExpanded(tvdZakladka.index)//Разворачивает закладку по index
-                            trvZakladki.isIndikator = true;//Взводим флаг, отключаем горячие клавиши.
-                            mouse.accepted = true
+                    Item {//Весь контент строки, который мы будем сдвигать по X
+                        id: tmContent
+                        anchors.verticalCenter: parent.verticalCenter
+                        height: parent.height
+                        //lineContent.x = левый отступ - глобальный горизонтальный сдвиг
+                        //при horizontalOffset=0 строка стоит на "естественном" месте (с лесенкой)
+                        //при horizontalOffset>0 строка уезжает влево, открывая правый хвост текста
+                        x: rowContent.leftIndent - trvZakladki.horizontalOffset
+                        Item {//Индикатор разворота ▾ / ▸ слева от текста
+                            id: tmIndicator
+                            width: 22
+                            height: parent.height
+                            anchors.left: parent.left
+                            visible: tvdZakladka.hasChildren
+                            //Функции
+                            Text {
+                                anchors.centerIn: parent
+                                text: tvdZakladka.expanded ? "\u25BE" : "\u25B8" // ▾ / ▸
+                                color: root.clrTexta
+                                font.pixelSize: tvdZakladka.pixelShrift
+                            }
+                            MouseArea {
+                                anchors.fill: parent
+                                hoverEnabled: true
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: (mouse) => {
+                                    if (!tvdZakladka.hasChildren) return//Если нет вложеных закладок, выходим.
+                                    trvZakladki.focus = true//Фокус на Закладках
+                                    if(trvZakladki.currentIndex !== tvdZakladka.index)//Если это другая вкладк
+                                        trvZakladki.currentIndex = -1
+                                    trvZakladki.toggleExpanded(tvdZakladka.index)//Разворач/сворачиваем заклад
+                                    trvZakladki.isIndikator = true//Взводим флаг, отключаем горячие клавиши.
+                                    mouse.accepted = true
+                                }
+                            }
                         }
+                        Text {//Текст закладки
+                            id: lblZakladka
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.left: tmIndicator.right
+                            text: tvdZakladka.text
+                            color: root.clrTexta
+                            wrapMode: Text.NoWrap//Не переносим по словам, именно в одну строку
+                            font.pixelSize: tvdZakladka.pixelShrift
+                            verticalAlignment: Text.AlignVCenter
+                        }
+                        width: tmIndicator.width + lblZakladka.paintedWidth//Логич.ширина содержимого строки
                     }
+                    Component.onCompleted: fnMaxOffset()//Когда делегат только создался — учитываем его вклад
+                    onWidthChanged: fnMaxOffset()//При изменении ширины строки — обновляем вклад
                 }
-                //Функции
-                onClicked: {
+                indicator: null// Полностью отключаем встроенный индикатор TreeViewDelegate. Свой написал.
+                onClicked: {//Клик по строке — перейти к закладке и, на мобильных, закрыть боковую панель
                     trvZakladki.currentIndex = tvdZakladka.index//Сохраняем индекс, который мы выбрали
                     if (root.pmpDoc) root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//На Стр
                     if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                 }
             }
-            model: PdfBookmarkModel {
+            model: PdfBookmarkModel {//Модель закладок PDF
                 id: pdfBookmarkModel
                 document: root.pdfDoc
-                onModelReset:{//Если модель сбрасывается
+                onModelReset: {//Если модель сбрасывается, или нажатие на Индикатор
+                    trvZakladki.horizontalOffset = 0//Сбрасываем горизонтальный скролл
+                    trvZakladki.maxHorizontalOffset = 0//Сбрасываем максимум при смене документа
+                    hzScrollBar.position = 0//Позицию скроллбара
                     if (pdfBookmarkModel.rowCount() > 0) trvZakladki.currentIndex = 0//Подсвечиваем первую Зак
                     else trvZakladki.currentIndex = -1//Сбрасываем индекс, если нет ни одной закладки.
                 }
+            }
+        }
+        ScrollBar {//Горизонтальный ScrollBar внизу
+            id: hzScrollBar
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            height: rctZakladki.heightScrollBar
+            orientation: Qt.Horizontal
+            //Показываем полосу, только если есть реальный "хвост" больше 2 пикселей
+            policy: trvZakladki.maxHorizontalOffset > 2 ? ScrollBar.AsNeeded
+                                                        : ScrollBar.AlwaysOff
+            //Доля видимой части: чем больше maxHorizontalOffset, тем меньше size, тем "короче" ползунок
+            size: trvZakladki.maxHorizontalOffset > 0
+                  ? trvZakladki.width / (trvZakladki.width + trvZakladki.maxHorizontalOffset)
+                  : 1.0
+            onPositionChanged: {//При перемещ ползунка меняем horizontalOffset
+                if (trvZakladki.maxHorizontalOffset > 0)
+                    trvZakladki.horizontalOffset = trvZakladki.maxHorizontalOffset * position
+                else trvZakladki.horizontalOffset = 0
             }
         }
     }
