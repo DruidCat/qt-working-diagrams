@@ -280,7 +280,12 @@ public:
     Q_INVOKABLE void	copyKatalogStart();//Начать копирование документов в каталог.
     Q_INVOKABLE void	copyKatalogStop();//Остановить копирование документов в каталог.
 
+    Q_INVOKABLE QString strDebugDen() const { return m_pdclogger->polDebugDen(); }
+    Q_INVOKABLE QString strDebugNedelya() const { return m_pdclogger->polDebugNedelya(); }
+    Q_INVOKABLE QString strDebugMesyac() const { return m_pdclogger->polDebugMesyac(); }
+    Q_INVOKABLE QString strDebugGod() const { return m_pdclogger->polDebugGod(); }
     QString		strDebug();//Возвращает ошибку.
+
     QString		qtVersion() const;//Метод возвращающий версию Qt
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//
