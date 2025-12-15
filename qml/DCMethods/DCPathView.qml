@@ -30,6 +30,10 @@ Item {
             pvwKarusel.internalChange = false;//Это против самозацикливания. Сбрасываем флаг.
         }
     }
+    onVisibleChanged: {//Если видимость изменилась, то...
+        if(visible) pvwKarusel.focus = true;//Если видимый, то фокусируемся на карусели, чтоб кнопки работали.
+    }
+
     Rectangle {
         id: rctKarusel
         anchors.top: root.top

@@ -150,6 +150,11 @@ Item {
             onClicked: function(strShrift) {
                 pvPoisk.visible = false;
                 root.ntPoisk = pvPoisk.currentIndex;//Приравниваем значение к переменной.
+                if(root.ntPoisk === 0)root.strDebug = cppqml.polDebugNedelya()
+                else if(root.ntPoisk === 1) root.strDebug = cppqml.polDebugMesyac()
+                    else if(root.ntPoisk === 2) root.strDebug = cppqml.polDebugGod()
+                txdZona.text = root.strDebug
+                txdZona.fnFocus();//Чтоб горячие кнопки листания работали.
             }
         }
         DCMenu {
