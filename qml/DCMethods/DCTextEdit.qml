@@ -26,6 +26,9 @@ Item {
     //Сигналы
     signal pressed();
     //Функции. 
+    function fnFocus(){//Функция фокусировки на виджете, чтоб горячие клавиши работали.
+        flcListat.focus = true;//Чтоб курсор активный был, и горячие клавиши работали.
+    }
     Rectangle {
         id: rctTextEdit
         anchors.fill: root
@@ -96,7 +99,7 @@ Item {
                 readOnly: true//Запрещено редактировать. 
                 focus: {
                     if(root.readOnly){//Если режим чтения, то...
-                        flcListat.focus = true;//Чтоб курсор активный был, и горячие клавиши работали.
+                        fnFocus();//Чтоб курсор активный был, и горячие клавиши работали.
                         return false;
                     }
                     else//Если режим редактирования текста, то...
