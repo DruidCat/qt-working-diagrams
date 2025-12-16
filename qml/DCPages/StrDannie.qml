@@ -144,8 +144,13 @@ Item {
     }
     function fnClickedOk(){//Функция переименования Данных.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
-        if(lsvDannie.isPereimenovat)//Если запрос на переименовывание.
-            cppqml.renStrDannieDB(strDannieRen, txnZagolovok.text);//Переименовываем имя Документа.
+        if(lsvDannie.isPereimenovat){//Если запрос на переименовывание.
+            if(cppqml.renStrDannieDB(root.strDannieRen, txnZagolovok.text)){//Переименовываем имя Документа.
+                cppqml.strDebug = qsTr("Переименован документ: ")
+                            + root.strDannieRen + "->" + txnZagolovok.text.toUpperCase()//Записываем в логи.
+                root.signalToolbar("Успешное переименование документа.");//Сообщение пользователю
+            }
+        }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
@@ -263,13 +268,15 @@ Item {
                     knopkaInfo.visible = true;//Конопка Информация Видимая.
                 }
             }
-            onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
+            onClickedUdalit: function (strKod, strText) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvDannie.enabled = true;//Делаем кликабельную Зону.
-                if(cppqml.delStrDannie(strKod))//Запускаю метод удаление записи из БД и самого Документа.
-                    root.signalToolbar(qsTr("Успешное удаление документа"));
+                if(cppqml.delStrDannie(strKod)){//Запускаю метод удаление записи из БД и самого Документа.
+                    cppqml.strDebug = qsTr("Удалён документ: ") + strText;//Запись в лог.
+                    root.signalToolbar(qsTr("Удалён документ: ") + strText);//Сообщение пользователю.
+                }
                 else
-                    cppqml.strDebug = qsTr("Ошибка при удалении.");
+                    cppqml.strDebug = qsTr("Ошибка удаления документа: ") + strText;
                 lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie,чтоб клавиши работали листания
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления

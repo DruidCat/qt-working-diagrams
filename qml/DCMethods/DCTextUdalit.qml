@@ -20,7 +20,7 @@ Item {
     property real tapKnopkaZakrit: 1
     property real tapKnopkaOk: 1
     //Сигналы.
-    signal clickedUdalit(var strKod);//Сигнал на удаление вместе с кодом удаляемого эдемента.
+    signal clickedUdalit(var strKod, var strText);//Сигнал на удаление вместе с кодом удаляемого эдемента.
     signal clickedOtmena();//Сигнал на отмену удаления.
     //Функции.
     function fnClickedZakrit(){//Функция Закрытия виджета.
@@ -130,7 +130,7 @@ Item {
             anchors.right: rctTextUdalit.right
             clrKnopki: root.clrKnopki
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaOk
-            onClicked: root.clickedUdalit(root.kod);//Сигнал удаления с кодом удаляемого Элемента.
+            onClicked: root.clickedUdalit(root.kod, root.text);//Сигнал удаления с кодом удаляемого Элемента.
         }
     }
 }

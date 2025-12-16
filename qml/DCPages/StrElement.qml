@@ -140,11 +140,15 @@ Item {
     }
     function fnClickedOk(){//Функция сохранения/переименования Элементов списка.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
-        if(lsvElement.isPereimenovat)//Если запрос на переименовывание.
-            cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text);//Переименовываем Элемент списка.
-        else{//Если НЕ ПЕРЕИМЕНОВАТЬ, то Сохранить.
-            cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
+        if(lsvElement.isPereimenovat){//Если запрос на переименовывание.
+            if(cppqml.renStrElementDB(cppqml.strElement, txnZagolovok.text)){//Переименовываем Элемент списка.
+                cppqml.strDebug = qsTr("Переименован элемент: ")
+                            + cppqml.strElement + "->" + txnZagolovok.text.toUpperCase()//Записываем в логи.
+                root.signalToolbar("Успешное переименование элемента.");//Сообщение пользователю
+            }
         }
+        else//Если НЕ ПЕРЕИМЕНОВАТЬ, то Сохранить.
+            cppqml.strElementDB = txnZagolovok.text;//Сохранить название Элемента списка, и только потом..
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
     function fnUdalit(strKod, strImya){//Функция запуска Запроса на Удаление выбранного документа.
@@ -261,13 +265,15 @@ Item {
                     knopkaInfo.visible = true;//Конопка Информация Видимая.
                 }
             }
-            onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
+            onClickedUdalit: function (strKod, strText) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvElement.enabled = true;//Делаем кликабельную Зону.
-                if(cppqml.delStrElement(strKod))//Запускаю метод удаление Элемента из БД и их Документов.
-                    root.signalToolbar(qsTr("Успешное удаление элемента."));
+                if(cppqml.delStrElement(strKod)){//Запускаю метод удаление Элемента из БД и их Документов.
+                    cppqml.strDebug = qsTr("Удалён элемент: ") + strText;//Запись в лог.
+                    root.signalToolbar(qsTr("Удалён элемент: ") + strText);//Сообщение пользователю.
+                }
                 else
-                    cppqml.strDebug = qsTr("Ошибка при удалении.");
+                    cppqml.strDebug = qsTr("Ошибка удаления элемента: ") + strText;
                 lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement,чтоб клавиши работали листания
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления

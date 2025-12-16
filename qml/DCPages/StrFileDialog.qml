@@ -204,6 +204,8 @@ Item {
                                     tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
                                     if(!cppqml.copyPlan(strFileDialog))//Если ошибка Копирования файла Плана.
                                         fnCopyStop();//Останавливаем анимацию копирования, закрываем проводник
+                                    else
+                                        cppqml.strDebug = "";//Стираем сообщение записываемое в логи.
                                 }
                                 else{
                                     if(root.modeFileDialog === "filedialog"){//Если режим Проводника, то...
@@ -217,6 +219,8 @@ Item {
                                         tmrLogoTMK.running = true;//Запускаем таймер анимации логотипа ТМК.
                                         if(!cppqml.copyDannie(strFileDialog))//Если ошибка Копирования файла.
                                             fnCopyStop();//Останавливаем анимацию копирования,закр. проводник.
+                                        else
+                                            cppqml.strDebug = "";//Стираем сообщение записываемое в логи.
                                     }
                                     else{
                                         if(root.modeFileDialog === "polkatalog")//Режим отображения Каталога

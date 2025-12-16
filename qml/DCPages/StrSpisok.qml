@@ -149,15 +149,20 @@ Item {
 	function fnClickedOk(){//Функция сохранения/переименования элемента Списка.
         root.signalToolbar("");//Делаем пустую строку в Toolbar.
         if(blZagolovok){//Если изменить имя заголовка, то...
+            var vrTitul = cppqml.strTitul;//Запоминаем старое зназвание Титула.
             cppqml.strTitul = txnZagolovok.text;//Переименовываем Заголовок Списка.
             root.signalZagolovok(cppqml.strTitul);//Отображаем Заголовок
         }
         else{//В ином случае...
-            if(lsvSpisok.isPereimenovat)//Если запрос на переименовывание.
-                cppqml.renStrSpisokDB(cppqml.strSpisok, txnZagolovok.text)//Переименовываем элемент Списка
-            else{//иначе...
-                cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
+            if(lsvSpisok.isPereimenovat){//Если запрос на переименовывание.
+                if(cppqml.renStrSpisokDB(cppqml.strSpisok,txnZagolovok.text)){//Переименовываем элемент Списка
+                    cppqml.strDebug = qsTr("Переименован список: ")
+                            + cppqml.strSpisok + "->" + txnZagolovok.text.toUpperCase()//Записываем в логи.
+                    root.signalToolbar("Успешное переименование списка.");//Сообщение пользователю
+                }
             }
+            else//иначе...
+                cppqml.strSpisokDB = txnZagolovok.text;//Сохранить название элемента списка, и только потом...
         }
         fnClickedEscape();//Функция нажатия кнопки Escape.
     }
@@ -286,13 +291,15 @@ Item {
                     knopkaInfo.visible = true;//Конопка Информация Видимая.
                 }
             }
-            onClickedUdalit: function (strKod) {//Слот нажатия кнопки Удалить
+            onClickedUdalit: function (strKod, strText) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvSpisok.enabled = true;//Делаем кликабельную Зону.
-                if(cppqml.delStrSpisok(strKod))//Запускаю метод удаление Списка из БД, Элементов и  Документов
-                    root.signalToolbar(qsTr("Успешное удаление списка."));
+                if(cppqml.delStrSpisok(strKod)){//Запускаю метод удаление Списка из БД,Элементов и  Документов
+                    cppqml.strDebug = qsTr("Удалён список: ") + strText;//Запись в лог.
+                    root.signalToolbar(qsTr("Удалён список: ") + strText);//Сообщение пользователю.
+                }
                 else
-                    cppqml.strDebug = qsTr("Ошибка при удалении.");
+                    cppqml.strDebug = qsTr("Ошибка удаления списка: ") + strText;
                 lsvSpisok.fnFocus();//Установить фокус на lsvZona в lsvSpisok, чтоб клавиши работали листания
             }
             onClickedOtmena: {//Слот нажатия кнопки Отмены Удаления
