@@ -40,7 +40,7 @@ Item {
     signal clickedInfo();//Сигнал нажатия кнопки Информация
     signal clickedHotKey();//Сигнал о нажатии кнопки Горячие Клавиши.
     signal clickedAnimaciya();//Сигнал нажития кнопки Анимация.
-    signal clickedLogi();//Сигнал нажатия кнопки Логи.
+    signal clickedJurnal();//Сигнал нажатия кнопки Журнал.
     signal clickedMentor();//Сигнал нажатия кнопки об Менторе.
     signal clickedQt();//Сигнал нажатия кнопки Об Qt.
     signal clickedKatalog();//Сигнал нажатия кнопки Создание каталога документов.
@@ -341,7 +341,7 @@ Item {
                     function fnPress(){//Функция обработчик нажатия на кнопку, ДОЛЖНА БЫТЬ В КАЖДОЙ КНОПКЕ!!!
                         tmZona.currentIndex = 4;//При нажатии или клике присваеваем идекс активной кнопки.
                         fnClickedEscape()//Закрываем выбор шрифта и меню открытое.
-                        root.clickedLogi();//Сигнал нажатия кнопки Логи.
+                        root.clickedJurnal();//Сигнал нажатия кнопки Журнал.
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
                         if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то

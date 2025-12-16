@@ -268,10 +268,8 @@ Item {
             onClickedUdalit: function (strKod, strText) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvElement.enabled = true;//Делаем кликабельную Зону.
-                if(cppqml.delStrElement(strKod)){//Запускаю метод удаление Элемента из БД и их Документов.
+                if(cppqml.delStrElement(strKod))//Запускаю метод удаление Элемента из БД и их Документов.
                     cppqml.strDebug = qsTr("Удалён элемент: ") + strText;//Запись в лог.
-                    root.signalToolbar(qsTr("Удалён элемент: ") + strText);//Сообщение пользователю.
-                }
                 else
                     cppqml.strDebug = qsTr("Ошибка удаления элемента: ") + strText;
                 lsvElement.fnFocus();//Установить фокус на lsvZona в lsvElement,чтоб клавиши работали листания
@@ -364,7 +362,7 @@ Item {
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
                         	fnClickedSozdat();//Функция при нажатии кнопки Создать.
 						else
-                    		cppqml.strDebug = qsTr("Режим редактора выключен.");
+                            root.signalToolbar(qsTr("Режим редактора выключен."));
 					}
 					else{//Если не первый элемент, то...
                         if(lsvElement.isPereimenovatVibor) {//Если разрешён выбор элементов для переименовыван

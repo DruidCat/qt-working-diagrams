@@ -69,6 +69,9 @@ Item {
             }
         }
     }
+    onStrDebugChanged: {//Если переменная strDebug изменилась, то...
+        txdZona.text = root.strDebug//Добавляем данные переменной в окно Журнала.
+    }
     MouseArea {//Если кликнуть на пустую зону, свернётся Меню. Объявлять в начале Item. До других MouseArea.
         anchors.fill: root
         onClicked: fnClickedEscape();//Функция нажатия кнопки Escape.
@@ -153,7 +156,6 @@ Item {
                 if(root.ntPoisk === 0)root.strDebug = cppqml.polDebugNedelya()
                 else if(root.ntPoisk === 1) root.strDebug = cppqml.polDebugMesyac()
                     else if(root.ntPoisk === 2) root.strDebug = cppqml.polDebugGod()
-                txdZona.text = root.strDebug
             }
             onVisibleChanged: if(!visible) txdZona.fnFocus();//Чтоб горячие кнопки листания работали.
         }
@@ -215,14 +217,4 @@ Item {
             }
         }
     }
-	Connections {//Соединяем сигнал из C++ с действием в QML
-		target: cppqml;//Цель объект класса С++ DCCppQml
-		function onStrDebugChanged(){//Слот Если изменилось сообщение в strDebug (Q_PROPERTY), то...
-			let ltDebug = cppqml.strDebug;//Считываем сообщение из переменной.
-            if(ltDebug !== ""){//Если не пустая строка, которая затирает старое сообщение в Toolbar, то...
-				strDebug = strDebug + ltDebug + "\n";//Пишем текст в переменную из Свойтва Q_PROPERTY
-				txdZona.text = strDebug;//Отображаем собранную строку в TextEdit модуле.
-			}
-		}
-	}
 }

@@ -294,10 +294,8 @@ Item {
             onClickedUdalit: function (strKod, strText) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvSpisok.enabled = true;//Делаем кликабельную Зону.
-                if(cppqml.delStrSpisok(strKod)){//Запускаю метод удаление Списка из БД,Элементов и  Документов
+                if(cppqml.delStrSpisok(strKod))//Запускаю метод удаление Списка из БД,Элементов и  Документов
                     cppqml.strDebug = qsTr("Удалён список: ") + strText;//Запись в лог.
-                    root.signalToolbar(qsTr("Удалён список: ") + strText);//Сообщение пользователю.
-                }
                 else
                     cppqml.strDebug = qsTr("Ошибка удаления списка: ") + strText;
                 lsvSpisok.fnFocus();//Установить фокус на lsvZona в lsvSpisok, чтоб клавиши работали листания
@@ -392,8 +390,7 @@ Item {
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
                         	fnClickedSozdat();//Функция обрабатывающая кнопку Создать.
 						else
-                    		cppqml.strDebug = qsTr("Режим редактора выключен.");
-							
+                            root.signalToolbar(qsTr("Режим редактора выключен."));
                     }
                     else{//Если не первый элемент, то...
                         if(lsvSpisok.isPereimenovatVibor){//Если разрешён выбор элементов для переименовывания

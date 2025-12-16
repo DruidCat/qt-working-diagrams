@@ -152,7 +152,10 @@ ApplicationWindow {
                 onClickedInfo: stvStr.push(pgStrInstrukciyaMenu)//Переходим на страницу Инструкции Меню
                 onClickedHotKey: stvStr.push(pgStrHotKey)//Переходим на страницу горячих клавиш.
                 onClickedAnimaciya: stvStr.push(pgStrAnimaciya);//Переходим на страницу Анимация.
-                onClickedLogi: stvStr.push(pgStrJurnal)//Переходим на страницу Логи.
+                onClickedJurnal: {//Если нажата кнопка Журнал, то...
+                    tmJurnal.strDebug = cppqml.polDebugDen();//Загружаем логи за день.
+                    stvStr.push(pgStrJurnal)//Переходим на страницу Журнал.
+                }
                 onClickedMentor: stvStr.push(pgStrMentor)//Переходим на страницу об Менторе.
                 onClickedQt: stvStr.push(pgStrQt)//Переходим на страницу об Qt.
                 onClickedKatalog: stvStr.push(pgStrKatalog)//Переходим на страницу Создать каталог документов

@@ -271,10 +271,8 @@ Item {
             onClickedUdalit: function (strKod, strText) {//Слот нажатия кнопки Удалить
                 txuUdalit.visible = false;//Делаем невидимый запрос на удаление.
                 lsvDannie.enabled = true;//Делаем кликабельную Зону.
-                if(cppqml.delStrDannie(strKod)){//Запускаю метод удаление записи из БД и самого Документа.
+                if(cppqml.delStrDannie(strKod))//Запускаю метод удаление записи из БД и самого Документа.
                     cppqml.strDebug = qsTr("Удалён документ: ") + strText;//Запись в лог.
-                    root.signalToolbar(qsTr("Удалён документ: ") + strText);//Сообщение пользователю.
-                }
                 else
                     cppqml.strDebug = qsTr("Ошибка удаления документа: ") + strText;
                 lsvDannie.fnFocus();//Установить фокус на lsvZona в lsvDannie,чтоб клавиши работали листания
@@ -368,8 +366,8 @@ Item {
 						if(root.appRedaktor)//Если включён Редактор приложения, то...
                         	fnClickedSozdat();//Функция при нажатии кнопки Создать(Проводник).
 						else
-                    		cppqml.strDebug = qsTr("Режим редактора выключен.");
-					}
+                            root.signalToolbar(qsTr("Режим редактора выключен."));
+                    }
 					else{//Если не первый элемент, то...
                         if(lsvDannie.isPereimenovatVibor) {//Если разрешён выбор элементов для переименовывани
                             lsvDannie.isPereimenovatVibor = false;//Запрещаем выбор элемента для переименовани
