@@ -154,8 +154,8 @@ Item {
                 else if(root.ntPoisk === 1) root.strDebug = cppqml.polDebugMesyac()
                     else if(root.ntPoisk === 2) root.strDebug = cppqml.polDebugGod()
                 txdZona.text = root.strDebug
-                txdZona.fnFocus();//Чтоб горячие кнопки листания работали.
             }
+            onVisibleChanged: if(!visible) txdZona.fnFocus();//Чтоб горячие кнопки листания работали.
         }
         DCMenu {
             id: menuJurnal
@@ -181,6 +181,7 @@ Item {
                     fnClickedNazad();//Закрываем журнал.
                 }
             }
+            onVisibleChanged: if(!visible) txdZona.fnFocus();//Чтоб горячие кнопки листания работали.
         }
     }
     Item {//Данные Тулбар
