@@ -638,9 +638,13 @@ ApplicationWindow {
                         else{//Если на сторонний просмотщик pdf документов, то...
                             tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмотор
                             if(!cppqml.blPlanPervi){//Если план еще не задан, то...
-                                cppqml.strDebug = qsTr("Открывается план.");//Оповещение пользователю, важно.
+                                cppqml.strDebug = qsTr("В стороннем приложении план: ") + ltPdfUrl;//В лог
+                                cppqml.strDebug = qsTr("");//Затираем, чтоб не отображалось сообщение.
                                 Qt.callLater( function () {//Пауза, чтоб сообщение успело отобразиться выше.
-                                    Qt.openUrlExternally(ltPdfUrl)//Открываем pdf в стороннем app.
+                                    pgStrPdf.textToolbar = qsTr("Открывается план.");//Оповещение пользователю.
+                                    Qt.callLater( function () {//Пауза, чтоб сообщение успело отобразиться выш
+                                        Qt.openUrlExternally(ltPdfUrl)//Открываем pdf в стороннем app.
+                                    })
                                 })
                             }
                         }
@@ -665,9 +669,13 @@ ApplicationWindow {
                     }
                     else{//Если на сторонний просмотщик pdf документов, то...
                         cppqml.strFileDialogPut = "sohranit";//ВАЖНО!!! Сохраняем положение в дереве папок.
-                        cppqml.strDebug = qsTr("Открывается документ: ") + strImyaFaila;//Оповещение.
+                        cppqml.strDebug = qsTr("В стороннем приложении документ: ") + strImyaFaila;//В логи.
+                        cppqml.strDebug = qsTr("");//Затираем, чтоб не отображалось сообщение.
                         Qt.callLater( function() {//Пауза нужна, чтоб сообщение успело отрисоваться выше.
-                            Qt.openUrlExternally(cppqml.polKatalogUrl(strImyaFaila))//В стороннем app.
+                            pgStrPdf.textToolbar = qsTr("Открывается документ: ") + strImyaFaila;//Оповещение.
+                            Qt.callLater( function() {//Пауза нужна, чтоб сообщение успело отрисоваться выше.
+                                Qt.openUrlExternally(cppqml.polKatalogUrl(strImyaFaila))//В стороннем app.
+                            })
                         })
                     }
                 }
@@ -732,9 +740,13 @@ ApplicationWindow {
                     else{//Если на сторонний просмотщик pdf документов, то...
                         tmPlan.ustSource("qrc:///workingdata/plan.pdf");//Открываем во встроеном просмоторщике
                         if(!cppqml.blPlanPervi){//Если план еще не задан, то...
-                            cppqml.strDebug = qsTr("Открывается план.");//Оповещение пользователя.
+                            cppqml.strDebug = qsTr("В стороннем приложении план: ") + ltPdfUrl;//В лог запись.
+                            cppqml.strDebug = qsTr("");//Затираем, чтоб не отображалось сообщение.
                             Qt.callLater ( function () {//Пауза, чтоб сообщение успело отобразиться выше.
-                                Qt.openUrlExternally(ltPdfUrl)//Открываем pdf в стороннем app.
+                                pgStrPdf.textToolbar = qsTr("Открывается план.");//Оповещение пользователю важ
+                                Qt.callLater ( function () {//Пауза, чтоб сообщение успело отобразиться выше.
+                                    Qt.openUrlExternally(ltPdfUrl)//Открываем pdf в стороннем app.
+                                })
                             })
                         }
                     }

@@ -21,6 +21,7 @@ Item {
 	signal clickedEnter();//Сигнал нажатия Enter
 	signal clickedEscape();//Сигнал нажатия Escape
     signal clickedCopyToClipboard();//Скопировать в буфер обмена.
+    signal sgnDebug(string strDebug);//Сигнал, излучающий ошибку из виджета.
     //Функции.
 	function ustText (strText){//Функция вставления текста, нужна для Android и обновления вирт клавиатуры.
         txnTextInput.focus = false//Убрать фокус.
@@ -97,7 +98,7 @@ Item {
                     }
                     if(blSqlProtect&&((event.key===63)||(event.key===39)||(event.key===59)||(event.key===42)
                                       ||(event.key === 37)||(event.key === 95)||(event.key === 92))){
-                        cppqml.strDebug = "Нельза использовать данные символы ? ' ; * % _ \\ ";
+                        root.sgnDebug("Нельза использовать символы % ? ' ; * _ \\ ");//Сигнал ошибки
                     }
                 }
                 //console.log(event.key);

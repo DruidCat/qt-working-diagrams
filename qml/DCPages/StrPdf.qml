@@ -416,7 +416,8 @@ Item {
                 clrTexta: root.clrTexta; clrFona: root.clrMenuFon
 				blSqlProtect: false//Отключаем защиту от Sql инъекций, вводить можно любой текст.
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
-				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
+                onSgnDebug: function (strDebug) { signalToolbar(strDebug) }//Ошибка из виджета в программу.
+                onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
                         knopkaSidebar.visible = false;//Делаем невидимым кнопку Боковой панели

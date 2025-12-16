@@ -299,7 +299,8 @@ Item {
 				textInput.font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
                 textInput.inputMethodHints: Qt.ImhUppercaseOnly//Буквы в виртуальной клавиатуре заглавные
                 textInput.maximumLength: cppqml.untNastroikiMaxLength
-				onVisibleChanged: {//Если видимость DCTextInput изменился, то...
+                onSgnDebug: function (strDebug) { signalToolbar(strDebug) }//Ошибка из виджета в программу.
+                onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
                         knopkaInfo.visible = false;//Конопка Информации Невидимая.
