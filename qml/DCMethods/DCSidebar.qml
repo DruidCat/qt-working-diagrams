@@ -412,6 +412,7 @@ Drawer {
         visible: currentIndex === 1//показываем, только когда выбрана вкладка "Закладки"
         //Функции
         Text {//Сообщение "Нет закладок", если модель пуста
+            id:txtZakladki
             anchors.left: rctZakladki.left
             anchors.right: rctZakladki.right
             anchors.verticalCenter: rctZakladki.verticalCenter
@@ -420,7 +421,7 @@ Drawer {
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
             elide: Text.ElideRight//Обрезаем текст по правой стороне точками (...)
-            text: pdfBookmarkModel.rowCount() ? "" : qsTr("Нет закладок")//Если есть/нет закладок
+            text: qsTr("Нет закладок")//Нет закладок
         }
         TreeView {
             id: trvZakladki
@@ -610,7 +611,10 @@ Drawer {
                     trvZakladki.horizontalOffset = 0//Сбрасываем горизонтальный скролл
                     trvZakladki.maxHorizontalOffset = 0//Сбрасываем максимум при смене документа
                     hzScrollBar.position = 0//Позицию скроллбара
-                    if (pdfBookmarkModel.rowCount() > 0) trvZakladki.currentIndex = 0//Подсвечиваем первую Зак
+                    if (pdfBookmarkModel.rowCount() > 0){//Если закладки есть, то...
+                        txtZakladki.text = "";//Удаляем сообщение "Нет закладок".
+                        trvZakladki.currentIndex = 0//Подсвечиваем первую Зак
+                    }
                     else trvZakladki.currentIndex = -1//Сбрасываем индекс, если нет ни одной закладки.
                 }
             }
