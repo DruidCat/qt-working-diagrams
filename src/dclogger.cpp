@@ -70,18 +70,9 @@ QString DCLogger::polDebugGod(){//Получить Год логов
 /////////////////////////////////////////////
 //---П О Л У Ч И Т Ь   Г О Д   Л О Г О В---//
 /////////////////////////////////////////////
-    QString strDebug("");//Строка, в которой будет собираться весь лог
-    QFile flFail(m_strPutFaila);//Файл на нынешний год.
-    if (!flFail.open(QIODevice::ReadOnly | QIODevice::Text))//Если файл не открылся, то...
-        return "DCLogger::polDebugGod(): Ошибка открытия лога.";//Ошибка.
-    QTextStream txsPotok(&flFail);//Задаём Поток, для чтения файла.
-    while (!txsPotok.atEnd()) {//Цикл чтения строк, пока он не закончится.
-        QString strLog = txsPotok.readLine();//Считиваем строку в файле.
-        if (!strLog.isEmpty())//Если строка не пустая, то...
-            strDebug += strLog + "\n";//Прибавляем новую строку с переходом на новую строку.
-    }
-    flFail.close();//Закрываем файл, когда он закончился.
-    return strDebug;//Возвращаем результат чтения всех
+    QDate odtSegodnya = QDate::currentDate();//Сегодняшняя дата.
+    QDate odtMesyac  = odtSegodnya.addDays(-364);//Сегодня + 364 предыдущих = 365 дней, это год.
+    return polLogiData(odtMesyac, odtSegodnya);//Получаем строку с логами по промежутку дат.
 }
 QString DCLogger::polDebugVse(){//Все логи (по всем файлам годов в каталоге)
 ///////////////////////////////////////////
