@@ -123,15 +123,19 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 <p>Навигация в проводнике возможна в пределах вашей дамашней дериктории. Если документы расположены в другой \
 дериктории или на другом накопителе, то заранее переместите их в домашнюю дерикторию.</p>
 <p><b>ФУНКЦИОНАЛ:</b></p>
+<ol>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNazad.png\"> - Вернуться в предыдущую папку.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaZakrit.png\"> - Закрыть ваш проводник.</p>
+<ol>
 <p>или</p>
+</ol>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaOk.png\"> - Выбрать папку.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNastroiki.png\"> - Меню вашего проводника.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaInfo.png\"> - Инструкция по проводнику.</p>
 <p><b>[..]</b> - Вернуться в предыдущую папку.</p>
 <p><b>[папка]</b> - Квадратными скобками обозначаются папки.</p>
 <p><b>док.pdf</b> - Документ который можно добавить или открыть в приложение.</p>
+</ol>
 						</body>
 					</html>");
             }
@@ -169,22 +173,28 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p>Введёный вами текск будет увеличиваться вместе с логотипом компании. Данную анимацию можно снять \
 приложением захвата экрана, например ShareX. И добавить на этапе монтажа в обучающий ролик.</p>
 <p><b>ФУНКЦИОНАЛ:</b></p>
+<ol>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNazad.png\"> - Вернуться в Меню программы Ментор.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaInfo.png\"> - Инструкция по анимации.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaSozdat.png\"> - Добавить текст, который будет увеличиваться \
 с логотипом.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNastroiki.png\"> - Меню анимации.</p>
+</ol>
 <p><b>ГОРЯЧИЕ КЛАВИШИ:</b></p>
+<ol>
 <p><b>[Ctrl N]</b> или <b>[Shift I]</b> - Режим добавления текста анимации.</p>
 <p><b>[Ctrl S]</b> или <b>[Enter]</b> - Сохранить текст анимации.</p>
 <p><b>[Пробел]</b> - Старт анимации.</p>
 <p><b>[Escape]</b> - Отмена действия.</p>
+</ol>
 <p><b>МЕНЮ:</b></p>
+<ol>
 <p><b>[Добавить]</b> - Добавить текс, который будет увеличиваться с логотипом.</p>
 <p><b>[Старт]</b> - Старт анимации.</p>
 <p><b>[Без рамки]</b> - Без рамки.</p>
 <p><b>[Рамка 16:9]</b> - Показ рамки для съёмки видео в пропорции экрана 16:9.</p>
 <p><b>[Закрыть]</b> - Закрыть приложение Ментор.</p>
+</ol>
                                 </body>
                             </html>");
                     }
@@ -194,6 +204,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 								<html>
 									<body>
 <p><b>МЕНТОР:</b></p>
+<ol>
 <p><b>[F1]</b> - Описание.</p>
 <p><b>[Alt F]</b> или <b>[Alt Стрелка влево]</b> - Настройки.</p>
 <p><b>[Alt Стрелка влево]</b> - Нажитие кнопки влево.</p>
@@ -208,7 +219,9 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>[Ctrl N]</b> или <b>[Shift I]</b> - Создать новый элемент.</p>
 <p><b>[Ctrl S]</b> или <b>[Enter]</b> - Сохранить изменения в элементе.</p>
 <p><b>[Escape]</b> - Отмена действия.</p>
+</ol>
 <p><b>ПРОСМОТРЩИК ДОКУМЕНТОВ:</b></p>
+<ol>
 <p><b>[PgUp]</b> - Страница вверх.</p>
 <p><b>[PgDn]</b> - Страница вниз.</p>
 <p><b>[Ctrl +]</b> - Масштаб увеличить.</p>
@@ -224,7 +237,9 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>[Shift Ctrl +]</b> - Поворот документа по часовой стрелки.</p>
 <p><b>[Shift Ctrl -]</b> - Поворот документа против часовой стрелки.</p>
 <p><b>[Shift Ctrl N]</b> - Ввод номера страницы.</p>
+</ol>
 <p><b>ОПИСАНИЕ:</b></p>
+<ol>
 <p><b>[Ctrl F]</b> - Навигатор.</p>
 <p><b>[Ctrl N]</b> или <b>[Shift I]</b> - Режим редактирования текста.</p>
 <p><b>[Ctrl S]</b> - Сохранить изменения текста.</p>
@@ -232,12 +247,15 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>[Стрелка вниз]</b> или <b>[J]</b> - Листание текста вниз.</p>
 <p><b>[PgUp]</b> - Страница вверх.</p>
 <p><b>[PgDn]</b> - Страница вниз.</p>
+</ol>
 <p><b>АНИМАЦИЯ:</b></p>
+<ol>
 <p><b>[F1]</b> - Инструкция.</p>
 <p><b>[Ctrl N]</b> или <b>[Shift I]</b> - Режим добавления текста анимации.</p>
 <p><b>[Ctrl S]</b> или <b>[Enter]</b> - Сохранить текст анимации.</p>
 <p><b>[Пробел]</b> - Старт анимации.</p>
 <p><b>[Escape]</b> - Отмена действия.</p>
+</ol>
                                     </body>
 								</html>");
 						}
@@ -290,12 +308,14 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaInfo.png\"> - Инструкция по созданию каталога документов.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNastroiki.png\"> - Меню создания каталогов.</p>
 <p><b>ГОРЯЧИЕ КЛАВИШИ:</b></p>
+<ol>
 <p><b>[Ctrl N]</b> - Создать каталог документов.</p>
 <p><b>[Стрелка вверх]</b> или <b>[K]</b> - Листание текста вверх.</p>
 <p><b>[Стрелка вниз]</b> или <b>[J]</b> - Листание текста вниз.</p>
 <p><b>[PgUp]</b> - Страница вверх.</p>
 <p><b>[PgDn]</b> - Страница вниз.</p>
 <p><b>[Escape]</b> - Отмена создания каталога.</p>
+</ol>
                                             </body>
                                         </html>");
                                 }
@@ -309,13 +329,17 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 каталогов. Добавление, переименование, удаление или открытие документов.</p>
 <p>Данная активность записывается и в дальнейшем может быть просмотрена в журнале для анализа.</p>
 <p><b>ФУНКЦИОНАЛ:</b></p>
+<ol>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNazad.png\"> - Выйти из журнала.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaInfo.png\"> - Инструкция о журнале.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaPoisk.png\"> - Показать данные журнала за:</p>
+<ol>
 <p><b>[Неделя]</b> - Отображение 7 дней активности пользователя.</p>
 <p><b>[Месяц]</b> - Отображение 30 дней активности пользователя.</p>
 <p><b>[Год]</b> - Отображение активности пользователя с первого дня действующего года.</p>
+</ol>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNastroiki.png\"> - Меню журнала.</p>
+</ol>
                                                 </body>
                                             </html>");
                                     }
@@ -326,8 +350,13 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                                                     <body>
 <p>В менторPDF отображаются документы формата pdf. Которые можно листать, изменять масштаб и вести поиск.</p>
 <p><b>ФУНКЦИОНАЛ:</b></p>
+<ol>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNazad.png\"> - Выйти из документа.</p>
-<p><img src = \"/images/DCButtons/24x24/DCKnopkaVpered.png\"> - Боковая панель документа, где:</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaNazad.png\"> - Боковую панель закрыть.</p>
+<ol>
+<p>или</p>
+</ol>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaVpered.png\"> - Боковую панель открыть, где:</p>
 <ol>
     <p><img src = \"/images/DCButtons/24x24/DCKnopkaInfo.png\"> - Инструкция для менторPDF.</p>
     <p><img src = \"/images/DCButtons/24x24/DCKnopkaZakrit.png\"> - Закрыть боковую панель.</p>
@@ -346,6 +375,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaMinus.png\">МАСШТАБ%\
 <img src = \"/images/DCButtons/24x24/DCKnopkaPlus.png\"> - Масштаб открытого документа, который можно \
 изменить вручную.</p>
+</ol>
                                                     </body>
                                                 </html>");
                                         }
