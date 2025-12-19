@@ -37,6 +37,7 @@ Item {
     focus: true//Чтоб работали горячие клавиши.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
+    signal clickedInfo();//Сигнал нажатия кнопки Информация
     //Функции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event => 
 		if (event.modifiers & Qt.ControlModifier && event.modifiers & Qt.ShiftModifier){//Если "Ctrl + Shift"
@@ -184,6 +185,12 @@ Item {
                                                             fnClickedKeyEnter();//Нажитие клавиши Enter
                                                             event.accepted = true;//Завер обработку эвента
                                                         }
+                                                        else{
+                                                            if(event.key === Qt.Key_F1){//нажата кнопка F1, то
+                                                                fnClickedInfo();//Функция нажатия на Информаци
+                                                                event.accepted = true;//Завершаем обработку эв.
+                                                            }
+                                                        }
                                                     }
                                                 }
                                             }
@@ -227,6 +234,10 @@ Item {
         if(pdfLoader.item)//Если документ загрузился в загрузчике, то...
             cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
         fnPdfSource("");//Пустой путь PDF документа, закрываем.
+    }
+    function fnClickedInfo(){//Функция нажатия кнопки Информация
+        cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
+        if(pdfLoader.item) root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
     }
     function fnClickedKeyPgDown(){//Функция нажатия клавиши Page Down
         if(pdfLoader.item) pdfLoader.item.fnClickedKeyPgDown()//Вниз на одну страницу
@@ -689,6 +700,9 @@ Item {
             }
             function onClickedPoisk(){//Если необходима запустить поиск, то...
                 fnClickedPoisk();//Функция запуска режима поиска.
+            }
+            function onClickedInfo(){//Необходимо запустить Инструкцию по pdfMentor
+                fnClickedInfo();//Функция нажатия кнопки Информация
             }
             function onSgnOpenedSidebar(blOpened){//Если боковая панель открыта/закрыта, то...
                 pskPoisk.isOpenedSidebar = blOpened;//Приравниваем флаг открыта ли боковая панель?

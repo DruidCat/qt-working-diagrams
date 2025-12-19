@@ -36,6 +36,7 @@ Drawer {
     y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
     //Сигналы
     signal clickedPoisk()//Сигнал запуска режима поиска.
+    signal clickedInfo();//Сигнал нажатия кнопки Информация
     //Функции
     onPdfDocChanged: {//Если будет замена на пустой pdf файл, для обнуления открытого файла, то...
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
@@ -73,6 +74,12 @@ Drawer {
         tbbPoster.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
         lblZagolovok.text = tbbPoster.text//Переименовываем заголовок на Страницы
     }
+    function fnClickedInfo(){//Функция нажатия кнопки Информация.
+        if(knopkaInfo.enabled){//Если кнопка активна, то...
+            root.close();//Метод обрабатывающий кнопку Закрыть Боковую панель.
+            root.clickedInfo();//сигнал нажатия кнопки Информация.
+        }
+    }
     Rectangle {//Прямоугольник узкой полоски интерфейса слева
         id: rctBorder
         anchors.top: root.top
@@ -108,7 +115,7 @@ Drawer {
             clrFona: root.clrFona
             tapHeight: (root.ntWidth-1)*root.ntCoff+root.ntCoff
             tapWidth: tapHeight
-            onClicked: console.log("Количество закладок: " + pdfBookmarkModel.rowCount())//fnClickedInfo();//Функция нажатия на Информацию
+            onClicked: fnClickedInfo();//Функция нажатия кнопки Информация.
         }
         DCKnopkaZakrit {
             id: knopkaZakrit
@@ -307,51 +314,41 @@ Drawer {
                         fnZakladkiOpen()//Функция открытия боковой панели на Закладке.
                         event.accepted = true;//Завершаем обработку эвента.
                     }
-                    else{
-                        if(event.key === Qt.Key_T){//Если нажата клавиша T
+                    else if(event.key === Qt.Key_T){//Если нажата клавиша T
                             fnPosterOpen()//Открытие боковой панели на Миниатюрах.
                             event.accepted = true;//Завершаем обработку эвента.
-                        }
-                        else{
-                            if(event.key === Qt.Key_F){//Если нажата клавиша F
-                                root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
-                                event.accepted = true;//Завершаем обработку эвента.
-                            }
-                        }
+                    }
+                    else if(event.key === Qt.Key_F){//Если нажата клавиша F
+                        root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
+                        event.accepted = true;//Завершаем обработку эвента.
                     }
                 }
-                else{
-                    if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
-                        if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
-                            dcSidebar.close()//Закрываем боковую панель
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
+                else if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                    if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                        dcSidebar.close()//Закрываем боковую панель
+                        event.accepted = true;//Завершаем обработку эвента.
                     }
-                    else{
-                        if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                            if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                                if(root.pmpDoc.searchModel.count)//Если не 0, то...
-                                    root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
-                                event.accepted = true;//Завершаем обработку эвента.
-                            }
-                        }
-                        else{
-                            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
-                                if(root.pmpDoc//Указатель не null
-                                    && lsvNaideno.model//модель не null
-                                    && lsvNaideno.focus//Фокус на Найдено
-                                    && root.pmpDoc.searchModel.count)//Счётчик поиска не 0
-                                        root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex
-                                event.accepted = true;//Завер обработку эвента
-                            }
-                            else{
-                                if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
-                                    if(root.pmpDoc.searchModel.count)//Если не 0, то...
-                                        root.pmpDoc.searchModel.currentResult += 1//Следующий результат
-                                    event.accepted = true;//Завершаем обработку эвента.
-                                }
-                            }
-                        }
+                } else if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                    if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                            root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
+                        event.accepted = true;//Завершаем обработку эвента.
+                    }
+                } else {
+                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                        if(root.pmpDoc//Указатель не null
+                            && lsvNaideno.model//модель не null
+                            && lsvNaideno.focus//Фокус на Найдено
+                            && root.pmpDoc.searchModel.count)//Счётчик поиска не 0
+                                root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex
+                        event.accepted = true;//Завер обработку эвента
+                    } else if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
+                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                            root.pmpDoc.searchModel.currentResult += 1//Следующий результат
+                        event.accepted = true;//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_F1){//Если нажата клавиша F1
+                        fnClickedInfo();//Функция нажатия клавиши Информация.
+                        event.accepted = true;//Завершаем обработку эвента.
                     }
                 }
             }
@@ -483,6 +480,9 @@ Drawer {
                         if(!isIndikator)//Если индикатор треугольник не был нажат, то...
                             currentIndex = Math.min(pdfBookmarkModel.rowCount()-1, currentIndex + 1)
                         event.accepted = true//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_F1){//Если нажата клавиша F1
+                        fnClickedInfo();//Функция нажатия клавиши Информация.
+                        event.accepted = true;//Завершаем обработку эвента.
                     }
                 }
             }
@@ -680,50 +680,37 @@ Drawer {
                     if(event.key === Qt.Key_B){//Если нажата клавиша B
                         fnZakladkiOpen()//Открытие боковой панели на Закладки.
                         event.accepted = true;//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_T){//Если нажата клавиша T
+                        dcSidebar.close()//Закрываем боковую панель
+                        event.accepted = true;//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_F){//Если нажата клавиша F
+                        fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+                        root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
+                        event.accepted = true;//Завершаем обработку эвента.
                     }
-                    else{
-                        if(event.key === Qt.Key_T){//Если нажата клавиша T
-                            dcSidebar.close()//Закрываем боковую панель
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
-                        else{
-                            if(event.key === Qt.Key_F){//Если нажата клавиша F
-                                fnNaidenoOpen()//Функция открытия и фокусировки Найдено
-                                root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
-                                event.accepted = true;//Завершаем обработку эвента.
-                            }
-                        }
+                } else if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+                    if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                        fnNaidenoOpen()//Функция открытия боковой панели на Найдено.
+                        event.accepted = true;//Завершаем обработку эвента.
                     }
-                }
-                else{
-                    if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
-                        if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
-                            fnNaidenoOpen()//Функция открытия боковой панели на Найдено.
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
+                } else if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+                    if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                            root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
+                        event.accepted = true;//Завершаем обработку эвента.
                     }
-                    else{
-                        if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                            if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                                if(root.pmpDoc.searchModel.count)//Если не 0, то...
-                                    root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
-                                event.accepted = true;//Завершаем обработку эвента.
-                            }
-                        }
-                        else{
-                            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
-                                if(root.pmpDoc && grvPoster.model && grvPoster.focus)
-                                    root.pmpDoc.goToPage(currentIndex)
-                                event.accepted = true;//Завер обработку эвента
-                            }
-                            else{
-                                if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
-                                    if(root.pmpDoc.searchModel.count)//Если не 0, то...
-                                        root.pmpDoc.searchModel.currentResult += 1//Следующий результат
-                                    event.accepted = true;//Завершаем обработку эвента.
-                                }
-                            }
-                        }
+                } else{
+                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){//Если нажата клавиша Enter
+                        if(root.pmpDoc && grvPoster.model && grvPoster.focus)
+                            root.pmpDoc.goToPage(currentIndex)
+                        event.accepted = true;//Завер обработку эвента
+                    } else if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
+                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                            root.pmpDoc.searchModel.currentResult += 1//Следующий результат
+                        event.accepted = true;//Завершаем обработку эвента.
+                    } else if(event.key === Qt.Key_F1){//Если нажата клавиша F1
+                        fnClickedInfo();//Функция нажатия клавиши Информация.
+                        event.accepted = true;//Завершаем обработку эвента.
                     }
                 }
             }

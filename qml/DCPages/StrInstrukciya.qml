@@ -319,6 +319,37 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                                                 </body>
                                             </html>");
                                     }
+                                    else{
+                                        if(strInstrukciya === "pdf"){//Если это Инструкция mentorPDF, то...
+                                            txdZona.text = qsTr("
+                                                <html>
+                                                    <body>
+<p>В менторPDF отображаются документы формата pdf. Которые можно листать, изменять масштаб и вести поиск.</p>
+<p><b>ФУНКЦИОНАЛ:</b></p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaNazad.png\"> - Выйти из документа.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaVpered.png\"> - Боковая панель документа, где:</p>
+<ol>
+    <p><img src = \"/images/DCButtons/24x24/DCKnopkaInfo.png\"> - Инструкция для менторPDF.</p>
+    <p><img src = \"/images/DCButtons/24x24/DCKnopkaZakrit.png\"> - Закрыть боковую панель.</p>
+    <p><b>[Страницы]</b> - Миниатюры страниц документа.</p>
+    <p><b>[Закладки]</b> - Закладки документа, если они существуют.</p>
+    <p><b>[Найдено]</b> - Результаты поиска по документу.</p>
+</ol>
+<p>НАЗВАНИЕ ДОКУМЕНТА - название открытого документа.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaPovorotPo.png\"> - Поворот документа по часовой стрелке.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaPovorotProtiv.png\"> - Поворот документа против часовой \
+стрелки.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaPoisk.png\"> - Поиск по документу.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaMinus.png\">НОМЕР СТРАНИЦЫ \
+<img src = \"/images/DCButtons/24x24/DCKnopkaPlus.png\"> - Номер открытой страницы, который можно изменить \
+кнопками плюс или минус. Или ввести нужную страницу и нажать Enter.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaMinus.png\">МАСШТАБ%\
+<img src = \"/images/DCButtons/24x24/DCKnopkaPlus.png\"> - Масштаб открытого документа, который можно \
+изменить вручную.</p>
+                                                    </body>
+                                                </html>");
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -338,6 +369,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 //<u>Подчеркнуть текст</u>
 //<center>По центру текст</center>
 //<pre>В данной записи сохранятся все tab и пробелы, как задумал разработчик.</pre>
+//<ol>строки или строка, которые будут с отступом tab.</ol>
 //<a href=\"http://ya.ru\">Яндекс</a> - форма записи ссылок.
 //<p><img src = \"images/Qt_logo_2016.png\"></p> - Вставка изображения
 //<p><center>.<img src = \"images/Qt_logo_2016.png\"></center></p> - Изображение по центру (поставь точку).

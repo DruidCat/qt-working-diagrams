@@ -42,6 +42,7 @@ Item {
     signal sgnPassword()//Сигнал о том, что запрашивается пароль.
     signal sgnProgress(int ntProgress, string strStatus)//Сигнал возвращающий загрузку документа и его статус.
     signal clickedPoisk()//Сигнал о том, что открываем Поиск.
+    signal clickedInfo();//Сигнал нажатия кнопки Информация
     signal sgnOpenedSidebar(bool blOpened)//Сигнал о том, что боковая панель открыта/закрыта
     signal sgnFocus()//Сигнал о том, что фокус на DCPdfMPV
     //Функции.
@@ -641,5 +642,6 @@ Item {
             if(dcSidebar.opened) rctZagruzka.visible = false//Если боковая панель открыта, скрываем Загрузку.
         }
         onClickedPoisk: root.clickedPoisk()//Сигнал о том, что открываем Поиск.
+        onClickedInfo: root.clickedInfo()//Сигнал о том, что нажата кнопка Информация.
     }
 }

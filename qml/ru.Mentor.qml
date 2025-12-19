@@ -592,6 +592,9 @@ ApplicationWindow {
                         cppqml.strFileDialogPut = "sohranit";//ВАЖНО!!! Сохраняем положение в дереве папок.
                     stvStr.pop()//Назад страницу
 				}
+                onClickedInfo: {
+                    stvStr.push(pgStrInstrukciyaPDF);//Переключаемся на страницу Инструкция mentorPDF.
+                }
 			}
 		}
         Stranica {//Страница Файловым Диалогом
@@ -972,6 +975,41 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrInstrukciyaJurnal.zagolovokPravi
                 tapToolbarLevi: pgStrInstrukciyaJurnal.toolbarLevi
                 tapToolbarPravi: pgStrInstrukciyaJurnal.toolbarPravi
+
+                onClickedNazad: stvStr.pop()//Назад страницу
+            }
+        }
+        Stranica {//Описание mentorPDF.
+        /////////////////////////////////////////////
+        ///И Н С Т Р У К Ц И Я   M E N T O R P D F///
+        /////////////////////////////////////////////
+            id: pgStrInstrukciyaPDF
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
+            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО МЕНТОРPDF")
+            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
+            StrInstrukciya {
+                strInstrukciya: "pdf"
+                ntWidth: pgStrInstrukciyaPDF.ntWidth; ntCoff: pgStrInstrukciyaPDF.ntCoff
+                clrTexta: pgStrInstrukciyaPDF.clrTexta; clrFona: pgStrInstrukciyaPDF.clrRabOblasti
+                clrPolzunka: pgStrInstrukciyaPDF.clrFona
+                zagolovokX: pgStrInstrukciyaPDF.rctStrZagolovok.x;
+                zagolovokY: pgStrInstrukciyaPDF.rctStrZagolovok.y
+                zagolovokWidth: pgStrInstrukciyaPDF.rctStrZagolovok.width
+                zagolovokHeight: pgStrInstrukciyaPDF.rctStrZagolovok.height
+                zonaX: pgStrInstrukciyaPDF.rctStrZona.x; zonaY: pgStrInstrukciyaPDF.rctStrZona.y
+                zonaWidth: pgStrInstrukciyaPDF.rctStrZona.width;
+                zonaHeight: pgStrInstrukciyaPDF.rctStrZona.height
+                toolbarX: pgStrInstrukciyaPDF.rctStrToolbar.x
+                toolbarY: pgStrInstrukciyaPDF.rctStrToolbar.y
+                toolbarWidth: pgStrInstrukciyaPDF.rctStrToolbar.width
+                toolbarHeight: pgStrInstrukciyaPDF.rctStrToolbar.height
+                radiusZona: pgStrInstrukciyaPDF.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrInstrukciyaPDF.zagolovokLevi
+                tapZagolovokPravi: pgStrInstrukciyaPDF.zagolovokPravi
+                tapToolbarLevi: pgStrInstrukciyaPDF.toolbarLevi
+                tapToolbarPravi: pgStrInstrukciyaPDF.toolbarPravi
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }
