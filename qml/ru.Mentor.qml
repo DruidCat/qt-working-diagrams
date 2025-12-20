@@ -208,6 +208,7 @@ ApplicationWindow {
                 radiusZona: pgStrHotKey.rctStrZona.radius//Радиус берём из настроек элемента qml
                 tapZagolovokLevi: pgStrHotKey.zagolovokLevi; tapZagolovokPravi: pgStrHotKey.zagolovokPravi
                 tapToolbarLevi: pgStrHotKey.toolbarLevi; tapToolbarPravi: pgStrHotKey.toolbarPravi
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }
@@ -311,6 +312,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrMentor.zagolovokPravi
                 tapToolbarLevi: pgStrMentor.toolbarLevi
                 tapToolbarPravi: pgStrMentor.toolbarPravi
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }
@@ -342,6 +344,7 @@ ApplicationWindow {
                 radiusZona: pgStrQt.rctStrZona.radius//Радиус берём из настроек элемента qml
                 tapZagolovokLevi: pgStrQt.zagolovokLevi; tapZagolovokPravi: pgStrQt.zagolovokPravi
                 tapToolbarLevi: pgStrQt.toolbarLevi; tapToolbarPravi: pgStrQt.toolbarPravi
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }
@@ -836,6 +839,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrInstrukciyaMenu.zagolovokPravi
                 tapToolbarLevi: pgStrInstrukciyaMenu.toolbarLevi
                 tapToolbarPravi: pgStrInstrukciyaMenu.toolbarPravi
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }
@@ -871,6 +875,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrInstrukciyaAnimacii.zagolovokPravi
                 tapToolbarLevi: pgStrInstrukciyaAnimacii.toolbarLevi
                 tapToolbarPravi: pgStrInstrukciyaAnimacii.toolbarPravi
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }
@@ -906,6 +911,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrInstrukciyaKataloga.zagolovokPravi
                 tapToolbarLevi: pgStrInstrukciyaKataloga.toolbarLevi
                 tapToolbarPravi: pgStrInstrukciyaKataloga.toolbarPravi
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }
@@ -940,6 +946,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrInstrukciyaFB.zagolovokPravi
                 tapToolbarLevi: pgStrInstrukciyaFB.toolbarLevi
                 tapToolbarPravi: pgStrInstrukciyaFB.toolbarPravi
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }
@@ -975,6 +982,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrInstrukciyaJurnal.zagolovokPravi
                 tapToolbarLevi: pgStrInstrukciyaJurnal.toolbarLevi
                 tapToolbarPravi: pgStrInstrukciyaJurnal.toolbarPravi
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
             }
@@ -1010,6 +1018,7 @@ ApplicationWindow {
                 tapZagolovokPravi: pgStrInstrukciyaPDF.zagolovokPravi
                 tapToolbarLevi: pgStrInstrukciyaPDF.toolbarLevi
                 tapToolbarPravi: pgStrInstrukciyaPDF.toolbarPravi
+                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad:{//Когда нажимается кнопка назад на инструкции менторPDF, то...
                     tmPdf.fnInteractiveSidebar(true)//Активируем свайп на боковой панели.

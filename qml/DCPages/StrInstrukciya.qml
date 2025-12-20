@@ -1,4 +1,5 @@
 ﻿import QtQuick //2.15
+import QtQuick.Controls//Drawer
 
 import DCButtons 1.0//Импортируем кнопки
 import DCMethods 1.0//Импортируем методы написанные мной.
@@ -30,6 +31,7 @@ Item {
     property real tapToolbarPravi: 1
     property string strInstrukciya: "obavtore"
     property bool isFileDialogFailVibor: true;//true - выбор файлов, false - выбор папки
+    property bool isMobile: true//true - мобильная платформа.
     //Настройки.
 	anchors.fill: parent//Растянется по Родителю.
     focus: true;//Чтоб работали горячие клавиши.
@@ -37,7 +39,12 @@ Item {
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
     //Функуции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
-        if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+        if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+            if (event.key === Qt.Key_B){//Если нажата клавиша В, то...
+                fnClickedSidebar();//Функция открытия/закрытия боковой панели.
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        } else if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
             if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
                 if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
                     fnClickedNazad();//Функция нажатия кнопки Назад
@@ -45,21 +52,35 @@ Item {
             }
         }
     }
-    function fnClickedNazad() {//Функция нажатия кнопки Назад
-        root.clickedNazad();
+    function fnClickedNazad(){//Функция нажатия кнопки Назад
+        drwSidebar.close();//Закрываем боковую панели при закрытии инструкции.
+        root.clickedNazad();//Закрываем Инструкцию.
+    }
+    function fnClickedSidebar(){//Функция нажатия кнопки SideBar.
+        if(drwSidebar.position)//Если боковая панель открыта, то...
+            drwSidebar.close()//Закрываем её
+        else//Если боковая панель закрыта, то...
+            drwSidebar.open()//Открываем её.
+        root.forceActiveFocus()//Чтоб горячие клавиши работали.
     }
     Item {//Данные Заголовок
 		id: tmZagolovok
         DCKnopkaNazad {
             id: knopkaNazad
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-			anchors.verticalCenter: tmZagolovok.verticalCenter
-			anchors.left:tmZagolovok.left
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left:tmZagolovok.left
             clrKnopki: root.clrTexta
-            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
-            tapWidth: tapHeight*root.tapZagolovokLevi
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
+        }
+        DCKnopkaSidebar {
+            id: knopkaSidebar
+            opened: true//По умолчанию отображение как будто открыта панель, так как панель с другой стороны
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
+            clrKnopki: root.clrTexta
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
+            onClicked: fnClickedSidebar();//Функция нажатия кнопки SideBar.
         }
     }
     Item {//Данные Зона
@@ -69,7 +90,8 @@ Item {
             id: txdZona
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
-			readOnly: true//Запрещено редактировать текст
+            anchors.rightMargin: drwSidebar.position * drwSidebar.width - drwSidebar.position * root.ntCoff
+            readOnly: true//Запрещено редактировать текст
             textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
 			textEdit.textFormat: TextEdit.AutoText//Формат АВТОМАТИЧЕСКИ определяется. Предпочтителен HTML4
             pixelSize: root.ntWidth/2*root.ntCoff//размер шрифта текста в два раза меньше.
@@ -84,6 +106,141 @@ Item {
     }
     Item {//Данные Тулбар
 		id: tmToolbar
+    }
+    Drawer {
+        id: drwSidebar
+        //Свойства
+        property int minSidebarWidth: 200//Минимум ширины боковой панели
+        property int maxSidebarWidth: parent ? parent.width * 0.8 : 640//Максимум ширины боковой панели
+        property int sidebarWidth: root.isMobile//Если мобила, ширина на весь экран, если нет,то данные из Реестра
+                                   ? root.width
+                                   : Math.max(minSidebarWidth, (parent ? cppqml.untSidebarWidth : 330))
+        //Настройки
+        edge: Qt.RightEdge
+        modal: false
+        dim: false
+        closePolicy: Drawer.CloseOnEscape//Закрываем боковую панель только при нажати Escape, другие политики выкл
+        clip: true//Обрезать всё лишнее.
+        //width: 330
+        width: sidebarWidth//ВАЖНО! ширина боковой панели зависит только от sidebarWidth.
+        height: tmZona.height//Высота боковой панели по высоте инструкции.
+        y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
+        interactive: true//false -  панель не реагирует на свайпы.
+        //Функции
+        onPositionChanged: {//Если позиция изменяется у боковой панели, то...
+            knopkaSidebar.opened = !position//Передаём сигнал кнопке,для отображения нужной позиции инверсивно
+        }
+        Rectangle {//Прямоугольник узкой полоски интерфейса справа
+            id: rctBorder
+            anchors.top: drwSidebar.top
+            x: drwSidebar.width-root.ntCoff
+            width: root.ntCoff
+            height: drwSidebar.height
+            color: root.clrPolzunka
+        }
+        Rectangle {//Прямоугольник заголовка, для информации и кнопки закрыть.
+            id: rctZagolovok
+            anchors.top: drwSidebar.top
+            anchors.right: rctBorder.left
+            width: drwSidebar.width - rctBorder.width - rctRuchka.width
+            height: root.ntCoff*(root.ntWidth-1)+root.ntCoff
+            color: root.clrFona
+            border.color: root.clrTexta
+            border.width: root.ntCoff/4
+            DCKnopkaZakrit {
+                id: knopkaZakrit
+                ntWidth: (root.ntWidth-1)
+                ntCoff: root.ntCoff
+                visible: true
+                anchors.verticalCenter: rctZagolovok.verticalCenter
+                anchors.right: rctZagolovok.right
+                clrKnopki: root.clrTexta
+                clrFona: root.clrFona
+                tapHeight: (root.ntWidth-1)*root.ntCoff+root.ntCoff
+                tapWidth: tapHeight
+                onClicked: drwSidebar.close();//Метод обрабатывающий кнопку Закрыть боковую панель.
+            }
+            Label {//Текст вписанный в границы, отображает имя заголовка.
+                id: lblZagolovok
+                anchors.top: rctZagolovok.top
+                anchors.right: knopkaZakrit.left
+                width: drwSidebar.width - rctBorder.width - rctRuchka.width - knopkaZakrit.width
+                height: rctZagolovok.height
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                color: root.clrTexta
+                //font.capitalization: Font.AllUppercase//СЛОВА ЗАГЛАВНЫМИ БУКВАМИ
+                font.bold: true//Жирный текст.
+                font.pixelSize: root.ntCoff*(root.ntWidth-1)
+                elide: Text.ElideRight//Обрезаем текст по правой стороне точками (...)
+                text: qsTr("Список инструкций")
+            }
+        }
+        Rectangle {//Прямоугольник всей оставшейся боковой панели.
+            id: rctSidebar
+            anchors.top: rctZagolovok.bottom
+            anchors.right: rctBorder.left
+            width: drwSidebar.width - rctBorder.width - rctRuchka.width
+            height: drwSidebar.height-rctZagolovok.height
+            color: root.clrFona
+            clip: true//Обязательно обрезать всё, что не помещается в этот прямоугольник.
+        }
+        Rectangle {//Прямоугольник ручки, за которую можно тянуть размер боковой панели, для изменения её размеров
+            id: rctRuchka
+            anchors.top: drwSidebar.top
+            anchors.right: rctSidebar.left
+            width: (root.ntWidth < 3) ? 3 : root.ntWidth//В зависимости от параметра, изменяется толщина ручки.
+            height: drwSidebar.height
+            color: Qt.darker(root.clrTexta, 1.3)
+            border.color: root.clrTexta
+            border.width: (root.ntWidth < 5) ? 1 : root.ntCoff/4//Чтоб была видна оконтовка ручки.
+            MouseArea {
+                id: maRuchka
+                //Свойства
+                property bool isDrag: false//Свойство перетаскивания. true - началось перетаскивание.
+                property real lastX//Переменная хранящаа предыдущее положение мыши
+                //Настройки
+                anchors.fill: parent
+                hoverEnabled: true//При наведении изменение
+                cursorShape: Qt.SizeHorCursor//Курсор в виде изменения горизонтального размера.
+                //Функции
+                onPressed: (mouse) => {//Если нажали на ручку
+                    if (root.isMobile) return//Если мобильное устройство, то выходим
+                    drwSidebar.interactive = false;//Отключаем свайп Drawer. ВАЖНО!
+                    isDrag = true//Взводим флаг при нажатии на ручку, идёт изменение размеров.
+                    lastX = mouse.x//Запоминаем первоначальное положение боковой панели по координатам мыши.
+                    mouse.accepted = true//Завершаем обработку эвента.
+                }
+                onReleased: {//Если отпустили кнопку мышки
+                    drwSidebar.interactive = true;//Включаем свайп Drawer. ВАЖНО!
+                    //cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
+                    isDrag = false//При отпускании мыши Окончание перетаскивания
+                }
+                onCanceled: {
+                    drwSidebar.interactive = true;//Включаем свайп Drawer. ВАЖНО!
+                    //cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
+                    isDrag = false//Окончание перетаскивания
+                }
+                onPositionChanged: (mouse) => {//Если позиция меняется, то...
+                    if (!isDrag || root.isMobile) return//Если не перетаскиваем ручку или мобильное устройство,вых
+                    const dX = mouse.x - lastX//Дельта Х относительно предыдущей точки Х
+                    lastX = mouse.x//Запоминаем положение мыши по Х.
+                    if (dX === 0) return//Если дельта не изменилась, ничего не делаем
+                    let ltWidth = drwSidebar.sidebarWidth - dX//Новые размеры ширины боковой панели.
+                    ltWidth=Math.max(drwSidebar.minSidebarWidth,Math.min(drwSidebar.maxSidebarWidth, ltWidth))
+                    drwSidebar.sidebarWidth = ltWidth//Изменяем ширину боковой панели на новую ширину
+                }
+            }
+        }
+        Rectangle {//Оконтовка поверх всех прямоугольников
+            anchors.top: drwSidebar.top
+            anchors.right: rctSidebar.right
+            height: drwSidebar.height
+            width: rctSidebar.width
+            color: "transparent"
+            border.color: root.clrTexta
+            border.width: root.ntCoff/4
+        }
     }
     Component.onCompleted: {//Когда страница отрисовалась, то...
         if (strInstrukciya === "oprilojenii"){//Если это анотация Об приложении Ментор, то...
@@ -182,6 +339,8 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 </ol>
 <p><b>ГОРЯЧИЕ КЛАВИШИ:</b></p>
 <ol>
+<p><b>[Alt Стрелка влево]</b> - Закрыть окно анимации.</p>
+<p><b>[F1]</b> - Инструкция.</p>
 <p><b>[Ctrl N]</b> или <b>[Shift I]</b> - Режим добавления текста анимации.</p>
 <p><b>[Ctrl S]</b> или <b>[Enter]</b> - Сохранить текст анимации.</p>
 <p><b>[Пробел]</b> - Старт анимации.</p>
@@ -222,6 +381,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 </ol>
 <p><b>ПРОСМОТРЩИК ДОКУМЕНТОВ МЕНТОРPDF:</b></p>
 <ol>
+<p><b>[Alt Стрелка влево]</b> - Закрыть окно менторPDF.</p>
 <p><b>[F1]</b> - Инструкция.</p>
 <p><b>[PgUp]</b> - Страница вверх.</p>
 <p><b>[PgDn]</b> - Страница вниз.</p>
@@ -258,6 +418,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 </ol>
 <p><b>АНИМАЦИЯ:</b></p>
 <ol>
+<p><b>[Alt Стрелка влево]</b> - Закрыть окно анимации.</p>
 <p><b>[F1]</b> - Инструкция.</p>
 <p><b>[Ctrl N]</b> или <b>[Shift I]</b> - Режим добавления текста анимации.</p>
 <p><b>[Ctrl S]</b> или <b>[Enter]</b> - Сохранить текст анимации.</p>
@@ -266,8 +427,8 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 </ol>
 <p><b>ЖУРНАЛ:</b></p>
 <ol>
-<p><b>[F1]</b> - Инструкция.</p>
 <p><b>[Alt Стрелка влево]</b> - Закрыть журнал.</p>
+<p><b>[F1]</b> - Инструкция.</p>
 <p><b>[Ctrl F]</b> - Сортировка по неделе, месяцу, году:</p>
 <ol>
 <p><b>[Стрелка вверх]</b> - Листание элементов сортировки.</p>
