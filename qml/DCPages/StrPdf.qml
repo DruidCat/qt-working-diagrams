@@ -45,164 +45,100 @@ Item {
                 if(knopkaPovorotPo.visible && knopkaPovorotPo.enabled)//Если кнопка видимая, и активная то...
 					fnClickedPovorotPo()//Функция нажатия кнопки поворота по часовой стрелке.
                 event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === 95){//Если нажата клавиша "-", то...
+                if(knopkaPovorotProtiv.visible && knopkaPovorotProtiv.enabled)//Если видимая и активная,то
+                    fnClickedPovorotProtiv()//Функция нажатия кнопки поворота против часовой стрелке.
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
+                fnClickedPage()//Функция клика на ввод номера страницы.
+                event.accepted = true;//Завершаем обработку эвента.
             }
-			else{
-				if(event.key === 95){//Если нажата клавиша "-", то...
-                    if(knopkaPovorotProtiv.visible && knopkaPovorotProtiv.enabled)//Если видимая и активная,то
-						fnClickedPovorotProtiv()//Функция нажатия кнопки поворота против часовой стрелке.
-					event.accepted = true;//Завершаем обработку эвента.
-				}
-                else{
-                    if(event.key === Qt.Key_N){//Если нажата клавиша N, то...
-                        fnClickedPage()//Функция клика на ввод номера страницы.
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                }
-			}
         }
-		else{
-			if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
-				if(event.key === Qt.Key_Equal){//Если нажата "+",то.
-					var ntScaleUp = pdfScale.value + 25;
-					if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
-						pdfLoader.item.renderScale = ntScaleUp/100;
-					else{//Если больше максимального масштаба, то...
-						if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения, то
-							pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
-					}
-					event.accepted = true;//Завершаем обработку эвента.
-				}
-				else{
-					if(event.key === Qt.Key_Minus){//Если нажат "-", то.
-						var ntScaleDown = pdfScale.value - 25;//-1 страница
-						if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
-							pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
-						else{
-							if(pdfScale.value !== pdfScale.from)
-								pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем мин значение.
-						}
-						event.accepted = true;//Завершаем обработку эвента.
-					}
-					else{
-						if(event.key === Qt.Key_F){//Если нажат "F", то.
-                            fnClickedPoisk();//Запускаем режим поиска
-							event.accepted = true;//Завершаем обработку эвента.
-						}
-						else{
-							if(event.key === Qt.Key_S){
-								if(knopkaOk.visible)//Если кнопка Ок видимая, то...
-									fnClickedOk();//Функция нажатия кнопки Ок
-								event.accepted = true;//Завершаем обработку эвента.
-							}
-                            else{
-                                if(event.key === Qt.Key_C){
-                                    if(pdfLoader.item)//Если существует Загрузчик, то...
-                                        pdfLoader.item.fnCopyToClipboard();//Копируем выделенный текст в file.pdf.
-                                    event.accepted = true;//Завершаем обработку эвента.
-                                }
-                                else{
-                                    if(event.key === Qt.Key_B){//Если нажата клавиша B
-                                        fnSidebarZakladki()//Функция открытия боковой панели на Закладке.
-                                        event.accepted = true;//Завершаем обработку эвента.
-                                    }
-                                    else{
-                                        if(event.key === Qt.Key_T){//Если нажата клавиша T
-                                            fnSidebarPoster()//Открытие боковой панели на Миниатюрах.
-                                            event.accepted = true;//Завершаем обработку эвента.
-                                        }
-                                    }
-                                }
-                            }
-						}
-					}
-				}
-			}
-			else{
-                if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
-                    if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
-                        if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
-                            fnClickedNazad();//Функция нажатия кнопки Назад
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                    else{
-                        if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
-                            fnSidebarNaideno()//Функция открытия боковой панели на Найдено.
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
-                    }
+        else if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+            if(event.key === Qt.Key_Equal){//Если нажата "+",то.
+                var ntScaleUp = pdfScale.value + 25;
+                if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
+                    pdfLoader.item.renderScale = ntScaleUp/100;
+                else{//Если больше максимального масштаба, то...
+                    if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения, то
+                        pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
                 }
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_Minus){//Если нажат "-", то.
+                var ntScaleDown = pdfScale.value - 25;//-1 страница
+                if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
+                    pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
                 else{
-                    if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
-                        if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                            fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
-                    }
-                    else{//Если не нажат shift, то...
-                        if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
-                            if(knopkaZakrit.visible)//Если кнопка Закрыть на поиск видима, то...
-                                fnClickedZakrit();//Закрываем эту строку
-                            event.accepted = true;//Завершаем обработку эвента.
-                        }
-                        else{
-                            if(event.key === Qt.Key_Down){//нажата "Стрелка вниз",то
-                                fnClickedKeyVniz();//Функция нажатия клавиши вниз
-                                event.accepted = true;//Завершаем обработку эвента.
-                            }
-                            else{
-                                if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
-                                    fnClickedKeyVverh();//Функция нажатия клавиши вверх
-                                    event.accepted = true;//Завершаем обработку эвента.
-                                }
-                                else{
-                                    if(event.key === Qt.Key_PageDown){//нажата "Page Down",то
-                                        fnClickedKeyPgDown();//Функция нажатия клавиши Page Down
-                                        event.accepted = true;//Завершаем обработку эвента.
-                                    }
-                                    else{
-                                        if(event.key === Qt.Key_PageUp){//нажата "Page Up"
-                                            fnClickedKeyPgUp();//Функция нажатия клавиши Page Up
-                                            event.accepted = true;//Завершаем обработку эвента.
-                                        }
-                                        else{
-                                            if(event.key === Qt.Key_Home){//Если нажата кнопка Home,то
-                                                fnClickedKeyHome();//Функция нажатия клавиши Home
-                                                event.accepted = true;//Завершаем обработку эвента.
-                                            }
-                                            else{
-                                                if(event.key === Qt.Key_End){//Если нажата кнопка End
-                                                    fnClickedKeyEnd();//Функция нажатия клавиши End
-                                                    event.accepted = true;//Завершаем обработку эвента
-                                                }
-                                                else{
-                                                    if(event.key===Qt.Key_F3){//F3
-                                                        fnClickedPoiskNext();//нажатия Следующий поиск
-                                                        event.accepted = true;//Завер обработку эвента
-                                                    }
-                                                    else{
-                                                        if((event.key===Qt.Key_Enter)
-                                                                ||(event.key===Qt.Key_Return)){//Enter
-                                                            fnClickedKeyEnter();//Нажитие клавиши Enter
-                                                            event.accepted = true;//Завер обработку эвента
-                                                        }
-                                                        else{
-                                                            if(event.key === Qt.Key_F1){//нажата кнопка F1, то
-                                                                fnClickedInfo();//Функция нажатия на Информаци
-                                                                event.accepted = true;//Завершаем обработку эв.
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    if(pdfScale.value !== pdfScale.from)
+                        pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем мин значение.
                 }
-			}
-		}
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_F){//Если нажат "F", то.
+                fnClickedPoisk();//Запускаем режим поиска
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_S){
+                if(knopkaOk.visible)//Если кнопка Ок видимая, то...
+                    fnClickedOk();//Функция нажатия кнопки Ок
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_C){
+                if(pdfLoader.item)//Если существует Загрузчик, то...
+                    pdfLoader.item.fnCopyToClipboard();//Копируем выделенный текст в file.pdf.
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_B){//Если нажата клавиша B
+                fnSidebarZakladki()//Функция открытия боковой панели на Закладке.
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_T){//Если нажата клавиша T
+                fnSidebarPoster()//Открытие боковой панели на Миниатюрах.
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        } else if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
+            if (event.key === Qt.Key_Left){//Если нажата клавиша стрелка влево, то...
+                if(knopkaNazad.visible)//Если кнопка Назад видимая, то...
+                    fnClickedNazad();//Функция нажатия кнопки Назад
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
+                fnSidebarNaideno()//Функция открытия боковой панели на Найдено.
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        } else if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
+            if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
+                fnClickedPoiskPrevious()//Функция нажатия кнопки Предыдущего поиска
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        } else {//Если не нажат shift, то...
+            if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
+                if(knopkaZakrit.visible)//Если кнопка Закрыть на поиск видима, то...
+                    fnClickedZakrit();//Закрываем эту строку
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_Down){//нажата "Стрелка вниз",то
+                fnClickedKeyVniz();//Функция нажатия клавиши вниз
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
+                fnClickedKeyVverh();//Функция нажатия клавиши вверх
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_PageDown){//нажата "Page Down",то
+                fnClickedKeyPgDown();//Функция нажатия клавиши Page Down
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_PageUp){//нажата "Page Up"
+                fnClickedKeyPgUp();//Функция нажатия клавиши Page Up
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_Home){//Если нажата кнопка Home,то
+                fnClickedKeyHome();//Функция нажатия клавиши Home
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_End){//Если нажата кнопка End
+                fnClickedKeyEnd();//Функция нажатия клавиши End
+                event.accepted = true;//Завершаем обработку эвента
+            } else if(event.key===Qt.Key_F3){//F3
+                fnClickedPoiskNext();//нажатия Следующий поиск
+                event.accepted = true;//Завер обработку эвента
+            } else if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){//Enter
+                fnClickedKeyEnter();//Нажитие клавиши Enter
+                event.accepted = true;//Завер обработку эвента
+            } else if(event.key === Qt.Key_F1){//нажата кнопка F1, то...
+                fnClickedInfo();//Функция нажатия на Информаци
+                event.accepted = true;//Завершаем обработку эвента.
+            }
+        }
         //cppqml.strDebug = event.key;
     }
     function fnPdfSource(urlPdfPut){//управление свойствами загруженного компонента
@@ -235,9 +171,16 @@ Item {
             cppqml.strDannieStr = pdfLoader.item.nomerStranici;//Записываем в БД номер открытой страницы.
         fnPdfSource("");//Пустой путь PDF документа, закрываем.
     }
+    function fnInteractiveSidebar(isInteractive){//Функция, которая включает/выключает свайп боковой панели.
+        if(pdfLoader.item) pdfLoader.item.fnInteractiveSidebar(isInteractive)//вкл/выкл свайп боковой панели.
+    }
     function fnClickedInfo(){//Функция нажатия кнопки Информация
         cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
-        if(pdfLoader.item) root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
+        if(pdfLoader.item){//Если документ загрузился, то...
+            pdfLoader.item.fnZakritSidebar();//Закрываем боковую панель. ВАЖНО!
+            fnInteractiveSidebar(false)//Отключаем свайп в боковой панеле. ВАЖНО!
+            root.clickedInfo();//Сигнал излучаем, что нажата кнопка Описание.
+        }
     }
     function fnClickedKeyPgDown(){//Функция нажатия клавиши Page Down
         if(pdfLoader.item) pdfLoader.item.fnClickedKeyPgDown()//Вниз на одну страницу

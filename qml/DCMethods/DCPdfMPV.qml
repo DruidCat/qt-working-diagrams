@@ -133,6 +133,12 @@ Item {
             tmrSidebar.running = true//Открываем боковую панель через задержку таймера.
         }
     }
+    function fnZakritSidebar(){//Функция закрытия боковой панели.
+        dcSidebar.close()//Закрываем боковую панель
+    }
+    function fnInteractiveSidebar(isInteractive){//Функция, которая включает/выключает свайп боковой панели.
+        dcSidebar.interactive = isInteractive;//вкл/выкл свайп боковой панели.
+    }
     Timer {//Таймер необходим, чтоб
         id: tmrSidebar
         interval: 3; running: false; repeat: false

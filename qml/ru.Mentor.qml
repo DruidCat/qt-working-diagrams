@@ -1011,7 +1011,10 @@ ApplicationWindow {
                 tapToolbarLevi: pgStrInstrukciyaPDF.toolbarLevi
                 tapToolbarPravi: pgStrInstrukciyaPDF.toolbarPravi
 
-                onClickedNazad: stvStr.pop()//Назад страницу
+                onClickedNazad:{//Когда нажимается кнопка назад на инструкции менторPDF, то...
+                    tmPdf.fnInteractiveSidebar(true)//Активируем свайп на боковой панели.
+                    stvStr.pop()//Назад страницу
+                }
             }
         }
 	}  
