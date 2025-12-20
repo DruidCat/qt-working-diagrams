@@ -212,7 +212,7 @@ Drawer {
         transformOrigin: Item.BottomLeft//Точка поворота боковой панели нижний левый угол.
         currentIndex: 1//Закладки видимые по умолчанию.
         Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
-            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
                 if(tbbNaideno.focus) fnNaidenoOpen()//Функция открытия и фокусировки Найдено
                 else if(tbbZakladki.focus) fnZakladkiOpen()//Функция открытия и фокусировки Закладках
                 else if(tbbPoster.focus) fnPosterOpen()//Функция открытия и фокусировки Страницы
@@ -320,12 +320,10 @@ Drawer {
                     if(event.key === Qt.Key_B){//Если нажата клавиша B
                         fnZakladkiOpen()//Функция открытия боковой панели на Закладке.
                         event.accepted = true;//Завершаем обработку эвента.
-                    }
-                    else if(event.key === Qt.Key_T){//Если нажата клавиша T
+                    } else if(event.key === Qt.Key_T){//Если нажата клавиша T
                             fnPosterOpen()//Открытие боковой панели на Миниатюрах.
                             event.accepted = true;//Завершаем обработку эвента.
-                    }
-                    else if(event.key === Qt.Key_F){//Если нажата клавиша F
+                    } else if(event.key === Qt.Key_F){//Если нажата клавиша F
                         root.clickedPoisk()//Сигнал нажатия на кнопку поиск.
                         event.accepted = true;//Завершаем обработку эвента.
                     }
@@ -342,7 +340,7 @@ Drawer {
                         event.accepted = true;//Завершаем обработку эвента.
                     }
                 } else {
-                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
                         if(root.pmpDoc//Указатель не null
                             && lsvNaideno.model//модель не null
                             && lsvNaideno.focus//Фокус на Найдено
@@ -472,7 +470,7 @@ Drawer {
                         event.accepted = true//Завершаем обработку эвента.
                     }
                 } else {
-                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){
+                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
                         if(!isIndikator)//Если индикатор треугольник не был нажат, то...
                             if(trvZakladki.focus) fnGoToZakladka(currentIndex)//Переходим на страницу
                         event.accepted = true//Завершаем обработку эвента.
@@ -711,7 +709,7 @@ Drawer {
                         event.accepted = true;//Завершаем обработку эвента.
                     }
                 } else{
-                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)){//Если нажата клавиша Enter
+                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
                         if(root.pmpDoc && grvPoster.model && grvPoster.focus)
                             root.pmpDoc.goToPage(currentIndex)
                         event.accepted = true;//Завер обработку эвента
