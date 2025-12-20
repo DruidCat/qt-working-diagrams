@@ -1,7 +1,7 @@
-﻿// DCSidebar.qml
+﻿//DCSidebar.qml
 import QtQuick //2.15
-import QtQuick.Controls
-import QtQuick.Pdf
+import QtQuick.Controls//Drawer
+import QtQuick.Pdf//PdfMultiPageView PdfDocument
 import DCButtons 1.0//Импортируем кнопки написанные мной.
 import DCMethods 1.0//Импортируем методы написанные мной.
 import QtQml.Models//Для DelegateModel
@@ -58,19 +58,19 @@ Drawer {
             lsvNaideno.currentIndex -= 1//То уменьшаем на 1
     }
     function fnNaidenoOpen(){//Функция открытия и фокусировки Найдено
-        dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено
+        root.currentIndex = 0//Переключаемся на вкладку Найдено
         lsvNaideno.focus = true//Фокус на Найдено
         tbbNaideno.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
         lblZagolovok.text = tbbNaideno.text//Переименовываем заголовок на Найдено
     }
     function fnZakladkiOpen(){//Функция открытия и фокусировки Закладках
-        dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
+        root.currentIndex = 1//Переключаемся на вкладку Закладки
         trvZakladki.focus = true//Фокус на Закладках
         tbbZakladki.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
         lblZagolovok.text = tbbZakladki.text//Переименовываем заголовок на Закладки
     }
     function fnPosterOpen(){//Функция открытия и фокусировки Страницы
-        dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
+        root.currentIndex = 2//Переключаемся на вкладку Миниатюр
         grvPoster.focus = true//Фокус на страницах
         tbbPoster.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
         lblZagolovok.text = tbbPoster.text//Переименовываем заголовок на Страницы
@@ -244,7 +244,7 @@ Drawer {
             blFontAuto: true//Включаем автоподгонку размера шрифта.
             onPressed: fnNaidenoOpen()//Функция открытия и фокусировки Найдено
             onFocusChanged: {//Если фокус вкладки изменился, то...
-                if(focus) dcSidebar.currentIndex = 0//Переключаемся на вкладку Найдено.
+                if(focus) root.currentIndex = 0//Переключаемся на вкладку Найдено.
                 borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
             }
             Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
@@ -262,7 +262,7 @@ Drawer {
             blFontAuto: true//Включаем автоподгонку размера шрифта.
             onPressed: fnZakladkiOpen()//Функция открытия и фокусировки Закладках
             onFocusChanged: {//Если фокус вкладки изменился, то...
-                if(focus) dcSidebar.currentIndex = 1//Переключаемся на вкладку Закладки
+                if(focus) root.currentIndex = 1//Переключаемся на вкладку Закладки
                 borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
             }
             Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
@@ -280,7 +280,7 @@ Drawer {
             blFontAuto: true//Включаем автоподгонку размера шрифта.
             onPressed: fnPosterOpen()//Функция открытия и фокусировки Страницы
             onFocusChanged: {//Если фокус вкладки изменился, то...
-                if(focus) dcSidebar.currentIndex = 2//Переключаемся на вкладку Миниатюр
+                if(focus) root.currentIndex = 2//Переключаемся на вкладку Миниатюр
                 borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
             }
             Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
@@ -330,7 +330,7 @@ Drawer {
                 }
                 else if(event.modifiers & Qt.AltModifier){//Если нажат "Alt"
                     if (event.key === Qt.Key_F){//Если нажата клавиша F, то...
-                        dcSidebar.close()//Закрываем боковую панель
+                        root.close()//Закрываем боковую панель
                         event.accepted = true;//Завершаем обработку эвента.
                     }
                 } else if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
@@ -448,7 +448,7 @@ Drawer {
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
                 if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
                     if(event.key === Qt.Key_B){//Если нажата клавиша B
-                        dcSidebar.close()//Закрываем боковую панель
+                        root.close()//Закрываем боковую панель
                         event.accepted = true//Завершаем обработку эвента.
                     } else if(event.key === Qt.Key_T){//Если нажата клавиша T
                         fnPosterOpen()//Открытие боковой панели на Миниатюрах.
@@ -690,7 +690,7 @@ Drawer {
                         fnZakladkiOpen()//Открытие боковой панели на Закладки.
                         event.accepted = true;//Завершаем обработку эвента.
                     } else if(event.key === Qt.Key_T){//Если нажата клавиша T
-                        dcSidebar.close()//Закрываем боковую панель
+                        root.close()//Закрываем боковую панель
                         event.accepted = true;//Завершаем обработку эвента.
                     } else if(event.key === Qt.Key_F){//Если нажата клавиша F
                         fnNaidenoOpen()//Функция открытия и фокусировки Найдено
