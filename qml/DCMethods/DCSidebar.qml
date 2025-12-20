@@ -34,6 +34,7 @@ Drawer {
     width: sidebarWidth//ВАЖНО! ширина боковой панели зависит только от sidebarWidth.
     height: root.pmpDoc ? root.pmpDoc.height : (parent ? parent.height : 0)//Высота по высоте pdf сцены
     y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
+    interactive: true//false -  панель не реагирует на свайпы.
     //Сигналы
     signal clickedPoisk()//Сигнал запуска режима поиска.
     signal clickedInfo();//Сигнал нажатия кнопки Информация
@@ -175,12 +176,21 @@ Drawer {
             //Функции
             onPressed: (mouse) => {//Если нажали на ручку
                 if (root.isMobile) return//Если мобильное устройство, то выходим
-                mouse.accepted = true//событие не пойдёт в Drawer, но это не точно)
+                root.interactive = false;//Отключаем свайп Drawer. ВАЖНО!
                 isDrag = true//Взводим флаг при нажатии на ручку, идёт изменение размеров.
                 lastX = mouse.x//Запоминаем первоначальное положение боковой панели по координатам мыши.
+                mouse.accepted = true//Завершаем обработку эвента.
             }
-            onReleased: isDrag = false//При отпускании мыши Окончание перетаскивания
-            onCanceled: isDrag = false//Окончание перетаскивания
+            onReleased: {//Если отпустили кнопку мышки
+                root.interactive = true;//Включаем свайп Drawer. ВАЖНО!
+                cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
+                isDrag = false//При отпускании мыши Окончание перетаскивания
+            }
+            onCanceled: {
+                root.interactive = true;//Включаем свайп Drawer. ВАЖНО!
+                cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
+                isDrag = false//Окончание перетаскивания
+            }
             onPositionChanged: (mouse) => {//Если позиция меняется, то...
                 if (!isDrag || root.isMobile) return//Если не перетаскиваем ручку или мобильное устройство,вых
                 const dX = mouse.x - lastX//Дельта Х относительно предыдущей точки Х
@@ -189,7 +199,6 @@ Drawer {
                 let ltWidth = root.sidebarWidth + dX//Новые размеры ширины боковой панели.
                 ltWidth = Math.max(root.minSidebarWidth, Math.min(root.maxSidebarWidth, ltWidth))//Проверка
                 root.sidebarWidth = ltWidth//Изменяем ширину боковой панели на новую ширину
-                cppqml.untSidebarWidth = ltWidth//Записываем в реестр ширину боковой панели.
             }
         }
     }
@@ -199,8 +208,6 @@ Drawer {
         anchors.bottom: rctTabbar.bottom
         height: rctTabbar.width
         width: rctTabbar.height
-        //y: rctTabbar.height
-        //x: rctBorder.width+rctTabbar.width
         rotation: -90//Поворачиваем на 90 градусов против часовой стрелки боковую панель
         transformOrigin: Item.BottomLeft//Точка поворота боковой панели нижний левый угол.
         currentIndex: 1//Закладки видимые по умолчанию.
