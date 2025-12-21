@@ -545,11 +545,11 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>ФУНКЦИОНАЛ:</b></p>
 <ol>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaNazad.png\"> - Выйти из документа.</p>
-<p><img src = \"/images/DCButtons/24x24/DCKnopkaNazad.png\"> - Боковую панель закрыть.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaSidebar_2.png\"> - Боковую панель закрыть.</p>
 <ol>
 <p>или</p>
 </ol>
-<p><img src = \"/images/DCButtons/24x24/DCKnopkaVpered.png\"> - Боковую панель открыть, где:</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaSidebar.png\"> - Боковую панель открыть, где:</p>
 <ol>
     <p><img src = \"/images/DCButtons/24x24/DCKnopkaInfo.png\"> - Инструкция для менторPDF.</p>
     <p><img src = \"/images/DCButtons/24x24/DCKnopkaZakrit.png\"> - Закрыть боковую панель.</p>
@@ -565,8 +565,8 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaMinus.png\">НОМЕР СТРАНИЦЫ \
 <img src = \"/images/DCButtons/24x24/DCKnopkaPlus.png\"> - Номер открытой страницы, который можно изменить \
 кнопками плюс или минус. Или ввести нужную страницу и нажать Enter.</p>
-<p><img src = \"/images/DCButtons/24x24/DCKnopkaMinus.png\">МАСШТАБ%\
-<img src = \"/images/DCButtons/24x24/DCKnopkaPlus.png\"> - Масштаб открытого документа, который можно \
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaMinus_2.png\">МАСШТАБ%\
+<img src = \"/images/DCButtons/24x24/DCKnopkaPlus_2.png\"> - Масштаб открытого документа, который можно \
 изменить вручную.</p>
 </ol>
                                                     </body>

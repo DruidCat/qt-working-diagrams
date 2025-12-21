@@ -143,5 +143,25 @@
         <file>qml/DCMethods/DCSidebar.qml</file>
         <file>qml/DCMethods/DCFontAuto.qml</file>
         <file>qml/DCMethods/DCScrollbar.qml</file>
+        <file>images/DCButtons/24x24/DCKnopkaMinus_2.png</file>
+        <file>images/DCButtons/24x24/DCKnopkaPlus_2.png</file>
+        <file>images/DCButtons/24x24/DCKnopkaSidebar.png</file>
+        <file>images/DCButtons/24x24/DCKnopkaSidebar_2.png</file>
+        <file>images/DCButtons/48x48/DCKnopkaMinus_2.png</file>
+        <file>images/DCButtons/48x48/DCKnopkaPlus_2.png</file>
+        <file>images/DCButtons/48x48/DCKnopkaSidebar.png</file>
+        <file>images/DCButtons/48x48/DCKnopkaSidebar_2.png</file>
+        <file>images/DCButtons/96x96/DCKnopkaMinus_2.png</file>
+        <file>images/DCButtons/96x96/DCKnopkaPlus_2.png</file>
+        <file>images/DCButtons/96x96/DCKnopkaSidebar.png</file>
+        <file>images/DCButtons/96x96/DCKnopkaSidebar_2.png</file>
+        <file>images/DCButtons/144x144/DCKnopkaMinus_2.png</file>
+        <file>images/DCButtons/144x144/DCKnopkaPlus_2.png</file>
+        <file>images/DCButtons/144x144/DCKnopkaSidebar.png</file>
+        <file>images/DCButtons/144x144/DCKnopkaSidebar_2.png</file>
+        <file>images/DCButtons/24x24/DCKnopkaSozdat_2.png</file>
+        <file>images/DCButtons/48x48/DCKnopkaSozdat_2.png</file>
+        <file>images/DCButtons/96x96/DCKnopkaSozdat_2.png</file>
+        <file>images/DCButtons/144x144/DCKnopkaSozdat_2.png</file>
     </qresource>
 </RCC>
