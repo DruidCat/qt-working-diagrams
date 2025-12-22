@@ -1,4 +1,4 @@
-﻿import QtQuick //2.15
+﻿import QtQuick//5.15
 import QtQuick.Controls//Drawer
 
 import DCButtons 1.0//Импортируем кнопки
@@ -130,6 +130,9 @@ Item {
         onPositionChanged: {//Если позиция изменяется у боковой панели, то...
             knopkaSidebar.opened = !position//Передаём сигнал кнопке,для отображения нужной позиции инверсивно
         }
+        onOpened: {//Если боковая панель открылась, то...
+            lsvInstrukcii.forceActiveFocus()//Делаем фокус на списке, чтоб листался список.
+        }
         Rectangle {//Прямоугольник узкой полоски интерфейса справа
             id: rctBorder
             anchors.top: drwSidebar.top
@@ -184,6 +187,90 @@ Item {
             height: drwSidebar.height-rctZagolovok.height
             color: root.clrFona
             clip: true//Обязательно обрезать всё, что не помещается в этот прямоугольник.
+            ListView {
+                id: lsvInstrukcii
+                anchors.fill: rctSidebar
+                anchors.margins: root.ntCoff
+                model: mdlInstrukcii
+                focus: true//ListView должен получать фокус
+                clip: true
+                //Делаем так, чтобы можно было управлять стрелками
+                highlightRangeMode: ListView.StrictlyEnforceRange
+                keyNavigationEnabled: true//разрешаем стандартную навигацию
+                currentIndex: -1//начальное значение — ничего не выбрано
+
+                delegate: Rectangle {
+                    id: delegateRoot
+                    width: lsvInstrukcii.width
+                    height: txtInstrukciya.font.pixelSize + root.ntCoff
+                    readonly property color baseRowColor: (index % 2 === 0)
+                        ? root.clrFona
+                        : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))
+                    color: (root.strInstrukciya === key) || (lsvInstrukcii.currentIndex === index)
+                        ? root.clrPolzunka
+                        : baseRowColor
+                    Text {
+                        id: txtInstrukciya
+                        anchors.fill: parent
+                        anchors.leftMargin: root.ntCoff
+                        anchors.rightMargin: root.ntCoff
+                        verticalAlignment: Text.AlignVCenter
+                        elide: Text.ElideRight
+                        color: (root.strInstrukciya === key) || (lsvInstrukcii.currentIndex === index)
+                            ? root.clrFona
+                            : root.clrTexta
+                        font.pixelSize: (root.ntWidth<=2) ? root.ntCoff*(root.ntWidth-1)
+                                                          : root.ntCoff*(root.ntWidth-2)
+                        text: title
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            fnLoadInstrukciya(key)
+                            if (root.isMobile) drwSidebar.close()
+                            root.forceActiveFocus()
+                        }
+                    }
+                    //Делаем делегат "фокусируемым" для получения нажатий клавиш
+                    Keys.onPressed: (event) => {
+                        if (lsvInstrukcii.currentIndex === index) {
+                            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                                fnLoadInstrukciya(key)
+                                if (root.isMobile) drwSidebar.close()
+                                root.forceActiveFocus()
+                                event.accepted = true
+                            }
+                        }
+                    }
+                }
+                // Обработка клавиш на уровне ListView
+                Keys.onUpPressed: decrementCurrentIndex()
+                Keys.onDownPressed: incrementCurrentIndex()
+                Keys.onReturnPressed: {
+                    if (currentIndex !== -1) {
+                        let key = mdlInstrukcii.get(currentIndex).key
+                        fnLoadInstrukciya(key)
+                        if (root.isMobile) drwSidebar.close()
+                        root.forceActiveFocus()
+                    }
+                }
+                Keys.onEnterPressed: Keys.onReturnPressed  // Enter и Return — одно и то же
+                ScrollBar.vertical: ScrollBar {
+                    policy: ScrollBar.AsNeeded
+                }
+            }
+            ListModel {//Список всех инструкций (ключ + заголовок)
+                id: mdlInstrukcii
+                ListElement { key: "oprilojenii"; title: "О приложении" }
+                ListElement { key: "fdinstrukciya"; title: "Проводник" }
+                ListElement { key: "oqt"; title: "О Qt" }
+                ListElement { key: "animaciya"; title: "Анимация" }
+                ListElement { key: "hotkey"; title: "Горячие клавиши" }
+                ListElement { key: "menu"; title: "Меню" }
+                ListElement { key: "katalog"; title: "Каталог документов" }
+                ListElement { key: "jurnal"; title: "Журнал" }
+                ListElement { key: "pdf"; title: "менторPDF" }
+            }
         }
         Rectangle {//Прямоугольник ручки, за которую можно тянуть размер боковой панели, для изменения её размеров
             id: rctRuchka
@@ -243,7 +330,11 @@ Item {
         }
     }
     Component.onCompleted: {//Когда страница отрисовалась, то...
-        if (strInstrukciya === "oprilojenii"){//Если это анотация Об приложении Ментор, то...
+        fnLoadInstrukciya(root.strInstrukciya)
+    }
+    function fnLoadInstrukciya(strKluch) {// Загрузка текста инструкции по ключу (ОДНО место истины)
+        root.strInstrukciya = strKluch
+        if (strKluch === "oprilojenii"){//Если это анотация Об приложении Ментор, то...
             //Любые пробелы и табы в тексте отобразятся в приложении.
 			txdZona.text = qsTr("
 				<html>
@@ -271,7 +362,7 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 				</html>");
         }
         else{
-            if(strInstrukciya === "fdinstrukciya"){//Если это Инструкция Проводника, то...
+            if(strKluch === "fdinstrukciya"){//Если это Инструкция Проводника, то...
 
                 txdZona.text = qsTr("
 					<html>
@@ -297,7 +388,7 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 					</html>");
             }
 			else{
-				if(strInstrukciya === "oqt"){
+                if(strKluch === "oqt"){
 				txdZona.text = qsTr("
 					<html>
 						<body>
@@ -322,7 +413,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                     </html>");
 				}
                 else{
-                    if(strInstrukciya === "animaciya"){
+                    if(strKluch === "animaciya"){
                         txdZona.text = qsTr("
                             <html>
                                 <body>
@@ -358,7 +449,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                             </html>");
                     }
 					else{
-						if(strInstrukciya === "hotkey"){
+                        if(strKluch === "hotkey"){
 							txdZona.text = qsTr("
 								<html>
 									<body>
@@ -441,7 +532,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 								</html>");
 						}
                         else{
-                            if(strInstrukciya === "menu"){
+                            if(strKluch === "menu"){
                                 txdZona.text = qsTr("
                                     <html>
                                         <body>
@@ -471,7 +562,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                                     </html>");
                             }
                             else{
-                                if(strInstrukciya === "katalog"){
+                                if(strKluch === "katalog"){
                                     txdZona.text = qsTr("
                                         <html>
                                             <body>
@@ -501,7 +592,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                                         </html>");
                                 }
                                 else{
-                                    if(strInstrukciya === "jurnal"){//Если это Инструкция Журнал, то...
+                                    if(strKluch === "jurnal"){//Если это Инструкция Журнал, то...
                                         txdZona.text = qsTr("
                                             <html>
                                                 <body>
@@ -537,7 +628,7 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
                                             </html>");
                                     }
                                     else{
-                                        if(strInstrukciya === "pdf"){//Если это Инструкция mentorPDF, то...
+                                        if(strKluch === "pdf"){//Если это Инструкция mentorPDF, то...
                                             txdZona.text = qsTr("
                                                 <html>
                                                     <body>
