@@ -13,6 +13,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_untShrift(1),
                                         m_strKatalogPut(""),
                                         m_untSidebarWidth(0),
+                                        m_untInstrukciyaWidth(0),
                                         m_untNastroikiMaxLength(33),
 
 										m_strTitul(""),
@@ -202,6 +203,7 @@ void DCCppQml::ustReestr(){//Запись настроек программы
     m_sttReestr.setValue("/shrift", m_untShrift);//Записываем размер Шрифта 0-мал, 1-средний, 2-большой.
     m_sttReestr.setValue("/katalog_put", QDir::toNativeSeparators(m_strKatalogPut));//Записываем путь каталога
     m_sttReestr.setValue("/shirina_sidebar", m_untSidebarWidth);//Запись ширины боковой панели DCSidebar.qml
+    m_sttReestr.setValue("/shirina_instrukciya", m_untInstrukciyaWidth);//Запись ширины панели StrInstrukciya
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::polReestr(){//Чтение настроек программы
@@ -218,6 +220,7 @@ void DCCppQml::polReestr(){//Чтение настроек программы
     m_untShrift = m_sttReestr.value("/shrift", 1).toUInt();//Читаем шрифт, по умол 1-средний
     m_strKatalogPut = m_sttReestr.value("/katalog_put", QDir::toNativeSeparators(m_strDomPut)).toString();
     m_untSidebarWidth = m_sttReestr.value("/shirina_sidebar", 330).toUInt();//Ширина DCSidebar,по умолчанию330
+    m_untInstrukciyaWidth = m_sttReestr.value("/shirina_instrukciya", 330).toUInt();//Ширина по умолчанию330
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::setUntHeight(const uint& untHeight) {//Изменяем высоту окна приложения.
@@ -311,6 +314,17 @@ void DCCppQml::setUntSidebarWidth(const uint &untSidebarWidth){//Изменяе�
         if (untSidebarWidth != m_untSidebarWidth){//Если не равны значения, то...
             m_untSidebarWidth = untSidebarWidth;//Приравниваем.
             emit untSidebarWidthChanged();//Излучаем сигнал об изменении аргумента.
+        }
+    }
+}
+void DCCppQml::setUntInstrukciyaWidth(const uint &untInstrukciyaWidth){//Изменяем размер боковой панели.
+ //////////////////////////////////////////////////////////////////////////
+//---И З М Е Н Я Е М   Ш И Р И Н У   П А Н Е Л И   И Н С Т Р У К Ц И Й---//
+///////////////////////////////////////////////////////////////////////////
+    if(untInstrukciyaWidth >= 220){//Если значение больше или равно минимальному размеру боковой панели, то...
+        if (untInstrukciyaWidth != m_untInstrukciyaWidth){//Если не равны значения, то...
+            m_untInstrukciyaWidth = untInstrukciyaWidth;//Приравниваем.
+            emit untInstrukciyaWidthChanged();//Излучаем сигнал об изменении аргумента.
         }
     }
 }

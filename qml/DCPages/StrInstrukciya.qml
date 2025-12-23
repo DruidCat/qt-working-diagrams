@@ -60,7 +60,7 @@ Item {
     function fnClickedSidebar(){//Функция нажатия кнопки SideBar.
         if(drwSidebar.position){//Если боковая панель открыта, то...
             drwSidebar.close()//Закрываем её
-            root.focus()//Чтоб горячие клавиши работали.
+            root.focus = true//Чтоб горячие клавиши работали.
         }
         else//Если боковая панель закрыта, то...
             drwSidebar.open()//Открываем её.
@@ -113,10 +113,9 @@ Item {
         id: drwSidebar
         //Свойства
         property int minSidebarWidth: 200//Минимум ширины боковой панели
-        property int maxSidebarWidth: parent ? parent.width * 0.8 : 640//Максимум ширины боковой панели
+        property int maxSidebarWidth: root.width * 0.8//Максимум ширины боковой панели
         property int sidebarWidth: root.isMobile//Если мобила, ширина на весь экран, если нет,то данные из Реестра
-                                   ? root.width
-                                   : Math.max(minSidebarWidth, (parent ? cppqml.untSidebarWidth : 330))
+                                   ? root.width : Math.max(minSidebarWidth, cppqml.untInstrukciyaWidth)
         //Настройки
         edge: Qt.RightEdge
         modal: false
@@ -195,22 +194,19 @@ Item {
                 model: mdlInstrukcii
                 focus: true//ListView должен получать фокус
                 clip: true
-                //Делаем так, чтобы можно было управлять стрелками
-                highlightRangeMode: ListView.StrictlyEnforceRange
                 keyNavigationEnabled: true//разрешаем стандартную навигацию
                 currentIndex: -1//начальное значение — ничего не выбрано
-
                 delegate: Rectangle {
                     //Свойства
-                    readonly property color baseRowColor: (index % 2 === 0)
+                    readonly property color clrRow: (index % 2 === 0)
                                                           ? root.clrFona
                                                           : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))
                     //Настройки
-                    width: lsvInstrukcii.width
+                    width: lsvInstrukcii.width - (srbVertical.active ? srbVertical.width : 0)
                     height: txtInstrukciya.font.pixelSize + root.ntCoff
                     color: (root.strInstrukciya === key) || (lsvInstrukcii.currentIndex === index)
                            ? root.clrPolzunka
-                           : baseRowColor
+                           : clrRow
                     Text {
                         id: txtInstrukciya
                         anchors.fill: parent
@@ -231,30 +227,35 @@ Item {
                             fnInstrukciya(key)//Функция загружающая заголовок и инструкцию по ключу.
                         }
                     }
-                    Keys.onPressed: (event) => {
-                        if (lsvInstrukcii.currentIndex === index) {
-                            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                fnInstrukciya(key)//Функция загружающая заголовок и инструкцию по ключу.
-                                event.accepted = true
+                }
+                Keys.onPressed: (event) => {//Обработка клавиш на уровне ListView
+                    if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
+                        if (event.key === Qt.Key_B){//Если нажата клавиша В, то...
+                            fnClickedSidebar();//Функция открытия/закрытия боковой панели.
+                            event.accepted = true;//Завершаем обработку эвента.
+                        }
+                    } else {
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                            if (currentIndex !== -1) {
+                                const cnKluch = mdlInstrukcii.get(currentIndex).key
+                                fnInstrukciya(cnKluch)//Функция загружающая заголовок и инструкцию по ключу.
                             }
+                            event.accepted = true
+                        } else if (event.key === Qt.Key_Up){//Если нажата на стрелку вниз, то...
+                            decrementCurrentIndex();//Убавляем от индекса.
+                            event.accepted = true
+                        } else if (event.key === Qt.Key_Down){//Если нажата на стрелку вверх, то...
+                            incrementCurrentIndex()//Прибавляем к индексу.
+                            event.accepted = true
                         }
                     }
                 }
-                // Обработка клавиш на уровне ListView
-                Keys.onUpPressed: decrementCurrentIndex()
-                Keys.onDownPressed: incrementCurrentIndex()
-                Keys.onReturnPressed: {
-                    if (currentIndex !== -1) {
-                        const cnKluch = mdlInstrukcii.get(currentIndex).key
-                        fnInstrukciya(cnKluch)//Функция загружающая заголовок и инструкцию по ключу.
-                    }
-                }
-                Keys.onEnterPressed: Keys.onReturnPressed//Enter и Return — одно и то же
-                ScrollBar.vertical: ScrollBar {
+                ScrollBar.vertical: ScrollBar {//Вертикальный скролл бар.
+                    id: srbVertical
                     policy: ScrollBar.AsNeeded
                 }
             }
-            ListModel {//Список всех инструкций (ключ + заголовок)
+            ListModel {//Список всех инструкций: ключ, название, заголовок)
                 id: mdlInstrukcii
                 ListElement { key: "oprilojenii"; title: "О приложении"; zagolovok: "О ПРИЛОЖЕНИИ" }
                 ListElement { key: "filedialog"; title: "Проводник"; zagolovok: "ИНСТРУКЦИЯ ПО ПРОВОДНИКУ" }
@@ -283,7 +284,7 @@ Item {
                 property bool isDrag: false//Свойство перетаскивания. true - началось перетаскивание.
                 property real lastX//Переменная хранящаа предыдущее положение мыши
                 //Настройки
-                anchors.fill: parent
+                anchors.fill: rctRuchka
                 hoverEnabled: true//При наведении изменение
                 cursorShape: Qt.SizeHorCursor//Курсор в виде изменения горизонтального размера.
                 //Функции
@@ -296,12 +297,12 @@ Item {
                 }
                 onReleased: {//Если отпустили кнопку мышки
                     drwSidebar.interactive = true;//Включаем свайп Drawer. ВАЖНО!
-                    //cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
+                    cppqml.untInstrukciyaWidth = drwSidebar.sidebarWidth//Записываем в реестр ширину боковой панели.
                     isDrag = false//При отпускании мыши Окончание перетаскивания
                 }
                 onCanceled: {
                     drwSidebar.interactive = true;//Включаем свайп Drawer. ВАЖНО!
-                    //cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
+                    cppqml.untInstrukciyaWidth = drwSidebar.sidebarWidth//Записываем в реестр ширину боковой панели.
                     isDrag = false//Окончание перетаскивания
                 }
                 onPositionChanged: (mouse) => {//Если позиция меняется, то...

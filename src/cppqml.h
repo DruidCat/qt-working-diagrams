@@ -58,6 +58,10 @@ class DCCppQml : public QObject {
                     READ untSidebarWidth
                     WRITE setUntSidebarWidth
                     NOTIFY untSidebarWidthChanged FINAL)
+    Q_PROPERTY(uint	untInstrukciyaWidth
+                    READ untInstrukciyaWidth
+                    WRITE setUntInstrukciyaWidth
+                    NOTIFY untInstrukciyaWidthChanged FINAL)
     Q_PROPERTY(uint untNastroikiMaxLength
                     READ untNastroikiMaxLength
                     NOTIFY untNastroikiMaxLengthChanged FINAL)
@@ -204,6 +208,8 @@ public:
     void		setStrKatalogPut(const QString& strKatalogPut);//Изменяем путь сохранения каталога.
     uint 		untSidebarWidth() const { return m_untSidebarWidth; }//Возвращаем размер боковой панели.
     void		setUntSidebarWidth(const uint& untSidebarWidth);//Изменяем размер боковой панели.
+    uint 		untInstrukciyaWidth() const { return m_untInstrukciyaWidth; }//Возвращаем размер боковой панел
+    void		setUntInstrukciyaWidth(const uint& untInstrukciyaWidth);//Изменяем размер боковой панели.
     uint 		untNastroikiMaxLength() const { return m_untNastroikiMaxLength; }//Макс длина строки текста
 
     QString		strTitul();//Получить имя Титула.
@@ -304,6 +310,7 @@ signals:
     void untShriftChanged();//Сигнал о том, что размер шрифта поменялся.
     void strKatalogPutChanged();//Сигнал о том, что путь размещения каталога изменён.
     void untSidebarWidthChanged();//Сигнал о том, что ширина боковой панели поменялась.
+    void untInstrukciyaWidthChanged();//Сигнал о том, что ширина боковой панели инструкции поменялась.
     void untNastroikiMaxLengthChanged();//Сигнал о том, что максимальная длина текста изменилась.
 
     void strTitulChanged();//Сигнал о том, что имя Титула изменилось.
@@ -367,6 +374,7 @@ private:
     uint 	m_untShrift;//Размер шрифта 0-маленький, 1-средний, 2-большой.
     QString m_strKatalogPut;//Путь сохранения каталога документов.
     uint 	m_untSidebarWidth;//Ширина боковой панели DCSidebar.qml
+    uint 	m_untInstrukciyaWidth;//Ширина боковой панели StrInstrukciya.qml
     uint	m_untNastroikiMaxLength;//Максимальная длина строки текста в Свойстве Q_PROPERTY
 
     QString m_strTitul;//аргумент элемента имени Титула в Свойстве Q_PROPERTY
