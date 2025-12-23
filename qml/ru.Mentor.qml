@@ -149,15 +149,27 @@ ApplicationWindow {
                 isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
-                onClickedInfo: stvStr.push(pgStrInstrukciyaMenu)//Переходим на страницу Инструкции Меню
-                onClickedHotKey: stvStr.push(pgStrHotKey)//Переходим на страницу горячих клавиш.
+                onClickedInfo: {
+                    tmStrInstrukciya.strInstrukciya = "menu"
+                    stvStr.push(pgStrInstrukciya)//Переходим на страницу Инструкции Меню
+                }
+                onClickedHotKey: {
+                    tmStrInstrukciya.strInstrukciya = "hotkey"//Задаём ключ
+                    stvStr.push(pgStrInstrukciya)//Переходим на страницу горячих клавиш.
+                }
                 onClickedAnimaciya: stvStr.push(pgStrAnimaciya);//Переходим на страницу Анимация.
                 onClickedJurnal: {//Если нажата кнопка Журнал, то...
                     tmJurnal.strDebug = cppqml.polDebugDen();//Загружаем логи за день.
                     stvStr.push(pgStrJurnal)//Переходим на страницу Журнал.
                 }
-                onClickedMentor: stvStr.push(pgStrMentor)//Переходим на страницу об Менторе.
-                onClickedQt: stvStr.push(pgStrQt)//Переходим на страницу об Qt.
+                onClickedMentor: {
+                    tmStrInstrukciya.strInstrukciya = "oprilojenii"//Задаём ключ.
+                    stvStr.push(pgStrInstrukciya)//Переходим на страницу об Менторе.
+                }
+                onClickedQt: {//Если кликнули по кнопке О QT, то...
+                    tmStrInstrukciya.strInstrukciya = "oqt"//Задаём ключ
+                    stvStr.push(pgStrInstrukciya)//Переходим на страницу об Qt.
+                }
                 onClickedKatalog: stvStr.push(pgStrKatalog)//Переходим на страницу Создать каталог документов
                 onPdfMentorChanged: {//Если флаг настройки pdf Проигрывателя изменился, то...
                     root.pdfMentor = root.isAdmin ? tmMenu.pdfMentor : true;//Приравниваем флаг настройки.
@@ -179,38 +191,6 @@ ApplicationWindow {
                 root.pdfMentor = root.isAdmin ? tmMenu.pdfMentor : true;//Приравниваем флаг настройки. ВАЖНО.
                 root.appRedaktor = root.isAdmin ? tmMenu.appRedaktor : false//Приравниваем флаг настройки.
                 root.shrift = (tmMenu.untShrift + 1);//Задаём размер шрифта в приложении.
-            }
-        }
-        Stranica {//Горячие Клавиши.
-        ///////////////////////////////////
-        ///Г О Р Я Ч И Е   К Л А В И Ш И///
-        ///////////////////////////////////
-            id: pgStrHotKey
-            visible: false
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("ГОРЯЧИЕ КЛАВИШИ")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                id: tmHotKey
-                strInstrukciya: "hotkey"
-                ntWidth: pgStrHotKey.ntWidth; ntCoff: pgStrHotKey.ntCoff
-                clrTexta: pgStrHotKey.clrTexta; clrFona: pgStrHotKey.clrRabOblasti
-                clrPolzunka: pgStrHotKey.clrFona
-                zagolovokX: pgStrHotKey.rctStrZagolovok.x; zagolovokY: pgStrHotKey.rctStrZagolovok.y
-                zagolovokWidth: pgStrHotKey.rctStrZagolovok.width
-                zagolovokHeight: pgStrHotKey.rctStrZagolovok.height
-                zonaX: pgStrHotKey.rctStrZona.x; zonaY: pgStrHotKey.rctStrZona.y
-                zonaWidth: pgStrHotKey.rctStrZona.width; zonaHeight: pgStrHotKey.rctStrZona.height
-                toolbarX: pgStrHotKey.rctStrToolbar.x; toolbarY: pgStrHotKey.rctStrToolbar.y
-                toolbarWidth: pgStrHotKey.rctStrToolbar.width
-                toolbarHeight: pgStrHotKey.rctStrToolbar.height
-                radiusZona: pgStrHotKey.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrHotKey.zagolovokLevi; tapZagolovokPravi: pgStrHotKey.zagolovokPravi
-                tapToolbarLevi: pgStrHotKey.toolbarLevi; tapToolbarPravi: pgStrHotKey.toolbarPravi
-                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
-
-                onClickedNazad: stvStr.pop()//Назад страницу
             }
         }
         Stranica {//Анимация
@@ -241,7 +221,10 @@ ApplicationWindow {
                 tapToolbarLevi: pgStrAnimaciya.toolbarLevi; tapToolbarPravi: pgStrAnimaciya.toolbarPravi
 
                 onClickedNazad: stvStr.pop()//Назад страницу
-                onClickedInfo: stvStr.push(pgStrInstrukciyaAnimacii);//Переключаемся на Инструкцию Анимации.
+                onClickedInfo: {
+                    tmStrInstrukciya.strInstrukciya = "animaciya"
+                    stvStr.push(pgStrInstrukciya);//Переключаемся на Инструкцию Анимации.
+                }
                 onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
                     pgStrAnimaciya.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
@@ -275,78 +258,47 @@ ApplicationWindow {
                 zonaWidth: pgStrJurnal.rctStrZona.width; zonaHeight: pgStrJurnal.rctStrZona.height
 
                 onClickedNazad: stvStr.pop()//Назад страницу
-                onClickedInfo: stvStr.push(pgStrInstrukciyaJurnal);//Переключаемся на Инструкцию Журнала.
+                onClickedInfo: {
+                    tmStrInstrukciya.strInstrukciya = "jurnal"
+                    stvStr.push(pgStrInstrukciya);//Переключаемся на Инструкцию Журнала.
+                }
                 onSignalToolbar: function(strToolbar) {//Слот сигнала signalToolbar с новым сообщением.
                     pgStrJurnal.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
 			}
         }
-        Stranica {//Ментор
-        /////////////////////////////
-        ///О   П Р И Л О Ж Е Н И И///
-        /////////////////////////////
-            id: pgStrMentor
+        Stranica {//Инструкция
+        /////////////////////////
+        ///И Н С Т Р У К Ц И Я///
+        /////////////////////////
+            id: pgStrInstrukciya
             visible: false
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("О ПРИЛОЖЕНИИ")
+            //textZagolovok: qsTr("О Qt")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
-                id: tmMentor
-                strInstrukciya: "oprilojenii"
-                ntWidth: pgStrMentor.ntWidth; ntCoff: pgStrMentor.ntCoff
-                clrTexta: pgStrMentor.clrTexta; clrFona: pgStrMentor.clrRabOblasti
-                clrPolzunka: pgStrMentor.clrFona
-                zagolovokX: pgStrMentor.rctStrZagolovok.x;
-                zagolovokY: pgStrMentor.rctStrZagolovok.y
-                zagolovokWidth: pgStrMentor.rctStrZagolovok.width
-                zagolovokHeight: pgStrMentor.rctStrZagolovok.height
-                zonaX: pgStrMentor.rctStrZona.x; zonaY: pgStrMentor.rctStrZona.y
-                zonaWidth: pgStrMentor.rctStrZona.width;
-                zonaHeight: pgStrMentor.rctStrZona.height
-                toolbarX: pgStrMentor.rctStrToolbar.x; toolbarY: pgStrMentor.rctStrToolbar.y
-                toolbarWidth: pgStrMentor.rctStrToolbar.width
-                toolbarHeight: pgStrMentor.rctStrToolbar.height
-                radiusZona: pgStrMentor.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrMentor.zagolovokLevi
-                tapZagolovokPravi: pgStrMentor.zagolovokPravi
-                tapToolbarLevi: pgStrMentor.toolbarLevi
-                tapToolbarPravi: pgStrMentor.toolbarPravi
+                id: tmStrInstrukciya
+                ntWidth: pgStrInstrukciya.ntWidth; ntCoff: pgStrInstrukciya.ntCoff
+                clrTexta: pgStrInstrukciya.clrTexta; clrFona: pgStrInstrukciya.clrRabOblasti
+                clrPolzunka: pgStrInstrukciya.clrFona
+                zagolovokX: pgStrInstrukciya.rctStrZagolovok.x; zagolovokY: pgStrInstrukciya.rctStrZagolovok.y
+                zagolovokWidth: pgStrInstrukciya.rctStrZagolovok.width
+                zagolovokHeight: pgStrInstrukciya.rctStrZagolovok.height
+                zonaX: pgStrInstrukciya.rctStrZona.x; zonaY: pgStrInstrukciya.rctStrZona.y
+                zonaWidth: pgStrInstrukciya.rctStrZona.width; zonaHeight: pgStrInstrukciya.rctStrZona.height
+                toolbarX: pgStrInstrukciya.rctStrToolbar.x; toolbarY: pgStrInstrukciya.rctStrToolbar.y
+                toolbarWidth: pgStrInstrukciya.rctStrToolbar.width
+                toolbarHeight: pgStrInstrukciya.rctStrToolbar.height
+                radiusZona: pgStrInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
+                tapZagolovokLevi: pgStrInstrukciya.zagolovokLevi; tapZagolovokPravi: pgStrInstrukciya.zagolovokPravi
+                tapToolbarLevi: pgStrInstrukciya.toolbarLevi; tapToolbarPravi: pgStrInstrukciya.toolbarPravi
                 isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
-            }
-        }
-        Stranica {//Qt
-        /////////////
-        ///О   Q T///
-        /////////////
-            id: pgStrQt
-            visible: false
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("О Qt")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                id: tmQt
-                strInstrukciya: "oqt"
-                ntWidth: pgStrQt.ntWidth; ntCoff: pgStrQt.ntCoff
-                clrTexta: pgStrQt.clrTexta; clrFona: pgStrQt.clrRabOblasti
-                clrPolzunka: pgStrQt.clrFona
-                zagolovokX: pgStrQt.rctStrZagolovok.x; zagolovokY: pgStrQt.rctStrZagolovok.y
-                zagolovokWidth: pgStrQt.rctStrZagolovok.width
-                zagolovokHeight: pgStrQt.rctStrZagolovok.height
-                zonaX: pgStrQt.rctStrZona.x; zonaY: pgStrQt.rctStrZona.y
-                zonaWidth: pgStrQt.rctStrZona.width; zonaHeight: pgStrQt.rctStrZona.height
-                toolbarX: pgStrQt.rctStrToolbar.x; toolbarY: pgStrQt.rctStrToolbar.y
-                toolbarWidth: pgStrQt.rctStrToolbar.width
-                toolbarHeight: pgStrQt.rctStrToolbar.height
-                radiusZona: pgStrQt.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrQt.zagolovokLevi; tapZagolovokPravi: pgStrQt.zagolovokPravi
-                tapToolbarLevi: pgStrQt.toolbarLevi; tapToolbarPravi: pgStrQt.toolbarPravi
-                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
-
-                onClickedNazad: stvStr.pop()//Назад страницу
+                onSignalZagolovok: function(strZagolovok) {//Слот сигнала signalZagolovok с новым Заголовком.
+                    pgStrInstrukciya.textZagolovok = strZagolovok;//Выставляем изменённый Заголовок.
+                }
             }
         }
         Stranica {//Создание Каталога
@@ -377,7 +329,10 @@ ApplicationWindow {
                 logoRazmer: root.logoRazmer; logoImya: root.logoImya
 
                 onClickedNazad: stvStr.pop()//Назад страницу
-                onClickedInfo: stvStr.push(pgStrInstrukciyaKataloga);//Переключаемся на Инструкцию Каталога.
+                onClickedInfo: {
+                    tmStrInstrukciya.strInstrukciya = "katalog"//Передаём ключ
+                    stvStr.push(pgStrInstrukciya);//Переключаемся на Инструкцию Каталога.
+                }
                 onClickedPolKatalog: {//Слот нажатия кнопки открытия папки в которой создался каталог док..
                     root.modeFileDialog = "polkatalog";//Открываем проводник папки где создан каталог докумен.
                     pgStrFileDialog.textZagolovok = cppqml.strKatalogPut;//Путь в заголовке
@@ -596,7 +551,8 @@ ApplicationWindow {
                     stvStr.pop()//Назад страницу
 				}
                 onClickedInfo: {
-                    stvStr.push(pgStrInstrukciyaPDF);//Переключаемся на страницу Инструкция mentorPDF.
+                    tmStrInstrukciya.strInstrukciya = "pdf"//Задаём ключ
+                    stvStr.push(pgStrInstrukciya);//Переключаемся на страницу Инструкция mentorPDF.
                 }
 			}
 		}
@@ -695,7 +651,8 @@ ApplicationWindow {
                     pgStrFileDialog.textToolbar = strToolbar;//Пишем в ToolBar новое сообщение.
                 }
                 onClickedInfo: {
-                    stvStr.push(pgStrInstrukciyaFB);//Переключаемся на страницу Инструкция проводника.
+                    tmStrInstrukciya.strInstrukciya = "filedialog"//Передаём ключ
+                    stvStr.push(pgStrInstrukciya);//Переключаемся на страницу Инструкция проводника.
                 }
             }
         }
@@ -805,224 +762,6 @@ ApplicationWindow {
                     cppqml.strFileDialogPut = "start";//ВАЖНО!!! Обновляем каталог Проводника
                     tmFileDialog.failVibor = true;//Проводник выбирает файлы.
                     stvStr.push(pgStrFileDialog);//Переключаемся на страницу Файлового Диалога.
-                }
-            }
-        }
-        Stranica {//Инструкция Меню.
-        ///////////////////////////////////
-        ///И Н С Т Р У К Ц И Я   М Е Н Ю///
-        ///////////////////////////////////
-            id: pgStrInstrukciyaMenu
-            visible: false
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("ОПИСАНИЕ НАСТРОЕК МЕНЮ")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                strInstrukciya: "menu"
-                ntWidth: pgStrInstrukciyaMenu.ntWidth; ntCoff: pgStrInstrukciyaMenu.ntCoff
-                clrTexta: pgStrInstrukciyaMenu.clrTexta; clrFona: pgStrInstrukciyaMenu.clrRabOblasti
-                clrPolzunka: pgStrInstrukciyaMenu.clrFona
-                zagolovokX: pgStrInstrukciyaMenu.rctStrZagolovok.x;
-                zagolovokY: pgStrInstrukciyaMenu.rctStrZagolovok.y
-                zagolovokWidth: pgStrInstrukciyaMenu.rctStrZagolovok.width
-                zagolovokHeight: pgStrInstrukciyaMenu.rctStrZagolovok.height
-                zonaX: pgStrInstrukciyaMenu.rctStrZona.x; zonaY: pgStrInstrukciyaMenu.rctStrZona.y
-                zonaWidth: pgStrInstrukciyaMenu.rctStrZona.width;
-                zonaHeight: pgStrInstrukciyaMenu.rctStrZona.height
-                toolbarX: pgStrInstrukciyaMenu.rctStrToolbar.x;
-                toolbarY: pgStrInstrukciyaMenu.rctStrToolbar.y
-                toolbarWidth: pgStrInstrukciyaMenu.rctStrToolbar.width
-                toolbarHeight: pgStrInstrukciyaMenu.rctStrToolbar.height
-                radiusZona: pgStrInstrukciyaMenu.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrInstrukciyaMenu.zagolovokLevi
-                tapZagolovokPravi: pgStrInstrukciyaMenu.zagolovokPravi
-                tapToolbarLevi: pgStrInstrukciyaMenu.toolbarLevi
-                tapToolbarPravi: pgStrInstrukciyaMenu.toolbarPravi
-                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
-
-                onClickedNazad: stvStr.pop()//Назад страницу
-            }
-        }
-        Stranica {//Инструкция Анимации.
-        ///////////////////////////////////////////
-        ///И Н С Т Р У К Ц И Я   А Н И М А Ц И И///
-        ///////////////////////////////////////////
-            id: pgStrInstrukciyaAnimacii
-            visible: false
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО АНИМАЦИИ")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                strInstrukciya: "animaciya"
-                ntWidth: pgStrInstrukciyaAnimacii.ntWidth; ntCoff: pgStrInstrukciyaAnimacii.ntCoff
-                clrTexta: pgStrInstrukciyaAnimacii.clrTexta; clrFona: pgStrInstrukciyaAnimacii.clrRabOblasti
-                clrPolzunka: pgStrInstrukciyaAnimacii.clrFona
-                zagolovokX: pgStrInstrukciyaAnimacii.rctStrZagolovok.x;
-                zagolovokY: pgStrInstrukciyaAnimacii.rctStrZagolovok.y
-                zagolovokWidth: pgStrInstrukciyaAnimacii.rctStrZagolovok.width
-                zagolovokHeight: pgStrInstrukciyaAnimacii.rctStrZagolovok.height
-                zonaX: pgStrInstrukciyaAnimacii.rctStrZona.x; zonaY: pgStrInstrukciyaAnimacii.rctStrZona.y
-                zonaWidth: pgStrInstrukciyaAnimacii.rctStrZona.width;
-                zonaHeight: pgStrInstrukciyaAnimacii.rctStrZona.height
-                toolbarX: pgStrInstrukciyaAnimacii.rctStrToolbar.x;
-                toolbarY: pgStrInstrukciyaAnimacii.rctStrToolbar.y
-                toolbarWidth: pgStrInstrukciyaAnimacii.rctStrToolbar.width
-                toolbarHeight: pgStrInstrukciyaAnimacii.rctStrToolbar.height
-                radiusZona: pgStrInstrukciyaAnimacii.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrInstrukciyaAnimacii.zagolovokLevi
-                tapZagolovokPravi: pgStrInstrukciyaAnimacii.zagolovokPravi
-                tapToolbarLevi: pgStrInstrukciyaAnimacii.toolbarLevi
-                tapToolbarPravi: pgStrInstrukciyaAnimacii.toolbarPravi
-                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
-
-                onClickedNazad: stvStr.pop()//Назад страницу
-            }
-        }
-        Stranica {//Описание Создания каталога.
-        ///////////////////////////////////////////
-        ///И Н С Т Р У К Ц И Я   К А Т А Л О Г А///
-        ///////////////////////////////////////////
-            id: pgStrInstrukciyaKataloga
-            visible: false
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО СОЗДАНИЮ КАТАЛОГА ДОКУМЕНТОВ")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                strInstrukciya: "katalog"
-                ntWidth: pgStrInstrukciyaKataloga.ntWidth; ntCoff: pgStrInstrukciyaKataloga.ntCoff
-                clrTexta: pgStrInstrukciyaKataloga.clrTexta; clrFona: pgStrInstrukciyaKataloga.clrRabOblasti
-                clrPolzunka: pgStrInstrukciyaKataloga.clrFona
-                zagolovokX: pgStrInstrukciyaKataloga.rctStrZagolovok.x;
-                zagolovokY: pgStrInstrukciyaKataloga.rctStrZagolovok.y
-                zagolovokWidth: pgStrInstrukciyaKataloga.rctStrZagolovok.width
-                zagolovokHeight: pgStrInstrukciyaKataloga.rctStrZagolovok.height
-                zonaX: pgStrInstrukciyaKataloga.rctStrZona.x; zonaY: pgStrInstrukciyaKataloga.rctStrZona.y
-                zonaWidth: pgStrInstrukciyaKataloga.rctStrZona.width;
-                zonaHeight: pgStrInstrukciyaKataloga.rctStrZona.height
-                toolbarX: pgStrInstrukciyaKataloga.rctStrToolbar.x
-                toolbarY: pgStrInstrukciyaKataloga.rctStrToolbar.y
-                toolbarWidth: pgStrInstrukciyaKataloga.rctStrToolbar.width
-                toolbarHeight: pgStrInstrukciyaKataloga.rctStrToolbar.height
-                radiusZona: pgStrInstrukciyaKataloga.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrInstrukciyaKataloga.zagolovokLevi
-                tapZagolovokPravi: pgStrInstrukciyaKataloga.zagolovokPravi
-                tapToolbarLevi: pgStrInstrukciyaKataloga.toolbarLevi
-                tapToolbarPravi: pgStrInstrukciyaKataloga.toolbarPravi
-                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
-
-                onClickedNazad: stvStr.pop()//Назад страницу
-            }
-        }
-        Stranica {//Описание Проводника.
-        ///////////////////////////////////////////////
-        ///И Н С Т Р У К Ц И Я   П Р О В О Д Н И К А///
-        ///////////////////////////////////////////////
-            id: pgStrInstrukciyaFB
-            visible: false
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО ПРОВОДНИКУ")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                strInstrukciya: "fdinstrukciya"
-                ntWidth: pgStrInstrukciyaFB.ntWidth; ntCoff: pgStrInstrukciyaFB.ntCoff
-                clrTexta: pgStrInstrukciyaFB.clrTexta; clrFona: pgStrInstrukciyaFB.clrRabOblasti
-                clrPolzunka: pgStrInstrukciyaFB.clrFona
-                zagolovokX: pgStrInstrukciyaFB.rctStrZagolovok.x;
-                zagolovokY: pgStrInstrukciyaFB.rctStrZagolovok.y
-                zagolovokWidth: pgStrInstrukciyaFB.rctStrZagolovok.width
-                zagolovokHeight: pgStrInstrukciyaFB.rctStrZagolovok.height
-                zonaX: pgStrInstrukciyaFB.rctStrZona.x; zonaY: pgStrInstrukciyaFB.rctStrZona.y
-                zonaWidth: pgStrInstrukciyaFB.rctStrZona.width;
-                zonaHeight: pgStrInstrukciyaFB.rctStrZona.height
-                toolbarX: pgStrInstrukciyaFB.rctStrToolbar.x; toolbarY: pgStrInstrukciyaFB.rctStrToolbar.y
-                toolbarWidth: pgStrInstrukciyaFB.rctStrToolbar.width
-                toolbarHeight: pgStrInstrukciyaFB.rctStrToolbar.height
-                radiusZona: pgStrInstrukciyaFB.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrInstrukciyaFB.zagolovokLevi
-                tapZagolovokPravi: pgStrInstrukciyaFB.zagolovokPravi
-                tapToolbarLevi: pgStrInstrukciyaFB.toolbarLevi
-                tapToolbarPravi: pgStrInstrukciyaFB.toolbarPravi
-                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
-
-                onClickedNazad: stvStr.pop()//Назад страницу
-            }
-        }
-        Stranica {//Описание Журнала.
-        /////////////////////////////////////////
-        ///И Н С Т Р У К Ц И Я   Ж У Р Н А Л А///
-        /////////////////////////////////////////
-            id: pgStrInstrukciyaJurnal
-            visible: false
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО ЖУРНАЛУ")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                strInstrukciya: "jurnal"
-                ntWidth: pgStrInstrukciyaJurnal.ntWidth; ntCoff: pgStrInstrukciyaJurnal.ntCoff
-                clrTexta: pgStrInstrukciyaJurnal.clrTexta; clrFona: pgStrInstrukciyaJurnal.clrRabOblasti
-                clrPolzunka: pgStrInstrukciyaJurnal.clrFona
-                zagolovokX: pgStrInstrukciyaJurnal.rctStrZagolovok.x;
-                zagolovokY: pgStrInstrukciyaJurnal.rctStrZagolovok.y
-                zagolovokWidth: pgStrInstrukciyaJurnal.rctStrZagolovok.width
-                zagolovokHeight: pgStrInstrukciyaJurnal.rctStrZagolovok.height
-                zonaX: pgStrInstrukciyaJurnal.rctStrZona.x; zonaY: pgStrInstrukciyaJurnal.rctStrZona.y
-                zonaWidth: pgStrInstrukciyaJurnal.rctStrZona.width;
-                zonaHeight: pgStrInstrukciyaJurnal.rctStrZona.height
-                toolbarX: pgStrInstrukciyaJurnal.rctStrToolbar.x
-                toolbarY: pgStrInstrukciyaJurnal.rctStrToolbar.y
-                toolbarWidth: pgStrInstrukciyaJurnal.rctStrToolbar.width
-                toolbarHeight: pgStrInstrukciyaJurnal.rctStrToolbar.height
-                radiusZona: pgStrInstrukciyaJurnal.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrInstrukciyaJurnal.zagolovokLevi
-                tapZagolovokPravi: pgStrInstrukciyaJurnal.zagolovokPravi
-                tapToolbarLevi: pgStrInstrukciyaJurnal.toolbarLevi
-                tapToolbarPravi: pgStrInstrukciyaJurnal.toolbarPravi
-                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
-
-                onClickedNazad: stvStr.pop()//Назад страницу
-            }
-        }
-        Stranica {//Описание mentorPDF.
-        /////////////////////////////////////////////
-        ///И Н С Т Р У К Ц И Я   M E N T O R P D F///
-        /////////////////////////////////////////////
-            id: pgStrInstrukciyaPDF
-            visible: false
-            ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
-            textZagolovok: qsTr("ИНСТРУКЦИЯ ПО МЕНТОРPDF")
-            zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
-            StrInstrukciya {
-                strInstrukciya: "pdf"
-                ntWidth: pgStrInstrukciyaPDF.ntWidth; ntCoff: pgStrInstrukciyaPDF.ntCoff
-                clrTexta: pgStrInstrukciyaPDF.clrTexta; clrFona: pgStrInstrukciyaPDF.clrRabOblasti
-                clrPolzunka: pgStrInstrukciyaPDF.clrFona
-                zagolovokX: pgStrInstrukciyaPDF.rctStrZagolovok.x;
-                zagolovokY: pgStrInstrukciyaPDF.rctStrZagolovok.y
-                zagolovokWidth: pgStrInstrukciyaPDF.rctStrZagolovok.width
-                zagolovokHeight: pgStrInstrukciyaPDF.rctStrZagolovok.height
-                zonaX: pgStrInstrukciyaPDF.rctStrZona.x; zonaY: pgStrInstrukciyaPDF.rctStrZona.y
-                zonaWidth: pgStrInstrukciyaPDF.rctStrZona.width;
-                zonaHeight: pgStrInstrukciyaPDF.rctStrZona.height
-                toolbarX: pgStrInstrukciyaPDF.rctStrToolbar.x
-                toolbarY: pgStrInstrukciyaPDF.rctStrToolbar.y
-                toolbarWidth: pgStrInstrukciyaPDF.rctStrToolbar.width
-                toolbarHeight: pgStrInstrukciyaPDF.rctStrToolbar.height
-                radiusZona: pgStrInstrukciyaPDF.rctStrZona.radius//Радиус берём из настроек элемента qml
-                tapZagolovokLevi: pgStrInstrukciyaPDF.zagolovokLevi
-                tapZagolovokPravi: pgStrInstrukciyaPDF.zagolovokPravi
-                tapToolbarLevi: pgStrInstrukciyaPDF.toolbarLevi
-                tapToolbarPravi: pgStrInstrukciyaPDF.toolbarPravi
-                isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
-
-                onClickedNazad:{//Когда нажимается кнопка назад на инструкции менторPDF, то...
-                    tmPdf.fnInteractiveSidebar(true)//Активируем свайп на боковой панели.
-                    stvStr.pop()//Назад страницу
                 }
             }
         }

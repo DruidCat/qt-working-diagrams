@@ -37,6 +37,7 @@ Item {
     focus: true;//Чтоб работали горячие клавиши.
     //Сигналы.
 	signal clickedNazad();//Сигнал нажатия кнопки Назад
+    signal signalZagolovok(var strZagolovok);//Сигнал, когда передаём новую надпись в Заголовок.
     //Функуции.
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
@@ -57,11 +58,12 @@ Item {
         root.clickedNazad();//Закрываем Инструкцию.
     }
     function fnClickedSidebar(){//Функция нажатия кнопки SideBar.
-        if(drwSidebar.position)//Если боковая панель открыта, то...
+        if(drwSidebar.position){//Если боковая панель открыта, то...
             drwSidebar.close()//Закрываем её
+            root.focus()//Чтоб горячие клавиши работали.
+        }
         else//Если боковая панель закрыта, то...
             drwSidebar.open()//Открываем её.
-        root.forceActiveFocus()//Чтоб горячие клавиши работали.
     }
     Item {//Данные Заголовок
 		id: tmZagolovok
@@ -190,7 +192,6 @@ Item {
             ListView {
                 id: lsvInstrukcii
                 anchors.fill: rctSidebar
-                anchors.margins: root.ntCoff
                 model: mdlInstrukcii
                 focus: true//ListView должен получать фокус
                 clip: true
@@ -200,15 +201,16 @@ Item {
                 currentIndex: -1//начальное значение — ничего не выбрано
 
                 delegate: Rectangle {
-                    id: delegateRoot
+                    //Свойства
+                    readonly property color baseRowColor: (index % 2 === 0)
+                                                          ? root.clrFona
+                                                          : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))
+                    //Настройки
                     width: lsvInstrukcii.width
                     height: txtInstrukciya.font.pixelSize + root.ntCoff
-                    readonly property color baseRowColor: (index % 2 === 0)
-                        ? root.clrFona
-                        : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))
                     color: (root.strInstrukciya === key) || (lsvInstrukcii.currentIndex === index)
-                        ? root.clrPolzunka
-                        : baseRowColor
+                           ? root.clrPolzunka
+                           : baseRowColor
                     Text {
                         id: txtInstrukciya
                         anchors.fill: parent
@@ -226,18 +228,13 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            fnLoadInstrukciya(key)
-                            if (root.isMobile) drwSidebar.close()
-                            root.forceActiveFocus()
+                            fnInstrukciya(key)//Функция загружающая заголовок и инструкцию по ключу.
                         }
                     }
-                    //Делаем делегат "фокусируемым" для получения нажатий клавиш
                     Keys.onPressed: (event) => {
                         if (lsvInstrukcii.currentIndex === index) {
                             if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                fnLoadInstrukciya(key)
-                                if (root.isMobile) drwSidebar.close()
-                                root.forceActiveFocus()
+                                fnInstrukciya(key)//Функция загружающая заголовок и инструкцию по ключу.
                                 event.accepted = true
                             }
                         }
@@ -248,28 +245,27 @@ Item {
                 Keys.onDownPressed: incrementCurrentIndex()
                 Keys.onReturnPressed: {
                     if (currentIndex !== -1) {
-                        let key = mdlInstrukcii.get(currentIndex).key
-                        fnLoadInstrukciya(key)
-                        if (root.isMobile) drwSidebar.close()
-                        root.forceActiveFocus()
+                        const cnKluch = mdlInstrukcii.get(currentIndex).key
+                        fnInstrukciya(cnKluch)//Функция загружающая заголовок и инструкцию по ключу.
                     }
                 }
-                Keys.onEnterPressed: Keys.onReturnPressed  // Enter и Return — одно и то же
+                Keys.onEnterPressed: Keys.onReturnPressed//Enter и Return — одно и то же
                 ScrollBar.vertical: ScrollBar {
                     policy: ScrollBar.AsNeeded
                 }
             }
             ListModel {//Список всех инструкций (ключ + заголовок)
                 id: mdlInstrukcii
-                ListElement { key: "oprilojenii"; title: "О приложении" }
-                ListElement { key: "fdinstrukciya"; title: "Проводник" }
-                ListElement { key: "oqt"; title: "О Qt" }
-                ListElement { key: "animaciya"; title: "Анимация" }
-                ListElement { key: "hotkey"; title: "Горячие клавиши" }
-                ListElement { key: "menu"; title: "Меню" }
-                ListElement { key: "katalog"; title: "Каталог документов" }
-                ListElement { key: "jurnal"; title: "Журнал" }
-                ListElement { key: "pdf"; title: "менторPDF" }
+                ListElement { key: "oprilojenii"; title: "О приложении"; zagolovok: "О ПРИЛОЖЕНИИ" }
+                ListElement { key: "filedialog"; title: "Проводник"; zagolovok: "ИНСТРУКЦИЯ ПО ПРОВОДНИКУ" }
+                ListElement { key: "oqt"; title: "О Qt"; zagolovok: "О QT" }
+                ListElement { key: "animaciya"; title: "Анимация"; zagolovok: "ИНСТРУКЦИЯ ПО АНИМАЦИИ" }
+                ListElement { key: "hotkey"; title: "Горячие клавиши"; zagolovok: "ГОРЯЧИЕ КЛАВИШИ" }
+                ListElement { key: "menu"; title: "Меню"; zagolovok: "ОПИСАНИЕ НАСТРОЕК МЕНЮ" }
+                ListElement { key: "katalog"; title: "Каталог документов";
+                                                    zagolovok: "ИНСТРУКЦИЯ ПО СОЗДАНИЮ КАТАЛОГА ДОКУМЕНТОВ" }
+                ListElement { key: "jurnal"; title: "Журнал"; zagolovok: "ИНСТРУКЦИЯ ПО ЖУРНАЛУ" }
+                ListElement { key: "pdf"; title: "менторPDF"; zagolovok: "ИНСТРУКЦИЯ ПО МЕНТОРPDF" }
             }
         }
         Rectangle {//Прямоугольник ручки, за которую можно тянуть размер боковой панели, для изменения её размеров
@@ -329,11 +325,19 @@ Item {
             border.width: root.ntCoff/4
         }
     }
-    Component.onCompleted: {//Когда страница отрисовалась, то...
-        fnLoadInstrukciya(root.strInstrukciya)
+    onStrInstrukciyaChanged: {//Если переменная поменялась, то...
+        fnInstrukciya(root.strInstrukciya)//Функция загружающая заголовок и инструкцию по ключу.
     }
-    function fnLoadInstrukciya(strKluch) {// Загрузка текста инструкции по ключу (ОДНО место истины)
+    Component.onCompleted: {//Когда страница отрисовалась, то...
+        fnInstrukciya(root.strInstrukciya)//Функция загружающая заголовок и инструкцию по ключу.
+    }
+    function fnInstrukciya(strKluch){//Функция загружающая заголовок и инструкцию по ключу.
         root.strInstrukciya = strKluch
+        for (var vrShag = 0; vrShag < mdlInstrukcii.count; ++vrShag){//Цикл перебора модели.
+            if(mdlInstrukcii.get(vrShag).key === strKluch)//Если есть равенство с ключом, то...
+                root.signalZagolovok(mdlInstrukcii.get(vrShag).zagolovok)//передаём заголовок в заголовок.
+        }
+        if (root.isMobile) drwSidebar.close()//Если мобильное устройство, то закрываем боковую панель.
         if (strKluch === "oprilojenii"){//Если это анотация Об приложении Ментор, то...
             //Любые пробелы и табы в тексте отобразятся в приложении.
 			txdZona.text = qsTr("
@@ -362,7 +366,7 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 				</html>");
         }
         else{
-            if(strKluch === "fdinstrukciya"){//Если это Инструкция Проводника, то...
+            if(strKluch === "filedialog"){//Если это Инструкция Проводника, то...
 
                 txdZona.text = qsTr("
 					<html>
