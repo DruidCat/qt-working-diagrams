@@ -303,10 +303,12 @@ Item {
                 onReleased: {//Если отпустили кнопку мышки
                     drwSidebar.interactive = true;//Включаем свайп Drawer. ВАЖНО!
                     isDrag = false//При отпускании мыши Окончание перетаскивания
+                    cppqml.untInstrukciyaWidth = drwSidebar.sidebarWidth//Записываем в реестр ширину панели.
                 }
                 onCanceled: {
                     drwSidebar.interactive = true;//Включаем свайп Drawer. ВАЖНО!
                     isDrag = false//Окончание перетаскивания
+                    cppqml.untInstrukciyaWidth = drwSidebar.sidebarWidth//Записываем в реестр ширину панели.
                 }
                 onPositionChanged: (mouse) => {//Если позиция меняется, то...
                     if (!isDrag || root.isMobile) return//Если не перетаскиваем ручку или мобильное устройство,вых
@@ -316,7 +318,6 @@ Item {
                     let ltWidth = drwSidebar.sidebarWidth - dX//Новые размеры ширины боковой панели.
                     ltWidth=Math.max(drwSidebar.minSidebarWidth,Math.min(drwSidebar.maxSidebarWidth, ltWidth))
                     drwSidebar.sidebarWidth = ltWidth//Изменяем ширину боковой панели на новую ширину
-                    cppqml.untInstrukciyaWidth = drwSidebar.sidebarWidth//Записываем в реестр ширину панели.
                 }
             }
         }
