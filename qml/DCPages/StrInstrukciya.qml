@@ -31,6 +31,7 @@ Item {
     property real tapToolbarPravi: 1
     property string strInstrukciya: "obavtore"
     property bool isFileDialogFailVibor: true;//true - выбор файлов, false - выбор папки
+    property bool isAdmin: false;//НЕ ИЗМЕНЯТЬ ЭТОТ ФЛАГ.
     property bool isMobile: true//true - мобильная платформа.
     //Настройки.
 	anchors.fill: parent//Растянется по Родителю.
@@ -262,16 +263,16 @@ Item {
             }
             ListModel {//Список всех инструкций: ключ, название, заголовок)
                 id: mdlInstrukcii
-                ListElement { key: "oprilojenii"; title: "О приложении"; zagolovok: "О ПРИЛОЖЕНИИ" }
-                ListElement { key: "filedialog"; title: "Проводник"; zagolovok: "ИНСТРУКЦИЯ ПО ПРОВОДНИКУ" }
-                ListElement { key: "oqt"; title: "О Qt"; zagolovok: "О QT" }
-                ListElement { key: "animaciya"; title: "Анимация"; zagolovok: "ИНСТРУКЦИЯ ПО АНИМАЦИИ" }
                 ListElement { key: "hotkey"; title: "Горячие клавиши"; zagolovok: "ГОРЯЧИЕ КЛАВИШИ" }
+                ListElement { key: "pdf"; title: "менторPDF"; zagolovok: "ИНСТРУКЦИЯ ПО МЕНТОРPDF" }
                 ListElement { key: "menu"; title: "Меню"; zagolovok: "ОПИСАНИЕ НАСТРОЕК МЕНЮ" }
+                ListElement { key: "oprilojenii"; title: "О приложении"; zagolovok: "О ПРИЛОЖЕНИИ" }
+                ListElement { key: "oqt"; title: "О Qt"; zagolovok: "О QT" }
+                ListElement { key: "filedialog"; title: "Проводник"; zagolovok: "ИНСТРУКЦИЯ ПО ПРОВОДНИКУ" }
                 ListElement { key: "katalog"; title: "Каталог документов";
                                                     zagolovok: "ИНСТРУКЦИЯ ПО СОЗДАНИЮ КАТАЛОГА ДОКУМЕНТОВ" }
                 ListElement { key: "jurnal"; title: "Журнал"; zagolovok: "ИНСТРУКЦИЯ ПО ЖУРНАЛУ" }
-                ListElement { key: "pdf"; title: "менторPDF"; zagolovok: "ИНСТРУКЦИЯ ПО МЕНТОРPDF" }
+                ListElement { key: "animaciya"; title: "Анимация"; zagolovok: "ИНСТРУКЦИЯ ПО АНИМАЦИИ" }
             }
         }
         Rectangle {//Прямоугольник ручки, за которую можно тянуть размер боковой панели, для изменения её размеров
@@ -345,8 +346,20 @@ Item {
                 lsvInstrukcii.currentIndex = vrShag;//Подсвечиваем в списке.
             }
         }
+        if(!root.isAdmin && ((strKluch === "filedialog")
+                             ||(strKluch === "katalog")
+                             ||(strKluch === "jurnal")
+                             ||(strKluch === "animaciya"))) strKluch = "neadmin";//Без прав администратора
         if (root.isMobile) drwSidebar.close()//Если мобильное устройство, то закрываем боковую панель.
-        if (strKluch === "oprilojenii"){//Если это анотация Об приложении Ментор, то...
+        if (strKluch === "neadmin"){//Если это анотация не Админа, то...
+            txdZona.text = qsTr("
+                <html>
+                    <body>
+<p><center>Это инструкция для приложения Ментор с правами администратора.</center></p>
+                    </body>
+                </html>"
+            );
+        } else if (strKluch === "oprilojenii"){//Если это анотация Об приложении Ментор, то...
             //Любые пробелы и табы в тексте отобразятся в приложении.
 			txdZona.text = qsTr("
 				<html>
@@ -371,14 +384,12 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 <p>От разработки и создания данного приложения мной было получено огромное удовольствие. Надеюсь оно вам \
 понравится, и принесёт пользу.</p>
 					</body>
-				</html>");
-        }
-        else{
-            if(strKluch === "filedialog"){//Если это Инструкция Проводника, то...
-
-                txdZona.text = qsTr("
-					<html>
-						<body>
+                </html>"
+            );
+        } else if(strKluch === "filedialog"){//Если это Инструкция Проводника, то...
+            txdZona.text = qsTr("
+                <html>
+                    <body>
 <p>В Проводнике выбирайте PDF документы, которые хотите добавить или открыть в приложение.</p>
 <p>Навигация в проводнике возможна в пределах вашей дамашней дериктории. Если документы расположены в другой \
 дериктории или на другом накопителе, то заранее переместите их в домашнюю дерикторию.</p>
@@ -396,14 +407,13 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 <p><b>[папка]</b> - Квадратными скобками обозначаются папки.</p>
 <p><b>док.pdf</b> - Документ который можно добавить или открыть в приложение.</p>
 </ol>
-						</body>
-					</html>");
-            }
-			else{
-                if(strKluch === "oqt"){
-				txdZona.text = qsTr("
-					<html>
-						<body>
+                    </body>
+                </html>"
+            );
+        } else if(strKluch === "oqt"){
+            txdZona.text = qsTr("
+                <html>
+                    <body>
 <p><center><img src = \"/images/Qt_logo_2016.png\"></center></p>
 <p>This program uses Qt version ") + cppqml.qtVersion + (".</p>
 <p>Qt is a C++ toolkit for cross-platform application development.</p>
@@ -421,14 +431,13 @@ comply with the terms and conditions of the respective licenses.</p>
 <p>Qt and the Qt logo are trademarks of The Qt Company Ltd.</p>
 <p>Qt is The Qt Company Ltd product developed as an open source project. \
 See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
-						</body>
-                    </html>");
-				}
-                else{
-                    if(strKluch === "animaciya"){
-                        txdZona.text = qsTr("
-                            <html>
-                                <body>
+                    </body>
+                </html>"
+            );
+        } else if(strKluch === "animaciya"){
+            txdZona.text = qsTr("
+                <html>
+                    <body>
 <p>Данная страница необходима для создания анимированных заставок обучающих роликов.</p>
 <p>Введёный вами текск будет увеличиваться вместе с логотипом компании. Данную анимацию можно снять \
 приложением захвата экрана, например ShareX. И добавить на этапе монтажа в обучающий ролик.</p>
@@ -457,14 +466,13 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>[Рамка 16:9]</b> - Показ рамки для съёмки видео в пропорции экрана 16:9.</p>
 <p><b>[Закрыть]</b> - Закрыть приложение Ментор.</p>
 </ol>
-                                </body>
-                            </html>");
-                    }
-					else{
-                        if(strKluch === "hotkey"){
-							txdZona.text = qsTr("
-								<html>
-									<body>
+                    </body>
+                </html>"
+            );
+        } else if(strKluch === "hotkey"){
+            txdZona.text = qsTr("
+                <html>
+                    <body>
 <p><b>МЕНТОР:</b></p>
 <ol>
 <p><b>[F1]</b> - Описание.</p>
@@ -517,8 +525,9 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>[Стрелка вверх]</b> или <b>[K]</b> - Листание текста вверх.</p>
 <p><b>[Стрелка вниз]</b> или <b>[J]</b> - Листание текста вниз.</p>
 <p><b>[PgUp]</b> - Страница вверх.</p>
-<p><b>[PgDn]</b> - Страница вниз.</p>
-</ol>
+<p><b>[PgDn]</b> - Страница вниз.</p>")
++ (!root.isAdmin ? " " :
+qsTr("</ol>
 <p><b>АНИМАЦИЯ:</b></p>
 <ol>
 <p><b>[Alt Стрелка влево]</b> - Закрыть окно анимации.</p>
@@ -540,44 +549,45 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>[Escape]</b> - Закрыть карусель сортировки.</p>
 </ol>
 </ol>
-                                    </body>
-								</html>");
-						}
-                        else{
-                            if(strKluch === "menu"){
-                                txdZona.text = qsTr("
-                                    <html>
-                                        <body>
-<p><b>менторPDF</b></p>
+                    </body>
+                </html>"
+            ));
+        } else if(strKluch === "menu"){
+            txdZona.text = qsTr("
+                <html>
+                    <body>")
++ (!root.isAdmin ? "" :
+qsTr("<p><b>менторPDF</b></p>
 <p>- [вкл] включен встроенный просмотщик pdf.</p>
-<p>- [выкл] включен внешний просмотщик pdf.</p>
-<p><b>горячие клавиши</b></p>
+<p>- [выкл] включен внешний просмотщик pdf.</p>"))
++ qsTr("<p><b>горячие клавиши</b></p>
 <p>- описание всех горячих клавиш в приложении.</p>
 <p><b>шрифт</b></p>
 <p>- [маленький] размер шрифта.</p>
 <p>- [средний] размер шрифта.</p>
-<p>- [большой] размер шрифта.</p>
-<p><b>анимация</b></p>
+<p>- [большой] размер шрифта.</p>")
++ (!root.isAdmin ? "" :
+qsTr("<p><b>анимация</b></p>
 <p>- создание и воспроизведение анимационной заставки для видео роликов.</p>
-<p><b>логи</b></p>
-<p>- все сообщения, предупреждения или ошибки от приложения записываются на данной странице.</p>
-<p><b>о приложении</b></p>
+<p><b>журнал</b></p>
+<p>- все сообщения, предупреждения или ошибки от приложения записываются на данной странице.</p>"))
++ qsTr("<p><b>о приложении</b></p>
 <p>- краткая информация о приложении и его создатиле.</p>
 <p><b>о Qt</b></p>
-<p>- информация о фреймворке, на котором написано приложение.</p>
-<p><b>редактор</b></p>
+<p>- информация о фреймворке, на котором написано приложение.</p>")
++ (!root.isAdmin ? "" :
+qsTr("<p><b>редактор</b></p>
 <p>- [вкл] включен редактор создания каталогов.</p>
 <p>- [выкл] выключен редактор создания каталогов.</p>
 <p><b>создание каталога документов</b></p>
 <p>- в папке [") + cppqml.strKatalogPut + qsTr("] создаётся каталог со всеми документами из приложения.</p>
-                                        </body>
-                                    </html>");
-                            }
-                            else{
-                                if(strKluch === "katalog"){
-                                    txdZona.text = qsTr("
-                                        <html>
-                                            <body>
+                    </body>
+                </html>"
+            ));
+        } else if(strKluch === "katalog"){
+            txdZona.text = qsTr("
+                <html>
+                    <body>
 <p>Данный функционал создаёт на устройстве структурированные папки с документами как в приложении.</p>
 <p><b>Создать</b> или <img src = \"/images/DCButtons/24x24/DCKnopkaSozdat.png\"></p>
 <p>- запускает создание каталога документов в заданной дерриктории.</p>
@@ -600,14 +610,13 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>[PgDn]</b> - Страница вниз.</p>
 <p><b>[Escape]</b> - Отмена создания каталога.</p>
 </ol>
-                                            </body>
-                                        </html>");
-                                }
-                                else{
-                                    if(strKluch === "jurnal"){//Если это Инструкция Журнал, то...
-                                        txdZona.text = qsTr("
-                                            <html>
-                                                <body>
+                    </body>
+                </html>"
+            );
+        } else if(strKluch === "jurnal"){//Если это Инструкция Журнал, то...
+            txdZona.text = qsTr("
+                <html>
+                    <body>
 <p>В журнале отображаются ошибки, которые возникли при работе приложения.</p>
 <p>Так же в журнале фиксируются действия пользователя, такие как создание, переименование или удаление \
 каталогов. Добавление, переименование, удаление или открытие документов.</p>
@@ -636,14 +645,13 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <p><b>[Escape]</b> - Закрыть карусель сортировки.</p>
 </ol>
 </ol>
-                                                </body>
-                                            </html>");
-                                    }
-                                    else{
-                                        if(strKluch === "pdf"){//Если это Инструкция mentorPDF, то...
-                                            txdZona.text = qsTr("
-                                                <html>
-                                                    <body>
+                    </body>
+                </html>"
+            );
+        } else if(strKluch === "pdf"){//Если это Инструкция mentorPDF, то...
+            txdZona.text = qsTr("
+                <html>
+                    <body>
 <p>В менторPDF отображаются документы формата pdf. Которые можно листать, изменять масштаб и вести поиск.</p>
 <p><b>ФУНКЦИОНАЛ:</b></p>
 <ol>
@@ -672,16 +680,9 @@ See <a href=\"http://qt.io\">qt.io</a> for more information.</p>
 <img src = \"/images/DCButtons/24x24/DCKnopkaPlus_2.png\"> - Масштаб открытого документа, который можно \
 изменить вручную.</p>
 </ol>
-                                                    </body>
-                                                </html>");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-					}
-                }
-			}
+                    </body>
+                </html>"
+            );
         }
     }
 }

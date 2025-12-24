@@ -293,6 +293,7 @@ ApplicationWindow {
                 radiusZona: pgStrInstrukciya.rctStrZona.radius//Радиус берём из настроек элемента qml
                 tapZagolovokLevi: pgStrInstrukciya.zagolovokLevi; tapZagolovokPravi: pgStrInstrukciya.zagolovokPravi
                 tapToolbarLevi: pgStrInstrukciya.toolbarLevi; tapToolbarPravi: pgStrInstrukciya.toolbarPravi
+                isAdmin: root.isAdmin;//ПЕРЕДАЁМ ФЛАГ АМИНИСТРАТОРА В НАСТРОЙКИ.
                 isMobile: root.isMobile//Передаём флаг Мобильного приложения в настройки.
 
                 onClickedNazad: stvStr.pop()//Назад страницу
