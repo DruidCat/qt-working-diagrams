@@ -51,6 +51,11 @@ Item {
                     fnClickedNazad();//Функция нажатия кнопки Назад
                 event.accepted = true;//Завершаем обработку эвента.
             }
+        } else {
+            if (event.key === Qt.Key_F1){//Если нажата F1, то...
+                fnClickedSidebar();//Функция открытия/закрытия боковой панели.
+                event.accepted = true
+            }
         }
     }
     function fnClickedNazad(){//Функция нажатия кнопки Назад
@@ -75,9 +80,9 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
         }
-        DCKnopkaSidebar {
-            id: knopkaSidebar
-            opened: true//По умолчанию отображение как будто открыта панель, так как панель с другой стороны
+        DCKnopkaInfo {
+            id: knopkaInfo
+            opened: false//По умолчанию, бордюр с радиусом
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
             clrKnopki: root.clrTexta
@@ -129,7 +134,7 @@ Item {
         interactive: true//false -  панель не реагирует на свайпы.
         //Функции
         onPositionChanged: {//Если позиция изменяется у боковой панели, то...
-            knopkaSidebar.opened = !position//Передаём сигнал кнопке,для отображения нужной позиции инверсивно
+            knopkaInfo.opened = position//Передаём сигнал кнопке,для отображения нужной позиции инверсивно
         }
         onOpened: {//Если боковая панель открылась, то...
             lsvInstrukcii.forceActiveFocus()//Делаем фокус на списке, чтоб листался список.
@@ -199,14 +204,12 @@ Item {
                 delegate: Rectangle {
                     //Свойства
                     readonly property color clrRow: (index % 2 === 0)
-                                                          ? root.clrFona
-                                                          : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))
+                                                    ? root.clrFona
+                                                    : Qt.tint(root.clrFona, Qt.rgba(1, 1, 1, 0.22))
                     //Настройки
-                    width: lsvInstrukcii.width - (srbVertical.active ? srbVertical.width : 0)
+                    width: lsvInstrukcii.width - (srbVertical.visible ? srbVertical.width : 0)
                     height: txtInstrukciya.font.pixelSize + root.ntCoff
-                    color: (root.strInstrukciya === key) || (lsvInstrukcii.currentIndex === index)
-                           ? root.clrPolzunka
-                           : clrRow
+                    color: (lsvInstrukcii.currentIndex === index) ? root.clrPolzunka : clrRow
                     Text {
                         id: txtInstrukciya
                         anchors.fill: parent
@@ -214,9 +217,7 @@ Item {
                         anchors.rightMargin: root.ntCoff
                         verticalAlignment: Text.AlignVCenter
                         elide: Text.ElideRight
-                        color: (root.strInstrukciya === key) || (lsvInstrukcii.currentIndex === index)
-                            ? root.clrFona
-                            : root.clrTexta
+                        color: (lsvInstrukcii.currentIndex === index) ? root.clrFona : root.clrTexta
                         font.pixelSize: (root.ntWidth<=2) ? root.ntCoff*(root.ntWidth-1)
                                                           : root.ntCoff*(root.ntWidth-2)
                         text: title
@@ -224,6 +225,7 @@ Item {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
+                            lsvInstrukcii.currentIndex = index;//Присваемваем индекс выбранного элемента.
                             fnInstrukciya(key)//Функция загружающая заголовок и инструкцию по ключу.
                         }
                     }
@@ -241,11 +243,14 @@ Item {
                                 fnInstrukciya(cnKluch)//Функция загружающая заголовок и инструкцию по ключу.
                             }
                             event.accepted = true
-                        } else if (event.key === Qt.Key_Up){//Если нажата на стрелку вниз, то...
+                        } else if (event.key === Qt.Key_Up){//Если нажата стрелка вниз, то...
                             decrementCurrentIndex();//Убавляем от индекса.
                             event.accepted = true
-                        } else if (event.key === Qt.Key_Down){//Если нажата на стрелку вверх, то...
+                        } else if (event.key === Qt.Key_Down){//Если нажата стрелка вверх, то...
                             incrementCurrentIndex()//Прибавляем к индексу.
+                            event.accepted = true
+                        } else if (event.key === Qt.Key_F1){//Если нажата F1, то...
+                            fnClickedSidebar();//Функция открытия/закрытия боковой панели.
                             event.accepted = true
                         }
                     }
@@ -297,12 +302,10 @@ Item {
                 }
                 onReleased: {//Если отпустили кнопку мышки
                     drwSidebar.interactive = true;//Включаем свайп Drawer. ВАЖНО!
-                    cppqml.untInstrukciyaWidth = drwSidebar.sidebarWidth//Записываем в реестр ширину боковой панели.
                     isDrag = false//При отпускании мыши Окончание перетаскивания
                 }
                 onCanceled: {
                     drwSidebar.interactive = true;//Включаем свайп Drawer. ВАЖНО!
-                    cppqml.untInstrukciyaWidth = drwSidebar.sidebarWidth//Записываем в реестр ширину боковой панели.
                     isDrag = false//Окончание перетаскивания
                 }
                 onPositionChanged: (mouse) => {//Если позиция меняется, то...
@@ -313,6 +316,7 @@ Item {
                     let ltWidth = drwSidebar.sidebarWidth - dX//Новые размеры ширины боковой панели.
                     ltWidth=Math.max(drwSidebar.minSidebarWidth,Math.min(drwSidebar.maxSidebarWidth, ltWidth))
                     drwSidebar.sidebarWidth = ltWidth//Изменяем ширину боковой панели на новую ширину
+                    cppqml.untInstrukciyaWidth = drwSidebar.sidebarWidth//Записываем в реестр ширину панели.
                 }
             }
         }
@@ -335,8 +339,10 @@ Item {
     function fnInstrukciya(strKluch){//Функция загружающая заголовок и инструкцию по ключу.
         root.strInstrukciya = strKluch
         for (var vrShag = 0; vrShag < mdlInstrukcii.count; ++vrShag){//Цикл перебора модели.
-            if(mdlInstrukcii.get(vrShag).key === strKluch)//Если есть равенство с ключом, то...
+            if(mdlInstrukcii.get(vrShag).key === strKluch){//Если есть равенство с ключом, то...
                 root.signalZagolovok(mdlInstrukcii.get(vrShag).zagolovok)//передаём заголовок в заголовок.
+                lsvInstrukcii.currentIndex = vrShag;//Подсвечиваем в списке.
+            }
         }
         if (root.isMobile) drwSidebar.close()//Если мобильное устройство, то закрываем боковую панель.
         if (strKluch === "oprilojenii"){//Если это анотация Об приложении Ментор, то...

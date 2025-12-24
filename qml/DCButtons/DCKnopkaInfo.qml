@@ -12,6 +12,7 @@ Item {
     property real maxDarker: 1.3//Максимальная затемнённость кнопки, когда она нажата.
     property bool enabled: true//true - активирована, false - деактивированна кнопка.
     property bool pressed: tphKnopkaInfo.pressed//true - нажали false - не нажали
+    property bool opened: false//true - радиус 0, false - root.width/4
     //property bool pressed: maKnopkaInfo.pressed//true - нажали false - не нажали
     property real tapHeight: ntWidth*ntCoff//Высота зоны нажатия пальцем или мышкой
     property real tapWidth: ntWidth*ntCoff//Ширина зоны нажатия пальцем или мышкой
@@ -60,7 +61,7 @@ Item {
                 Qt.darker(clrKnopki, root.minDarker)
         }
         border.width: root.width/8/4
-        radius: root.width/4
+        radius: root.opened ? 0 : root.width/4
 
 		Rectangle {
 			id: rctBukvaTochka
