@@ -72,13 +72,20 @@ Item {
                 dcSidebar.fnNaidenoNext()//Функция перехода к следующему результату в списке.
             }
             else{//Временно, чтоб работал скролл страниц
-                if(ntStrDown < pdfDoc.pageCount)
-                    root.currentPage = ntStrDown;//Листаем страницы документа.
+                if(ntStrDown < pdfDoc.pageCount) fnScrollVniz()//Функция скролла вниз страницы.
+                    //root.currentPage = ntStrDown;//Листаем страницы документа.
             }
         }
         else{//Если боковая панель не открыта, то...
-            if(ntStrDown < pdfDoc.pageCount)
-                root.currentPage = ntStrDown;//Листаем страницы документа.
+            if(ntStrDown < pdfDoc.pageCount) fnScrollVniz()//Функция скролла вниз страницы.
+                //root.currentPage = ntStrDown;//Листаем страницы документа.
+        }
+    }
+    function fnScrollVniz(){//Функция скролла вниз страницы.
+        let maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight)*pmpDoc.renderScale
+        pmpDoc.flickable.contentY = Math.min(maxHeight, pmpDoc.flickable.contentY + pdfDoc.heightScroll*pmpDoc.renderScale)
+        if(pmpDoc.flickable.contentY === maxHeight){//Если максимум, то...
+            root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу,так как автоматически не листает
         }
     }
     function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
@@ -89,14 +96,23 @@ Item {
             }
             else{//Временно, чтоб работал скролл страниц
                 if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                    root.currentPage = ntStrUp;//Листаем страницы документа.
+                    fnScrollVverh()//Функция скролла вверх страницы.
+                    //root.currentPage = ntStrUp;//Листаем страницы документа.
             }
         }
         else{//Если боковая панель не открыта, то...
             if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                root.currentPage = ntStrUp;//Листаем страницы документа.
+                fnScrollVverh()//Функция скролла вверх страницы.
+                //root.currentPage = ntStrUp;//Листаем страницы документа.
         }
     } 
+    function fnScrollVverh(){//Функция скролла вверх страницы.
+        let minHeight = pdfDoc.pageContentY*pmpDoc.renderScale
+        pmpDoc.flickable.contentY = Math.max(minHeight, pmpDoc.flickable.contentY - pdfDoc.heightScroll*pmpDoc.renderScale)
+        if(pmpDoc.flickable.contentY === minHeight){//Если минимум, то...
+            root.currentPage = pmpDoc.currentPage - 1//Листаем на -1 страницу,так как автоматически не листает
+        }
+    }
     function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
         const cnModel = dlmPoisk.items.get(index);//Получаем объект на конкретный currentResult
         return cnModel ? cnModel.model : null;//если модель пустая, возвращаем null, если нет, то модель
@@ -436,6 +452,8 @@ Item {
             property bool isDocVert: true//true - вертикальный документ, false - горизонтальный документ.
             property real rlWidth: 0//Длина текущей страницы
             property real rlHeight: 0//Высота текущей страницы
+            property real widthScroll: 0//Шаг скроллинга по горизонтали.
+            property real heightScroll: 0//Шаг скроллинга по вертикали.
             property real pageContentY: 0//Положение координаты contentY на действующей стренице
             //Настройки
             source: root.source//Привязываем источник PDF
@@ -453,6 +471,8 @@ Item {
                         //Расчитываем, вертикальный или горизонтальный документ.
                         pdfDoc.rlWidth = pdfDoc.pagePointSize(root.currentPage).width//Запоминаем первую стр.
                         pdfDoc.rlHeight = pdfDoc.pagePointSize(root.currentPage).height//Запоминаем первую стр
+                        pdfDoc.heightScroll = pdfDoc.rlHeight/10//Шар скролла по вертикали.
+                        pdfDoc.widthScroll = pdfDoc.rlWidth/10//Шаг скролла по горизонтали
                         if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
                             pdfDoc.isDocVert = true;//true - вертикальный документ.
                         else
@@ -481,15 +501,24 @@ Item {
                 if((pdfDoc.rlWidth !== cnWidth) || (pdfDoc.rlHeight !== cnHeight)){
                     pdfDoc.rlWidth = cnWidth
                     pdfDoc.rlHeight = cnHeight
+                    pdfDoc.heightScroll = pdfDoc.rlHeight/10//Шар скролла по вертикали.
+                    pdfDoc.widthScroll = pdfDoc.rlWidth/10//Шаг скролла по горизонтали
                     if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
                         pdfDoc.isDocVert = true;//true - вертикальный документ.
                     else
                         pdfDoc.isDocVert = false;//false - горизонтальный документ.
                     console.error("516: НУЖНО МЕНЯТЬ МАСШТАБ")
                 }
-                pdfDoc.pageContentY = pmpDoc.pmpContentY/pmpDoc.renderScale//Запоминаем коорд начала страницы
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
+                tmrPage.running = true//Запускаем таймер, чтоб запоимнить стартовую координату Y страницы
+            }
+        }
+        Timer {//Таймер необходим, чтоб скролл страницы завершился.
+            id: tmrPage
+            interval: 1111; running: false; repeat: false
+            onTriggered: {
+                pdfDoc.pageContentY = pmpDoc.pmpContentY/pmpDoc.renderScale//Запоминаем коорд начала страницы
             }
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
