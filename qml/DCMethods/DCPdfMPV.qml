@@ -82,10 +82,14 @@ Item {
         }
     }
     function fnScrollVniz(){//Функция скролла вниз страницы.
+        pmpDoc.blScrollKey = true;//Включаем скролл клавишами.
+        pmpDoc.blVerhStranici = false;//Сбрасываем флаг, скрол страницы вверху.
         let maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight)*pmpDoc.renderScale
-        pmpDoc.flickable.contentY = Math.min(maxHeight, pmpDoc.flickable.contentY + pdfDoc.heightScroll*pmpDoc.renderScale)
+        pmpDoc.flickable.contentY = Math.min(maxHeight,
+                                        pmpDoc.flickable.contentY + pdfDoc.heightScroll*pmpDoc.renderScale)
         if(pmpDoc.flickable.contentY === maxHeight){//Если максимум, то...
             root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу,так как автоматически не листает
+            pmpDoc.blVerhStranici = true;//Взводим флаг, скрол страницы вверху.
         }
     }
     function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
@@ -107,11 +111,19 @@ Item {
         }
     } 
     function fnScrollVverh(){//Функция скролла вверх страницы.
+        pmpDoc.blScrollKey = true;//Включаем скролл клавишами.
         let minHeight = pdfDoc.pageContentY*pmpDoc.renderScale
-        pmpDoc.flickable.contentY = Math.max(minHeight, pmpDoc.flickable.contentY - pdfDoc.heightScroll*pmpDoc.renderScale)
+        let verhStranici = false;//Это не верх страницы
+        pmpDoc.flickable.contentY = Math.max(minHeight,
+                                        pmpDoc.flickable.contentY - pdfDoc.heightScroll*pmpDoc.renderScale)
         if(pmpDoc.flickable.contentY === minHeight){//Если минимум, то...
-            root.currentPage = pmpDoc.currentPage - 1//Листаем на -1 страницу,так как автоматически не листает
+            verhStranici = true;//Взводим флаг, скрол стараници вверху.
         }
+        if(pmpDoc.blVerhStranici){//Если до этого страница вверху была, то...
+            root.currentPage = pmpDoc.currentPage - 1//Листаем на -1 страницу,так как автоматически не листает
+            //После перехода на страницу будет сброшен флаг pmpDoc.blVerhStranici = false;
+        }
+        if(verhStranici) pmpDoc.blVerhStranici = true;//Взводим флаг, скрол страницы вверху.
     }
     function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
         const cnModel = dlmPoisk.items.get(index);//Получаем объект на конкретный currentResult
@@ -308,10 +320,22 @@ Item {
         root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
         tmrResetScene.running = true;//запускаем таймер, сброса сцены.
     }
-    function fnGoToPage(ntPage){//Функция обрабатывающая переход на новую страницу документа.
-        console.error("333: 10. Переходим на страницу: " + ntPage);
+    function fnGoToPage(ntStranica){//Функция обрабатывающая переход на новую страницу документа.
+        console.error("333: 10. Переходим на страницу: " + ntStranica);
         root.sgnProgress(91, "10/11 Переходим на страницу.");
-        pmpDoc.goToLocation(ntPage, Qt.point(pmpDoc.pmpContentX/pmpDoc.renderScale, 0), pmpDoc.renderScale)
+        if(pmpDoc.blVerhStranici){//Если флаг взведён, то...
+            console.log("fnGotoPage ПЕРЕХОД С КООРДИНАТАМИ")
+            const cnWidth = pdfDoc.pagePointSize(ntStranica).width
+            const cnHeight = pdfDoc.pagePointSize(ntStranica).height
+            const cnHeightScroll = cnHeight/pmpDoc.ntShagScroll*(pmpDoc.ntShagScroll - 1)//Предпоследний скрол
+            pmpDoc.goToLocation(ntStranica,
+                        Qt.point(pmpDoc.pmpContentX/pmpDoc.renderScale, cnHeightScroll),pmpDoc.renderScale)
+        } else{ //Если флаг не взведён, то листаем страницы в обычном режими.
+            console.log("fnGotoPage ПЕРЕХОД БЕЗ КООРДИНАТ")
+            pmpDoc.goToLocation(ntStranica,
+                        Qt.point(pmpDoc.pmpContentX/pmpDoc.renderScale, 0),pmpDoc.renderScale)
+        }
+
         console.error("336: 11. Старт таймера видимости.");
         root.sgnProgress(100, "11/11 Старт таймера отображения.");
         tmrVisible.running = true;//Запускаем таймер отображения документа.
@@ -440,6 +464,9 @@ Item {
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
         property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
+        property bool blVerhStranici: false//true - скролл страницы находится вверху.
+        property bool blScrollKey: false//true - скролл клавишами документа.
+        readonly property int ntShagScroll: 10;//Шаг скролла клавишами документа.
         //Скрытые указатели PdfMultiPageView
         property var verticalScrollbar
         property var flickable
@@ -471,8 +498,8 @@ Item {
                         //Расчитываем, вертикальный или горизонтальный документ.
                         pdfDoc.rlWidth = pdfDoc.pagePointSize(root.currentPage).width//Запоминаем первую стр.
                         pdfDoc.rlHeight = pdfDoc.pagePointSize(root.currentPage).height//Запоминаем первую стр
-                        pdfDoc.heightScroll = pdfDoc.rlHeight/10//Шар скролла по вертикали.
-                        pdfDoc.widthScroll = pdfDoc.rlWidth/10//Шаг скролла по горизонтали
+                        pdfDoc.heightScroll = pdfDoc.rlHeight/pmpDoc.ntShagScroll//Шар скролла по вертикали.
+                        pdfDoc.widthScroll = pdfDoc.rlWidth/pmpDoc.ntShagScroll//Шаг скролла по горизонтали
                         if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
                             pdfDoc.isDocVert = true;//true - вертикальный документ.
                         else
@@ -501,8 +528,8 @@ Item {
                 if((pdfDoc.rlWidth !== cnWidth) || (pdfDoc.rlHeight !== cnHeight)){
                     pdfDoc.rlWidth = cnWidth
                     pdfDoc.rlHeight = cnHeight
-                    pdfDoc.heightScroll = pdfDoc.rlHeight/10//Шар скролла по вертикали.
-                    pdfDoc.widthScroll = pdfDoc.rlWidth/10//Шаг скролла по горизонтали
+                    pdfDoc.heightScroll = pdfDoc.rlHeight/pmpDoc.ntShagScroll//Шар скролла по вертикали.
+                    pdfDoc.widthScroll = pdfDoc.rlWidth/pmpDoc.ntShagScroll//Шаг скролла по горизонтали
                     if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
                         pdfDoc.isDocVert = true;//true - вертикальный документ.
                     else
@@ -511,7 +538,13 @@ Item {
                 }
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
-                tmrPage.running = true//Запускаем таймер, чтоб запоимнить стартовую координату Y страницы
+                if(pmpDoc.blScrollKey){//Если скролл клавишами, то...
+                    if(pmpDoc.blVerhStranici){//Если флаг взведён, то...
+                        pmpDoc.blVerhStranici = false;//Сбрасываем флаг, скрол страницы вверху.
+                        pmpDoc.pmpContentY -= cnHeight;//Запоминаем
+                    } else tmrPage.running = true//Запускаем таймер, чтоб запоимнить стартовую координату Y страницы
+                }
+                pmpDoc.blScrollKey = false;//Отключаем скролл клавишами.
             }
         }
         Timer {//Таймер необходим, чтоб скролл страницы завершился.
