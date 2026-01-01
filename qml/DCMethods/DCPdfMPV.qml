@@ -87,9 +87,11 @@ Item {
         let maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight)*pmpDoc.renderScale
         pmpDoc.flickable.contentY = Math.min(maxHeight,
                                         pmpDoc.flickable.contentY + pdfDoc.heightScroll*pmpDoc.renderScale)
+
         if(pmpDoc.flickable.contentY === maxHeight){//Если максимум, то...
             root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу,так как автоматически не листает
-            pmpDoc.blVerhStranici = true;//Взводим флаг, скрол страницы вверху.
+        } else {
+            pmpDoc.blScrollKey = false;//Выключаем скролл клавишами, так как не будет перескока на другую стр.
         }
     }
     function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
@@ -113,17 +115,14 @@ Item {
     function fnScrollVverh(){//Функция скролла вверх страницы.
         pmpDoc.blScrollKey = true;//Включаем скролл клавишами.
         let minHeight = pdfDoc.pageContentY*pmpDoc.renderScale
-        let verhStranici = false;//Это не верх страницы
         pmpDoc.flickable.contentY = Math.max(minHeight,
                                         pmpDoc.flickable.contentY - pdfDoc.heightScroll*pmpDoc.renderScale)
         if(pmpDoc.flickable.contentY === minHeight){//Если минимум, то...
-            verhStranici = true;//Взводим флаг, скрол стараници вверху.
-        }
-        if(pmpDoc.blVerhStranici){//Если до этого страница вверху была, то...
+            pmpDoc.blVerhStranici = true;//Взводим флаг, скрол страницы вверху.
             root.currentPage = pmpDoc.currentPage - 1//Листаем на -1 страницу,так как автоматически не листает
-            //После перехода на страницу будет сброшен флаг pmpDoc.blVerhStranici = false;
+        } else {//Если это не начало страници, то...
+            pmpDoc.blScrollKey = false;//Выключаем скролл клавишами, так как не будет перескока на другую стр.
         }
-        if(verhStranici) pmpDoc.blVerhStranici = true;//Взводим флаг, скрол страницы вверху.
     }
     function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
         const cnModel = dlmPoisk.items.get(index);//Получаем объект на конкретный currentResult
@@ -324,18 +323,19 @@ Item {
         console.error("333: 10. Переходим на страницу: " + ntStranica);
         root.sgnProgress(91, "10/11 Переходим на страницу.");
         if(pmpDoc.blVerhStranici){//Если флаг взведён, то...
-            console.log("fnGotoPage ПЕРЕХОД С КООРДИНАТАМИ")
             const cnWidth = pdfDoc.pagePointSize(ntStranica).width
             const cnHeight = pdfDoc.pagePointSize(ntStranica).height
             const cnHeightScroll = cnHeight/pmpDoc.ntShagScroll*(pmpDoc.ntShagScroll - 1)//Предпоследний скрол
+            pmpDoc.blVerhStranici = false;//скрол страницы не вверху.
             pmpDoc.goToLocation(ntStranica,
-                        Qt.point(pmpDoc.pmpContentX/pmpDoc.renderScale, cnHeightScroll),pmpDoc.renderScale)
+                                Qt.point(pmpDoc.flickable.contentX/pmpDoc.renderScale, cnHeightScroll),
+                                pmpDoc.renderScale)
         } else{ //Если флаг не взведён, то листаем страницы в обычном режими.
-            console.log("fnGotoPage ПЕРЕХОД БЕЗ КООРДИНАТ")
+            pmpDoc.blVerhStranici = true;//скрол страницы вверху.
             pmpDoc.goToLocation(ntStranica,
-                        Qt.point(pmpDoc.pmpContentX/pmpDoc.renderScale, 0),pmpDoc.renderScale)
+                                Qt.point(pmpDoc.flickable.contentX/pmpDoc.renderScale, 0),
+                                pmpDoc.renderScale)
         }
-
         console.error("336: 11. Старт таймера видимости.");
         root.sgnProgress(100, "11/11 Старт таймера отображения.");
         tmrVisible.running = true;//Запускаем таймер отображения документа.
@@ -425,7 +425,6 @@ Item {
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
             dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
-            pdfDoc.pageContentY = pmpDoc.pmpContentY/pmpDoc.renderScale//Запоминаем коорд начала страницы
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
@@ -464,15 +463,13 @@ Item {
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
         property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
-        property bool blVerhStranici: false//true - скролл страницы находится вверху.
-        property bool blScrollKey: false//true - скролл клавишами документа.
+        property bool blVerhStranici: false//true - скролл страницы находится вверху. В НАЧАЛЕ FALSE ВСЕГДА!!!
+        property bool blScrollKey: false//true - скролл документа клавишами.
         readonly property int ntShagScroll: 10;//Шаг скролла клавишами документа.
         //Скрытые указатели PdfMultiPageView
         property var verticalScrollbar
         property var flickable
-        //
-        property real pmpContentX: pmpDoc.flickable.contentX//Положение Flickable contentX
-        property real pmpContentY: pmpDoc.flickable.contentY//Положение Flickable contentY 
+
         document: PdfDocument {
             id: pdfDoc
             //Свойства
@@ -540,18 +537,24 @@ Item {
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
                 if(pmpDoc.blScrollKey){//Если скролл клавишами, то...
                     if(pmpDoc.blVerhStranici){//Если флаг взведён, то...
-                        pmpDoc.blVerhStranici = false;//Сбрасываем флаг, скрол страницы вверху.
-                        pmpDoc.pmpContentY -= cnHeight;//Запоминаем
-                    } else tmrPage.running = true//Запускаем таймер, чтоб запоимнить стартовую координату Y страницы
+                        tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
+                    } else {
+                        pdfDoc.pageContentY = pdfDoc.pageContentY - cnHeight
+                    }
                 }
-                pmpDoc.blScrollKey = false;//Отключаем скролл клавишами.
+                else{//Если не клавиши, то нужно первоначальное определение координаты страницы.
+                    if(pmpDoc.blVerhStranici){//Если флаг взведён, то...
+                        tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
+                    }
+                }
             }
+            pmpDoc.blScrollKey = false;//Отключаем скролл клавишами всегда, так как обработка завершена.
         }
         Timer {//Таймер необходим, чтоб скролл страницы завершился.
             id: tmrPage
             interval: 1111; running: false; repeat: false
             onTriggered: {
-                pdfDoc.pageContentY = pmpDoc.pmpContentY/pmpDoc.renderScale//Запоминаем коорд начала страницы
+                pdfDoc.pageContentY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
             }
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
