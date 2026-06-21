@@ -209,6 +209,10 @@ Item {
     function fnClickedPoiskPrevious(){//Функция предыдущего номера поиска
         if(pskPoisk.visible) pdfLoader.item.fnClickedPoiskPrevious()//переход к предыдущему номеру поиска
     } 
+    function fnClickedVidelit(){//Функция нажатия кнопки Выделить/Захватить pdf.
+        knopkaVidelit.isVidelit = !knopkaVidelit.isVidelit//Инвертируем анимацию
+        pskPoisk.isVidelit = !pskPoisk.isVidelit//Инвертируем анимацию
+    }
     function fnClickedSidebar(){//Функция нажатия кнопки SideBar.
         if(pdfLoader.item) pdfLoader.item.fnClickedSidebar()//Открываем/закрываем боковую панель через функцию
     }
@@ -297,6 +301,7 @@ Item {
         onRunningChanged: {//Если таймер изменился, то...
             if(running){//Если запустился таймер, то...
                 ldrProgress.active = true;//Запускаем виджет загрузки
+                knopkaVidelit.enabled = false;//Делаем неактивной кнопку Выделить текст.
                 knopkaSidebar.enabled = false;//Делаем неактивной кнопку боковой панели.
                 knopkaPovorotPo.enabled = false;//Делаем неактивной кнопку По часовой стрелки.
                 knopkaPovorotProtiv.enabled = false;//Делаем неактивной кнопку Против часовой стрелки.
@@ -309,11 +314,13 @@ Item {
                 spbPdfPage.visible = true;//Делаем видимым DCSpinBox
                 pdfScale.visible = true;//Делаем видимым DCScale
                 if(pskPoisk.visible){//Если видим виджет поиска, то...
+                    knopkaVidelit.visible = false;//Делаем невидимым кнопку Выделить текст.
                     knopkaSidebar.visible = false;//Делаем невидимой кнопку боковой панели.
                     knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
                 	knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
                 }
 				else{//Если не видим виджет поиска(например при увеличении), то...
+                    knopkaVidelit.enabled = true;//Делаем активной кнопку Выделить текст.
                     knopkaSidebar.enabled = true;//Делаем активной кнопку боковой панели.
                     knopkaPovorotPo.enabled = true;//Делаем активное кнопку По часовой стрелки.
                     knopkaPovorotProtiv.enabled = true;//Делаем активной кнопку Против часовой стрелки.
@@ -332,18 +339,20 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
         }
-        Rectangle {
-            id: rctKnopka
-            width: root.ntWidth*root.ntCoff
-            height: width
+        DCKnopkaVidelit {
+            id: knopkaVidelit
+            isVidelit: false//По умолчанию Захватить документ
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: knopkaNazad.right
-            color: "transparent"
+            clrKnopki: root.clrTexta
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
+            onClicked: fnClickedVidelit();//Функция нажатия кнопки SideBar.
         }
         DCKnopkaSidebar {
             id: knopkaSidebar
             opened: false//По умолчанию закрыта боковая панель.
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
-            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: rctKnopka.right
+            anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: knopkaVidelit.right
             clrKnopki: root.clrTexta
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedSidebar();//Функция нажатия кнопки SideBar.
@@ -374,6 +383,7 @@ Item {
                 onVisibleChanged: {//Если видимость DCTextInput изменился, то...
                     if(txnZagolovok.visible){//Если DCTextInput видимый, то...
                         knopkaNazad.visible = false;//Кнопка назад Невидимая.
+                        knopkaVidelit.visible = false;//Делаем невидимым кнопку Выделить текст.
                         knopkaSidebar.visible = false;//Делаем невидимым кнопку Боковой панели
                         knopkaPovorotPo.visible = false;//Делаем невидимым кнопку По часовой стрелки.
                         knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
@@ -387,6 +397,7 @@ Item {
 						if(!pskPoisk.visible){//Если не открыли Режим поиска, то...
                             root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
 							knopkaNazad.visible = true;//Кнопка назад видимая.
+                            knopkaVidelit.visible = true;//Делаем видимым кнопку Выделить текст.
                             knopkaSidebar.visible = true;//Делаем видимым кнопку Боковой панели
                             knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
                             knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
@@ -429,6 +440,7 @@ Item {
             tapKnopkaZakrit: 1.3; tapKnopkaVniz: 1.3; tapKnopkaVverh: 1.3
             onClickedNext: fnClickedPoiskNext()//Функция следующего номера поиска
             onClickedPrevious: fnClickedPoiskPrevious()//Функция предыдущего номера поиска
+            onClickedVidelit: fnClickedVidelit()//Выделить/Захватить pdf.
             onClickedSidebar: fnClickedSidebar()//Открываем/Закрываем боковую панель.
             onSgnZakritSidebar: fnClickedSidebar()//Закрываем боковую панель.
             onClickedZakrit: {//Нажатие кнопки Закрытия поиска.
@@ -437,6 +449,8 @@ Item {
                 knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                 knopkaOk.visible = false;//Кнопка Ок Невидимая.
                 knopkaNazad.visible = true;//Кнопка назад видимая.
+                knopkaVidelit.visible = true;//Делаем видимым кнопку Выделить текст.
+                knopkaVidelit.enabled = true;//Делаем активной кнопку Выделить текст.
                 knopkaSidebar.visible = true;//Делаем видимым кнопку Боковой панели
                 knopkaSidebar.enabled = true;//Делаем активной кнопку Боковой панели
                 knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.

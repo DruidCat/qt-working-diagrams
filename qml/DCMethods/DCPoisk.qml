@@ -23,6 +23,7 @@ Item {
     property real tapKnopkaZakrit: 1
     property real tapKnopkaVniz: 1
     property real tapKnopkaVverh: 1
+    property bool isVidelit: false//true - режим выделения текства в pdf
     property bool isOpenedSidebar: false//true - открыта боковая панель
     //Настройки
     focus: true
@@ -30,12 +31,16 @@ Item {
     signal clickedNext();//Сигнал на следующий элемент поиска
     signal clickedPrevious();//Сигнал на предыдущий элемент поиска.
     signal clickedZakrit();//Сигнал на отмену поиска.
+    signal clickedVidelit();//Сигнал о нажатии на кнопку Выделить/Захват pdf.
     signal clickedSidebar();//Сигнал о нажатии на кнопку боковой панели.
     signal sgnZakritSidebar();//Сигнал закрытия боковой панели.
     //Функции.
     onTextChanged: {//Если новый текст Поиска, то...
         root.blNomer = true;//Начало обнуления
         root.blNomer = false;//Окончание обнуления.
+    }
+    onIsVidelitChanged: {//Если статус флага выделить/захватить pdf изменился, то...
+        knopkaVidelit.isVidelit = root.isVidelit;//Передаём сигнал кнопке, для отображения нужной анимации.
     }
     onIsOpenedSidebarChanged: {//Если статус флага открыта/закрыта боковая панель изменился, то...
         knopkaSidebar.opened = root.isOpenedSidebar;//Передаём сигнал кнопке, для отображения нужной позиции.
@@ -82,12 +87,22 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
             onClicked: fnClickedZakrit();//Функция закрытия виджета.
         }
+        DCKnopkaVidelit {//Кнопка Выделить/Заахватить pdf.
+            id: knopkaVidelit
+            ntWidth: root.ntWidth
+            ntCoff: root.ntCoff
+            anchors.verticalCenter: rctPoisk.verticalCenter
+            anchors.left:knopkaZakrit.right
+            clrKnopki: root.clrKnopki
+            tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
+            onClicked: root.clickedVidelit();//Сигнал о нажатии на кнопку Выделить/Закрыть pdf.
+        }
         DCKnopkaSidebar{//Кнопка Открытия/Закрытия боковой панели.
             id: knopkaSidebar
             ntWidth: root.ntWidth
             ntCoff: root.ntCoff
             anchors.verticalCenter: rctPoisk.verticalCenter
-            anchors.left:knopkaZakrit.right
+            anchors.left:knopkaVidelit.right
             clrKnopki: root.clrKnopki
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
             onClicked: root.clickedSidebar();//Сигнал о нажатии на кнопку боковой панели.

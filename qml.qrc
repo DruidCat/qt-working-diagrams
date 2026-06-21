@@ -163,5 +163,6 @@
         <file>images/DCButtons/48x48/DCKnopkaSozdat_2.png</file>
         <file>images/DCButtons/96x96/DCKnopkaSozdat_2.png</file>
         <file>images/DCButtons/144x144/DCKnopkaSozdat_2.png</file>
+        <file>qml/DCButtons/DCKnopkaVidelit.qml</file>
     </qresource>
 </RCC>
