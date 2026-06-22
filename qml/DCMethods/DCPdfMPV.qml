@@ -72,27 +72,34 @@ Item {
                 dcSidebar.fnNaidenoNext()//Функция перехода к следующему результату в списке.
             }
             else{//Временно, чтоб работал скролл страниц
-                if(ntStrDown < pdfDoc.pageCount) fnScrollVniz()//Функция скролла вниз страницы.
-                    //root.currentPage = ntStrDown;//Листаем страницы документа.
+                if(ntStrDown < pdfDoc.pageCount)
+                    //fnScrollVniz()//Функция скролла вниз страницы.
+                    root.currentPage = ntStrDown;//Листаем страницы документа.
             }
         }
         else{//Если боковая панель не открыта, то...
-            if(ntStrDown < pdfDoc.pageCount) fnScrollVniz()//Функция скролла вниз страницы.
-                //root.currentPage = ntStrDown;//Листаем страницы документа.
+            if(ntStrDown < pdfDoc.pageCount)
+                //fnScrollVniz()//Функция скролла вниз страницы.
+                root.currentPage = ntStrDown;//Листаем страницы документа.
         }
     }
     function fnScrollVniz(){//Функция скролла вниз страницы.
-        pmpDoc.blScrollKeyVniz = true;//Включаем скролл клавишей вниз.
-        //pmpDoc.blScrollKey = true;//Включаем скролл клавишами.
-        //pmpDoc.blVerhStranici = false;//Сбрасываем флаг, скрол страницы вверху.
-        let maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight)*pmpDoc.renderScale
-        pmpDoc.flickable.contentY = Math.min(maxHeight,
-                                        pmpDoc.flickable.contentY + pdfDoc.heightScroll*pmpDoc.renderScale)
+        if(pdfDoc.isPageContentY){//Если расчитана координата начала страницы, то...
+            //pmpDoc.blScrollKeyVniz = true;//Включаем скролл клавишей вниз.
+            //pmpDoc.blScrollKey = true;//Включаем скролл клавишами.
+            //pmpDoc.blVerhStranici = false;//Сбрасываем флаг, скрол страницы вверху.
+            let maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight)*pmpDoc.renderScale
+            pmpDoc.flickable.contentY = Math.min(maxHeight,
+                                            pmpDoc.flickable.contentY + pdfDoc.heightScroll*pmpDoc.renderScale)
 
-        if(pmpDoc.flickable.contentY === maxHeight){//Если максимум, то...
-            root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу,так как автоматически не листает
-        } else {
-            pmpDoc.blScrollKeyVniz = false;//Выкл. скролл клавишами, так как не будет перескока на другую стр.
+            if(pmpDoc.flickable.contentY === maxHeight){//Если максимум, то...
+                root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу,так как автоматически не листает
+            } else {
+                //pmpDoc.blScrollKeyVniz = false;//Выкл. скролл клавишами, так как не будет перескока на другую стр.
+            }
+        }
+        else {
+            console.log("Страница еще не перескачила на начала страницы.")
         }
     }
     function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
@@ -490,7 +497,9 @@ Item {
             property real rlHeight: 0//Высота текущей страницы
             property real widthScroll: 0//Шаг скроллинга по горизонтали.
             property real heightScroll: 0//Шаг скроллинга по вертикали.
-            property real pageContentY: 0//Положение координаты contentY на действующей стренице
+            property bool isPageContentY: false;//true - посчитана координата начала страницы.
+            property real pageContentY: 0//Координата начала страницы на действующей странице
+            property real cacheContentY: 0//Временная координата начала страницы при скролле системы на неё.
             //Настройки
             source: root.source//Привязываем источник PDF
             password: root.password//Пароль для pdf документа.
@@ -547,7 +556,7 @@ Item {
                 }
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
-                tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
+                fnPageContentY();//Функция высчитывает координату начала страницы по Y
                 /*
                 if(pmpDoc.blScrollKey){//Если скролл клавишами, то...
                     if(pmpDoc.blVerhStranici){//Если флаг взведён, то...
@@ -564,18 +573,10 @@ Item {
                 */
             }
             //pmpDoc.blScrollKey = false;//Отключаем скролл клавишами всегда, обработка завершена.
-            pmpDoc.blScrollKeyVniz = false;//Отключаем скролл клавиши вниз всегда, обработка завершена.
+            //pmpDoc.blScrollKeyVniz = false;//Отключаем скролл клавиши вниз всегда, обработка завершена.
             pmpDoc.blScrollKeyVverh = false;//Отключаем скролл клавиши ввверх всегда, обработка завершена.
             pmpDoc.blScrollKeyVlevo = false;//Отключаем скролл клавиши влево всегда, обработка завершена.
             pmpDoc.blScrollKeyVpravo = false;//Отключаем скролл клавиши вправо всегда, обработка завершена.
-        }
-        Timer {//Таймер необходим, чтоб скролл страницы завершился.
-            id: tmrPage
-            interval: 1111; running: false; repeat: false
-            onTriggered: {
-                //TODO сделать функцию проверки, что страница закончила скролиться и запомнить координату.
-                pdfDoc.pageContentY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
-            }
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
             if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
@@ -652,6 +653,26 @@ Item {
                 if(cnNashel) return cnNashel
             }
             return null//Если ничего не найдено, возвращаем нулевой указатель.
+        }
+        function fnPageContentY(){//Функция высчитывает координату начала страницы по Y
+            pdfDoc.isPageContentY = false;//Начала расчёта начала координаты страницы.
+            pdfDoc.cacheContentY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
+            tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
+        }
+        Timer {//Таймер необходим, чтоб высчитать координату начала страницы по Y
+            id: tmrPage
+            interval: 111; running: false; repeat: false
+            onTriggered: {
+                let ltContentY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
+                if(pdfDoc.cacheContentY === ltContentY){//Если есть равенство, то страница перестала двигаться.
+                    pdfDoc.pageContentY = ltContentY//Приравниваем координату начала страницы.
+                    pdfDoc.isPageContentY = true;//Посчитана координата начала страницы.
+                }
+                else{//Если страница в процессе анимации перескока на начальную координату страницы, то...
+                    pdfDoc.cacheContentY = ltContentY//Запоминаем промежуточную координату
+                    tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
+                }
+            }
         }
     }
     Connections {//Автовыбор первого совпадения и переход
