@@ -679,6 +679,8 @@ qsTr("<p><b>редактор</b></p>
 <p><img src = \"/images/DCButtons/24x24/DCKnopkaMinus_2.png\">МАСШТАБ%\
 <img src = \"/images/DCButtons/24x24/DCKnopkaPlus_2.png\"> - Масштаб открытого документа, который можно \
 изменить вручную.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaPovorotPo.png\"> - Перемещение мышкой pdf документа.</p>
+<p><img src = \"/images/DCButtons/24x24/DCKnopkaPovorotProtiv.png\"> - Выделение текста в pdf документе.</p>
 </ol>
                     </body>
                 </html>"
