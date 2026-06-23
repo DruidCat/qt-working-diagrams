@@ -79,8 +79,8 @@ Item {
         }
         else{//Если боковая панель не открыта, то...
             if(ntStrDown < pdfDoc.pageCount)
-                //fnScrollVniz()//Функция скролла вниз страницы.
-                root.currentPage = ntStrDown;//Листаем страницы документа.
+                fnScrollVniz()//Функция скролла вниз страницы.
+                //root.currentPage = ntStrDown;//Листаем страницы документа.
         }
     }
     function fnScrollVniz(){//Функция скролла вниз страницы.
@@ -88,13 +88,14 @@ Item {
             //pmpDoc.blScrollKeyVniz = true;//Включаем скролл клавишей вниз.
             //pmpDoc.blScrollKey = true;//Включаем скролл клавишами.
             //pmpDoc.blVerhStranici = false;//Сбрасываем флаг, скрол страницы вверху.
-            let maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight)*pmpDoc.renderScale
-            pmpDoc.flickable.contentY = Math.min(maxHeight,
-                                            pmpDoc.flickable.contentY + pdfDoc.heightScroll*pmpDoc.renderScale)
 
-            if(pmpDoc.flickable.contentY === maxHeight){//Если максимум, то...
-                root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу,так как автоматически не листает
-            } else {
+            var maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight) * pmpDoc.renderScale
+            var coordinataY = pmpDoc.flickable.contentY + pdfDoc.heightScroll * pmpDoc.renderScale
+            if (coordinataY > maxHeight){//Если расчитаная координата больше максимальной, то...
+                root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу.
+            }
+            else{//Если не перескочили координаты за границы страницы, то перескакиваем на координату на шаг.
+                pmpDoc.flickable.contentY = coordinataY
                 //pmpDoc.blScrollKeyVniz = false;//Выкл. скролл клавишами, так как не будет перескока на другую стр.
             }
         }
