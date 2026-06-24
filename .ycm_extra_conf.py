@@ -57,13 +57,28 @@ flags = [
     '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtGui',
     '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtSql',
     '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtWidgets',
-    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtUiTools'
-    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuick'
-    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickControls2'
-    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickDialogs2'
-    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickEffects'
-    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickLayouts'
-    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickWidgets'
+    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtUiTools',
+    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuick',
+    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickControls2',
+    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickDialogs2',
+    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickEffects',
+    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickLayouts',
+    '-isystem', '/opt/Qt/6.6.0/gcc_64/include/QtQuickWidgets',
+
+    # Ubuntu 26.04
+    '-I/usr/include/x86_64-linux-gnu/qt6',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtCore',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtGui',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtSql',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtWidgets',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtUiTools',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtQuick',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtQuickControls2',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtQuickDialogs2',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtQuickEffects',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtQuickLayouts',
+    '-isystem', '/usr/include/x86_64-linux-gnu/qt6/QtQuickWidgets'
 ]
 
 
