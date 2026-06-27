@@ -29,7 +29,7 @@ Item {
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
-    property alias sbCurrentIndex: dcSidebar.currentIndex
+    property alias sbCurrentIndex: dcSidebar.currentIndex//Индекс открытой вкладки в боковой панели.
     property int currentResult: -1//Номер Поиска, совпадение от 0....
     //Настройки
     anchors.fill: parent
@@ -707,6 +707,9 @@ Item {
     }
     DCSidebar {
         id: dcSidebar
+        //Свойства
+        property bool isFirstOpened: false
+        //Настройки
         //пробрасываем тему/параметры
         isMobile: root.isMobile
         ntWidth: root.ntWidth
@@ -719,7 +722,11 @@ Item {
         pmpDoc: pmpDoc//Передаём объект отображения
         pdfDoc: pdfDoc//Передаём объект документа
         //чтобы внешний сигнал продолжил работать
-        onOpenedChanged: {
+        onOpenedChanged: {//Если состояние боковой панели изменилось, она открыта или закрыта, то...
+            if(!isFirstOpened){//Если панель не открывалась ни разу, то...
+                dcSidebar.fnZakladkiOpen();//Функция для фокусировки на списке закладок при первом запуске.
+                isFirstOpened = true;//Взводим флаг первого открытия боковой панели.
+            }
             root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
             if(dcSidebar.opened) rctZagruzka.visible = false//Если боковая панель открыта, скрываем Загрузку.
         }
