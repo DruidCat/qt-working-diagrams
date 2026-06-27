@@ -11,7 +11,7 @@ Item {
     //Свойства.
     property string source: ""// Свойство для установки пути к PDF
     property string password: ""//Пароль для pdf документа.
-    property real renderScale: 1//Коэффициень масштаба 1.
+    property real renderScale: 1//Коэффициент масштаба 1.
     property int currentPage : -1//Номер страницы устанавливаемый вне виджет(set).(не путать с ntStranica)
     property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
     property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
@@ -280,7 +280,7 @@ Item {
         if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
             var widthScrollbar = 0//По умолчанию равно 0
             if(pmpDoc.verticalScrollbar) widthScrollbar = pmpDoc.verticalScrollbar.width//Если есть указатель.
-            var widthRect = pmpDoc.childrenRect.width - widthScrollbar//Минус ширина Scrollbar
+            var widthRect = pmpDoc.childrenRect.width + widthScrollbar//Плюс ширина Scrollbar
             var heightRect = pmpDoc.childrenRect.height;
             if(pdfDoc.isDocVert){//Если вертикальная страница, то...
 				if((root.rotation === 0) || (root.rotation === 180))//Если поворот нулевой или 180 градусов,то
