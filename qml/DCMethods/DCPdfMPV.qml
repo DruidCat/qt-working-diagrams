@@ -68,13 +68,12 @@ Item {
         var ntStrDown = pmpDoc.currentPage + 1;
         if(dcSidebar.opened){//Если открыта боковая панель, то...
             if(dcSidebar.currentIndex === 0){//Если открыта вкладка Найдено, то...
-                //fnClickedPoiskNext()//Функция перехода к следующему номеру поиска.
                 dcSidebar.fnNaidenoNext()//Функция перехода к следующему результату в списке.
             }
             else{//Временно, чтоб работал скролл страниц
                 if(ntStrDown < pdfDoc.pageCount)
-                    //fnScrollVniz()//Функция скролла вниз страницы.
-                    root.currentPage = ntStrDown;//Листаем страницы документа.
+                    fnScrollVniz()//Функция скролла вниз страницы.
+                    //root.currentPage = ntStrDown;//Листаем страницы документа.
             }
         }
         else{//Если боковая панель не открыта, то...
@@ -85,9 +84,6 @@ Item {
     }
     function fnScrollVniz(){//Функция скролла вниз страницы.
         if(pdfDoc.isPageContentY){//Если расчитана координата начала страницы, то...
-            //pmpDoc.blScrollKeyVniz = true;//Включаем скролл клавишей вниз.
-            //pmpDoc.blScrollKey = true;//Включаем скролл клавишами.
-            //pmpDoc.blVerhStranici = false;//Сбрасываем флаг, скрол страницы вверху.
 
             var maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight) * pmpDoc.renderScale
             var coordinataY = pmpDoc.flickable.contentY + pdfDoc.heightScroll * pmpDoc.renderScale
@@ -96,7 +92,6 @@ Item {
             }
             else{//Если не перескочили координаты за границы страницы, то перескакиваем на координату на шаг.
                 pmpDoc.flickable.contentY = coordinataY
-                //pmpDoc.blScrollKeyVniz = false;//Выкл. скролл клавишами, так как не будет перескока на другую стр.
             }
         }
         else {
@@ -111,8 +106,8 @@ Item {
             }
             else{//Временно, чтоб работал скролл страниц
                 if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                    //fnScrollVverh()//Функция скролла вверх страницы.
-                    root.currentPage = ntStrUp;//Листаем страницы документа.
+                    fnScrollVverh()//Функция скролла вверх страницы.
+                    //root.currentPage = ntStrUp;//Листаем страницы документа.
             }
         }
         else{//Если боковая панель не открыта, то...
@@ -135,19 +130,6 @@ Item {
         else {
             console.log("Страница еще не перескачила на начала страницы.")
         }
-        //pmpDoc.blScrollKeyVverh = true;//Включаем скролл клавишей вверх.
-    /*
-        pmpDoc.blScrollKey = true;//Включаем скролл клавишами.
-        let minHeight = pdfDoc.pageContentY*pmpDoc.renderScale
-        pmpDoc.flickable.contentY = Math.max(minHeight,
-                                        pmpDoc.flickable.contentY - pdfDoc.heightScroll*pmpDoc.renderScale)
-        if(pmpDoc.flickable.contentY === minHeight){//Если минимум, то...
-            pmpDoc.blVerhStranici = true;//Взводим флаг, скрол страницы вверху.
-            root.currentPage = pmpDoc.currentPage - 1//Листаем на -1 страницу,так как автоматически не листает
-        } else {//Если это не начало страници, то...
-            pmpDoc.blScrollKey = false;//Выключаем скролл клавишами, так как не будет перескока на другую стр.
-        }
-    */
     }
     function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
         const cnModel = dlmPoisk.items.get(index);//Получаем объект на конкретный currentResult
@@ -474,7 +456,6 @@ Item {
     PdfMultiPageView {
         id: pmpDoc
         anchors.fill: root
-        //anchors.leftMargin: drwSidebar.position * drwSidebar.width-drwSidebar.position*root.ntCoff
         anchors.leftMargin: dcSidebar.position * dcSidebar.width - dcSidebar.position * root.ntCoff
         searchString: ""
         //Иннициализация Свойств при каждой загрузке, от сюда берутся первоначальные данные Свойств.
@@ -492,12 +473,6 @@ Item {
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
         property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
-        //property bool blVerhStranici: false//true - скролл страницы находится вверху. В НАЧАЛЕ FALSE ВСЕГДА!!!
-        //property bool blScrollKey: false//true - скролл документа клавишами.
-        property bool blScrollKeyVniz: false//true - скролл документа клавишей вниз.
-        property bool blScrollKeyVverh: false//true - скролл документа клавишей вверх.
-        property bool blScrollKeyVlevo: false//true - скролл документа клавишей влево.
-        property bool blScrollKeyVpravo: false//true - скролл документа клавишей вправо.
         readonly property int ntShagScroll: 10;//Шаг скролла клавишами документа.
         //Скрытые указатели PdfMultiPageView
         property var verticalScrollbar
@@ -571,26 +546,7 @@ Item {
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
                 fnPageContentY();//Функция высчитывает координату начала страницы по Y
-                /*
-                if(pmpDoc.blScrollKey){//Если скролл клавишами, то...
-                    if(pmpDoc.blVerhStranici){//Если флаг взведён, то...
-                        tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
-                    } else {
-                        pdfDoc.pageContentY = pdfDoc.pageContentY - cnHeight
-                    }
-                }
-                else{//Если не клавиши, то нужно первоначальное определение координаты страницы.
-                    if(pmpDoc.blVerhStranici){//Если флаг взведён, то...
-                        tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
-                    }
-                }
-                */
             }
-            //pmpDoc.blScrollKey = false;//Отключаем скролл клавишами всегда, обработка завершена.
-            //pmpDoc.blScrollKeyVniz = false;//Отключаем скролл клавиши вниз всегда, обработка завершена.
-            pmpDoc.blScrollKeyVverh = false;//Отключаем скролл клавиши ввверх всегда, обработка завершена.
-            pmpDoc.blScrollKeyVlevo = false;//Отключаем скролл клавиши влево всегда, обработка завершена.
-            pmpDoc.blScrollKeyVpravo = false;//Отключаем скролл клавиши вправо всегда, обработка завершена.
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
             if(pmpDoc.currentPageRenderingStatus === Image.Loading){//Статус рендеринга страницы ЗАГРУЗКА.
