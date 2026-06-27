@@ -116,6 +116,12 @@ Item {
             } else if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
                 fnClickedKeyVverh();//Функция нажатия клавиши вверх
                 event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_Left){//нажата "Стрелка влево",то
+                fnClickedKeyVlevo();//Функция нажатия клавиши влево
+                event.accepted = true;//Завершаем обработку эвента.
+            } else if(event.key === Qt.Key_Right){//нажата "Стрелка вправо"
+                fnClickedKeyVpravo();//Функция нажатия клавиши вправо
+                event.accepted = true;//Завершаем обработку эвента.
             } else if(event.key === Qt.Key_PageDown){//нажата "Page Down",то
                 fnClickedKeyPgDown();//Функция нажатия клавиши Page Down
                 event.accepted = true;//Завершаем обработку эвента.
@@ -189,10 +195,16 @@ Item {
         if(pdfLoader.item) pdfLoader.item.fnClickedKeyPgUp()//Вверх на одну страницу
     }
     function fnClickedKeyVniz(){//Функция нажатия клавиши вниз
-        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVniz()//Вниз на одну страницу
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVniz()//Вниз скролл страницы на шаг вниз
     }
     function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
-        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVverh()//Вверх на одну страницу
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVverh()//Вверх скролл страницы на шаг вверх
+    }
+    function fnClickedKeyVlevo(){//Функция нажатия клавиши влево
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVlevo()//Вниз скролл страницы на шаг влево
+    }
+    function fnClickedKeyVpravo(){//Функция нажатия клавиши вправо
+        if(pdfLoader.item) pdfLoader.item.fnClickedKeyVpravo()//Вверх скролл страницы на шаг право
     }
     function fnClickedKeyHome(){//Функция нажатия клавиши Home
         if(pdfLoader.item) pdfLoader.item.fnClickedKeyHome()//На первую страницу.

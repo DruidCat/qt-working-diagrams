@@ -72,30 +72,14 @@ Item {
             }
             else{//Временно, чтоб работал скролл страниц
                 if(ntStrDown < pdfDoc.pageCount)
-                    fnScrollVniz()//Функция скролла вниз страницы.
+                    pmpDoc.fnScrollVniz()//Функция скролла вниз страницы.
                     //root.currentPage = ntStrDown;//Листаем страницы документа.
             }
         }
         else{//Если боковая панель не открыта, то...
             if(ntStrDown < pdfDoc.pageCount)
-                fnScrollVniz()//Функция скролла вниз страницы.
+                pmpDoc.fnScrollVniz()//Функция скролла вниз страницы.
                 //root.currentPage = ntStrDown;//Листаем страницы документа.
-        }
-    }
-    function fnScrollVniz(){//Функция скролла вниз страницы.
-        if(pdfDoc.isPageContentY){//Если расчитана координата начала страницы, то...
-
-            var maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight) * pmpDoc.renderScale
-            var coordinataY = pmpDoc.flickable.contentY + pdfDoc.heightScroll * pmpDoc.renderScale
-            if (coordinataY > maxHeight){//Если расчитаная координата больше максимальной, то...
-                root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу.
-            }
-            else{//Если не перескочили координаты за границы страницы, то перескакиваем на координату на шаг.
-                pmpDoc.flickable.contentY = coordinataY
-            }
-        }
-        else {
-            console.log("Страница еще не перескачила на начала страницы.")
         }
     }
     function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
@@ -106,30 +90,21 @@ Item {
             }
             else{//Временно, чтоб работал скролл страниц
                 if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                    fnScrollVverh()//Функция скролла вверх страницы.
+                    pmpDoc.fnScrollVverh()//Функция скролла вверх страницы.
                     //root.currentPage = ntStrUp;//Листаем страницы документа.
             }
         }
         else{//Если боковая панель не открыта, то...
             if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-                fnScrollVverh()//Функция скролла вверх страницы.
+                pmpDoc.fnScrollVverh()//Функция скролла вверх страницы.
                 //root.currentPage = ntStrUp;//Листаем страницы документа.
         }
+    } 
+    function fnClickedKeyVlevo(){//Функция нажатия клавиши влево.
+        pmpDoc.fnScrollVlevo()//Функция скролла влево страницы
     }
-    function fnScrollVverh(){//Функция скролла вверх страницы.
-        if(pdfDoc.isPageContentY){//Если расчитана координата начала страницы, то...
-            var minHeight = pdfDoc.pageContentY * pmpDoc.renderScale//Координата верхнего края страницы.
-            var coordinataY = pmpDoc.flickable.contentY - pdfDoc.heightScroll * pmpDoc.renderScale
-            if (coordinataY < minHeight){//Если расчитаная координата меньше минимальной, то...
-                root.currentPage = pmpDoc.currentPage - 1//Листаем на -1 страницу.
-            }
-            else{//Если не перескочили координаты за границы страницы, то перескакиваем на координату на шаг.
-                pmpDoc.flickable.contentY = coordinataY
-            }
-        }
-        else {
-            console.log("Страница еще не перескачила на начала страницы.")
-        }
+    function fnClickedKeyVpravo(){//Функция нажатия клавиши вправо.
+        pmpDoc.fnScrollVpravo()//Функция скролла вправо страницы
     }
     function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
         const cnModel = dlmPoisk.items.get(index);//Получаем объект на конкретный currentResult
@@ -329,22 +304,6 @@ Item {
     function fnGoToPage(ntStranica){//Функция обрабатывающая переход на новую страницу документа.
         console.error("333: 10. Переходим на страницу: " + ntStranica);
         root.sgnProgress(91, "10/11 Переходим на страницу.");
-        /*
-        if(pmpDoc.blVerhStranici){//Если флаг взведён, то...
-            const cnWidth = pdfDoc.pagePointSize(ntStranica).width
-            const cnHeight = pdfDoc.pagePointSize(ntStranica).height
-            const cnHeightScroll = cnHeight/pmpDoc.ntShagScroll*(pmpDoc.ntShagScroll - 1)//Предпоследний скрол
-            pmpDoc.blVerhStranici = false;//скрол страницы не вверху.
-            pmpDoc.goToLocation(ntStranica,
-                                Qt.point(pmpDoc.flickable.contentX/pmpDoc.renderScale, cnHeightScroll),
-                                pmpDoc.renderScale)
-        } else{ //Если флаг не взведён, то листаем страницы в обычном режими.
-            pmpDoc.blVerhStranici = true;//скрол страницы вверху.
-            pmpDoc.goToLocation(ntStranica,
-                                Qt.point(pmpDoc.flickable.contentX/pmpDoc.renderScale, 0),
-                                pmpDoc.renderScale)
-        }
-        */
         pmpDoc.goToLocation(ntStranica, Qt.point(pmpDoc.flickable.contentX/pmpDoc.renderScale, 0),
                             pmpDoc.renderScale)
         console.error("336: 11. Старт таймера видимости.");
@@ -624,6 +583,51 @@ Item {
             }
             return null//Если ничего не найдено, возвращаем нулевой указатель.
         }
+        function fnScrollVniz(){//Функция скролла вниз страницы.
+            if(pdfDoc.isPageContentY){//Если расчитана координата начала страницы, то...
+                var maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight) * pmpDoc.renderScale
+                var coordinataY = pmpDoc.flickable.contentY + pdfDoc.heightScroll * pmpDoc.renderScale
+                if (coordinataY > maxHeight)//Если расчитаная координата больше максимальной, то...
+                    root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу.
+                else//Если не перескочили координаты за границы страницы,то перескакиваем на координату на шаг
+                    pmpDoc.flickable.contentY = coordinataY
+            }
+            else console.log("Страница еще не перескачила на начала страницы.")
+        }
+        function fnScrollVverh(){//Функция скролла вверх страницы.
+            if(pdfDoc.isPageContentY){//Если расчитана координата начала страницы, то...
+                var minHeight = pdfDoc.pageContentY * pmpDoc.renderScale//Координата верхнего края страницы.
+                var coordinataY = pmpDoc.flickable.contentY - pdfDoc.heightScroll * pmpDoc.renderScale
+                if (coordinataY < minHeight)//Если расчитаная координата меньше минимальной, то...
+                    root.currentPage = pmpDoc.currentPage - 1//Листаем на -1 страницу.
+                else//Если не перескочили координаты за границы страницы,то перескакиваем на координату на шаг
+                    pmpDoc.flickable.contentY = coordinataY
+            }
+            else console.log("Страница еще не перескачила на начала страницы.")
+        }
+        function fnScrollVlevo(){//Функция скролла влево страницы.
+            if(pdfDoc.isPageContentY){//Если расчитана координата начала страницы, то...
+                var coordinataX = pmpDoc.flickable.contentX - pdfDoc.widthScroll * pmpDoc.renderScale
+                if (coordinataX < 0)//Если расчитаная координата меньше минимальной, то...
+                    pmpDoc.flickable.contentX = 0//Минимальное значение.
+                else//Если не перескочили координаты за границы страницы,то перескакиваем на координату на шаг
+                    pmpDoc.flickable.contentX = coordinataX
+            }
+            else console.log("Страница еще не перескачила на начала страницы.")
+        }
+        function fnScrollVpravo(){//Функция скролла вправо страницы.
+            if(pdfDoc.isPageContentY){//Если расчитана координата начала страницы, то...
+                var maxWidth = pdfDoc.rlWidth * pmpDoc.renderScale;//Максимальная длина страницы
+                var coordinataX = pmpDoc.flickable.contentX + pdfDoc.widthScroll * pmpDoc.renderScale
+                if ((coordinataX+pmpDoc.childrenRect.width) > maxWidth){//Если координата больше максимальной
+                    pmpDoc.flickable.contentX=maxWidth
+                            -pmpDoc.childrenRect.width+pmpDoc.verticalScrollbar.width//Максимальное значение
+                }
+                else//Если не перескочили координаты за границы страницы,то перескакиваем на координату на шаг
+                    pmpDoc.flickable.contentX = coordinataX
+            }
+            else console.log("Страница еще не перескачила на начала страницы.")
+        }
         function fnPageContentY(){//Функция высчитывает координату начала страницы по Y
             pdfDoc.isPageContentY = false;//Начала расчёта начала координаты страницы.
             pdfDoc.cacheContentY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
@@ -634,7 +638,7 @@ Item {
             interval: 111; running: false; repeat: false
             onTriggered: {
                 let ltContentY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
-                if(pdfDoc.cacheContentY === ltContentY){//Если есть равенство, то страница перестала двигаться.
+                if(pdfDoc.cacheContentY === ltContentY){//Если есть равенство, то страница перестала двигаться
                     pdfDoc.pageContentY = ltContentY//Приравниваем координату начала страницы.
                     pdfDoc.isPageContentY = true;//Посчитана координата начала страницы.
                 }
