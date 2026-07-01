@@ -56,21 +56,25 @@ Item {
         }
         else if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
             if(event.key === Qt.Key_Equal){//Если нажата "+",то.
-                var ntScaleUp = pdfScale.value + 25;
-                if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
-                    pdfLoader.item.renderScale = ntScaleUp/100;
-                else{//Если больше максимального масштаба, то...
-                    if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения, то
-                        pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
+                if(pdfLoader.item.visible){//Если виджет видимый, то можно масштабировать.
+                    var ntScaleUp = pdfScale.value + 25;
+                    if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
+                        pdfLoader.item.renderScale = ntScaleUp/100;
+                    else{//Если больше максимального масштаба, то...
+                        if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения
+                            pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
+                    }
                 }
                 event.accepted = true;//Завершаем обработку эвента.
             } else if(event.key === Qt.Key_Minus){//Если нажат "-", то.
-                var ntScaleDown = pdfScale.value - 25;//-1 страница
-                if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
-                    pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
-                else{
-                    if(pdfScale.value !== pdfScale.from)
-                        pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем мин значение.
+                if(pdfLoader.item.visible){//Если виджет видимый, то можно масштабировать.
+                    var ntScaleDown = pdfScale.value - 25;//-1 страница
+                    if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
+                        pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
+                    else{
+                        if(pdfScale.value !== pdfScale.from)
+                            pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем мин значение.
+                    }
                 }
                 event.accepted = true;//Завершаем обработку эвента.
             } else if(event.key === Qt.Key_F){//Если нажат "F", то.

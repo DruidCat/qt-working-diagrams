@@ -257,7 +257,7 @@ Item {
         }
     }
     function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
-        pmpDoc.blScaleStart = true;//Начало масштабирования.
+        pmpDoc.isScaleStart = true;//Начало масштабирования.
         pmpDoc.goToPage(0);//Переходим на первую страницу, чтоб потом перейти на заданную страницу.
         console.error("308: 5. Начало масштабирования документа.");
         root.sgnProgress(46, "5/11 Начало масштабирования документа.");
@@ -313,7 +313,7 @@ Item {
             const doc = pmpDoc.document;//Запоминаем pdf документ.
             pmpDoc.document = null;//Выставляем нулевой документ, и тем самым сбрасываем сцену.
             pmpDoc.document = doc;//Восстанавливаем старый документ с обновлённой сценой.
-            pmpDoc.blScaleStart = false;//Окончание масштабирования, это для щипка.
+            pmpDoc.isScaleStart = false;//Окончание масштабирования, это для щипка.
             /*
             //Это очень медленный способ, даже на быстром компьютере, но без ошибок. На Android падает app
             pmpDoc.anchors.fill = undefined;//Не определен якорь.
@@ -406,7 +406,7 @@ Item {
         property bool blScale: false//true - когда в pdf документе масштабирование произошло.
         property bool blRenderScale: false//Флаг предотвращающий рекурсию root.renderScale
         property bool blScaleAuto: true//true - автоматическое масштабирование. false - ручное масштабирование
-        property bool blScaleStart: false//true - когда pdf документ изменяет масштаб.
+        property bool isScaleStart: false//true - когда pdf документ изменяет масштаб.
         property bool blPinch: false//true - когда пользователь щипком изменил масштаб.
         property bool blSize: false//true - когда pdf документ изменяет размер при масштабе виджета.
         property bool blStartWidth: true//true - пришёл сигнал об измении ширины виджета при его открытии.
@@ -472,7 +472,7 @@ Item {
         onCurrentPageChanged: {//Если страница документа изменилась, то...
             const cnStranica = pmpDoc.currentPage//Номер страницы
             if(cnStranica < 0) return//Если страница -1, выходим из обработчика, так как это ошибка.
-            if(!blScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
+            if(!pmpDoc.isScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
                 const cnWidth = pdfDoc.pagePointSize(cnStranica).width
                 const cnHeight = pdfDoc.pagePointSize(cnStranica).height
                 if((pdfDoc.rlWidth !== cnWidth) || (pdfDoc.rlHeight !== cnHeight)){
@@ -535,7 +535,7 @@ Item {
             }
         }
         onRenderScaleChanged: {//Если масштаб изменился, то...
-            if(!pmpDoc.blScaleStart){//Если не была запущена функция масштабирования fnScale(), то...
+            if(!pmpDoc.isScaleStart){//Если не была запущена функция масштабирования fnScale(), то...
                 pmpDoc.ntPinchPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
                 pmpDoc.blPinch = true;//То это увеличение масштаба пользователем через щипок
                 root.visible = false;//Невидимый виджет.
