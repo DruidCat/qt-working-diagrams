@@ -355,7 +355,7 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedNazad();//Функция нажатия кнопки Назад.
         }
-        DCKnopkaVidelit {
+        DCKnopkaVidelit{
             id: knopkaVidelit
             isVidelit: false//По умолчанию Захватить документ
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
