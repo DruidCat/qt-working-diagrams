@@ -648,6 +648,126 @@ Item {
                 }
             }
         }
+        property bool handMode: true     // постоянный режим "рука"
+        property bool spacePressed: false
+
+        Keys.onPressed: (event) => {
+            if (event.key === Qt.Key_Space) {
+                spacePressed = true
+                event.accepted = true
+            }
+        }
+
+        Keys.onReleased: (event) => {
+            if (event.key === Qt.Key_Space) {
+                spacePressed = false
+                event.accepted = true
+            }
+        }
+        MouseArea {
+            id: handDragArea
+            anchors.fill: parent
+            acceptedButtons: Qt.LeftButton
+            hoverEnabled: true
+            propagateComposedEvents: false
+
+            // Включение режима:
+            enabled: pmpDoc.handMode || pmpDoc.spacePressed
+
+            cursorShape: pressed
+                         ? Qt.ClosedHandCursor
+                         : Qt.OpenHandCursor
+
+            property real lastX
+            property real lastY
+            property real velocityX: 0
+            property real velocityY: 0
+            property real lastTime
+
+            onPressed: (mouse) => {
+                lastX = mouse.x
+                lastY = mouse.y
+                lastTime = Date.now()
+                velocityX = 0
+                velocityY = 0
+            }
+
+            onPositionChanged: (mouse) => {
+                if (!(mouse.buttons & Qt.LeftButton))
+                    return
+
+                let dx = mouse.x - lastX
+                let dy = mouse.y - lastY
+
+                let now = Date.now()
+                let dt = now - lastTime
+                if (dt > 0) {
+                    velocityX = dx / dt
+                    velocityY = dy / dt
+                }
+
+                moveContent(-dx, -dy)
+
+                lastX = mouse.x
+                lastY = mouse.y
+                lastTime = now
+            }
+
+            onReleased: {
+                startInertia()
+            }
+
+            // 🔥 Движение с ограничением границ
+            function moveContent(dx, dy) {
+
+                let flick = pmpDoc.flickable
+                if (!flick)
+                    return
+
+                let newX = flick.contentX + dx
+                let newY = flick.contentY + dy
+
+                // Ограничения
+                newX = Math.max(0, Math.min(newX,
+                       flick.contentWidth - flick.width))
+
+                newY = Math.max(0, Math.min(newY,
+                       flick.contentHeight - flick.height))
+
+                flick.contentX = newX
+                flick.contentY = newY
+            }
+
+            // 🔥 Инерция
+            Timer {
+                id: inertiaTimer
+                interval: 16
+                repeat: true
+                running: false
+
+                property real friction: 0.95
+
+                onTriggered: {
+                    handDragArea.velocityX *= friction
+                    handDragArea.velocityY *= friction
+
+                    if (Math.abs(handDragArea.velocityX) < 0.01 &&
+                        Math.abs(handDragArea.velocityY) < 0.01) {
+                        running = false
+                        return
+                    }
+
+                    handDragArea.moveContent(
+                        -handDragArea.velocityX * 16,
+                        -handDragArea.velocityY * 16
+                    )
+                }
+            }
+
+            function startInertia() {
+                inertiaTimer.running = true
+            }
+        }
     }
     Connections {//Автовыбор первого совпадения и переход
         target: pmpDoc.searchModel
