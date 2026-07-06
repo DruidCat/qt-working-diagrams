@@ -470,6 +470,8 @@ Item {
             }
         }
         onCurrentPageChanged: {//Если страница документа изменилась, то...
+            pdfDoc.isPageContentY = false//ПОНЯТЬ
+            inertiaTimer.running = false//Очень важно, чтоб не происходил перескок на 1 страницу
             const cnStranica = pmpDoc.currentPage//Номер страницы
             if(cnStranica < 0) return//Если страница -1, выходим из обработчика, так как это ошибка.
             if(!pmpDoc.isScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
@@ -669,10 +671,12 @@ Item {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton
             hoverEnabled: true
+            preventStealing: true//Очень важно, чтоб захват мышкой не сбрасывался при движении
             propagateComposedEvents: false
 
             // Включение режима:
-            enabled: pmpDoc.handMode || pmpDoc.spacePressed
+            enabled: (pmpDoc.handMode || pmpDoc.spacePressed)
+                    && pdfDoc.isPageContentY
 
             cursorShape: pressed
                          ? Qt.ClosedHandCursor
@@ -685,6 +689,13 @@ Item {
             property real lastTime
 
             onPressed: (mouse) => {
+
+                let flick = pmpDoc.flickable
+                if (flick) {
+                    flick.cancelFlick()
+                    flick.interactive = false
+                }
+
                 lastX = mouse.x
                 lastY = mouse.y
                 lastTime = Date.now()
@@ -714,32 +725,57 @@ Item {
             }
 
             onReleased: {
+
+                let flick = pmpDoc.flickable
+                if (flick)
+                    flick.interactive = true
+
                 startInertia()
             }
 
-            // 🔥 Движение с ограничением границ
+            //Функция движения с ограничением страниц
             function moveContent(dx, dy) {
-
-                let flick = pmpDoc.flickable
-                if (!flick)
+                if (!pdfDoc.isPageContentY)
                     return
 
+                let flick = pmpDoc.flickable
+                if (!flick || !pdfDoc.isPageContentY)
+                    return
+
+                // Текущее положение
                 let newX = flick.contentX + dx
                 let newY = flick.contentY + dy
 
-                // Ограничения
-                newX = Math.max(0, Math.min(newX,
-                       flick.contentWidth - flick.width))
+                // ====== ГОРИЗОНТАЛЬНОЕ ОГРАНИЧЕНИЕ ======
+                let maxWidth = pdfDoc.rlWidth * pmpDoc.renderScale
+                let viewWidth = flick.width
 
-                newY = Math.max(0, Math.min(newY,
-                       flick.contentHeight - flick.height))
+                let minX = 0
+                let maxX = Math.max(0, maxWidth - viewWidth)
+
+                newX = Math.max(minX, Math.min(newX, maxX))
+
+
+                // ====== ВЕРТИКАЛЬНОЕ ОГРАНИЧЕНИЕ ПО ТЕКУЩЕЙ СТРАНИЦЕ ======
+                let pageTop = pdfDoc.pageContentY * pmpDoc.renderScale
+                let pageBottom = (pdfDoc.pageContentY + pdfDoc.rlHeight) * pmpDoc.renderScale
+                let viewHeight = flick.height
+
+                let minY = pageTop
+                let pageHeightScaled = pdfDoc.rlHeight * pmpDoc.renderScale
+
+                let maxY
+                if (pageHeightScaled <= viewHeight)
+                    maxY = pageTop
+                else
+                    maxY = pageBottom - viewHeight
+                newY = Math.max(minY, Math.min(newY, maxY))
 
                 flick.contentX = newX
                 flick.contentY = newY
             }
 
-            // 🔥 Инерция
-            Timer {
+            Timer {//Таймер инерции.
                 id: inertiaTimer
                 interval: 16
                 repeat: true
