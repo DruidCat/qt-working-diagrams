@@ -689,8 +689,8 @@ Item {
             property real lastTime
 
             onPressed: (mouse) => {
-
                 let flick = pmpDoc.flickable
+                flick.contentY = flick.contentY//Это от микро дёрганий.(форсирует фиксацию binding)
                 if (flick) {
                     flick.cancelFlick()
                     flick.interactive = false
