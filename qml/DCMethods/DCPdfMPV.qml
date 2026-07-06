@@ -564,7 +564,7 @@ Item {
             for(let ltShag = 0; ltShag < target.children.length; ltShag++){//Цикл поиска в детях.
                 const idFlickable = target.children[ltShag]//Ищем в детях pmpDoc
                 if(idFlickable instanceof Flickable) return idFlickable
-                const cnNashel = pmpDoc.fnPoiskScrollbar(idFlickable)//Рекурсивно ищем в потомках.
+                const cnNashel = pmpDoc.fnPoiskFlickable(idFlickable)//Рекурсивно ищем в потомках.
                 if(cnNashel) return cnNashel
             }
             return null//Если ничего не найдено, возвращаем нулевой указатель.
