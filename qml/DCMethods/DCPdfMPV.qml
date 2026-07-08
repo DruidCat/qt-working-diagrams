@@ -470,8 +470,7 @@ Item {
             }
         }
         onCurrentPageChanged: {//Если страница документа изменилась, то...
-            pdfDoc.isPageContentY = false//ПОНЯТЬ
-            inertiaTimer.running = false//Очень важно, чтоб не происходил перескок на 1 страницу
+            //tmrMoveInerciya.running = false//ВАЖНО, чтоб не происходил перескок на 1 стр, стоп Таймер инерции.
             const cnStranica = pmpDoc.currentPage//Номер страницы
             if(cnStranica < 0) return//Если страница -1, выходим из обработчика, так как это ошибка.
             if(!pmpDoc.isScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
@@ -667,9 +666,9 @@ Item {
             }
         }
         MouseArea {
-            id: handDragArea
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton
+            id: maDoc
+            anchors.fill: pmpDoc
+            acceptedButtons: Qt.LeftButton//Нажатие левой кнопки мыши
             hoverEnabled: true
             preventStealing: true//Очень важно, чтоб захват мышкой не сбрасывался при движении
             propagateComposedEvents: false
@@ -682,101 +681,75 @@ Item {
                          ? Qt.ClosedHandCursor
                          : Qt.OpenHandCursor
 
-            property real lastX
-            property real lastY
-            property real velocityX: 0
-            property real velocityY: 0
-            property real lastTime
+            property real rlLastX//Последняя запомнившаяся координата X
+            property real rlLastY//Последняя запомнившаяся координата Y
+            //property real rlVelocityX: 0//Скорость движения курсора мыши по X
+            //property real rlVelocityY: 0//Скорость движения курсора мыши по Y
+            //property real rlLastTime//Последнее запомнившееся время в миллисекундах.
 
-            onPressed: (mouse) => {
-                let flick = pmpDoc.flickable
-                flick.contentY = flick.contentY//Это от микро дёрганий.(форсирует фиксацию binding)
-                if (flick) {
-                    flick.cancelFlick()
-                    flick.interactive = false
+            onPressed: (mouse) => {//Если нажата левая кнопка мыши.
+                const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
+                cnFlickable.contentY = cnFlickable.contentY//Это от микро дёрганий. Форсирует фиксацию binding
+                if (cnFlickable) {//Если указатель существует, то обращаемся к закрытым методам и свойствам.
+                    cnFlickable.cancelFlick()//Прерывает инерциальную прокрутку (flicking)
+                    cnFlickable.interactive = false//Отключаем свайпы,pinch-to-zoom,выделение,вращение и т.д.
                 }
-
-                lastX = mouse.x
-                lastY = mouse.y
-                lastTime = Date.now()
-                velocityX = 0
-                velocityY = 0
+                rlLastX = mouse.x//Запоминаем позицию мыши по X
+                rlLastY = mouse.y//Запоминаем позицию мыши по Y
+                //rlLastTime = Date.now()//Время в миллисекундах прошедшее с 01.01.1970
+                //rlVelocityX = 0//Выставляем скорость по X 0
+                //rlVelocityY = 0//Выставляем скорость по Y 0
             }
-
-            onPositionChanged: (mouse) => {
-                if (!(mouse.buttons & Qt.LeftButton))
-                    return
-
-                let dx = mouse.x - lastX
-                let dy = mouse.y - lastY
-
-                let now = Date.now()
-                let dt = now - lastTime
-                if (dt > 0) {
-                    velocityX = dx / dt
-                    velocityY = dy / dt
+            onPositionChanged: (mouse) => {//Если изменилась позиция мыши
+                if (!(mouse.buttons & Qt.LeftButton))//Если при этом нажата не левая кнопка мыши, то...
+                    return//Выходим
+                let dx = mouse.x - rlLastX//Дельта по X
+                let dy = mouse.y - rlLastY//Дельта по Y
+                /*
+                const cnTime = Date.now()//Запоминаем текущее время.
+                let dt = cnTime - rlLastTime//Считаем дельту времени, чтоб расчитать скорость движения курсора
+                if (dt > 0) {//Если дельта положительная, то...
+                    rlVelocityX = dx / dt//Считаем скорость движения курсора по X
+                    rlVelocityY = dy / dt//Считаем скорость движения курсора по Y
                 }
-
-                moveContent(-dx, -dy)
-
-                lastX = mouse.x
-                lastY = mouse.y
-                lastTime = now
+                */
+                fnMovePage(-dx, -dy)//Функция передвижения на pdf странице.
+                rlLastX = mouse.x//Запоминаем позицию мыши по X
+                rlLastY = mouse.y//Запоминаем позицию мыши по Y
+                //rlLastTime = cnTime//Запоминаем время в миллисекундах
             }
-
-            onReleased: {
-
-                let flick = pmpDoc.flickable
-                if (flick)
-                    flick.interactive = true
-
-                startInertia()
+            onReleased: {//Если отпустил правую кнопку мыши.
+                const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
+                if (cnFlickable){//Если указатель существует, то...
+                    cnFlickable.interactive = true//Включаем свайпы, pinch-to-zoom, выделение, вращение и т.д.
+                    //tmrMoveInerciya.running = true//Включаем таймер инерции, с небольшим движение страницы.
+                }
             }
-
-            //Функция движения с ограничением страниц
-            function moveContent(dx, dy) {
-                if (!pdfDoc.isPageContentY)
-                    return
-
-                let flick = pmpDoc.flickable
-                if (!flick || !pdfDoc.isPageContentY)
-                    return
-
-                // Текущее положение
-                let newX = flick.contentX + dx
-                let newY = flick.contentY + dy
-
-                // ====== ГОРИЗОНТАЛЬНОЕ ОГРАНИЧЕНИЕ ======
-                let maxWidth = pdfDoc.rlWidth * pmpDoc.renderScale
-                let viewWidth = flick.width
-
-                let minX = 0
-                let maxX = Math.max(0, maxWidth - viewWidth)
-
-                newX = Math.max(minX, Math.min(newX, maxX))
-
-
-                // ====== ВЕРТИКАЛЬНОЕ ОГРАНИЧЕНИЕ ПО ТЕКУЩЕЙ СТРАНИЦЕ ======
-                let pageTop = pdfDoc.pageContentY * pmpDoc.renderScale
-                let pageBottom = (pdfDoc.pageContentY + pdfDoc.rlHeight) * pmpDoc.renderScale
-                let viewHeight = flick.height
-
-                let minY = pageTop
-                let pageHeightScaled = pdfDoc.rlHeight * pmpDoc.renderScale
-
-                let maxY
-                if (pageHeightScaled <= viewHeight)
-                    maxY = pageTop
-                else
-                    maxY = pageBottom - viewHeight
-                newY = Math.max(minY, Math.min(newY, maxY))
-
-                flick.contentX = newX
-                flick.contentY = newY
+            function fnMovePage(dx, dy) {//Функция движения pdf с ограничением в границах страницы.
+                const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
+                if (!cnFlickable || !pdfDoc.isPageContentY)//Нет указатели или нач.коорд стр по Y не расчитана
+                    return//Выходим из функции
+                //Текущее положение куда уже переместилась мышка
+                let newX = cnFlickable.contentX + dx
+                let newY = cnFlickable.contentY + dy
+                //Горизонтальное ограничение по текущей странице
+                let minX = 0//Минимальная координата по Х
+                let maxWidth = pdfDoc.rlWidth * pmpDoc.renderScale//Максимальная ширина
+                let viewWidth = cnFlickable.width//Видимая ширина.
+                let maxX = Math.max(0, maxWidth - viewWidth)//Максимальная координата по Х
+                newX = Math.max(minX, Math.min(newX, maxX))//Координата Х с ограничениями по странице.
+                //Вертикальное ограничение по текущей странице
+                let minY = pdfDoc.pageContentY * pmpDoc.renderScale//Координата Y начала страницы
+                let viewHeight = cnFlickable.height//Видимая высота.
+                let maxY = (pdfDoc.pageContentY + pdfDoc.rlHeight) * pmpDoc.renderScale - viewHeight//Макс Y
+                newY = Math.max(minY, Math.min(newY, maxY))//Координата Y с ограничениями по странице.
+                //Выставляем расчитанные координаты с ограничениями в пределах страницы.
+                cnFlickable.contentX = newX//Выставляем координату по Х с ограничениями в пределах страницы.
+                cnFlickable.contentY = newY//Выставляем координату по Y с ограничениями в пределах страницы.
             }
-
+            /*
             Timer {//Таймер инерции.
-                id: inertiaTimer
+                id: tmrMoveInerciya
                 interval: 16
                 repeat: true
                 running: false
@@ -784,25 +757,22 @@ Item {
                 property real friction: 0.95
 
                 onTriggered: {
-                    handDragArea.velocityX *= friction
-                    handDragArea.velocityY *= friction
+                    maDoc.rlVelocityX *= friction
+                    maDoc.rlVelocityY *= friction
 
-                    if (Math.abs(handDragArea.velocityX) < 0.01 &&
-                        Math.abs(handDragArea.velocityY) < 0.01) {
+                    if (Math.abs(maDoc.rlVelocityX) < 0.01 &&
+                        Math.abs(maDoc.rlVelocityY) < 0.01) {
                         running = false
                         return
                     }
 
-                    handDragArea.moveContent(
-                        -handDragArea.velocityX * 16,
-                        -handDragArea.velocityY * 16
+                    maDoc.fnMovePage(
+                        -maDoc.rlVelocityX * 16,
+                        -maDoc.rlVelocityY * 16
                     )
                 }
             }
-
-            function startInertia() {
-                inertiaTimer.running = true
-            }
+            */
         }
     }
     Connections {//Автовыбор первого совпадения и переход
