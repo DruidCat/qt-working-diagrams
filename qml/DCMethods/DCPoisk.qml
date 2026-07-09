@@ -95,7 +95,11 @@ Item {
             anchors.left:knopkaZakrit.right
             clrKnopki: root.clrKnopki
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
-            onClicked: root.clickedVidelit();//Сигнал о нажатии на кнопку Выделить/Закрыть pdf.
+            onClicked: {
+                knopkaVidelit.isVidelit = !knopkaVidelit.isVidelit//Реверсируем кнопку
+                root.isVidelit = knopkaVidelit.isVidelit;//для изменения режима выделить/двигать.
+                root.clickedVidelit();//Сигнал о нажатии на кнопку Выделить/Двигать pdf.
+            }
         }
         DCKnopkaSidebar{//Кнопка Открытия/Закрытия боковой панели.
             id: knopkaSidebar
