@@ -226,8 +226,11 @@ Item {
         if(pskPoisk.visible) pdfLoader.item.fnClickedPoiskPrevious()//переход к предыдущему номеру поиска
     } 
     function fnClickedVidelit(){//Функция нажатия кнопки Выделить/Захватить pdf.
-        knopkaVidelit.isVidelit = !knopkaVidelit.isVidelit//Инвертируем анимацию
-        pskPoisk.isVidelit = !pskPoisk.isVidelit//Инвертируем анимацию
+        if(knopkaVidelit.visible && knopkaVidelit.enabled){//Если кнопка видна и активна, то...
+            knopkaVidelit.isVidelit = !knopkaVidelit.isVidelit//Инвертируем анимацию
+            pskPoisk.isVidelit = !pskPoisk.isVidelit//Инвертируем анимацию
+            if(pdfLoader.item) pdfLoader.item.isVidelit = knopkaVidelit.isVidelit
+        }
     }
     function fnClickedSidebar(){//Функция нажатия кнопки SideBar.
         if(pdfLoader.item) pdfLoader.item.fnClickedSidebar()//Открываем/закрываем боковую панель через функцию

@@ -22,6 +22,7 @@ Item {
     property alias rotation: pmpDoc.rotation//Поворот сцены документа.
     property alias pageRotation: pmpDoc.pageRotation//Поворот страниц документа.
     property alias straniciVisible: rctStranici.visible//Вкл/Выкл дополнительное окно с количеством страниц.
+    property bool isVidelit: false//true - режим выделения текста, false - режим движения документа мышкой.
     property int ntWidth: 1//Длина символа для боковой панели
     property int ntCoff: 8//Коэффициент для боковой панели
     property color clrTexta: "Orange"
@@ -673,14 +674,13 @@ Item {
             preventStealing: true//Очень важно, чтоб захват мышкой не сбрасывался при движении
             propagateComposedEvents: false
 
-            // Включение режима:
+            // Включение режима, когда можно захватить лкм документ и перемещать его.
             enabled: (pmpDoc.handMode || pmpDoc.spacePressed)
-                    && pdfDoc.isPageContentY
-
+                    && pdfDoc.isPageContentY && !root.isVidelit
+            //Вид курсора в зависимости нажатия или нет лкм и в зависимости режима Выделить или Перемещать.
             cursorShape: pressed
-                         ? Qt.ClosedHandCursor
-                         : Qt.OpenHandCursor
-
+                         ? (root.isVidelit ? Qt.IBeamCursor : Qt.ClosedHandCursor)
+                         : (root.isVidelit ? Qt.ArrowCursor : Qt.OpenHandCursor)
             property real rlLastX//Последняя запомнившаяся координата X
             property real rlLastY//Последняя запомнившаяся координата Y
             //property real rlVelocityX: 0//Скорость движения курсора мыши по X
