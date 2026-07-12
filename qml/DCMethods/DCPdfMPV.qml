@@ -380,6 +380,10 @@ Item {
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
             dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
+            const cnTime = Date.now()
+            console.log("Spacing", pmpDoc.fnSpacing())
+            const cnTime1 = Date.now()
+            console.log("Время", cnTime1 - cnTime)
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
@@ -432,7 +436,9 @@ Item {
             property real heightScroll: 0//Шаг скроллинга по вертикали.
             property bool isPageContentY: true;//true - посчитана координата начала страницы, для 1 стр true!
             property real pageContentY: 0//Координата начала страницы на действующей странице
+            property real lastPageContentY: 0//Координата начала страницы на прошлой странице
             property real cacheContentY: 0//Временная координата начала страницы при скролле системы на неё.
+            property real spacing: 3.5//Приблизительное расстояние между страницами.
             //Настройки
             source: root.source//Привязываем источник PDF
             password: root.password//Пароль для pdf документа.
@@ -454,7 +460,7 @@ Item {
                         if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
                             pdfDoc.isDocVert = true;//true - вертикальный документ.
                         else
-                            pdfDoc.isDocVert = false;//false - горизонтальный документ.
+                            pdfDoc.isDocVert = false;//false - горизонтальный документ. 
                     }
                     else{
                         if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
@@ -569,6 +575,23 @@ Item {
             }
             return null//Если ничего не найдено, возвращаем нулевой указатель.
         }
+        function fnSpacing(){//Расчитываю растояние (spacing)между страницами pdf документа
+            const cnFlickable = pmpDoc.flickable
+            if(!cnFlickable)
+                return 0
+            if(pdfDoc.pageCount < 2)
+                return 0
+            let totalHeight = 0
+            for (let ltShag = 0; ltShag < pdfDoc.pageCount; ltShag++){
+                totalHeight += pdfDoc.pagePointSize(ltShag).height * pmpDoc.renderScale
+            }
+            console.log("totalHeight", totalHeight)
+            let totalContent = cnFlickable.contentHeight
+            console.log("totalContent", totalContent)
+            let spacing = (totalContent - totalHeight)/(pdfDoc.pageCount - 1)
+            return spacing
+        }
+
         function fnScrollVniz(){//Функция скролла вниз страницы.
             if(pdfDoc.isPageContentY){//Если расчитана координата начала страницы, то...
                 var maxHeight = (pdfDoc.pageContentY + pdfDoc.rlHeight) * pmpDoc.renderScale
@@ -631,6 +654,7 @@ Item {
             else console.log("Страница еще не перескачила на начала страницы.")
         }
         function fnPageContentY(){//Функция высчитывает координату начала страницы по Y
+            pdfDoc.lastPageContentY = pdfDoc.pageContentY;//Приравниваем,чтоб помнить координату Y прошлой стр
             pdfDoc.isPageContentY = false;//Начала расчёта начала координаты страницы.
             pdfDoc.cacheContentY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
             tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
@@ -639,13 +663,16 @@ Item {
             id: tmrPage
             interval: 111; running: false; repeat: false
             onTriggered: {
-                let ltContentY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
-                if(pdfDoc.cacheContentY === ltContentY){//Если есть равенство, то страница перестала двигаться
-                    pdfDoc.pageContentY = ltContentY//Приравниваем координату начала страницы.
+                const cnContentY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
+                if(pdfDoc.cacheContentY === cnContentY){//Если есть равенство, то страница перестала двигаться
+                    pdfDoc.pageContentY = cnContentY//Приравниваем координату начала страницы.
                     pdfDoc.isPageContentY = true;//Посчитана координата начала страницы.
+                    console.log("Предыдущая координата Y", pdfDoc.lastPageContentY,
+                                "Действующая координата Y", pdfDoc.pageContentY,
+                                "Высота страницы", pdfDoc.rlHeight)
                 }
                 else{//Если страница в процессе анимации перескока на начальную координату страницы, то...
-                    pdfDoc.cacheContentY = ltContentY//Запоминаем промежуточную координату
+                    pdfDoc.cacheContentY = cnContentY//Запоминаем промежуточную координату
                     tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
                 }
             }
