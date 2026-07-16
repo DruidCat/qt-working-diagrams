@@ -656,6 +656,7 @@ Item {
                     pdfDoc.pagePointY = cnPointY//Приравниваем координату начала страницы.
                     pdfDoc.isPagePointY = true;//Посчитана координата начала страницы.
                     const minPointHeigt = pdfDoc.heightScroll * (pmpDoc.ntShagScroll -1)
+                    dcSpacing.fnSpacingPagePage(pdfDoc.lastPagePointY, pdfDoc.pagePointY, pdfDoc.rlHeight)
                     if(pdfDoc.pagePointY > pdfDoc.lastPagePointY){//Если страницы увеличиваются
                         if(pdfDoc.pagePointY < (pdfDoc.lastPagePointY + minPointHeigt)){
 
@@ -670,10 +671,6 @@ Item {
 
                         }
                     }
-                    console.log("Предыдущая координата Y", pdfDoc.lastPagePointY,
-                                "Действующая координата Y", pdfDoc.pagePointY,
-                                "Высота страницы", pdfDoc.rlHeight,
-                                pdfDoc.pagePointY - pdfDoc.lastPagePointY - pdfDoc.rlHeight)
                 }
                 else{//Если страница в процессе анимации перескока на начальную координату страницы, то...
                     pdfDoc.cachePointY = cnPointY//Запоминаем промежуточную координату
@@ -896,8 +893,5 @@ Item {
     }
     DCPdfSpacing {
         id: dcSpacing
-        pmpDoc: pmpDoc//Передаём объект отображения
-        pdfDoc: pdfDoc//Передаём объект документа
-        flickable: pmpDoc.flickable//Передаём указатель на Flickable
     }
 }
