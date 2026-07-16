@@ -380,7 +380,7 @@ Item {
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
             dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно! 
-            console.log("Spacing", pmpDoc.fnSpacing(pmpDoc.currentPage, pdfDoc.pagePointY))
+            dcSpacing.fnSpacingStart(pmpDoc.currentPage, pdfDoc.pagePointY)
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
@@ -434,8 +434,6 @@ Item {
             property bool isPagePointY: true;//true - посчитана координата начала страницы. Для 1 стр true!
             property real pagePointY: 0//Координата начала страницы на действующей странице
             property real lastPagePointY: 0//Координата начала страницы на прошлой странице
-            property int spacing: 3//Расстояние между страницами pdf докуммента
-            property bool isSpacing: false//true - расстояние между страницами посчитано.
             property real cachePointY: 0//Временная координата начала страницы при скролле системы на неё.
             //Настройки
             source: root.source//Привязываем источник PDF
@@ -581,20 +579,7 @@ Item {
                 if(cnNashel) return cnNashel
             }
             return null//Если ничего не найдено, возвращаем нулевой указатель.
-        }
-        function fnSpacing(nomerStranici, pointY){//Расчитываем сумму высот страниц до номера страницы.
-            console.log("принимаю стр", nomerStranici, pointY)
-            let ltSpacing = pdfDoc.spacing
-            if (nomerStranici){//Если не 0 (первая страница), то...
-                let sumHeight = 0
-                for (let ltShag = 0; ltShag < nomerStranici; ltShag++){
-                    sumHeight += pdfDoc.pagePointSize(ltShag).height
-                }
-                console.log("sum", sumHeight)
-                pdfDoc.spacing = ltSpacing = (pointY - sumHeight)/(nomerStranici+1)
-            }
-            return  ltSpacing
-        }
+        } 
         function fnScrollVniz(){//Функция скролла вниз страницы.
             if(pdfDoc.isPagePointY){//Если расчитана координата начала страницы, то...
                 var maxHeight = (pdfDoc.pagePointY + pdfDoc.rlHeight) * pmpDoc.renderScale
@@ -678,9 +663,9 @@ Item {
 
                         }
                     } else {//Если страницы уменьшаются
-                        const minPointY = pdfDoc.lastPagePointY - minPointHeigt - pdfDoc.spacing
+                        const minPointY = pdfDoc.lastPagePointY - minPointHeigt - dcSpacing.spacing
                         if(pdfDoc.pagePointY > minPointY){//Если больше минимального значения,то
-                            pdfDoc.pagePointY = pdfDoc.lastPagePointY - pdfDoc.spacing - pdfDoc.rlHeight
+                            pdfDoc.pagePointY = pdfDoc.lastPagePointY - dcSpacing.spacing - pdfDoc.rlHeight
                         } else {
 
                         }
@@ -909,7 +894,7 @@ Item {
         onClickedPoisk: root.clickedPoisk()//Сигнал о том, что открываем Поиск.
         onClickedInfo: root.clickedInfo()//Сигнал о том, что нажата кнопка Информация.
     }
-    DCSpacing {
+    DCPdfSpacing {
         id: dcSpacing
         pmpDoc: pmpDoc//Передаём объект отображения
         pdfDoc: pdfDoc//Передаём объект документа
