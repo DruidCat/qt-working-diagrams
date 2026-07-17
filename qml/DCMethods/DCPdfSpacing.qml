@@ -33,15 +33,22 @@ Item {
         }
     }
     function fnSpacingPagePage(lastPointY, pointY, heightPage){//Функция расчитывает расстояние между двумя ст
-        if(root.isSpacingStart){//Если не было запуска fnSpacingStart, то данная функция не запускается!!!
+        if(root.isSpacingStart && !root.isSpacing){//Если запускался fnSpacingStart, и не было расчёта spacing
             console.log("Предыдущая координата Y", lastPointY, "Действующая координата Y", pointY,
                         "Высота страницы", heightPage)
-            let ltSpacing//Переменная хранящая расстояние между страницами
-            if(pointY > lastPointY)//Если увелицивается страница
-                ltSpacing = pointY - lastPointY - heightPage
-            else//Если уменьшается страница
-                ltSpacing = lastPointY - pointY - heightPage
-            if ((ltSpacing > root.spacingMin) && (ltSpacing < root.spacingMax)){//Если в пределах мин и макс
+            let ltSpacing = 0//Переменная хранящая расстояние между страницами
+            let heightContent = 0//Разность координат.
+            if(pointY > lastPointY){//Если увелицивается страница
+                heightContent = pointY - lastPointY//Считаем разницу координат
+                ltSpacing = heightContent - heightPage//Считаем расстояние между страницами
+            }
+            else{//Если уменьшается страница
+                heightContent = lastPointY - pointY
+                ltSpacing =  heightContent - heightPage
+            }
+            if ((ltSpacing > root.spacingMin) //Если в пределах минимально заданого растояния
+                    && (ltSpacing < root.spacingMax)//И в пределах максимально заданного расстояния
+                    && (heightContent < (heightPage + heightPage * 0.05))){//разница коорд. меньше высоты+5%
                 root.isSpacing = true//Успешный расчёт расстояния между страницами
                 root.spacing = ltSpacing;//Расчёт правильный, приравниваем.
             }
