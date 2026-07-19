@@ -70,26 +70,26 @@ Item {
             if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
                 dcSidebar.fnNaidenoNext()//Функция перехода к следующему результату в списке.
             else//Если нет, то работает скролл страницы
-                pmpDoc.fnScrollVniz()//Функция скролла вниз страницы.
+                dcScroll.fnKeyVniz()//Функция скролла вниз страницы.
         }
         else//Если боковая панель не открыта, то...
-            pmpDoc.fnScrollVniz()//Функция скролла вниз страницы.
+            dcScroll.fnKeyVniz()//Функция скролла вниз страницы.
     }
     function fnClickedKeyVverh(){//Функция нажатия клавиши вверх
         if(dcSidebar.opened){//Если открыта боковая панель, то...
             if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
                 dcSidebar.fnNaidenoPrevious()//Функция перехода к предыдущему результату в списке.
             else//Если нет, то работает скролл страницы
-                pmpDoc.fnScrollVverh()//Функция скролла вверх страницы.
+                dcScroll.fnKeyVverh()//Функция скролла вверх страницы.
         }
         else//Если боковая панель не открыта, то...
-            pmpDoc.fnScrollVverh()//Функция скролла вверх страницы.
+            dcScroll.fnKeyVverh()//Функция скролла вверх страницы.
     } 
     function fnClickedKeyVlevo(){//Функция нажатия клавиши влево.
-        pmpDoc.fnScrollVlevo()//Функция скролла влево страницы
+        dcScroll.fnKeyVlevo()//Функция скролла влево страницы
     }
     function fnClickedKeyVpravo(){//Функция нажатия клавиши вправо.
-        pmpDoc.fnScrollVpravo()//Функция скролла вправо страницы
+        dcScroll.fnKeyVpravo()//Функция скролла вправо страницы
     }
     function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
         const cnModel = dlmPoisk.items.get(index);//Получаем объект на конкретный currentResult
@@ -380,7 +380,7 @@ Item {
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
             dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно! 
-            dcSpacing.fnSpacingStart(pmpDoc.currentPage, pdfDoc.pagePointY)
+            dcScroll.fnSpacingStart(pmpDoc.currentPage, dcScroll.pagePointY)
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
@@ -418,7 +418,9 @@ Item {
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
         property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
-        readonly property int ntShagScroll: 10;//Шаг скролла клавишами документа.
+        //Scroll мышью документа
+        property bool handMode: true//Режим "рука" активирован
+        property bool spacePressed: false//true - Мышка нажата ЛКМ, false - ЛКМ не нажата.
         //Скрытые указатели PdfMultiPageView
         property var verticalScrollbar//Недокументированный указатель на scrollbar
         property var flickable//Недокументированный указатель на flickable
@@ -429,12 +431,6 @@ Item {
             property bool isDocVert: true//true - вертикальный документ, false - горизонтальный документ.
             property real rlWidth: 0//Длина текущей страницы
             property real rlHeight: 0//Высота текущей страницы
-            property real widthScroll: 0//Шаг скроллинга по горизонтали.
-            property real heightScroll: 0//Шаг скроллинга по вертикали.
-            property bool isPagePointY: true;//true - посчитана координата начала страницы. Для 1 стр true!
-            property real pagePointY: 0//Координата начала страницы на действующей странице
-            property real lastPagePointY: 0//Координата начала страницы на прошлой странице
-            property real cachePointY: 0//Временная координата начала страницы при скролле системы на неё.
             //Настройки
             source: root.source//Привязываем источник PDF
             password: root.password//Пароль для pdf документа.
@@ -451,8 +447,7 @@ Item {
                         //Расчитываем, вертикальный или горизонтальный документ.
                         pdfDoc.rlWidth = pdfDoc.pagePointSize(root.currentPage).width//Запоминаем первую стр.
                         pdfDoc.rlHeight = pdfDoc.pagePointSize(root.currentPage).height//Запоминаем первую стр
-                        pdfDoc.heightScroll = pdfDoc.rlHeight/pmpDoc.ntShagScroll//Шар скролла по вертикали.
-                        pdfDoc.widthScroll = pdfDoc.rlWidth/pmpDoc.ntShagScroll//Шаг скролла по горизонтали
+                        dcScroll.fnSteps()//Расчёт шагов для скролла.
                         if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
                             pdfDoc.isDocVert = true;//true - вертикальный документ.
                         else
@@ -473,7 +468,6 @@ Item {
             }
         }
         onCurrentPageChanged: {//Если страница документа изменилась, то...
-            //tmrMoveInerciya.running = false//ВАЖНО, чтоб не происходил перескок на 1 стр, стоп Таймер инерции.
             const cnStranica = pmpDoc.currentPage//Номер страницы
             if(cnStranica < 0) return//Если страница -1, выходим из обработчика, так как это ошибка.
             if(!pmpDoc.isScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
@@ -482,8 +476,7 @@ Item {
                 if((pdfDoc.rlWidth !== cnWidth) || (pdfDoc.rlHeight !== cnHeight)){
                     pdfDoc.rlWidth = cnWidth
                     pdfDoc.rlHeight = cnHeight
-                    pdfDoc.heightScroll = pdfDoc.rlHeight/pmpDoc.ntShagScroll//Шаг скролла по вертикали.
-                    pdfDoc.widthScroll = pdfDoc.rlWidth/pmpDoc.ntShagScroll//Шаг скролла по горизонтали
+                    dcScroll.fnSteps()//Расчёт шагов для скролла.
                     if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
                         pdfDoc.isDocVert = true;//true - вертикальный документ.
                     else
@@ -492,7 +485,7 @@ Item {
                 }
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
-                fnPageContentY();//Функция высчитывает координату начала страницы по Y
+                dcScroll.fnPagePointY();//Функция высчитывает координату начала страницы по Y
             }
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
@@ -551,16 +544,7 @@ Item {
         Component.onCompleted: {//Когда полностью загрузился виджет PdfMultiPageView, то...
             pmpDoc.verticalScrollbar = pmpDoc.fnPoiskScrollbar(pmpDoc)//Находим указатель на вертикалScrollbar
             pmpDoc.flickable = pmpDoc.fnPoiskFlickable(pmpDoc)//Находим указатель на Flickable
-        }
-        Connections {
-            target: pmpDoc.flickable
-            function onMovementStarted(){//Если скролл документа колёсиком мыши начался
-                console.log("Движение колёсиком мыши началось")
-            }
-            function onMovementEnded() {//Если скролл документа колёсиком мыши закончился.
-                console.log("Движение колёсиком мыши закончилось")
-            }
-        }
+        } 
         function fnPoiskScrollbar(target){//Функция поиска Вертикального Scrolbar в детях PdfMultiPageView.
             for(let ltShag = 0; ltShag < target.children.length; ltShag++){//Цикл поиска в детях.
                 const idScrollbar = target.children[ltShag]//Ищем в детях pmpDoc
@@ -580,114 +564,12 @@ Item {
             }
             return null//Если ничего не найдено, возвращаем нулевой указатель.
         } 
-        function fnScrollVniz(){//Функция скролла вниз страницы.
-            if(pdfDoc.isPagePointY){//Если расчитана координата начала страницы, то...
-                var maxHeight = (pdfDoc.pagePointY + pdfDoc.rlHeight) * pmpDoc.renderScale
-                var coordinataY = pmpDoc.flickable.contentY + pdfDoc.heightScroll * pmpDoc.renderScale
-                if((pmpDoc.currentPage+1) === pdfDoc.pageCount){//Это единственная или последняя страница, то?
-                    if ((coordinataY+pmpDoc.childrenRect.height) > maxHeight)//Если координата больше макс,то
-                        pmpDoc.flickable.contentY=maxHeight-pmpDoc.childrenRect.height//Максимальное значение
-                    else//Если это не конец документа, то...
-                        pmpDoc.flickable.contentY = coordinataY//Листаем документ.
-                }
-                else{
-                    if (coordinataY > maxHeight)//Если расчитаная координата больше максимальной, то...
-                        root.currentPage = pmpDoc.currentPage + 1//Листаем на +1 страницу.
-                    else//Если не перескочили координаты за границы страницы,то перескакиваем на координату на шаг
-                        pmpDoc.flickable.contentY = coordinataY//Листаем документ.
-                }
-            }
-            else console.log("Страница еще не перескачила на начала страницы.")
-        }
-        function fnScrollVverh(){//Функция скролла вверх страницы.
-            if(pdfDoc.isPagePointY){//Если расчитана координата начала страницы, то...
-                var minHeight = pdfDoc.pagePointY * pmpDoc.renderScale//Координата верхнего края страницы.
-                var coordinataY = pmpDoc.flickable.contentY - pdfDoc.heightScroll * pmpDoc.renderScale
-                if(pmpDoc.currentPage < 1){//Если это единственная или первая (0) страница, то?
-                    if (coordinataY < minHeight)//Если расчитаная координата меньше минимальной, то...
-                        pmpDoc.flickable.contentY = minHeight//Делаем нулевую координату, не двигаем документ
-                    else//Если нет, то...
-                        pmpDoc.flickable.contentY = coordinataY//двигаем документ вверх
-                }
-                else{
-                    if (coordinataY < minHeight)//Если расчитаная координата меньше минимальной, то...
-                        root.currentPage = pmpDoc.currentPage - 1//Листаем на -1 страницу.
-                    else//Если не перескочили координаты за границы страницы,то перескакиваем на координату на шаг
-                        pmpDoc.flickable.contentY = coordinataY//двигаем документ вверх
-                }
-            }
-            else console.log("Страница еще не перескачила на начала страницы.")
-        }
-        function fnScrollVlevo(){//Функция скролла влево страницы.
-            if(pdfDoc.isPagePointY){//Если расчитана координата начала страницы, то...
-                var coordinataX = pmpDoc.flickable.contentX - pdfDoc.widthScroll * pmpDoc.renderScale
-                if (coordinataX < 0)//Если расчитаная координата меньше минимальной, то...
-                    pmpDoc.flickable.contentX = 0//Минимальное значение.
-                else//Если не перескочили координаты за границы страницы,то перескакиваем на координату на шаг
-                    pmpDoc.flickable.contentX = coordinataX
-            }
-            else console.log("Страница еще не перескачила на начала страницы.")
-        }
-        function fnScrollVpravo(){//Функция скролла вправо страницы.
-            if(pdfDoc.isPagePointY){//Если расчитана координата начала страницы, то...
-                var maxWidth = pdfDoc.rlWidth * pmpDoc.renderScale;//Максимальная длина страницы
-                var coordinataX = pmpDoc.flickable.contentX + pdfDoc.widthScroll * pmpDoc.renderScale
-                if ((coordinataX+pmpDoc.childrenRect.width) > maxWidth){//Если координата больше максимальной
-                    pmpDoc.flickable.contentX=maxWidth
-                            -pmpDoc.childrenRect.width+pmpDoc.verticalScrollbar.width//Максимальное значение
-                }
-                else//Если не перескочили координаты за границы страницы,то перескакиваем на координату на шаг
-                    pmpDoc.flickable.contentX = coordinataX
-            }
-            else console.log("Страница еще не перескачила на начала страницы.")
-        }
-        function fnPageContentY(){//Функция высчитывает координату начала страницы по Y
-            pdfDoc.lastPagePointY = pdfDoc.pagePointY;//Приравниваем,чтоб помнить координату Y прошлой стр
-            pdfDoc.isPagePointY = false;//Начала расчёта начала координаты страницы.
-            pdfDoc.cachePointY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
-            tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
-        }
-        Timer {//Таймер необходим, чтоб высчитать координату начала страницы по Y
-            id: tmrPage
-            interval: 111; running: false; repeat: false
-            onTriggered: {
-                const cnPointY = pmpDoc.flickable.contentY/pmpDoc.renderScale//координаты начала страницы
-                if(pdfDoc.cachePointY === cnPointY){//Если есть равенство, то страница перестала двигаться
-                    pdfDoc.pagePointY = cnPointY//Приравниваем координату начала страницы.
-                    pdfDoc.isPagePointY = true;//Посчитана координата начала страницы.
-                    const minPointHeigt = pdfDoc.heightScroll * (pmpDoc.ntShagScroll -1)
-                    dcSpacing.fnSpacingPagePage(pdfDoc.lastPagePointY, pdfDoc.pagePointY, pdfDoc.rlHeight)
-                    if(pdfDoc.pagePointY > pdfDoc.lastPagePointY){//Если страницы увеличиваются
-                        if(pdfDoc.pagePointY < (pdfDoc.lastPagePointY + minPointHeigt)){
-
-                        } else {
-
-                        }
-                    } else {//Если страницы уменьшаются
-                        const minPointY = pdfDoc.lastPagePointY - minPointHeigt - dcSpacing.spacing
-                        if(pdfDoc.pagePointY > minPointY){//Если больше минимального значения,то
-                            pdfDoc.pagePointY = pdfDoc.lastPagePointY - dcSpacing.spacing - pdfDoc.rlHeight
-                        } else {
-
-                        }
-                    }
-                }
-                else{//Если страница в процессе анимации перескока на начальную координату страницы, то...
-                    pdfDoc.cachePointY = cnPointY//Запоминаем промежуточную координату
-                    tmrPage.running = true//Запускаем таймер, запоимним стартовую координату Y страницы
-                }
-            }
-        }
-        property bool handMode: true     // постоянный режим "рука"
-        property bool spacePressed: false
-
         Keys.onPressed: (event) => {
             if (event.key === Qt.Key_Space) {
                 spacePressed = true
                 event.accepted = true
             }
         }
-
         Keys.onReleased: (event) => {
             if (event.key === Qt.Key_Space) {
                 spacePressed = false
@@ -704,16 +586,13 @@ Item {
 
             // Включение режима, когда можно захватить лкм документ и перемещать его.
             enabled: (pmpDoc.handMode || pmpDoc.spacePressed)
-                    && pdfDoc.isPagePointY && !root.isVidelit
+                    && dcScroll.isPagePointY && !root.isVidelit
             //Вид курсора в зависимости нажатия или нет лкм и в зависимости режима Выделить или Перемещать.
             cursorShape: pressed
                          ? (root.isVidelit ? Qt.IBeamCursor : Qt.ClosedHandCursor)
                          : (root.isVidelit ? Qt.ArrowCursor : Qt.OpenHandCursor)
             property real rlLastX//Последняя запомнившаяся координата X
             property real rlLastY//Последняя запомнившаяся координата Y
-            //property real rlVelocityX: 0//Скорость движения курсора мыши по X
-            //property real rlVelocityY: 0//Скорость движения курсора мыши по Y
-            //property real rlLastTime//Последнее запомнившееся время в миллисекундах.
 
             onPressed: (mouse) => {//Если нажата левая кнопка мыши.
                 const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
@@ -724,83 +603,22 @@ Item {
                 }
                 rlLastX = mouse.x//Запоминаем позицию мыши по X
                 rlLastY = mouse.y//Запоминаем позицию мыши по Y
-                //rlLastTime = Date.now()//Время в миллисекундах прошедшее с 01.01.1970
-                //rlVelocityX = 0//Выставляем скорость по X 0
-                //rlVelocityY = 0//Выставляем скорость по Y 0
             }
             onPositionChanged: (mouse) => {//Если изменилась позиция мыши
                 if (!(mouse.buttons & Qt.LeftButton))//Если при этом нажата не левая кнопка мыши, то...
                     return//Выходим
                 let dx = mouse.x - rlLastX//Дельта по X
                 let dy = mouse.y - rlLastY//Дельта по Y
-                /*
-                const cnTime = Date.now()//Запоминаем текущее время.
-                let dt = cnTime - rlLastTime//Считаем дельту времени, чтоб расчитать скорость движения курсора
-                if (dt > 0) {//Если дельта положительная, то...
-                    rlVelocityX = dx / dt//Считаем скорость движения курсора по X
-                    rlVelocityY = dy / dt//Считаем скорость движения курсора по Y
-                }
-                */
-                fnMovePage(-dx, -dy)//Функция передвижения на pdf странице.
+                dcScroll.fnPageMove(-dx, -dy)//Функция передвижения на pdf странице.
                 rlLastX = mouse.x//Запоминаем позицию мыши по X
                 rlLastY = mouse.y//Запоминаем позицию мыши по Y
-                //rlLastTime = cnTime//Запоминаем время в миллисекундах
             }
             onReleased: {//Если отпустил правую кнопку мыши.
                 const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
                 if (cnFlickable){//Если указатель существует, то...
                     cnFlickable.interactive = true//Включаем свайпы, pinch-to-zoom, выделение, вращение и т.д.
-                    //tmrMoveInerciya.running = true//Включаем таймер инерции, с небольшим движение страницы.
                 }
             }
-            function fnMovePage(dx, dy) {//Функция движения pdf с ограничением в границах страницы.
-                const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
-                if (!cnFlickable || !pdfDoc.isPagePointY)//Нет указатели или нач.коорд стр по Y не расчитана
-                    return//Выходим из функции
-                //Текущее положение куда уже переместилась мышка
-                let newX = cnFlickable.contentX + dx
-                let newY = cnFlickable.contentY + dy
-                //Горизонтальное ограничение по текущей странице
-                let minX = 0//Минимальная координата по Х
-                let maxWidth = pdfDoc.rlWidth * pmpDoc.renderScale//Максимальная ширина
-                let viewWidth = cnFlickable.width//Видимая ширина.
-                let maxX = Math.max(0, maxWidth - viewWidth)//Максимальная координата по Х
-                newX = Math.max(minX, Math.min(newX, maxX))//Координата Х с ограничениями по странице.
-                //Вертикальное ограничение по текущей странице
-                let minY = pdfDoc.pagePointY * pmpDoc.renderScale//Координата Y начала страницы
-                let viewHeight = cnFlickable.height//Видимая высота.
-                let maxY = (pdfDoc.pagePointY + pdfDoc.rlHeight) * pmpDoc.renderScale - viewHeight//Макс Y
-                newY = Math.max(minY, Math.min(newY, maxY))//Координата Y с ограничениями по странице.
-                //Выставляем расчитанные координаты с ограничениями в пределах страницы.
-                cnFlickable.contentX = newX//Выставляем координату по Х с ограничениями в пределах страницы.
-                cnFlickable.contentY = newY//Выставляем координату по Y с ограничениями в пределах страницы.
-            }
-            /*
-            Timer {//Таймер инерции.
-                id: tmrMoveInerciya
-                interval: 16
-                repeat: true
-                running: false
-
-                property real friction: 0.95
-
-                onTriggered: {
-                    maDoc.rlVelocityX *= friction
-                    maDoc.rlVelocityY *= friction
-
-                    if (Math.abs(maDoc.rlVelocityX) < 0.01 &&
-                        Math.abs(maDoc.rlVelocityY) < 0.01) {
-                        running = false
-                        return
-                    }
-
-                    maDoc.fnMovePage(
-                        -maDoc.rlVelocityX * 16,
-                        -maDoc.rlVelocityY * 16
-                    )
-                }
-            }
-            */
         }
     }
     Connections {//Автовыбор первого совпадения и переход
@@ -891,7 +709,23 @@ Item {
         onClickedPoisk: root.clickedPoisk()//Сигнал о том, что открываем Поиск.
         onClickedInfo: root.clickedInfo()//Сигнал о том, что нажата кнопка Информация.
     }
-    DCPdfSpacing {
-        id: dcSpacing
+    DCPdfScroll {//Обработка и расчёт scroll документа
+        id: dcScroll
+        //Настройки
+        pdfDoc: pdfDoc//Передаём объект документа
+        flickable: pmpDoc.flickable
+        currentPage: pmpDoc.currentPage//Открытая страницы в mentorPDF.
+        pageCount: pdfDoc.pageCount//Количество страниц в документе.
+        renderScale: pmpDoc.renderScale//Масштаб pdf документа
+        pointPageHeight: pdfDoc.rlHeight//Действительная высота страницы.
+        pointPageWidth: pdfDoc.rlWidth//Действительная ширина страницы.
+        pointRectHeight: pmpDoc.childrenRect.height//Действительная высота прямоугольника сцены
+        pointRectWidth: pmpDoc.childrenRect.width//Действительная ширина прямоугольника сцены
+        pointScrollBarWidth: pmpDoc.verticalScrollbar.width//Высота самого scrollbar
+        //Функции.
+        onCurrentPageChanged: {//Если страница поменялась в виджете, то...
+            if(isCurrentPage)//Если флаг взведём (от бесконечного вызова защита), то...
+                root.currentPage = currentPage//Перелистываем страницу в mentorPDF
+        }
     }
 }

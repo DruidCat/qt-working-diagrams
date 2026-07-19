@@ -9,7 +9,7 @@ DCMenu 1.0 DCMenu.qml
 DCPassword 1.0 DCPassword.qml
 DCPathView 1.0 DCPathView.qml
 DCPdfMPV 1.0 DCPdfMPV.qml
-DCPdfSpacing 1.0 DCPdfSpacing.qml
+DCPdfScroll 1.0 DCPdfScroll.qml
 DCPoisk 1.0 DCPoisk.qml
 DCProgress 1.0 DCProgress.qml
 DCScale 1.0 DCScale.qml
