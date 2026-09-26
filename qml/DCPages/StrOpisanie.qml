@@ -189,8 +189,8 @@ Item {
 		clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
         DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
 			id: txdZona
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.fill: tmZona
 			readOnly: true//Запрещено редактировать текст
             textEdit.selectByMouse: !root.isMobile//Запрещаем выделять текст в Android из-за свайпа. На ПК нет
             radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property

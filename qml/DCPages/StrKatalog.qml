@@ -328,31 +328,26 @@ Item {
             opacityKnopki: 0.8
             onClicked: fnClickedUstKatalog();//Функция задания пути, где создаётся каталога документов.
         }
-        Rectangle {
-            id: rctTextEdit
+        DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
+            id: txdZona
+            //Свойства
+            property string strCopy: ""
+            //Настройки
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.top: knopkaUstKatalog.bottom; anchors.bottom: tmZona.bottom
             anchors.left: tmZona.left; anchors.right: tmZona.right
-            border.color: root.clrTexta; border.width: 3
-            color: "transparent"
-            clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
-            DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
-                id: txdZona
-                //Свойства
-                property string strCopy: ""
-                //Настройки
-                ntWidth: root.ntWidth; ntCoff: root.ntCoff
-                readOnly: true//Запрещено редактировать текст
-                scrollAuto: true//Автоматически скроллим текст вверх, если он занимает всю область видимости.
-                textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
-                pixelSize: root.ntWidth/3*root.ntCoff//размер шрифта текста в три раза меньше.
-                radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
-                clrFona: "transparent"//Цвет фона рабочей области
-                clrTexta: root.clrTexta//Цвет текста
-                //Функции
-                onPressed: fnClickedEscape();//сворачиваем всё.
-            }
+            readOnly: true//Запрещено редактировать текст
+            scrollAuto: true//Автоматически скроллим текст вверх, если он занимает всю область видимости.
+            textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
+            pixelSize: root.ntWidth/3*root.ntCoff//размер шрифта текста в три раза меньше.
+            radius: root.ntCoff/4//Радиус возьмём из настроек элемента qml через property
+            clrFona: "transparent"//Цвет фона рабочей области
+            clrTexta: root.clrTexta//Цвет текста
+            clrBorder: root.clrTexta//Цвет бардюра при редактировании текста.
+            isBorder: true//true - Показываем бордюр области текста.
+            //Функции
+            onPressed: fnClickedEscape();//сворачиваем всё.
         }
-
         DCMenu {
             id: menuSpisok 
             visible: false//Невидимое меню.

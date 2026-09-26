@@ -96,8 +96,8 @@ Item {
         clip: true//Обрезаем всё что выходит за пределы этой области. Это для листания нужно.
         DCTextEdit {//Модуль просмотра текста, прокрутки и редактирования.
             id: txdZona
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.fill: tmZona//Чтоб работал anchors.rightMargin, и не только.
             anchors.rightMargin: drwSidebar.position * drwSidebar.width - drwSidebar.position * root.ntCoff
             readOnly: true//Запрещено редактировать текст
             textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
@@ -109,6 +109,7 @@ Item {
             clrTexta: root.clrTexta//Цвет текста
             clrPolzunka: root.clrPolzunka//Цвет ползунка scrollbar, когда он не активен
             clrBorder: root.clrTexta//Цвет бардюра при редактировании текста.
+            isBorder: false//true - Показываем бордюр области текста.
 			italic: true//Текст курсивом.
 		}
     }
