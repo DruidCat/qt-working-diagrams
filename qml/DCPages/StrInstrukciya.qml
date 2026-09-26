@@ -83,10 +83,10 @@ Item {
         }
         DCKnopkaInfo {
             id: knopkaInfo
-            opened: false//По умолчанию, бордюр с радиусом
+            isInvers: false//По умолчанию, бордюр с радиусом
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.right: tmZagolovok.right
-            clrKnopki: root.clrTexta
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
             onClicked: fnClickedSidebar();//Функция нажатия кнопки SideBar.
         }
@@ -135,7 +135,7 @@ Item {
         interactive: true//false -  панель не реагирует на свайпы.
         //Функции
         onPositionChanged: {//Если позиция изменяется у боковой панели, то...
-            knopkaInfo.opened = position//Передаём сигнал кнопке,для отображения нужной позиции инверсивно
+            knopkaInfo.isInvers = position//Передаём сигнал кнопке,для отображения нужной позиции инверсивно
         }
         onOpened: {//Если боковая панель открылась, то...
             lsvInstrukcii.forceActiveFocus()//Делаем фокус на списке, чтоб листался список.

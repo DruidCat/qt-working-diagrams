@@ -220,7 +220,7 @@ Item {
 			visible: true
 			anchors.verticalCenter: tmZagolovok.verticalCenter
 			anchors.right: tmZagolovok.right
-			clrKnopki: root.clrTexta
+            clrKnopki: root.clrTexta; clrFona: root.clrFona
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff
             tapWidth: tapHeight*root.tapZagolovokLevi
             onClicked: fnClickedInfo();//Функция нажатия на кнопку Информации.
