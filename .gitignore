@@ -8,6 +8,9 @@
 /build/workingdata/
 /build/workinglogs/
 /build/ru.Mentor
+
+# Release-каталог сборки (клавиша F8 в build/.vimrc)
+/build-release/
 /build/.qt/
 /build/.qt_plugins/
 /build/Android_Qt_6_8_2_Clang_arm64_v8a-Debug/
