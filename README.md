@@ -1,42 +1,30 @@
 ﻿# Mentor (Ментор)
 
-Keep all your working documents in one place. Find the wiring diagram or manual you need in seconds,
-not after hours of digging through folders!
-
-## Description
-
-Mentor is a desktop GUI application: a document catalog editor with a built-in document viewer.
-Its main goal is to build a catalog of the documents you need at work, here and now. All documents live
-in a single SQL database, so the whole catalog can be moved to any computer or phone in one step.
+Desktop application: a catalog editor for working documents with a built-in viewer.
+UI: QML, application code: C++, data storage: SQLite.
 
 Application structure: Menu -> (Title + List) -> Elements -> (Data + Viewer) -> File Manager.
 
-## Why Mentor is useful
+## Features
 
-- **Order instead of chaos.** Sites, assemblies and documents are neatly shelved: List -> Elements -> Data.
-- **Fast search.** Search across the catalog, and full-text search inside PDF documents (Ctrl+F, F3 — next).
-- **Works offline.** Everything is stored in a local SQLite database — no internet needed,
-  your data is always with you.
-- **Two work modes.** ADMINISTRATOR creates and deletes document catalogs; WORKER only views them —
-  it is easy to explain to a newcomer what they may and may not do.
-- **Clear from the first launch.** Hints in the Toolbar at every step, hotkeys for all standard operations,
-  adjustable font size for any screen — from a desktop monitor to a phone.
-- **PDF viewer out of the box.** Open, page through, zoom (pinch-to-zoom on tablets), rotate.
-- **One database for everything.** Catalog, documents and title data share a single base — backup and transfer
-  in a single step.
-
-## Requirements
-
-- Qt 6 (components: Core, Quick, QuickControls2, Sql, Pdf, PdfQuick)
-- A C++17-capable compiler
-- CMake 3.14+ or Qt Creator (qmake build also supported)
-- SQLite (ships with Qt)
+- Single storage: the catalog, documents and title data live in one SQL database (SQLite).
+  Backup and transfer of the catalog is done by copying a single folder.
+- Works offline, no internet connection required.
+- Catalog search; full-text search inside PDF documents (Ctrl+F, F3 — next match).
+- PDF viewer: open, paging, zooming (including pinch-to-zoom on tablets), rotation.
+- Two work modes: ADMINISTRATOR (create and delete) and WORKER (view only).
+  The mode flag (isAdmin) is set at project compile time.
+- Hints in the Toolbar, hotkeys for standard operations, adjustable font size.
 
 ## Installation and build
 
 ### Ubuntu 22.04+
 
-1. **Install Qt6 and dependencies:**
+Requirements:
+- Qt 6, components: Core, Quick, QuickControls2, Sql (SQLite driver), Pdf, PdfQuick;
+- a C++17-capable compiler, CMake 3.14+, git.
+
+1. Install Qt 6 and dependencies:
 
 ```bash
 sudo apt update
@@ -47,21 +35,21 @@ sudo apt install -y build-essential cmake git \
   qt6-pdf-dev qml6-module-qtquick-pdf libqt6sql6-sqlite
 ```
 
-2. **Clone the repository:**
+2. Clone the repository:
 
 ```bash
 git clone https://github.com/DruidCat/qt-working-diagrams.git
 cd qt-working-diagrams
 ```
 
-3. **Build the project:**
+3. Build the project (qmake build is also supported, file `ru.Mentor.pro`):
 
 ```bash
 cmake -S . -B build
 cmake --build build -j$(nproc)
 ```
 
-4. **Run the application:**
+4. Run the application:
 
 ```bash
 ./build/ru.Mentor
@@ -69,33 +57,41 @@ cmake --build build -j$(nproc)
 
 ### Windows 10, 11
 
-1. Install Qt6 from the official site: https://www.qt.io/download (Qt Online Installer).
-   When choosing components, tick Qt 6.x, Quick Controls 2, QML, SQL (SQLite driver) and Qt PDF.
-2. Open the project in Qt Creator: `CMakeLists.txt` or `ru.Mentor.pro` -> Configure -> Build.
-3. Run the built `ru.Mentor.exe` from the build folder.
+Requirements:
+- Qt 6 from the Qt Online Installer (https://www.qt.io/download).
+  Components: Qt 6.x — Core, Quick, Quick Controls 2, SQL (SQLite driver), Qt PDF.
+  A C++17 compiler (MSVC or MinGW from the Qt installer).
+- CMake 3.14+ or Qt Creator (shipped with Qt).
+
+Build:
+1. Open the project in Qt Creator: `CMakeLists.txt` or `ru.Mentor.pro` -> Configure -> Build.
+2. Run `ru.Mentor.exe` from the build folder.
 
 ### AltLinux
 
-The Qt6 package list for building from the AltLinux repository is in [Qt6_AltLinux.txt](Qt6_AltLinux.txt),
-Qt5.15 notes are in [Qt5_AltLinux.txt](Qt5_AltLinux.txt).
+Requirements: Qt 6 packages from the AltLinux repository, the list is in
+[Qt6_AltLinux.txt](Qt6_AltLinux.txt). Qt 5.15 notes are in [Qt5_AltLinux.txt](Qt5_AltLinux.txt).
+
+Build: the same CMake commands as in the Ubuntu section.
 
 ### Android
 
-The project builds for Android from Qt Creator (the [android](android) folder holds the manifest and
-resources).
+Build from Qt Creator using the Android kit.
+The manifest and resources are in the [android](android) folder.
 
 ## Usage
 
-On start, the app opens a document catalog following the scheme Menu -> List -> Elements -> Data -> Viewer.
+On start, the application opens the document catalog following the scheme
+Menu -> List -> Elements -> Data -> Viewer.
 
-- **ADMINISTRATOR** creates Lists and Elements, attaches documents via the File Manager, keeps a journal,
-  picks the viewer. The mode flag (isAdmin) is set at project compile time.
-- **WORKER** only browses catalogs and documents — no create or delete.
-- Side panel (bookmarks, instructions) — F1. Search inside an open PDF — Ctrl+F, next match — F3.
-- Font size adapts to the screen; every standard operation has a hotkey.
+- ADMINISTRATOR: creates Lists and Elements, attaches documents via the File Manager,
+  keeps a journal, picks the viewer.
+- WORKER: browses catalogs and documents only, no create or delete.
+- F1 — side panel (bookmarks, instructions). Ctrl+F — search inside an open PDF, F3 — next match.
+- Font size adapts to the screen; hotkeys are defined for standard operations.
 
-First-run documents are read from the `workingdata` folder next to the executable — the database and
-the documents are stored in one folder.
+On first run the application reads documents from the `workingdata` folder next to the
+executable; the database and the documents are stored in one folder.
 
 ## Project structure
 
@@ -140,10 +136,9 @@ The project is compatible with:
 
 ## Tasks and bugs
 
-All tasks, plans and bugs are tracked in [GitHub Issues](https://github.com/DruidCat/qt-working-
-diagrams/issues).
-Found a bug or want a feature? Open an issue! Code fixes close a task with a `Closes #N` line
-in the commit message.
+All tasks, plans and bugs are tracked in
+[GitHub Issues](https://github.com/DruidCat/qt-working-diagrams/issues).
+Code fixes close a task with a `Closes #N` line in the commit message.
 
 ## Terms of use and participation
 
