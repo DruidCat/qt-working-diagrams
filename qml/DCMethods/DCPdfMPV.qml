@@ -290,8 +290,9 @@ Item {
 	function fnGoToPage(ntStranica){//Функция обрабатывающая переход на новую страницу документа.
 		console.error("333: 10. Переходим на страницу: " + ntStranica);
 		root.sgnProgress(91, "10/11 Переходим на страницу.");
-		pmpDoc.goToLocation(ntStranica, Qt.point(pmpDoc.flickable.contentX/pmpDoc.renderScale, 0),
-							pmpDoc.renderScale)
+		const cnFl = pmpDoc.flickable
+    	const cnX = cnFl ? cnFl.contentX / pmpDoc.renderScale : 0//Без flickable прыг к левому краю, не падаем
+		pmpDoc.goToLocation(ntStranica, Qt.point(cnX, 0), pmpDoc.renderScale)
 		console.error("336: 11. Старт таймера видимости.");
 		root.sgnProgress(100, "11/11 Старт таймера отображения.");
 		tmrVisible.running = true;//Запускаем таймер отображения документа.
@@ -532,6 +533,7 @@ Item {
         Component.onCompleted: {//Когда полностью загрузился виджет PdfMultiPageView, то...
             pmpDoc.verticalScrollbar = pmpDoc.fnPoiskScrollbar(pmpDoc)//Находим указатель на вертикалScrollbar
             pmpDoc.flickable = pmpDoc.fnPoiskFlickable(pmpDoc)//Находим указатель на Flickable
+			pmpDoc.fnProverkaFlickable()//Предупреждаем, если устройство PdfMultiPageView не то, без flickable
         } 
         function fnPoiskScrollbar(target){//Функция поиска Вертикального Scrolbar в детях PdfMultiPageView.
             for(let ltShag = 0; ltShag < target.children.length; ltShag++){//Цикл поиска в детях.
@@ -552,6 +554,22 @@ Item {
             }
             return null//Если ничего не найдено, возвращаем нулевой указатель.
         } 
+		function fnProverkaFlickable(){//Проверка недокументированных внутренностей PdfMultiPageView.
+			const cnFl = pmpDoc.flickable
+			if(!cnFl){
+				console.warn("DCPdfMPV: внутри PdfMultiPageView не найден Flickable. Не будут работать: " + 
+									"клавиши и «рука» (DCPdfScroll), поля под полосы прокрутки, forceLayout.")
+				return
+			}
+			if(typeof cnFl.itemAtCell !== "function")//Метод TableView, на нём держится DCPdfScroll.pageRect()
+				console.warn("DCPdfMPV: у flickable нет itemAtCell(), это не TableView:", cnFl,
+								"Скролл по страницам клавишами и «рукой» работать не будет.")
+			if(typeof cnFl.forceLayout !== "function")//Метод TableView, им пересчитываем сцену после масштаба
+				console.warn("DCPdfMPV: у flickable нет forceLayout(). " + 
+								"Сброс сцены пойдёт через document = null.")
+			if(!pmpDoc.verticalScrollbar)
+				console.warn("DCPdfMPV: вертикальный ScrollBar внутри PdfMultiPageView не найден.")
+		}
         Keys.onPressed: (event) => {
             if (event.key === Qt.Key_Space) {
                 spacePressed = true
