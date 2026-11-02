@@ -295,15 +295,16 @@ Item {
         tmrResetScene.running = true;//запускаем таймер, сброса сцены.
     }
     function fnGoToPage(ntStranica){//Функция обрабатывающая переход на новую страницу документа.
-        root.fnLog(10, "Переходим на страницу: " + ntStranica);
-        root.sgnProgress(91, "10/11 Переходим на страницу.");
-        const cnFl = pmpDoc.flickable
-        const cnX = cnFl ? cnFl.contentX / pmpDoc.renderScale : 0//Без flickable прыг к левому краю, не падаем
-        pmpDoc.goToLocation(ntStranica, Qt.point(cnX, 0), pmpDoc.renderScale)
-        root.fnLog(11, "Старт таймера видимости.");
-        root.sgnProgress(100, "11/11 Старт таймера отображения.");
-        tmrVisible.running = true;//Запускаем таймер отображения документа.
-    }
+		root.fnLog(10, "Переходим на страницу: " + ntStranica);
+		root.sgnProgress(91, "10/11 Переходим на страницу.");
+		const cnFl = pmpDoc.flickable
+		//После поворота старый contentX относится к прежней сцене, поэтому берём левый край страницы.
+		const cnX = (cnFl && !pmpDoc.blRotation) ? cnFl.contentX / pmpDoc.renderScale : 0
+		pmpDoc.goToLocation(ntStranica, Qt.point(cnX, 0), pmpDoc.renderScale)
+		root.fnLog(11, "Старт таймера видимости.");
+		root.sgnProgress(100, "11/11 Старт таймера отображения.");
+		tmrVisible.running = true;//Запускаем таймер отображения документа.
+	}
 	function fnVremya(ntMs){//Переводит миллисекунды в текст «N мин M с», минуты не пишем, если их 0.
         const cnSek = Math.round(ntMs / 1000)//Всего секунд.
         const cnMin = Math.floor(cnSek / 60)//Целых минут.
