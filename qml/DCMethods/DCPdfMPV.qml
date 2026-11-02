@@ -175,6 +175,7 @@ Item {
         if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
+			root.fnWatchdogStart()//Сторож: если конвейер встанет, документ покажется сам.
             pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
             root.fnLog(3, "Старт таймера масштабирования (масштаб извне).");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
@@ -197,6 +198,7 @@ Item {
             pmpDoc.blRotation = true;//Изменился поворот документа.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
+			root.fnWatchdogStart()//Сторож: если конвейер встанет, документ покажется сам.
             pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
             root.fnLog(3, "Старт таймера масштабирования (поворот).");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
@@ -257,6 +259,7 @@ Item {
                 root.fnLog(4, "Изменился размер окна.");
                 root.sgnProgress(37, "4/11 Изменился размер окна.")
                 root.visible = false;//Невидимым виджет делаем.
+				root.fnWatchdogStart()//Сторож: если конвейер встанет, документ покажется сам.
             }
             tmrAppSize.restart();//Таймер перезапускаем.
         }
@@ -299,6 +302,9 @@ Item {
         root.fnLog(11, "Старт таймера видимости.");
         root.sgnProgress(100, "11/11 Старт таймера отображения.");
         tmrVisible.running = true;//Запускаем таймер отображения документа.
+    }
+	function fnWatchdogStart(){//Запуск/перезапуск сторожа, вызываем там, где виджет становится невидимым.
+        tmrWatchdog.restart()
     }
     Timer {//Таймер сброса сцены документа, чтоб сцена пересчиталась под новый масштаб.
         id: tmrResetScene
@@ -372,6 +378,7 @@ Item {
         id: tmrVisible
         interval: 333; running: false; repeat: false
         onTriggered: {
+			tmrWatchdog.stop()//Конвейер дошёл до конца, сторож не нужен.
             root.fnLog(0, "Отображаем ваш документ.");
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
             pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
@@ -395,6 +402,24 @@ Item {
             }
         }
     }
+    Timer {//Сторож открытия: если конвейер не дошёл до tmrVisible, показываем pdf как есть.
+        id: tmrWatchdog
+        interval: 70000; running: false; repeat: false//1 минуты 10 секунды.
+        onTriggered: {
+            console.warn("DCPdfMPV: watchdog, документ не открылся за 1 мин 10 с, показываю как есть.",
+                         "blScale=" + pmpDoc.blScale, "isSceneReset=" + pmpDoc.isSceneReset,
+                         "isScaleStart=" + pmpDoc.isScaleStart, "blSize=" + pmpDoc.blSize,
+                         "status=" + pdfDoc.status, "page=" + pmpDoc.currentPage)//Где именно застряли.
+            pmpDoc.isSceneReset = false;//Сбрасываем состояния конвейера,чтоб не остались взведёнными навсегда
+            pmpDoc.isScaleStart = false;
+            pmpDoc.blSize = false;//Иначе изменение размера окна больше не будет обрабатываться.
+            pmpDoc.blRotation = false;
+            root.sgnProgress(100, "11/11 Таймаут открытия: документ показан как есть.");
+            root.visible = true;//Показываем документ как есть.
+            if(pmpDoc.currentPage >= 0)//-1 в боковую панель не отдаём.
+                dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем миниатюру, как в tmrVisible.
+        }
+    } 
     PdfMultiPageView {
         id: pmpDoc
         anchors.fill: root
@@ -431,6 +456,7 @@ Item {
             password: root.password//Пароль для pdf документа.
             onStatusChanged: {
                 if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
+					tmrWatchdog.stop()//Документ не открылся по настоящей причине, сторож не нужен.
                     console.error("DCPdfMPV [10/11]: статус документа Ошибка, старт таймера ошибки.");//ошибка
                     root.sgnProgress(91, "10/11 Старт таймера ошибки.");
                     tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
@@ -448,11 +474,13 @@ Item {
                     }
                 }
                 else if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
+					root.fnWatchdogStart()//Старт сторожа открытия, в том числе после ввода пароля.
                     root.fnLog(1, "Статус документа: Загрузка.");
                     root.sgnProgress(10, "1/11 Статус документа: Загрузка.");
                 }
             }
             onPasswordRequired: {//Если пришёл сигнал passwordRequire запроса пароля в pdf документе, то...
+				tmrWatchdog.stop()//Пока пользователь вводит пароль, сторож молчит. Перезапустится на загрузке
                 root.fnLog(0, "Запрашиваю пароль.")
                 pmpDoc.blPassword = true;//Запрашиваю пароль.
                 root.sgnPassword();//Сигнал о том, что есть запрос на ввод пароля.
@@ -504,6 +532,7 @@ Item {
                     root.fnLog(0, "Рендер Error проигнорирован: идёт сброс сцены.");
                     break;
                 }
+				tmrWatchdog.stop()//Настоящая авария, документ закрывается, показывать нечего.
                 console.error("DCPdfMPV [11/11]: ошибка рендера страницы " + pmpDoc.currentPage);//Ошибка крас
                 root.sgnProgress(100, "11/11 Ошибка рендера страницы.");
                 root.sgnDebug(qsTr("Ошибка рендера страницы."));//Передаём ошибку.
@@ -514,6 +543,7 @@ Item {
                     root.fnLog(0, "Рендер Null проигнорирован: идёт сброс сцены.");
                     break;
                 }
+				tmrWatchdog.stop()//Настоящая авария, документ закрывается, показывать нечего.
                 console.error("DCPdfMPV [11/11]: рендер страницы " + pmpDoc.currentPage + " Null");//Ошибка.
                 root.sgnProgress(100, "11/11 Рендера страницы Null.");
                 root.sgnDebug(qsTr("Рендера страницы Null."));//Передаём ошибку.
@@ -526,6 +556,7 @@ Item {
                 pmpDoc.ntPinchPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
                 pmpDoc.blPinch = true;//То это увеличение масштаба пользователем через щипок
                 root.visible = false;//Невидимый виджет.
+				root.fnWatchdogStart()//Сторож: если конвейер встанет, документ покажется сам.
             }
             pmpDoc.blRenderScale = true;//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
             root.renderScale = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
