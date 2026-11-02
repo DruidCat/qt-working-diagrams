@@ -233,10 +233,18 @@ Item {
     }
 
     function searchForward(){//Функция следующего поиска, пробрасываем вне виджета.
-        pmpDoc.searchForward();
+        //pmpDoc.searchForward();
+		const cnCount = pmpDoc.searchModel.count//Количество совпадений
+		if(cnCount <= 0) return//Совпадений нет, переходить некуда.
+		const cnNext = pmpDoc.searchModel.currentResult + 1//Следующий результат
+		pmpDoc.searchModel.currentResult = (cnNext >= cnCount) ? 0 : cnNext//После последнего идёт первый.
     }
     function searchBack(){//Функция предыдущего поиска, пробрасываем вне виджета.
-        pmpDoc.searchBack();
+        //pmpDoc.searchBack();
+		const cnCount = pmpDoc.searchModel.count
+		if(cnCount <= 0) return
+		const cnPrev = pmpDoc.searchModel.currentResult - 1//Предыдущий результат
+		pmpDoc.searchModel.currentResult = (cnPrev < 0) ? cnCount - 1 : cnPrev//Перед первым идёт последний.
     }
     function fnTimerAppSize(){//Функция старта таймера при изменении размеров приложения пользователем.
         if(!pmpDoc.blSize){//Принимаю размеры приложения, пока не запустится обработкик показа документа.
