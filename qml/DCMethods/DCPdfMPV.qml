@@ -5,7 +5,6 @@ import QtQuick.Layouts
 import DCButtons 1.0//Импортируем кнопки
 import DCMethods 1.0//Импортируем методы написанные мной.
 import QtQml.Models//Для DelegateModel
-
 Item {
     id: root
     //Свойства.
@@ -30,7 +29,8 @@ Item {
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
-	property int ntScrollMargin: root.isMobile ? 0 : 7//Запас под полосу прокрутки, чтобы она не закрывала край страницы.
+    property int ntScrollMargin: root.isMobile ? 0 : 7//Ширина/высота ползунка полосы прокрутки.
+    property bool blLog: true//true - отладочные сообщения включены, false - выключены (для релиза).
     property alias sbCurrentIndex: dcSidebar.currentIndex//Индекс открытой вкладки в боковой панели.
     property int currentResult: -1//Номер Поиска, совпадение от 0....
     //Настройки
@@ -48,6 +48,10 @@ Item {
     signal sgnOpenedSidebar(bool blOpened)//Сигнал о том, что боковая панель открыта/закрыта
     signal sgnFocus()//Сигнал о том, что фокус на DCPdfMPV
     //Функции.
+    function fnLog(ntShag, strText){//Единая точка отладочных сообщений.ntShag: 1-11 шаг загрузки,0 - без шага
+        if(!root.blLog) return//В релизе не шумим.
+        console.log("pdf" + (ntShag > 0 ? " [" + ntShag + "/11]" : "") + ": " + strText)//Обычный цвет
+    }
     Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event =>
         root.sgnFocus()//Излучаем сигнал, так как фокус на DCPdfMPV перещёл.
         //cppqml.strDebug = event.key;
@@ -85,7 +89,7 @@ Item {
         }
         else//Если боковая панель не открыта, то...
             dcScroll.fnKeyVverh()//Функция скролла вверх страницы.
-    } 
+    }
     function fnClickedKeyVlevo(){//Функция нажатия клавиши влево.
         dcScroll.fnKeyVlevo()//Функция скролла влево страницы
     }
@@ -97,13 +101,13 @@ Item {
         return cnModel ? cnModel.model : null;//если модель пустая, возвращаем null, если нет, то модель
     }
     function fnClickedKeyEnter(){//Функция перехода нажатия клавиши Enter.
-		if(dcSidebar.opened){//Если боковая панель открыта, то...
-			if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
-				dcSidebar.fnNaidenoEnter()//Функцию нажатия на клавишу Enter.
-		}
-		else//Если боковая панель не открыта
-			fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
-	}
+        if(dcSidebar.opened){//Если боковая панель открыта, то...
+            if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
+                dcSidebar.fnNaidenoEnter()//Функцию нажатия на клавишу Enter.
+        }
+        else//Если боковая панель не открыта
+            fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
+    }
     function fnClickedPoiskStop(){//Функция остановки поиска.
         root.currentResult = -1//Чтоб в пустом поиске не было 1
         root.searchString = "";//Сбрасываем поисковую модель именно сдесь, чтоб не было loop цикла.
@@ -120,59 +124,59 @@ Item {
     function fnClickedKeyEnd(){//Функция нажатия клавиши End
         root.currentPage = pdfDoc.pageCount-1;//На последнюю страницу
     }
-	function fnOpenSidebar(){//Открыть боковую панель (именно открыть, а не переключить).
-		if(dcSidebar.opened || tmrSidebar.running) return//Уже открыта или уже открывается.
-		if(dcSidebar.position === 0)//Показываем «Загрузка» только если панель полностью закрыта.
-			rctZagruzka.visible = true
-		tmrSidebar.start()//Откроем через задержку таймера.
-	}
-	function fnZakritSidebar(){//Закрыть боковую панель.
-		tmrSidebar.stop()//Если открытие ещё не стартовало, отменяем.
-		rctZagruzka.visible = false//Надпись «Загрузка» гасим всегда.
-		dcSidebar.close()//Закрываем боковую панель.
-	}
-	function fnClickedSidebar(){//Переключатель, только для кнопки.
-		if(dcSidebar.position > 0) fnZakritSidebar()
-		else fnOpenSidebar()
-	}
+    function fnOpenSidebar(){//Открыть боковую панель (именно открыть, а не переключить).
+        if(dcSidebar.opened || tmrSidebar.running) return//Уже открыта или уже открывается.
+        if(dcSidebar.position === 0)//Показываем «Загрузка» только если панель полностью закрыта.
+            rctZagruzka.visible = true
+        tmrSidebar.start()//Откроем через задержку таймера.
+    }
+    function fnZakritSidebar(){//Закрыть боковую панель.
+        tmrSidebar.stop()//Если открытие ещё не стартовало, отменяем.
+        rctZagruzka.visible = false//Надпись «Загрузка» гасим всегда.
+        dcSidebar.close()//Закрываем боковую панель.
+    }
+    function fnClickedSidebar(){//Переключатель, только для кнопки.
+        if(dcSidebar.position > 0) fnZakritSidebar()
+        else fnOpenSidebar()
+    }
     function fnInteractiveSidebar(isInteractive){//Функция, которая включает/выключает свайп боковой панели.
         dcSidebar.interactive = isInteractive;//вкл/выкл свайп боковой панели.
     }
-    Timer {//Таймер необходим, чтоб
+    Timer {//Таймер необходим, чтоб надпись «Загрузка» успела отрисоваться до открытия боковой панели.
         id: tmrSidebar
         interval: 3; running: false; repeat: false
         onTriggered: dcSidebar.open()//Открываем боковую панель.
     }
     function fnSidebarNaideno(){//Функция нажатия кнопки Найдено.
-		if(dcSidebar.opened && dcSidebar.currentIndex === 0)//Открыта именно эта вкладка, то...
-			fnZakritSidebar()//Закрываем боковую панель.
-		else{
-			fnOpenSidebar()//Если уже открыта, функция сама вернётся.
-			dcSidebar.fnNaidenoOpen()//Открываем и фокусируемся на Найдено
-		}
-	}
-	function fnSidebarZakladki(){//Функция нажатия кнопки Закладки.
-		if(dcSidebar.opened && dcSidebar.currentIndex === 1)//Открыта именно эта вкладка, то...
-			fnZakritSidebar()//Закрываем боковую панель.
-		else{
-			fnOpenSidebar()
-			dcSidebar.fnZakladkiOpen()//Открываем и фокусируемся на Закладках
-		}
-	}
-	function fnSidebarPoster(){//Функция нажатия кнопки Миниатюры.
-		if(dcSidebar.opened && dcSidebar.currentIndex === 2)//Открыта именно эта вкладка, то...
-			fnZakritSidebar()//Закрываем боковую панель.
-		else{
-			fnOpenSidebar()
-			dcSidebar.fnPosterOpen()//Открываем и фокусируемся на Страницах
-		}
-	}
+        if(dcSidebar.opened && dcSidebar.currentIndex === 0)//Открыта именно эта вкладка, то...
+            fnZakritSidebar()//Закрываем боковую панель.
+        else{
+            fnOpenSidebar()//Если уже открыта, функция сама вернётся.
+            dcSidebar.fnNaidenoOpen()//Открываем и фокусируемся на Найдено
+        }
+    }
+    function fnSidebarZakladki(){//Функция нажатия кнопки Закладки.
+        if(dcSidebar.opened && dcSidebar.currentIndex === 1)//Открыта именно эта вкладка, то...
+            fnZakritSidebar()//Закрываем боковую панель.
+        else{
+            fnOpenSidebar()
+            dcSidebar.fnZakladkiOpen()//Открываем и фокусируемся на Закладках
+        }
+    }
+    function fnSidebarPoster(){//Функция нажатия кнопки Миниатюры.
+        if(dcSidebar.opened && dcSidebar.currentIndex === 2)//Открыта именно эта вкладка, то...
+            fnZakritSidebar()//Закрываем боковую панель.
+        else{
+            fnOpenSidebar()
+            dcSidebar.fnPosterOpen()//Открываем и фокусируемся на Страницах
+        }
+    }
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
         if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
             pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
-            console.error("231: 3. Старт таймера масштабирования.");
+            root.fnLog(3, "Старт таймера масштабирования (масштаб извне).");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
             tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
         }
@@ -181,41 +185,41 @@ Item {
                 root.sgnScaleMin(pmpDoc.renderScale);//Передаём значение минимального масштаба.
         }
     }
-	onCurrentPageChanged: {//Если страница поменялась из вне, то...
-		if(!pmpDoc.blScale) return//Первичный конвейер ещё не запущен: стартовую страницу выставит tmrGoToPage.
-		if(root.currentPage < 0 || root.currentPage >= pdfDoc.pageCount) return//Страницы не существует.
-		if(root.currentPage === pmpDoc.currentPage) return//Вид уже на этой странице.
-		console.log("Страница " + root.currentPage + " из вне.")
-		fnGoToPage(root.currentPage)//Переходим на заданную страницу.
-	}
-	onRotationChanged:{//Изменение поворота документа.
+    onCurrentPageChanged: {//Если страница поменялась из вне, то...
+        if(!pmpDoc.blScale) return//Первичный конвейер ещё не запущен: стартовую страницу выставит tmrGoToPage
+        if(root.currentPage < 0 || root.currentPage >= pdfDoc.pageCount) return//Страницы не существует.
+        if(root.currentPage === pmpDoc.currentPage) return//Вид уже на этой странице.
+        root.fnLog(0, "Страница " + root.currentPage + " из вне.")
+        fnGoToPage(root.currentPage)//Переходим на заданную страницу.
+    }
+    onRotationChanged:{//Изменение поворота документа.
         Qt.callLater(function() {//Пауза в такт. Чтоб успела повернуться сцена, и перерасчет сторон произошёл.
             pmpDoc.blRotation = true;//Изменился поворот документа.
-			pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
+            pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
             pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
-            console.error("253: 3. Старт таймера масштабирования.");
+            root.fnLog(3, "Старт таймера масштабирования (поворот).");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
-            tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть. 
+            tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
         })
-	}
+    }
     onSourceChanged: {//Когда меняется источник документа — обновим C++ поиск
         if(root.source && root.source !== "")
             cppqml.pdfPoisk.urlPdf = root.source//Отправляем адрес файла в бизнес логику.
     }
     onSearchStringChanged: {//Когда меняется поисковая строка — отдадим её в C++
-		cppqml.pdfPoisk.strPoisk = root.searchString;//Отправляем поисковый запрос в бизнес логику.
-		if(root.searchString){//Если не пустая строка, то...
-			if(dcSidebar.opened){//Если боковая панель открыта, то...
-				if(dcSidebar.currentIndex !== 0)//Если открыта вкладка не Найдено, то...
-					dcSidebar.fnNaidenoOpen()//Функция открытия и фокусировки Найдено
-			}
-			else{//Если боковая панель закрыта (или ещё открывается), то...
-				dcSidebar.fnNaidenoOpen()//Функция открытия и фокусировки Найдено
-				fnOpenSidebar()//Открываем боковую панель, а не переключаем.
-			}
-		}
-	}
+        cppqml.pdfPoisk.strPoisk = root.searchString;//Отправляем поисковый запрос в бизнес логику.
+        if(root.searchString){//Если не пустая строка, то...
+            if(dcSidebar.opened){//Если боковая панель открыта, то...
+                if(dcSidebar.currentIndex !== 0)//Если открыта вкладка не Найдено, то...
+                    dcSidebar.fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+            }
+            else{//Если боковая панель закрыта (или ещё открывается), то...
+                dcSidebar.fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+                fnOpenSidebar()//Открываем боковую панель, а не переключаем.
+            }
+        }
+    }
     onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
         if(width > 0){//Если ширина больше 0, это не формирование при старте окна, то...
             if(pmpDoc.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
@@ -232,93 +236,93 @@ Item {
                 fnTimerAppSize();//Запускаем таймер.
         }
     }
-
     function searchForward(){//Функция следующего поиска, пробрасываем вне виджета.
         //pmpDoc.searchForward();
-		const cnCount = pmpDoc.searchModel.count//Количество совпадений
-		if(cnCount <= 0) return//Совпадений нет, переходить некуда.
-		const cnNext = pmpDoc.searchModel.currentResult + 1//Следующий результат
-		pmpDoc.searchModel.currentResult = (cnNext >= cnCount) ? 0 : cnNext//После последнего идёт первый.
+        const cnCount = pmpDoc.searchModel.count//Количество совпадений
+        if(cnCount <= 0) return//Совпадений нет, переходить некуда.
+        const cnNext = pmpDoc.searchModel.currentResult + 1//Следующий результат
+        pmpDoc.searchModel.currentResult = (cnNext >= cnCount) ? 0 : cnNext//После последнего идёт первый.
     }
     function searchBack(){//Функция предыдущего поиска, пробрасываем вне виджета.
         //pmpDoc.searchBack();
-		const cnCount = pmpDoc.searchModel.count
-		if(cnCount <= 0) return
-		const cnPrev = pmpDoc.searchModel.currentResult - 1//Предыдущий результат
-		pmpDoc.searchModel.currentResult = (cnPrev < 0) ? cnCount - 1 : cnPrev//Перед первым идёт последний.
+        const cnCount = pmpDoc.searchModel.count
+        if(cnCount <= 0) return
+        const cnPrev = pmpDoc.searchModel.currentResult - 1//Предыдущий результат
+        pmpDoc.searchModel.currentResult = (cnPrev < 0) ? cnCount - 1 : cnPrev//Перед первым идёт последний.
     }
     function fnTimerAppSize(){//Функция старта таймера при изменении размеров приложения пользователем.
         if(!pmpDoc.blSize){//Принимаю размеры приложения, пока не запустится обработкик показа документа.
             if(!tmrAppSize.running){//Если таймер еще не запускался, то...
                 pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
-                console.error("298: 4. Изменился размер окна.");
+                root.fnLog(4, "Изменился размер окна.");
                 root.sgnProgress(37, "4/11 Изменился размер окна.")
                 root.visible = false;//Невидимым виджет делаем.
             }
             tmrAppSize.restart();//Таймер перезапускаем.
         }
     }
-	function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
-		pmpDoc.isScaleStart = true;//Начало масштабирования.
-		pmpDoc.goToPage(0);//Переходим на первую страницу, чтоб потом перейти на заданную страницу.
-		console.error("308: 5. Начало масштабирования документа.");
-		root.sgnProgress(46, "5/11 Начало масштабирования документа.");
-		if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
-			const cnFl = pmpDoc.flickable
-			const cnW = (cnFl ? cnFl.width : pmpDoc.width) - root.ntScrollMargin//Область без полосы
-			const cnH = (cnFl ? cnFl.height : pmpDoc.height) - root.ntScrollMargin
-			if(pdfDoc.isDocVert){
-				if((root.rotation === 0) || (root.rotation === 180))
-					pmpDoc.scaleToPage(cnW, cnH);
-				else
-					pmpDoc.scaleToWidth(cnW, cnH);
-			}
-			else{
-				if((root.rotation === 0) || (root.rotation === 180))
-					pmpDoc.scaleToWidth(cnW, cnH);
-				else
-					pmpDoc.scaleToPage(cnW, cnH);
-			}
-		}
-		else
-			pmpDoc.renderScale = root.renderScale;//Выставляем масштаб из Свойства.
-		console.error("328: 6. Окончание масштабирования документа.")
-		root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
-		pmpDoc.isSceneReset = true;//Сброс сцены запланирован: ошибки рендера Null/Error игнорируем.
-		tmrResetScene.running = true;//запускаем таймер, сброса сцены.
-	}
-	function fnGoToPage(ntStranica){//Функция обрабатывающая переход на новую страницу документа.
-		console.error("333: 10. Переходим на страницу: " + ntStranica);
-		root.sgnProgress(91, "10/11 Переходим на страницу.");
-		const cnFl = pmpDoc.flickable
-    	const cnX = cnFl ? cnFl.contentX / pmpDoc.renderScale : 0//Без flickable прыг к левому краю, не падаем
-		pmpDoc.goToLocation(ntStranica, Qt.point(cnX, 0), pmpDoc.renderScale)
-		console.error("336: 11. Старт таймера видимости.");
-		root.sgnProgress(100, "11/11 Старт таймера отображения.");
-		tmrVisible.running = true;//Запускаем таймер отображения документа.
-	}
-	Timer {//Таймер сброса сцены документа, чтоб сцена пересчиталась под новый масштаб.
-		id: tmrResetScene
-		interval: 3; running: false; repeat: false
-		onTriggered: {
-			console.error("344: 7. Сброс сцены документа.")
-			root.sgnProgress(64, "7/11 Сброс сцены документа.");
-			pmpDoc.isSceneReset = true;//Подстраховка: на случай, если таймер запущен не из fnScale.
-			if(pmpDoc.flickable && pmpDoc.flickable.forceLayout) {//Если внутренности есть, то...
-				//Это быстрый способ сброса сцены
-    			pmpDoc.flickable.forceLayout()//Это способ сброса сцены через внутренности pmpDoc.flickable
-			} else {//Если внутренности после обновления Qt не работают, то старый способ, долгий.
-				//Это тяжелый способ сброса сцены, но при нём документ на миг обнуляется.
-				const doc = pmpDoc.document;//Запоминаем pdf документ.
-				pmpDoc.document = null;//Выставляем нулевой документ, и тем самым сбрасываем сцену.
-				pmpDoc.document = doc;//Восстанавливаем старый документ с обновлённой сценой.
-			}
-			pmpDoc.isScaleStart = false;//Окончание масштабирования, это для щипка.
-			console.error("367: 8. Старт таймера страницы.")
-			root.sgnProgress(73, "8/11 Старт таймера страницы.");
-			tmrGoToPage.running = true;//запускаем таймер, перед переходом на страницу
-		}
-	}
+    function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
+        pmpDoc.isScaleStart = true;//Начало масштабирования.
+        pmpDoc.goToPage(0);//Переходим на первую страницу, чтоб потом перейти на заданную страницу.
+        root.fnLog(5, "Начало масштабирования документа.");
+        root.sgnProgress(46, "5/11 Начало масштабирования документа.");
+        if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
+            const cnFl = pmpDoc.flickable
+            const cnW = (cnFl ? cnFl.width : pmpDoc.width) - root.ntScrollMargin//Область без полосы
+            const cnH = (cnFl ? cnFl.height : pmpDoc.height) - root.ntScrollMargin
+            if(pdfDoc.isDocVert){
+                if((root.rotation === 0) || (root.rotation === 180))
+                    pmpDoc.scaleToPage(cnW, cnH);
+                else
+                    pmpDoc.scaleToWidth(cnW, cnH);
+            }
+            else{
+                if((root.rotation === 0) || (root.rotation === 180))
+                    pmpDoc.scaleToWidth(cnW, cnH);
+                else
+                    pmpDoc.scaleToPage(cnW, cnH);
+            }
+        }
+        else
+            pmpDoc.renderScale = root.renderScale;//Выставляем масштаб из Свойства.
+        root.fnLog(6, "Окончание масштабирования документа.")
+        root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
+        pmpDoc.isSceneReset = true;//Сброс сцены запланирован: ошибки рендера Null/Error игнорируем.
+        tmrResetScene.running = true;//запускаем таймер, сброса сцены.
+    }
+    function fnGoToPage(ntStranica){//Функция обрабатывающая переход на новую страницу документа.
+        root.fnLog(10, "Переходим на страницу: " + ntStranica);
+        root.sgnProgress(91, "10/11 Переходим на страницу.");
+        const cnFl = pmpDoc.flickable
+        const cnX = cnFl ? cnFl.contentX / pmpDoc.renderScale : 0//Без flickable прыг к левому краю, не падаем
+        pmpDoc.goToLocation(ntStranica, Qt.point(cnX, 0), pmpDoc.renderScale)
+        root.fnLog(11, "Старт таймера видимости.");
+        root.sgnProgress(100, "11/11 Старт таймера отображения.");
+        tmrVisible.running = true;//Запускаем таймер отображения документа.
+    }
+    Timer {//Таймер сброса сцены документа, чтоб сцена пересчиталась под новый масштаб.
+        id: tmrResetScene
+        interval: 3; running: false; repeat: false
+        onTriggered: {
+            root.sgnProgress(64, "7/11 Сброс сцены документа.");
+            pmpDoc.isSceneReset = true;//Подстраховка: на случай, если таймер запущен не из fnScale.
+            if(pmpDoc.flickable && pmpDoc.flickable.forceLayout) {//Если внутренности есть, то...
+                root.fnLog(7, "Сброс сцены документа: forceLayout.")
+                //Это быстрый способ сброса сцены
+                pmpDoc.flickable.forceLayout()//Это способ сброса сцены через внутренности pmpDoc.flickable
+            } else {//Если внутренности после обновления Qt не работают, то старый способ, долгий.
+                root.fnLog(7, "Сброс сцены документа: document = null.")
+                //Это тяжелый способ сброса сцены, но при нём документ на миг обнуляется.
+                const doc = pmpDoc.document;//Запоминаем pdf документ.
+                pmpDoc.document = null;//Выставляем нулевой документ, и тем самым сбрасываем сцену.
+                pmpDoc.document = doc;//Восстанавливаем старый документ с обновлённой сценой.
+            }
+            pmpDoc.isScaleStart = false;//Окончание масштабирования, это для щипка.
+            root.fnLog(8, "Старт таймера страницы.")
+            root.sgnProgress(73, "8/11 Старт таймера страницы.");
+            tmrGoToPage.running = true;//запускаем таймер, перед переходом на страницу
+        }
+    }
     Timer {//Таймер необходим, чтоб пока пользователь изменяет размер окна приложения,не обрабатывался масштаб
         id: tmrAppSize
         interval: 333; running: false; repeat: false
@@ -332,59 +336,60 @@ Item {
         id: tmrScale
         interval: 111; running: false; repeat: false
         onTriggered: {
-            console.error("385: 4. Стоп таймера масштабирования.");
+            root.fnLog(4, "Стоп таймера масштабирования.");
             root.sgnProgress(37, "4/11 Стоп таймера масштабирования.");
             fnScale();//масштабируем документ автоматически/вручную.
         }
     }
-	Timer {//Таймер необходим, чтоб pdf документ успел смаштабироваться, и можно было выставить страницу.
-		id: tmrGoToPage
-		interval: 777; running: false; repeat: false
-		onTriggered: {
-			pmpDoc.isSceneReset = false;//Сброс сцены закончился, статусы рендера снова обрабатываем.
-			console.error("394: 9. Стоп таймера страницы.");
-			root.sgnProgress(82, "9/11 Стоп таймера страницы.");
-			if(pmpDoc.blPinch){//Если был щипок пользователя с изменением Масштаба, то...
-				pmpDoc.blPinch = false;//Сбрасываем флаг
-				fnGoToPage(pmpDoc.ntPinchPage);//Выставляем запомненную страницу после щипка
-			}
-			else{//Если не было щипка пользователя, то...
-				if(pmpDoc.blSize)//Если идет изменение масштаба через изменение размера виджета, то...
-					fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
-				else{//Если нет, то...
-					if(pmpDoc.blScaleAuto){//Если масштабирование Автоматическое при старте, то...
-						if(pmpDoc.blRotation)//Если нажат поворот документа, то..
-							fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
-						else//Если не нажат поворот, то это автоматическое масштабирование, и поэтому...
-							fnGoToPage(root.currentPage);//Выставляем заданную страницу из вне виджита.
-					}
-					else//Если Ручное масштабирование пользователем, то...
-						fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
-				}
-			}
-		}
-	}
+    Timer {//Таймер необходим, чтоб pdf документ успел смаштабироваться, и можно было выставить страницу.
+        id: tmrGoToPage
+        interval: 777; running: false; repeat: false
+        onTriggered: {
+            pmpDoc.isSceneReset = false;//Сброс сцены закончился, статусы рендера снова обрабатываем.
+            root.fnLog(9, "Стоп таймера страницы.");
+            root.sgnProgress(82, "9/11 Стоп таймера страницы.");
+            if(pmpDoc.blPinch){//Если был щипок пользователя с изменением Масштаба, то...
+                pmpDoc.blPinch = false;//Сбрасываем флаг
+                fnGoToPage(pmpDoc.ntPinchPage);//Выставляем запомненную страницу после щипка
+            }
+            else{//Если не было щипка пользователя, то...
+                if(pmpDoc.blSize)//Если идет изменение масштаба через изменение размера виджета, то...
+                    fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
+                else{//Если нет, то...
+                    if(pmpDoc.blScaleAuto){//Если масштабирование Автоматическое при старте, то...
+                        if(pmpDoc.blRotation)//Если нажат поворот документа, то..
+                            fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
+                        else//Если не нажат поворот, то это автоматическое масштабирование, и поэтому...
+                            fnGoToPage(root.currentPage);//Выставляем заданную страницу из вне виджита.
+                    }
+                    else//Если Ручное масштабирование пользователем, то...
+                        fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
+                }
+            }
+        }
+    }
     Timer {//Таймер необходим, чтоб после перехода на страницу произошла небольшая пауза, минимум 333.
         id: tmrVisible
         interval: 333; running: false; repeat: false
         onTriggered: {
-            console.error("420: Отображаем ваш документ.");
+            root.fnLog(0, "Отображаем ваш документ.");
             pmpDoc.blSize = false;//Готов к изменению размера приложения.
-			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
+            pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
-            dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно! 
+            dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
         id: tmrError
         interval: 111; running: false; repeat: false
         onTriggered: {
-            console.error("431: 11. Ошибка, окончание загрузки.");
             root.sgnProgress(100, "11/11 Ошибка, окончание загрузки.");
             if(pmpDoc.blPassword){//Если был запрос на пароль, то...
+                root.fnLog(11, "Запрос пароля, окончание загрузки.");
                 pmpDoc.blPassword = false;//Сбрасываем флаг.
             }
             else{//Если не было запроса на пароль, то это ошибка обычная...
+                console.error("DCPdfMPV: ошибка, окончание загрузки: " + pdfDoc.error);//ошибка красная
                 root.sgnDebug(qsTr("Ошибка открытия документа: ") + pdfDoc.error);//Передаём ошибку.
                 root.sgnError();//Закрываем документ.
             }
@@ -396,8 +401,7 @@ Item {
         anchors.leftMargin: dcSidebar.position * dcSidebar.width - dcSidebar.position * root.ntCoff
         searchString: ""
         //Иннициализация Свойств при каждой загрузке, от сюда берутся первоначальные данные Свойств.
-        property bool blResetScene: false//false - быстрый сброс сцены при первом открытии pdf документа.
-		property bool isSceneReset: false//true - идёт сброс сцены, статусы рендера Null/Error игнорируем.
+        property bool isSceneReset: false//true - идёт сброс сцены, статусы рендера Null/Error игнорируем.
         property bool blScale: false//true - когда в pdf документе масштабирование произошло.
         property bool blRenderScale: false//Флаг предотвращающий рекурсию root.renderScale
         property bool blScaleAuto: true//true - автоматическое масштабирование. false - ручное масштабирование
@@ -406,7 +410,7 @@ Item {
         property bool blSize: false//true - когда pdf документ изменяет размер при масштабе виджета.
         property bool blStartWidth: true//true - пришёл сигнал об измении ширины виджета при его открытии.
         property bool blStartHeight: true//true - пришёл сигнал об измении высоты виджета при его открытии.
-		property bool blRotation: false//true - нажата кнопка поворота документа.
+        property bool blRotation: false//true - нажата кнопка поворота документа.
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
         property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
@@ -416,7 +420,6 @@ Item {
         //Скрытые указатели PdfMultiPageView
         property var verticalScrollbar//Недокументированный указатель на scrollbar
         property var flickable//Недокументированный указатель на flickable
-
         document: PdfDocument {
             id: pdfDoc
             //Свойства
@@ -427,30 +430,30 @@ Item {
             source: root.source//Привязываем источник PDF
             password: root.password//Пароль для pdf документа.
             onStatusChanged: {
-				if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
-					console.error("474: 10. Старт таймера ошибки.");
-					root.sgnProgress(91, "10/11 Старт таймера ошибки.");
-					tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
-				}
-				else if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
-					console.error("480: 2. Статус документа: Готов.");
-					root.sgnProgress(19, "2/11 Загрузка большого документа.");
-					if(pdfDoc.pageCount > 0){//Защита от пустого документа.
-						//Берём заданную страницу, но не меньше 0 и не больше последней.
-						const cnPage = Math.max(0, Math.min(root.currentPage, pdfDoc.pageCount - 1))
-						const cnSize = pdfDoc.pagePointSize(cnPage)//Размер страницы в пунктах.
-						pdfDoc.rlWidth = cnSize.width//Запоминаем ширину.
-						pdfDoc.rlHeight = cnSize.height//Запоминаем высоту.
-						pdfDoc.isDocVert = (cnSize.height >= cnSize.width)//true - вертикальный документ.
-					}
-				}
-				else if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
-					console.error("492: 1. Статус документа: Загрузка.");
-					root.sgnProgress(10, "1/11 Статус документа: Загрузка.");
-				}
-			}
+                if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
+                    console.error("DCPdfMPV [10/11]: статус документа Ошибка, старт таймера ошибки.");//ошибка
+                    root.sgnProgress(91, "10/11 Старт таймера ошибки.");
+                    tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
+                }
+                else if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
+                    root.fnLog(2, "Статус документа: Готов.");
+                    root.sgnProgress(19, "2/11 Загрузка большого документа.");
+                    if(pdfDoc.pageCount > 0){//Защита от пустого документа.
+                        //Берём заданную страницу, но не меньше 0 и не больше последней.
+                        const cnPage = Math.max(0, Math.min(root.currentPage, pdfDoc.pageCount - 1))
+                        const cnSize = pdfDoc.pagePointSize(cnPage)//Размер страницы в пунктах.
+                        pdfDoc.rlWidth = cnSize.width//Запоминаем ширину.
+                        pdfDoc.rlHeight = cnSize.height//Запоминаем высоту.
+                        pdfDoc.isDocVert = (cnSize.height >= cnSize.width)//true - вертикальный документ.
+                    }
+                }
+                else if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
+                    root.fnLog(1, "Статус документа: Загрузка.");
+                    root.sgnProgress(10, "1/11 Статус документа: Загрузка.");
+                }
+            }
             onPasswordRequired: {//Если пришёл сигнал passwordRequire запроса пароля в pdf документе, то...
-                console.error("499: Запрашиваю пароль.")
+                root.fnLog(0, "Запрашиваю пароль.")
                 pmpDoc.blPassword = true;//Запрашиваю пароль.
                 root.sgnPassword();//Сигнал о том, что есть запрос на ввод пароля.
             }
@@ -468,58 +471,56 @@ Item {
                         pdfDoc.isDocVert = true;//true - вертикальный документ.
                     else
                         pdfDoc.isDocVert = false;//false - горизонтальный документ.
-                    console.error("516: НУЖНО МЕНЯТЬ МАСШТАБ")
+                    root.fnLog(0, "Размер страницы изменился, нужно менять масштаб.")
                 }
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
             }
         }
-		onCurrentPageRenderingStatusChanged: {//Если рендер страницы изменился, то...
-			switch(pmpDoc.currentPageRenderingStatus){
-			case Image.Loading://Статус рендеринга страницы ЗАГРУЗКА.
-				console.error("523: Рендер страницы: " + pmpDoc.currentPage + " Загрузка.");
-				break;
-			case Image.Ready://Статус рендеринга страницы ОТКРЫТ.
-				console.error("527: Рендер страницы: " + pmpDoc.currentPage + " Открыт.");
-				if(!pmpDoc.blScale){//Если стартового масштабирование не было, то...
-					pmpDoc.blScale = true;//Активируем флаг, что началось первичное масштабирование.
-					console.error("530: 3. Старт таймера масштабирования.");
-					root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
-					pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером
-					tmrScale.running = true;//запускаем таймер, перед переходом на страницу
-				}
-				else if(pmpDoc.blPinch && !pmpDoc.isSceneReset){//Щипок был, и сброс сцены ещё не запущен, то...
-					pmpDoc.isSceneReset = true;//Взводим сразу, чтоб повторный Ready не запустил второй сброс.
-					pmpDoc.goToPage(0);//Переходим на первую страницу, потом goTo на заданную страницу
-					console.error("538: 6. Окончание масштабирования документа.")
-					root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
-					tmrResetScene.running = true;//запускаем таймер, сброса сцены.
-				}
-				break;
-			case Image.Error://Статус рендеринга страницы ОШИБКА.
-				if(pmpDoc.isSceneReset || pmpDoc.isScaleStart){//Это не авария, а сброс сцены.
-					console.error("546: Рендер Error проигнорирован: идёт сброс сцены.");
-					break;
-				}
-				console.error("546: Рендер страницы: " + pmpDoc.currentPage + " Ошибка.");
-				console.error("547: 11. Ошибка рендера страницы.");
-				root.sgnProgress(100, "11/11 Ошибка рендера страницы.");
-				root.sgnDebug(qsTr("Ошибка рендера страницы."));//Передаём ошибку.
-				root.sgnError();//Закрываем документ.
-				break;
-			case Image.Null://Статус рендеринга страницы Null
-				if(pmpDoc.isSceneReset || pmpDoc.isScaleStart){//Это не авария, а сброс сцены.
-					console.error("554: Рендер Null проигнорирован: идёт сброс сцены.");
-					break;
-				}
-				console.error("554: Рендер страницы: " + pmpDoc.currentPage + " Null.");
-				console.error("555: 11. Рендера страницы Null.");
-				root.sgnProgress(100, "11/11 Рендера страницы Null.");
-				root.sgnDebug(qsTr("Рендера страницы Null."));//Передаём ошибку.
-				root.sgnError();//Закрываем документ.
-				break;
-			}
-		}
+        onCurrentPageRenderingStatusChanged: {//Если рендер страницы изменился, то...
+            switch(pmpDoc.currentPageRenderingStatus){
+            case Image.Loading://Статус рендеринга страницы ЗАГРУЗКА.
+                root.fnLog(0, "Рендер страницы " + pmpDoc.currentPage + ": Загрузка.");
+                break;
+            case Image.Ready://Статус рендеринга страницы ОТКРЫТ.
+                root.fnLog(0, "Рендер страницы " + pmpDoc.currentPage + ": Открыт.");
+                if(!pmpDoc.blScale){//Если стартового масштабирование не было, то...
+                    pmpDoc.blScale = true;//Активируем флаг, что началось первичное масштабирование.
+                    root.fnLog(3, "Старт таймера масштабирования (первичный).");
+                    root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
+                    pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером
+                    tmrScale.running = true;//запускаем таймер, перед переходом на страницу
+                }
+                else if(pmpDoc.blPinch && !pmpDoc.isSceneReset){//Щипок был, и сброс сцены ещё не запущен, то.
+                    pmpDoc.isSceneReset = true;//Взводим сразу, чтоб повторный Ready не запустил второй сброс.
+                    pmpDoc.goToPage(0);//Переходим на первую страницу, потом goTo на заданную страницу
+                    root.fnLog(6, "Окончание масштабирования документа (щипок).")
+                    root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
+                    tmrResetScene.running = true;//запускаем таймер, сброса сцены.
+                }
+                break;
+            case Image.Error://Статус рендеринга страницы ОШИБКА.
+                if(pmpDoc.isSceneReset || pmpDoc.isScaleStart){//Это не авария, а сброс сцены.
+                    root.fnLog(0, "Рендер Error проигнорирован: идёт сброс сцены.");
+                    break;
+                }
+                console.error("DCPdfMPV [11/11]: ошибка рендера страницы " + pmpDoc.currentPage);//Ошибка крас
+                root.sgnProgress(100, "11/11 Ошибка рендера страницы.");
+                root.sgnDebug(qsTr("Ошибка рендера страницы."));//Передаём ошибку.
+                root.sgnError();//Закрываем документ.
+                break;
+            case Image.Null://Статус рендеринга страницы Null
+                if(pmpDoc.isSceneReset || pmpDoc.isScaleStart){//Это не авария, а сброс сцены.
+                    root.fnLog(0, "Рендер Null проигнорирован: идёт сброс сцены.");
+                    break;
+                }
+                console.error("DCPdfMPV [11/11]: рендер страницы " + pmpDoc.currentPage + " Null");//Ошибка.
+                root.sgnProgress(100, "11/11 Рендера страницы Null.");
+                root.sgnDebug(qsTr("Рендера страницы Null."));//Передаём ошибку.
+                root.sgnError();//Закрываем документ.
+                break;
+            }
+        }
         onRenderScaleChanged: {//Если масштаб изменился, то...
             if(!pmpDoc.isScaleStart){//Если не была запущена функция масштабирования fnScale(), то...
                 pmpDoc.ntPinchPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
@@ -528,13 +529,13 @@ Item {
             }
             pmpDoc.blRenderScale = true;//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
             root.renderScale = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
-            pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг. 
+            pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг.
         }
         Component.onCompleted: {//Когда полностью загрузился виджет PdfMultiPageView, то...
             pmpDoc.verticalScrollbar = pmpDoc.fnPoiskScrollbar(pmpDoc)//Находим указатель на вертикалScrollbar
             pmpDoc.flickable = pmpDoc.fnPoiskFlickable(pmpDoc)//Находим указатель на Flickable
-			pmpDoc.fnProverkaFlickable()//Предупреждаем, если устройство PdfMultiPageView не то, без flickable
-        } 
+            pmpDoc.fnProverkaFlickable()//Предупреждаем, если устройство PdfMultiPageView не то, без flickable
+        }
         function fnPoiskScrollbar(target){//Функция поиска Вертикального Scrolbar в детях PdfMultiPageView.
             for(let ltShag = 0; ltShag < target.children.length; ltShag++){//Цикл поиска в детях.
                 const idScrollbar = target.children[ltShag]//Ищем в детях pmpDoc
@@ -553,23 +554,24 @@ Item {
                 if(cnNashel) return cnNashel
             }
             return null//Если ничего не найдено, возвращаем нулевой указатель.
-        } 
-		function fnProverkaFlickable(){//Проверка недокументированных внутренностей PdfMultiPageView.
-			const cnFl = pmpDoc.flickable
-			if(!cnFl){
-				console.warn("DCPdfMPV: внутри PdfMultiPageView не найден Flickable. Не будут работать: " + 
-									"клавиши и «рука» (DCPdfScroll), поля под полосы прокрутки, forceLayout.")
-				return
-			}
-			if(typeof cnFl.itemAtCell !== "function")//Метод TableView, на нём держится DCPdfScroll.pageRect()
-				console.warn("DCPdfMPV: у flickable нет itemAtCell(), это не TableView:", cnFl,
-								"Скролл по страницам клавишами и «рукой» работать не будет.")
-			if(typeof cnFl.forceLayout !== "function")//Метод TableView, им пересчитываем сцену после масштаба
-				console.warn("DCPdfMPV: у flickable нет forceLayout(). " + 
-								"Сброс сцены пойдёт через document = null.")
-			if(!pmpDoc.verticalScrollbar)
-				console.warn("DCPdfMPV: вертикальный ScrollBar внутри PdfMultiPageView не найден.")
-		}
+        }
+        function fnProverkaFlickable(){//Проверка недокументированных внутренностей PdfMultiPageView.
+            const cnFl = pmpDoc.flickable
+            if(!cnFl){
+                console.warn("DCPdfMPV: внутри PdfMultiPageView не найден Flickable. Не будут работать: " +
+                             "клавиши и «рука» (DCPdfScroll), поля под полосы прокрутки, forceLayout.")
+                return
+            }
+            if(typeof cnFl.itemAtCell !== "function")//Метод TableView, на нём держится DCPdfScroll.pageRect()
+                console.warn("DCPdfMPV: у flickable нет itemAtCell(), это не TableView:", cnFl,
+                             "Скролл по страницам клавишами и «рукой» работать не будет.")
+            if(typeof cnFl.forceLayout !== "function")//Метод TableView, им пересчитываем сцену после масштаба
+                console.warn("DCPdfMPV: у flickable нет forceLayout(). " +
+                             "Сброс сцены пойдёт через document = null.")
+            if(!pmpDoc.verticalScrollbar)
+                console.warn("DCPdfMPV: вертикальный ScrollBar внутри PdfMultiPageView не найден.")
+			else ntScrollMargin = verticalScrollbar.width//Ширина вертикального ползунка из внутренностей.
+        }
         Keys.onPressed: (event) => {
             if (event.key === Qt.Key_Space) {
                 spacePressed = true
@@ -585,13 +587,12 @@ Item {
         MouseArea {
             id: maDoc
             anchors.fill: pmpDoc
-			anchors.rightMargin: root.ntScrollMargin//Не закрываем зону вертикальной полосы прокрутки.
-    		anchors.bottomMargin: root.ntScrollMargin//Не закрываем зону горизонтальной полосы прокрутки.
+            anchors.rightMargin: root.ntScrollMargin//Не закрываем зону вертикальной полосы прокрутки.
+            anchors.bottomMargin: root.ntScrollMargin//Не закрываем зону горизонтальной полосы прокрутки.
             acceptedButtons: Qt.LeftButton//Нажатие левой кнопки мыши
             hoverEnabled: true
             preventStealing: true//Очень важно, чтоб захват мышкой не сбрасывался при движении
             propagateComposedEvents: false
-
             // Включение режима, когда можно захватить лкм документ и перемещать его.
             enabled: (pmpDoc.handMode || pmpDoc.spacePressed) && !root.isVidelit
             //Вид курсора в зависимости нажатия или нет лкм и в зависимости режима Выделить или Перемещать.
@@ -600,16 +601,16 @@ Item {
                          : (root.isVidelit ? Qt.ArrowCursor : Qt.OpenHandCursor)
             property real rlLastX//Последняя запомнившаяся координата X
             property real rlLastY//Последняя запомнившаяся координата Y
-			onPressed: (mouse) => {//Если нажата левая кнопка мыши.
-				const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
-				if (cnFlickable) {//Если указатель существует, то обращаемся к закрытым методам и свойствам.
-					cnFlickable.contentY = cnFlickable.contentY//От микро-дёрганий
-					cnFlickable.cancelFlick()//Прерывает инерциальную прокрутку (flicking)
-					cnFlickable.interactive = false//Отключаем свайпы,pinch-to-zoom,выделение,вращение и т.д.
-				}
-				rlLastX = mouse.x//Запоминаем позицию мыши по X
-				rlLastY = mouse.y//Запоминаем позицию мыши по Y
-			}
+            onPressed: (mouse) => {//Если нажата левая кнопка мыши.
+                const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
+                if (cnFlickable) {//Если указатель существует, то обращаемся к закрытым методам и свойствам.
+                    cnFlickable.contentY = cnFlickable.contentY//От микро-дёрганий
+                    cnFlickable.cancelFlick()//Прерывает инерциальную прокрутку (flicking)
+                    cnFlickable.interactive = false//Отключаем свайпы,pinch-to-zoom,выделение,вращение и т.д.
+                }
+                rlLastX = mouse.x//Запоминаем позицию мыши по X
+                rlLastY = mouse.y//Запоминаем позицию мыши по Y
+            }
             onPositionChanged: (mouse) => {//Если изменилась позиция мыши
                 if (!(mouse.buttons & Qt.LeftButton))//Если при этом нажата не левая кнопка мыши, то...
                     return//Выходим
@@ -619,12 +620,12 @@ Item {
                 rlLastX = mouse.x//Запоминаем позицию мыши по X
                 rlLastY = mouse.y//Запоминаем позицию мыши по Y
             }
-			onReleased: fnRestoreInteractive()//Если отпустил правую кнопку мыши.
-			onCanceled: fnRestoreInteractive()//Если enabled стал false во время нажатия.
-			function fnRestoreInteractive(){
-				if (pmpDoc.flickable)//Если указатель существует, то...
-					pmpDoc.flickable.interactive = true//Включаем свайпы, pinch-to-zoom, выделение, вращение
-			}
+            onReleased: fnRestoreInteractive()//Если отпустил правую кнопку мыши.
+            onCanceled: fnRestoreInteractive()//Если enabled стал false во время нажатия.
+            function fnRestoreInteractive(){
+                if (pmpDoc.flickable)//Если указатель существует, то...
+                    pmpDoc.flickable.interactive = true//Включаем свайпы, pinch-to-zoom, выделение, вращение
+            }
         }
     }
     Binding {//Постоянный запас под вертикальную полосу прокрутки.
@@ -639,10 +640,6 @@ Item {
     }
     Connections {//Автовыбор первого совпадения и переход
         target: pmpDoc.searchModel
-        function onModelReset() {//Поисковая модель сбрасывается при вызове fnClickedPoiskStop()
-        }
-        function onCountChanged() {//Если счётчик совпадений изменился, то...
-        }
         function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
             root.currentResult = pmpDoc.searchModel.currentResult//Присваиваем действующий результат поиска.
             if(root.currentResult >= 0){//Проверка на -1, если нет, то...
@@ -688,7 +685,6 @@ Item {
             text: qsTr("Загрузка")
         }
     }
-
     DelegateModel {
         id: dlmPoisk
         model: pmpDoc.searchModel
@@ -714,25 +710,25 @@ Item {
         pmpDoc: pmpDoc//Передаём объект отображения
         pdfDoc: pdfDoc//Передаём объект документа
         //чтобы внешний сигнал продолжил работать
-		onOpenedChanged: {//Если состояние боковой панели изменилось, она открыта или закрыта, то...
-			if(!isFirstOpened){//Если панель не открывалась ни разу, то...
-				isFirstOpened = true;//Взводим флаг первого открытия боковой панели.
-				if(root.searchString)//Если поиск уже запущен, то первое открытие — на вкладке Найдено.
-					dcSidebar.fnNaidenoOpen()
-				else//Иначе при первом открытии фокусируемся на Закладках.
-					dcSidebar.fnZakladkiOpen()
-			}
-			root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
-			if(dcSidebar.opened) rctZagruzka.visible = false//Если боковая панель открыта, скрываем Загрузку.
-		}
+        onOpenedChanged: {//Если состояние боковой панели изменилось, она открыта или закрыта, то...
+            if(!isFirstOpened){//Если панель не открывалась ни разу, то...
+                isFirstOpened = true;//Взводим флаг первого открытия боковой панели.
+                if(root.searchString)//Если поиск уже запущен, то первое открытие — на вкладке Найдено.
+                    dcSidebar.fnNaidenoOpen()
+                else//Иначе при первом открытии фокусируемся на Закладках.
+                    dcSidebar.fnZakladkiOpen()
+            }
+            root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
+            if(dcSidebar.opened) rctZagruzka.visible = false//Если боковая панель открыта, скрываем Загрузку.
+        }
         onClickedPoisk: root.clickedPoisk()//Сигнал о том, что открываем Поиск.
         onClickedInfo: root.clickedInfo()//Сигнал о том, что нажата кнопка Информация.
     }
     DCPdfScroll {//Обработка и расчёт scroll документа
-		id: dcScroll
-		flickable: pmpDoc.flickable
-		currentPage: pmpDoc.currentPage
-		pageCount: pdfDoc.pageCount
-		onSgnGoToPage: (ntStranica) => root.fnGoToPage(ntStranica)//Листаем страницу, биндинги не ломаем.
-	}
+        id: dcScroll
+        flickable: pmpDoc.flickable
+        currentPage: pmpDoc.currentPage
+        pageCount: pdfDoc.pageCount
+        onSgnGoToPage: (ntStranica) => root.fnGoToPage(ntStranica)//Листаем страницу, биндинги не ломаем.
+    }
 }
