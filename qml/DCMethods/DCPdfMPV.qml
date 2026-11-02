@@ -188,13 +188,13 @@ Item {
                 root.sgnScaleMin(pmpDoc.renderScale);//Передаём значение минимального масштаба.
         }
     }
-    onCurrentPageChanged: {//Если страница поменялась из вне, то...
-        console.error("241: Страница " + root.currentPage + " из вне.");
-        if(pmpDoc.blStranica)//Первоначальная установка страницы при загрузке документа
-            pmpDoc.blStranica = false;//Сбрасываем флаг.
-        else//Если изменение страницы не в первый раз, то...
-            fnGoToPage(root.currentPage);//Переходим на заданную страницу.
-    }
+	onCurrentPageChanged: {//Если страница поменялась из вне, то...
+		if(!pmpDoc.blScale) return//Первичный конвейер ещё не запущен: стартовую страницу выставит tmrGoToPage.
+		if(root.currentPage < 0 || root.currentPage >= pdfDoc.pageCount) return//Страницы не существует.
+		if(root.currentPage === pmpDoc.currentPage) return//Вид уже на этой странице.
+		console.log("Страница " + root.currentPage + " из вне.")
+		fnGoToPage(root.currentPage)//Переходим на заданную страницу.
+	}
 	onRotationChanged:{//Изменение поворота документа.
         Qt.callLater(function() {//Пауза в такт. Чтоб успела повернуться сцена, и перерасчет сторон произошёл.
             pmpDoc.blRotation = true;//Изменился поворот документа.
@@ -400,7 +400,6 @@ Item {
         property bool blSize: false//true - когда pdf документ изменяет размер при масштабе виджета.
         property bool blStartWidth: true//true - пришёл сигнал об измении ширины виджета при его открытии.
         property bool blStartHeight: true//true - пришёл сигнал об измении высоты виджета при его открытии.
-        property bool blStranica: true//true-чтоб не обрабатывать первоначально заданную страницу в прерывании
 		property bool blRotation: false//true - нажата кнопка поворота документа.
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
         property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
