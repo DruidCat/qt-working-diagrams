@@ -26,11 +26,11 @@ Item {
 		return { top: cnItem.y, bottom: cnItem.y + cnItem.height, width: cnItem.width }
 	} 
     function maxY(rect){//Максимальная contentY на странице. Если страница влезает во view, то равна верху.
-        return Math.max(rect.top, rect.bottom - viewHeight)
+		return Math.max(rect.top, rect.bottom - viewHeight + flickable.bottomMargin)
     }
     function clampX(x, rect){//Ограничение координаты X в пределах страницы.
         const cnWidth = Math.max(flickable.contentWidth, rect.width)//Ширина контента
-        return Math.max(0, Math.min(x, Math.max(0, cnWidth - viewWidth)))
+		return Math.max(0, Math.min(x, Math.max(0, cnWidth + flickable.rightMargin - viewWidth)))
     }
     function clampY(y, rect){//Ограничение координаты Y в пределах страницы.
         return Math.max(rect.top, Math.min(y, maxY(rect)))

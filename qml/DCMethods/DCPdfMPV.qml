@@ -30,6 +30,7 @@ Item {
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
+	property int ntScrollMargin: root.isMobile ? 0 : 14//Запас под полосу прокрутки, чтобы она не закрывала край страницы.
     property alias sbCurrentIndex: dcSidebar.currentIndex//Индекс открытой вкладки в боковой панели.
     property int currentResult: -1//Номер Поиска, совпадение от 0....
     //Настройки
@@ -263,21 +264,20 @@ Item {
 		console.error("308: 5. Начало масштабирования документа.");
 		root.sgnProgress(46, "5/11 Начало масштабирования документа.");
 		if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
-			var widthScrollbar = 0//По умолчанию равно 0
-			if(pmpDoc.verticalScrollbar) widthScrollbar = pmpDoc.verticalScrollbar.width//Если есть указатель.
-			var widthRect = pmpDoc.childrenRect.width + widthScrollbar//Плюс ширина Scrollbar
-			var heightRect = pmpDoc.childrenRect.height;
-			if(pdfDoc.isDocVert){//Если вертикальная страница, то...
-				if((root.rotation === 0) || (root.rotation === 180))//Если поворот нулевой или 180 градусов,то
-					pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
-				else//Если поворот 90 или 270 градусов, то...
-					pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
+			const cnFl = pmpDoc.flickable
+			const cnW = (cnFl ? cnFl.width - cnFl.rightMargin : pmpDoc.width)//Область без полосы
+			const cnH = (cnFl ? cnFl.height - cnFl.bottomMargin : pmpDoc.height)
+			if(pdfDoc.isDocVert){
+				if((root.rotation === 0) || (root.rotation === 180))
+					pmpDoc.scaleToPage(cnW, cnH);
+				else
+					pmpDoc.scaleToWidth(cnW, cnH);
 			}
-			else{//Если горизонтальная страница, то...
-				if((root.rotation === 0) || (root.rotation === 180))//Если поворот нулевой или 180 градусов,то
-					pmpDoc.scaleToWidth(widthRect, heightRect);//Масштаб по ширине страницы.
-				else//Если поворот 90 или 270 градусов, то...
-					pmpDoc.scaleToPage(widthRect, heightRect);//масштаб по высоте страницы.
+			else{
+				if((root.rotation === 0) || (root.rotation === 180))
+					pmpDoc.scaleToWidth(cnW, cnH);
+				else
+					pmpDoc.scaleToPage(cnW, cnH);
 			}
 		}
 		else
@@ -527,6 +527,10 @@ Item {
         Component.onCompleted: {//Когда полностью загрузился виджет PdfMultiPageView, то...
             pmpDoc.verticalScrollbar = pmpDoc.fnPoiskScrollbar(pmpDoc)//Находим указатель на вертикалScrollbar
             pmpDoc.flickable = pmpDoc.fnPoiskFlickable(pmpDoc)//Находим указатель на Flickable
+			if(pmpDoc.flickable){
+				pmpDoc.flickable.rightMargin = root.ntScrollMargin//Справа под вертикальную полосу.
+				pmpDoc.flickable.bottomMargin = root.ntScrollMargin//Снизу под горизонтальную полосу.
+			}
         } 
         function fnPoiskScrollbar(target){//Функция поиска Вертикального Scrolbar в детях PdfMultiPageView.
             for(let ltShag = 0; ltShag < target.children.length; ltShag++){//Цикл поиска в детях.
