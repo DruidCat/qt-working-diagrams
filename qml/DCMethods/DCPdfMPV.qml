@@ -96,13 +96,13 @@ Item {
         return cnModel ? cnModel.model : null;//если модель пустая, возвращаем null, если нет, то модель
     }
     function fnClickedKeyEnter(){//Функция перехода нажатия клавиши Enter.
-        if(dcSidebar.position){//Если открыта боковая панель, то...
-            if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
-                dcSidebar.fnNaidenoEnter()//Функцию нажатия на клавишу Enter.
-        }
-        else//Если боковая панель не открыта
-            fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
-    }
+		if(dcSidebar.opened){//Если боковая панель открыта, то...
+			if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
+				dcSidebar.fnNaidenoEnter()//Функцию нажатия на клавишу Enter.
+		}
+		else//Если боковая панель не открыта
+			fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
+	}
     function fnClickedPoiskStop(){//Функция остановки поиска.
         root.currentResult = -1//Чтоб в пустом поиске не было 1
         root.searchString = "";//Сбрасываем поисковую модель именно сдесь, чтоб не было loop цикла.
@@ -119,17 +119,21 @@ Item {
     function fnClickedKeyEnd(){//Функция нажатия клавиши End
         root.currentPage = pdfDoc.pageCount-1;//На последнюю страницу
     }
-    function fnClickedSidebar(){//Функция открывающая/закрывающая боковую панель.
-        if(dcSidebar.position)//Если открыта боковая панель, то...
-            dcSidebar.close()//Закрываем боковую панель
-        else{//Если закрыта боковая панель, то...
-            rctZagruzka.visible = true
-            tmrSidebar.running = true//Открываем боковую панель через задержку таймера.
-        }
-    }
-    function fnZakritSidebar(){//Функция закрытия боковой панели.
-        dcSidebar.close()//Закрываем боковую панель
-    }
+	function fnOpenSidebar(){//Открыть боковую панель (именно открыть, а не переключить).
+		if(dcSidebar.opened || tmrSidebar.running) return//Уже открыта или уже открывается.
+		if(dcSidebar.position === 0)//Показываем «Загрузка» только если панель полностью закрыта.
+			rctZagruzka.visible = true
+		tmrSidebar.start()//Откроем через задержку таймера.
+	}
+	function fnZakritSidebar(){//Закрыть боковую панель.
+		tmrSidebar.stop()//Если открытие ещё не стартовало, отменяем.
+		rctZagruzka.visible = false//Надпись «Загрузка» гасим всегда.
+		dcSidebar.close()//Закрываем боковую панель.
+	}
+	function fnClickedSidebar(){//Переключатель, только для кнопки.
+		if(dcSidebar.position > 0) fnZakritSidebar()
+		else fnOpenSidebar()
+	}
     function fnInteractiveSidebar(isInteractive){//Функция, которая включает/выключает свайп боковой панели.
         dcSidebar.interactive = isInteractive;//вкл/выкл свайп боковой панели.
     }
@@ -138,42 +142,30 @@ Item {
         interval: 3; running: false; repeat: false
         onTriggered: dcSidebar.open()//Открываем боковую панель.
     }
-    function fnSidebarNaideno(){//Функция нажатия кнопки SideBar.
-        if(dcSidebar.opened){//Если боковая панель открыта, то...
-            if(dcSidebar.currentIndex === 0)//Если открыта вкладка Найдено, то...
-                fnClickedSidebar()//Закрываем боковую панель.
-            else//Если вкладка открыта отличная от Найдено, то...
-                dcSidebar.fnNaidenoOpen()//Открываем и фокусируемся на Найдено
-        }
-        else{//Если боковая панель закрыта, то...
-            fnClickedSidebar()//Открываем боковую панель.
-            dcSidebar.fnNaidenoOpen()//Открываем и фокусируемся на Найдено
-        }
-    }
-    function fnSidebarZakladki(){//Функция нажатия кнопки SideBar.
-        if(dcSidebar.opened){//Если боковая панель открыта, то...
-            if(dcSidebar.currentIndex === 1)//Если открыта вкладка Закладки, то...
-                fnClickedSidebar()//Закрываем боковую панель.
-            else//Если вкладка открыта отличная от Закладки, то...
-                dcSidebar.fnZakladkiOpen()//Открываем и фокусируемся на Закладках
-        }
-        else{//Если боковая панель закрыта, то...
-            fnClickedSidebar()//Открываем боковую панель.
-            dcSidebar.fnZakladkiOpen()//Открываем и фокусируемся на Закладках
-        }
-    }
-    function fnSidebarPoster(){//Функция нажатия кнопки SideBar.
-        if(dcSidebar.opened){//Если боковая панель открыта, то...
-            if(dcSidebar.currentIndex === 2)//Если открыта вкладка Миниатюры, то...
-                fnClickedSidebar()//Закрываем боковую панель.
-            else//Если вкладка открыта отличная от Миниатюры, то...
-                dcSidebar.fnPosterOpen()//Открываем и фокусируемся на Страницах
-        }
-        else{//Если боковая панель закрыта, то...
-            fnClickedSidebar()//Открываем боковую панель.
-            dcSidebar.fnPosterOpen()//Открываем и фокусируемся на Страницах
-        }
-    } 
+    function fnSidebarNaideno(){//Функция нажатия кнопки Найдено.
+		if(dcSidebar.opened && dcSidebar.currentIndex === 0)//Открыта именно эта вкладка, то...
+			fnZakritSidebar()//Закрываем боковую панель.
+		else{
+			fnOpenSidebar()//Если уже открыта, функция сама вернётся.
+			dcSidebar.fnNaidenoOpen()//Открываем и фокусируемся на Найдено
+		}
+	}
+	function fnSidebarZakladki(){//Функция нажатия кнопки Закладки.
+		if(dcSidebar.opened && dcSidebar.currentIndex === 1)//Открыта именно эта вкладка, то...
+			fnZakritSidebar()//Закрываем боковую панель.
+		else{
+			fnOpenSidebar()
+			dcSidebar.fnZakladkiOpen()//Открываем и фокусируемся на Закладках
+		}
+	}
+	function fnSidebarPoster(){//Функция нажатия кнопки Миниатюры.
+		if(dcSidebar.opened && dcSidebar.currentIndex === 2)//Открыта именно эта вкладка, то...
+			fnZakritSidebar()//Закрываем боковую панель.
+		else{
+			fnOpenSidebar()
+			dcSidebar.fnPosterOpen()//Открываем и фокусируемся на Страницах
+		}
+	}
     onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
         if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
@@ -211,18 +203,18 @@ Item {
             cppqml.pdfPoisk.urlPdf = root.source//Отправляем адрес файла в бизнес логику.
     }
     onSearchStringChanged: {//Когда меняется поисковая строка — отдадим её в C++
-        cppqml.pdfPoisk.strPoisk = root.searchString;//Отправляем поисковый запрос в бизнес логику.
-        if(root.searchString){//Если не пустая строка, то...
-            if(dcSidebar.opened){//Если боковая панель открыта, то...
-                if(dcSidebar.currentIndex !== 0)//Если открыта вкладка не Найдено, то...
-                    dcSidebar.fnNaidenoOpen()//Функция открытия и фокусировки Найдено
-            }
-            else{//Если боковая панель закрыта, то...
-                dcSidebar.fnNaidenoOpen()//Функция открытия и фокусировки Найдено
-                fnClickedSidebar()//Открываем боковую панель.
-            }
-        }
-    }
+		cppqml.pdfPoisk.strPoisk = root.searchString;//Отправляем поисковый запрос в бизнес логику.
+		if(root.searchString){//Если не пустая строка, то...
+			if(dcSidebar.opened){//Если боковая панель открыта, то...
+				if(dcSidebar.currentIndex !== 0)//Если открыта вкладка не Найдено, то...
+					dcSidebar.fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+			}
+			else{//Если боковая панель закрыта (или ещё открывается), то...
+				dcSidebar.fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+				fnOpenSidebar()//Открываем боковую панель, а не переключаем.
+			}
+		}
+	}
     onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
         if(width > 0){//Если ширина больше 0, это не формирование при старте окна, то...
             if(pmpDoc.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
@@ -679,14 +671,17 @@ Item {
         pmpDoc: pmpDoc//Передаём объект отображения
         pdfDoc: pdfDoc//Передаём объект документа
         //чтобы внешний сигнал продолжил работать
-        onOpenedChanged: {//Если состояние боковой панели изменилось, она открыта или закрыта, то...
-            if(!isFirstOpened){//Если панель не открывалась ни разу, то...
-                dcSidebar.fnZakladkiOpen();//Функция для фокусировки на списке закладок при первом запуске.
-                isFirstOpened = true;//Взводим флаг первого открытия боковой панели.
-            }
-            root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
-            if(dcSidebar.opened) rctZagruzka.visible = false//Если боковая панель открыта, скрываем Загрузку.
-        }
+		onOpenedChanged: {//Если состояние боковой панели изменилось, она открыта или закрыта, то...
+			if(!isFirstOpened){//Если панель не открывалась ни разу, то...
+				isFirstOpened = true;//Взводим флаг первого открытия боковой панели.
+				if(root.searchString)//Если поиск уже запущен, то первое открытие — на вкладке Найдено.
+					dcSidebar.fnNaidenoOpen()
+				else//Иначе при первом открытии фокусируемся на Закладках.
+					dcSidebar.fnZakladkiOpen()
+			}
+			root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
+			if(dcSidebar.opened) rctZagruzka.visible = false//Если боковая панель открыта, скрываем Загрузку.
+		}
         onClickedPoisk: root.clickedPoisk()//Сигнал о том, что открываем Поиск.
         onClickedInfo: root.clickedInfo()//Сигнал о том, что нажата кнопка Информация.
     }
