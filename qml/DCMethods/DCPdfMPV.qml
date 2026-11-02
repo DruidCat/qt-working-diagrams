@@ -422,31 +422,28 @@ Item {
             source: root.source//Привязываем источник PDF
             password: root.password//Пароль для pdf документа.
             onStatusChanged: {
-                if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
-                    console.error("474: 10. Старт таймера ошибки.");
-                    root.sgnProgress(91, "10/11 Старт таймера ошибки.");
-                    tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
-                }
-                else{//Если не ошибка, то...
-                    if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
-                        console.error("480: 2. Статус документа: Готов.");
-                        root.sgnProgress(19, "2/11 Загрузка большого документа.");
-                        //Расчитываем, вертикальный или горизонтальный документ.
-                        pdfDoc.rlWidth = pdfDoc.pagePointSize(root.currentPage).width//Запоминаем первую стр.
-                        pdfDoc.rlHeight = pdfDoc.pagePointSize(root.currentPage).height//Запоминаем первую стр
-                        if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
-                            pdfDoc.isDocVert = true;//true - вертикальный документ.
-                        else
-                            pdfDoc.isDocVert = false;//false - горизонтальный документ. 
-                    }
-                    else{
-                        if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
-                            console.error("492: 1. Статус документа: Загрузка.");
-                            root.sgnProgress(10, "1/11 Статус документа: Загрузка.");
-                        }
-                    }
-                }
-            }
+				if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
+					console.error("474: 10. Старт таймера ошибки.");
+					root.sgnProgress(91, "10/11 Старт таймера ошибки.");
+					tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
+				}
+				else if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
+					console.error("480: 2. Статус документа: Готов.");
+					root.sgnProgress(19, "2/11 Загрузка большого документа.");
+					if(pdfDoc.pageCount > 0){//Защита от пустого документа.
+						//Берём заданную страницу, но не меньше 0 и не больше последней.
+						const cnPage = Math.max(0, Math.min(root.currentPage, pdfDoc.pageCount - 1))
+						const cnSize = pdfDoc.pagePointSize(cnPage)//Размер страницы в пунктах.
+						pdfDoc.rlWidth = cnSize.width//Запоминаем ширину.
+						pdfDoc.rlHeight = cnSize.height//Запоминаем высоту.
+						pdfDoc.isDocVert = (cnSize.height >= cnSize.width)//true - вертикальный документ.
+					}
+				}
+				else if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
+					console.error("492: 1. Статус документа: Загрузка.");
+					root.sgnProgress(10, "1/11 Статус документа: Загрузка.");
+				}
+			}
             onPasswordRequired: {//Если пришёл сигнал passwordRequire запроса пароля в pdf документе, то...
                 console.error("499: Запрашиваю пароль.")
                 pmpDoc.blPassword = true;//Запрашиваю пароль.
