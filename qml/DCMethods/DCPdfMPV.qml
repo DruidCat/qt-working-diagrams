@@ -380,7 +380,6 @@ Item {
 			pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
             dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно! 
-            dcScroll.fnSpacingStart(pmpDoc.currentPage, dcScroll.pagePointY)
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
@@ -447,7 +446,6 @@ Item {
                         //Расчитываем, вертикальный или горизонтальный документ.
                         pdfDoc.rlWidth = pdfDoc.pagePointSize(root.currentPage).width//Запоминаем первую стр.
                         pdfDoc.rlHeight = pdfDoc.pagePointSize(root.currentPage).height//Запоминаем первую стр
-                        dcScroll.fnSteps()//Расчёт шагов для скролла.
                         if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
                             pdfDoc.isDocVert = true;//true - вертикальный документ.
                         else
@@ -476,7 +474,6 @@ Item {
                 if((pdfDoc.rlWidth !== cnWidth) || (pdfDoc.rlHeight !== cnHeight)){
                     pdfDoc.rlWidth = cnWidth
                     pdfDoc.rlHeight = cnHeight
-                    dcScroll.fnSteps()//Расчёт шагов для скролла.
                     if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
                         pdfDoc.isDocVert = true;//true - вертикальный документ.
                     else
@@ -485,7 +482,6 @@ Item {
                 }
                 root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
                 dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
-                dcScroll.fnPagePointY();//Функция высчитывает координату начала страницы по Y
             }
         }
         onCurrentPageRenderingStatusChanged:{//Если рендер страницы изменился, то...
@@ -585,25 +581,23 @@ Item {
             propagateComposedEvents: false
 
             // Включение режима, когда можно захватить лкм документ и перемещать его.
-            enabled: (pmpDoc.handMode || pmpDoc.spacePressed)
-                    && dcScroll.isPagePointY && !root.isVidelit
+            enabled: (pmpDoc.handMode || pmpDoc.spacePressed) && !root.isVidelit
             //Вид курсора в зависимости нажатия или нет лкм и в зависимости режима Выделить или Перемещать.
             cursorShape: pressed
                          ? (root.isVidelit ? Qt.IBeamCursor : Qt.ClosedHandCursor)
                          : (root.isVidelit ? Qt.ArrowCursor : Qt.OpenHandCursor)
             property real rlLastX//Последняя запомнившаяся координата X
             property real rlLastY//Последняя запомнившаяся координата Y
-
-            onPressed: (mouse) => {//Если нажата левая кнопка мыши.
-                const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
-                cnFlickable.contentY = cnFlickable.contentY//Это от микро дёрганий. Форсирует фиксацию binding
-                if (cnFlickable) {//Если указатель существует, то обращаемся к закрытым методам и свойствам.
-                    cnFlickable.cancelFlick()//Прерывает инерциальную прокрутку (flicking)
-                    cnFlickable.interactive = false//Отключаем свайпы,pinch-to-zoom,выделение,вращение и т.д.
-                }
-                rlLastX = mouse.x//Запоминаем позицию мыши по X
-                rlLastY = mouse.y//Запоминаем позицию мыши по Y
-            }
+			onPressed: (mouse) => {//Если нажата левая кнопка мыши.
+				const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
+				if (cnFlickable) {//Если указатель существует, то обращаемся к закрытым методам и свойствам.
+					cnFlickable.contentY = cnFlickable.contentY//От микро-дёрганий
+					cnFlickable.cancelFlick()//Прерывает инерциальную прокрутку (flicking)
+					cnFlickable.interactive = false//Отключаем свайпы,pinch-to-zoom,выделение,вращение и т.д.
+				}
+				rlLastX = mouse.x//Запоминаем позицию мыши по X
+				rlLastY = mouse.y//Запоминаем позицию мыши по Y
+			}
             onPositionChanged: (mouse) => {//Если изменилась позиция мыши
                 if (!(mouse.buttons & Qt.LeftButton))//Если при этом нажата не левая кнопка мыши, то...
                     return//Выходим
@@ -613,12 +607,12 @@ Item {
                 rlLastX = mouse.x//Запоминаем позицию мыши по X
                 rlLastY = mouse.y//Запоминаем позицию мыши по Y
             }
-            onReleased: {//Если отпустил правую кнопку мыши.
-                const cnFlickable = pmpDoc.flickable//Создаём указатель на непубличный pmpDoc.flickable
-                if (cnFlickable){//Если указатель существует, то...
-                    cnFlickable.interactive = true//Включаем свайпы, pinch-to-zoom, выделение, вращение и т.д.
-                }
-            }
+			onReleased: fnRestoreInteractive()//Если отпустил правую кнопку мыши.
+			onCanceled: fnRestoreInteractive()//Если enabled стал false во время нажатия.
+			function fnRestoreInteractive(){
+				if (pmpDoc.flickable)//Если указатель существует, то...
+					pmpDoc.flickable.interactive = true//Включаем свайпы, pinch-to-zoom, выделение, вращение
+			}
         }
     }
     Connections {//Автовыбор первого совпадения и переход
@@ -710,22 +704,10 @@ Item {
         onClickedInfo: root.clickedInfo()//Сигнал о том, что нажата кнопка Информация.
     }
     DCPdfScroll {//Обработка и расчёт scroll документа
-        id: dcScroll
-        //Настройки
-        pdfDoc: pdfDoc//Передаём объект документа
-        flickable: pmpDoc.flickable
-        currentPage: pmpDoc.currentPage//Открытая страницы в mentorPDF.
-        pageCount: pdfDoc.pageCount//Количество страниц в документе.
-        renderScale: pmpDoc.renderScale//Масштаб pdf документа
-        pointPageHeight: pdfDoc.rlHeight//Действительная высота страницы.
-        pointPageWidth: pdfDoc.rlWidth//Действительная ширина страницы.
-        pointRectHeight: pmpDoc.childrenRect.height//Действительная высота прямоугольника сцены
-        pointRectWidth: pmpDoc.childrenRect.width//Действительная ширина прямоугольника сцены
-        pointScrollBarWidth: pmpDoc.verticalScrollbar.width//Высота самого scrollbar
-        //Функции.
-        onCurrentPageChanged: {//Если страница поменялась в виджете, то...
-            if(isCurrentPage)//Если флаг взведём (от бесконечного вызова защита), то...
-                root.currentPage = currentPage//Перелистываем страницу в mentorPDF
-        }
-    }
+		id: dcScroll
+		flickable: pmpDoc.flickable
+		currentPage: pmpDoc.currentPage
+		pageCount: pdfDoc.pageCount
+		onSgnGoToPage: (ntStranica) => root.fnGoToPage(ntStranica)//Листаем страницу, биндинги не ломаем.
+	}
 }
