@@ -30,7 +30,7 @@ Item {
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
-	property int ntScrollMargin: root.isMobile ? 0 : 14//Запас под полосу прокрутки, чтобы она не закрывала край страницы.
+	property int ntScrollMargin: root.isMobile ? 0 : 7//Запас под полосу прокрутки, чтобы она не закрывала край страницы.
     property alias sbCurrentIndex: dcSidebar.currentIndex//Индекс открытой вкладки в боковой панели.
     property int currentResult: -1//Номер Поиска, совпадение от 0....
     //Настройки
@@ -265,8 +265,8 @@ Item {
 		root.sgnProgress(46, "5/11 Начало масштабирования документа.");
 		if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
 			const cnFl = pmpDoc.flickable
-			const cnW = (cnFl ? cnFl.width - cnFl.rightMargin : pmpDoc.width)//Область без полосы
-			const cnH = (cnFl ? cnFl.height - cnFl.bottomMargin : pmpDoc.height)
+			const cnW = (cnFl ? cnFl.width : pmpDoc.width) - root.ntScrollMargin//Область без полосы
+			const cnH = (cnFl ? cnFl.height : pmpDoc.height) - root.ntScrollMargin
 			if(pdfDoc.isDocVert){
 				if((root.rotation === 0) || (root.rotation === 180))
 					pmpDoc.scaleToPage(cnW, cnH);
@@ -527,10 +527,6 @@ Item {
         Component.onCompleted: {//Когда полностью загрузился виджет PdfMultiPageView, то...
             pmpDoc.verticalScrollbar = pmpDoc.fnPoiskScrollbar(pmpDoc)//Находим указатель на вертикалScrollbar
             pmpDoc.flickable = pmpDoc.fnPoiskFlickable(pmpDoc)//Находим указатель на Flickable
-			if(pmpDoc.flickable){
-				pmpDoc.flickable.rightMargin = root.ntScrollMargin//Справа под вертикальную полосу.
-				pmpDoc.flickable.bottomMargin = root.ntScrollMargin//Снизу под горизонтальную полосу.
-			}
         } 
         function fnPoiskScrollbar(target){//Функция поиска Вертикального Scrolbar в детях PdfMultiPageView.
             for(let ltShag = 0; ltShag < target.children.length; ltShag++){//Цикл поиска в детях.
@@ -607,6 +603,16 @@ Item {
 					pmpDoc.flickable.interactive = true//Включаем свайпы, pinch-to-zoom, выделение, вращение
 			}
         }
+    }
+    Binding {//Постоянный запас под вертикальную полосу прокрутки.
+        target: pmpDoc.flickable; property: "rightMargin"
+        value: root.ntScrollMargin; when: !!pmpDoc.flickable
+        restoreMode: Binding.RestoreNone
+    }
+    Binding {//Постоянный запас под горизонтальную полосу прокрутки.
+        target: pmpDoc.flickable; property: "bottomMargin"
+        value: root.ntScrollMargin; when: !!pmpDoc.flickable
+        restoreMode: Binding.RestoreNone
     }
     Connections {//Автовыбор первого совпадения и переход
         target: pmpDoc.searchModel
