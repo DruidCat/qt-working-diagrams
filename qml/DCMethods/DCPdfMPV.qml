@@ -30,6 +30,7 @@ Item {
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
     property int ntScrollMargin: root.isMobile ? 0 : 7//Ширина/высота ползунка полосы прокрутки.
+	property int msWatchdog: 70000//Время сторожа открытия в миллисекундах (70000 = 1 мин 10 с).
     property bool blLog: true//true - отладочные сообщения включены, false - выключены (для релиза).
     property alias sbCurrentIndex: dcSidebar.currentIndex//Индекс открытой вкладки в боковой панели.
     property int currentResult: -1//Номер Поиска, совпадение от 0....
@@ -175,7 +176,7 @@ Item {
         if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
-			root.fnWatchdogStart()//Сторож: если конвейер встанет, документ покажется сам.
+			tmrWatchdog.restart()//Запуск/перезапуск сторожа
             pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
             root.fnLog(3, "Старт таймера масштабирования (масштаб извне).");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
@@ -198,7 +199,7 @@ Item {
             pmpDoc.blRotation = true;//Изменился поворот документа.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
-			root.fnWatchdogStart()//Сторож: если конвейер встанет, документ покажется сам.
+			tmrWatchdog.restart()//Запуск/перезапуск сторожа
             pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
             root.fnLog(3, "Старт таймера масштабирования (поворот).");
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
@@ -259,7 +260,7 @@ Item {
                 root.fnLog(4, "Изменился размер окна.");
                 root.sgnProgress(37, "4/11 Изменился размер окна.")
                 root.visible = false;//Невидимым виджет делаем.
-				root.fnWatchdogStart()//Сторож: если конвейер встанет, документ покажется сам.
+				tmrWatchdog.restart()//Запуск/перезапуск сторожа
             }
             tmrAppSize.restart();//Таймер перезапускаем.
         }
@@ -303,8 +304,11 @@ Item {
         root.sgnProgress(100, "11/11 Старт таймера отображения.");
         tmrVisible.running = true;//Запускаем таймер отображения документа.
     }
-	function fnWatchdogStart(){//Запуск/перезапуск сторожа, вызываем там, где виджет становится невидимым.
-        tmrWatchdog.restart()
+	function fnVremya(ntMs){//Переводит миллисекунды в текст «N мин M с», минуты не пишем, если их 0.
+        const cnSek = Math.round(ntMs / 1000)//Всего секунд.
+        const cnMin = Math.floor(cnSek / 60)//Целых минут.
+        const cnOst = cnSek % 60//Оставшиеся секунды.
+        return (cnMin > 0 ? cnMin + " мин " : "") + cnOst + " с"
     }
     Timer {//Таймер сброса сцены документа, чтоб сцена пересчиталась под новый масштаб.
         id: tmrResetScene
@@ -404,9 +408,10 @@ Item {
     }
     Timer {//Сторож открытия: если конвейер не дошёл до tmrVisible, показываем pdf как есть.
         id: tmrWatchdog
-        interval: 70000; running: false; repeat: false//1 минуты 10 секунды.
+        interval: root.msWatchdog; running: false; repeat: false//1 минуты 10 секунды.
         onTriggered: {
-            console.warn("DCPdfMPV: watchdog, документ не открылся за 1 мин 10 с, показываю как есть.",
+            console.warn("DCPdfMPV: watchdog, документ не открылся за " + root.fnVremya(root.msWatchdog) +
+                         ", показываю как есть.",
                          "blScale=" + pmpDoc.blScale, "isSceneReset=" + pmpDoc.isSceneReset,
                          "isScaleStart=" + pmpDoc.isScaleStart, "blSize=" + pmpDoc.blSize,
                          "status=" + pdfDoc.status, "page=" + pmpDoc.currentPage)//Где именно застряли.
@@ -474,7 +479,7 @@ Item {
                     }
                 }
                 else if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
-					root.fnWatchdogStart()//Старт сторожа открытия, в том числе после ввода пароля.
+					tmrWatchdog.restart()//Запуск/перезапуск сторожа
                     root.fnLog(1, "Статус документа: Загрузка.");
                     root.sgnProgress(10, "1/11 Статус документа: Загрузка.");
                 }
@@ -556,7 +561,7 @@ Item {
                 pmpDoc.ntPinchPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
                 pmpDoc.blPinch = true;//То это увеличение масштаба пользователем через щипок
                 root.visible = false;//Невидимый виджет.
-				root.fnWatchdogStart()//Сторож: если конвейер встанет, документ покажется сам.
+				tmrWatchdog.restart()//Запуск/перезапуск сторожа
             }
             pmpDoc.blRenderScale = true;//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
             root.renderScale = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
