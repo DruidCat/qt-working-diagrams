@@ -566,6 +566,8 @@ Item {
         MouseArea {
             id: maDoc
             anchors.fill: pmpDoc
+			anchors.rightMargin: root.ntScrollMargin//Не закрываем зону вертикальной полосы прокрутки.
+    		anchors.bottomMargin: root.ntScrollMargin//Не закрываем зону горизонтальной полосы прокрутки.
             acceptedButtons: Qt.LeftButton//Нажатие левой кнопки мыши
             hoverEnabled: true
             preventStealing: true//Очень важно, чтоб захват мышкой не сбрасывался при движении
