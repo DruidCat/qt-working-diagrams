@@ -32,9 +32,12 @@ Item {
         const cnWidth = Math.max(flickable.contentWidth, rect.width)//Ширина контента
 		return Math.max(0, Math.min(x, Math.max(0, cnWidth + flickable.rightMargin - viewWidth)))
     }
-    function clampY(y, rect){//Ограничение координаты Y в пределах страницы.
-        return Math.max(rect.top, Math.min(y, maxY(rect)))
-    }
+	function clampY(y, rect){//Ограничение координаты Y в пределах страницы.
+		const cur = flickable.contentY
+		const lo = Math.min(rect.top, cur)//Уже выше верха - выше не пускаем, но и не дёргаем.
+		const hi = Math.max(maxY(rect), cur)//Уже ниже низа - ниже не пускаем, но и не дёргаем.
+		return Math.max(lo, Math.min(y, hi))
+	}
     function stepY(rect){ return (rect.bottom - rect.top) / ntStepScroll }//Шаг скролла по вертикали.
     function stepX(rect){ return rect.width / ntStepScroll }//Шаг скролла по горизонтали.
     function fnKeyVniz(){//Функция скролла вниз страницы.
