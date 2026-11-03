@@ -172,36 +172,22 @@ Item {
         }
     }
 	onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
-        if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
-            pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
-            root.visible = false;//Невидимый виджет.
-			tmrWatchdog.restart()//Запуск/перезапуск сторожа
-            pmpDoc.blScaleAuto = false;//Ручное масштабирование, обязательно перед таймером.
-            root.fnLog(3, "Старт таймера масштабирования (масштаб извне).");
-            root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
-            tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
-        }
-        //Внутреннее изменение масштаба: минимальный масштаб (sgnScaleMin) теперь излучает fnScale().
-    }
-    onCurrentPageChanged: {//Если страница поменялась из вне, то...
-        if(!pmpDoc.blScale) return//Первичный конвейер ещё не запущен: стартовую страницу выставит tmrGoToPage
-        if(root.currentPage < 0 || root.currentPage >= pdfDoc.pageCount) return//Страницы не существует.
-        if(root.currentPage === pmpDoc.currentPage) return//Вид уже на этой странице.
-        root.fnLog(0, "Страница " + root.currentPage + " из вне.")
-        fnGoToPage(root.currentPage)//Переходим на заданную страницу.
-    }
-    onRotationChanged:{//Изменение поворота документа.
-        Qt.callLater(function() {//Пауза в такт. Чтоб успела повернуться сцена, и перерасчет сторон произошёл.
-            pmpDoc.blRotation = true;//Изменился поворот документа.
-            pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
-            root.visible = false;//Невидимый виджет.
-			tmrWatchdog.restart()//Запуск/перезапуск сторожа
-            pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером.
-            root.fnLog(3, "Старт таймера масштабирования (поворот).");
-            root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
-            tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
-        })
-    }
+		if(pmpDoc.blRenderScale) return//Это эхо от самого виджета.
+		if(!pmpDoc.blScale) return//Первичный конвейер ещё не стартовал.
+		fnRestartPipeline("масштаб извне", false, tmrScale)//Ручное масштабирование.
+	}	
+	onCurrentPageChanged: {//Если страница поменялась из вне, то...
+		if(!pmpDoc.blScale) return//Первичный конвейер ещё не запущен: страницу возьмёт он.
+		if(root.currentPage < 0 || root.currentPage >= pdfDoc.pageCount) return
+		if(pmpDoc.isBusy){//Конвейер идёт: страница назначения просто обновляется.
+			pmpDoc.ntPdfPage = root.currentPage
+			return
+		}
+		if(root.currentPage === pmpDoc.currentPage) return
+		root.fnLog(0, "Страница " + root.currentPage + " из вне.")
+		fnGoToPage(root.currentPage)
+	}
+	onRotationChanged: Qt.callLater(root.fnOnRotation)//Пауза в такт, чтоб сцена успела повернуться. 
     onSourceChanged: {//Когда меняется источник документа — обновим C++ поиск
         if(root.source && root.source !== "")
             cppqml.pdfPoisk.urlPdf = root.source//Отправляем адрес файла в бизнес логику.
@@ -219,22 +205,8 @@ Item {
             }
         }
     }
-    onWidthChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
-        if(width > 0){//Если ширина больше 0, это не формирование при старте окна, то...
-            if(pmpDoc.blStartWidth)//Окно открылось, не обрабатываем сигнал об изменении..
-                pmpDoc.blStartWidth = false;//Взводим флаг на оброботку размера.
-            else
-                fnTimerAppSize();//Запускаем таймер.
-        }
-    }
-    onHeightChanged:{//Первое изменение при открытии окна и последнее изменения при закрытии окна.
-        if(height > 0){//Если высота больше 0, это не формирование при старте окна, то...
-            if(pmpDoc.blStartHeight)//Окно открылось, не обрабатываем сигнал об изменении..
-                pmpDoc.blStartHeight = false;//Взводим флаг на оброботку размера.
-            else
-                fnTimerAppSize();//Запускаем таймер.
-        }
-    }
+	onWidthChanged: { if(width > 0) fnTimerAppSize() }
+	onHeightChanged: { if(height > 0) fnTimerAppSize() }
     function searchForward(){//Функция следующего поиска, пробрасываем вне виджета.
         //pmpDoc.searchForward();
         const cnCount = pmpDoc.searchModel.count//Количество совпадений
@@ -249,18 +221,48 @@ Item {
         const cnPrev = pmpDoc.searchModel.currentResult - 1//Предыдущий результат
         pmpDoc.searchModel.currentResult = (cnPrev < 0) ? cnCount - 1 : cnPrev//Перед первым идёт последний.
     }
-    function fnTimerAppSize(){//Функция старта таймера при изменении размеров приложения пользователем.
-        if(!pmpDoc.blSize){//Принимаю размеры приложения, пока не запустится обработкик показа документа.
-            if(!tmrAppSize.running){//Если таймер еще не запускался, то...
-                pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
-                root.fnLog(4, "Изменился размер окна.");
-                root.sgnProgress(37, "4/11 Изменился размер окна.")
-                root.visible = false;//Невидимым виджет делаем.
-				tmrWatchdog.restart()//Запуск/перезапуск сторожа
-            }
-            tmrAppSize.restart();//Таймер перезапускаем.
-        }
-    }
+	function fnClampPage(ntStranica){//Страница в пределах документа.
+		return Math.max(0, Math.min(ntStranica, pdfDoc.pageCount - 1))
+	}
+	function fnBeginPipeline(){//Общее начало: прячем виджет, взводим isBusy, будим сторожа.
+		if(!pmpDoc.isBusy){//Страницу запоминаем только при ПЕРВОМ входе, иначе запомнится 0 из fnScale.
+			pmpDoc.isBusy = true
+			if(pmpDoc.currentPage >= 0)
+				pmpDoc.ntPdfPage = pmpDoc.currentPage
+		}
+		root.visible = false
+		tmrWatchdog.restart()
+	}
+	function fnStopTimers(){//Останавливаем всё, что запущено конвейером, чтоб старый прогон не дошёл до конца.
+		tmrAppSize.stop()
+		tmrScale.stop()
+		tmrResetScene.stop()
+		tmrGoToPage.stop()
+		tmrVisible.stop()
+	}
+	function fnRestartPipeline(strPrichina, blAuto, tmrStart){//ЕДИНАЯ точка запуска конвейера.
+		const blNew = !pmpDoc.isBusy//true - конвейер запускается, false - перезапуск посреди прогона.
+		fnBeginPipeline()
+		fnStopTimers()
+		pmpDoc.blPinch = false//Перезапуск полностью заменяет щипок.
+		pmpDoc.blScaleAuto = blAuto//Обязательно перед таймером.
+		if(blNew){
+			fnLog(3, "Старт таймера масштабирования (" + strPrichina + ").")
+			sgnProgress(28, "3/11 Старт таймера масштабирования.")
+		}
+		else
+			fnLog(3, "Перезапуск конвейера (" + strPrichina + "), страница " + pmpDoc.ntPdfPage + " сохранена.")
+		tmrStart.restart()//tmrScale - обычный запуск, tmrAppSize - с задержкой на изменение размера.
+	}
+	function fnOnRotation(){//Именно именованная функция, чтоб Qt.callLater склеивал повторные вызовы.
+		if(!pmpDoc.blScale) return//Первичный конвейер ещё не стартовал, он возьмёт актуальный поворот.
+		pmpDoc.blRotation = true//Изменился поворот документа.
+		fnRestartPipeline("поворот", true, tmrScale)
+	}
+	function fnTimerAppSize(){//Вызывается при каждом изменении размера окна.
+		if(!pmpDoc.blScale) return//Первичный конвейер ещё не стартовал, он возьмёт актуальный размер.
+		fnRestartPipeline("размер окна", true, tmrAppSize)//Конвейер перезапускается, пока окно тянут.
+	}
 	function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
 		pmpDoc.isScaleStart = true;//Начало масштабирования.
 		pmpDoc.goToPage(0);//Переходим на первую страницу, чтоб потом перейти на заданную страницу.
@@ -303,6 +305,8 @@ Item {
 		tmrResetScene.running = true;//запускаем таймер, сброса сцены.
 	}
     function fnGoToPage(ntStranica){//Функция обрабатывающая переход на новую страницу документа.
+		if(pdfDoc.pageCount <= 0) return
+    	ntStranica = fnClampPage(ntStranica)//Защита от -1 и выхода за конец.
 		root.fnLog(10, "Переходим на страницу: " + ntStranica);
 		root.sgnProgress(91, "10/11 Переходим на страницу.");
 		const cnFl = pmpDoc.flickable
@@ -346,7 +350,6 @@ Item {
         id: tmrAppSize
         interval: 333; running: false; repeat: false
         onTriggered: {
-            pmpDoc.blSize = true;//Открываем документ, игнорируя изменения размера приложения.
             pmpDoc.blScaleAuto = true;//Автоматический режим масштабирования по размеру виджета
             fnScale();//Выставляем масштаб по ширине или по высоте в зависимости от размера документа.
         }
@@ -360,43 +363,30 @@ Item {
             fnScale();//масштабируем документ автоматически/вручную.
         }
     }
-    Timer {//Таймер необходим, чтоб pdf документ успел смаштабироваться, и можно было выставить страницу.
-        id: tmrGoToPage
-        interval: 777; running: false; repeat: false
-        onTriggered: {
-            pmpDoc.isSceneReset = false;//Сброс сцены закончился, статусы рендера снова обрабатываем.
-            root.fnLog(9, "Стоп таймера страницы.");
-            root.sgnProgress(82, "9/11 Стоп таймера страницы.");
-            if(pmpDoc.blPinch){//Если был щипок пользователя с изменением Масштаба, то...
-                pmpDoc.blPinch = false;//Сбрасываем флаг
-                fnGoToPage(pmpDoc.ntPinchPage);//Выставляем запомненную страницу после щипка
-            }
-            else{//Если не было щипка пользователя, то...
-                if(pmpDoc.blSize)//Если идет изменение масштаба через изменение размера виджета, то...
-                    fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
-                else{//Если нет, то...
-                    if(pmpDoc.blScaleAuto){//Если масштабирование Автоматическое при старте, то...
-                        if(pmpDoc.blRotation)//Если нажат поворот документа, то..
-                            fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
-                        else//Если не нажат поворот, то это автоматическое масштабирование, и поэтому...
-                            fnGoToPage(root.currentPage);//Выставляем заданную страницу из вне виджита.
-                    }
-                    else//Если Ручное масштабирование пользователем, то...
-                        fnGoToPage(pmpDoc.ntPdfPage);//Выставляем запомненную страницу из виджита
-                }
-            }
-        }
-    }
+	Timer {//Таймер необходим, чтоб pdf документ успел смаштабироваться, и можно было выставить страницу.
+		id: tmrGoToPage
+		interval: 777; running: false; repeat: false
+		onTriggered: {
+			pmpDoc.isSceneReset = false//Сброс сцены закончился, статусы рендера снова обрабатываем.
+			pmpDoc.blPinch = false//Сбрасываем флаг
+			root.fnLog(9, "Стоп таймера страницы.")
+			root.sgnProgress(82, "9/11 Стоп таймера страницы.")
+			fnGoToPage(pmpDoc.ntPdfPage)//Единая страница назначения для всех входов.
+		}
+	}
     Timer {//Таймер необходим, чтоб после перехода на страницу произошла небольшая пауза, минимум 333.
         id: tmrVisible
         interval: 333; running: false; repeat: false
         onTriggered: {
 			tmrWatchdog.stop()//Конвейер дошёл до конца, сторож не нужен.
             root.fnLog(0, "Отображаем ваш документ.");
-            pmpDoc.blSize = false;//Готов к изменению размера приложения.
+			pmpDoc.isBusy = false//Конвейер закончен.
             pmpDoc.blRotation = false;//Сбрасываем флаг поворота документа.
             root.visible = true;//Видимый виджет
-            dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем минниатюру страницы Обязательно!
+			if(pmpDoc.currentPage >= 0){
+				root.sgnCurrentPage(pmpDoc.currentPage)//Страницу отдаём один раз, в конце.
+				dcSidebar.posterIndex = pmpDoc.currentPage
+			}
         }
     }
     Timer {//Таймер необходим, чтоб чтоб после аварии закрыть страницу.
@@ -422,16 +412,18 @@ Item {
             console.warn("DCPdfMPV: watchdog, документ не открылся за " + root.fnVremya(root.msWatchdog) +
                          ", показываю как есть.",
                          "blScale=" + pmpDoc.blScale, "isSceneReset=" + pmpDoc.isSceneReset,
-                         "isScaleStart=" + pmpDoc.isScaleStart, "blSize=" + pmpDoc.blSize,
+                         "isScaleStart=" + pmpDoc.isScaleStart, "isBusy=" + pmpDoc.isBusy,
                          "status=" + pdfDoc.status, "page=" + pmpDoc.currentPage)//Где именно застряли.
             pmpDoc.isSceneReset = false;//Сбрасываем состояния конвейера,чтоб не остались взведёнными навсегда
             pmpDoc.isScaleStart = false;
-            pmpDoc.blSize = false;//Иначе изменение размера окна больше не будет обрабатываться.
+            pmpDoc.isBusy = false;//Иначе изменение размера окна больше не будет обрабатываться.
             pmpDoc.blRotation = false;
             root.sgnProgress(100, "11/11 Таймаут открытия: документ показан как есть.");
             root.visible = true;//Показываем документ как есть.
-            if(pmpDoc.currentPage >= 0)//-1 в боковую панель не отдаём.
+            if(pmpDoc.currentPage >= 0){//-1 в боковую панель не отдаём.
+				root.sgnCurrentPage(pmpDoc.currentPage)
                 dcSidebar.posterIndex = pmpDoc.currentPage//Подсвечиваем миниатюру, как в tmrVisible.
+			}
         }
     } 
     PdfMultiPageView {
@@ -445,13 +437,10 @@ Item {
         property bool blRenderScale: false//Флаг предотвращающий рекурсию root.renderScale
         property bool blScaleAuto: true//true - автоматическое масштабирование. false - ручное масштабирование
         property bool isScaleStart: false//true - когда pdf документ изменяет масштаб.
+		property bool isBusy: false//true - конвейер открытия/масштабирования идёт, документ скрыт.
         property bool blPinch: false//true - когда пользователь щипком изменил масштаб.
-        property bool blSize: false//true - когда pdf документ изменяет размер при масштабе виджета.
-        property bool blStartWidth: true//true - пришёл сигнал об измении ширины виджета при его открытии.
-        property bool blStartHeight: true//true - пришёл сигнал об измении высоты виджета при его открытии.
         property bool blRotation: false//true - нажата кнопка поворота документа.
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
-        property int ntPinchPage: 0//Номер страницы, который запоминается при щипке на Android
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
         //Scroll мышью документа
         property bool handMode: true//Режим "рука" активирован
@@ -500,25 +489,23 @@ Item {
                 root.sgnPassword();//Сигнал о том, что есть запрос на ввод пароля.
             }
         }
-        onCurrentPageChanged: {//Если страница документа изменилась, то...
-            const cnStranica = pmpDoc.currentPage//Номер страницы
-            if(cnStranica < 0) return//Если страница -1, выходим из обработчика, так как это ошибка.
-            if(!pmpDoc.isScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
-                const cnWidth = pdfDoc.pagePointSize(cnStranica).width
-                const cnHeight = pdfDoc.pagePointSize(cnStranica).height
-                if((pdfDoc.rlWidth !== cnWidth) || (pdfDoc.rlHeight !== cnHeight)){
-                    pdfDoc.rlWidth = cnWidth
-                    pdfDoc.rlHeight = cnHeight
-                    if(pdfDoc.rlHeight >= pdfDoc.rlWidth)
-                        pdfDoc.isDocVert = true;//true - вертикальный документ.
-                    else
-                        pdfDoc.isDocVert = false;//false - горизонтальный документ.
-                    root.fnLog(0, "Размер страницы изменился, нужно менять масштаб.")
-                }
-                root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
-                dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
-            }
-        }
+		onCurrentPageChanged: {//Если страница документа изменилась, то...
+			const cnStranica = pmpDoc.currentPage//Номер страницы
+			if(cnStranica < 0) return//Если страница -1, выходим из обработчика, так как это ошибка.
+			if(!pmpDoc.isScaleStart){//Если не изменяется масштаб с перескоком на 0 страницу, то...
+				const cnSize = pdfDoc.pagePointSize(cnStranica)//Один вызов вместо двух.
+				if(pdfDoc.rlWidth !== cnSize.width || pdfDoc.rlHeight !== cnSize.height){
+					pdfDoc.rlWidth = cnSize.width
+					pdfDoc.rlHeight = cnSize.height
+					pdfDoc.isDocVert = (cnSize.height >= cnSize.width)
+					root.fnLog(0, "Размер страницы изменился, нужно менять масштаб.")
+				}
+				if(pmpDoc.blScale && !pmpDoc.isBusy){//Во время конвейера промежуточные 0 наружу не отдаём.
+					root.sgnCurrentPage(cnStranica)//Сигнал с номером страницы отсылаем.
+					dcSidebar.posterIndex = cnStranica//Для перескока на конкретную минниатюру в sidebar.
+				}
+			}
+		}
         onCurrentPageRenderingStatusChanged: {//Если рендер страницы изменился, то...
             switch(pmpDoc.currentPageRenderingStatus){
             case Image.Loading://Статус рендеринга страницы ЗАГРУЗКА.
@@ -528,10 +515,8 @@ Item {
                 root.fnLog(0, "Рендер страницы " + pmpDoc.currentPage + ": Открыт.");
                 if(!pmpDoc.blScale){//Если стартового масштабирование не было, то...
                     pmpDoc.blScale = true;//Активируем флаг, что началось первичное масштабирование.
-                    root.fnLog(3, "Старт таймера масштабирования (первичный).");
-                    root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
-                    pmpDoc.blScaleAuto = true;//Автоматическое масштабирование, обязательно перед таймером
-                    tmrScale.running = true;//запускаем таймер, перед переходом на страницу
+                    root.fnRestartPipeline("первичный", true, tmrScale)
+    				pmpDoc.ntPdfPage = root.fnClampPage(root.currentPage)//Стартовая страница из вне (при -1 будет 0).
                 }
                 else if(pmpDoc.blPinch && !pmpDoc.isSceneReset){//Щипок был, и сброс сцены ещё не запущен, то.
                     pmpDoc.isSceneReset = true;//Взводим сразу, чтоб повторный Ready не запустил второй сброс.
@@ -565,17 +550,15 @@ Item {
                 break;
             }
         }
-        onRenderScaleChanged: {//Если масштаб изменился, то...
-            if(!pmpDoc.isScaleStart){//Если не была запущена функция масштабирования fnScale(), то...
-                pmpDoc.ntPinchPage = pmpDoc.currentPage;//Запоминаем номер страницы до изменения масштаба.
-                pmpDoc.blPinch = true;//То это увеличение масштаба пользователем через щипок
-                root.visible = false;//Невидимый виджет.
-				tmrWatchdog.restart()//Запуск/перезапуск сторожа
-            }
-            pmpDoc.blRenderScale = true;//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
-            root.renderScale = pmpDoc.renderScale;//Присваемаем масштаб внутри виджета.
-            pmpDoc.blRenderScale = false;//ОБЯЗАТЕЛЬНО сбрасываем флаг.
-        }
+		onRenderScaleChanged: {//Если масштаб изменился, то...
+			if(!pmpDoc.isScaleStart && pmpDoc.blScale){//Масштаб изменил пользователь щипком.
+				pmpDoc.blPinch = true//То это увеличение масштаба пользователем через щипок
+				root.fnBeginPipeline()//Только прячем и запоминаем страницу. Таймеры не трогаем: вход идёт через Image.Ready.
+			}
+			pmpDoc.blRenderScale = true//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
+			root.renderScale = pmpDoc.renderScale//Присваемаем масштаб внутри виджета.
+			pmpDoc.blRenderScale = false//ОБЯЗАТЕЛЬНО сбрасываем флаг.
+		}
         Component.onCompleted: {//Когда полностью загрузился виджет PdfMultiPageView, то...
             pmpDoc.verticalScrollbar = pmpDoc.fnPoiskScrollbar(pmpDoc)//Находим указатель на вертикалScrollbar
             pmpDoc.flickable = pmpDoc.fnPoiskFlickable(pmpDoc)//Находим указатель на Flickable
@@ -774,6 +757,6 @@ Item {
         flickable: pmpDoc.flickable
         currentPage: pmpDoc.currentPage
         pageCount: pdfDoc.pageCount
-        onSgnGoToPage: (ntStranica) => root.fnGoToPage(ntStranica)//Листаем страницу, биндинги не ломаем.
+		onSgnGoToPage: (ntStranica) => { if(!pmpDoc.isBusy) root.fnGoToPage(ntStranica) }//Листаем страницу
     }
 }
