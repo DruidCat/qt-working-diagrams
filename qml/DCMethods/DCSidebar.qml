@@ -303,12 +303,23 @@ Drawer {
         }
         ListView {
             id: lsvNaideno
+			//Свойства
+			property int ntPrevCount: 0//Сколько результатов было при прошлом изменении.
+			//Настройки
             anchors.fill: rctNaideno
             implicitHeight: rctNaideno.height
             model: root.pmpDoc ? root.pmpDoc.searchModel : null//Если есть поисковая модель, то добавляем её
             currentIndex: root.pmpDoc ? root.pmpDoc.searchModel.currentResult : -1
             ScrollBar.vertical: ScrollBar { }
             KeyNavigation.tab: tbbNaideno//Tab -> кнопка "Найдено"
+			onCountChanged: {//Срабатывает при росте/сбросе списка результатов, а не при создании делегатов.
+				if(!root.pmpDoc) return
+				if(count === 0)
+					root.pmpDoc.searchModel.currentResult = -1//Поиск сброшен или ничего не найдено.
+				else if(ntPrevCount === 0)
+					root.pmpDoc.searchModel.currentResult = 0//Пришёл первый результат нового поиска: переходим на него.
+				ntPrevCount = count
+			}
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
                 if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
                     if(event.key === Qt.Key_B){//Если нажата клавиша B
@@ -378,22 +389,6 @@ Drawer {
                     }
                     if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                 }
-                Component.onCompleted: {//Если создался элемент делегата, то...
-                    if (index === 0 && root.pmpDoc){//Если index поиска первый (0), то...
-                        root.pmpDoc.searchModel.currentResult = -1//Сбрасываем результат прошлого поиска.
-                        tmrCurrentResult.running = true//Запускаем таймер,чтоб нет прерывания в прерывании
-                    }
-                }
-                Timer {//Таймер необходим, чтобы выйти из прерывания и подсветить первый элемент.
-                    id: tmrCurrentResult
-                    interval: 3; running: false; repeat: false
-                    onTriggered: {//Когда таймер отработает, то...
-                        if (root.pmpDoc){//Если не null, то...
-                            lsvNaideno.focus = true//Фокус на Найдено
-                            root.pmpDoc.searchModel.currentResult = 0//Переход на первый
-                        }
-                    }
-                }
             }
         }
     }
@@ -426,7 +421,6 @@ Drawer {
             id: trvZakladki
             //Свойства
             property int currentIndex: -1//Хранит индекс той закладки, который мы выбрали, кликнув на неё.
-            property bool isIndikator: false//true - индикатор треугольник нажат хоть один раз.
             property real horizontalOffset: 0//Гориз. сдвиг всех строк меняется при движении гориз. ScrollBar.
             property real maxHorizontalOffset: 0//Маx"хвост"по X среди всех строк который вылез за правый край
             //Настройки
@@ -463,44 +457,67 @@ Drawer {
                             root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
                         event.accepted = true//Завершаем обработку эвента.
                     }
-                } else {
-                    if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
-                        if(!isIndikator)//Если индикатор треугольник не был нажат, то...
-                            if(trvZakladki.focus) fnGoToZakladka(currentIndex)//Переходим на страницу
-                        event.accepted = true//Завершаем обработку эвента.
-                    } else if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
-                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
-                            root.pmpDoc.searchModel.currentResult += 1//Следующий результат
-                        event.accepted = true//Завершаем обработку эвента.
-                    } else if(event.key === Qt.Key_Up){//нажата "Стрелка вверх",то
-                        if(!isIndikator)//Если индикатор треугольник не был нажат, то...
-                            currentIndex = Math.max(0, currentIndex - 1)
-                        event.accepted = true//Завершаем обработку эвента.
-                    } else if(event.key === Qt.Key_Down){//нажата "Стрелка вниз"
-                        if(!isIndikator)//Если индикатор треугольник не был нажат, то...
-                            currentIndex = Math.min(pdfBookmarkModel.rowCount()-1, currentIndex + 1)
-                        event.accepted = true//Завершаем обработку эвента.
-                    } else if(event.key === Qt.Key_F1){//Если нажата клавиша F1
-                        fnClickedInfo();//Функция нажатия клавиши Информация.
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                }
+				} else {
+					if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
+						fnEnterZakladka()//Папка: развернуть/свернуть. Закладка: перейти.
+						event.accepted = true
+					} else if(event.key === Qt.Key_Right){
+						fnExpandZakladka(true)//Развернуть папку.
+						event.accepted = true
+					} else if(event.key === Qt.Key_Left){
+						fnExpandZakladka(false)//Свернуть папку.
+						event.accepted = true
+					} else if(event.key === Qt.Key_Up){
+						if(rows > 0) currentIndex = Math.max(0, currentIndex - 1)
+						event.accepted = true
+					} else if(event.key === Qt.Key_Down){
+						if(rows > 0) currentIndex = Math.min(rows - 1, currentIndex + 1)//Предел видимые строк
+						event.accepted = true
+					} else if(event.key === Qt.Key_F3){
+						if(root.pmpDoc.searchModel.count)
+							root.pmpDoc.searchModel.currentResult += 1
+						event.accepted = true
+					} else if(event.key === Qt.Key_F1){
+						fnClickedInfo()
+						event.accepted = true
+					}
+				}
             }
-            function fnGoToZakladka(index){//Переход к закладке по индексу (используется клавишами/мышью)
-                if (index < 0) return//Если индекс меньше нуля, выходим из функции.
-                const modelIndex = pdfBookmarkModel.index(index, 0)//Получаем модель закладки по индексу.
-                if (!modelIndex.valid) return//Если модель не действительна, выходим из функции.
-                const page = pdfBookmarkModel.data(modelIndex, PdfBookmarkModel.Page)//Получаем Страницу
-                const location = pdfBookmarkModel.data(modelIndex, PdfBookmarkModel.Location)//Координаты
-                root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//Переходим на страницу
-            }
-            onCurrentIndexChanged: {//При смене currentIndex скроллим TreeView, чтобы выбранная строка видна
-                if(currentIndex >= 0 && currentIndex < pdfBookmarkModel.rowCount()){//Если индекс в габаритах
-                    const modelIndex = pdfBookmarkModel.index(currentIndex, 0)//Получаем модель конкр.закладки
-                    if (modelIndex.valid)//Если эта модель существует и она действительная
-                        positionViewAtIndex(modelIndex, TreeView.Contain)//Делаем ВИДИМОЙ вкладку. Скроллим.
-                }
-            }
+			function fnHasChildren(ntRow){//Есть ли у строки видимого дерева вложенные закладки (папка).
+				const cnIndex = fnModelIndex(ntRow)
+				if(!cnIndex || !cnIndex.valid) return false
+				return pdfBookmarkModel.rowCount(cnIndex) > 0
+			}
+			function fnModelIndex(ntRow){//QModelIndex модели по строке видимого дерева.
+				return trvZakladki.index(ntRow, 0)
+			}
+			function fnGoToZakladka(ntRow){//Переход на закладку по строке видимого дерева.
+				if(ntRow < 0 || ntRow >= trvZakladki.rows || !root.pmpDoc) return
+				const cnIndex = fnModelIndex(ntRow)
+				if(!cnIndex || !cnIndex.valid) return
+				const ntPage = pdfBookmarkModel.data(cnIndex, PdfBookmarkModel.Page)//Страница
+				const ptLocation = pdfBookmarkModel.data(cnIndex, PdfBookmarkModel.Location)//Координаты
+				root.pmpDoc.goToLocation(ntPage, ptLocation, root.pmpDoc.renderScale)
+			}
+			function fnEnterZakladka(){//Enter: папка - свернуть/развернуть, закладка - перейти.
+				const ntRow = trvZakladki.currentIndex
+				if(ntRow < 0 || ntRow >= trvZakladki.rows) return
+				if(fnHasChildren(ntRow))//Это папка?
+					trvZakladki.toggleExpanded(ntRow)
+				else
+					fnGoToZakladka(ntRow)
+			}
+			function fnExpandZakladka(blExpand){//Right/Left: развернуть или свернуть папку.
+				const ntRow = trvZakladki.currentIndex
+				if(ntRow < 0 || ntRow >= trvZakladki.rows) return
+				if(!fnHasChildren(ntRow)) return
+				if(blExpand && !trvZakladki.isExpanded(ntRow)) trvZakladki.expand(ntRow)
+				else if(!blExpand && trvZakladki.isExpanded(ntRow)) trvZakladki.collapse(ntRow)
+			}
+            onCurrentIndexChanged: {//Прокручиваем так, чтобы выбранная строка была видна.
+				if(currentIndex >= 0 && currentIndex < rows)
+					positionViewAtRow(currentIndex, TableView.Contain)
+			}
             delegate: TreeViewDelegate {//Делегат закладки, отдна строка в TreeView
                 id: tvdZakladka
                 //Свойства
@@ -570,15 +587,13 @@ Drawer {
                                 anchors.fill: parent
                                 hoverEnabled: true
                                 cursorShape: Qt.PointingHandCursor
-                                onClicked: (mouse) => {
-                                    if (!tvdZakladka.hasChildren) return//Если нет вложеных закладок, выходим.
-                                    trvZakladki.focus = true//Фокус на Закладках
-                                    if(trvZakladki.currentIndex !== tvdZakladka.index)//Если это другая вкладк
-                                        trvZakladki.currentIndex = -1
-                                    trvZakladki.toggleExpanded(tvdZakladka.index)//Разворач/сворачиваем заклад
-                                    trvZakladki.isIndikator = true//Взводим флаг, отключаем горячие клавиши.
-                                    mouse.accepted = true
-                                }
+								onClicked: (mouse) => {
+									if(!tvdZakladka.hasChildren) return
+									trvZakladki.forceActiveFocus()//Чтобы после клика работали клавиши.
+									trvZakladki.currentIndex = tvdZakladka.row//Выбираем эту папку, не сбрасываем в -1.
+									trvZakladki.toggleExpanded(tvdZakladka.row)
+									mouse.accepted = true
+								}
                             }
                         }
                         Text {//Текст закладки
@@ -598,6 +613,7 @@ Drawer {
                 }
                 indicator: null// Полностью отключаем встроенный индикатор TreeViewDelegate. Свой написал.
                 onClicked: {//Клик по строке — перейти к закладке и, на мобильных, закрыть боковую панель
+					trvZakladki.forceActiveFocus()//Без этого после клика мышью клавиши не придут в дерево.
                     trvZakladki.currentIndex = tvdZakladka.index//Сохраняем индекс, который мы выбрали
                     if (root.pmpDoc) root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//На Стр
                     if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
