@@ -373,7 +373,7 @@ private:
     bool	m_blAppRedaktor;//Флаг Редактора вкл/выкл.
     uint 	m_untShrift;//Размер шрифта 0-маленький, 1-средний, 2-большой.
     QString m_strKatalogPut;//Путь сохранения каталога документов.
-    uint 	m_untSidebarWidth;//Ширина боковой панели DCSidebar.qml
+    uint 	m_untSidebarWidth;//Ширина боковой панели DCPdfSidebar.qml
     uint 	m_untInstrukciyaWidth;//Ширина боковой панели StrInstrukciya.qml
     uint	m_untNastroikiMaxLength;//Максимальная длина строки текста в Свойстве Q_PROPERTY
 

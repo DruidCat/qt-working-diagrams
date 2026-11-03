@@ -202,7 +202,8 @@ void DCCppQml::ustReestr(){//Запись настроек программы
     m_sttReestr.setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
     m_sttReestr.setValue("/shrift", m_untShrift);//Записываем размер Шрифта 0-мал, 1-средний, 2-большой.
     m_sttReestr.setValue("/katalog_put", QDir::toNativeSeparators(m_strKatalogPut));//Записываем путь каталога
-    m_sttReestr.setValue("/shirina_sidebar", m_untSidebarWidth);//Запись ширины боковой панели DCSidebar.qml
+    //Запись ширины боковой панели DCPdfSidebar.qml.
+    m_sttReestr.setValue("/shirina_sidebar", m_untSidebarWidth);
     m_sttReestr.setValue("/shirina_instrukciya", m_untInstrukciyaWidth);//Запись ширины панели StrInstrukciya
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }
@@ -219,7 +220,8 @@ void DCCppQml::polReestr(){//Чтение настроек программы
     m_blAppRedaktor = m_sttReestr.value("/app_redaktor", true).toBool();//Читаем флаг редактора, по умол 1
     m_untShrift = m_sttReestr.value("/shrift", 1).toUInt();//Читаем шрифт, по умол 1-средний
     m_strKatalogPut = m_sttReestr.value("/katalog_put", QDir::toNativeSeparators(m_strDomPut)).toString();
-    m_untSidebarWidth = m_sttReestr.value("/shirina_sidebar", 330).toUInt();//Ширина DCSidebar,по умолчанию330
+    //Ширина DCPdfSidebar,по умолчанию330.
+    m_untSidebarWidth = m_sttReestr.value("/shirina_sidebar", 330).toUInt();
     m_untInstrukciyaWidth = m_sttReestr.value("/shirina_instrukciya", 330).toUInt();//Ширина по умолчанию330
     m_sttReestr.endGroup();//Закрываем группу /Настройки
 }

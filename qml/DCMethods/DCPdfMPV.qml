@@ -721,7 +721,7 @@ Item {
             property var location: model.location
         }
     }
-    DCSidebar {
+    DCPdfSidebar {
         id: dcSidebar
         //Свойства
         property bool isFirstOpened: false

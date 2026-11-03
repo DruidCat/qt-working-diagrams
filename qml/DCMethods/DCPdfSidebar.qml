@@ -1,4 +1,4 @@
-﻿//DCSidebar.qml
+﻿//DCPdfSidebar.qml
 import QtQuick //2.15
 import QtQuick.Controls//Drawer
 import QtQuick.Pdf//PdfMultiPageView PdfDocument
@@ -687,7 +687,7 @@ Drawer {
                 if(grvPoster.count > cnStranica)//ЗАЩИТА. Если счётчик больше количества страниц, то...
                     grvPoster.currentIndex = cnStranica//Подсвечиваем открытую страницу.
                 else
-                    console.error("254: DCSidebar, попытка перехода на постер, который ещё не создался.")
+                    console.error("254: DCPdfSidebar, попытка перехода на постер, который ещё не создался.")
             }
         }
         GridView {

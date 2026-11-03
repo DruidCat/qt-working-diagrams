@@ -43,7 +43,7 @@
 		<file>qml/DCButtons/DCTabButton.qml</file>
         <file>qml/DCButtons/DCKnopkaSidebar.qml</file>
         <file>qml/DCButtons/qmldir</file>
-        <file>qml/DCMethods/DCSidebar.qml</file>
+        <file>qml/DCMethods/DCPdfSidebar.qml</file>
         <file>qml/DCMethods/DCFontSize.qml</file>
         <file>qml/DCMethods/DCScrollbar.qml</file>
         <file>qml/DCMethods/DCFileDialog.qml</file>
