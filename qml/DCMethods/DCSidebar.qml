@@ -303,23 +303,12 @@ Drawer {
         }
         ListView {
             id: lsvNaideno
-			//Свойства
-			property int ntPrevCount: 0//Сколько результатов было при прошлом изменении.
-			//Настройки
             anchors.fill: rctNaideno
             implicitHeight: rctNaideno.height
             model: root.pmpDoc ? root.pmpDoc.searchModel : null//Если есть поисковая модель, то добавляем её
             currentIndex: root.pmpDoc ? root.pmpDoc.searchModel.currentResult : -1
             ScrollBar.vertical: ScrollBar { }
             KeyNavigation.tab: tbbNaideno//Tab -> кнопка "Найдено"
-			onCountChanged: {//Срабатывает при росте/сбросе списка результатов, а не при создании делегатов.
-				if(!root.pmpDoc) return
-				if(count === 0)
-					root.pmpDoc.searchModel.currentResult = -1//Поиск сброшен или ничего не найдено.
-				else if(ntPrevCount === 0)
-					root.pmpDoc.searchModel.currentResult = 0//Пришёл первый результат нового поиска: переходим на него.
-				ntPrevCount = count
-			}
             Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
                 if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
                     if(event.key === Qt.Key_B){//Если нажата клавиша B
@@ -388,6 +377,22 @@ Drawer {
                         root.pmpDoc.searchModel.currentResult = tmdResult.index//Задаём № поиска
                     }
                     if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
+                }
+                Component.onCompleted: {//Если создался элемент делегата, то...
+                    if (index === 0 && root.pmpDoc){//Если index поиска первый (0), то...
+                        root.pmpDoc.searchModel.currentResult = -1//Сбрасываем результат прошлого поиска.
+                        tmrCurrentResult.running = true//Запускаем таймер,чтоб нет прерывания в прерывании
+                    }
+                }
+                Timer {//Таймер необходим, чтобы выйти из прерывания и подсветить первый элемент.
+                    id: tmrCurrentResult
+                    interval: 3; running: false; repeat: false
+                    onTriggered: {//Когда таймер отработает, то...
+                        if (root.pmpDoc){//Если не null, то...
+                            lsvNaideno.focus = true//Фокус на Найдено
+                            root.pmpDoc.searchModel.currentResult = 0//Переход на первый
+                        }
+                    }
                 }
             }
         }
