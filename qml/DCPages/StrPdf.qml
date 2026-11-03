@@ -55,25 +55,25 @@ Item {
             }
         }
         else if(event.modifiers & Qt.ControlModifier){//Если нажат "Ctrl"
-            if(event.key === Qt.Key_Equal){//Если нажата "+",то.
+             if(event.key === Qt.Key_Equal){//Если нажата "+",то.
                 if(pdfLoader.item.visible){//Если виджет видимый, то можно масштабировать.
                     var ntScaleUp = pdfScale.value + 25;
                     if(ntScaleUp <= pdfScale.to)//Если это не максимальное значение масштаба, то...
-                        pdfLoader.item.renderScale = ntScaleUp/100;
+                        root.fnSetScale(ntScaleUp)
                     else{//Если больше максимального масштаба, то...
                         if(pdfScale.value !== pdfScale.to)//Если не равна максимальному значению до увеличения
-                            pdfLoader.item.renderScale = pdfScale.to/100;//Выставляем максимальное значение.
+                            root.fnSetScale(pdfScale.to)//Выставляем максимальное значение.
                     }
                 }
                 event.accepted = true;//Завершаем обработку эвента.
             } else if(event.key === Qt.Key_Minus){//Если нажат "-", то.
                 if(pdfLoader.item.visible){//Если виджет видимый, то можно масштабировать.
-                    var ntScaleDown = pdfScale.value - 25;//-1 страница
-                    if(ntScaleDown > pdfScale.from)//Если больше или равно минимальному значению, то...
-                        pdfLoader.item.renderScale = ntScaleDown/100;//уменьшаем масштаб документа.
+                    var ntScaleDown = pdfScale.value - 25;
+                    if(ntScaleDown > pdfScale.from)//Если больше минимального значения, то...
+                        root.fnSetScale(ntScaleDown)//уменьшаем масштаб документа.
                     else{
                         if(pdfScale.value !== pdfScale.from)
-                            pdfLoader.item.renderScale = pdfScale.from/100;//Выставляем мин значение.
+                            root.fnSetScale(pdfScale.from)//Выставляем мин значение.
                     }
                 }
                 event.accepted = true;//Завершаем обработку эвента.
@@ -737,7 +737,21 @@ Item {
 			radius: root.ntCoff/2
             from: 1; to: 300; value: 100; stepSize: 25
             tapKnopkaMinus: root.tapToolbarPravi; tapKnopkaPlus: root.tapToolbarPravi
-            onValueModified: pdfLoader.item.renderScale = value/100;//Масштабируем документ по значению value
+			onValueModified: root.fnSetScale(value)//Масштабируем документ по значению value, со ступенью.
 		}
 	}
+	function fnSetScale(ntProcent){//Ставит масштаб документа в процентах, прилипая к ступени «ширина = ширине окна».
+        const cnItem = pdfLoader.item
+        const ntOld = cnItem.renderScale * 100//Текущий масштаб в процентах.
+        const ntStep = (cnItem.renderScaleWidth || 0) * 100//Ступень «по ширине», 0 - ступени нет.
+        let ntNew = ntProcent
+        if(ntStep > 0){//Если у документа есть промежуточная ступень, то...
+            const ntEps = 0.5//Допуск, чтоб не прилипать, когда мы уже на ступени.
+            if(ntNew > ntOld && ntOld < ntStep - ntEps && ntNew > ntStep)//Вверх: ступень на пути.
+                ntNew = ntStep
+            else if(ntNew < ntOld && ntOld > ntStep + ntEps && ntNew < ntStep)//Вниз: ступень на пути.
+                ntNew = ntStep
+        }
+        cnItem.renderScale = ntNew / 100
+    }
 }

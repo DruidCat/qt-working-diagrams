@@ -31,6 +31,7 @@ Item {
     property bool isMobile: true//true - мобильная платформа.
     property int ntScrollMargin: root.isMobile ? 0 : 7//Ширина/высота ползунка полосы прокрутки.
 	property int msWatchdog: 70000//Время сторожа открытия в миллисекундах (70000 = 1 мин 10 с).
+	property real renderScaleWidth: 0//Масштаб «ширина страницы = ширине окна» у горизонтального документа. 0 - промежуточной ступени нет.
     property bool blLog: true//true - отладочные сообщения включены, false - выключены (для релиза).
     property alias sbCurrentIndex: dcSidebar.currentIndex//Индекс открытой вкладки в боковой панели.
     property int currentResult: -1//Номер Поиска, совпадение от 0....
@@ -172,7 +173,7 @@ Item {
             dcSidebar.fnPosterOpen()//Открываем и фокусируемся на Страницах
         }
     }
-    onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
+	onRenderScaleChanged: {//Если масштаб поменялся из вне, то...
         if(!pmpDoc.blRenderScale){//Если не взведён флаг, обрабатываем из вне данные.
             pmpDoc.ntPdfPage = pmpDoc.currentPage;//Сохраняем действующую страницу.
             root.visible = false;//Невидимый виджет.
@@ -182,10 +183,7 @@ Item {
             root.sgnProgress(28, "3/11 Старт таймера масштабирования.");
             tmrScale.running = true;//Запускаем таймер перед масштабированием, чтоб сцена успела исчезнуть.
         }
-        else{//Если внутреннее изменение масштаба, то...
-            if(pmpDoc.blScaleAuto)//Если это автоматическое изменение масштаба, то...
-                root.sgnScaleMin(pmpDoc.renderScale);//Передаём значение минимального масштаба.
-        }
+        //Внутреннее изменение масштаба: минимальный масштаб (sgnScaleMin) теперь излучает fnScale().
     }
     onCurrentPageChanged: {//Если страница поменялась из вне, то...
         if(!pmpDoc.blScale) return//Первичный конвейер ещё не запущен: стартовую страницу выставит tmrGoToPage
@@ -265,35 +263,49 @@ Item {
             tmrAppSize.restart();//Таймер перезапускаем.
         }
     }
-    function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
-        pmpDoc.isScaleStart = true;//Начало масштабирования.
-        pmpDoc.goToPage(0);//Переходим на первую страницу, чтоб потом перейти на заданную страницу.
-        root.fnLog(5, "Начало масштабирования документа.");
-        root.sgnProgress(46, "5/11 Начало масштабирования документа.");
-        if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
-            const cnFl = pmpDoc.flickable
-            const cnW = (cnFl ? cnFl.width : pmpDoc.width) - root.ntScrollMargin//Область без полосы
-            const cnH = (cnFl ? cnFl.height : pmpDoc.height) - root.ntScrollMargin
-            if(pdfDoc.isDocVert){
-                if((root.rotation === 0) || (root.rotation === 180))
-                    pmpDoc.scaleToPage(cnW, cnH);
-                else
-                    pmpDoc.scaleToWidth(cnW, cnH);
-            }
-            else{
-                if((root.rotation === 0) || (root.rotation === 180))
-                    pmpDoc.scaleToWidth(cnW, cnH);
-                else
-                    pmpDoc.scaleToPage(cnW, cnH);
-            }
-        }
-        else
-            pmpDoc.renderScale = root.renderScale;//Выставляем масштаб из Свойства.
-        root.fnLog(6, "Окончание масштабирования документа.")
-        root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
-        pmpDoc.isSceneReset = true;//Сброс сцены запланирован: ошибки рендера Null/Error игнорируем.
-        tmrResetScene.running = true;//запускаем таймер, сброса сцены.
-    }
+	function fnScale(){//Функция авто/руч. масштабирования в зависимости от формата pdf документа.
+		pmpDoc.isScaleStart = true;//Начало масштабирования.
+		pmpDoc.goToPage(0);//Переходим на первую страницу, чтоб потом перейти на заданную страницу.
+		root.fnLog(5, "Начало масштабирования документа.");
+		root.sgnProgress(46, "5/11 Начало масштабирования документа.");
+		let rlScaleMin = 0//Минимальный масштаб для DCScale, считается только в автоматическом режиме.
+		if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
+			const cnFl = pmpDoc.flickable
+			const cnW = (cnFl ? cnFl.width : pmpDoc.width) - root.ntScrollMargin//Область без полосы
+			const cnH = (cnFl ? cnFl.height : pmpDoc.height) - root.ntScrollMargin
+			const isRot90 = !((root.rotation === 0) || (root.rotation === 180))//Сцена повёрнута на 90/270.
+			const isVisGor = pdfDoc.isDocVert ? isRot90 : !isRot90//true - документ на экране выглядит горизонтальным.
+			if(isVisGor){//Горизонтальный документ: две ступени масштаба.
+				pmpDoc.scaleToPage(cnW, cnH)//Высота страницы = высоте окна.
+				const rlPage = pmpDoc.renderScale
+				pmpDoc.scaleToWidth(cnW, cnH)//Ширина страницы = ширине окна, это стартовый масштаб, как раньше.
+				const rlWidth = pmpDoc.renderScale
+				if(rlPage < rlWidth * 0.99){//Страница по высоте даёт заметно меньший масштаб, вторая ступень есть.
+					root.renderScaleWidth = rlWidth//Промежуточная ступень.
+					rlScaleMin = rlPage//Новый минимум.
+				}
+				else{//Страница очень широкая: ступень одна, как раньше.
+					root.renderScaleWidth = 0
+					rlScaleMin = rlWidth
+				}
+				root.fnLog(5, "Масштаб: по ширине=" + rlWidth + " по странице=" + rlPage +
+							" ступень=" + root.renderScaleWidth + " минимум=" + rlScaleMin)
+			}
+			else{//Вертикальный документ, всё как раньше.
+				pmpDoc.scaleToPage(cnW, cnH)
+				root.renderScaleWidth = 0
+				rlScaleMin = pmpDoc.renderScale
+			}
+		}
+		else
+			pmpDoc.renderScale = root.renderScale;//Выставляем масштаб из Свойства.
+		root.fnLog(6, "Окончание масштабирования документа.")
+		root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
+		if(pmpDoc.blScaleAuto)//Минимум меняется только при автоматическом масштабировании.
+			root.sgnScaleMin(rlScaleMin)//Минимальный масштаб в DCScale.
+		pmpDoc.isSceneReset = true;//Сброс сцены запланирован: ошибки рендера Null/Error игнорируем.
+		tmrResetScene.running = true;//запускаем таймер, сброса сцены.
+	}
     function fnGoToPage(ntStranica){//Функция обрабатывающая переход на новую страницу документа.
 		root.fnLog(10, "Переходим на страницу: " + ntStranica);
 		root.sgnProgress(91, "10/11 Переходим на страницу.");
