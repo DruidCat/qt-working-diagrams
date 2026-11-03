@@ -640,7 +640,7 @@ Drawer {
                   : 1.0
             onPositionChanged: {//При перемещ ползунка меняем horizontalOffset
                 if (trvZakladki.maxHorizontalOffset > 0)
-                    trvZakladki.horizontalOffset = trvZakladki.maxHorizontalOffset * position
+					trvZakladki.horizontalOffset=position*(trvZakladki.width+trvZakladki.maxHorizontalOffset)
                 else trvZakladki.horizontalOffset = 0
             }
         }
