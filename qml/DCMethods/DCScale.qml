@@ -16,6 +16,7 @@ Item {
     property real from: 0//Минимальное значение.
     property real to: 32767//Максимальное значение.
     property int stepSize: 1
+	readonly property real __rlEps: 0.01//Допуск сравнения, чтоб не ловить ошибки плавающей арифметики.
     property real tapKnopkaMinus: 1
     property real tapCentor: 3.9
     property real tapKnopkaPlus: 1
@@ -35,7 +36,7 @@ Item {
     }
     function fnStep(ntNapravlenie){//Шаг на stepSize. ntNapravlenie: -1 минус, +1 плюс.
         const cnValue = Math.max(from, Math.min(rlMax, value + ntNapravlenie * stepSize))
-        if(cnValue === value) return//Уже на границе, сигнал не нужен.
+		if(Math.abs(cnValue - value) < __rlEps) return//Уже на границе, защита от сотых значения min или max
         value = cnValue
         valueModified()//А текст обновится по привязке.
     }
@@ -65,7 +66,7 @@ Item {
             anchors.left: rctScale.left
             clrKnopki: root.clrTexta
             border: false
-            enabled: root.value > root.from//Активна, пока есть куда уменьшать.
+            enabled: root.value > root.from + root.__rlEps//Активна, пока есть куда уменьшать.
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaMinus
             onClicked: {
                 root.tap()//Тапнули на кнопку.
@@ -107,7 +108,7 @@ Item {
             anchors.right: rctScale.right
             clrKnopki: root.clrTexta
             border: false
-            enabled: root.value < root.rlMax//Активна, пока есть куда увеличивать.
+            enabled: root.value < root.rlMax - root.__rlEps//Активна, пока есть куда увеличивать.
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaPlus
             onClicked: {
                 root.tap()//Тапнули на кнопку.

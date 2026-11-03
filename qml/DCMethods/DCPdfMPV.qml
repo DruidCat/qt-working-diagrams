@@ -288,8 +288,6 @@ Item {
 					root.renderScaleWidth = 0
 					rlScaleMin = rlWidth
 				}
-				root.fnLog(5, "Масштаб: по ширине=" + rlWidth + " по странице=" + rlPage +
-							" ступень=" + root.renderScaleWidth + " минимум=" + rlScaleMin)
 			}
 			else{//Вертикальный документ, всё как раньше.
 				pmpDoc.scaleToPage(cnW, cnH)
