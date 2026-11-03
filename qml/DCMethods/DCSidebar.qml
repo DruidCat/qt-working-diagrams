@@ -31,7 +31,7 @@ Drawer {
     modal: false
     dim: false
     closePolicy: Drawer.CloseOnEscape//Закрываем боковую панель только при нажати Escape, другие политики выкл
-	interactive: blSwipe && !maRuchka.isDrag//Присваивания interactive в ручке удаляются.false -  панель не реагирует на свайпы.
+	interactive: blSwipe && !maRuchka.isDrag//Присваивания interactive в ручке удаляются.false-не реагирует на свайпы.
     clip: true//Обрезать всё лишнее.
     width: sidebarWidth//ВАЖНО! ширина боковой панели зависит только от sidebarWidth.
     height: root.pmpDoc ? root.pmpDoc.height : (parent ? parent.height : 0)//Высота по высоте pdf сцены
@@ -62,19 +62,16 @@ Drawer {
         root.currentIndex = 0//Переключаемся на вкладку Найдено
         lsvNaideno.focus = true//Фокус на Найдено
         tbbNaideno.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
-        lblZagolovok.text = tbbNaideno.text//Переименовываем заголовок на Найдено
     }
     function fnZakladkiOpen(){//Функция открытия и фокусировки Закладках
         root.currentIndex = 1//Переключаемся на вкладку Закладки
         trvZakladki.focus = true//Фокус на Закладках
         tbbZakladki.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
-        lblZagolovok.text = tbbZakladki.text//Переименовываем заголовок на Закладки
     }
     function fnPosterOpen(){//Функция открытия и фокусировки Страницы
         root.currentIndex = 2//Переключаемся на вкладку Миниатюр
         grvPoster.focus = true//Фокус на страницах
         tbbPoster.focus = false//Убираем фокус, чтоб подсветку бордюра вкладки убрать.
-        lblZagolovok.text = tbbPoster.text//Переименовываем заголовок на Страницы
     }
     function fnClickedInfo(){//Функция нажатия кнопки Информация.
         if(knopkaInfo.enabled){//Если кнопка активна, то...
@@ -145,7 +142,10 @@ Drawer {
             font.bold: true//Жирный текст.
             font.pixelSize: root.ntCoff*(root.ntWidth-1)
             elide: Text.ElideRight//Обрезаем текст по правой стороне точками (...)
-            Component.onCompleted: text = tbbZakladki.text//Переименовываем заголовок на Закладки
+			text: {
+				const cnTab = [tbbNaideno, tbbZakladki, tbbPoster][root.currentIndex]//Бвает undefined при -1.
+        		return cnTab ? cnTab.text : ""//При закрытии контейнера Loader эта защита от -1
+			}
         }
     }
     Rectangle {//Прямоугольник всей оставшейся боковой панели.
