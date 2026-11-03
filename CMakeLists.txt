@@ -141,7 +141,16 @@ add_dependencies(${EXECUTABLE_NAME} copy_qml)
 set(QML_IMPORT_PATH "${CMAKE_BINARY_DIR}/qml" CACHE INTERNAL "")
 
 if(QT_VERSION_MAJOR EQUAL 6)
-	qt_import_qml_plugins(${EXECUTABLE_NAME})
+	# Shared-сборка десктопа: QML-плагины грузятся рантаймом из установки Qt, сканирование
+	# qmlimportscanner и линковка плагинов не нужны. Без этого флага finalize
+	# вызывает qt_import_qml_plugins и сыплет предупреждениями про Qt6::<plugin>.
+	# Под Android флаг НЕ ставим: там QML-плагины — статические библиотеки, их обязательно
+	# линковать в libproject_.so, а androiddeployqt берёт список QML-модулей из результата
+	# этого сканирования. Без сканирования APK не получит плагины и приложение упадёт
+	# на старте с «module ... not found».
+	if(NOT ANDROID)
+		set_property(TARGET ${EXECUTABLE_NAME} PROPERTY QT_QML_MODULE_NO_IMPORT_SCAN TRUE)
+	endif()
 	qt_finalize_executable(${EXECUTABLE_NAME})
 endif()
 
