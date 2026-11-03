@@ -64,13 +64,11 @@ Item {
     }
     function fnClickedKeyPgDown(){//Функция нажатия клавиши Page Down
         var ntStrDown = pmpDoc.currentPage + 1;//+1 страница
-        if(ntStrDown < pdfDoc.pageCount)
-            root.currentPage = ntStrDown;//Листаем страницы документа.
+        if(ntStrDown < pdfDoc.pageCount) pmpDoc.goToPage(ntStrDown)//Листаем страницы документа.
     }
     function fnClickedKeyPgUp(){//Функция нажатия клавиши Page Up
         var ntStrUp = pmpDoc.currentPage - 1;//-1 страница
-        if(ntStrUp >= 0)//Если больше 0, то листаем к началу документа.
-            root.currentPage = ntStrUp;//Листаем страницы документа.
+        if(ntStrUp >= 0) pmpDoc.goToPage(ntStrUp)//Листаем страницы документа.
     }
     function fnClickedKeyVniz(){//Функция нажатия клавиши вниз
         if(dcSidebar.opened){//Если открыта боковая панель, то...
@@ -121,10 +119,10 @@ Item {
         pmpDoc.searchModel.currentResult -= 1;//Выбираем предыдущий номер поиска
     }
     function fnClickedKeyHome(){//Функция нажатия клавиши Home
-        root.currentPage = 0;//На первую страницу.
+       pmpDoc.goToPage(0)//На первую страницу.
     }
     function fnClickedKeyEnd(){//Функция нажатия клавиши End
-        root.currentPage = pdfDoc.pageCount-1;//На последнюю страницу
+       pmpDoc.goToPage(pdfDoc.pageCount - 1)//На последнюю страницу
     }
     function fnOpenSidebar(){//Открыть боковую панель (именно открыть, а не переключить).
         if(dcSidebar.opened || tmrSidebar.running) return//Уже открыта или уже открывается.
