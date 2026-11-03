@@ -38,8 +38,14 @@ Item {
 		const hi = Math.max(maxY(rect), cur)//Уже ниже низа - ниже не пускаем, но и не дёргаем.
 		return Math.max(lo, Math.min(y, hi))
 	}
-    function stepY(rect){ return (rect.bottom - rect.top) / ntStepScroll }//Шаг скролла по вертикали.
-    function stepX(rect){ return rect.width / ntStepScroll }//Шаг скролла по горизонтали.
+	function stepY(rect){//Шаг скролла по вертикали.
+		//Коэффициент 0.9 оставляет около 10 % перекрытия, чтобы взгляд не терял строку
+		return Math.min((rect.bottom - rect.top) / ntStepScroll, viewHeight * 0.9)
+	}
+	function stepX(rect){//Шаг скролла по горизонтали.
+		//Коэффициент 0.9 оставляет около 10 % перекрытия, чтобы взгляд не терял строку
+		return Math.min(rect.width / ntStepScroll, viewWidth * 0.9)
+	}
     function fnKeyVniz(){//Функция скролла вниз страницы.
         const rect = pageRect()
         if(!rect) return//Страница ещё не готова.
