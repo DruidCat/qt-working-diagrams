@@ -3,8 +3,7 @@
 Item {
     id: root
     //Свойства
-    //var, а не Flickable: нужен метод itemAtIndex, он есть у ListView, а не у Flickable.
-    property var flickable//Скрытый указатель на ListView внутри PdfMultiPageView
+    property var flickable//Скрытый указатель на TabView внутри PdfMultiPageView
     property int currentPage: -1//Номер действующей страницы (привязывается к pmpDoc.currentPage)
     property int pageCount: 0//Количество страниц в документе
     readonly property int ntStepScroll: 10//Документ листается клавишами за 10 нажатий на страницу.
