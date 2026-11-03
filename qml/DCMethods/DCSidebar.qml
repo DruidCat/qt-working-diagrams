@@ -22,19 +22,20 @@ Drawer {
     property alias posterIndex: grvPoster.currentIndex
     property int minSidebarWidth: 200//Минимум ширины боковой панели
     property int maxSidebarWidth: parent ? parent.width * 0.8 : 640//Максимум ширины боковой панели
-    property int sidebarWidth: root.isMobile//Если мобила, ширина на весь экран, если нет,то данные из Реестра
-                               ? (parent ? parent.width : 0)
-                               : Math.max(minSidebarWidth, (parent ? cppqml.untSidebarWidth : 330))
+	property int userWidth: cppqml.untSidebarWidth//Выбор пользователя.
+	property bool blSwipe: true//Свайп разрешён снаружи (fnInteractiveSidebar).
+	readonly property int sidebarWidth: isMobile ? (parent ? parent.width : 0)
+        									: Math.max(minSidebarWidth, Math.min(maxSidebarWidth, userWidth))
     //Настройки
     edge: Qt.LeftEdge
     modal: false
     dim: false
     closePolicy: Drawer.CloseOnEscape//Закрываем боковую панель только при нажати Escape, другие политики выкл
+	interactive: blSwipe && !maRuchka.isDrag//Присваивания interactive в ручке удаляются.false -  панель не реагирует на свайпы.
     clip: true//Обрезать всё лишнее.
     width: sidebarWidth//ВАЖНО! ширина боковой панели зависит только от sidebarWidth.
     height: root.pmpDoc ? root.pmpDoc.height : (parent ? parent.height : 0)//Высота по высоте pdf сцены
     y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
-    interactive: true//false -  панель не реагирует на свайпы.
     //Сигналы
     signal clickedPoisk()//Сигнал запуска режима поиска.
     signal clickedInfo();//Сигнал нажатия кнопки Информация
@@ -168,38 +169,30 @@ Drawer {
             id: maRuchka
             //Свойства
             property bool isDrag: false//Свойство перетаскивания. true - началось перетаскивание.
-            property real lastX//Переменная хранящаа предыдущее положение мыши
+			property real startGX: 0
+			property real startW: 0
             //Настройки
             anchors.fill: parent
             hoverEnabled: true//При наведении изменение
             cursorShape: Qt.SizeHorCursor//Курсор в виде изменения горизонтального размера.
             //Функции
-            onPressed: (mouse) => {//Если нажали на ручку
-                if (root.isMobile) return//Если мобильное устройство, то выходим
-                root.interactive = false;//Отключаем свайп Drawer. ВАЖНО!
-                isDrag = true//Взводим флаг при нажатии на ручку, идёт изменение размеров.
-                lastX = mouse.x//Запоминаем первоначальное положение боковой панели по координатам мыши.
-                mouse.accepted = true//Завершаем обработку эвента.
-            }
-            onReleased: {//Если отпустили кнопку мышки
-                root.interactive = true;//Включаем свайп Drawer. ВАЖНО!
-                cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
-                isDrag = false//При отпускании мыши Окончание перетаскивания
-            }
-            onCanceled: {
-                root.interactive = true;//Включаем свайп Drawer. ВАЖНО!
-                cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
-                isDrag = false//Окончание перетаскивания
-            }
-            onPositionChanged: (mouse) => {//Если позиция меняется, то...
-                if (!isDrag || root.isMobile) return//Если не перетаскиваем ручку или мобильное устройство,вых
-                const dX = mouse.x - lastX//Дельта Х относительно предыдущей точки Х
-                lastX = mouse.x//Запоминаем положение мыши по Х.
-                if (dX === 0) return//Если дельта не изменилась, ничего не делаем
-                let ltWidth = root.sidebarWidth + dX//Новые размеры ширины боковой панели.
-                ltWidth = Math.max(root.minSidebarWidth, Math.min(root.maxSidebarWidth, ltWidth))//Проверка
-                root.sidebarWidth = ltWidth//Изменяем ширину боковой панели на новую ширину
-            }
+			onPressed: (mouse) => {//Если нажали на ручку
+				if(root.isMobile){ mouse.accepted = false; return }//Если мобильное устройство, то выходим
+				startGX = mapToItem(null, mouse.x, 0).x//Координата в сцене, она не едет вместе с ручкой.
+				startW = root.sidebarWidth
+				isDrag = true//Взводим флаг при нажатии на ручку, идёт изменение размеров.
+			}
+			onPositionChanged: (mouse) => {//Если позиция меняется, то...
+				if(!isDrag) return//Если не перетаскиваем ручку, выходим
+				root.userWidth = Math.round(startW + mapToItem(null, mouse.x, 0).x - startGX)//Кламп внутри sidebarWidth.
+			}
+			onReleased: fnEnd()//Если отпустили кнопку мышки
+			onCanceled: fnEnd()
+			function fnEnd(){
+				if(!isDrag) return//На мобильном в реестр не пишем.
+				isDrag = false//При отпускании мыши Окончание перетаскивания
+				cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
+			}
         }
     }
     TabBar {//Вкладки
