@@ -297,7 +297,8 @@ Drawer {
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-            text: root.pmpDoc.searchModel.count ? "" : qsTr("Не найдено")
+			text: (root.pmpDoc && root.pmpDoc.searchString !== "" && root.pmpDoc.searchModel.count === 0)
+      																				? qsTr("Не найдено") : ""
             elide: Text.ElideRight//Обрезаем текст по правой стороне точками (...)
         }
         ListView {
