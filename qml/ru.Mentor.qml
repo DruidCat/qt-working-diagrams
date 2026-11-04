@@ -313,6 +313,7 @@ ApplicationWindow {
             textZagolovok: qsTr("СОЗДАНИЕ КАТАЛОГА ДОКУМЕНТОВ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrKatalog {
+                id: tmKatalog//Идентификатор шаблона для аппаратной кнопки Назад Android.
                 ntWidth: pgStrKatalog.ntWidth; ntCoff: pgStrKatalog.ntCoff
                 clrTexta: pgStrKatalog.clrTexta; clrFona: pgStrKatalog.clrRabOblasti
                 clrMenuText: root.clrMenuText; clrMenuFon: pgStrKatalog.clrFona
@@ -467,6 +468,7 @@ ApplicationWindow {
             clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
+                id: tmDannie//Идентификатор шаблона для аппаратной кнопки Назад Android.
 				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
 				clrTexta: pgStrDannie.clrTexta; clrFona: pgStrDannie.clrRabOblasti
 				clrFaila: pgStrDannie.clrFaila
@@ -767,4 +769,32 @@ ApplicationWindow {
             }
         }
 	}  
+
+    //Дублирование кнопки DCKnopkaNazad аппаратной кнопкой "Назад" Android.
+    //Горячая клавиша "Back" ловится окном без активного фокуса, в отличии от Keys.onBackPressed.
+    //На глубине стека 1 (страница Список) шорткат отключён и нажатие обрабатывает сам
+    //Android по системному поведению: сворачивает или закрывает приложение.
+    Shortcut {
+        sequences: ["Back"]
+        enabled: Qt.platform.os === "android" && stvStr.depth > 1
+        onActivated: root.fnAndroidNazad()//Действие равно нажатию кнопки Назад страницы.
+    }
+
+    //Обработка аппаратной кнопки "Назад" Android: вызываем fnClickedNazad() текущей
+    //страницы. Она выполняет внутренние действия страницы и излучает сигнал clickedNazad,
+    //слот которого на корневой сцене делает переход stvStr.pop().
+    function fnAndroidNazad(){
+        var item = stvStr.currentItem//Текущая страница стека навигации.
+        if(item === pgStrMenu) tmMenu.fnClickedVpered()//В Меню нет кнопки Назад, закрытие через Вперёд.
+        else if(item === pgStrAnimaciya) tmAnimaciya.fnClickedNazad()
+        else if(item === pgStrJurnal) tmJurnal.fnClickedNazad()
+        else if(item === pgStrInstrukciya) tmStrInstrukciya.fnClickedNazad()
+        else if(item === pgStrKatalog) tmKatalog.fnClickedNazad()
+        else if(item === pgStrElement) tmElement.fnClickedNazad()
+        else if(item === pgStrDannie) tmDannie.fnClickedNazad()
+        else if(item === pgStrPdf) tmPdf.fnClickedNazad()
+        else if(item === pgStrFileDialog) tmFileDialog.fnClickedNazad()
+        else if(item === pgStrOpisanie) tmOpisanie.fnClickedNazad()
+        else if(item === pgStrPlan) tmPlan.fnClickedNazad()
+    }
 }
