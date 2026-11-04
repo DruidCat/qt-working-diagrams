@@ -134,7 +134,7 @@ Item {
             clrTexta: root.clrTexta//Цвет текста
             clrBorder: root.clrTexta//Цвет бардюра при редактировании текста.
 			italic: true//Текст курсивом.
-            onPressed: fnClickedEscape();//Если нажали на пустое место.
+            onPressed: if(!pvPoisk.pressed) fnClickedEscape();//Если нажали на пустое место
         }
         ListModel {//Модель с шриштами
             id: modelPoisk
