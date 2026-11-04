@@ -341,7 +341,7 @@ Item {
                 	knopkaPovorotProtiv.visible = false;//Делаем невидимым кнопку Против часовой стрелки.
                 }
 				else{//Если не видим виджет поиска(например при увеличении), то...
-                    knopkaVidelit.enabled = true;//Делаем активной кнопку Выделить текст.
+                    knopkaVidelit.enabled = root.isMobile ? false : true;//Делаем активн кнопку Выделить текст
                     knopkaSidebar.enabled = true;//Делаем активной кнопку боковой панели.
                     knopkaPovorotPo.enabled = true;//Делаем активное кнопку По часовой стрелки.
                     knopkaPovorotProtiv.enabled = true;//Делаем активной кнопку Против часовой стрелки.
@@ -362,7 +362,9 @@ Item {
         }
         DCKnopkaVidelit{
             id: knopkaVidelit
-            isVidelit: false//По умолчанию Захватить документ
+            isVidelit: root.isMobile ? true : false//По умолчанию Захватить документ, на мобилке выключен.
+			enabled: root.isMobile ? false : true//На мобилке деактивирована кнопка.
+			visible: root.isMobile ? false : true//На мобилке невидимая кнопка.
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             anchors.verticalCenter: tmZagolovok.verticalCenter; anchors.left: knopkaNazad.right
             clrKnopki: root.clrTexta
@@ -418,7 +420,7 @@ Item {
 						if(!pskPoisk.visible){//Если не открыли Режим поиска, то...
                             root.focus = true;//Фокус на основной странице, чтоб горячие клавиши работали.
 							knopkaNazad.visible = true;//Кнопка назад видимая.
-                            knopkaVidelit.visible = true;//Делаем видимым кнопку Выделить текст.
+                            knopkaVidelit.visible = root.isMobile ? false : true;//Делаем видимым кнопку
                             knopkaSidebar.visible = true;//Делаем видимым кнопку Боковой панели
                             knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
                             knopkaPovorotProtiv.visible = true;//Делаем видимым кнопку Против часовой стрелки.
@@ -470,8 +472,8 @@ Item {
                 knopkaZakrit.visible = false;//Кнопка закрыть Невидимая
                 knopkaOk.visible = false;//Кнопка Ок Невидимая.
                 knopkaNazad.visible = true;//Кнопка назад видимая.
-                knopkaVidelit.visible = true;//Делаем видимым кнопку Выделить текст.
-                knopkaVidelit.enabled = true;//Делаем активной кнопку Выделить текст.
+                knopkaVidelit.visible = root.isMobile ? false : true;//Делаем видимым кнопку Выделить текст.
+                knopkaVidelit.enabled = root.isMobile ? false : true;//Делаем активной кнопку Выделить текст.
                 knopkaSidebar.visible = true;//Делаем видимым кнопку Боковой панели
                 knopkaSidebar.enabled = true;//Делаем активной кнопку Боковой панели
                 knopkaPovorotPo.visible = true;//Делаем видимым кнопку По часовой стрелки.
