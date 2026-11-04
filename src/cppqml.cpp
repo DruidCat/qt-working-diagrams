@@ -267,6 +267,9 @@ void DCCppQml::setBlPdfMentor(const bool& blPdfMentor){//Изменяем про
 ///////////////////////////////////////////////////////////////////////
     if (blPdfMentor != m_blPdfMentor){//Если не равны значения, то...
         m_blPdfMentor = blPdfMentor;//Приравниваем.
+		m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
+		m_sttReestr.setValue("/pdf_mentor", m_blPdfMentor);//Записываем просмотрщик pdf документов.
+		m_sttReestr.endGroup();//Закрываем группу /Настройки
         emit blPdfMentorChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
@@ -276,6 +279,9 @@ void DCCppQml::setBlAppRedaktor(const bool& blAppRedaktor){//Изменяем ф
 ///////////////////////////////////////////////////////
     if (blAppRedaktor != m_blAppRedaktor){//Если не равны значения, то...
         m_blAppRedaktor = blAppRedaktor;//Приравниваем.
+		m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
+		m_sttReestr.setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
+		m_sttReestr.endGroup();//Закрываем группу /Настройки
         emit blAppRedaktorChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
@@ -289,6 +295,9 @@ void DCCppQml::setUntShrift(const uint& untShrift){//Изменяем значе
     else{//Если нет, то...
         if (untShrift != m_untShrift){//Если не равны значения, то...
             m_untShrift = untShrift;//Приравниваем.
+			m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
+			m_sttReestr.setValue("/shrift", m_untShrift);//Записываем Шрифт 0-мал, 1-средний, 2-большой.
+			m_sttReestr.endGroup();//Закрываем группу /Настройки
             emit untShriftChanged();//Излучаем сигнал об изменении аргумента.
         }
     }
@@ -304,6 +313,9 @@ void DCCppQml::setStrKatalogPut(const QString &strKatalogPut){//Изменяем
     else{//Если нет, то...
         if (strKatalogPut != m_strKatalogPut){//Если не равны значения, то...
             m_strKatalogPut = strKatalogPut;//Приравниваем.
+			m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
+			m_sttReestr.setValue("/katalog_put", QDir::toNativeSeparators(m_strKatalogPut));//путь каталога
+			m_sttReestr.endGroup();//Закрываем группу /Настройки
             emit strKatalogPutChanged();//Излучаем сигнал об изменении аргумента.
         }
     }
