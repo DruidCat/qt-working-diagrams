@@ -2,6 +2,75 @@
 
 #include <QDebug>
 
+#ifdef Q_OS_ANDROID
+#include <QDir>
+#include <QJniObject>
+#include <QJniEnvironment>
+#include <QtCore/qcoreapplication_platform.h>
+//////////////////////////////////////
+//---A N D R O I D   D O S T U P---//
+//////////////////////////////////////
+// Задача #27. На Android домашняя папка Проводника (DCFileDialog) берётся из
+// standardLocations, а это песочница приложения, где документов пользователя нет.
+// Здесь домашней делается общая папка «Документы» устройства, доступ к которой
+// даёт системное разрешение «Доступ ко всем файлам» (MANAGE_EXTERNAL_STORAGE).
+static QString polAndroidDocumentPut(){//Вернуть путь общей папки «Документы».
+    QJniObject m_pOdrDir = QJniObject::callStaticObjectMethod("android/os/Environment",
+            "getExternalStorageDirectory", "()Ljava/io/File;");//Корень хранилища.
+    if(!m_pOdrDir.isValid())
+        return QString();//Сбой JNI - вернуть пустой путь.
+    QJniObject m_pOdrPath = m_pOdrDir.callObjectMethod("getPath", "()Ljava/lang/String;");
+    if(!m_pOdrPath.isValid())
+        return QString();//Сбой чтения пути - вернуть пустой путь.
+    QString strRoot = m_pOdrPath.toString();//Например /storage/emulated/0.
+    return QDir(strRoot).filePath(QStringLiteral("Documents"));//Дописать имя папки.
+}
+static bool blAndroidVneshniyDostup(){//Выдан ли доступ «Доступ ко всем файлам».
+    if(QJniObject::getStaticField<jint>("android/os/Build$VERSION", "SDK_INT") < 30)
+        return true;//До Android 11 такого разрешения не существует.
+    jboolean blManager = QJniObject::callStaticMethod<jboolean>("android/os/Environment",
+            "isExternalStorageManager");//Спрошить разрешение у системы.
+    return blManager;//Вернуть результат опроса.
+}
+static void zaprosAndroidVneshniyDostup(bool blAppStraniza){//Открыть страницу выдачи доступа.
+    QJniObject m_pOdrContext = QNativeInterface::QAndroidApplication::context();
+    if(!m_pOdrContext.isValid())
+        return;//Контекст приложения недоступен - ничего не делать.
+    QJniObject m_pOdrPaket = m_pOdrContext.callObjectMethod("getPackageName",
+            "()Ljava/lang/String;");//Пакет этого приложения.
+    if(!m_pOdrPaket.isValid())
+        return;
+    QJniObject m_pOdrUri;//Uri с пакетом, чтобы открыть страницу конкретного приложения.
+    if(blAppStraniza){
+        QJniObject m_pOdrUriStr = QJniObject::fromString(
+                QStringLiteral("package:") + m_pOdrPaket.toString());
+        m_pOdrUri = QJniObject::callStaticObjectMethod("android/net/Uri", "parse",
+                "(Ljava/lang/String;)Landroid/net/Uri;", m_pOdrUriStr.object());
+    }
+    QString strAction = blAppStraniza
+            ? QStringLiteral("android.settings.MANAGE_APP_ALL_FILES_ACCESS_PERMISSION")
+            : QStringLiteral("android.settings.MANAGE_ALL_FILES_ACCESS_PERMISSION");
+    QJniObject m_pOdrAction = QJniObject::fromString(strAction);
+    QJniObject m_pOdrIntent("android/content/Intent", "(Ljava/lang/String;)V",
+            m_pOdrAction.object());//Создать интент настроек.
+    if(!m_pOdrIntent.isValid())
+        return;
+    if(m_pOdrUri.isValid())
+        m_pOdrIntent.callObjectMethod("setData",
+                "(Landroid/net/Uri;)Landroid/content/Intent;", m_pOdrUri.object());
+    m_pOdrIntent.callObjectMethod("setFlags", "(I)Landroid/content/Intent;",
+            0x10000000);//FLAG_ACTIVITY_NEW_TASK, за пределами активности Qt.
+    m_pOdrContext.callMethod<void>("startActivity", "(Landroid/content/Intent;)V",
+            m_pOdrIntent.object());//Открыть системные настройки.
+    QJniEnvironment m_pOdrEnv;
+    if(m_pOdrEnv->ExceptionCheck()){//Сбой страницы приложения - повторить через общую страницу.
+        m_pOdrEnv->ExceptionClear();
+        if(blAppStraniza)
+            zaprosAndroidVneshniyDostup(false);
+    }
+}
+#endif // Q_OS_ANDROID
+
 DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_sttReestr("DruidCat", "Mentor"),
                                         m_untHeight(0),
@@ -67,6 +136,15 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     QStringList slsFileDialogMaska = QStringList() << "*.pdf" << "*.PDF" << "*.Pdf"<<"*.m4b";
     QStringList slsDomPut = QStandardPaths::standardLocations(QStandardPaths::DocumentsLocation);
     m_strDomPut = slsDomPut.first();//Переменная хранящая путь домашнего каталога.
+#ifdef Q_OS_ANDROID
+    //Задача #27: standardLocations на Android выдаёт песочницу приложения, поэтому
+    //домашней папкой делаем общую «Документы» устройства (Документы пользователя).
+    QString strAndroidDom = polAndroidDocumentPut();
+    if(!strAndroidDom.isEmpty())
+        m_strDomPut = strAndroidDom;//Домашняя папка Проводника, Каталогизатора и реестра.
+    if(blAndroidVneshniyDostup())//Если доступ уже выдан, проследить о существовании папки.
+        QDir().mkpath(m_strDomPut);
+#endif
 
     QDir odrMentor = QDir::current();//Объект каталога приложения.
     if(!odrMentor.cd(strKatalogDB)){//Если перейти к это папке не получается, то...
@@ -899,6 +977,14 @@ void DCCppQml::setStrFileDialogPut(const QString& strFileDialogPutNovi){//Зап
     //strFileDialogPutNovi = dom; Задаёт домашнюю дерикторию.
     //strFileDialogPutNovi = sohranit; Задаёт текущую дерикторию.
     if(strFileDialogPutNovi == "start"){//Если это Старт, то...
+#ifdef Q_OS_ANDROID
+        //Задача #27: без доступа к хранилищу устройства Проводник покажет пустую папку,
+        //поэтому открываем системную страницу «Доступ ко всем файлам» для нашего пакета.
+        if(!blAndroidVneshniyDostup())//Если доступ ещё не выдан, то...
+            zaprosAndroidVneshniyDostup(true);//Открыть страницу выдачи доступа.
+        else//Если доступ уже есть, то...
+            QDir().mkpath(m_strDomPut);//Создать домашнюю папку, если её вдруг нет.
+#endif
         emit strFileDialogPutChanged();//Излучаем сигнал об изменении аргумента и обновляем каталог проводника
     }
     else{//Если это не старт, то...
