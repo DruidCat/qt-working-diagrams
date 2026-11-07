@@ -6,6 +6,7 @@
 #include <QFont>
 #include <QDebug>//Отладка.
 #include <QQuickWindow>
+#include <QSysInfo>//Определение ОС по /etc/os-release (ID=auroraos на Авроре).
 
 #include "cppqml.h"
 
@@ -48,6 +49,10 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
     QQmlContext* pkornevoiKontekst = engine.rootContext();//Создаём корневой контекс
     pkornevoiKontekst->setContextProperty("cppqml", &odccppqml);//Передаём имя и объект
+    //На Авроре QSysInfo::productType() равно "auroraos" (поле ID из /etc/os-release на устройстве).
+    //Qt.platform.os на Авроре возвращает "linux", отличить его от десктопа нельзя, поэтому проверка здесь.
+    pkornevoiKontekst->setContextProperty("osAurora",
+            QSysInfo::productType().compare(QStringLiteral("auroraos"), Qt::CaseInsensitive) == 0);
     engine.load(url);
     return app.exec();
 }

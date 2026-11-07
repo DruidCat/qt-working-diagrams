@@ -1,5 +1,6 @@
 ﻿import QtQuick //2.15
 import QtQuick.Controls //2.15 //StackView
+import QtQml//Базовый модуль QML.
 
 import DCPages 1.0//Импортируем Страницы программы.
 
@@ -23,8 +24,9 @@ ApplicationWindow {
     property int ntCoff: 8
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
     ///////////////////////////////////////////////////////////////////
+	property bool isAurora: osAurora//Флаг передаётся из main.cpp (QSysInfo::productType() == "auroraos").
     property bool isMobile: {//Переменная определяющая, мобильная это платформа или нет. true - мобильная.
-        if((Qt.platform.os === "android") || (Qt.platform.os === "ios"))//Если мобильная платформа, то...
+        if((Qt.platform.os === "android") || (Qt.platform.os === "ios") || isAurora)//Если мобильная платформа
 			return true;//Это мобильная платформа.
 		else//Эсли не мобильная, то...
 			return false;//Это не мобильная платформа.
