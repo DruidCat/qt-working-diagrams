@@ -91,9 +91,93 @@ Drawer {
         id: rctTabbar
         anchors.top: root.top
         anchors.left: rctBorder.right
-        width: ((root.ntWidth-1)*root.ntCoff<20)?20:(root.ntWidth-1)*root.ntCoff//От слишком маленького шрифта
+		//ВЫСОТА TARBAR И ВЫСОТА ТЕКСТА TABBUTTON СИНХРОНИЗИРОВАНЫ, И ДОЛЖНЫ СООТВЕТСТВОВАТЬ ДРУГ ДРУГУ
+        width: root.ntWidth * root.ntCoff + (ntWidth === 2 ? 12 : (ntWidth === 4 ? 16 : 20))//НЕ МЕНЯТЬ КОЭФФ!
         height: root.height
         color: root.clrTexta
+		TabBar {//Вкладки//TabBar находится внутри прямоугольника и поумолчанию в него вписывается.
+			id: tbSidebar
+			anchors.top: parent.bottom//Можно только один anchor задать, второй проигнорируется.
+			height: rctTabbar.width
+			width: rctTabbar.height
+			rotation: -90//Поворачиваем на 90 градусов против часовой стрелки боковую панель
+			transformOrigin: Item.TopLeft//Точка поворота боковой панели верхний левый угол.
+			currentIndex: 1//Закладки видимые по умолчанию.
+			Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
+				if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
+					if(tbbNaideno.focus) fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+					else if(tbbZakladki.focus) fnZakladkiOpen()//Функция открытия и фокусировки Закладках
+					else if(tbbPoster.focus) fnPosterOpen()//Функция открытия и фокусировки Страницы
+					event.accepted = true;//Завер обработку эвента
+				}
+				else{
+					if(event.key === Qt.Key_Down){//нажата "Стрелка вниз",то
+						tbSidebar.currentIndex = Math.max(0, tbSidebar.currentIndex -= 1)
+						event.accepted = true;//Завершаем обработку эвента.
+					}
+					else{
+						if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
+							tbSidebar.currentIndex = Math.min(2, tbSidebar.currentIndex += 1)
+							event.accepted = true;//Завершаем обработку эвента.
+						}
+					}
+				}
+			}
+			DCTabButton {
+				id: tbbNaideno
+				text: qsTr("Найдено")
+				width: tbSidebar.width/tbSidebar.count//делим на кол-во кнопок
+				height: tbSidebar.height
+				hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
+				clrTexta: root.clrTexta
+				clrFona: root.clrFona
+				clrHover: root.clrMenuFon
+				ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
+				ntWidth: root.ntWidth
+				onPressed: fnNaidenoOpen()//Функция открытия и фокусировки Найдено
+				onFocusChanged: {//Если фокус вкладки изменился, то...
+					if(focus) root.currentIndex = 0//Переключаемся на вкладку Найдено.
+					borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
+				}
+				Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
+			}
+			DCTabButton {
+				id: tbbZakladki
+				text: qsTr("Закладки")
+				width: tbSidebar.width/tbSidebar.count-root.ntCoff/4//делим на кол-во кнопок//делим на кол-во кнопок
+				height: tbSidebar.height
+				hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
+				clrTexta: root.clrTexta
+				clrFona: root.clrFona
+				clrHover: root.clrMenuFon
+				ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
+				ntWidth: root.ntWidth
+				onPressed: fnZakladkiOpen()//Функция открытия и фокусировки Закладках
+				onFocusChanged: {//Если фокус вкладки изменился, то...
+					if(focus) root.currentIndex = 1//Переключаемся на вкладку Закладки
+					borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
+				}
+				Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
+			}
+			DCTabButton {
+				id: tbbPoster
+				text: qsTr("Страницы")
+				width: tbSidebar.width/tbSidebar.count//делим на кол-во кнопок//делим на кол-во кнопок
+				height: tbSidebar.height
+				hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
+				clrTexta: root.clrTexta
+				clrFona: root.clrFona
+				clrHover: root.clrMenuFon
+				ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
+				ntWidth: root.ntWidth
+				onPressed: fnPosterOpen()//Функция открытия и фокусировки Страницы
+				onFocusChanged: {//Если фокус вкладки изменился, то...
+					if(focus) root.currentIndex = 2//Переключаемся на вкладку Миниатюр
+					borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
+				}
+				Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
+			}
+		}
     }
     Rectangle {//Прямоугольник заголовка, для информации и кнопки закрыть.
         id: rctZagolovok
@@ -194,91 +278,7 @@ Drawer {
 				cppqml.untSidebarWidth = root.sidebarWidth//Записываем в реестр ширину боковой панели.
 			}
         }
-    }
-    TabBar {//Вкладки
-        id: tbSidebar
-        anchors.left: rctTabbar.right
-        anchors.bottom: rctTabbar.bottom
-        height: rctTabbar.width
-        width: rctTabbar.height
-        rotation: -90//Поворачиваем на 90 градусов против часовой стрелки боковую панель
-        transformOrigin: Item.BottomLeft//Точка поворота боковой панели нижний левый угол.
-        currentIndex: 1//Закладки видимые по умолчанию.
-        Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
-            if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
-                if(tbbNaideno.focus) fnNaidenoOpen()//Функция открытия и фокусировки Найдено
-                else if(tbbZakladki.focus) fnZakladkiOpen()//Функция открытия и фокусировки Закладках
-                else if(tbbPoster.focus) fnPosterOpen()//Функция открытия и фокусировки Страницы
-                event.accepted = true;//Завер обработку эвента
-            }
-            else{
-                if(event.key === Qt.Key_Down){//нажата "Стрелка вниз",то
-                    tbSidebar.currentIndex = Math.max(0, tbSidebar.currentIndex -= 1)
-                    event.accepted = true;//Завершаем обработку эвента.
-                }
-                else{
-                    if(event.key === Qt.Key_Up){//нажата "Стрелка вверх"
-                        tbSidebar.currentIndex = Math.min(2, tbSidebar.currentIndex += 1)
-                        event.accepted = true;//Завершаем обработку эвента.
-                    }
-                }
-            }
-        }
-        DCTabButton {
-            id: tbbNaideno
-            text: qsTr("Найдено")
-            width: (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4//делим на кол-во кнопок
-            height: rctTabbar.width
-            hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
-            clrTexta: root.clrTexta
-            clrFona: root.clrFona
-            clrHover: root.clrMenuFon
-            ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-            blFontAuto: true//Включаем автоподгонку размера шрифта.
-            onPressed: fnNaidenoOpen()//Функция открытия и фокусировки Найдено
-            onFocusChanged: {//Если фокус вкладки изменился, то...
-                if(focus) root.currentIndex = 0//Переключаемся на вкладку Найдено.
-                borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
-            }
-            Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
-        }
-        DCTabButton {
-            id: tbbZakladki
-            text: qsTr("Закладки")
-            width: (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
-            height: rctTabbar.width
-            hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
-            clrTexta: root.clrTexta
-            clrFona: root.clrFona
-            clrHover: root.clrMenuFon
-            ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-            blFontAuto: true//Включаем автоподгонку размера шрифта.
-            onPressed: fnZakladkiOpen()//Функция открытия и фокусировки Закладках
-            onFocusChanged: {//Если фокус вкладки изменился, то...
-                if(focus) root.currentIndex = 1//Переключаемся на вкладку Закладки
-                borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
-            }
-            Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
-        }
-        DCTabButton {
-            id: tbbPoster
-            text: qsTr("Страницы")
-            width: (rctTabbar.height - root.ntCoff/2)/tbSidebar.count + root.ntCoff/4
-            height: rctTabbar.width
-            hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
-            clrTexta: root.clrTexta
-            clrFona: root.clrFona
-            clrHover: root.clrMenuFon
-            ntCoff: root.ntCoff//Для автоподгонки шрифта во вкладке
-            blFontAuto: true//Включаем автоподгонку размера шрифта.
-            onPressed: fnPosterOpen()//Функция открытия и фокусировки Страницы
-            onFocusChanged: {//Если фокус вкладки изменился, то...
-                if(focus) root.currentIndex = 2//Переключаемся на вкладку Миниатюр
-                borderFocus = focus//Не подсвечиваем/подсвечиваем бордюр вкладки.
-            }
-            Component.onCompleted: borderFocus = false//После загрузки бордюр не активный
-        }
-    }
+    } 
     Rectangle {//Вкладка "Найдено"
         id: rctNaideno
         anchors.top: rctSidebar.top
@@ -789,7 +789,6 @@ Drawer {
             }
         }
     }
-
     Rectangle {//Оконтовка поверх всех прямоугольников
         anchors.top: root.top
         anchors.right: rctSidebar.right

@@ -10,8 +10,8 @@ TabButton {
     property color clrFona:		"Black"
     property color clrHover:	"SlateGray"
     property int ntCoff:		8//Для автоподгонки шрифта во вкладке
+	property int ntWidth: 		2//Размер шрифта
     property real radius:		0//0 - без радиуса
-    property bool blFontAuto:	true//true - Автоподгон шрифта под ширину кнопки, false - [...]
     property bool borderFocus:	false//true - если фокус на вкладке, то она другого цвета
     //Настраиваемые параметры внешнего вида TabButton
     readonly property color clrFonNormal:	clrFona//Цвет фона фкладки, когда она не активна.
@@ -40,46 +40,19 @@ TabButton {
         text: root.text//У TabButton есть свойство text, нет смысла его переназначать.
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
-        font.pixelSize: root.height - root.ntCoff//Размер шрифта - это высота вкладки, минус ntCoff
+        font.pixelSize: fnFont()
+        elide: Text.ElideRight//автоматически сокращает текст, добавляя многоточие (...) в конце
         color: !root.enabled	? root.clrTxtPressed
             : root.checked		? root.clrTxtChecked
             : root.down			? root.clrTxtPressed
             : 					root.clrTxtNormal
-        /*
-        wrapMode: Text.NoWrap//ОБЯЗАТЕЛЕН, чтобы implicitWidth был предсказуемым
-        DCFontAuto {
-            target: lblText
-            ntCoff: root.ntCoff
-            blFontAuto: root.blFontAuto
-        }
-        */
     }
-    function fnAutoFont(){//Функция авто подгонки размера текста во вкладке
-        if (!blFontAuto){//Если авто подгон размера шрифта отключен, то...
-            lblText.elide = Text.ElideRight//автоматически сокращает текст, добавляя многоточие (...) в конце
-            return;//Выходим из функции.
-        }
-        if(width > (lblText.implicitWidth+root.ntCoff)){//Если длина строки больше длины текста
-            for(var ltShag=lblText.font.pixelSize; ltShag<height-root.ntCoff; ltShag++){
-                if((lblText.implicitWidth+root.ntCoff) < width){//Если длина txt меньше динны стр
-                    lblText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                    if((lblText.implicitWidth+root.ntCoff) > width){//Но, если переборщили
-                        lblText.font.pixelSize--;//То уменьшаем размер шрифта и...
-                        return;//Выходим из увеличения шрифта.
-                    }
-                }
-            }
-        }
-        else{//Если длина строки меньше длины текста, то...
-            for(let ltShag = lblText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                if((lblText.implicitWidth+root.ntCoff) > width)//Если текст дилиннее строки, то
-                    lblText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-            }
-        }
+    function fnFont(){//Функция  размера текста во вкладке
+		return root.ntWidth * root.ntCoff - 2//ВНИМАНИЕ! РАЗМЕР ШРИФТА ЗАВИСИТ ОТ ВЫСОТЫ РОДИТЕЛЯ TARBAR
     }
-    Component.onCompleted:	fnAutoFont()//Когда текст отрисовался, то нужно выставить размер шрифта.
-    onWidthChanged:			fnAutoFont()//Если длина строки изменилась, то нужно выставить размер шрифта.
-    onHeightChanged:		fnAutoFont()//Если высота изменилась, значить изменился размер шрифта в настройках
-    onTextChanged:			fnAutoFont()//Если текст изменился, то нужно выставить размер шрифта.
-    onNtCoffChanged:		fnAutoFont()//Если коэффициент изменился, то нужно выставить размер шрифта.
+    Component.onCompleted:	fnFont()//Когда текст отрисовался, то нужно выставить размер шрифта.
+    onWidthChanged:			fnFont()//Если длина строки изменилась, то нужно выставить размер шрифта.
+    onHeightChanged:		fnFont()//Если высота изменилась, значить изменился размер шрифта в настройках
+    onTextChanged:			fnFont()//Если текст изменился, то нужно выставить размер шрифта.
+    onNtCoffChanged:		fnFont()//Если коэффициент изменился, то нужно выставить размер шрифта.
 }
