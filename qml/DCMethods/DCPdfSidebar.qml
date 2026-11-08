@@ -40,6 +40,17 @@ Drawer {
     signal clickedPoisk()//Сигнал запуска режима поиска.
     signal clickedInfo();//Сигнал нажатия кнопки Информация
     //Функции
+	onPositionChanged: {//Если позиция изменяется у боковой панели, то...
+		if(!position) {//Если боковая панель закрылась, то...
+			if(trvZakladki.isMobileCloseStart){//Если была иннициализация перехода на закладку в Мобилке, то..
+				trvZakladki.isMobileCloseStart = false//сбрасываем флаг
+				if (root.pmpDoc){//Если указатель не null. то...
+					root.pmpDoc.goToLocation(trvZakladki.ntPage,
+											trvZakladki.pntLocation, root.pmpDoc.renderScale)
+				}
+			}
+		}
+	}
     onPdfDocChanged: {//Если будет замена на пустой pdf файл, для обнуления открытого файла, то...
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
     }
@@ -303,6 +314,8 @@ Drawer {
         }
         ListView {
             id: lsvNaideno
+			//Свойства
+			//Настройки
             anchors.fill: rctNaideno
             implicitHeight: rctNaideno.height
             model: root.pmpDoc ? root.pmpDoc.searchModel : null//Если есть поисковая модель, то добавляем её
@@ -372,11 +385,11 @@ Drawer {
                 }
                 highlighted: ListView.isCurrentItem
                 onClicked: {
+                    if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                     if (root.pmpDoc){//Если указатель не null. то...
                         lsvNaideno.focus = true//Фокус на Найдено
                         root.pmpDoc.searchModel.currentResult = tmdResult.index//Задаём № поиска
                     }
-                    if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                 }
                 Component.onCompleted: {//Если создался элемент делегата, то...
                     if (index === 0 && root.pmpDoc){//Если index поиска первый (0), то...
@@ -428,6 +441,9 @@ Drawer {
             property int currentIndex: -1//Хранит индекс той закладки, который мы выбрали, кликнув на неё.
             property real horizontalOffset: 0//Гориз. сдвиг всех строк меняется при движении гориз. ScrollBar.
             property real maxHorizontalOffset: 0//Маx"хвост"по X среди всех строк который вылез за правый край
+			property int ntPage//Приходит из PdfBookmarkModel номер страницы, нужно  его запомнить
+            property point pntLocation//Приходит из PdfBookmarkModel координата закладки, запоминаем её.
+			property bool isMobileCloseStart: false//true-запуск закрытия боковой панели на Закладках
             //Настройки
             anchors.top: parent.top
             anchors.left: parent.left
@@ -620,8 +636,14 @@ Drawer {
                 onClicked: {//Клик по строке — перейти к закладке и, на мобильных, закрыть боковую панель
 					trvZakladki.forceActiveFocus()//Без этого после клика мышью клавиши не придут в дерево.
                     trvZakladki.currentIndex = tvdZakladka.index//Сохраняем индекс, который мы выбрали
-                    if (root.pmpDoc) root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)//На Стр
-                    if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
+					if (root.isMobile){//Если болильное устройство, то...
+						trvZakladki.isMobileCloseStart = true//запуск закрытия боковой панели на Закладках
+						trvZakladki.ntPage = page//Запоминаем страницу.
+						trvZakladki.pntLocation = location//Запоминаем координату.
+						root.close()//Если мобила, то закрываем боковую панель
+					} else {//Если это не мобильное устройство, то...
+						if (root.pmpDoc) root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)
+					}
                 }
             }
             model: PdfBookmarkModel {//Модель закладок PDF
@@ -780,10 +802,10 @@ Drawer {
                 }
                 TapHandler {
                     onTapped: {
+                        if(root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                         grvPoster.focus = true//Фокус на страницах
                         grvPoster.currentIndex = index//Передаём выбранный индекс, для подсветки текста.
                         if(root.pmpDoc) root.pmpDoc.goToPage(index)//Переходим на страницу.
-                        if(root.isMobile) root.close()//Если мобила, то закрываем боковую панель
                     }
                 }
             }
