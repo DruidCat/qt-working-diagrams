@@ -1,30 +1,30 @@
-﻿# Mentor (Ментор)
+﻿# Ментор (Mentor)
 
-Desktop application: a catalog editor for working documents with a built-in viewer.
-UI: QML, application code: C++, data storage: SQLite.
+Настольное приложение — редактор каталогов рабочих документов со встроенным просмотрщиком.
+Интерфейс: QML, код приложения: C++, хранение данных: SQLite.
 
-Application structure: Menu -> (Title + List) -> Elements -> (Data + Viewer) -> File Manager.
+Структура программы: Меню -> (Титул + Список) -> Элементы -> (Данные + Просмотрщик) -> Проводник.
 
-## Features
+## Возможности
 
-- Single storage: the catalog, documents and title data live in one SQL database (SQLite).
-  Backup and transfer of the catalog is done by copying a single folder.
-- Works offline, no internet connection required.
-- Catalog search; full-text search inside PDF documents (Ctrl+F, F3 — next match).
-- PDF viewer: open, paging, zooming (including pinch-to-zoom on tablets), rotation.
-- Two work modes: ADMINISTRATOR (create and delete) and WORKER (view only).
-  The mode flag (isAdmin) is set at project compile time.
-- Hints in the Toolbar, hotkeys for standard operations, adjustable font size.
+- Единое хранилище: каталог, документы и титульные данные в одной SQL базе (SQLite).
+  Резервная копия и перенос каталога — копированием одной папки.
+- Работа без подключения к интернету.
+- Поиск по каталогу; полнотекстовый поиск внутри PDF-документов (Ctrl+F, F3 — следующее совпадение).
+- Просмотр PDF: открытие, листание, масштабирование (в том числе щипком на планшете), поворот.
+- Два режима работы: АДМИНИСТРАТОР (создание и удаление) и РАБОТНИК (только просмотр).
+  Флаг режима (isAdmin) задаётся при компиляции проекта.
+- Подсказки в Toolbar, горячие клавиши для стандартных операций, регулировка размера шрифта.
 
-## Installation and build
+## Установка и сборка
 
 ### Ubuntu 22.04+
 
-Requirements:
-- Qt 6, components: Core, Quick, QuickControls2, Sql (SQLite driver), Pdf, PdfQuick;
-- a C++17-capable compiler, CMake 3.14+, git.
+Требования:
+- Qt 6, компоненты: Core, Quick, QuickControls2, Sql (драйвер SQLite), Pdf, PdfQuick;
+- компилятор с поддержкой C++17, CMake 3.14+, git.
 
-1. Install Qt 6 and dependencies:
+1. Установить Qt 6 и зависимости:
 
 ```bash
 sudo apt update
@@ -35,21 +35,21 @@ sudo apt install -y build-essential cmake git \
   qt6-pdf-dev qml6-module-qtquick-pdf libqt6sql6-sqlite
 ```
 
-2. Clone the repository:
+2. Клонировать репозиторий:
 
 ```bash
 git clone https://github.com/DruidCat/qt-working-diagrams.git
 cd qt-working-diagrams
 ```
 
-3. Build the project (qmake build is also supported, file `ru.Mentor.pro`):
+3. Собрать проект (допустима также сборка через qmake, файл `ru.Mentor.pro`):
 
 ```bash
 cmake -S . -B build
 cmake --build build -j$(nproc)
 ```
 
-4. Run the application:
+4. Запустить приложение:
 
 ```bash
 ./build/ru.Mentor
@@ -57,76 +57,76 @@ cmake --build build -j$(nproc)
 
 ### Windows 10, 11
 
-Requirements:
-- Qt 6 from the Qt Online Installer (https://www.qt.io/download).
-  Components: Qt 6.x — Core, Quick, Quick Controls 2, SQL (SQLite driver), Qt PDF.
-  A C++17 compiler (MSVC or MinGW from the Qt installer).
-- CMake 3.14+ or Qt Creator (shipped with Qt).
+Требования:
+- Qt 6 из Qt Online Installer (https://www.qt.io/download).
+  Компоненты: Qt 6.x — Core, Quick, Quick Controls 2, SQL (драйвер SQLite), Qt PDF.
+  Компилятор C++17 (MSVC или MinGW из установщика Qt).
+- CMake 3.14+ или Qt Creator (поставляется с Qt).
 
-Build:
-1. Open the project in Qt Creator: `CMakeLists.txt` or `ru.Mentor.pro` -> Configure -> Build.
-2. Run `ru.Mentor.exe` from the build folder.
+Сборка:
+1. Открыть проект в Qt Creator: `CMakeLists.txt` или `ru.Mentor.pro` -> Configure -> Build.
+2. Запустить `ru.Mentor.exe` из каталога сборки.
 
 ### AltLinux
 
-Requirements: Qt 6 packages from the AltLinux repository, the list is in
-[Qt6_AltLinux.txt](Qt6_AltLinux.txt). Qt 5.15 notes are in [Qt5_AltLinux.txt](Qt5_AltLinux.txt).
+Требования: пакеты Qt 6 из репозитория AltLinux, список — в файле
+[Qt6_AltLinux.txt](Qt6_AltLinux.txt). Заметки по Qt 5.15 — в [Qt5_AltLinux.txt](Qt5_AltLinux.txt).
 
-Build: the same CMake commands as in the Ubuntu section.
+Сборка: те же команды CMake, что в разделе Ubuntu.
 
 ### Android
 
-Build from Qt Creator using the Android kit.
-The manifest and resources are in the [android](android) folder.
+Сборка из Qt Creator с использованием Android-комплекта.
+Манифест и ресурсы находятся в каталоге [android](android).
 
-## Usage
+## Использование
 
-On start, the application opens the document catalog following the scheme
-Menu -> List -> Elements -> Data -> Viewer.
+После запуска приложение открывает каталог документов по схеме
+Меню -> Список -> Элементы -> Данные -> Просмотрщик.
 
-- ADMINISTRATOR: creates Lists and Elements, attaches documents via the File Manager,
-  keeps a journal, picks the viewer.
-- WORKER: browses catalogs and documents only, no create or delete.
-- F1 — side panel (bookmarks, instructions). Ctrl+F — search inside an open PDF, F3 — next match.
-- Font size adapts to the screen; hotkeys are defined for standard operations.
+- АДМИНИСТРАТОР: создаёт Списки и Элементы, добавляет документы через Проводник,
+  ведёт журнал, выбирает просмотрщик.
+- РАБОТНИК: только просмотр каталогов и документов, без создания и удаления.
+- F1 — боковая панель (закладки, инструкция). Ctrl+F — поиск по открытому PDF, F3 — далее.
+- Размер шрифта подстраивается под экран; горячие клавиши заданы для стандартных операций.
 
-On first run the application reads documents from the `workingdata` folder next to the
-executable; the database and the documents are stored in one folder.
+При первом запуске приложение читает документы из каталога `workingdata` рядом
+с исполняемым файлом; база данных и документы хранятся в одном каталоге.
 
-## Project structure
+## Структура проекта
 
 ```
 qt-working-diagrams/
-├── qml/                    # QML source code and interface resources
-│   ├── DCButtons/          # Application buttons (the DCButtons library)
-│   ├── DCMethods/          # Application widgets and methods
-│   ├── DCPages/            # Pages (Menu, List, Elements, Data, File Manager)
-│   └── ru.Mentor.qml       # Main qml file — the application window
-├── src/                    # C++ source code
-│   └── main.cpp            # Application entry point
-├── js/                     # JavaScript files (JSON helper functions)
-├── icons/                  # App icons for supported screen resolutions
-├── fonts/                  # Application fonts
-├── images/                 # Interface images
-├── workingdata/            # Database and documents
-├── android/                # Android manifest and resources
-├── CMakeLists.txt          # Project structure for the cmake build system
-├── ru.Mentor.pro           # Project structure for the qmake build system
-└── qml.qrc                 # Project resource table
+├── qml/                    # Исходный код на QML и ресурсы интерфейса
+│   ├── DCButtons/          # Кнопки приложения (библиотека DCButtons)
+│   ├── DCMethods/          # Виджеты и методы приложения
+│   ├── DCPages/            # Страницы (Меню, Список, Элементы, Данные, Проводник)
+│   └── ru.Mentor.qml       # Главный qml файл — окно приложения
+├── src/                    # Исходный код на C++
+│   └── main.cpp            # Точка входа в приложение
+├── js/                     # Java Script файлы (функции для работы с JSON)
+├── icons/                  # Иконки приложения для поддерживаемых разрешений экрана
+├── fonts/                  # Шрифты приложения
+├── images/                 # Изображения интерфейса
+├── workingdata/            # База данных и документы
+├── android/                # Манифест и ресурсы для сборки под Android
+├── CMakeLists.txt          # Структура проекта для системы сборки cmake
+├── ru.Mentor.pro           # Структура проекта для системы сборки qmake
+└── qml.qrc                 # Таблица ресурсов проекта
 ```
 
-## How the application is built
+## Как устроено приложение
 
-- [DCDB](src/dcdb.h) — class working with the SQL database.
-- [DCDBData](src/dcdbdata.h) — class working with files stored inside the SQL database.
-- [DCCppQml](src/cppqml.h) — the single driver binding the C++ and QML code together.
-- [DCPdfPoisk](src/dcpdfpoisk.h) — full-text search across PDF documents.
-- [DCLogger](src/dclogger.h) — application error journal.
-- [Stranica](qml/DCPages/Stranica.qml) — the main UI template of the program.
+- [DCDB](src/dcdb.h) — класс, работающий с SQL базой данных.
+- [DCDBData](src/dcdbdata.h) — класс, работающий с файлами, записанными в SQL базу данных.
+- [DCCppQml](src/cppqml.h) — единственный драйвер, связывающий C++ и QML код друг с другом.
+- [DCPdfPoisk](src/dcpdfpoisk.h) — поиск текста по PDF документам.
+- [DCLogger](src/dclogger.h) — журнал ошибок приложения.
+- [Stranica](qml/DCPages/Stranica.qml) — основной шаблон интерфейса программы.
 
-## Compatibility
+## Совместимость
 
-The project is compatible with:
+Проект совместим с:
 
 * Windows 7, 8, 10, 11.
 * GNU/Linux.
@@ -134,39 +134,37 @@ The project is compatible with:
 * Android.
 * iOS.
 
-## Tasks and bugs
+## Задачи и баги
 
-All tasks, plans and bugs are tracked in
-[GitHub Issues](https://github.com/DruidCat/qt-working-diagrams/issues).
-Code fixes close a task with a `Closes #N` line in the commit message.
+Все задачи, планы и баги ведутся в [GitHub Issues](https://github.com/DruidCat/qt-working-diagrams/issues).
+Исправления в коде закрывают задачу строкой `Closes #N` в сообщении коммита.
 
-## Terms of use and participation
+## Условия использования и участия
 
-The project source code is provided under the [GPLv3 license](LICENSE.GPLv3.md), which requires
-source code disclosure.
+Исходный код проекта предоставляется по [лицензии GPLv3](LICENSE.GPLv3.md), которая обязывает раскрытие
+исходного кода.
 
-The [Contributor Agreement](CONTRIBUTING.md) governs the rights granted by contributors to the DruidCat
-company.
+[Соглашение участника](CONTRIBUTING.md) регламентирует права, предоставляемые участниками компании «DruidCat».
 
-Contributor information is in the [AUTHORS](AUTHORS.md) file.
+Информация об участниках указана в файле [AUTHORS](AUTHORS.md).
 
-The [Code of Conduct](CODE_OF_CONDUCT.md) is the current set of DruidCat company rules informing about the
-expectations for interaction between community members when communicating and working on projects.
+[Кодекс поведения](CODE_OF_CONDUCT.md) — действующий набор правил компании «DruidCat», который информирует об
+ожиданиях по взаимодействию между членами сообщества при общении и работе над проектами.
 
-## Screenshots
+## Снимки экранов
 
-![Mentor app screenshot](screenshots/ru.Mentor.png)
+![Снимок приложения Ментор](screenshots/ru.Mentor.png)
 
-## Author
+## Автор
 
 DruidCat
 
-## Links
+## Ссылки
 
 - GitHub: https://github.com/DruidCat/qt-working-diagrams
-- Qt6 documentation: https://doc.qt.io/qt-6/
+- Документация Qt6: https://doc.qt.io/qt-6/
 - Qt Creator: https://www.qt.io/download
 
-## Этот документ на русском
+## This document in English
 
-- [README.ru.md](README.ru.md)
+- [README.en.md](README.en.md)
