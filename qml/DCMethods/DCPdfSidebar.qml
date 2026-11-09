@@ -42,7 +42,12 @@ Drawer {
     //Функции
 	onPositionChanged: {//Если позиция изменяется у боковой панели, то...
 		if(!position) {//Если боковая панель закрылась, то...
-			if(trvZakladki.isMobileCloseStart){//Если была иннициализация перехода на закладку в Мобилке, то..
+			if(lsvNaideno.isMobileCloseStart){//Если была иннициализация перехода на Найдено в Мобилке, то..
+				lsvNaideno.isMobileCloseStart = false//сбрасываем флаг
+				if (root.pmpDoc){//Если указатель не null. то...
+						root.pmpDoc.searchModel.currentResult = lsvNaideno.ntResultIndex//Задаём № поиска
+				}
+			} else if(trvZakladki.isMobileCloseStart){//Если была иннициализация перехода на закладку в Мобиле
 				trvZakladki.isMobileCloseStart = false//сбрасываем флаг
 				if (root.pmpDoc){//Если указатель не null. то...
 					root.pmpDoc.goToLocation(trvZakladki.ntPage,
@@ -315,6 +320,8 @@ Drawer {
         ListView {
             id: lsvNaideno
 			//Свойства
+			property bool isMobileCloseStart: false//true-запуск закрытия боковой панели на Найдено
+			property int ntResultIndex: 0//Индекс результата поиска, необходим для перехода в мобильном режиме
 			//Настройки
             anchors.fill: rctNaideno
             implicitHeight: rctNaideno.height
@@ -352,7 +359,7 @@ Drawer {
                             && lsvNaideno.model//модель не null
                             && lsvNaideno.focus//Фокус на Найдено
                             && root.pmpDoc.searchModel.count)//Счётчик поиска не 0
-                                root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex
+                                lsvNaideno.fnClicedEnter(lsvNaideno.currentIndex)//Обработка Enter или клика
                         event.accepted = true;//Завер обработку эвента
                     } else if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
                         if(root.pmpDoc.searchModel.count)//Если не 0, то...
@@ -364,6 +371,19 @@ Drawer {
                     }
                 }
             }
+			function fnClicedEnter(ntIndex){//Функция нажатия кнопки Enter или клика по элементу поиска
+				if (root.isMobile) {//Если мобила, то закрываем боковую панель
+					lsvNaideno.isMobileCloseStart = true//запуск закрытия боковой панели на Найдено
+					lsvNaideno.ntResultIndex = ntIndex//Сохраняем № поиска
+					root.close()
+				}
+				else {//Если это не Мобильное устройство, то...
+					if (root.pmpDoc){//Если указатель не null. то...
+						lsvNaideno.focus = true//Фокус на Найдено
+						root.pmpDoc.searchModel.currentResult = ntIndex//Задаём № поиска
+					}
+				}
+			}
             delegate: ItemDelegate {
                 id: tmdResult
                 required property int index//Номер совпадения
@@ -384,13 +404,7 @@ Drawer {
                     //font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта
                 }
                 highlighted: ListView.isCurrentItem
-                onClicked: {
-                    if (root.isMobile) root.close()//Если мобила, то закрываем боковую панель
-                    if (root.pmpDoc){//Если указатель не null. то...
-                        lsvNaideno.focus = true//Фокус на Найдено
-                        root.pmpDoc.searchModel.currentResult = tmdResult.index//Задаём № поиска
-                    }
-                }
+                onClicked: lsvNaideno.fnClicedEnter(tmdResult.index)//Нажатие Enter или клика по элементу
                 Component.onCompleted: {//Если создался элемент делегата, то...
                     if (index === 0 && root.pmpDoc){//Если index поиска первый (0), то...
                         root.pmpDoc.searchModel.currentResult = -1//Сбрасываем результат прошлого поиска.
