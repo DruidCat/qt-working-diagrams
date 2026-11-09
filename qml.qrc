@@ -53,7 +53,7 @@
         <file>qml/DCMethods/DCMenu.qml</file>
         <file>qml/DCMethods/DCPassword.qml</file>
         <file>qml/DCMethods/DCPdfMPV.qml</file>
-        <file>qml/DCMethods/DCPoisk.qml</file>
+        <file>qml/DCMethods/DCPdfPoisk.qml</file>
         <file>qml/DCMethods/DCProgress.qml</file>
         <file>qml/DCMethods/DCScale.qml</file>
         <file>qml/DCMethods/DCSpinBox.qml</file>

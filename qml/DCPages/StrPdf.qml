@@ -450,7 +450,7 @@ Item {
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapZagolovokPravi
             onClicked: fnClickedOk()//Функция отправить запрос на поиск
 		}	
-        DCPoisk {
+        DCPdfPoisk {
             id: pskPoisk
             //Свойства
             sumPoisk: pdfLoader.item ? pdfLoader.item.searchCount : 0
