@@ -494,7 +494,7 @@ Drawer {
                     }
 				} else {
 					if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
-						fnEnterZakladka()//Папка: развернуть/свернуть. Закладка: перейти.
+						trvZakladki.fnEnterZakladka()//Папка: развернуть/свернуть. Закладка: перейти.
 						event.accepted = true
 					} else if(event.key === Qt.Key_Right){
 						fnExpandZakladka(true)//Развернуть папку.
@@ -530,17 +530,22 @@ Drawer {
 				if(ntRow < 0 || ntRow >= trvZakladki.rows || !root.pmpDoc) return
 				const cnIndex = fnModelIndex(ntRow)
 				if(!cnIndex || !cnIndex.valid) return
-				const ntPage = pdfBookmarkModel.data(cnIndex, PdfBookmarkModel.Page)//Страница
-				const ptLocation = pdfBookmarkModel.data(cnIndex, PdfBookmarkModel.Location)//Координаты
-				root.pmpDoc.goToLocation(ntPage, ptLocation, root.pmpDoc.renderScale)
+				const cnPage = pdfBookmarkModel.data(cnIndex, PdfBookmarkModel.Page)//Страница
+				const cnLocation = pdfBookmarkModel.data(cnIndex, PdfBookmarkModel.Location)//Координаты
+				if (root.isMobile){//Если болильное устройство, то...
+					trvZakladki.isMobileCloseStart = true//запуск закрытия боковой панели на Закладках
+					trvZakladki.ntPage = cnPage//Запоминаем страницу.
+					trvZakladki.pntLocation = cnLocation//Запоминаем координату.
+					root.close()//Если мобила, то закрываем боковую панель
+				} else {//Если это не мобильное устройство, то...
+					if (root.pmpDoc) root.pmpDoc.goToLocation(cnPage, cnLocation, root.pmpDoc.renderScale)
+				}
 			}
 			function fnEnterZakladka(){//Enter: папка - свернуть/развернуть, закладка - перейти.
 				const ntRow = trvZakladki.currentIndex
 				if(ntRow < 0 || ntRow >= trvZakladki.rows) return
-				if(fnHasChildren(ntRow))//Это папка?
-					trvZakladki.toggleExpanded(ntRow)
-				else
-					fnGoToZakladka(ntRow)
+				if(fnHasChildren(ntRow)) trvZakladki.toggleExpanded(ntRow)//папка,то разворачиваем/сворачиваем
+				else fnGoToZakladka(ntRow)//Если это закладка, переходим на неё
 			}
 			function fnExpandZakladka(blExpand){//Right/Left: развернуть или свернуть папку.
 				const ntRow = trvZakladki.currentIndex
@@ -650,14 +655,7 @@ Drawer {
                 onClicked: {//Клик по строке — перейти к закладке и, на мобильных, закрыть боковую панель
 					trvZakladki.forceActiveFocus()//Без этого после клика мышью клавиши не придут в дерево.
                     trvZakladki.currentIndex = tvdZakladka.index//Сохраняем индекс, который мы выбрали
-					if (root.isMobile){//Если болильное устройство, то...
-						trvZakladki.isMobileCloseStart = true//запуск закрытия боковой панели на Закладках
-						trvZakladki.ntPage = page//Запоминаем страницу.
-						trvZakladki.pntLocation = location//Запоминаем координату.
-						root.close()//Если мобила, то закрываем боковую панель
-					} else {//Если это не мобильное устройство, то...
-						if (root.pmpDoc) root.pmpDoc.goToLocation(page, location, root.pmpDoc.renderScale)
-					}
+					trvZakladki.fnEnterZakladka()//Enter: папка - свернуть/развернуть, закладка - перейти.	
                 }
             }
             model: PdfBookmarkModel {//Модель закладок PDF
