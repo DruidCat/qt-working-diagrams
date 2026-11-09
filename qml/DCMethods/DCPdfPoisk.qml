@@ -89,10 +89,11 @@ Item {
         }
         DCKnopkaVidelit {//Кнопка Выделить/Заахватить pdf.
             id: knopkaVidelit
-            ntWidth: root.ntWidth
-            ntCoff: root.ntCoff
-            anchors.verticalCenter: rctPoisk.verticalCenter
-            anchors.left:knopkaZakrit.right
+			isVidelit: root.isMobile ? true : false//По умолчанию Захватить документ, на мобилке выключен.
+			enabled: root.isMobile ? false : true//На мобилке деактивирована кнопка.
+			visible: root.isMobile ? false : true//На мобилке невидимая кнопка.
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.verticalCenter: rctPoisk.verticalCenter; anchors.left:knopkaZakrit.right
             clrKnopki: root.clrKnopki
             tapHeight: root.ntWidth*root.ntCoff+root.ntCoff; tapWidth: tapHeight*root.tapKnopkaZakrit
             onClicked: {

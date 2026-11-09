@@ -21,7 +21,6 @@ Item {
     property alias rotation: pmpDoc.rotation//Поворот сцены документа.
     property alias pageRotation: pmpDoc.pageRotation//Поворот страниц документа.
     property alias straniciVisible: rctStranici.visible//Вкл/Выкл дополнительное окно с количеством страниц.
-    property bool isVidelit: false//true - режим выделения текста, false - режим движения документа мышкой.
     property int ntWidth: 1//Длина символа для боковой панели
     property int ntCoff: 8//Коэффициент для боковой панели
     property color clrTexta: "Orange"
@@ -29,6 +28,7 @@ Item {
     property color clrMenuFon: "SlateGray"
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
+    property bool isVidelit: isMobile ? true : false//true - режим выделения текста, false - режим движения
     property int ntScrollMargin: root.isMobile ? 0 : 7//Ширина/высота ползунка полосы прокрутки.
 	property int msWatchdog: 70000//Время сторожа открытия в миллисекундах (70000 = 1 мин 10 с).
 	property real renderScaleWidth: 0//Масштаб «ширина страницы = ширине окна» у горизонтального документа. 0 - промежуточной ступени нет.
