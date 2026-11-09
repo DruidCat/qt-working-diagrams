@@ -53,6 +53,11 @@ Drawer {
 					root.pmpDoc.goToLocation(trvZakladki.ntPage,
 											trvZakladki.pntLocation, root.pmpDoc.renderScale)
 				}
+			} else if(grvPoster.isMobileCloseStart){//Если была иннициализация перехода на Постер в Мобильном
+				grvPoster.isMobileCloseStart = false//сбрасываем флаг
+				if (root.pmpDoc){//Если указатель не null. то...
+					if(root.pmpDoc) root.pmpDoc.goToPage(grvPoster.ntPosterIndex)//Переходим на страницу.
+				}
 			}
 		}
 	}
@@ -726,6 +731,10 @@ Drawer {
         }
         GridView {
             id: grvPoster
+			//Свойства
+			property bool isMobileCloseStart: false//true-запуск закрытия боковой панели на Постер
+			property int ntPosterIndex: 0//Индекс выбранного постера.
+			//Настройки
             implicitWidth: rctPoster.width
             implicitHeight: rctPoster.height
             model: null//Модель нулевая, пока пользователь её не загрузит
@@ -760,7 +769,7 @@ Drawer {
                 } else{
                     if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
                         if(root.pmpDoc && grvPoster.model && grvPoster.focus)
-                            root.pmpDoc.goToPage(currentIndex)
+							grvPoster.fnClickedEnter(currentIndex)//Нажимаем Enter или кликаем на постере
                         event.accepted = true;//Завер обработку эвента
                     } else if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
                         if(root.pmpDoc.searchModel.count)//Если не 0, то...
@@ -772,6 +781,18 @@ Drawer {
                     }
                 }
             }
+			function fnClickedEnter(ntIndex){//Функция нажатия Enter или кликаем мышкой на Постере
+				if(root.isMobile) {//Если мобильное устройство
+					grvPoster.isMobileCloseStart = true//запуск закрытия боковой панели на Постере
+					grvPoster.ntPosterIndex = ntIndex
+					root.close()//закрываем боковую панель
+				}
+				else {//Если не мобильное устройство, то...
+					grvPoster.focus = true//Фокус на страницах
+					grvPoster.currentIndex = ntIndex//Передаём выбранный индекс, для подсветки текста.
+					if(root.pmpDoc) root.pmpDoc.goToPage(ntIndex)//Переходим на страницу.
+				}
+			}
             delegate: Item {
                 id: tmPoster
                 required property int index
@@ -813,12 +834,7 @@ Drawer {
                     font.pixelSize: root.ntWidth * root.ntCoff - root.ntCoff//Размер шрифта
                 }
                 TapHandler {
-                    onTapped: {
-                        if(root.isMobile) root.close()//Если мобила, то закрываем боковую панель
-                        grvPoster.focus = true//Фокус на страницах
-                        grvPoster.currentIndex = index//Передаём выбранный индекс, для подсветки текста.
-                        if(root.pmpDoc) root.pmpDoc.goToPage(index)//Переходим на страницу.
-                    }
+                    onTapped: grvPoster.fnClickedEnter(index)//Нажимаем  Enter или кликаем мышкой на постере
                 }
             }
         }
