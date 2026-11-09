@@ -1,6 +1,8 @@
 ﻿#include "cppqml.h"
 
 #include <QDebug>
+#include <QDir>//Каталоги для пути файла настроек (Аврора).
+#include <QSysInfo>//Определение ОС по /etc/os-release (ID=auroraos на Авроре).
 
 #ifdef Q_OS_ANDROID
 #include <QDir>
@@ -71,8 +73,30 @@ static void zaprosAndroidVneshniyDostup(bool blAppStraniza){//Открыть с�
 }
 #endif // Q_OS_ANDROID
 
+/////////////////////////////////////////
+//---К Р О С С П Л А Т Ф О Р М А   Р Е Е С Т Р---//
+/////////////////////////////////////////
+//Задача #750. Единая пара имён для всех ОС: организация druidcat, приложение ru.druidcat.mentor.
+//Windows — реестр HKCU\Software\druidcat\ru.druidcat.mentor, macOS/iOS — plist в ~/Library/Preferences,
+//Linux (десктоп) — INI ~/.config/druidcat/ru.druidcat.mentor.conf, Android — INI в каталоге приложения.
+static const QString REESTR_ORG = QStringLiteral("druidcat");//Организация в хранилище настроек.
+static const QString REESTR_APP = QStringLiteral("ru.druidcat.mentor");//Приложение в хранилище настроек.
+static QSettings* sozdatNastroikiReestra(DCCppQml* vladelica){//Создать объект настроек под текущую ОС.
+    if(QSysInfo::productType().compare(QStringLiteral("auroraos"), Qt::CaseInsensitive) == 0){
+        //Аврора: приложение работает в песочнице (sailjail), которая разрешает запись только в
+        //~/.config/ru.druidcat/mentor/ — пара имён из блока [X-Application] desktop-файла пакета.
+        //QSettings с произвольной организацией песочница молча блокирует (задача #750).
+        QString putKatalogNastroek = QDir::homePath() + "/.config/ru.druidcat/mentor";
+        QDir().mkpath(putKatalogNastroek);//Создать каталог, если его нет.
+        return new QSettings(putKatalogNastroek + "/" + REESTR_APP + ".conf",
+                             QSettings::IniFormat, vladelica);
+    }
+    //Остальные ОС: нативное хранилище QSettings (реестр/plist/INI) с общей парой имён.
+    return new QSettings(REESTR_ORG, REESTR_APP, vladelica);
+}
+
 DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
-                                        m_sttReestr("DruidCat", "Mentor"),
+                                        m_pSttReestr(sozdatNastroikiReestra(this)),
                                         m_untHeight(0),
                                         m_untWidth(0),
                                         m_untY(0),
@@ -271,37 +295,37 @@ void DCCppQml::ustReestr(){//Запись настроек программы
 /////////////////////////////////////////////////////////////
 //---З А П И С Ь   Н А С Т Р О Е К   П Р И Л О Ж Е Н И Я---//
 /////////////////////////////////////////////////////////////
-    m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-    m_sttReestr.setValue("/visota_okna", m_untHeight);//Записываем высоту окна
-    m_sttReestr.setValue("/shirina_okna", m_untWidth);//Записываем ширину окна
-    m_sttReestr.setValue("/y_okna", m_untY);//Записываем y координату окна
-    m_sttReestr.setValue("/x_okna", m_untX);//Записываем x координату окна
-    m_sttReestr.setValue("/pdf_mentor", m_blPdfMentor);//Записываем просмотрщик pdf документов.
-    m_sttReestr.setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
-    m_sttReestr.setValue("/shrift", m_untShrift);//Записываем размер Шрифта 0-мал, 1-средний, 2-большой.
-    m_sttReestr.setValue("/katalog_put", QDir::toNativeSeparators(m_strKatalogPut));//Записываем путь каталога
+    m_pSttReestr->beginGroup("/Nastroiki");//Открываем группу /Настройки
+    m_pSttReestr->setValue("/visota_okna", m_untHeight);//Записываем высоту окна
+    m_pSttReestr->setValue("/shirina_okna", m_untWidth);//Записываем ширину окна
+    m_pSttReestr->setValue("/y_okna", m_untY);//Записываем y координату окна
+    m_pSttReestr->setValue("/x_okna", m_untX);//Записываем x координату окна
+    m_pSttReestr->setValue("/pdf_mentor", m_blPdfMentor);//Записываем просмотрщик pdf документов.
+    m_pSttReestr->setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
+    m_pSttReestr->setValue("/shrift", m_untShrift);//Записываем размер Шрифта 0-мал, 1-средний, 2-большой.
+    m_pSttReestr->setValue("/katalog_put", QDir::toNativeSeparators(m_strKatalogPut));//Путь каталога
     //Запись ширины боковой панели DCPdfSidebar.qml.
-    m_sttReestr.setValue("/shirina_sidebar", m_untSidebarWidth);
-    m_sttReestr.setValue("/shirina_instrukciya", m_untInstrukciyaWidth);//Запись ширины панели StrInstrukciya
-    m_sttReestr.endGroup();//Закрываем группу /Настройки
+    m_pSttReestr->setValue("/shirina_sidebar", m_untSidebarWidth);
+    m_pSttReestr->setValue("/shirina_instrukciya", m_untInstrukciyaWidth);//Ширина панели StrInstrukciya
+    m_pSttReestr->endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::polReestr(){//Чтение настроек программы
 /////////////////////////////////////////////////////////////
 //---Ч Т Е Н И Е   Н А С Т Р О Е К   П Р И Л О Ж Е Н И Я---//
 /////////////////////////////////////////////////////////////
-    m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-    m_untHeight = m_sttReestr.value("/visota_okna", 480).toUInt();//Читаем высоту окна, по умолчанию 480
-    m_untWidth = m_sttReestr.value("/shirina_okna", 640).toUInt();//Читаем ширину окна, по умолчанию 640
-    m_untY = m_sttReestr.value("/y_okna", 0).toUInt();//Читаем Y координату окна, по умолчанию 0
-    m_untX = m_sttReestr.value("/x_okna", 0).toUInt();//Читаем X координату окна, по умолчанию 0
-    m_blPdfMentor = m_sttReestr.value("/pdf_mentor", true).toBool();//Читаем просмотрщик документов, по умол 1
-    m_blAppRedaktor = m_sttReestr.value("/app_redaktor", true).toBool();//Читаем флаг редактора, по умол 1
-    m_untShrift = m_sttReestr.value("/shrift", 1).toUInt();//Читаем шрифт, по умол 1-средний
-    m_strKatalogPut = m_sttReestr.value("/katalog_put", QDir::toNativeSeparators(m_strDomPut)).toString();
+    m_pSttReestr->beginGroup("/Nastroiki");//Открываем группу /Настройки
+    m_untHeight = m_pSttReestr->value("/visota_okna", 480).toUInt();//Читаем высоту окна, по умолчанию 480
+    m_untWidth = m_pSttReestr->value("/shirina_okna", 640).toUInt();//Читаем ширину окна, по умолчанию 640
+    m_untY = m_pSttReestr->value("/y_okna", 0).toUInt();//Читаем Y координату окна, по умолчанию 0
+    m_untX = m_pSttReestr->value("/x_okna", 0).toUInt();//Читаем X координату окна, по умолчанию 0
+    m_blPdfMentor = m_pSttReestr->value("/pdf_mentor", true).toBool();//Просмотрщик документов, по умол 1
+    m_blAppRedaktor = m_pSttReestr->value("/app_redaktor", true).toBool();//Читаем флаг редактора, по умол 1
+    m_untShrift = m_pSttReestr->value("/shrift", 1).toUInt();//Читаем шрифт, по умол 1-средний
+    m_strKatalogPut = m_pSttReestr->value("/katalog_put", QDir::toNativeSeparators(m_strDomPut)).toString();
     //Ширина DCPdfSidebar,по умолчанию330.
-    m_untSidebarWidth = m_sttReestr.value("/shirina_sidebar", 330).toUInt();
-    m_untInstrukciyaWidth = m_sttReestr.value("/shirina_instrukciya", 330).toUInt();//Ширина по умолчанию330
-    m_sttReestr.endGroup();//Закрываем группу /Настройки
+    m_untSidebarWidth = m_pSttReestr->value("/shirina_sidebar", 330).toUInt();
+    m_untInstrukciyaWidth = m_pSttReestr->value("/shirina_instrukciya", 330).toUInt();//Ширина по умолчанию330
+    m_pSttReestr->endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::setUntHeight(const uint& untHeight) {//Изменяем высоту окна приложения.
 ///////////////////////////////////////////////////
@@ -345,9 +369,9 @@ void DCCppQml::setBlPdfMentor(const bool& blPdfMentor){//Изменяем про
 ///////////////////////////////////////////////////////////////////////
     if (blPdfMentor != m_blPdfMentor){//Если не равны значения, то...
         m_blPdfMentor = blPdfMentor;//Приравниваем.
-		m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-		m_sttReestr.setValue("/pdf_mentor", m_blPdfMentor);//Записываем просмотрщик pdf документов.
-		m_sttReestr.endGroup();//Закрываем группу /Настройки
+		m_pSttReestr->beginGroup("/Nastroiki");//Открываем группу /Настройки
+		m_pSttReestr->setValue("/pdf_mentor", m_blPdfMentor);//Записываем просмотрщик pdf документов.
+		m_pSttReestr->endGroup();//Закрываем группу /Настройки
         emit blPdfMentorChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
@@ -357,9 +381,9 @@ void DCCppQml::setBlAppRedaktor(const bool& blAppRedaktor){//Изменяем ф
 ///////////////////////////////////////////////////////
     if (blAppRedaktor != m_blAppRedaktor){//Если не равны значения, то...
         m_blAppRedaktor = blAppRedaktor;//Приравниваем.
-		m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-		m_sttReestr.setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
-		m_sttReestr.endGroup();//Закрываем группу /Настройки
+		m_pSttReestr->beginGroup("/Nastroiki");//Открываем группу /Настройки
+		m_pSttReestr->setValue("/app_redaktor", m_blAppRedaktor);//Записываем флаг Редактора вкл/выкл.
+		m_pSttReestr->endGroup();//Закрываем группу /Настройки
         emit blAppRedaktorChanged();//Излучаем сигнал об изменении аргумента.
     }
 }
@@ -373,9 +397,9 @@ void DCCppQml::setUntShrift(const uint& untShrift){//Изменяем значе
     else{//Если нет, то...
         if (untShrift != m_untShrift){//Если не равны значения, то...
             m_untShrift = untShrift;//Приравниваем.
-			m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-			m_sttReestr.setValue("/shrift", m_untShrift);//Записываем Шрифт 0-мал, 1-средний, 2-большой.
-			m_sttReestr.endGroup();//Закрываем группу /Настройки
+			m_pSttReestr->beginGroup("/Nastroiki");//Открываем группу /Настройки
+			m_pSttReestr->setValue("/shrift", m_untShrift);//Записываем Шрифт 0-мал, 1-средний, 2-большой.
+			m_pSttReestr->endGroup();//Закрываем группу /Настройки
             emit untShriftChanged();//Излучаем сигнал об изменении аргумента.
         }
     }
@@ -391,9 +415,9 @@ void DCCppQml::setStrKatalogPut(const QString &strKatalogPut){//Изменяем
     else{//Если нет, то...
         if (strKatalogPut != m_strKatalogPut){//Если не равны значения, то...
             m_strKatalogPut = strKatalogPut;//Приравниваем.
-			m_sttReestr.beginGroup("/Nastroiki");//Открываем группу /Настройки
-			m_sttReestr.setValue("/katalog_put", QDir::toNativeSeparators(m_strKatalogPut));//путь каталога
-			m_sttReestr.endGroup();//Закрываем группу /Настройки
+			m_pSttReestr->beginGroup("/Nastroiki");//Открываем группу /Настройки
+			m_pSttReestr->setValue("/katalog_put", QDir::toNativeSeparators(m_strKatalogPut));//путь каталога
+			m_pSttReestr->endGroup();//Закрываем группу /Настройки
             emit strKatalogPutChanged();//Излучаем сигнал об изменении аргумента.
         }
     }

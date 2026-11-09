@@ -359,7 +359,10 @@ public	slots:
 
 private:
     //---настройки-в-реестре---//
-    QSettings m_sttReestr;//Настройки программы которые будут хранится в системном реестре.
+    //Задача #750. Хранилище настроек кроссплатформенное: Windows — реестр HKCU\Software\druidcat,
+    //macOS/iOS — plist, Linux — INI в ~/.config, Android — INI в каталоге приложения,
+    //Аврора — файл в ~/.config/ru.druidcat/mentor (белый список песочницы приложения).
+    QSettings* m_pSttReestr;//Объект настроек, вид хранилища выбирается по ОС в конструкторе.
     void ustReestr();//Запись настроек программы
     void polReestr();//Чтение настроек программы
 
