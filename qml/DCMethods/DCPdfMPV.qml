@@ -35,6 +35,8 @@ Item {
     property bool blLog: true//true - отладочные сообщения включены, false - выключены (для релиза).
     property alias sbCurrentIndex: dcSidebar.currentIndex//Индекс открытой вкладки в боковой панели.
     property int currentResult: -1//Номер Поиска, совпадение от 0....
+	property bool _isPoiskNextStart: false//Начался поиск следующего элемента на мобильном устройстве
+	property bool _isPoiskPreviousStart: false//Начался поиск предыдущего элемента на мобильном устройстве
     //Настройки
     anchors.fill: parent
     visible: false//по умолчанию он невидимый.
@@ -108,15 +110,27 @@ Item {
         else//Если боковая панель не открыта
             fnClickedPoiskNext()//Функция перехода к следующему номеру поиска
     }
-    function fnClickedPoiskStop(){//Функция остановки поиска.
+    function fnClickedPoiskStop(){//Функция остановки поиска.	
         root.currentResult = -1//Чтоб в пустом поиске не было 1
         root.searchString = "";//Сбрасываем поисковую модель именно сдесь, чтоб не было loop цикла.
     }
     function fnClickedPoiskNext(){//Функция перехода к следующему номеру поиска
-        pmpDoc.searchModel.currentResult += 1;//Выбираем следующий номер поиска
+		if (root.isMobile) {//Если мобильное устройство, то...
+			if (dcSidebar.opened){//Если боковая панель открыта, то...
+				root._isPoiskNextStart = true//Начинаем закрытие боковой панели, взводим флаг
+				dcSidebar.close()//Закрываем боковую панель	
+			} else pmpDoc.searchModel.currentResult += 1//Выбираем следующий номер поиска Если это не Мобильно
+		} else pmpDoc.searchModel.currentResult += 1//Выбираем следующий номер поиска Если это не Мобильное
+        
     }
     function fnClickedPoiskPrevious(){//Функция перехода к предыдущему номеру поиска
-        pmpDoc.searchModel.currentResult -= 1;//Выбираем предыдущий номер поиска
+		if (root.isMobile) {//Если мобильное устройство, то...
+			if (dcSidebar.opened){//Если боковая панель открыта, то...
+				root._isPoiskPreviousStart = true//Начинаем закрытие боковой панели, взводим флаг
+				dcSidebar.close()//Закрываем боковую панель
+			} else pmpDoc.searchModel.currentResult -= 1//Выбираем предыдущий номер поиска, если не мобильное
+		}
+		else pmpDoc.searchModel.currentResult -= 1//Выбираем предыдущий номер поиска, если не мобильное устр
     }
     function fnClickedKeyHome(){//Функция нажатия клавиши Home
        pmpDoc.goToPage(0)//На первую страницу.
@@ -749,6 +763,17 @@ Item {
             root.sgnOpenedSidebar(dcSidebar.opened)//Излучаем сигнал открыта/закрыта панель
             if(dcSidebar.opened) rctZagruzka.visible = false//Если боковая панель открыта, скрываем Загрузку.
         }
+		onPositionChanged: {//Если позиция изменяется у боковой панели, то...
+			if(!position) {//Если боковая панель закрылась, то...
+				if(root._isPoiskNextStart){//Если пришёл сигнал на закрытие боковой панели, то...
+					root._isPoiskNextStart = false//СБрасываем флаг
+					pmpDoc.searchModel.currentResult += 1;//Выбираем следующий номер поиска
+				} else if (root._isPoiskPreviousStart){//Если пришёл сигнал на закрытие боковой панели, то...
+					root._isPoiskPreviousStart = false//Сбрасываем флаг
+					pmpDoc.searchModel.currentResult -= 1;//Выбираем предыдущий номер поиска
+				}
+			}
+		}
         onClickedPoisk: root.clickedPoisk()//Сигнал о том, что открываем Поиск.
         onClickedInfo: root.clickedInfo()//Сигнал о том, что нажата кнопка Информация.
     }
