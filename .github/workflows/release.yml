@@ -87,7 +87,7 @@ jobs:
           fetch-depth: 0
 
       - name: Системные пакеты
-        run: sudo apt-get update && sudo apt-get install -y patchelf p7zip-full libgl-dev libglx-dev libglu1-mesa-dev
+        run: sudo apt-get update && sudo apt-get install -y patchelf p7zip-full libgl-dev libglx-dev libglu1-mesa-dev libxkbcommon-dev libvulkan-dev
 
       - name: Установка Qt 6.7.3 (base + QtPdf)
         run: |
