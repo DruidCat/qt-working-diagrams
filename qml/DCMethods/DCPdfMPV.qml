@@ -29,7 +29,7 @@ Item {
     property color clrPoisk: "Yellow"
     property bool isMobile: true//true - мобильная платформа.
     property bool isVidelit: isMobile ? true : false//true - режим выделения текста, false - режим движения
-    property int ntScrollMargin: root.isMobile ? 0 : 7//Ширина/высота ползунка полосы прокрутки.
+    property int ntScrollMargin: 0//Ширина/высота ползунка полосы прокрутки.
 	property int msWatchdog: 70000//Время сторожа открытия в миллисекундах (70000 = 1 мин 10 с).
 	property real renderScaleWidth: 0//Масштаб «ширина страницы = ширине окна» у горизонтального документа. 0 - промежуточной ступени нет.
     property bool blLog: true//true - отладочные сообщения включены, false - выключены (для релиза).
@@ -52,6 +52,11 @@ Item {
     signal sgnOpenedSidebar(bool blOpened)//Сигнал о том, что боковая панель открыта/закрыта
     signal sgnFocus()//Сигнал о том, что фокус на DCPdfMPV
     //Функции.
+	Component.onCompleted: {//Когда полностью загрузился виджет PdfMultiPageView, то...
+		Qt.callLater( function () {//Пауза, чтоб успел прийти флаг isMobile
+			if(isMobile) ntScrollMargin = 3//Это 3 пикселя, чтоб было видно весь документ, правый край.
+        })
+	}
     function fnLog(ntShag, strText){//Единая точка отладочных сообщений.ntShag: 1-11 шаг загрузки,0 - без шага
         if(!root.blLog) return//В релизе не шумим.
         console.log("pdf" + (ntShag > 0 ? " [" + ntShag + "/11]" : "") + ": " + strText)//Обычный цвет
@@ -612,7 +617,7 @@ Item {
                              "Сброс сцены пойдёт через document = null.")
             if(!pmpDoc.verticalScrollbar)
                 console.warn("DCPdfMPV: вертикальный ScrollBar внутри PdfMultiPageView не найден.")
-			else ntScrollMargin = verticalScrollbar.width//Ширина вертикального ползунка из внутренностей.
+			else root.ntScrollMargin = verticalScrollbar.width//Ширина вертикального ползунка из внутренностей
         }
         Keys.onPressed: (event) => {
             if (event.key === Qt.Key_Space) {
