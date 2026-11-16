@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Mentor
+GenericName=Каталог документов
+GenericName[en]=Document catalog
+Comment=Работа с каталогом документов
+Comment[en]=Working with the document catalog
+Exec=ru.Mentor
+Icon=ru.Mentor
+Categories=Office;Utility;
+Terminal=false

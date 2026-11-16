@@ -1,0 +1,106 @@
+# Релизные сборки «Ментора» под Windows и Linux.
+# Запускается пушем тега v*.*.*; артефакты прикрепляются к GitHub Release
+# этого же тега (релиз создаёт заранее или создаст первый пришедший job).
+# Android и Aurora собираются локально и догружаются в тот же релиз вручную.
+name: Release builds
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  windows:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Автоверсия берётся из git describe — нужны теги в истории.
+          fetch-depth: 0
+
+      - name: MSVC environment
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Установка Qt 6.7.3
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.7.3
+          arch: win64_msvc2019_64
+          modules: QtPdf
+
+      - name: Сборка
+        shell: bash
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_PREFIX_PATH="$Qt6_DIR"
+          cmake --build build
+
+      - name: Упаковка (windeployqt + zip)
+        shell: bash
+        run: |
+          VER=$(git describe --tags --match "v[0-9]*" | sed 's/^v//')
+          "$QT_DIR/bin/windeployqt.exe" --release --qmldir qml build/ru.Mentor.exe
+          mkdir -p dist/ru.Mentor
+          cp build/ru.Mentor.exe dist/ru.Mentor/
+          cp build/*.dll dist/ru.Mentor/ 2>/dev/null || true
+          for d in platforms qml imageformats sqldrivers styles networkinformation \
+                   tls iconengines translations toolitems; do
+            [ -d "build/$d" ] && cp -a "build/$d" "dist/ru.Mentor/"
+          done
+          ( cd dist/ru.Mentor && 7z a -tzip "../../ru.Mentor-${VER}-win64.zip" . )
+
+      - name: Загрузка артефакта в релиз
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ru.Mentor-*-win64.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  linux:
+    runs-on: ubuntu-22.04
+    env:
+      LINUXDEPLOY: ${{ github.workspace }}/tools/linuxdeploy
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Автоверсия берётся из git describe — нужны теги в истории.
+          fetch-depth: 0
+
+      - name: Системные пакеты
+        run: sudo apt-get update && sudo apt-get install -y patchelf
+
+      - name: Установка Qt 6.7.3
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: 6.7.3
+          arch: gcc_64
+          modules: QtPdf
+
+      - name: linuxdeploy
+        run: |
+          mkdir -p tools
+          curl -fsSL -o "$LINUXDEPLOY" \
+            https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x "$LINUXDEPLOY"
+          "$LINUXDEPLOY" --appimage-extract >/dev/null
+          if [ -x squashfs-root/usr/bin/patchelf ]; then
+              echo "PATCHELF=$PWD/squashfs-root/usr/bin/patchelf" >> "$GITHUB_ENV"
+          else
+              echo "PATCHELF=patchelf" >> "$GITHUB_ENV"
+          fi
+
+      - name: Сборка
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_PREFIX_PATH="$Qt6_DIR"
+          cmake --build build
+
+      - name: AppImage
+        run: bash packaging/make_appimage.sh build "${RUNNER_TEMP}/out"
+
+      - name: Загрузка артефакта в релиз
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ runner.temp }}/out/*.AppImage
+          token: ${{ secrets.GITHUB_TOKEN }}
