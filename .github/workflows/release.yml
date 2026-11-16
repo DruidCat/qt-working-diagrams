@@ -1,13 +1,22 @@
 # Релизные сборки «Ментора» под Windows и Linux.
 # Запускается пушем тега v*.*.*; артефакты прикрепляются к GitHub Release
-# этого же тега (релиз создаёт заранее или создаст первый пришедший job).
-# Android и Aurora собираются локально и догружаются в тот же релиз вручную.
+# этого же тега. Android и Aurora собираются локально и догружаются вручную.
+#
+# Qt 6.7.3 ставится напрямую 7z-архивами с зеркала ftp.fau.de: pypi-пакет aqt
+# в новых версиях не понимает XML старого архива 6.7.3, а старые версии aqt
+# не понимают новую структуру каталогов зеркала.
 name: Release builds
 
 on:
   push:
     tags:
       - "v*.*.*"
+
+permissions:
+  contents: write
+
+env:
+  QT_BASE_URL: https://ftp.fau.de/qtproject/online/qtsdkrepository
 
 jobs:
   windows:
@@ -22,12 +31,23 @@ jobs:
       - name: MSVC environment
         uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Установка Qt 6.7.3
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: 6.7.3
-          arch: win64_msvc2019_64
-          modules: QtPdf
+      - name: Установка Qt 6.7.3 (base + QtPdf)
+        shell: bash
+        run: |
+          mkdir -p ~/qt673 && cd ~/qt673
+          D="$QT_BASE_URL/windows_x86/desktop/qt6_673"
+          PKGS="$D/qt.qt6.673.win64_msvc2019_64 $D/qt.qt6.673.addons.qtpdf.win64_msvc2019_64"
+          for p in $PKGS; do
+            for u in $(curl -s "$p/" | grep -oE '"[^"]*\.7z"' | tr -d '"' | grep -v meta); do
+              curl -fsSL --retry 3 -O "$p/$u"
+            done
+          done
+          for a in *.7z; do 7z x -y -o"$HOME/qt673/Qt" "$a" >/dev/null; done
+          QD="$HOME/qt673/Qt/Qt/6.7.3/win64_msvc2019_64"
+          echo "Qt6_DIR=$QD" >> "$GITHUB_ENV"
+          echo "QT_DIR=$QD" >> "$GITHUB_ENV"
+          echo "$QD/bin" >> "$GITHUB_PATH"
+          qmake -query
 
       - name: Сборка
         shell: bash
@@ -45,7 +65,7 @@ jobs:
           cp build/ru.Mentor.exe dist/ru.Mentor/
           cp build/*.dll dist/ru.Mentor/ 2>/dev/null || true
           for d in platforms qml imageformats sqldrivers styles networkinformation \
-                   tls iconengines translations toolitems; do
+                   tls iconengines translations; do
             [ -d "build/$d" ] && cp -a "build/$d" "dist/ru.Mentor/"
           done
           ( cd dist/ru.Mentor && 7z a -tzip "../../ru.Mentor-${VER}-win64.zip" . )
@@ -54,7 +74,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ru.Mentor-*-win64.zip
-          token: ${{ secrets.GITHUB_TOKEN }}
 
   linux:
     runs-on: ubuntu-22.04
@@ -68,14 +87,26 @@ jobs:
           fetch-depth: 0
 
       - name: Системные пакеты
-        run: sudo apt-get update && sudo apt-get install -y patchelf
+        run: sudo apt-get update && sudo apt-get install -y patchelf p7zip-full
 
-      - name: Установка Qt 6.7.3
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: 6.7.3
-          arch: gcc_64
-          modules: QtPdf
+      - name: Установка Qt 6.7.3 (base + QtPdf)
+        run: |
+          mkdir -p ~/qt673 && cd ~/qt673
+          D="$QT_BASE_URL/linux_x64/desktop/qt6_673"
+          PKGS="$D/qt.qt6.673.linux_gcc_64 $D/qt.qt6.673.addons.qtpdf.linux_gcc_64"
+          for p in $PKGS; do
+            for u in $(curl -s "$p/" | grep -oE '"[^"]*\.7z"' | tr -d '"' | grep -v meta); do
+              curl -fsSL --retry 3 -O "$p/$u"
+            done
+          done
+          for a in *.7z; do 7z x -y -o"$HOME/qt673/Qt" "$a" >/dev/null; done
+          QD="$HOME/qt673/Qt/Qt/6.7.3/gcc_64"
+          # 7z не восстанавливает бит исполнения.
+          chmod -R +x "$QD/bin" "$QD/libexec" "$QD/plugins"
+          echo "Qt6_DIR=$QD" >> "$GITHUB_ENV"
+          echo "QT_DIR=$QD" >> "$GITHUB_ENV"
+          echo "$QD/bin" >> "$GITHUB_PATH"
+          qmake -query
 
       - name: linuxdeploy
         run: |
@@ -103,4 +134,3 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ runner.temp }}/out/*.AppImage
-          token: ${{ secrets.GITHUB_TOKEN }}
