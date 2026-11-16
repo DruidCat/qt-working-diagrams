@@ -182,6 +182,8 @@ if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 		# Находимся на теге или рядом с ним: vX.Y.Z[-N-g<sha>[-dirty]]
 		set(APP_VERSION "${GIT_DESCRIBE}")
 		string(REGEX REPLACE "^v" "" APP_VERSION "${APP_VERSION}")  # убираем ведущую "v"
+		# Semver — старший сегмент тега (как в ru.Mentor.pro): v0.33.3[-...]- > 0.33.3.
+		string(REGEX REPLACE "^v([0-9]+\\.[0-9]+\\.[0-9]+).*$" "\\1" APP_SEMVER "${GIT_DESCRIBE}")
 	else()
 		# Нет подходящих тегов — фоллбек
 		# Было: v0.0.0-<count>-g<sha> → станет: 0.0.0-<count>-g<sha>
@@ -201,3 +203,12 @@ target_compile_definitions(${EXECUTABLE_NAME} PRIVATE
   APP_SEMVER="${APP_SEMVER}"        # например: 1.2.3
   GIT_SHA="${GIT_SHA}"              # например: 1a2b3c4
 )
+
+# Android: versionName/versionCode в манифесте из git-тега (публичные релизы).
+if(ANDROID)
+    string(REGEX MATCH "^[0-9]+\\.[0-9]+\\.[0-9]+" MENTOR_SEMVER "${APP_SEMVER}")
+    string(REPLACE "." "" MENTOR_VERCODE "${MENTOR_SEMVER}")
+    set_target_properties(${EXECUTABLE_NAME} PROPERTIES
+        QT_ANDROID_VERSION_NAME "${MENTOR_SEMVER}"
+        QT_ANDROID_VERSION_CODE "${MENTOR_VERCODE}")
+endif()

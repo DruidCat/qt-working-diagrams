@@ -65,6 +65,12 @@ DEFINES += APP_VERSION=\\\"$$APP_VERSION\\\" \
            APP_SEMVER=\\\"$$APP_SEMVER\\\" \
            GIT_SHA=\\\"$$GIT_SHA\\\"
 
+android {
+    # Версия в манифесте: аналог QT_ANDROID_VERSION_NAME/CODE из CMakeLists.txt.
+    ANDROID_VERSION_NAME = $$APP_SEMVER
+    ANDROID_VERSION_CODE = $$replace(APP_SEMVER, \\., )
+}
+
 SOURCES += \
     src/copydannie.cpp \
     src/copykatalog.cpp \
