@@ -182,5 +182,6 @@ sed 's/^Exec=ru.Mentor/Exec=AppRun/' "$REPO_DIR/packaging/mentor.desktop" > "$AP
 VER=$(git -C "$REPO_DIR" describe --tags --match "v[0-9]*" 2>/dev/null | sed 's/^v//' || echo 0.0.0)
 "$LINUXDEPLOY" --appimage-extract-and-run --appdir "$APPDIR" \
     --output appimage --custom-apprun "$OUT_DIR/AppRun"
-find "$OUT_DIR" -maxdepth 1 -name '*.AppImage' -exec mv {} "$OUT_DIR/Mentor-${VER}-x86_64.AppImage" \;
+# linuxdeploy пишет образ в текущий каталог, не в OUT_DIR — ищем оба.
+find "$OUT_DIR" "$PWD" -maxdepth 1 -name 'Mentor-x86_64.AppImage' -exec mv -f {} "$OUT_DIR/Mentor-${VER}-x86_64.AppImage" \;
 echo "APPIMAGE_DONE: $OUT_DIR/Mentor-${VER}-x86_64.AppImage"
