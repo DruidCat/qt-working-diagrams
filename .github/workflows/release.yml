@@ -43,7 +43,7 @@ jobs:
             done
           done
           for a in *.7z; do 7z x -y -o"$HOME/qt673/Qt" "$a" >/dev/null; done
-          QD="$HOME/qt673/Qt/6.7.3/win64_msvc2019_64"
+          QD="$HOME/qt673/Qt/6.7.3/msvc2019_64"
           echo "Qt6_DIR=$QD" >> "$GITHUB_ENV"
           echo "QT_DIR=$QD" >> "$GITHUB_ENV"
           echo "$QD/bin" >> "$GITHUB_PATH"
@@ -87,7 +87,7 @@ jobs:
           fetch-depth: 0
 
       - name: Системные пакеты
-        run: sudo apt-get update && sudo apt-get install -y patchelf p7zip-full
+        run: sudo apt-get update && sudo apt-get install -y patchelf p7zip-full libgl-dev libglx-dev libglu1-mesa-dev
 
       - name: Установка Qt 6.7.3 (base + QtPdf)
         run: |
