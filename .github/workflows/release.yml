@@ -128,9 +128,11 @@ jobs:
           cmake --build build
 
       - name: AppImage
-        run: bash packaging/make_appimage.sh build "${RUNNER_TEMP}/out"
+        run: |
+          bash packaging/make_appimage.sh build "${RUNNER_TEMP}/out"
+          cp "${RUNNER_TEMP}"/out/*.AppImage "$GITHUB_WORKSPACE"/
 
       - name: Загрузка артефакта в релиз
         uses: softprops/action-gh-release@v2
         with:
-          files: ${{ runner.temp }}/out/*.AppImage
+          files: "*.AppImage"
