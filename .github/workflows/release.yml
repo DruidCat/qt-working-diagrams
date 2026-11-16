@@ -47,7 +47,7 @@ jobs:
           echo "Qt6_DIR=$QD" >> "$GITHUB_ENV"
           echo "QT_DIR=$QD" >> "$GITHUB_ENV"
           echo "$QD/bin" >> "$GITHUB_PATH"
-          qmake -query
+          "$QD/bin/qmake.exe" -query | head -2
 
       - name: Сборка
         shell: bash
@@ -106,7 +106,7 @@ jobs:
           echo "Qt6_DIR=$QD" >> "$GITHUB_ENV"
           echo "QT_DIR=$QD" >> "$GITHUB_ENV"
           echo "$QD/bin" >> "$GITHUB_PATH"
-          qmake -query
+          "$QD/bin/qmake" -query | head -2
 
       - name: linuxdeploy
         run: |
