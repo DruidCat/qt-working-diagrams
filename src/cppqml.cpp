@@ -4,6 +4,10 @@
 #include <QDebug>
 #include <QDir>//Каталоги для пути файла настроек (Аврора).
 #include <QSysInfo>//Определение ОС по /etc/os-release (ID=auroraos на Авроре).
+#include <QLocale>//Задача #773: системная локаль для языка интерфейса по умолчанию.
+#include <QTranslator>//Задача #773: переводчик английского интерфейса (:i18n/mentor_en.qm).
+#include <QQmlEngine>//Задача #773: retranslate() страниц QML при смене языка.
+#include <QCoreApplication>//Задача #773: qApp - установка/снятие переводчика.
 
 #ifdef Q_OS_ANDROID
 #include <QDir>
@@ -98,6 +102,8 @@ static QSettings* sozdatNastroikiReestra(DCCppQml* vladelica){//Создать �
 
 DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
                                         m_pSttReestr(sozdatNastroikiReestra(this)),
+                                        m_strYazik(QStringLiteral("ru")),//Задача #773: язык по умолчанию.
+                                        m_pPerevodchik(nullptr),//Задача #773: переводчик ещё не установлен.
                                         m_untHeight(0),
                                         m_untWidth(0),
                                         m_untY(0),
@@ -272,6 +278,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 				SLOT(slotTimerDebug()));//При сигнале на прерывание таймера, запускаем слот таймера.
     //---чтение-настроек-из-реестра---//
     polReestr();//Читаем настройки из реестра.
+    privestPerevodchik();//Задача #773: ставим переводчик до создания движка QML и загрузки qml.
 }
 DCCppQml::~DCCppQml(){//Деструктор.
 //////////////////////////////
@@ -318,6 +325,7 @@ void DCCppQml::ustReestr(){//Запись настроек программы
     //Запись ширины боковой панели DCPdfSidebar.qml.
     m_pSttReestr->setValue("/shirina_sidebar", m_untSidebarWidth);
     m_pSttReestr->setValue("/shirina_instrukciya", m_untInstrukciyaWidth);//Ширина панели StrInstrukciya
+    m_pSttReestr->setValue("/yazik", m_strYazik);//Задача #773: язык интерфейса.
     m_pSttReestr->endGroup();//Закрываем группу /Настройки
 }
 void DCCppQml::polReestr(){//Чтение настроек программы
@@ -336,7 +344,52 @@ void DCCppQml::polReestr(){//Чтение настроек программы
     //Ширина DCPdfSidebar,по умолчанию330.
     m_untSidebarWidth = m_pSttReestr->value("/shirina_sidebar", 330).toUInt();
     m_untInstrukciyaWidth = m_pSttReestr->value("/shirina_instrukciya", 330).toUInt();//Ширина по умолчанию330
+    //Задача #773: язык интерфейса. При первом запуске (ключа нет) определяем по системной
+    //локали и сразу записываем в реестр: ru - если локаль русская, иначе en.
+    m_strYazik = m_pSttReestr->value("/yazik", QString()).toString().toLower();//Читаем язык интерфейса.
+    if(m_strYazik.isEmpty()){//Записи о языке ещё нет - это первый запуск.
+        m_strYazik = (QLocale::system().language() == QLocale::Russian)
+                     ? QStringLiteral("ru") : QStringLiteral("en");//Выбор по системной локали.
+        m_pSttReestr->setValue("/yazik", m_strYazik);//Сразу пишем язык в реестр.
+    }
+    if(m_strYazik != QStringLiteral("en"))//Задача #773: прочих языков нет - считаем русским.
+        m_strYazik = QStringLiteral("ru");
     m_pSttReestr->endGroup();//Закрываем группу /Настройки
+}
+void DCCppQml::ustQmlEngine(QQmlEngine* pQmlEngine){//Задача #773: сохраняем движок QML.
+    m_pQmlEngine = pQmlEngine;//Указатель нужен для retranslate() при смене языка.
+}
+void DCCppQml::ustStrYazik(const QString& strYazik){//Задача #773: смена языка интерфейса.
+    QString strNovyj = strYazik.toLower();//"EN" и "en" - одно значение.
+    if(strNovyj != QStringLiteral("en"))//Задача #773: прочих языков нет - всё остальное русский.
+        strNovyj = QStringLiteral("ru");
+    if(strNovyj == m_strYazik)//Язык не меняется - выходить без сигналов.
+        return;
+    m_strYazik = strNovyj;//Запоминаем новый язык интерфейса.
+    privestPerevodchik();//Меняем переводчик и переоцениваем тексты страниц.
+    m_pSttReestr->beginGroup("/Nastroiki");//Открываем группу /Настройки
+    m_pSttReestr->setValue("/yazik", m_strYazik);//Записываем язык интерфейса в реестр.
+    m_pSttReestr->endGroup();//Закрываем группу /Настройки
+    emit strYazikChanged();//Излучаем сигнал об изменении языка.
+}
+void DCCppQml::privestPerevodchik(){//Задача #773: установка/снятие QTranslator по strYazik.
+    if(m_pPerevodchik){//Переводчик установлен - снять и удалить перед установкой нового.
+        qApp->removeTranslator(m_pPerevodchik);//Снимаем переводчик с приложения.
+        m_pPerevodchik->deleteLater();//Помечаем объект переводчика на удаление.
+        m_pPerevodchik = nullptr;//Обнуляем указатель.
+    }
+    if(m_strYazik == QStringLiteral("en")){//Задача #773: английский интерфейс.
+        QTranslator* pPerevod = new QTranslator(qApp);//Родитель - приложение.
+        if(pPerevod->load(QStringLiteral(":/i18n/mentor_en.qm"))){//Перевод, вшитый в qrc.
+            qApp->installTranslator(pPerevod);//Устанавливаем переводчик.
+            m_pPerevodchik = pPerevod;//Запоминаем установленный переводчик.
+        } else {//Задача #773: .qm не загрузился - откат на русский.
+            delete pPerevod;//Удаляем неиспользованный объект переводчика.
+            m_strYazik = QStringLiteral("ru");
+        }
+    }
+    if(m_pQmlEngine)//Движок подключён - переоценить qsTr-привязки страниц с новым переводчиком.
+        m_pQmlEngine->retranslate();
 }
 void DCCppQml::setUntHeight(const uint& untHeight) {//Изменяем высоту окна приложения.
 ///////////////////////////////////////////////////

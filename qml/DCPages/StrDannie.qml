@@ -6,6 +6,8 @@ import DCMethods 1.0//Импортируем методы написанные �
 //Страница с Данными, где отображаются сами документы в виде списка.
 Item {
     id: root
+    	property string strYazik: "ru"//Задача #773: язык интерфейса ("ru"/"en"), приходит с главной.
+
     //Свойства
     property int ntWidth: 2
     property int ntCoff: 8

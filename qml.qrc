@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+        <file>i18n/mentor_en.qm</file><!--Задача #773: английский перевод интерфейса.-->
         <file>fonts/verdana.ttf</file>
         <file>icons/108x108/ru.Mentor.png</file>
         <file>icons/128x128/ru.Mentor.png</file>
