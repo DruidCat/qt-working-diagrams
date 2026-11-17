@@ -1,4 +1,4 @@
-# Релизные сборки «Ментора» под Windows и Linux.
+# Релизные сборки «Ментора» под Windows, Linux и macOS.
 # Запускается пушем тега v*.*.*; артефакты прикрепляются к GitHub Release
 # этого же тега. Android и Aurora собираются локально и догружаются вручную.
 #
@@ -11,6 +11,8 @@ on:
   push:
     tags:
       - "v*.*.*"
+  # Ручной запуск для проверки сборок без тега (артефакты — в CI, не в релиз).
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -71,9 +73,17 @@ jobs:
           ( cd dist/ru.Mentor && 7z a -tzip "../../ru.Mentor-${VER}-win64.zip" . )
 
       - name: Загрузка артефакта в релиз
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: ru.Mentor-*-win64.zip
+
+      - name: Артефакт CI (ручной запуск без тега)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: win64
+          path: ru.Mentor-*-win64.zip
 
   linux:
     runs-on: ubuntu-22.04
@@ -133,6 +143,73 @@ jobs:
           cp "${RUNNER_TEMP}"/out/*.AppImage "$GITHUB_WORKSPACE"/
 
       - name: Загрузка артефакта в релиз
+        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
           files: "*.AppImage"
+
+      - name: Артефакт CI (ручной запуск без тега)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: appimage
+          path: "*.AppImage"
+
+  # macOS: архивы Qt на зеркале универсальные (X86_64+ARM64), собираем тем же
+  # способом, что Windows/Linux. macdeployqt вместо windeployqt/linuxdeploy.
+  macos:
+    runs-on: macos-14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Автоверсия берётся из git describe — нужны теги в истории.
+          fetch-depth: 0
+
+      - name: Установка Qt 6.7.3 (base + QtPdf)
+        run: |
+          command -v 7z >/dev/null || brew install p7zip
+          mkdir -p ~/qt673 && cd ~/qt673
+          D="$QT_BASE_URL/mac_x64/desktop/qt6_673"
+          PKGS="$D/qt.qt6.673.clang_64 $D/qt.qt6.673.addons.qtpdf.clang_64"
+          for p in $PKGS; do
+            for u in $(curl -s "$p/" | grep -oE '"[^"]*\.7z"' | tr -d '"' | grep -v meta); do
+              curl -fsSL --retry 3 -O "$p/$u"
+            done
+          done
+          for a in *.7z; do 7z x -y -o"$HOME/qt673/Qt" "$a" >/dev/null; done
+          # Каталог Qt на macOS называется macos — определяем по расположению qmake.
+          QD="$(cd "$(dirname "$(find "$HOME/qt673/Qt" -maxdepth 4 -name qmake | head -1)")/.." && pwd)"
+          echo "Qt6_DIR=$QD" >> "$GITHUB_ENV"
+          echo "QT_DIR=$QD" >> "$GITHUB_ENV"
+          echo "$QD/bin" >> "$GITHUB_PATH"
+          "$QD/bin/qmake" -query | head -2
+
+      - name: Сборка (arm64 + x86_64)
+        run: |
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+                -DCMAKE_PREFIX_PATH="$Qt6_DIR" \
+                -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64" \
+                -DCMAKE_OSX_DEPLOYMENT_TARGET=11.0
+          cmake --build build
+
+      - name: Упаковка (macdeployqt + zip)
+        run: |
+          VER=$(git describe --tags --match "v[0-9]*" | sed 's/^v//')
+          "$QT_DIR/bin/macdeployqt" "build/ru.Mentor.app" -qmldir=qml
+          # Ad-hoc подпись: без неё на Apple Silicon систему убивает неподписанные бинари.
+          codesign --force --deep --sign - "build/ru.Mentor.app"
+          ditto -c -k --keepParent "build/ru.Mentor.app" "ru.Mentor-${VER}-macos.zip"
+
+      - name: Загрузка артефакта в релиз
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ru.Mentor-*-macos.zip
+
+      - name: Артефакт CI (ручной запуск без тега)
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: ru.Mentor-*-macos.zip
