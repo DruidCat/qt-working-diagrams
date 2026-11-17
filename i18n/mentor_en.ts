@@ -34,76 +34,76 @@
         <translation>New entry in the header description.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="583"/>
-        <location filename="../src/cppqml.cpp" line="739"/>
+        <location filename="../src/cppqml.cpp" line="582"/>
+        <location filename="../src/cppqml.cpp" line="737"/>
         <source>Ошибка удаления элемента.</source>
         <translation>Failed to delete the element.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="588"/>
-        <location filename="../src/cppqml.cpp" line="742"/>
+        <location filename="../src/cppqml.cpp" line="587"/>
+        <location filename="../src/cppqml.cpp" line="740"/>
         <source>Ошибка удаления таблицы выбранного элемента.</source>
         <translation>Failed to delete the table of the selected element.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="593"/>
-        <location filename="../src/cppqml.cpp" line="745"/>
+        <location filename="../src/cppqml.cpp" line="592"/>
+        <location filename="../src/cppqml.cpp" line="743"/>
         <source>Ошибка удаления данных выбранного элемента.</source>
         <translation>Failed to delete the data of the selected element.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="604"/>
+        <location filename="../src/cppqml.cpp" line="603"/>
         <source>Ошибка удаления списка.</source>
         <translation>Failed to delete the list.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="628"/>
-        <location filename="../src/cppqml.cpp" line="650"/>
+        <location filename="../src/cppqml.cpp" line="627"/>
+        <location filename="../src/cppqml.cpp" line="649"/>
         <source>Список с таким именем уже существует.</source>
         <translation>A list with this name already exists.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="633"/>
+        <location filename="../src/cppqml.cpp" line="632"/>
         <source>Создан список: </source>
         <translation>List created: </translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="767"/>
-        <location filename="../src/cppqml.cpp" line="789"/>
+        <location filename="../src/cppqml.cpp" line="765"/>
+        <location filename="../src/cppqml.cpp" line="787"/>
         <source>Элемент с таким именем уже существует.</source>
         <translation>An element with this name already exists.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="772"/>
+        <location filename="../src/cppqml.cpp" line="770"/>
         <source>Создан элемент: </source>
         <translation>Element created: </translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="841"/>
+        <location filename="../src/cppqml.cpp" line="839"/>
         <source>Новая запись в описании элемента.</source>
         <translation>New entry in the element description.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="893"/>
-        <location filename="../src/cppqml.cpp" line="917"/>
+        <location filename="../src/cppqml.cpp" line="890"/>
+        <location filename="../src/cppqml.cpp" line="914"/>
         <source>Нельзя сохранить пустые данные.</source>
         <translation>Cannot save empty data.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="902"/>
-        <location filename="../src/cppqml.cpp" line="924"/>
-        <location filename="../src/cppqml.cpp" line="947"/>
+        <location filename="../src/cppqml.cpp" line="899"/>
+        <location filename="../src/cppqml.cpp" line="921"/>
+        <location filename="../src/cppqml.cpp" line="944"/>
         <source>Документ с таким именем уже существует.</source>
         <translation>A document with this name already exists.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="909"/>
-        <location filename="../src/cppqml.cpp" line="930"/>
+        <location filename="../src/cppqml.cpp" line="906"/>
+        <location filename="../src/cppqml.cpp" line="927"/>
         <source>Добавлен документ: </source>
         <translation>Document added: </translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="1122"/>
+        <location filename="../src/cppqml.cpp" line="1119"/>
         <source>Добавлен план: </source>
         <translation>Plan added: </translation>
     </message>
@@ -113,17 +113,17 @@
     <message>
         <location filename="../src/dcdb.cpp" line="64"/>
         <source>Ошибка 001 в DCDB::checkStatus(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 001 in DCDB::checkStatus(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="69"/>
         <source>Ошибка 002 в DCDB::checkStatus(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 002 in DCDB::checkStatus(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="81"/>
         <source>Ошибка 000 в DCDB::checkStatus(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 000 in DCDB::checkStatus(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="82"/>
@@ -144,78 +144,78 @@
         <location filename="../src/dcdb.cpp" line="1186"/>
         <location filename="../src/dcdb.cpp" line="1314"/>
         <source> не открылась по причине: </source>
-        <translation type="unfinished"></translation>
+        <translation> failed to open because: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="97"/>
         <source>Ошибка 015 в DCDB::CREATE(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 015 in DCDB::CREATE(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="102"/>
         <source>Ошибка 016 в DCDB::CREATE(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 016 in DCDB::CREATE(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="112"/>
         <source>Ошибка 014 в DCDB::CREATE(): В Базе данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 014 in DCDB::CREATE(): In database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="112"/>
         <location filename="../src/dcdb.cpp" line="209"/>
         <source> не заданы графы таблицы.</source>
-        <translation type="unfinished"></translation>
+        <translation> the table fields are not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="116"/>
         <source>Ошибка 012 в DCDB::CREATE(): В Базе данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 012 in DCDB::CREATE(): In database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="116"/>
         <location filename="../src/dcdb.cpp" line="213"/>
         <source> имя таблицы не заданно.</source>
-        <translation type="unfinished"></translation>
+        <translation> the table name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="130"/>
         <source>Ошибка 010 в DCDB::CREATE(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 010 in DCDB::CREATE(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="148"/>
         <source>Ошибка 011 в DCDB::CREATE(): В базе данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 011 in DCDB::CREATE(): In database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="149"/>
         <location filename="../src/dcdb.cpp" line="246"/>
         <source> при создании таблицы: </source>
-        <translation type="unfinished"></translation>
+        <translation> while creating the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="149"/>
         <location filename="../src/dcdb.cpp" line="246"/>
         <source>, заданно </source>
-        <translation type="unfinished"></translation>
+        <translation>, given </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="150"/>
         <location filename="../src/dcdb.cpp" line="247"/>
         <source> графы: </source>
-        <translation type="unfinished"></translation>
+        <translation> fields: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="181"/>
         <source>Ошибка в 013 DCDB::CREATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 013 in DCDB::CREATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="182"/>
         <location filename="../src/dcdb.cpp" line="279"/>
         <source> не смог создать таблицу: </source>
-        <translation type="unfinished"></translation>
+        <translation> failed to create the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="183"/>
@@ -225,62 +225,62 @@
         <location filename="../src/dcdb.cpp" line="723"/>
         <location filename="../src/dcdb.cpp" line="774"/>
         <source> по причине: </source>
-        <translation type="unfinished"></translation>
+        <translation> because: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="199"/>
         <source>Ошибка 165 в DCDB::CREATE(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 165 in DCDB::CREATE(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="204"/>
         <source>Ошибка 166 в DCDB::CREATE(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 166 in DCDB::CREATE(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="209"/>
         <source>Ошибка 164 в DCDB::CREATE(): В Базе данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 164 in DCDB::CREATE(): In database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="213"/>
         <source>Ошибка 162 в DCDB::CREATE(): В Базе данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 162 in DCDB::CREATE(): In database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="227"/>
         <source>Ошибка 160 в DCDB::CREATE(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 160 in DCDB::CREATE(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="245"/>
         <source>Ошибка 161 в DCDB::CREATE(): В базе данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 161 in DCDB::CREATE(): In database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="278"/>
         <source>Ошибка в 163 DCDB::CREATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 163 in DCDB::CREATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="296"/>
         <source>Ошибка 122 в DCDB::DROP(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 122 in DCDB::DROP(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="301"/>
         <source>Ошибка 123 в DCDB::DROP(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 123 in DCDB::DROP(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="314"/>
         <source>Ошибка 120 в DCDB::DROP(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 120 in DCDB::DROP(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="326"/>
         <source>Ошибка 121 в DCDB::DROP(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 121 in DCDB::DROP(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="326"/>
@@ -300,114 +300,114 @@
         <location filename="../src/dcdb.cpp" line="1297"/>
         <location filename="../src/dcdb.cpp" line="1325"/>
         <source>, в таблице: </source>
-        <translation type="unfinished"></translation>
+        <translation>, in the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="341"/>
         <source>Ошибка 024 в DCDB::INSERT(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 024 in DCDB::INSERT(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="346"/>
         <source>Ошибка 025 в DCDB::INSERT(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 025 in DCDB::INSERT(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="358"/>
         <source>Ошибка 020 в DCDB::INSERT(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 020 in DCDB::INSERT(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="371"/>
         <source>Ошибка 021 в DCDB::INSERT(): В базе данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 021 in DCDB::INSERT(): In database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="371"/>
         <source> с именем таблици: </source>
-        <translation type="unfinished"></translation>
+        <translation> with the table name: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="372"/>
         <source> задано разное колличество Граф: </source>
-        <translation type="unfinished"></translation>
+        <translation> different numbers of fields: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="373"/>
         <source> и Колонок: </source>
-        <translation type="unfinished"></translation>
+        <translation> and columns: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="394"/>
         <source>Ошибка 023 в DCDB::INSERT(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 023 in DCDB::INSERT(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="395"/>
         <source> не смог вставить данные: </source>
-        <translation type="unfinished"></translation>
+        <translation> failed to insert data: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="395"/>
         <source>, в таблицу: </source>
-        <translation type="unfinished"></translation>
+        <translation>, into the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="409"/>
         <source>Ошибка 034 в DCDB::UPDATE(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 034 in DCDB::UPDATE(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="414"/>
         <source>Ошибка 035 в DCDB::UPDATE(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 035 in DCDB::UPDATE(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="426"/>
         <source>Ошибка 030 в DCDB::UPDATE(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 030 in DCDB::UPDATE(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="436"/>
         <source>Ошибка 031 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 031 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="437"/>
         <location filename="../src/dcdb.cpp" line="445"/>
         <source>, при обновлении данных в таблице: </source>
-        <translation type="unfinished"></translation>
+        <translation>, while updating data in the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="438"/>
         <location filename="../src/dcdb.cpp" line="446"/>
         <source> количество граф: </source>
-        <translation type="unfinished"></translation>
+        <translation> number of fields: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="439"/>
         <source> или колонок: </source>
-        <translation type="unfinished"></translation>
+        <translation> or columns: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="439"/>
         <source> меньше двух!</source>
-        <translation type="unfinished"></translation>
+        <translation> is less than two!</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="444"/>
         <source>Ошибка 032 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 032 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="447"/>
         <source> не равно колличеству колонок: </source>
-        <translation type="unfinished"></translation>
+        <translation> does not equal the number of columns: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="465"/>
         <source>Ошибка 033 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 033 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="466"/>
@@ -415,32 +415,32 @@
         <location filename="../src/dcdb.cpp" line="720"/>
         <location filename="../src/dcdb.cpp" line="773"/>
         <source> таблицы: </source>
-        <translation type="unfinished"></translation>
+        <translation> table: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="467"/>
         <source>, не смог записать данные: </source>
-        <translation type="unfinished"></translation>
+        <translation>, failed to write data: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="468"/>
         <source> в базу данных по причине: </source>
-        <translation type="unfinished"></translation>
+        <translation> into the database because: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="483"/>
         <source>Ошибка 045 в DCDB::UPDATE(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 045 in DCDB::UPDATE(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="488"/>
         <source>Ошибка 046 в DCDB::UPDATE(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 046 in DCDB::UPDATE(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="495"/>
         <source>Ошибка 041 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 041 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="496"/>
@@ -448,40 +448,40 @@
         <location filename="../src/dcdb.cpp" line="585"/>
         <location filename="../src/dcdb.cpp" line="605"/>
         <source>, при переименовании данных в таблице: </source>
-        <translation type="unfinished"></translation>
+        <translation>, while renaming data in the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="497"/>
         <location filename="../src/dcdb.cpp" line="586"/>
         <source> отсутствует Первичный Ключ!</source>
-        <translation type="unfinished"></translation>
+        <translation> has no Primary Key!</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="506"/>
         <source>Ошибка 040 в DCDB::UPDATE(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 040 in DCDB::UPDATE(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="515"/>
         <source>Ошибка 042 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 042 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="517"/>
         <location filename="../src/dcdb.cpp" line="606"/>
         <source> количество колонок: </source>
-        <translation type="unfinished"></translation>
+        <translation> number of columns: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="517"/>
         <location filename="../src/dcdb.cpp" line="606"/>
         <source> не равно двум!</source>
-        <translation type="unfinished"></translation>
+        <translation> is not equal to two!</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="528"/>
         <source>Ошибка 044 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 044 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="529"/>
@@ -497,335 +497,335 @@
         <location filename="../src/dcdb.cpp" line="1197"/>
         <location filename="../src/dcdb.cpp" line="1326"/>
         <source> ошибка по причине: </source>
-        <translation type="unfinished"></translation>
+        <translation> error because: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="536"/>
         <source>Ошибка 047 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 047 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="538"/>
         <source> ошибка неверного запроса: </source>
-        <translation type="unfinished"></translation>
+        <translation> invalid query error: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="547"/>
         <source>Ошибка 043 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 043 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="549"/>
         <location filename="../src/dcdb.cpp" line="721"/>
         <source>, не смог переименовать данные c </source>
-        <translation type="unfinished"></translation>
+        <translation>, failed to rename data from </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="550"/>
         <location filename="../src/dcdb.cpp" line="722"/>
         <source> на </source>
-        <translation type="unfinished"></translation>
+        <translation> to </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="551"/>
         <location filename="../src/dcdb.cpp" line="723"/>
         <source> в графе </source>
-        <translation type="unfinished"></translation>
+        <translation> in the field </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="572"/>
         <source>Ошибка 117 в DCDB::UPDATE(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 117 in DCDB::UPDATE(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="577"/>
         <source>Ошибка 118 в DCDB::UPDATE(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 118 in DCDB::UPDATE(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="584"/>
         <source>Ошибка 111 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 111 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="595"/>
         <source>Ошибка 110 в DCDB::UPDATE(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 110 in DCDB::UPDATE(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="604"/>
         <source>Ошибка 112 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 112 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="625"/>
         <source>Ошибка 113 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 113 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="635"/>
         <source>Ошибка 114 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 114 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="687"/>
         <source>Ошибка 115 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 115 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="719"/>
         <source>Ошибка 116 в DCDB::UPDATE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 116 in DCDB::UPDATE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="742"/>
         <source>Ошибка 054 в DCDB::DELETE(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 054 in DCDB::DELETE(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="747"/>
         <source>Ошибка 055 в DCDB::DELETE(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 055 in DCDB::DELETE(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="759"/>
         <source>Ошибка 050 в DCDB::DELETE(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 050 in DCDB::DELETE(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="772"/>
         <source>Ошибка 053 в DCDB::DELETE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 053 in DCDB::DELETE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="773"/>
         <source>, не смог удалить в графе </source>
-        <translation type="unfinished"></translation>
+        <translation>, failed to delete in the field </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="774"/>
         <source> колонку с </source>
-        <translation type="unfinished"></translation>
+        <translation> the column with </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="789"/>
         <source>Ошибка 191 в DCDB::SELECT(QString): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 191 in DCDB::SELECT(QString): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="801"/>
         <source>Ошибка 190 в DCDB::SELECT(QString): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 190 in DCDB::SELECT(QString): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="825"/>
         <source>Ошибка 064 в DCDB::SELECT(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 064 in DCDB::SELECT(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="830"/>
         <source>Ошибка 065 в DCDB::SELECT(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 065 in DCDB::SELECT(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="841"/>
         <source>Ошибка 060 в DCDB::SELECT(): база данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 060 in DCDB::SELECT(): database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="864"/>
         <source>Ошибка 063 в DCDB::SELECT(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 063 in DCDB::SELECT(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="878"/>
         <source>Ошибка 074 в DCDB::SELECT(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 074 in DCDB::SELECT(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="883"/>
         <source>Ошибка 075 в DCDB::SELECT(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 075 in DCDB::SELECT(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="894"/>
         <source>Ошибка 070 в DCDB::SELECT(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 070 in DCDB::SELECT(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="903"/>
         <source>Ошибка 073 в DCDB::SELECT(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 073 in DCDB::SELECT(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="925"/>
         <source>Ошибка 084 в DCDB::SELECT(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 084 in DCDB::SELECT(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="930"/>
         <source>Ошибка 085 в DCDB::SELECT(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 085 in DCDB::SELECT(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="941"/>
         <source>Ошибка 080 в DCDB::SELECT(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 080 in DCDB::SELECT(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="955"/>
         <source>Ошибка 083 в DCDB::SELECT(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 083 in DCDB::SELECT(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="969"/>
         <source>Ошибка 094 в DCDB::SELECT(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 094 in DCDB::SELECT(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="974"/>
         <source>Ошибка 095 в DCDB::SELECT(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 095 in DCDB::SELECT(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="987"/>
         <source>Ошибка 090 в DCDB::SELECT(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 090 in DCDB::SELECT(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1006"/>
         <source>Ошибка 093 в DCDB::SELECT(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 093 in DCDB::SELECT(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1012"/>
         <source>Ошибка 091 в DCDB::SELECT(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 091 in DCDB::SELECT(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1013"/>
         <source> количество Граф: </source>
-        <translation type="unfinished"></translation>
+        <translation> number of fields: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1014"/>
         <source> не равно количеству Колонок: </source>
-        <translation type="unfinished"></translation>
+        <translation> does not equal the number of columns: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1025"/>
         <source>Ошибка 105 в DCDB::SELECTPK(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 105 in DCDB::SELECTPK(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1030"/>
         <source>Ошибка 106 в DCDB::SELECTPK(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 106 in DCDB::SELECTPK(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1036"/>
         <source>Ошибка 101 в DCDB::SELECTPK(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 101 in DCDB::SELECTPK(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1036"/>
         <source>в таблице: </source>
-        <translation type="unfinished"></translation>
+        <translation>in the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1037"/>
         <source> отсутствует Primary Key!</source>
-        <translation type="unfinished"></translation>
+        <translation> has no Primary Key!</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1045"/>
         <source>Ошибка 100 в DCDB::SELECTPK(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 100 in DCDB::SELECTPK(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1062"/>
         <source>Ошибка 103 в DCDB::SELECTPK(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 103 in DCDB::SELECTPK(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1071"/>
         <source>Ошибка 104 в DCDB::SELECTPK(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 104 in DCDB::SELECTPK(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1100"/>
         <source>Ошибка 132 в DCDB::SELECT(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 132 in DCDB::SELECT(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1105"/>
         <source>Ошибка 133 в DCDB::SELECT(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 133 in DCDB::SELECT(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1185"/>
         <source>Ошибка 130 в DCDB::SELECT(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 130 in DCDB::SELECT(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1196"/>
         <source>Ошибка 131 в DCDB::SELECT(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 131 in DCDB::SELECT(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1210"/>
         <source>Ошибка 143 в DCDB::LIKE(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 143 in DCDB::LIKE(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1215"/>
         <source>Ошибка 144 в DCDB::LIKE(): Имя базы данных SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 144 in DCDB::LIKE(): SQL database name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1297"/>
         <source>Ошибка 142 в DCDB::LIKE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 142 in DCDB::LIKE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1298"/>
         <source> ошибка по причине отсутствия запроса на поиск!</source>
-        <translation type="unfinished"></translation>
+        <translation> error: no search query is set!</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1313"/>
         <source>Ошибка 140 в DCDB::LIKE(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 140 in DCDB::LIKE(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1325"/>
         <source>Ошибка 141 в DCDB::LIKE(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 141 in DCDB::LIKE(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1348"/>
         <source>Ошибка 171 в DCDB::ustDriverDB(): Нельзя повторно менять драйвер SQL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 171 in DCDB::ustDriverDB(): the SQL driver cannot be changed twice.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1353"/>
         <source>Ошибка 170 в DCDB::ustDriverDB(): Заданное имя драйвера SQL неизвестно.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 170 in DCDB::ustDriverDB(): unknown SQL driver name.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1374"/>
         <source>Ошибка 180 в DCDB::ustImyaDB(): Имя базы данных заданно пустым.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 180 in DCDB::ustImyaDB(): the database name is empty.</translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1386"/>
         <source>Ошибка 151 в DCDB::ustImyaTablici() В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 151 in DCDB::ustImyaTablici(): in database: </translation>
     </message>
     <message>
         <location filename="../src/dcdb.cpp" line="1387"/>
         <source> ошибка по причине пустого имени таблицы</source>
-        <translation type="unfinished"></translation>
+        <translation> error: the table name is empty</translation>
     </message>
 </context>
 <context>
@@ -833,22 +833,22 @@
     <message>
         <location filename="../src/dcdbdata.cpp" line="43"/>
         <source>Ошибка 015 в DCDBData::CREATE(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 015 in DCDBData::CREATE(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="47"/>
         <source>Ошибка 014 в DCDBData::CREATE(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 014 in DCDBData::CREATE(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="48"/>
         <source> не задано имя таблицы через метод ustImyaTablici(QString strImyaTablici)</source>
-        <translation type="unfinished"></translation>
+        <translation> the table name is not set via ustImyaTablici(QString strImyaTablici)</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="60"/>
         <source>Ошибка 010 в DCDBData::CREATE(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 010 in DCDBData::CREATE(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="61"/>
@@ -860,17 +860,17 @@
         <location filename="../src/dcdbdata.cpp" line="494"/>
         <location filename="../src/dcdbdata.cpp" line="541"/>
         <source> не открылась по причине: </source>
-        <translation type="unfinished"></translation>
+        <translation> failed to open because: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="79"/>
         <source>Ошибка 013 в DCDBData::DCDBData(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 013 in DCDBData::DCDBData(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="80"/>
         <source> не смог создать таблицу: </source>
-        <translation type="unfinished"></translation>
+        <translation> failed to create the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="80"/>
@@ -883,38 +883,38 @@
         <location filename="../src/dcdbdata.cpp" line="514"/>
         <location filename="../src/dcdbdata.cpp" line="563"/>
         <source> по причине: </source>
-        <translation type="unfinished"></translation>
+        <translation> because: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="92"/>
         <source>Ошибка 011 в DCDBData::DCDBData(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 011 in DCDBData::DCDBData(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="93"/>
         <location filename="../src/dcdbdata.cpp" line="108"/>
         <source> не смог вставить данные в таблицу: </source>
-        <translation type="unfinished"></translation>
+        <translation> failed to insert data into the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="107"/>
         <source>Ошибка 012 в DCDBData::DCDBData(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 012 in DCDBData::DCDBData(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="127"/>
         <source>Ошибка 072 в DCDBData::DROP(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 072 in DCDBData::DROP(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="139"/>
         <source>Ошибка 070 в DCDBData::DROP(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 070 in DCDBData::DROP(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="151"/>
         <source>Ошибка 071 в DCDBData::DROP(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 071 in DCDBData::DROP(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="152"/>
@@ -925,168 +925,168 @@
         <location filename="../src/dcdbdata.cpp" line="513"/>
         <location filename="../src/dcdbdata.cpp" line="562"/>
         <source>, в таблице: </source>
-        <translation type="unfinished"></translation>
+        <translation>, in the table: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="168"/>
         <source>Ошибка 081 в DCDBData::SELECT(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 081 in DCDBData::SELECT(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="180"/>
         <source>Ошибка 080 в DCDBData::SELECT(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 080 in DCDBData::SELECT(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="203"/>
         <source>Ошибка 025 в DCDBData::write(QString): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 025 in DCDBData::write(QString): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="216"/>
         <source>Ошибка 020 в DCDBData::write(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 020 in DCDBData::write(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="228"/>
         <source>Ошибка 021 в DCDBData::write(), превышена заданная максимальная величина файла: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 021 in DCDBData::write(): the file size limit of </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="229"/>
         <source>байт, записываемым в БД файлом: </source>
-        <translation type="unfinished"></translation>
+        <translation> bytes exceeded by the file written into the DB: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="230"/>
         <source>байт!</source>
-        <translation type="unfinished"></translation>
+        <translation> bytes!</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="239"/>
         <source>Ошибка 022 в DCDBData::write(), Ошибка открытия файла: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 022 in DCDBData::write(): failed to open the file: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="266"/>
         <source>Ошибка 023 в DCDBData::write(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 023 in DCDBData::write(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="267"/>
         <location filename="../src/dcdbdata.cpp" line="313"/>
         <source> таблицы: </source>
-        <translation type="unfinished"></translation>
+        <translation> table: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="268"/>
         <source>, не смог записать блок данных в БД по причине: </source>
-        <translation type="unfinished"></translation>
+        <translation>, failed to write the data block into the DB because: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="312"/>
         <source>Ошибка 024 в DCDBData::write(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 024 in DCDBData::write(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="314"/>
         <source>, не смог записать нулевой блок данных по причине: </source>
-        <translation type="unfinished"></translation>
+        <translation>, failed to write the zero data block because: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="333"/>
         <source>Ошибка 035 в DCDBData::read(QString): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 035 in DCDBData::read(QString): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="344"/>
         <source>Ошибка 031 в DCDBData::read(), Ошибка открытия файла: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 031 in DCDBData::read(): failed to open the file: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="345"/>
         <source> для записи в него данных из БД.</source>
-        <translation type="unfinished"></translation>
+        <translation> to write data from the DB into it.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="355"/>
         <source>Ошибка 030 в DCDBData::read(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 030 in DCDBData::read(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="374"/>
         <source>Ошибка 032 в DCDBData::read(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 032 in DCDBData::read(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="401"/>
         <source>Ошибка 033 в DCDBData::read(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 033 in DCDBData::read(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="416"/>
         <source>Ошибка 034 в DCDBData::read(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 034 in DCDBData::read(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="417"/>
         <source> по причине не совпедения контрольной суммы файла!</source>
-        <translation type="unfinished"></translation>
+        <translation> because of a file checksum mismatch!</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="432"/>
         <source>Ошибка 042 в DCDBData::lastModified(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 042 in DCDBData::lastModified(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="443"/>
         <source>Ошибка 040 в DCDBData::lastModified(): База данных </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 040 in DCDBData::lastModified(): Database </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="464"/>
         <source>Ошибка 041 в DCDBData::lastModified(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 041 in DCDBData::lastModified(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="481"/>
         <source>Ошибка 052 в DCDBData::baseName(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 052 in DCDBData::baseName(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="493"/>
         <source>Ошибка 050 в DCDBData::baseName(): База данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 050 in DCDBData::baseName(): Database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="513"/>
         <source>Ошибка 051 в DCDBData::baseName() В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 051 in DCDBData::baseName(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="528"/>
         <source>Ошибка 062 в DCDBData::suffix(): Имя драйвера SQL не указано.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 062 in DCDBData::suffix(): SQL driver name is not set.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="540"/>
         <source>Ошибка 060 в DCDBData::suffix(): База данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 060 in DCDBData::suffix(): Database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="562"/>
         <source>Ошибка 061 в DCDBData::suffix(): В базе данных: </source>
-        <translation type="unfinished"></translation>
+        <translation>Error 061 in DCDBData::suffix(): In database: </translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="580"/>
         <source>Ошибка 091 в DCDBData::ustDriverDB(): Нельзя повторно менять драйвер SQL.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 091 in DCDBData::ustDriverDB(): the SQL driver cannot be changed twice.</translation>
     </message>
     <message>
         <location filename="../src/dcdbdata.cpp" line="585"/>
         <source>Ошибка 090 в DCDBData::ustDriverDB(): Заданное имя драйвера SQL неизвестно.</source>
-        <translation type="unfinished"></translation>
+        <translation>Error 090 in DCDBData::ustDriverDB(): unknown SQL driver name.</translation>
     </message>
 </context>
 <context>
@@ -1094,12 +1094,12 @@
     <message>
         <location filename="../src/dclogger.cpp" line="12"/>
         <source>DCLogger::DCLogger: ошибка перехода в созданную папку хранения логов!</source>
-        <translation type="unfinished"></translation>
+        <translation>DCLogger::DCLogger: failed to enter the created logs storage folder!</translation>
     </message>
     <message>
         <location filename="../src/dclogger.cpp" line="14"/>
         <source>DCLogger::DCLogger: ошибка создания папки хранения логов.</source>
-        <translation type="unfinished"></translation>
+        <translation>DCLogger::DCLogger: failed to create the logs storage folder.</translation>
     </message>
 </context>
 <context>
@@ -1181,37 +1181,37 @@
     <message>
         <location filename="../qml/DCMethods/DCSpinBox.qml" line="52"/>
         <source>DCSpinBox.qml::from(int): from - задано отрицательное значение.</source>
-        <translation type="unfinished"></translation>
+        <translation>DCSpinBox.qml::from(int): from is negative.</translation>
     </message>
     <message>
         <location filename="../qml/DCMethods/DCSpinBox.qml" line="55"/>
         <source>DCSpinBox.qml::from(int): to - задано отрицательное значение.</source>
-        <translation type="unfinished"></translation>
+        <translation>DCSpinBox.qml::from(int): to is negative.</translation>
     </message>
     <message>
         <location filename="../qml/DCMethods/DCSpinBox.qml" line="62"/>
         <source>DCSpinBox.qml::from(int): from &gt; to.</source>
-        <translation type="unfinished"></translation>
+        <translation>DCSpinBox.qml::from(int): from &gt; to.</translation>
     </message>
     <message>
         <location filename="../qml/DCMethods/DCSpinBox.qml" line="90"/>
         <source>DCSpinBox.qml::to(int): to - задано отрицательное значение.</source>
-        <translation type="unfinished"></translation>
+        <translation>DCSpinBox.qml::to(int): to is negative.</translation>
     </message>
     <message>
         <location filename="../qml/DCMethods/DCSpinBox.qml" line="93"/>
         <source>DCSpinBox.qml::to(int): from - задано отрицательное значение.</source>
-        <translation type="unfinished"></translation>
+        <translation>DCSpinBox.qml::to(int): from is negative.</translation>
     </message>
     <message>
         <location filename="../qml/DCMethods/DCSpinBox.qml" line="100"/>
         <source>DCSpinBox.qml::to(int): to &lt; from.</source>
-        <translation type="unfinished"></translation>
+        <translation>DCSpinBox.qml::to(int): to &lt; from.</translation>
     </message>
     <message>
         <location filename="../qml/DCMethods/DCSpinBox.qml" line="128"/>
         <source>DCSpinBox.qml::stepSize(int): значение меньше 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>DCSpinBox.qml::stepSize(int): the value is less than 1.</translation>
     </message>
 </context>
 <context>
@@ -1227,37 +1227,37 @@
     <message>
         <location filename="../src/datadannie.cpp" line="29"/>
         <source>DataDannie::DataDannie: ошибка создания таблицы данные_0_0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataDannie::DataDannie: failed to create the table данные_0_0.</translation>
     </message>
     <message>
         <location filename="../src/datadannie.cpp" line="60"/>
         <source>DataDannie::DataDannie: ошибка создания первоначальной записи в таблицу данные_0_0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataDannie::DataDannie: failed to create the initial entry in the данные_0_0 table.</translation>
     </message>
     <message>
         <location filename="../src/datadannie.cpp" line="67"/>
         <source>DataDannie::dbStart(quint64): ошибка создания таблицы данные_0_0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataDannie::dbStart(quint64): failed to create the table данные_0_0.</translation>
     </message>
     <message>
         <location filename="../src/datadannie.cpp" line="88"/>
         <source>DataElement::polDannie(quint64,qint64): quint64 = 0, всего PRIMARY KEY 0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::polDannie(quint64,qint64): quint64 = 0, total PRIMARY KEY 0.</translation>
     </message>
     <message>
         <location filename="../src/datadannie.cpp" line="106"/>
         <source>DataDannie::ustDannie(quint64,quint64,QString): ошибка создания таблицы данные_</source>
-        <translation type="unfinished"></translation>
+        <translation>DataDannie::ustDannie(quint64,quint64,QString): failed to create the table данные_</translation>
     </message>
     <message>
         <location filename="../src/datadannie.cpp" line="144"/>
         <source>DataDannie::renDannie(QVariantList): ошибка записи сортированных данных.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataDannie::renDannie(QVariantList): failed to write sorted data.</translation>
     </message>
     <message>
         <location filename="../src/datadannie.cpp" line="171"/>
         <source>DataDannie::polDannieJSON(quint64,quint64): ошибка создания таблицы данные_</source>
-        <translation type="unfinished"></translation>
+        <translation>DataDannie::polDannieJSON(quint64,quint64): failed to create the table данные_</translation>
     </message>
     <message>
         <location filename="../src/datadannie.cpp" line="178"/>
@@ -1306,27 +1306,27 @@
     <message>
         <location filename="../src/dataelement.cpp" line="22"/>
         <source>DataElement::DataElement: ошибка создания таблицы элемент_0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::DataElement: failed to create the table элемент_0.</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="47"/>
         <source>DataElement::DataElement: ошибка создания первоначальной записи в таблицу  элемент_0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::DataElement: failed to create the initial entry in the элемент_0 table.</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="54"/>
         <source>DataElement::dbStart(quint64): ошибка создания таблицы элемент_0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::dbStart(quint64): failed to create the table элемент_0.</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="69"/>
         <source>DataElement::polElement(quint64): quint64 = 0, всего PRIMARY KEY 0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::polElement(quint64): quint64 = 0, total PRIMARY KEY 0.</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="85"/>
         <source>DataElement::ustElement(quint64, QString): ошибка создания таблицы элемент_</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::ustElement(quint64, QString): failed to create the table элемент_</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="97"/>
@@ -1336,17 +1336,17 @@
     <message>
         <location filename="../src/dataelement.cpp" line="101"/>
         <source>DataElement::ustElement(quint64, QString): Ошибка записи Элемента в БД.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::ustElement(quint64, QString): failed to write the Element to the DB.</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="126"/>
         <source>DataElement::renElement(QVariantList): ошибка записи сортированных данных.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::renElement(QVariantList): failed to write sorted data.</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="158"/>
         <source>DataElement::polElementJSON(quint64): ошибка создания таблицы элемент_</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::polElementJSON(quint64): failed to create the table элемент_</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="165"/>
@@ -1356,17 +1356,17 @@
     <message>
         <location filename="../src/dataelement.cpp" line="195"/>
         <source>DataElement::polElementOpisanie(quint64, quint64): quint64 меньше или равен 0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::polElementOpisanie(quint64, quint64): quint64 is less than or equal to 0.</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="206"/>
         <source>DataElement::ustElementOpisanie(quint64,quint64,QString): quint64 меньше или равен 0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::ustElementOpisanie(quint64,quint64,QString): quint64 is less than or equal to 0.</translation>
     </message>
     <message>
         <location filename="../src/dataelement.cpp" line="214"/>
         <source>DataElement::ustElementOpisanie(quint64,quint64,QString): ошибка записи Описания.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataElement::ustElementOpisanie(quint64,quint64,QString): failed to write the Description.</translation>
     </message>
 </context>
 <context>
@@ -1536,22 +1536,22 @@
     <message>
         <location filename="../src/dataspisok.cpp" line="23"/>
         <source>DataSpisok::DataSpisok: ошибка создания таблицы список.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataSpisok::DataSpisok: failed to create the table список.</translation>
     </message>
     <message>
         <location filename="../src/dataspisok.cpp" line="50"/>
         <source>DataSpisok::polSpisok(quint64): quint64 меньше или равен 0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataSpisok::polSpisok(quint64): quint64 is less than or equal to 0.</translation>
     </message>
     <message>
         <location filename="../src/dataspisok.cpp" line="55"/>
         <source>DataSpisok::polSpisok(quint64): Код: </source>
-        <translation type="unfinished"></translation>
+        <translation>DataSpisok::polSpisok(quint64): Code: </translation>
     </message>
     <message>
         <location filename="../src/dataspisok.cpp" line="56"/>
         <source> отсутствует, т.к. пустой элемент списка.</source>
-        <translation type="unfinished"></translation>
+        <translation> is missing: empty list element.</translation>
     </message>
     <message>
         <location filename="../src/dataspisok.cpp" line="78"/>
@@ -1561,7 +1561,7 @@
     <message>
         <location filename="../src/dataspisok.cpp" line="105"/>
         <source>DataSpisok::renSpisok(QVariantList): ошибка записи сортированных данных.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataSpisok::renSpisok(QVariantList): failed to write sorted data.</translation>
     </message>
     <message>
         <location filename="../src/dataspisok.cpp" line="127"/>
@@ -1571,27 +1571,27 @@
     <message>
         <location filename="../src/dataspisok.cpp" line="160"/>
         <source>DataSpisok::polSpisokOpisanie(quint64): quint64 меньше или равен 0.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataSpisok::polSpisokOpisanie(quint64): quint64 is less than or equal to 0.</translation>
     </message>
     <message>
         <location filename="../src/dataspisok.cpp" line="173"/>
         <source>DataSpisok::ustSpisokOpisanie(quint64, QString): ошибка записи Описания.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataSpisok::ustSpisokOpisanie(quint64, QString): failed to write the Description.</translation>
     </message>
     <message>
         <location filename="../src/dataspisok.cpp" line="181"/>
         <source>DataSpisok::polKod(QString): QString пустая строка.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataSpisok::polKod(QString): QString is an empty string.</translation>
     </message>
     <message>
         <location filename="../src/dataspisok.cpp" line="186"/>
         <source>DataSpisok::polKod(QString) - элемент Списка: </source>
-        <translation type="unfinished"></translation>
+        <translation>DataSpisok::polKod(QString) - List element: </translation>
     </message>
     <message>
         <location filename="../src/dataspisok.cpp" line="187"/>
         <source> отсутствует.</source>
-        <translation type="unfinished"></translation>
+        <translation> is missing.</translation>
     </message>
 </context>
 <context>
@@ -1609,12 +1609,12 @@
     <message>
         <location filename="../src/datatitul.cpp" line="57"/>
         <source>DataTitul::polTitul(): Пустое имя титула.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataTitul::polTitul(): empty title name.</translation>
     </message>
     <message>
         <location filename="../src/datatitul.cpp" line="75"/>
         <source>DataTitul::polOpisanie(): Пустое описание титула.</source>
-        <translation type="unfinished"></translation>
+        <translation>DataTitul::polOpisanie(): empty title description.</translation>
     </message>
 </context>
 <context>
@@ -2778,7 +2778,7 @@
         <location filename="../qml/ru.Mentor.qml" line="723"/>
         <location filename="../qml/ru.Mentor.qml" line="730"/>
         <source></source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../qml/ru.Mentor.qml" line="625"/>
