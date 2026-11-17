@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Задача #28 (MENTOR_DB_MOBILE, Android): синхронизация workingdata в assets APK.
+# (MENTOR_DB_MOBILE, Android): синхронизация workingdata в assets APK.
 # Вызывается шагом PRE_LINK из CMakeLists.txt; можно запускать и вручную:
 #   tools/sync_dbmobile_assets.sh [каталог_проекта]
 # Источник по умолчанию — workingdata проекта. Полный комплект документов хранится

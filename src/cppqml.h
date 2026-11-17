@@ -375,7 +375,7 @@ public	slots:
 
 private:
     //---настройки-в-реестре---//
-    //Задача #750. Хранилище настроек кроссплатформенное: Windows — реестр HKCU\Software\druidcat,
+    //Хранилище настроек кроссплатформенное: Windows — реестр HKCU\Software\druidcat,
     //macOS/iOS — plist, Linux — INI в ~/.config, Android — INI в каталоге приложения,
     //Аврора — файл в ~/.config/ru.druidcat/mentor (белый список песочницы приложения).
     QSettings* m_pSttReestr;//Объект настроек, вид хранилища выбирается по ОС в конструкторе.

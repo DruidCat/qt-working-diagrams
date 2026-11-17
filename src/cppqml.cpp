@@ -1,5 +1,5 @@
 ﻿#include "cppqml.h"
-#include "dcassets.h"//Задача #28: распаковка базы и документов из пакета (MENTOR_DB_MOBILE).
+#include "dcassets.h"//распаковка базы и документов из пакета (MENTOR_DB_MOBILE).
 
 #include <QDebug>
 #include <QDir>//Каталоги для пути файла настроек (Аврора).
@@ -14,10 +14,10 @@
 #include <QJniObject>
 #include <QJniEnvironment>
 #include <QtCore/qcoreapplication_platform.h>
-//////////////////////////////////////
-//---A N D R O I D   D O S T U P---//
-//////////////////////////////////////
-// Задача #27. На Android домашняя папка Проводника (DCFileDialog) берётся из
+/////////////////////////////////////
+//---A N D R O I D   Д О С Т У П---//
+/////////////////////////////////////
+// На Android домашняя папка Проводника (DCFileDialog) берётся из
 // standardLocations, а это песочница приложения, где документов пользователя нет.
 // Здесь домашней делается общая папка «Документы» устройства, доступ к которой
 // даёт системное разрешение «Доступ ко всем файлам» (MANAGE_EXTERNAL_STORAGE).
@@ -78,10 +78,10 @@ static void zaprosAndroidVneshniyDostup(bool blAppStraniza){//Открыть с�
 }
 #endif // Q_OS_ANDROID
 
-/////////////////////////////////////////
+///////////////////////////////////////////////////
 //---К Р О С С П Л А Т Ф О Р М А   Р Е Е С Т Р---//
-/////////////////////////////////////////
-//Задача #750. Единая пара имён для всех ОС: организация druidcat, приложение ru.druidcat.mentor.
+///////////////////////////////////////////////////
+//Единая пара имён для всех ОС: организация druidcat, приложение ru.druidcat.mentor.
 //Windows — реестр HKCU\Software\druidcat\ru.druidcat.mentor, macOS/iOS — plist в ~/Library/Preferences,
 //Linux (десктоп) — INI ~/.config/druidcat/ru.druidcat.mentor.conf, Android — INI в каталоге приложения.
 static const QString REESTR_ORG = QStringLiteral("druidcat");//Организация в хранилище настроек.
@@ -178,7 +178,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
 #endif
 
 #ifdef MENTOR_DB_MOBILE
-    //Задача #28. Сборка MENTOR_DB_MOBILE=ON: база druidcat.db и документы внутри
+    //Сборка MENTOR_DB_MOBILE=ON: база druidcat.db и документы внутри
     //установочного пакета. Рабочий каталог распаковывается из пакета в каталог
     //данных приложения (DCAssets::obnovitRabochieData); в QML режим администратора
     //при этом принудительно выключен — добавить/удалить/переименовать нельзя.
@@ -567,7 +567,6 @@ void DCCppQml::setStrSpisok(const QString& strSpisokNovi) {//Изменение 
 		m_strSpisok = strSpisokNovi;//Приравниваем.
     emit strSpisokChanged();//Излучаем сигнал об изменении аргумента. ТУТ этот сигнал. Не важно изменение.
 }
-
 bool DCCppQml::delStrSpisok(QString strSpisokKod){//Удалить Список по коду.
 /////////////////////////////////////
 //---У Д А Л И Т Ь   С П И С О К---//
@@ -706,7 +705,6 @@ void DCCppQml::ustSpisokSortDB(const QVariantList &jsonSpisok){//Установ�
 /////////////////////////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   О Т С О Р Т И Р О В А Н Ы Й   С П И С О К---//
 /////////////////////////////////////////////////////////////////////////
-
     if(!m_pDataSpisok->renSpisok(jsonSpisok))
         qdebug("Ошибка записи данных при сортировке в базу данных.");
 }
@@ -843,7 +841,6 @@ void DCCppQml::setStrElementOpisanie(const QString& strElementOpisanieNovi){//И
 		}
 	}
 }
-
 void DCCppQml::ustElementSortDB(const QVariantList &jsonElement){//Установить отсортированные элементы в БД
 /////////////////////////////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   О Т С О Р Т И Р О В А Н Ы Е   Э Л Е М Е Н Т Ы---//
@@ -1066,7 +1063,7 @@ void DCCppQml::setStrFileDialogPut(const QString& strFileDialogPutNovi){//Зап
     //strFileDialogPutNovi = sohranit; Задаёт текущую дерикторию.
     if(strFileDialogPutNovi == "start"){//Если это Старт, то...
 #ifdef Q_OS_ANDROID
-        //Задача #27: без доступа к хранилищу устройства Проводник покажет пустую папку,
+        //без доступа к хранилищу устройства Проводник покажет пустую папку,
         //поэтому открываем системную страницу «Доступ ко всем файлам» для нашего пакета.
         if(!blAndroidVneshniyDostup())//Если доступ ещё не выдан, то...
             zaprosAndroidVneshniyDostup(true);//Открыть страницу выдачи доступа.
@@ -1193,7 +1190,6 @@ bool DCCppQml::isPdfPoiskTri(const QString strPoisk){//В запросе три 
 ///////////////////////////////////////////////
 //---Т Р И   С И М В О Л А   И   Б О Л Е Е---//
 ///////////////////////////////////////////////
-
     QString strPoiskProvereni = m_pdcclass->udalitPustotu(strPoisk);
     return strPoiskProvereni.length() > 2 ? true : false;//Если больше двух символов, то истина, иначе ложь.
 }
@@ -1215,12 +1211,10 @@ void DCCppQml::setStrKatalogUrl(const QString &strImyaFaila){//Передаём 
     m_strKatalogUrl = rlPutImyaUrl.toString();//Переводим адресс Url в строку и приравниваем.
     emit strKatalogUrlChanged();//Излучаем сигнал в qml с путём+файл, который нужно открыть.
 }
-
 QString DCCppQml::polKatalogUrl(const QString &strImyaFaila){//Возвращаем путь+файл в Каталоге по Имени.
 /////////////////////////////////////////////////
 //---С О З Д А Ё М   П У Т Ь   К   Ф А Й Л У---//
 /////////////////////////////////////////////////
-
     QString strPutImyaFaila = QDir(m_pDataKatalog->polFileDialogPut()).filePath(strImyaFaila);
     QUrl rlPutImyaUrl = QUrl::fromUserInput(strPutImyaFaila);//Переводим в формат Url адреса.
     return rlPutImyaUrl.toString();//Переводим адресс Url в строку и возвращаем
@@ -1239,12 +1233,10 @@ void DCCppQml::copyKatalogStart(){//Начать копирование доку
     m_blKatalogStatus = true;//Сбрасываем статус на true.
     m_pDataKatalog->copyStart(m_strKatalogPut);//Начинаем создавать каталог.
 }
-
 void DCCppQml::copyKatalogStop(){//Остановить копирование документов в каталог.
  /////////////////////////////////////////////////////////
 //---С Т О П   С О З Д А Н И Я   К А Т А Л О Г А---//
 /////////////////////////////////////////////////////////
-
     m_pDataKatalog->copyStop();//Останавливаем создание каталога.
 }
 void DCCppQml::slotFileDialogCopy(bool blStatusCopy){//Обрабатываем статус скопированного документа из Проводн
@@ -1279,7 +1271,6 @@ void DCCppQml::slotKatalogCopy(bool blStatusCopy){//Обрабатываем с�
         }
     }
 }
-
 void DCCppQml::slotKatalogDocCopy(QString strKatalogDocCopy){//Слот обрабатывающий путь скопированного док.
 ///////////////////////////////////////////////////////////////////
 //---С Л О Т   С К О П И Р О В А Н Н О Г О   Д О К У М Е Н Т А---//
