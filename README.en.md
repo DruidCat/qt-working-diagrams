@@ -132,6 +132,7 @@ The project is compatible with:
 * GNU/Linux.
 * MacOS.
 * Android.
+* Aurora OS 5.2.
 * iOS.
 
 ## Tasks and bugs

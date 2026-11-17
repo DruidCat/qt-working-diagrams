@@ -132,6 +132,7 @@ qt-working-diagrams/
 * GNU/Linux.
 * MacOS.
 * Android.
+* Аврора 5.2.
 * iOS.
 
 ## Задачи и баги
