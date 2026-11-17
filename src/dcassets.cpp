@@ -15,7 +15,7 @@
 #include <android/asset_manager_jni.h>
 #endif // Q_OS_ANDROID
 
-#ifdef MENTOR_DB_MOBILE//Задача #28: механизм актуален только для сборок с базой в пакете.
+#ifdef MENTOR_DB_MOBILE//механизм актуален только для сборок с базой в пакете.
 
 //Файл-маркер версии бандла данных; пишет упаковщик (tools/sync_dbmobile_assets.sh,
 //adq_pack.py). Отличается от сохранённого — данные пересобираются с принудительной
@@ -34,9 +34,9 @@ static QString polWersiyuIzFaila(const QString& strFailPut){//Версия ба�
 }
 
 #ifdef Q_OS_ANDROID
-//////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////
 //---A N D R O I D :   A S S E T S   A P K---//
-//////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////
 static QString polWersiyuIzAsseta(AAssetManager* pMenedjerAssets){//Версия бандла из assets APK.
     QString strAssetPut = QStringLiteral("workingdata/") + slsImyaFailaVersii;
     AAsset* pAsset = AAssetManager_open(pMenedjerAssets, strAssetPut.toUtf8().constData(),
@@ -130,9 +130,9 @@ static bool sinhronizovatKatalog(const QString& strAssetPut, const QString& strF
     return blResult;
 }
 #else // !Q_OS_ANDROID
-/////////////////////////////////////////////////////////////////////////
-//---A V R O R A / D E S K T O P :   K A T A L O G---//
-/////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+//---A V R O R A / D E S K T O P :   К А Т А Л О Г---//
+///////////////////////////////////////////////////////
 //Каталог workingdata, упакованный в пакет: на Авроре installer переносит содержимое
 //RPM в зону /opt/app/<appid>/<ver> и оставляет ссылки /usr/...; путь /usr/share/...
 //работает и после релокации. MENTOR_BUNDLE_DIR задаётся сборкой для десктоп-тестов.
@@ -193,9 +193,9 @@ static bool sinhronizovatKatalogFailov(const QString& strIsthDir, const QString&
 #endif // MENTOR_DB_MOBILE
 
 QString DCAssets::polDataPut(const QString& strImyaKataloga){//Каталог данных приложения + подкаталог.
-//////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
 //---П У Т Ь   Д А Н Н Ы Х   П Р И Л О Ж Е Н И Я---//
-//////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////
 #ifdef Q_OS_ANDROID
     QString strDomPut = QDir::homePath();//На Android это приватный каталог files приложения.
 #else
@@ -211,9 +211,9 @@ QString DCAssets::polDataPut(const QString& strImyaKataloga){//Каталог д
 }
 
 bool DCAssets::obnovitRabochieData(const QString& strRabochiPut){//Синхронизация данных из пакета.
-///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 //---О Б Н О В И Т Ь   Р А Б О Ч И Е   Д А Н Н Ы Е---//
-///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
 #ifndef MENTOR_DB_MOBILE
     Q_UNUSED(strRabochiPut)//Классическая сборка: workingdata лежит на файловой системе.
     return true;

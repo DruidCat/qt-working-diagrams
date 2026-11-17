@@ -32,7 +32,7 @@ if(APPLE AND TARGET WrapOpenGL::WrapOpenGL)
         INTERFACE_LINK_LIBRARIES "${_ogl_libs}")
 endif()
 
-# ==== MENTOR_DB_MOBILE (задача #28): база druidcat.db и документы в установочном пакете ====
+# ==== MENTOR_DB_MOBILE: база druidcat.db и документы в установочном пакете ====
 # OFF — классический режим: workingdata лежит на файловой системе рядом с приложением.
 # ON  — данные упаковываются в пакет: Android — в assets APK (шаг синхронизации перед
 # линковкой, tools/sync_dbmobile_assets.sh), Аврора — в /usr/share/ru.druidcat.mentor/
@@ -254,7 +254,7 @@ if(ANDROID)
         QT_ANDROID_VERSION_CODE "${MENTOR_VERCODE}")
 endif()
 
-# ==== MENTOR_DB_MOBILE (задача #28): определения и упаковка данных в пакет ====
+# ==== MENTOR_DB_MOBILE: определения и упаковка данных в пакет ====
 if(MENTOR_DB_MOBILE)
     target_compile_definitions(${EXECUTABLE_NAME} PRIVATE MENTOR_DB_MOBILE)
     if(NOT CMAKE_CROSSCOMPILING)
