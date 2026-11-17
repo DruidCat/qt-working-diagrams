@@ -67,12 +67,26 @@ Build:
 1. Open the project in Qt Creator: `CMakeLists.txt` or `ru.Mentor.pro` -> Configure -> Build.
 2. Run `ru.Mentor.exe` from the build folder.
 
-### AltLinux
+### macOS 11 (Big Sur) and later
 
-Requirements: Qt 6 packages from the AltLinux repository, the list is in
-[Qt6_AltLinux.txt](Qt6_AltLinux.txt). Qt 5.15 notes are in [Qt5_AltLinux.txt](Qt5_AltLinux.txt).
+A prebuilt release is available in Releases: `ru.Mentor-<version>-macos.zip`
+(universal: Intel and Apple Silicon). Unpack the archive and move `ru.Mentor.app`
+to the Applications folder. On first launch open the app via right click -> Open:
+the build is signed ad-hoc and is not registered with Apple.
 
-Build: the same CMake commands as in the Ubuntu section.
+Building from sources:
+
+Requirements:
+- Qt 6 from the Qt Online Installer (https://www.qt.io/download).
+  Components: Qt 6.x — Core, Quick, Quick Controls 2, SQL (SQLite driver), Qt PDF.
+- Xcode Command Line Tools (`xcode-select --install`), CMake 3.14+ or Qt Creator.
+- macOS 11 and later are supported (the build is verified with Qt 6.7.3).
+
+```bash
+cmake -S . -B build
+cmake --build build -j$(sysctl -n hw.ncpu)
+open build/ru.Mentor.app
+```
 
 ### Android
 
@@ -110,6 +124,7 @@ qt-working-diagrams/
 ├── images/                 # Interface images
 ├── workingdata/            # Database and documents
 ├── android/                # Android manifest and resources
+├── tools/                  # Helper scripts (icon regeneration, data synchronization)
 ├── CMakeLists.txt          # Project structure for the cmake build system
 ├── ru.Mentor.pro           # Project structure for the qmake build system
 └── qml.qrc                 # Project resource table
@@ -130,7 +145,7 @@ The project is compatible with:
 
 * Windows 8, 10, 11.
 * GNU/Linux.
-* MacOS.
+* macOS 11 (Big Sur) and later.
 * Android.
 * Aurora OS 5.2.
 * iOS.
@@ -171,3 +186,10 @@ DruidCat
 ## Этот документ на русском
 
 - [README.md](README.md)
+
+## Support the project
+
+If you found the project useful, you can support its development by a bank transfer via the QR
+code below (SBP). This is entirely optional and in no way expected — but it genuinely helps.
+
+![Support the project via QR code (SBP)](images/SberSBP.png)

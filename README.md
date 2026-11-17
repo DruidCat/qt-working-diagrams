@@ -67,12 +67,26 @@ cmake --build build -j$(nproc)
 1. Открыть проект в Qt Creator: `CMakeLists.txt` или `ru.Mentor.pro` -> Configure -> Build.
 2. Запустить `ru.Mentor.exe` из каталога сборки.
 
-### AltLinux
+### macOS 11 (Big Sur) и новее
 
-Требования: пакеты Qt 6 из репозитория AltLinux, список — в файле
-[Qt6_AltLinux.txt](Qt6_AltLinux.txt). Заметки по Qt 5.15 — в [Qt5_AltLinux.txt](Qt5_AltLinux.txt).
+Готовая сборка — в релизах: `ru.Mentor-<версия>-macos.zip` (universal: Intel и Apple Silicon).
+Распакуйте архив и переместите `ru.Mentor.app` в папку «Программы». При первом запуске
+откройте приложение через правый клик -> Открыть: сборка подписана ad-hoc и не зарегистрирована
+в Apple.
 
-Сборка: те же команды CMake, что в разделе Ubuntu.
+Сборка из исходников:
+
+Требования:
+- Qt 6 из Qt Online Installer (https://www.qt.io/download).
+  Компоненты: Qt 6.x — Core, Quick, Quick Controls 2, SQL (драйвер SQLite), Qt PDF.
+- Command Line Tools для Xcode (`xcode-select --install`), CMake 3.14+ или Qt Creator.
+- Поддерживаются macOS 11 и новее (сборка проверена на Qt 6.7.3).
+
+```bash
+cmake -S . -B build
+cmake --build build -j$(sysctl -n hw.ncpu)
+open build/ru.Mentor.app
+```
 
 ### Android
 
@@ -110,6 +124,7 @@ qt-working-diagrams/
 ├── images/                 # Изображения интерфейса
 ├── workingdata/            # База данных и документы
 ├── android/                # Манифест и ресурсы для сборки под Android
+├── tools/                  # Вспомогательные скрипты (перегенерация иконок, синхронизация данных)
 ├── CMakeLists.txt          # Структура проекта для системы сборки cmake
 ├── ru.Mentor.pro           # Структура проекта для системы сборки qmake
 └── qml.qrc                 # Таблица ресурсов проекта
@@ -130,7 +145,7 @@ qt-working-diagrams/
 
 * Windows 8, 10, 11.
 * GNU/Linux.
-* MacOS.
+* macOS 11 (Big Sur) и новее.
 * Android.
 * Аврора 5.2.
 * iOS.
@@ -169,3 +184,10 @@ DruidCat
 ## This document in English
 
 - [README.en.md](README.en.md)
+
+## Поддержка проекта
+
+Если проект оказался полезным, вы можете поддержать его развитие переводом по QR-коду (СБП).
+Это добровольно и совсем не обязательно — но заметно помогает.
+
+![Поддержка проекта QR-кодом (СБП)](images/SberSBP.png)
