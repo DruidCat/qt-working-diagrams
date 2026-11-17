@@ -4,6 +4,9 @@ import DCMethods 1.0//Импортируем методы написанные �
 //StrMenu.qml - Страница отображающая Меню.
 Item {
     id: root
+    	property string strYazik: "ru"//Задача #773: язык интерфейса ("ru"/"en"), приходит с главной.
+    	//Задача #773: здесь пишется настройка языка: cppqml.strYazik = "en" или "ru" (реестр).
+
     //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
