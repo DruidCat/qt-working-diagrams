@@ -128,7 +128,7 @@ qt-working-diagrams/
 
 Проект совместим с:
 
-* Windows 7, 8, 10, 11.
+* Windows 8, 10, 11.
 * GNU/Linux.
 * MacOS.
 * Android.

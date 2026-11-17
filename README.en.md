@@ -128,7 +128,7 @@ qt-working-diagrams/
 
 The project is compatible with:
 
-* Windows 7, 8, 10, 11.
+* Windows 8, 10, 11.
 * GNU/Linux.
 * MacOS.
 * Android.
