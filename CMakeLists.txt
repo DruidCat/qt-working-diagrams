@@ -19,6 +19,19 @@ set(RES_FILES "${PROJECT_SOURCE_DIR}/icons/ico/ru.Mentor.rc")
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 Sql Pdf PdfQuick)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick QuickControls2 Sql Pdf PdfQuick)
 
+# Qt 6.7's FindWrapOpenGL.cmake links against AGL: it either finds a stale
+# AGL.framework stub path in the SDK (current ld rejects it: "framework 'AGL'
+# not found") or hardcodes -framework AGL. AGL was removed from macOS 10.14
+# and is used by neither the app nor the Qt frameworks - strip it from the
+# WrapOpenGL::WrapOpenGL interface target right after Qt is found.
+if(APPLE AND TARGET WrapOpenGL::WrapOpenGL)
+    get_target_property(_ogl_libs WrapOpenGL::WrapOpenGL INTERFACE_LINK_LIBRARIES)
+    list(REMOVE_ITEM _ogl_libs "-framework AGL")
+    list(FILTER _ogl_libs EXCLUDE REGEX "AGL[.]framework")
+    set_property(TARGET WrapOpenGL::WrapOpenGL PROPERTY
+        INTERFACE_LINK_LIBRARIES "${_ogl_libs}")
+endif()
+
 # ==== MENTOR_DB_MOBILE (задача #28): база druidcat.db и документы в установочном пакете ====
 # OFF — классический режим: workingdata лежит на файловой системе рядом с приложением.
 # ON  — данные упаковываются в пакет: Android — в assets APK (шаг синхронизации перед
