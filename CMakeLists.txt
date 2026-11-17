@@ -159,6 +159,8 @@ find_package(Git QUIET)
 set(APP_VERSION "v0.0.0")
 set(APP_SEMVER "0.0.0")
 set(GIT_SHA "")
+set(APP_VERSION_SEED "" CACHE STRING "x.y.z версия-сид, если git недоступен")
+
 if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 	# Короткий SHA
 	execute_process(
@@ -185,16 +187,31 @@ if(GIT_FOUND AND EXISTS "${CMAKE_SOURCE_DIR}/.git")
 		# Semver — старший сегмент тега (как в ru.Mentor.pro): v0.33.3[-...]- > 0.33.3.
 		string(REGEX REPLACE "^v([0-9]+\\.[0-9]+\\.[0-9]+).*$" "\\1" APP_SEMVER "${GIT_DESCRIBE}")
 	else()
-		# Нет подходящих тегов — фоллбек
-		# Было: v0.0.0-<count>-g<sha> → станет: 0.0.0-<count>-g<sha>
-		if(NOT BUILD_NUM)
-			set(BUILD_NUM 0)
-		endif()
-		if(GIT_SHA)
-			set(APP_VERSION "0.0.0-${BUILD_NUM}-g${GIT_SHA}")
+		# Сид версии для песочниц сборки без git (sb2/пакет chroot на Авроре):
+		# qt-cmake -DAPP_VERSION_SEED=1.1.1 (значение берут из git describe
+		# вне песочницы). Без сида включается фоллбек 0.0.0-<BUILD_NUM>.
+		if(APP_VERSION_SEED MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
+			set(APP_VERSION "${APP_VERSION_SEED}")
+			set(APP_SEMVER "${APP_VERSION_SEED}")
 		else()
-			set(APP_VERSION "0.0.0-${BUILD_NUM}")
+			# Нет подходящих тегов — фоллбек
+			# Было: v0.0.0-<count>-g<sha> → станет: 0.0.0-<count>-g<sha>
+			if(NOT BUILD_NUM)
+				set(BUILD_NUM 0)
+			endif()
+			if(GIT_SHA)
+				set(APP_VERSION "0.0.0-${BUILD_NUM}-g${GIT_SHA}")
+			else()
+				set(APP_VERSION "0.0.0-${BUILD_NUM}")
+			endif()
 		endif()
+	endif()
+else()
+	# Песочница сборки вообще без git (sb2 на Авроре): сработал бы только сид,
+	# иначе в бинарник ушёл бы стартовый фоллбек v0.0.0.
+	if(APP_VERSION_SEED MATCHES "^[0-9]+\\.[0-9]+\\.[0-9]+$")
+		set(APP_VERSION "${APP_VERSION_SEED}")
+		set(APP_SEMVER "${APP_VERSION_SEED}")
 	endif()
 endif()
 # Прокидываем в код. ДОЛЖНО стоять после add_executable(...)

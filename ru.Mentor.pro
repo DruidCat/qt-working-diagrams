@@ -54,10 +54,17 @@ APP_SEMVER = 0.0.0
     # Semver — старший сегмент тега: v0.33.3[-N-gsha][-dirty] -> 0.33.3.
     APP_SEMVER = $$replace(GIT_DESCRIBE, ^v([0-9]+\.[0-9]+\.[0-9]+).*, \1)
 } else {
-    # Нет подходящих тегов — фоллбек 0.0.0-<BUILD_NUM>-g<sha>, как в CMake.
-    isEmpty(BUILD_NUM): BUILD_NUM = 0
-    !isEmpty(GIT_SHA): APP_VERSION = 0.0.0-$$BUILD_NUM-g$$GIT_SHA
-    else: APP_VERSION = 0.0.0-$$BUILD_NUM
+    isEmpty(APP_VERSION_SEED) {
+        # Нет подходящих тегов — фоллбек 0.0.0-<BUILD_NUM>-g<sha>, как в CMake.
+        isEmpty(BUILD_NUM): BUILD_NUM = 0
+        !isEmpty(GIT_SHA): APP_VERSION = 0.0.0-$$BUILD_NUM-g$$GIT_SHA
+        else: APP_VERSION = 0.0.0-$$BUILD_NUM
+    } else {
+        # Сид версии для песочниц без git (sb2 на Авроре), паритет с CMake:
+        # qmake APP_VERSION_SEED=1.1.1 (значение берут из git describe снаружи).
+        APP_VERSION = $$APP_VERSION_SEED
+        APP_SEMVER = $$APP_VERSION_SEED
+    }
 }
 
 # Прокидываем версию в код (target_compile_definitions в CMakeLists.txt).
