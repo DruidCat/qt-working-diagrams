@@ -113,3 +113,12 @@ Thumbs.db
 
 
 build-android/
+
+# ==== Задача #28: данные сборки MENTOR_DB_MOBILE в git не попадают ====
+# База druidcat.db и PDF-документы из неё (NNNNNNNNN.pdf) хранятся только
+# у упаковщика; в репозитории остаются лишь plan.pdf и base.pdf.
+workingdata/*.db
+workingdata/[0-9]*.pdf
+workingdata/bundleversion.txt
+# Рабочие копии Android-пакета (android/ с манифестом при этом в репозитории).
+/android/assets/

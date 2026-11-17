@@ -41,6 +41,13 @@ win32: RC_FILE = icons/ico/ru.Mentor.rc
 DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000
 
+# ==== MENTOR_DB_MOBILE (задача #28): паритет с option в CMakeLists.txt ====
+# qmake "CONFIG+=dbmobile" включает режим: база druidcat.db и документы внутри пакета,
+# при запуске DCAssets распаковывает их в каталог данных приложения, isAdmin=false в QML.
+dbmobile: DEFINES += MENTOR_DB_MOBILE
+dbmobile:android: LIBS += -landroid # AAssetManager для распаковки assets с workingdata
+dbmobile:!android: DEFINES += MENTOR_BUNDLE_DIR=\\\"$$PWD/workingdata\\\"
+
 # === Автоверсия приложения из git (аналог execute_process в CMakeLists.txt) ===
 # Считается при запуске qmake (аналог configure-шага CMake).
 GIT_SHA = $$system(git rev-parse --short=7 HEAD 2> /dev/null)
@@ -80,6 +87,7 @@ android {
 
 SOURCES += \
     src/copydannie.cpp \
+    src/dcassets.cpp \
     src/copykatalog.cpp \
     src/copyplan.cpp \
     src/cppqml.cpp \
@@ -99,6 +107,7 @@ SOURCES += \
 
 HEADERS += \
     src/copydannie.h \
+    src/dcassets.h \
     src/copykatalog.h \
     src/copyplan.h \
     src/cppqml.h \

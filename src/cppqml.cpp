@@ -1,4 +1,5 @@
 ﻿#include "cppqml.h"
+#include "dcassets.h"//Задача #28: распаковка базы и документов из пакета (MENTOR_DB_MOBILE).
 
 #include <QDebug>
 #include <QDir>//Каталоги для пути файла настроек (Аврора).
@@ -170,6 +171,15 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
         QDir().mkpath(m_strDomPut);
 #endif
 
+#ifdef MENTOR_DB_MOBILE
+    //Задача #28. Сборка MENTOR_DB_MOBILE=ON: база druidcat.db и документы внутри
+    //установочного пакета. Рабочий каталог распаковывается из пакета в каталог
+    //данных приложения (DCAssets::obnovitRabochieData); в QML режим администратора
+    //при этом принудительно выключен — добавить/удалить/переименовать нельзя.
+    QString strMentorPut = DCAssets::polDataPut(strKatalogDB);
+    DCAssets::obnovitRabochieData(strMentorPut);
+    strKatalogDebug = QDir(strMentorPut).filePath(strKatalogDebug);//Логи рядом с данными.
+#else
     QDir odrMentor = QDir::current();//Объект каталога приложения.
     if(!odrMentor.cd(strKatalogDB)){//Если перейти к это папке не получается, то...
         if(odrMentor.mkdir(strKatalogDB)){//Создаём начальную дерикторию хранения данных
@@ -181,6 +191,7 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
             qWarning()<<tr("DataDannie::DataDannie: ошибка создания папки хранения документов.");
     }
     QString strMentorPut = odrMentor.path();//Присваеваем переменной каталог приложения.
+#endif // MENTOR_DB_MOBILE
 
     strImyaDB = QDir(strMentorPut).filePath(strImyaDB);//каталог + файл
     strImyaDBData  = QDir(strMentorPut).filePath(strImyaDBData);//каталог + файл.

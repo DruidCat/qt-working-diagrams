@@ -53,6 +53,13 @@ int main(int argc, char *argv[])
     //Qt.platform.os на Авроре возвращает "linux", отличить его от десктопа нельзя, поэтому проверка здесь.
     pkornevoiKontekst->setContextProperty("osAurora",
             QSysInfo::productType().compare(QStringLiteral("auroraos"), Qt::CaseInsensitive) == 0);
+    //Задача #28: сборка MENTOR_DB_MOBILE=ON (база и документы в пакете). QML по этому
+    //флагу принудительно выключает РЕЖИМ АДМИНИСТРАТОРА (isAdmin), правка базы запрещена.
+#ifdef MENTOR_DB_MOBILE
+    pkornevoiKontekst->setContextProperty("dbMobileMode", true);
+#else
+    pkornevoiKontekst->setContextProperty("dbMobileMode", false);
+#endif
     engine.load(url);
     return app.exec();
 }

@@ -19,6 +19,15 @@ set(RES_FILES "${PROJECT_SOURCE_DIR}/icons/ico/ru.Mentor.rc")
 find_package(QT NAMES Qt6 REQUIRED COMPONENTS Core Quick QuickControls2 Sql Pdf PdfQuick)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Quick QuickControls2 Sql Pdf PdfQuick)
 
+# ==== MENTOR_DB_MOBILE (задача #28): база druidcat.db и документы в установочном пакете ====
+# OFF — классический режим: workingdata лежит на файловой системе рядом с приложением.
+# ON  — данные упаковываются в пакет: Android — в assets APK (шаг синхронизации перед
+# линковкой, tools/sync_dbmobile_assets.sh), Аврора — в /usr/share/ru.druidcat.mentor/
+# workingdata состава RPM (adq_pack.py при MENTOR_DB_MOBILE=1). При первом запуске
+# DCAssets распаковывает каталог в данные приложения; режим администратора в QML
+# принудительно выключен (isAdmin=false): править базу в таком пакете нельзя.
+option(MENTOR_DB_MOBILE "База данных и документы внутри установочного пакета" OFF)
+
 # Создаём переменную PROJECT_SOURCES и добавляем в неё файлы *.cpp и *.h
 set(PROJECT_SOURCES
         src/copydannie.h
@@ -43,6 +52,8 @@ set(PROJECT_SOURCES
         src/datatitul.cpp
         src/dcclass.h
         src/dcclass.cpp
+        src/dcassets.h
+        src/dcassets.cpp
         src/dcdb.h
         src/dcdb.cpp
         src/dcdbdata.h
@@ -228,4 +239,27 @@ if(ANDROID)
     set_target_properties(${EXECUTABLE_NAME} PROPERTIES
         QT_ANDROID_VERSION_NAME "${MENTOR_SEMVER}"
         QT_ANDROID_VERSION_CODE "${MENTOR_VERCODE}")
+endif()
+
+# ==== MENTOR_DB_MOBILE (задача #28): определения и упаковка данных в пакет ====
+if(MENTOR_DB_MOBILE)
+    target_compile_definitions(${EXECUTABLE_NAME} PRIVATE MENTOR_DB_MOBILE)
+    if(NOT CMAKE_CROSSCOMPILING)
+        # Десктопная сборка: бандл берётся прямо из workingdata проекта — так режим
+        # можно проверять без сборки APK/RPM. Кросс-сборки (Android/Аврора) путь не
+        # получают: там бандл ищется в assets APK / каталоге RPM (см. DCAssets).
+        target_compile_definitions(${EXECUTABLE_NAME} PRIVATE
+            MENTOR_BUNDLE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/workingdata")
+    endif()
+    if(ANDROID)
+        target_link_libraries(${EXECUTABLE_NAME} PRIVATE android)# AAssetManager для распаковки assets
+        # Перед линковкой синхронизируем workingdata в android/assets (инкрементально,
+        # rsync копирует только изменения). MENTOR_WORKINGDATA — источник данных вне
+        # репозитория (полный комплект документов), по умолчанию workingdata проекта.
+        add_custom_command(TARGET ${EXECUTABLE_NAME} PRE_LINK
+            COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/tools/sync_dbmobile_assets.sh
+                    ${CMAKE_CURRENT_SOURCE_DIR}
+            COMMENT "MENTOR_DB_MOBILE: обновление workingdata в assets APK"
+            VERBATIM)
+    endif()
 endif()

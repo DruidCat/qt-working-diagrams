@@ -9,7 +9,10 @@ ApplicationWindow {
     ///////////////////////////////////////////////////////////////////
     //---О С Н О В Н Ы Е   Н А С Т Р О Й К И   П Р И Л О Ж Е Н И Я---//
     //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv//
-    readonly property bool isAdmin: true//true - РЕЖИМ АДМИНИСТРАТОРА, false - РЕЖИМ РАБОТНИКА.
+    //Задача #28: в сборке MENTOR_DB_MOBILE=ON (база и документы в пакете) флаг
+    //dbMobileMode из main.cpp равен true — тогда только РЕЖИМ РАБОТНИКА:
+    //добавлять/удалять/переименовывать данные в druidcat.db нельзя.
+    readonly property bool isAdmin: dbMobileMode ? false : true//РЕЖИМ РАБОТНИКА в бандл-сборке.
     readonly property color clrKnopok: "#ee732d"//Корпаративный оранжевый
     readonly property color clrFona: "#5a6673"//Серый цвет более мягкий,подходящий под оранжевый корпаративный
     readonly property color clrFaila: "yellow"
