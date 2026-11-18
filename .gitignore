@@ -126,3 +126,4 @@ workingdata/bundleversion.txt
 /android/assets/
 # Лог установщика Qt (aqt).
 aqtinstall.log
+/build-android-arm64/
