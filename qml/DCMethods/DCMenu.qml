@@ -148,15 +148,19 @@ Item {
 					lsvMenu.model = JSMenu.vrMenuDannie();//Перегружаем модель ListView с новыми данными.
                 else{
                     if(imyaMenu == "filedialog")
-                        lsvMenu.model = JSMenu.vrMenuFileDialog();//Перегружаем модель ListView с новыми данными
+                        //Перегружаем модель ListView с новыми данными
+                        lsvMenu.model = JSMenu.vrMenuFileDialog();
                     else {
                         if(imyaMenu == "animaciya")
-                            lsvMenu.model = JSMenu.vrMenuAnimaciya();//Перегружаем модель ListView с новыми дан.
+                            //Перегружаем модель ListView с новыми дан.
+                            lsvMenu.model = JSMenu.vrMenuAnimaciya();
                         else{
                             if(imyaMenu == "jurnal")
-                                lsvMenu.model = JSMenu.vrMenuJurnal();//Перегружаем модель ListView с новыми дан
+                                //Перегружаем модель ListView с новыми дан
+                                lsvMenu.model = JSMenu.vrMenuJurnal();
                             else
-                                lsvMenu.model = JSMenu.vrMenuVihod();//Перегружаем модель ListView с новыми дан
+                                //Перегружаем модель ListView с новыми дан
+                                lsvMenu.model = JSMenu.vrMenuVihod();
                         }
                     }
                 }
