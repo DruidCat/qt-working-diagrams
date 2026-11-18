@@ -5,10 +5,7 @@
 #include <QTime>
 #include <QTimer>
 #include <QSettings>
-#include <QPointer>//Задача #773: безопасный указатель на движок QML.
-
-class QQmlEngine;//Задача #773: retranslate() при смене языка интерфейса.
-class QTranslator;//Задача #773: переводчик английского интерфейса.
+#include <QPointer>//безопасный указатель на движок QML.
 
 #include "dcdb.h"// IWYU pragma: keep //Подавляет предупреждение от clang.
 #include "dcclass.h"
@@ -22,6 +19,8 @@ class QTranslator;//Задача #773: переводчик английског
 #include "dcpdfpoisk.h"
 #include "dclogger.h"
 
+class QQmlEngine;//retranslate() при смене языка интерфейса.
+class QTranslator;//переводчик английского интерфейса.
 class DCCppQml : public QObject {
     Q_OBJECT
     Q_PROPERTY(DCPdfPoisk* pdfPoisk READ pdfPoisk CONSTANT)
@@ -70,8 +69,7 @@ class DCCppQml : public QObject {
                     READ untNastroikiMaxLength
                     NOTIFY untNastroikiMaxLengthChanged FINAL)
 
-    //Задача #773: язык интерфейса ("ru"/"en"), хранится в реестре /Nastroiki/yazik.
-    Q_PROPERTY(QString strYazik
+    Q_PROPERTY(QString strYazik//язык интерфейса ("ru"/"en"), хранится в реестре /Nastroiki/yazik.
                     READ polStrYazik
                     WRITE ustStrYazik
                     NOTIFY strYazikChanged FINAL)
@@ -214,18 +212,17 @@ public:
     void		setBlAppRedaktor(const bool& blAppRedaktor);//Изменяем редактор Ментора.
     uint 		untShrift() const { return m_untShrift; }//Возвращаем размер шрифта.
     void		setUntShrift(const uint& untShrift);//Изменяем размер шрифта.
-    QString  strKatalogPut() const { return m_strKatalogPut; }//Возвращаем путь сохранения каталога.
+    QString  	strKatalogPut() const { return m_strKatalogPut; }//Возвращаем путь сохранения каталога.
 
-    //---Задача #773: язык интерфейса---//
-    QString polStrYazik() const { return m_strYazik; }//Возвращаем язык интерфейса ("ru"/"en").
-    void ustStrYazik(const QString& strYazik);//Выставляем язык интерфейса, пишем в реестр.
-    void ustQmlEngine(QQmlEngine* pQmlEngine);//Сохраняем движок QML для retranslate() при смене языка.
     void		setStrKatalogPut(const QString& strKatalogPut);//Изменяем путь сохранения каталога.
     uint 		untSidebarWidth() const { return m_untSidebarWidth; }//Возвращаем размер боковой панели.
     void		setUntSidebarWidth(const uint& untSidebarWidth);//Изменяем размер боковой панели.
     uint 		untInstrukciyaWidth() const { return m_untInstrukciyaWidth; }//Возвращаем размер боковой панел
     void		setUntInstrukciyaWidth(const uint& untInstrukciyaWidth);//Изменяем размер боковой панели.
     uint 		untNastroikiMaxLength() const { return m_untNastroikiMaxLength; }//Макс длина строки текста
+    QString 	polStrYazik() const { return m_strYazik; }//Возвращаем язык интерфейса ("ru"/"en").
+    void 		ustStrYazik(const QString& strYazik);//Выставляем язык интерфейса, пишем в реестр.
+    void 		ustQmlEngine(QQmlEngine* pQmlEngine);//Сохраняем движок QML для retranslate() при смене языка.
 
     QString		strTitul();//Получить имя Титула.
     void		setStrTitul(const QString& strTitulNovi);//Изменение имени Титула.
@@ -324,10 +321,10 @@ signals:
     void blAppRedaktorChanged();//Сигнал о том, что флаг Редактора поменялся.
     void untShriftChanged();//Сигнал о том, что размер шрифта поменялся.
     void strKatalogPutChanged();//Сигнал о том, что путь размещения каталога изменён.
-    void strYazikChanged();//Задача #773: сигнал о том, что язык интерфейса изменился.
     void untSidebarWidthChanged();//Сигнал о том, что ширина боковой панели поменялась.
     void untInstrukciyaWidthChanged();//Сигнал о том, что ширина боковой панели инструкции поменялась.
     void untNastroikiMaxLengthChanged();//Сигнал о том, что максимальная длина текста изменилась.
+    void strYazikChanged();//Сигнал о том, что язык интерфейса изменился.
 
     void strTitulChanged();//Сигнал о том, что имя Титула изменилось.
     void strTitulOpisanieChanged();//Сигнал, что описание Титула изменилось.
@@ -381,11 +378,7 @@ private:
     QSettings* m_pSttReestr;//Объект настроек, вид хранилища выбирается по ОС в конструкторе.
     void ustReestr();//Запись настроек программы
     void polReestr();//Чтение настроек программы
-    void privestPerevodchik();//Задача #773: установка/снятие QTranslator по strYazik.
-
-    QString m_strYazik;//Задача #773: язык интерфейса ("ru"/"en") из реестра /Nastroiki/yazik.
-    QTranslator* m_pPerevodchik;//Задача #773: переводчик английского, nullptr для русского.
-    QPointer<QQmlEngine> m_pQmlEngine;//Задача #773: движок QML, retranslate() при смене языка.
+    void privestPerevodchik();//Установка/снятие QTranslator по strYazik.
 
     QString	m_strDomPut;//Путь который будет хранить домашнюю деррикторию приложения.
 
@@ -400,6 +393,8 @@ private:
     uint 	m_untSidebarWidth;//Ширина боковой панели DCPdfSidebar.qml
     uint 	m_untInstrukciyaWidth;//Ширина боковой панели StrInstrukciya.qml
     uint	m_untNastroikiMaxLength;//Максимальная длина строки текста в Свойстве Q_PROPERTY
+    QString m_strYazik;//язык интерфейса ("ru"/"en") из реестра /Nastroiki/yazik.
+
 
     QString m_strTitul;//аргумент элемента имени Титула в Свойстве Q_PROPERTY
     QString m_strTitulOpisanie;//аргумент описания титула в Свойстве Q_PROPERTY
@@ -449,6 +444,8 @@ private:
     QTimer*			m_pTimerDebug = nullptr;//Указатель на таймер Отладчика.
     uint 			m_untDebugSec;//Счётчик секунд для таймера отладки.
     DCClass* 		m_pdcclass = nullptr;//Указатель на класс часто используемых методов.
-    DCLogger* m_pdclogger = nullptr;//Указатель на поток записи логов в файл.
+    DCLogger* 		m_pdclogger = nullptr;//Указатель на поток записи логов в файл.
+    QTranslator* 	m_pPerevodchik;//переводчик английского, nullptr для русского.
+    QPointer<QQmlEngine> 	m_pQmlEngine;//движок QML, retranslate() при смене языка.
 };
 #endif // CPPQML_H

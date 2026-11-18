@@ -23,7 +23,6 @@ ApplicationWindow {
     property bool pdfMentor: isAdmin ? true : false//true - включить/false - Отключить pdf просмоторщик.
     property bool appRedaktor: isAdmin ? true : false;//true - включить/false - Отключить Редактор приложения.
     property int shrift: 2;//1 - маленький, 2 - средний, 3 - большой
-    property string strYazik: cppqml.strYazik//Задача #773: язык интерфейса из реестра ("ru"/"en").
     property int ntWidth: 2*shrift
     property int ntCoff: 8
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
@@ -137,7 +136,6 @@ ApplicationWindow {
             textZagolovok: qsTr("МЕНЮ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrMenu {
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
 				id: tmMenu
 				ntWidth: pgStrMenu.ntWidth; ntCoff: pgStrMenu.ntCoff
 				clrTexta: pgStrMenu.clrTexta; clrFona: pgStrMenu.clrRabOblasti
@@ -211,7 +209,6 @@ ApplicationWindow {
             textZagolovok: qsTr("АНИМАЦИЯ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrAnimaciya {
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
                 id: tmAnimaciya
                 ntWidth: pgStrAnimaciya.ntWidth; ntCoff: pgStrAnimaciya.ntCoff
                 clrTexta: pgStrAnimaciya.clrTexta; clrFona: pgStrAnimaciya.clrRabOblasti
@@ -249,7 +246,6 @@ ApplicationWindow {
             textZagolovok: qsTr("ЖУРНАЛ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrJurnal{
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
                 id: tmJurnal
                 ntWidth: pgStrJurnal.ntWidth; ntCoff: pgStrJurnal.ntCoff
                 clrTexta: pgStrJurnal.clrTexta; clrFona: pgStrJurnal.clrRabOblasti;
@@ -287,7 +283,6 @@ ApplicationWindow {
             //textZagolovok: qsTr("О Qt")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrInstrukciya {
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
                 id: tmStrInstrukciya
                 ntWidth: pgStrInstrukciya.ntWidth; ntCoff: pgStrInstrukciya.ntCoff
                 clrTexta: pgStrInstrukciya.clrTexta; clrFona: pgStrInstrukciya.clrRabOblasti
@@ -323,7 +318,6 @@ ApplicationWindow {
             textZagolovok: qsTr("СОЗДАНИЕ КАТАЛОГА ДОКУМЕНТОВ")
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrKatalog {
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
                 id: tmKatalog//Идентификатор шаблона для аппаратной кнопки Назад Android.
                 ntWidth: pgStrKatalog.ntWidth; ntCoff: pgStrKatalog.ntCoff
                 clrTexta: pgStrKatalog.clrTexta; clrFona: pgStrKatalog.clrRabOblasti
@@ -381,7 +375,6 @@ ApplicationWindow {
             textZagolovok: cppqml.strTitul
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrSpisok {
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
                 id: tmSpisok
                 ntWidth: pgStrSpisok.ntWidth; ntCoff: pgStrSpisok.ntCoff
                 clrTexta: pgStrSpisok.clrTexta; clrFona: pgStrSpisok.clrRabOblasti
@@ -430,7 +423,6 @@ ApplicationWindow {
             clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrElement {
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
 				id: tmElement
 				ntWidth: pgStrElement.ntWidth; ntCoff: pgStrElement.ntCoff
 				clrTexta: pgStrElement.clrTexta; clrFona: pgStrElement.clrRabOblasti
@@ -481,7 +473,6 @@ ApplicationWindow {
             clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrDannie {//Блок управления Данными, чтоб разгрузить Main.qml
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
                 id: tmDannie//Идентификатор шаблона для аппаратной кнопки Назад Android.
 				ntWidth: pgStrDannie.ntWidth; ntCoff: pgStrDannie.ntCoff
 				clrTexta: pgStrDannie.clrTexta; clrFona: pgStrDannie.clrRabOblasti
@@ -543,7 +534,6 @@ ApplicationWindow {
             clrFona: root.clrFona; clrTexta: root.clrKnopok; clrRabOblasti: root.clrStranic
             zagolovokLevi: 3.7; zagolovokPravi: 3.7; toolbarLevi: 4.1; toolbarPravi: 5
             StrPdf {
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
 				id: tmPdf
 				ntWidth: pgStrPdf.ntWidth; ntCoff: pgStrPdf.ntCoff
 				clrTexta: pgStrPdf.clrTexta; clrFona: pgStrPdf.clrRabOblasti; clrMenuFon: pgStrPdf.clrFona
@@ -585,7 +575,6 @@ ApplicationWindow {
             clrFaila: root.clrFaila; clrRabOblasti: root.clrStranic
             zagolovokLevi: 1.3; zagolovokPravi: 1.3; toolbarLevi: 1.3; toolbarPravi: 1.3
             StrFileDialog{//Блок Файлового Диалога.
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
                 id: tmFileDialog
                 ntWidth: pgStrFileDialog.ntWidth; ntCoff: pgStrFileDialog.ntCoff
                 clrTexta: pgStrFileDialog.clrTexta; clrFona: pgStrFileDialog.clrRabOblasti
@@ -691,7 +680,6 @@ ApplicationWindow {
                 }
             }
             StrOpisanie {
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
 				id: tmOpisanie
 				ntWidth: pgStrOpisanie.ntWidth; ntCoff: pgStrOpisanie.ntCoff
 				clrTexta: pgStrOpisanie.clrTexta; clrFona: pgStrOpisanie.clrRabOblasti
@@ -754,7 +742,6 @@ ApplicationWindow {
             textZagolovok: qsTr("ПЛАН")
             zagolovokLevi: 1.3; zagolovokPravi: 2.6; toolbarLevi: 1.3; toolbarPravi: 4.5
             StrPlan {
-                strYazik: root.strYazik//Задача #773: язык интерфейса страницы.
                 id: tmPlan
                 ntWidth: pgStrPlan.ntWidth; ntCoff: pgStrPlan.ntCoff
                 clrTexta: pgStrPlan.clrTexta; clrFona: pgStrPlan.clrRabOblasti

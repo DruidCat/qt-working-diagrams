@@ -4,9 +4,6 @@ import DCMethods 1.0//Импортируем методы написанные �
 //StrMenu.qml - Страница отображающая Меню.
 Item {
     id: root
-    	property string strYazik: "ru"//Задача #773: язык интерфейса ("ru"/"en"), приходит с главной.
-    	//Задача #773: здесь пишется настройка языка: cppqml.strYazik = "en" или "ru" (реестр).
-
     //Свойства.
     property int ntWidth: 2
     property int ntCoff: 8
@@ -35,6 +32,8 @@ Item {
     property bool isAdmin: false;//НЕ ИЗМЕНЯТЬ ЭТОТ ФЛАГ.
     property int untShrift: cppqml.untShrift//0-мал, 1-сред, 2-большой.
     property bool isMobile: true;//true - мобильная платформа.
+   	//настройка языка: cppqml.strYazik = "en" или "ru" (реестр).
+	property string strYazik: cppqml.strYazik//язык интерфейса ("ru"/"en"), приходит с главной.
     //Настройки.
     anchors.fill: parent//Растянется по Родителю.
     focus: true;//Чтоб работали горячие клавиши.
@@ -61,6 +60,7 @@ Item {
         else{
             if(event.key === Qt.Key_Escape){//Если нажата на странице кнопка Escape, то...
                 pvShrift.visible = false;//Невидимый выбор шрифта
+                pvYazik.visible = false;//Невидимый выбор языка
                 fnClickedEscape()//Функция нажатия кнопки Escape
             }
             else{//Если не Escape, то...
@@ -116,8 +116,8 @@ Item {
         cppqml.untShrift = root.untShrift;//Отправляем в бизнес логику размер Шрифта.
     }
     function fnClickedEscape() {//Функция нажатия кнопки Escape
-        if(pvShrift.visible)//Если видимый выбор шрифта, то...
-            pvShrift.visible = false;//Делаем невидимым выбор шрифта.
+        if(pvShrift.visible) pvShrift.visible = false;//Делаем невидимым выбор шрифта.
+		if(pvYazik.visible) pvYazik.visible = false;//Невидимый выбор языка
         root.focus = true;//Чтоб горячие клавиши работали.
         menuMenu.visible = false
     }
@@ -171,8 +171,8 @@ Item {
             TapHandler {//Нажимаем не на Кнопки, а на пустую область.
                 //ВАЖНО, срабатывает и при нажатии на кнопки!!! Сменяет фокус на root при нажатии на кнопки.
                 onPressedChanged: {//Если изменён статус зажатия кнопки, то...
-                    if(pressed && !pvShrift.pressed)//Если нажата область и не нажато на pvShrift, то...
-                        fnClickedEscape();//Функция нажатия кнопки Escape.
+					//Если нажата область и не нажато на pvShrift и pvYazik, то...
+                    if(pressed && !pvShrift.pressed && !pvYazik.pressed) fnClickedEscape();//Функция Escape.
                 }
             }
             Rectangle {//Прямоугольник, в которм будут собраны все кнопки.
@@ -235,7 +235,7 @@ Item {
                         root.pdfMentor = !root.pdfMentor//Инверсия флага при нажатии.
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка
                     }
                 }
                 DCKnopkaOriginal {
@@ -255,7 +255,7 @@ Item {
                         root.clickedHotKey();//Сигнал нажатия кнопки Горячие клавиши.
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка,то
                     }
                     Component.onCompleted:{//Когда отрисуется Кнопка, то...
                         if(root.isMobile){//Если мобильная платформа, то...
@@ -305,7 +305,7 @@ Item {
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
                         //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
-                        if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка,то
                     }
                 }
                 DCKnopkaOriginal {
@@ -326,7 +326,7 @@ Item {
                         root.clickedAnimaciya();//Сигнал нажатия кнопки Анимация.
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка 
                     }
                 }
                 DCKnopkaOriginal {
@@ -347,7 +347,7 @@ Item {
                         root.clickedJurnal();//Сигнал нажатия кнопки Журнал.
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка
                     }
                 }
                 DCKnopkaOriginal {
@@ -367,7 +367,7 @@ Item {
                         root.clickedMentor();//Сигнал нажатия кнопки об приложении Ментор.
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка
                     }
                 }
                 DCKnopkaOriginal {
@@ -387,7 +387,7 @@ Item {
                         root.clickedQt();//Сигнал нажатия кнопки об Qt.
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка
                     }
                 }
                 DCKnopkaOriginal {
@@ -407,7 +407,7 @@ Item {
                         root.appRedaktor  = !root.appRedaktor//Инверсируем флаг.
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка
                     }
                 }
                 DCKnopkaOriginal {
@@ -437,12 +437,60 @@ Item {
                         root.clickedKatalog();//Открываем страницу создания каталога документов.
                     }
                     onPressedChanged: {//Если изменилось состояние Нажать, то...
-                        if (pressed && !pvShrift.pressed) fnPress()//Если нажата кнопка и не нажат pvShrift,то
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка
                     }
                     Component.onCompleted: {
 						if(root.isMobile)//Мобильное устройство
                             flcZona.kolichestvoKnopok -= 1;//Удаляем -1 кнопку идущую на Создание каталога.
 					}
+                }
+                DCKnopkaOriginal {
+                    id: knopkaYazik
+                    ntHeight: root.ntWidth; ntCoff: root.ntCoff
+                    anchors.top: {
+						if(root.isAdmin)
+							return knopkaKatalog.bottom
+						else
+							return knopkaQt.bottom
+                    }
+                    anchors.left: rctZona.left; anchors.right: rctZona.right
+                    anchors.topMargin: root.ntWidth
+                    anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
+                    clrTexta: root.clrTexta
+                    clrKnopki: (tmZona.currentIndex === 9) ? Qt.darker(root.clrMenuFon, 1.3) : root.clrMenuFon
+                    text: {
+                        let ltYazik = qsTr("язык ");//
+						if(root.strYazik === "ru")
+							ltYazik = ltYazik + qsTr("русский")
+                        else {
+                            if(root.strYazik === "en")
+                                ltYazik = ltYazik + qsTr("английский")
+						}
+						for (let index = 0; index < modelYazik.count; index++) {//Ищем сохранённый язык
+							if (modelYazik.get(index).spisok === root.strYazik) {
+								pvYazik.currentIndex = index//Выставляем в карусели нужный язых.
+								break
+							}
+						}
+                        return ltYazik;
+                    }
+                    opacityKnopki: 0.8
+                    function fnPress(){//Функция обработчик нажатия на кнопку, ДОЛЖНА БЫТЬ В КАЖДОЙ КНОПКЕ!!!
+                        tmZona.currentIndex = 9;//При нажатии или клике присваеваем идекс активной кнопки.
+                        if(pvYazik.visible){//Если видимый виджет, то...
+                            pvYazik.visible = false//Делаем невидимым виджет
+                        }
+                        else{//Если невидимый виджет, то...
+                            Qt.callLater(function(){//пауза, иначе не сработает фокус и pvYazik. ВАЖНО!!!
+                                pvYazik.visible = true//Делаем видимым виджет
+                                pvYazik.karusel.forceActiveFocus()//фокус PathView, чтоб hotkey работали.
+                            })
+                        }
+                    }
+                    onPressedChanged: {//Если изменилось состояние Нажать, то...
+                        //Делаем список прокрутки видимым/невидимым при каждом нажатии кнопки.
+                        if (pressed && !pvShrift.pressed && !pvYazik.pressed) fnPress()//Если нажата кнопка,то
+                    }
                 }
             }
             DCScrollbar {//Скроллбар
@@ -478,6 +526,25 @@ Item {
                 root.untShrift = pvShrift.currentIndex;//Приравниваем значение к переменной.
             }
         }
+		 ListModel {//Модель с языками
+            id: modelYazik
+            ListElement { spisok: qsTr("ru") }
+            ListElement { spisok: qsTr("en") }
+        }
+        DCPathView {
+            id: pvYazik
+            visible: false
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            anchors.left: tmZona.left; anchors.right: tmZona.right; anchors.bottom: tmZona.bottom
+            anchors.leftMargin: scbScrollbar.width; anchors.rightMargin: scbScrollbar.width
+            clrFona: root.clrFona; clrTexta: root.clrMenuText; clrMenuFon: root.clrMenuFon
+            modelData: modelYazik
+            onClicked: function(yazik) {
+                pvYazik.visible = false;
+                root.strYazik = yazik;//Приравниваем значение к переменной.
+				cppqml.strYazik = root.strYazik//Сохраняем в рестр значение языка
+            }
+        }
         DCMenu {//Меню отображается в Рабочей Зоне приложения.
             id: menuMenu
             visible: false//Невидимое меню.
@@ -509,6 +576,7 @@ Item {
                     menuMenu.visible = false;//То делаем меню невидимым.
                 else {//Если меню невидимое, то...
                     pvShrift.visible = false;//Делаем невидимым выбор размера Шрифта
+                    pvYazik.visible = false;//Делаем невидимым выбор Языка
                     menuMenu.visible = true;//Изменяем видимость
                 }
             }
