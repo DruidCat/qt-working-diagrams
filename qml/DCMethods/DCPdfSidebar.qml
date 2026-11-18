@@ -159,6 +159,9 @@ Drawer {
 				text: qsTr("Найдено")
 				width: tbSidebar.width/tbSidebar.count//делим на кол-во кнопок
 				height: tbSidebar.height
+				//implicit обязан равняться явному размеру: positioner TabBar позиционирует
+				//вкладку по implicit (y=(contentH-implicitH)/2), и без этого вкладки уезжают.
+				implicitHeight: height
 				hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
 				clrTexta: root.clrTexta
 				clrFona: root.clrFona
@@ -177,6 +180,9 @@ Drawer {
 				text: qsTr("Закладки")
 				width: tbSidebar.width/tbSidebar.count-root.ntCoff/4//делим на кол-во кнопок//делим на кол-во кнопок
 				height: tbSidebar.height
+				//implicit обязан равняться явному размеру: positioner TabBar позиционирует
+				//вкладку по implicit (y=(contentH-implicitH)/2), и без этого вкладки уезжают.
+				implicitHeight: height
 				hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
 				clrTexta: root.clrTexta
 				clrFona: root.clrFona
