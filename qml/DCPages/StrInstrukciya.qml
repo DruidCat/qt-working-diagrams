@@ -363,7 +363,7 @@ Item {
 <p><center>Приложение: <b>Ментор</b></center></p>
 <p><center>Версия: <b>")+ Qt.application.version +qsTr("</b></center></p>
 <p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
-<p><center>Приложение скомпилированно с <b>Qt версии ") + cppqml.qtVersion + ("</b></center></p>
+<p><center>Приложение скомпилированно с <b>Qt версии ") + cppqml.qtVersion + qsTr("</b></center></p>
 <p><center>Лицензия: <b>GPLv3</b></center></p>
 <p><center>Git URL: <a href=\"https://github.com/DruidCat/qt-working-diagrams\">\
 github.com/DruidCat/qt-working-diagrams</a></center></p>
