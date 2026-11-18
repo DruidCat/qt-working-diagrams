@@ -22,7 +22,7 @@ ApplicationWindow {
     readonly property string logoImya: "tmk-ts-bw-1"//Имя логотипа в DCLogo
     property bool pdfMentor: isAdmin ? true : false//true - включить/false - Отключить pdf просмоторщик.
     property bool appRedaktor: isAdmin ? true : false;//true - включить/false - Отключить Редактор приложения.
-    property int shrift: 2;//1 - маленький, 2 - средний, 3 - большой
+    property int shrift: cppqml.untShrift+1//1-мал, 2-сред, 3-большой.
     property int ntWidth: 2*shrift
     property int ntCoff: 8
     //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^//
@@ -195,7 +195,6 @@ ApplicationWindow {
             Component.onCompleted: {//После отрисовки страницы...
                 root.pdfMentor = root.isAdmin ? tmMenu.pdfMentor : true;//Приравниваем флаг настройки. ВАЖНО.
                 root.appRedaktor = root.isAdmin ? tmMenu.appRedaktor : false//Приравниваем флаг настройки.
-                root.shrift = (tmMenu.untShrift + 1);//Задаём размер шрифта в приложении.
             }
         }
         Stranica {//Анимация
