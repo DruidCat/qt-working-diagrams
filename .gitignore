@@ -124,3 +124,5 @@ workingdata/[0-9]*.pdf
 workingdata/bundleversion.txt
 # Рабочие копии Android-пакета (android/ с манифестом при этом в репозитории).
 /android/assets/
+# Лог установщика Qt (aqt).
+aqtinstall.log
