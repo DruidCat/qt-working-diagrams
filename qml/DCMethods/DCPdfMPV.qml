@@ -267,7 +267,7 @@ Item {
 		pmpDoc.blScaleAuto = blAuto//Обязательно перед таймером.
 		if(blNew){
 			fnLog(3, "Старт таймера масштабирования (" + strPrichina + ").")
-			sgnProgress(28, "3/11 Старт таймера масштабирования.")
+			sgnProgress(28, qsTr("3/11 Старт таймера масштабирования."))
 		}
 		else
 			fnLog(3, "Перезапуск конвейера (" + strPrichina + "), страница " + pmpDoc.ntPdfPage + " сохранена.")
@@ -286,7 +286,7 @@ Item {
 		pmpDoc.isScaleStart = true;//Начало масштабирования.
 		pmpDoc.goToPage(0);//Переходим на первую страницу, чтоб потом перейти на заданную страницу.
 		root.fnLog(5, "Начало масштабирования документа.");
-		root.sgnProgress(46, "5/11 Начало масштабирования документа.");
+		root.sgnProgress(46, qsTr("5/11 Начало масштабирования документа."));
 		let rlScaleMin = 0//Минимальный масштаб для DCScale, считается только в автоматическом режиме.
 		if(pmpDoc.blScaleAuto){//Если автоматический режим, то...
 			const cnFl = pmpDoc.flickable
@@ -317,7 +317,7 @@ Item {
 		else
 			pmpDoc.renderScale = root.renderScale;//Выставляем масштаб из Свойства.
 		root.fnLog(6, "Окончание масштабирования документа.")
-		root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
+		root.sgnProgress(55, qsTr("6/11 Остановка анимации: ожидайте."));
 		if(pmpDoc.blScaleAuto)//Минимум меняется только при автоматическом масштабировании.
 			root.sgnScaleMin(rlScaleMin)//Минимальный масштаб в DCScale.
 		pmpDoc.isSceneReset = true;//Сброс сцены запланирован: ошибки рендера Null/Error игнорируем.
@@ -327,13 +327,13 @@ Item {
 		if(pdfDoc.pageCount <= 0) return
     	ntStranica = fnClampPage(ntStranica)//Защита от -1 и выхода за конец.
 		root.fnLog(10, "Переходим на страницу: " + ntStranica);
-		root.sgnProgress(91, "10/11 Переходим на страницу.");
+		root.sgnProgress(91, qsTr("10/11 Переходим на страницу."));
 		const cnFl = pmpDoc.flickable
 		//После поворота старый contentX относится к прежней сцене, поэтому берём левый край страницы.
 		const cnX = (cnFl && !pmpDoc.blRotation) ? cnFl.contentX / pmpDoc.renderScale : 0
 		pmpDoc.goToLocation(ntStranica, Qt.point(cnX, 0), pmpDoc.renderScale)
 		root.fnLog(11, "Старт таймера видимости.");
-		root.sgnProgress(100, "11/11 Старт таймера отображения.");
+		root.sgnProgress(100, qsTr("11/11 Старт таймера отображения."));
 		tmrVisible.running = true;//Запускаем таймер отображения документа.
 	}
 	function fnVremya(ntMs){//Переводит миллисекунды в текст «N мин M с», минуты не пишем, если их 0.
@@ -346,7 +346,7 @@ Item {
         id: tmrResetScene
         interval: 3; running: false; repeat: false
         onTriggered: {
-            root.sgnProgress(64, "7/11 Сброс сцены документа.");
+            root.sgnProgress(64, qsTr("7/11 Сброс сцены документа."));
             pmpDoc.isSceneReset = true;//Подстраховка: на случай, если таймер запущен не из fnScale.
             if(pmpDoc.flickable && pmpDoc.flickable.forceLayout) {//Если внутренности есть, то...
                 root.fnLog(7, "Сброс сцены документа: forceLayout.")
@@ -361,7 +361,7 @@ Item {
             }
             pmpDoc.isScaleStart = false;//Окончание масштабирования, это для щипка.
             root.fnLog(8, "Старт таймера страницы.")
-            root.sgnProgress(73, "8/11 Старт таймера страницы.");
+            root.sgnProgress(73, qsTr("8/11 Старт таймера страницы."));
             tmrGoToPage.running = true;//запускаем таймер, перед переходом на страницу
         }
     }
@@ -378,7 +378,7 @@ Item {
         interval: 111; running: false; repeat: false
         onTriggered: {
             root.fnLog(4, "Стоп таймера масштабирования.");
-            root.sgnProgress(37, "4/11 Стоп таймера масштабирования.");
+            root.sgnProgress(37, qsTr("4/11 Стоп таймера масштабирования."));
             fnScale();//масштабируем документ автоматически/вручную.
         }
     }
@@ -389,7 +389,7 @@ Item {
 			pmpDoc.isSceneReset = false//Сброс сцены закончился, статусы рендера снова обрабатываем.
 			pmpDoc.blPinch = false//Сбрасываем флаг
 			root.fnLog(9, "Стоп таймера страницы.")
-			root.sgnProgress(82, "9/11 Стоп таймера страницы.")
+			root.sgnProgress(82, qsTr("9/11 Стоп таймера страницы."))
 			fnGoToPage(pmpDoc.ntPdfPage)//Единая страница назначения для всех входов.
 		}
 	}
@@ -412,7 +412,7 @@ Item {
         id: tmrError
         interval: 111; running: false; repeat: false
         onTriggered: {
-            root.sgnProgress(100, "11/11 Ошибка, окончание загрузки.");
+            root.sgnProgress(100, qsTr("11/11 Ошибка, окончание загрузки."));
             if(pmpDoc.blPassword){//Если был запрос на пароль, то...
                 root.fnLog(11, "Запрос пароля, окончание загрузки.");
                 pmpDoc.blPassword = false;//Сбрасываем флаг.
@@ -437,7 +437,7 @@ Item {
             pmpDoc.isScaleStart = false;
             pmpDoc.isBusy = false;//Иначе изменение размера окна больше не будет обрабатываться.
             pmpDoc.blRotation = false;
-            root.sgnProgress(100, "11/11 Таймаут открытия: документ показан как есть.");
+            root.sgnProgress(100, qsTr("11/11 Таймаут открытия: документ показан как есть."));
             root.visible = true;//Показываем документ как есть.
             if(pmpDoc.currentPage >= 0){//-1 в боковую панель не отдаём.
 				root.sgnCurrentPage(pmpDoc.currentPage)
@@ -480,12 +480,12 @@ Item {
                 if(pdfDoc.status === PdfDocument.Error){//enum, если статус Ошибка, то...
 					tmrWatchdog.stop()//Документ не открылся по настоящей причине, сторож не нужен.
                     console.error("DCPdfMPV [10/11]: статус документа Ошибка, старт таймера ошибки.");//ошибка
-                    root.sgnProgress(91, "10/11 Старт таймера ошибки.");
+                    root.sgnProgress(91, qsTr("10/11 Старт таймера ошибки."));
                     tmrError.running = true;//Запускаю таймер с обработчиком ошибки. ТАЙМЕР КРИТИЧЕСКИ ВАЖЕН.
                 }
                 else if(pdfDoc.status === PdfDocument.Ready){//Если pdf документ загрузился, то...
                     root.fnLog(2, "Статус документа: Готов.");
-                    root.sgnProgress(19, "2/11 Загрузка большого документа.");
+                    root.sgnProgress(19, qsTr("2/11 Загрузка большого документа."));
                     if(pdfDoc.pageCount > 0){//Защита от пустого документа.
                         //Берём заданную страницу, но не меньше 0 и не больше последней.
                         const cnPage = Math.max(0, Math.min(root.currentPage, pdfDoc.pageCount - 1))
@@ -498,7 +498,7 @@ Item {
                 else if(pdfDoc.status === PdfDocument.Loading){//Если pdf документ загружается, то...
 					tmrWatchdog.restart()//Запуск/перезапуск сторожа
                     root.fnLog(1, "Статус документа: Загрузка.");
-                    root.sgnProgress(10, "1/11 Статус документа: Загрузка.");
+                    root.sgnProgress(10, qsTr("1/11 Статус документа: Загрузка."));
                 }
             }
             onPasswordRequired: {//Если пришёл сигнал passwordRequire запроса пароля в pdf документе, то...
@@ -541,7 +541,7 @@ Item {
                     pmpDoc.isSceneReset = true;//Взводим сразу, чтоб повторный Ready не запустил второй сброс.
                     pmpDoc.goToPage(0);//Переходим на первую страницу, потом goTo на заданную страницу
                     root.fnLog(6, "Окончание масштабирования документа (щипок).")
-                    root.sgnProgress(55, "6/11 Остановка анимации: ожидайте.");
+                    root.sgnProgress(55, qsTr("6/11 Остановка анимации: ожидайте."));
                     tmrResetScene.running = true;//запускаем таймер, сброса сцены.
                 }
                 break;
@@ -552,7 +552,7 @@ Item {
                 }
 				tmrWatchdog.stop()//Настоящая авария, документ закрывается, показывать нечего.
                 console.error("DCPdfMPV [11/11]: ошибка рендера страницы " + pmpDoc.currentPage);//Ошибка крас
-                root.sgnProgress(100, "11/11 Ошибка рендера страницы.");
+                root.sgnProgress(100, qsTr("11/11 Ошибка рендера страницы."));
                 root.sgnDebug(qsTr("Ошибка рендера страницы."));//Передаём ошибку.
                 root.sgnError();//Закрываем документ.
                 break;
@@ -563,7 +563,7 @@ Item {
                 }
 				tmrWatchdog.stop()//Настоящая авария, документ закрывается, показывать нечего.
                 console.error("DCPdfMPV [11/11]: рендер страницы " + pmpDoc.currentPage + " Null");//Ошибка.
-                root.sgnProgress(100, "11/11 Рендера страницы Null.");
+                root.sgnProgress(100, qsTr("11/11 Рендера страницы Null."));
                 root.sgnDebug(qsTr("Рендера страницы Null."));//Передаём ошибку.
                 root.sgnError();//Закрываем документ.
                 break;

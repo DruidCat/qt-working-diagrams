@@ -1105,14 +1105,95 @@
 <context>
     <name>DCPdfMPV</name>
     <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="270" />
+        <source>3/11 Старт таймера масштабирования.</source>
+        <translation>3/11 Scaling timer started.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="289" />
+        <source>5/11 Начало масштабирования документа.</source>
+        <translation>5/11 Document scaling started.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="320" />
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="544" />
+        <source>6/11 Остановка анимации: ожидайте.</source>
+        <translation>6/11 Stopping animation: please wait.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="330" />
+        <source>10/11 Переходим на страницу.</source>
+        <translation>10/11 Navigating to the page.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="336" />
+        <source>11/11 Старт таймера отображения.</source>
+        <translation>11/11 Display timer started.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="349" />
+        <source>7/11 Сброс сцены документа.</source>
+        <translation>7/11 Document scene reset.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="364" />
+        <source>8/11 Старт таймера страницы.</source>
+        <translation>8/11 Page timer started.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="381" />
+        <source>4/11 Стоп таймера масштабирования.</source>
+        <translation>4/11 Scaling timer stopped.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="392" />
+        <source>9/11 Стоп таймера страницы.</source>
+        <translation>9/11 Page timer stopped.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="415" />
+        <source>11/11 Ошибка, окончание загрузки.</source>
+        <translation>11/11 Error, loading finished.</translation>
+    </message>
+    <message>
         <location filename="../qml/DCMethods/DCPdfMPV.qml" line="422" />
         <source>Ошибка открытия документа: </source>
         <translation>Failed to open document: </translation>
     </message>
     <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="440" />
+        <source>11/11 Таймаут открытия: документ показан как есть.</source>
+        <translation>11/11 Open timeout: document shown as is.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="483" />
+        <source>10/11 Старт таймера ошибки.</source>
+        <translation>10/11 Error timer started.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="488" />
+        <source>2/11 Загрузка большого документа.</source>
+        <translation>2/11 Loading a large document.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="501" />
+        <source>1/11 Статус документа: Загрузка.</source>
+        <translation>1/11 Document status: loading.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="555" />
+        <source>11/11 Ошибка рендера страницы.</source>
+        <translation>11/11 Page render error.</translation>
+    </message>
+    <message>
         <location filename="../qml/DCMethods/DCPdfMPV.qml" line="556" />
         <source>Ошибка рендера страницы.</source>
         <translation>Failed to render the page.</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="566" />
+        <source>11/11 Рендера страницы Null.</source>
+        <translation>11/11 Page render is null.</translation>
     </message>
     <message>
         <location filename="../qml/DCMethods/DCPdfMPV.qml" line="567" />
