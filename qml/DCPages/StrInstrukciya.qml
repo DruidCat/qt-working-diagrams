@@ -266,16 +266,24 @@ Item {
             }
             ListModel {//Список всех инструкций: ключ, название, заголовок)
                 id: mdlInstrukcii
-                ListElement { key: "hotkey"; title: "Горячие клавиши"; zagolovok: "ГОРЯЧИЕ КЛАВИШИ" }
-                ListElement { key: "pdf"; title: "менторPDF"; zagolovok: "ИНСТРУКЦИЯ ПО МЕНТОРPDF" }
-                ListElement { key: "menu"; title: "Меню"; zagolovok: "ОПИСАНИЕ НАСТРОЕК МЕНЮ" }
-                ListElement { key: "oprilojenii"; title: "О приложении"; zagolovok: "О ПРИЛОЖЕНИИ" }
-                ListElement { key: "oqt"; title: "О Qt"; zagolovok: "О QT" }
-                ListElement { key: "filedialog"; title: "Проводник"; zagolovok: "ИНСТРУКЦИЯ ПО ПРОВОДНИКУ" }
-                ListElement { key: "katalog"; title: "Каталог документов";
-                                                    zagolovok: "ИНСТРУКЦИЯ ПО СОЗДАНИЮ КАТАЛОГА ДОКУМЕНТОВ" }
-                ListElement { key: "jurnal"; title: "Журнал"; zagolovok: "ИНСТРУКЦИЯ ПО ЖУРНАЛУ" }
-                ListElement { key: "animaciya"; title: "Анимация"; zagolovok: "ИНСТРУКЦИЯ ПО АНИМАЦИИ" }
+				ListElement { key: "hotkey"; title: qsTr("Горячие клавиши");
+												zagolovok: qsTr("ГОРЯЧИЕ КЛАВИШИ") }
+				ListElement { key: "pdf"; title: qsTr("менторPDF");
+												zagolovok: qsTr("ИНСТРУКЦИЯ ПО МЕНТОРPDF") }
+				ListElement { key: "menu"; title: qsTr("Меню");
+												zagolovok: qsTr("ОПИСАНИЕ НАСТРОЕК МЕНЮ") }
+				ListElement { key: "oprilojenii"; title: qsTr("О приложении");
+												zagolovok: qsTr("О ПРИЛОЖЕНИИ") }
+				ListElement { key: "oqt"; title: qsTr("О Qt");
+												zagolovok: qsTr("О QT") }
+				ListElement { key: "filedialog"; title: qsTr("Проводник");
+												zagolovok: qsTr("ИНСТРУКЦИЯ ПО ПРОВОДНИКУ") }
+                ListElement { key: "katalog"; title: qsTr("Каталог документов");
+                                                zagolovok: qsTr("ИНСТРУКЦИЯ ПО СОЗДАНИЮ КАТАЛОГА ДОКУМЕНТОВ")}
+				ListElement { key: "jurnal"; title: qsTr("Журнал");
+												zagolovok: qsTr("ИНСТРУКЦИЯ ПО ЖУРНАЛУ") }
+				ListElement { key: "animaciya"; title: qsTr("Анимация");
+												zagolovok: qsTr("ИНСТРУКЦИЯ ПО АНИМАЦИИ") }
             }
         }
         Rectangle {//Прямоугольник ручки, за которую можно тянуть размер боковой панели,для изменения размеров
