@@ -33,6 +33,16 @@ Drawer {
     closePolicy: Drawer.CloseOnEscape//Закрываем боковую панель только при нажати Escape, другие политики выкл
 	interactive: blSwipe && !maRuchka.isDrag//Присваивания interactive в ручке удаляются.false-не реагирует на свайпы.
     clip: true//Обрезать всё лишнее.
+    //На Android стиль по умолчанию Material: его background = белая карточка с тенью и
+    //скруглением, выступающая выше панели (на десктопе её нет). Панель рисуется своими
+    //Rectangle, поэтому стандартный фон отключён.
+    background: Item {}//Отключаем фон стиля, рисуем сами.
+    //Стилевые отступы (Material topPadding=roundedScale) сдвигают contentItem вниз,
+    //на десктопе они почти нулевые. Обнуляем, панель вровень с tmZona на всех ОС.
+    topPadding: 0//Верхний отступ контента.
+    bottomPadding: 0//Нижний отступ контента.
+    leftPadding: 0//Левый отступ контента.
+    rightPadding: 0//Правый отступ контента.
     width: sidebarWidth//ВАЖНО! ширина боковой панели зависит только от sidebarWidth.
     height: root.pmpDoc ? root.pmpDoc.height : (parent ? parent.height : 0)//Высота по высоте pdf сцены
     y: root.ntWidth * root.ntCoff + 3 * root.ntCoff//координату по Y брал из расчёта Stranica.qml
