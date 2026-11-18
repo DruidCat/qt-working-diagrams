@@ -1,4 +1,6 @@
-﻿var vrMenuSpisok = [
+﻿function vrMenuSpisok(){//Массив возвращается новым на каждый вызов: qsTr() вычисляется
+    //заново, и меню всегда на актуальном языке интерфейса (задача #776).
+    return [
 			{
 				"nomer": "1",
                 "menu": qsTr("Добавить")
@@ -23,8 +25,11 @@
                 "nomer": "6",
                 "menu": qsTr("Выход")
 			}
-]
-var vrMenuElement = [
+    ]
+}
+function vrMenuElement(){//Массив возвращается новым на каждый вызов: qsTr() вычисляется
+    //заново, и меню всегда на актуальном языке интерфейса (задача #776).
+    return [
 			{
 				"nomer": "1",
                 "menu": qsTr("Добавить")
@@ -45,8 +50,11 @@ var vrMenuElement = [
                 "nomer": "5",
                 "menu": qsTr("Выход")
 			}
-]
-var vrMenuDannie = [
+    ]
+}
+function vrMenuDannie(){//Массив возвращается новым на каждый вызов: qsTr() вычисляется
+    //заново, и меню всегда на актуальном языке интерфейса (задача #776).
+    return [
 			{
 				"nomer": "1",
                 "menu": qsTr("Добавить")
@@ -67,8 +75,11 @@ var vrMenuDannie = [
                 "nomer": "5",
                 "menu": qsTr("Выход")
 			}
-]
-var vrMenuAnimaciya = [
+    ]
+}
+function vrMenuAnimaciya(){//Массив возвращается новым на каждый вызов: qsTr() вычисляется
+    //заново, и меню всегда на актуальном языке интерфейса (задача #776).
+    return [
             {
                 "nomer": "1",
                 "menu": qsTr("Добавить")
@@ -89,14 +100,20 @@ var vrMenuAnimaciya = [
                 "nomer": "5",
                 "menu": qsTr("Выход")
             }
-]
-var vrMenuFileDialog = [
+    ]
+}
+function vrMenuFileDialog(){//Массив возвращается новым на каждый вызов: qsTr() вычисляется
+    //заново, и меню всегда на актуальном языке интерфейса (задача #776).
+    return [
             {
                 "nomer": "1",
                 "menu": qsTr("Закрыть")
             }
-]
-var vrMenuJurnal = [
+    ]
+}
+function vrMenuJurnal(){//Массив возвращается новым на каждый вызов: qsTr() вычисляется
+    //заново, и меню всегда на актуальном языке интерфейса (задача #776).
+    return [
             {
                 "nomer": "1",
                 "menu": qsTr("Поиск")
@@ -109,13 +126,17 @@ var vrMenuJurnal = [
                 "nomer": "3",
                 "menu": qsTr("Закрыть")
             }
-]
-var vrMenuVihod = [
+    ]
+}
+function vrMenuVihod(){//Массив возвращается новым на каждый вызов: qsTr() вычисляется
+    //заново, и меню всегда на актуальном языке интерфейса (задача #776).
+    return [
             {
                 "nomer": "1",
                 "menu": qsTr("Выход")
             }
-]
+    ]
+}
 
 function fnSpisokJSON () {//Функция чтения JSON запроса Списка из бизнес логики.
 	return JSON.parse(cppqml.strSpisokDB);//Читаем JSON запрос.
