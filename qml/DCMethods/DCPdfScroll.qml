@@ -10,6 +10,8 @@ Item {
     readonly property real rlEps: 2//Допуск в пикселях при проверке достижения края страницы.
     readonly property real viewWidth: flickable ? flickable.width : 0//Ширина видимой области
     readonly property real viewHeight: flickable ? flickable.height : 0//Высота видимой области
+    property bool blDovodIdet: false//true - движок доводит страницу до начала, клавиши игнорируются.
+    readonly property int ntDovodIdleMs: 120//Сколько мс contentX/contentY стоят неподвижно: довод окончен.
     //Сигналы.
     signal sgnGoToPage(int ntStranica)//Просьба перейти на страницу (вместо присваивания currentPage).
     //Настройки
@@ -18,7 +20,11 @@ Item {
 			console.warn("DCPdfScroll: у flickable нет itemAtCell, скролл по страницам работать не будет.")
 	}
     //Функции.
-	function pageRect(){//Геометрия действующей страницы в пикселях контента. null - делегата ещё нет.
+	function fnDovodNachat(){//Перед каждой просьбой перелистнуть страницу взводим блокировку клавиш.
+		blDovodIdet = true//Клавиши игнорируются, пока движок доводит страницу до начала.
+		tmrDovodIdle.restart();//Если сдвига contentX/contentY не будет вовсе, сторож снимет блокировку.
+	}
+    function pageRect(){//Геометрия действующей страницы в пикселях контента. null - делегата ещё нет.
 		if(!flickable || !flickable.itemAtCell || currentPage < 0) return null
 		const cnItem = flickable.itemAtCell(Qt.point(0, currentPage))//TableView: колонка 0, строка = страница
 		if(!cnItem) return null
@@ -46,27 +52,35 @@ Item {
 		return Math.min(rect.width / ntStepScroll, viewWidth * 0.9)
 	}
     function fnKeyVniz(){//Функция скролла вниз страницы.
+        if(blDovodIdet) return//Идёт довод страницы движком — клавиша игнорируется, от дёрганья.
         const rect = pageRect()
         if(!rect) return//Страница ещё не готова.
-        if(flickable.contentY >= maxY(rect) - rlEps && (currentPage + 1) < pageCount)//Достигли низа страницы.
+        if(flickable.contentY >= maxY(rect) - rlEps && (currentPage + 1) < pageCount){//Достигли низа.
+            fnDovodNachat()//Блокируем клавиши на время анимации довода.
             sgnGoToPage(currentPage + 1)//Листаем на +1 страницу.
+        }
         else//Иначе двигаем документ на шаг.
             flickable.contentY = clampY(flickable.contentY + stepY(rect), rect)
     }
     function fnKeyVverh(){//Функция скролла вверх страницы.
+        if(blDovodIdet) return//Идёт довод страницы движком — клавиша игнорируется, от дёрганья.
         const rect = pageRect()
         if(!rect) return
-        if(flickable.contentY <= rect.top + rlEps && currentPage > 0)//Достигли верха страницы.
+        if(flickable.contentY <= rect.top + rlEps && currentPage > 0){//Достигли верха страницы.
+            fnDovodNachat()//Блокируем клавиши на время анимации довода.
             sgnGoToPage(currentPage - 1)//Листаем на -1 страницу.
+        }
         else
             flickable.contentY = clampY(flickable.contentY - stepY(rect), rect)
     }
     function fnKeyVlevo(){//Функция скролла влево страницы.
+        if(blDovodIdet) return//Идёт довод страницы движком — клавиша игнорируется, от дёрганья.
         const rect = pageRect()
         if(!rect) return
         flickable.contentX = clampX(flickable.contentX - stepX(rect), rect)
     }
     function fnKeyVpravo(){//Функция скролла вправо страницы.
+        if(blDovodIdet) return//Идёт довод страницы движком — клавиша игнорируется, от дёрганья.
         const rect = pageRect()
         if(!rect) return
         flickable.contentX = clampX(flickable.contentX + stepX(rect), rect)
@@ -76,5 +90,16 @@ Item {
         if(!rect) return
         flickable.contentX = clampX(flickable.contentX + dx, rect)
         flickable.contentY = clampY(flickable.contentY + dy, rect)
+    }
+    Timer {//Сторож окончания довода: срабатывает, когда контент перестал двигаться.
+        id: tmrDovodIdle
+        interval: root.ntDovodIdleMs; running: false; repeat: false
+        onTriggered: root.blDovodIdet = false//Довод окончен, клавиши снова работают.
+    }
+    Connections {//Во время довода движок сам двигает контент: на каждое движение взводим сторожа.
+        target: root.flickable
+        enabled: !!root.flickable
+        function onContentXChanged(){ if(root.blDovodIdet) tmrDovodIdle.restart() }
+        function onContentYChanged(){ if(root.blDovodIdet) tmrDovodIdle.restart() }
     }
 }
