@@ -17,8 +17,6 @@ Item {
     property alias searchString: pmpDoc.searchString//Запрос на поиск.
     //property int searchCount: cppqml.pdfPoisk.ntSchetchik//Количество совпадений при поиске.
     property int searchCount: cppqml.pdfPoisk.ntSchetchik//Количество совпадений при поиске.
-    //Свойство C++: в Qt 6.7.3 (Android) у searchModel свойства count НЕТ (оно с Qt 6.8),
-    //счётчик ведёт DCPdfPoisk по строкам привязанной модели — работает на обеих версиях Qt.
     property bool isSearch: cppqml.pdfPoisk.isPoisk//true - поиск идёт, false - поиск остановлен.
     property alias rotation: pmpDoc.rotation//Поворот сцены документа.
     property alias pageRotation: pmpDoc.pageRotation//Поворот страниц документа.
@@ -230,14 +228,19 @@ Item {
 	onHeightChanged: { if(height > 0) fnTimerAppSize() }
     function searchForward(){//Функция следующего поиска, пробрасываем вне виджета.
         //pmpDoc.searchForward();
-        const cnCount = cppqml.pdfPoisk.ntSchetchik//Количество совпадений (C++ счётчик)
+        //Навигация доступна и во время поиска: идём по уже найденному.
+        //Считаем по меньшему из двух: наш C++ счётчик и строки интерфейсной модели
+        //(ей принадлежит подсветка currentResult), чтоб не провалиться в индекс,
+        //который ещё не долетел до модели.
+        const cnCount = Math.min(cppqml.pdfPoisk.ntSchetchik, pmpDoc.searchModel.rowCount())
         if(cnCount <= 0) return//Совпадений нет, переходить некуда.
         const cnNext = pmpDoc.searchModel.currentResult + 1//Следующий результат
         pmpDoc.searchModel.currentResult = (cnNext >= cnCount) ? 0 : cnNext//После последнего идёт первый.
     }
     function searchBack(){//Функция предыдущего поиска, пробрасываем вне виджета.
         //pmpDoc.searchBack();
-        const cnCount = cppqml.pdfPoisk.ntSchetchik
+        //Счёт по меньшему из двух счётчиков — см. поиск вперёд (без провалов в пустой индекс).
+        const cnCount = Math.min(cppqml.pdfPoisk.ntSchetchik, pmpDoc.searchModel.rowCount())
         if(cnCount <= 0) return
         const cnPrev = pmpDoc.searchModel.currentResult - 1//Предыдущий результат
         pmpDoc.searchModel.currentResult = (cnPrev < 0) ? cnCount - 1 : cnPrev//Перед первым идёт последний.

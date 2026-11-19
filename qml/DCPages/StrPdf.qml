@@ -673,10 +673,8 @@ Item {
                 }
             }
             function onIsSearchChanged(){//Если статус поиска изменился, то...
-                if(pdfLoader.item.isSearch)//Если поиск идёт, то...
-                    pskPoisk.enabled = false;//Деактивируем кнопки в виджете поиска.
-                else//Если поиск окончился, то...
-                    pskPoisk.enabled = true;//Активируем кнопки в виджете поиска.
+                //Кнопки вверх/вниз по совпадениям активны и во время поиска: пользователь
+                //смотрит уже найденное, не дожидаясь окончания обхода страниц.
                 //Полоса прогресса поиска в тулбаре: показываем всё время поиска.
                 if(pdfLoader.item.isSearch){//Поиск идёт: полоса на месте, прятанье отменено.
                     tmrPrgPoisk.stop();
@@ -764,9 +762,18 @@ Item {
             running: false//Внутренний таймер DCProgress выключен, прогресс гоняет C++.
             visible: false//Видимость включает onIsSearchChanged.
             progress: cppqml.pdfPoisk.ntProgress//Точный прогресс обхода, 100 - окончание.
-            text: qsTr("Поиск: страница ") + cppqml.pdfPoisk.ntPageProsmotra
-                  + " " + qsTr("из ") + (pdfLoader.item ? pdfLoader.item.pageCount : 0)
+            text: qsTr("страница ") + cppqml.pdfPoisk.ntPageProsmotra
+                  + "/" + (pdfLoader.item ? pdfLoader.item.pageCount : 0)
                   + ", " + qsTr("найдено: ") + (pdfLoader.item ? pdfLoader.item.searchCount : 0)
+			onVisibleChanged: {//Если видимость изменилась, то...
+				if(visible) {//Если виджет видимый, то виджеты страницы и масштаба не видимые
+					spbPdfPage.visible = false
+					pdfScale.visible = false
+				} else {//Если виджет невидимый, то виджеты страницы и масштаба видимые
+					spbPdfPage.visible = true
+					pdfScale.visible = true
+				}
+			}
         }
         Timer {//Прятанье полосы прогресса поиска через паузу после окончания (видны 100%).
             id: tmrPrgPoisk

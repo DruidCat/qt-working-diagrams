@@ -1105,113 +1105,113 @@
 <context>
     <name>DCPdfMPV</name>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="272"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="275"/>
         <source>3/11 Старт таймера масштабирования.</source>
         <translation>3/11 Scaling timer started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="291"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="294"/>
         <source>5/11 Начало масштабирования документа.</source>
         <translation>5/11 Document scaling started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="322"/>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="546"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="325"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="549"/>
         <source>6/11 Остановка анимации: ожидайте.</source>
         <translation>6/11 Stopping animation: please wait.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="332"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="335"/>
         <source>10/11 Переходим на страницу.</source>
         <translation>10/11 Navigating to the page.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="338"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="341"/>
         <source>11/11 Старт таймера отображения.</source>
         <translation>11/11 Display timer started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="351"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="354"/>
         <source>7/11 Сброс сцены документа.</source>
         <translation>7/11 Document scene reset.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="366"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="369"/>
         <source>8/11 Старт таймера страницы.</source>
         <translation>8/11 Page timer started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="383"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="386"/>
         <source>4/11 Стоп таймера масштабирования.</source>
         <translation>4/11 Scaling timer stopped.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="394"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="397"/>
         <source>9/11 Стоп таймера страницы.</source>
         <translation>9/11 Page timer stopped.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="417"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="420"/>
         <source>11/11 Ошибка, окончание загрузки.</source>
         <translation>11/11 Error, loading finished.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="424"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="427"/>
         <source>Ошибка открытия документа: </source>
         <translation>Failed to open document: </translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="442"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="445"/>
         <source>11/11 Таймаут открытия: документ показан как есть.</source>
         <translation>11/11 Open timeout: document shown as is.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="485"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="488"/>
         <source>10/11 Старт таймера ошибки.</source>
         <translation>10/11 Error timer started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="490"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="493"/>
         <source>2/11 Загрузка большого документа.</source>
         <translation>2/11 Loading a large document.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="503"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="506"/>
         <source>1/11 Статус документа: Загрузка.</source>
         <translation>1/11 Document status: loading.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="557"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="560"/>
         <source>11/11 Ошибка рендера страницы.</source>
         <translation>11/11 Page render error.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="558"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="561"/>
         <source>Ошибка рендера страницы.</source>
         <translation>Failed to render the page.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="568"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="571"/>
         <source>11/11 Рендера страницы Null.</source>
         <translation>11/11 Page render is null.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="569"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="572"/>
         <source>Рендера страницы Null.</source>
         <translation>Page render is null.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="718"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="721"/>
         <source>Страница </source>
         <translation>Page </translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="720"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="723"/>
         <source> из </source>
         <translation> of </translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="734"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="737"/>
         <source>Загрузка</source>
         <translation>Loading</translation>
     </message>
@@ -1225,7 +1225,7 @@
     <message>
         <location filename="../qml/DCMethods/DCPdfPoisk.qml" line="138"/>
         <source>  Ничего не найдено</source>
-        <translation type="unfinished"></translation>
+        <translation>  Nothing found</translation>
     </message>
 </context>
 <context>
@@ -1248,7 +1248,7 @@
     <message>
         <location filename="../qml/DCMethods/DCPdfSidebar.qml" line="351"/>
         <source>Поиск…</source>
-        <translation type="unfinished"></translation>
+        <translation>Searching…</translation>
     </message>
     <message>
         <location filename="../qml/DCMethods/DCPdfSidebar.qml" line="354"/>
@@ -2892,19 +2892,14 @@
         <translation>WRONG DOCUMENT PASSWORD</translation>
     </message>
     <message>
+        <location filename="../qml/DCPages/StrPdf.qml" line="765"/>
+        <source>страница </source>
+        <translation>page </translation>
+    </message>
+    <message>
         <location filename="../qml/DCPages/StrPdf.qml" line="767"/>
-        <source>Поиск: страница </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/DCPages/StrPdf.qml" line="768"/>
-        <source>из </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../qml/DCPages/StrPdf.qml" line="769"/>
         <source>найдено: </source>
-        <translation type="unfinished"></translation>
+        <translation>found: </translation>
     </message>
 </context>
 <context>

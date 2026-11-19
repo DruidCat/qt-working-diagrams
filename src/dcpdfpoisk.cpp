@@ -222,8 +222,6 @@ void DCPdfPoisk::nachalPoisk(){//Состояние: поиск начался, 
         m_ntProgress = 0;
         emit ntProgressChanged();//Сигнал об обнулении прогресса.
     }
-    qDebug() << "DCPdfPoisk: поиск начат, запрос:" << m_strPoisk
-             << ", страниц:" << m_ntVsegoStranic;
     if(m_pdfDoc.status() == QPdfDocument::Status::Ready)//Документ готов — обход стартует сразу.
         m_modelPoiska.nachatObhod(m_strPoisk);
     else//Документ грузится: обход стартует в onStatusDokumenta по готовности.
@@ -270,8 +268,6 @@ void DCPdfPoisk::onObhodZavershen(int ntVsegoStranic){//Обход всех ст
 ////////////////////////////////////////////
 
     Q_UNUSED(ntVsegoStranic)//Количество страниц у нас уже учтено в тиках обхода.
-    qDebug() << "DCPdfPoisk: обход ЗАВЕРШЁН, просмотрено страниц:" << m_ntPageProsmotra
-             << ", совпадений:" << m_ntSchetchik;
     konchilPoisk("обход завершён");//Подводим итог: статус, «ничего не найдено», 100%.
 }
 void DCPdfPoisk::konchilPoisk(const char* strPrichina){//Состояние: поиск окончен, итог.
@@ -290,16 +286,14 @@ void DCPdfPoisk::konchilPoisk(const char* strPrichina){//Состояние: п�
         emit isPoiskChanged();//Сигнал о том, что изменился статус поиска.
         m_netSovpadenij = (!m_strPoisk.trimmed().isEmpty() && m_ntSchetchik == 0);
         emit netSovpadenijChanged();//Сигнал об итоговом результате поиска.
-        qDebug() << "DCPdfPoisk: поиск ОКОНЧЕН (" << strPrichina
-                 << "), ничего не найдено:" << m_netSovpadenij;
     }
-    else{//Поиск не шёл (пустой запрос/сброс) — снимаем «ничего не найдено» и только логи.
+    else{//Поиск не шёл (пустой запрос/сброс) — снимаем «ничего не найдено».
         if(m_netSovpadenij){
             m_netSovpadenij = false;
             emit netSovpadenijChanged();//Сигнал о снятии результата «пусто».
         }
-        qDebug() << "DCPdfPoisk: поиск сброшен (" << strPrichina << ")";
     }
+    Q_UNUSED(strPrichina)//Причина окончания оставлена в сигнатуре для чтения кода.
 }
 void DCPdfPoisk::qdebug(QString strDebug){//Метод отладки, излучающий строчку  Лог
 /////////////////////
