@@ -2,6 +2,8 @@
 
 Desktop application: a catalog editor for working documents with a built-in viewer.
 UI: QML, application code: C++, data storage: SQLite.
+Interface languages: Russian and English. The language is detected from the system locale
+on the first launch and can be changed at any time in the menu.
 
 Application structure: Menu -> (Title + List) -> Elements -> (Data + Viewer) -> File Manager.
 
@@ -92,6 +94,7 @@ open build/ru.Mentor.app
 
 Build from Qt Creator using the Android kit.
 The manifest and resources are in the [android](android) folder.
+The minimum supported version is Android 6.0 (API 23).
 
 ## Usage
 
@@ -119,6 +122,7 @@ qt-working-diagrams/
 ├── src/                    # C++ source code
 │   └── main.cpp            # Application entry point
 ├── js/                     # JavaScript files (JSON helper functions)
+├── i18n/                   # Interface translations: mentor_en.ts (catalog) and mentor_en.qm (compiled)
 ├── icons/                  # App icons for supported screen resolutions
 ├── fonts/                  # Application fonts
 ├── images/                 # Interface images
@@ -146,7 +150,7 @@ The project is compatible with:
 * Windows 8, 10, 11.
 * GNU/Linux.
 * macOS 11 (Big Sur) and later.
-* Android.
+* Android 6.0 (API 23) and later.
 * Aurora OS 5.2.
 * iOS.
 
