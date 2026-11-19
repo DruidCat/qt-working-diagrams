@@ -397,8 +397,7 @@ github.com/DruidCat/qt-working-diagrams</a></center></p>
 <p>От разработки и создания данного приложения мной было получено огромное удовольствие. Надеюсь оно вам \
 понравится, и принесёт пользу.</p>
 <p>Если вам приложение было полезно и вы хотите меня отблагодарить, можете это сделать \
-по QR-коду через СБП, или напрямую по <a href=\"\
-https://www.sberbank.com/sms/pbpn?requisiteNumber=79088261805\">ссылке</a></p>
+по QR-коду через СБП.</p>
 <p><center><font color=\"white\">.<img src = \"qrc:/images/SberSBP.png\">.</font></center></p>
 					</body>
                 </html>"

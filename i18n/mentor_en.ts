@@ -2013,11 +2013,37 @@
 &lt;p&gt;&lt;center&gt;&lt;b&gt;Хорошая идея может отличаться от плохой всего одним словом: Удобно!&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;Здравствуйте! Идея создания приложения пришла мне на работе, когда возникла нехватка рабочего персонала на других участках. И встала острая необходимость иметь под рукой полный набор документации на всё оборудование здесь и сейчас. Мной было принято решение разработать универсальное приложение для смартфона и персонального компьютера, где можно будет создавать каталоги документов и в удобном виде просматривать их. Что позволило сократить адаптацию на новых участках работы и более эффективно выполнять свои должностные обязанности.&lt;/p&gt;
 &lt;p&gt;От разработки и создания данного приложения мной было получено огромное удовольствие. Надеюсь оно вам понравится, и принесёт пользу.&lt;/p&gt;
-&lt;p&gt;Если вам приложение было полезно и вы хотите меня отблагодарить, можете это сделать по QR-коду через СБП, или напрямую по &lt;a href=&quot;https://www.sberbank.com/sms/pbpn?requisiteNumber=79088261805&quot;&gt;ссылке&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Если вам приложение было полезно и вы хотите меня отблагодарить, можете это сделать по QR-коду через СБП.&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;&lt;font color=&quot;white&quot;&gt;.&lt;img src = &quot;qrc:/images/SberSBP.png&quot;&gt;.&lt;/font&gt;&lt;/center&gt;&lt;/p&gt;
 					&lt;/body&gt;
                 &lt;/html&gt;</source>
         <translation>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;License: &lt;b&gt;GPLv3&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;Git URL: &lt;a href=&quot;https://github.com/DruidCat/qt-working-diagrams&quot;&gt;github.com/DruidCat/qt-working-diagrams&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;Email: &lt;a href=&quot;mailto:druidcat@yandex.ru&quot;&gt;druidcat@yandex.ru&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&amp;copy;2026. Developer &lt;b&gt;Sinebryukhov Sergey Vladimirovich&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&lt;b&gt;A good idea may differ from a bad one by just one word: Convenient!&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;Hello! The idea of creating the application came to me at work, when there was a shortage of staff at other sites. There arose an urgent need to have a full set of documentation for all equipment at hand, here and now. I decided to develop a universal application for a smartphone and a personal computer, where one could create documents catalogs and view them in a convenient way. That shortened the adaptation at new work sites and made job duties more effective.&lt;/p&gt;
+&lt;p&gt;Developing and creating this application gave me great pleasure. I hope you like it and it brings you benefit.&lt;/p&gt;
+&lt;p&gt;If the application was useful and you wish to reward me, you can do it by QR code via SBP.&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&lt;font color=&quot;white&quot;&gt;.&lt;img src = &quot;qrc:/images/SberSBP.png&quot;&gt;.&lt;/font&gt;&lt;/center&gt;&lt;/p&gt;
+					&lt;/body&gt;
+                &lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;Лицензия: &lt;b&gt;GPLv3&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;Git URL: &lt;a href=&quot;https://github.com/DruidCat/qt-working-diagrams&quot;&gt;github.com/DruidCat/qt-working-diagrams&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;Адресс электронной почты: &lt;a href=&quot;mailto:druidcat@yandex.ru&quot;&gt;druidcat@yandex.ru&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&amp;copy;2026. Разработчик &lt;b&gt;Синебрюхов Сергей Владимирович&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&lt;b&gt;Хорошая идея может отличаться от плохой всего одним словом: Удобно!&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;Здравствуйте! Идея создания приложения пришла мне на работе, когда возникла нехватка рабочего персонала на других участках. И встала острая необходимость иметь под рукой полный набор документации на всё оборудование здесь и сейчас. Мной было принято решение разработать универсальное приложение для смартфона и персонального компьютера, где можно будет создавать каталоги документов и в удобном виде просматривать их. Что позволило сократить адаптацию на новых участках работы и более эффективно выполнять свои должностные обязанности.&lt;/p&gt;
+&lt;p&gt;От разработки и создания данного приложения мной было получено огромное удовольствие. Надеюсь оно вам понравится, и принесёт пользу.&lt;/p&gt;
+&lt;p&gt;Если вам приложение было полезно и вы хотите меня отблагодарить, можете это сделать по QR-коду через СБП, или напрямую по &lt;a href=&quot;https://www.sberbank.com/sms/pbpn?requisiteNumber=79088261805&quot;&gt;ссылке&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;&lt;font color=&quot;white&quot;&gt;.&lt;img src = &quot;qrc:/images/SberSBP.png&quot;&gt;.&lt;/font&gt;&lt;/center&gt;&lt;/p&gt;
+					&lt;/body&gt;
+                &lt;/html&gt;</source>
+        <translation type="vanished">&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;License: &lt;b&gt;GPLv3&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Git URL: &lt;a href=&quot;https://github.com/DruidCat/qt-working-diagrams&quot;&gt;github.com/DruidCat/qt-working-diagrams&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Email: &lt;a href=&quot;mailto:druidcat@yandex.ru&quot;&gt;druidcat@yandex.ru&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
@@ -2083,7 +2109,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="407"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="406"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2128,7 +2154,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="431"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="430"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2141,7 +2167,7 @@
 &lt;p&gt;This program uses Qt version </translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="455"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="454"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2206,7 +2232,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="490"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="489"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2321,7 +2347,7 @@
 &lt;p&gt;&lt;b&gt;[PgDn]&lt;/b&gt; - Page down.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="547"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="546"/>
         <source>&lt;/ol&gt;
 &lt;p&gt;&lt;b&gt;АНИМАЦИЯ:&lt;/b&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2372,7 +2398,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="573"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="572"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;</source>
@@ -2381,7 +2407,7 @@
                     &lt;body&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="577"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="576"/>
         <source>&lt;p&gt;&lt;b&gt;менторPDF&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- [вкл] включен встроенный просмотщик pdf.&lt;/p&gt;
 &lt;p&gt;- [выкл] включен внешний просмотщик pdf.&lt;/p&gt;</source>
@@ -2390,7 +2416,7 @@
 &lt;p&gt;- [off] an external pdf viewer is used.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="580"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="579"/>
         <source>&lt;p&gt;&lt;b&gt;горячие клавиши&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- описание всех горячих клавиш в приложении.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;шрифт&lt;/b&gt;&lt;/p&gt;
@@ -2405,7 +2431,7 @@
 &lt;p&gt;- [large] font size.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="587"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="586"/>
         <source>&lt;p&gt;&lt;b&gt;анимация&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- создание и воспроизведение анимационной заставки для видео роликов.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;журнал&lt;/b&gt;&lt;/p&gt;
@@ -2416,7 +2442,7 @@
 &lt;p&gt;- all messages, warnings and errors from the application are recorded on this page.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="591"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="590"/>
         <source>&lt;p&gt;&lt;b&gt;о приложении&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- краткая информация о приложении и его создатиле.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;о Qt&lt;/b&gt;&lt;/p&gt;
@@ -2427,7 +2453,7 @@
 &lt;p&gt;- information about the framework the application is written with.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="596"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="595"/>
         <source>&lt;p&gt;&lt;b&gt;редактор&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- [вкл] включен редактор создания каталогов.&lt;/p&gt;
 &lt;p&gt;- [выкл] выключен редактор создания каталогов.&lt;/p&gt;
@@ -2440,7 +2466,7 @@
 &lt;p&gt;- in the folder [</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="600"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="599"/>
         <source>] создаётся каталог со всеми документами из приложения.&lt;/p&gt;
                     &lt;/body&gt;
                 &lt;/html&gt;</source>
@@ -2449,7 +2475,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="605"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="604"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2480,7 +2506,7 @@
 &lt;p&gt;- [</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="618"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="617"/>
         <source>].&lt;/p&gt;
 &lt;p&gt;&lt;img src = &quot;/images/DCButtons/24x24/DCKnopkaInfo.png&quot;&gt; - Инструкция по созданию каталога документов.&lt;/p&gt;
 &lt;p&gt;&lt;img src = &quot;/images/DCButtons/24x24/DCKnopkaNastroiki.png&quot;&gt; - Меню создания каталогов.&lt;/p&gt;
@@ -2511,7 +2537,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="634"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="633"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2578,7 +2604,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="669"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="668"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
