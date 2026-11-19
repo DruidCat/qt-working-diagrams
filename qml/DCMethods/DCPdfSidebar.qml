@@ -134,6 +134,15 @@ Drawer {
 			rotation: -90//Поворачиваем на 90 градусов против часовой стрелки боковую панель
 			transformOrigin: Item.TopLeft//Точка поворота боковой панели верхний левый угол.
 			currentIndex: 1//Закладки видимые по умолчанию.
+			background: Item {}//Отключаем фоновый Rectangle стилевого TabBar: Material на Android
+			//рисует за вкладками белую полосу, а в десктопном Basic фон сливается с окном.
+			Component.onCompleted: {//Отключаем излишества стилевого contentItem (ListView):
+				//убираем красный индикатор текущей вкладки (Material accentColor) и
+				//автопрокрутку полоски вкладок к выбранной вкладке.
+				tbSidebar.contentItem.highlight = null
+				tbSidebar.contentItem.highlightRangeMode = 0//ListView.NoRange (0): из QML JS
+				//enum-имена этого свойства в Qt 6.7 недоступны.
+			}
 			Keys.onPressed: (event) => {//Это запись для Qt6, для Qt5 нужно удалить event
 				if((event.key===Qt.Key_Enter)||(event.key===Qt.Key_Return)||(event.key===Qt.Key_Space)){
 					if(tbbNaideno.focus) fnNaidenoOpen()//Функция открытия и фокусировки Найдено
@@ -201,6 +210,9 @@ Drawer {
 				text: qsTr("Страницы")
 				width: tbSidebar.width/tbSidebar.count//делим на кол-во кнопок//делим на кол-во кнопок
 				height: tbSidebar.height
+				//implicit обязан равняться явному размеру: positioner TabBar позиционирует
+				//вкладку по implicit (y=(contentH-implicitH)/2), и без этого вкладки уезжают.
+				implicitHeight: height
 				hoverEnabled: !root.isMobile//Вкл/Выкл отслеживание наведения мыши на кнопку в ПК/Мобильных.
 				clrTexta: root.clrTexta
 				clrFona: root.clrFona
