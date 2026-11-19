@@ -454,6 +454,7 @@ Item {
             id: pskPoisk
             //Свойства
             sumPoisk: pdfLoader.item ? pdfLoader.item.searchCount : 0
+            nichegoNet: cppqml.pdfPoisk.netSovpadenij//Из C++: поиск закончен, совпадений 0.
             //Настройки
             anchors.top: tmZagolovok.top; anchors.bottom: tmZagolovok.bottom
             anchors.left: tmZagolovok.left; anchors.right: tmZagolovok.right
@@ -676,6 +677,17 @@ Item {
                     pskPoisk.enabled = false;//Деактивируем кнопки в виджете поиска.
                 else//Если поиск окончился, то...
                     pskPoisk.enabled = true;//Активируем кнопки в виджете поиска.
+                //Полоса прогресса поиска в тулбаре: показываем всё время поиска.
+                if(pdfLoader.item.isSearch){//Поиск идёт: полоса на месте, прятанье отменено.
+                    tmrPrgPoisk.stop();
+                    prgPoisk.visible = true;
+                }
+                else if(cppqml.pdfPoisk.strPoisk !== "") {//Поиск закончен: показать 100%...
+                    prgPoisk.visible = true;
+                    tmrPrgPoisk.restart();//...и спрятать через паузу.
+                }
+                else//Запрос пуст (отмена): полоса уходит сразу.
+                    prgPoisk.visible = false;
             }
             function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
                 pskPoisk.currentResult = pdfLoader.item.currentResult//Задаём отображение номера поиска.
@@ -743,6 +755,24 @@ Item {
             tapKnopkaMinus: root.tapToolbarPravi; tapKnopkaPlus: root.tapToolbarPravi
 			onValueModified: root.fnSetScale(value)//Масштабируем документ по значению value, со ступенью.	
 		}
+        DCProgress {//Полоса прогресса поиска: видна только пока идёт поиск (isSearch).
+            id: prgPoisk
+            anchors.fill: tmToolbar
+            anchors.topMargin: root.ntCoff/4; anchors.bottomMargin: root.ntCoff/4
+            ntWidth: root.ntWidth; ntCoff: root.ntCoff
+            clrProgress: root.clrPoisk; clrTexta: root.clrMenuFon
+            running: false//Внутренний таймер DCProgress выключен, прогресс гоняет C++.
+            visible: false//Видимость включает onIsSearchChanged.
+            progress: cppqml.pdfPoisk.ntProgress//Точный прогресс обхода, 100 - окончание.
+            text: qsTr("Поиск: страница ") + cppqml.pdfPoisk.ntPageProsmotra
+                  + " " + qsTr("из ") + (pdfLoader.item ? pdfLoader.item.pageCount : 0)
+                  + ", " + qsTr("найдено: ") + (pdfLoader.item ? pdfLoader.item.searchCount : 0)
+        }
+        Timer {//Прятанье полосы прогресса поиска через паузу после окончания (видны 100%).
+            id: tmrPrgPoisk
+            interval: 400; running: false; repeat: false
+            onTriggered: prgPoisk.visible = false//Полоса скрыта, поиск закончен.
+        }
 	}
 	function fnSetScale(ntProcent){
 		const cnItem = pdfLoader.item

@@ -75,14 +75,14 @@ Drawer {
         grvPoster.model = null//Обнуляем отображение постеров, чтоб не обратится к несуществующему постеру.
     }
     function fnNaidenoEnter(){//Функция выбора результата поиска в боковой панели для перехода к нему.
-        if(root.pmpDoc.searchModel.count)//Если счётчик поиска не 0, то...
+        if(cppqml.pdfPoisk.ntSchetchik)//Если счётчик поиска не 0, то...
             root.pmpDoc.searchModel.currentResult = lsvNaideno.currentIndex//Переходим к определён результату.
     }
     function fnNaidenoIndex(index){//Функция подсвечивания результата поиска в боковой панели.
         lsvNaideno.currentIndex = index//Подсвечиваем в списке.
     }
     function fnNaidenoNext(){//Функция перехода к следующему результату в списке.
-        if(lsvNaideno.currentIndex !== (root.pmpDoc.searchModel.count - 1))//Если не максимальный индекс, то..
+        if(lsvNaideno.currentIndex !== (cppqml.pdfPoisk.ntSchetchik - 1))//Если не максимальный индекс, то..
             lsvNaideno.currentIndex += 1//То увеличиваем на 1
     }
     function fnNaidenoPrevious(){//Функция перехода к предыдущему результату в списке.
@@ -346,8 +346,14 @@ Drawer {
             font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
-			text: (root.pmpDoc && root.pmpDoc.searchString !== "" && root.pmpDoc.searchModel.count === 0)
-      																				? qsTr("Не найдено") : ""
+			text: {//Надпись статуса поиска на вкладке «Найдено».
+				if(cppqml.pdfPoisk.isPoisk)//Пока поиск идёт, показываем это.
+					return qsTr("Поиск…")
+				//«Не найдено» — только когда поиск реально закончен (сторож) и совпадений 0.
+				if(cppqml.pdfPoisk.netSovpadenij)
+					return qsTr("Не найдено")
+				return ""
+			}
             elide: Text.ElideRight//Обрезаем текст по правой стороне точками (...)
         }
         ListView {
@@ -382,7 +388,7 @@ Drawer {
                     }
                 } else if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
                     if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                        if(cppqml.pdfPoisk.ntSchetchik)//Если не 0, то...
                             root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
                         event.accepted = true;//Завершаем обработку эвента.
                     }
@@ -391,11 +397,11 @@ Drawer {
                         if(root.pmpDoc//Указатель не null
                             && lsvNaideno.model//модель не null
                             && lsvNaideno.focus//Фокус на Найдено
-                            && root.pmpDoc.searchModel.count)//Счётчик поиска не 0
+                            && cppqml.pdfPoisk.ntSchetchik)//Счётчик поиска не 0
                                 lsvNaideno.fnClicedEnter(lsvNaideno.currentIndex)//Обработка Enter или клика
                         event.accepted = true;//Завер обработку эвента
                     } else if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
-                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                        if(cppqml.pdfPoisk.ntSchetchik)//Если не 0, то...
                             root.pmpDoc.searchModel.currentResult += 1//Следующий результат
                         event.accepted = true;//Завершаем обработку эвента.
                     } else if(event.key === Qt.Key_F1){//Если нажата клавиша F1
@@ -521,7 +527,7 @@ Drawer {
                     }
                 } else if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
                     if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                        if(cppqml.pdfPoisk.ntSchetchik)//Если не 0, то...
                             root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
                         event.accepted = true//Завершаем обработку эвента.
                     }
@@ -542,7 +548,7 @@ Drawer {
 						if(rows > 0) currentIndex = Math.min(rows - 1, currentIndex + 1)//Предел видимые строк
 						event.accepted = true
 					} else if(event.key === Qt.Key_F3){
-						if(root.pmpDoc.searchModel.count)
+						if(cppqml.pdfPoisk.ntSchetchik)
 							root.pmpDoc.searchModel.currentResult += 1
 						event.accepted = true
 					} else if(event.key === Qt.Key_F1){
@@ -790,7 +796,7 @@ Drawer {
                     }
                 } else if (event.modifiers & Qt.ShiftModifier){//Если нажат "Shift"
                     if(event.key === Qt.Key_F3){//Если нажата клавиша F3, то...
-                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                        if(cppqml.pdfPoisk.ntSchetchik)//Если не 0, то...
                             root.pmpDoc.searchModel.currentResult -= 1//Предыдущий результат
                         event.accepted = true;//Завершаем обработку эвента.
                     }
@@ -800,7 +806,7 @@ Drawer {
 							grvPoster.fnClickedEnter(currentIndex)//Нажимаем Enter или кликаем на постере
                         event.accepted = true;//Завер обработку эвента
                     } else if(event.key === Qt.Key_F3){//Если нажата кнопка F3,то..
-                        if(root.pmpDoc.searchModel.count)//Если не 0, то...
+                        if(cppqml.pdfPoisk.ntSchetchik)//Если не 0, то...
                             root.pmpDoc.searchModel.currentResult += 1//Следующий результат
                         event.accepted = true;//Завершаем обработку эвента.
                     } else if(event.key === Qt.Key_F1){//Если нажата клавиша F1

@@ -25,6 +25,7 @@ Item {
     property real tapKnopkaVverh: 1
     property bool isVidelit: false//true - режим выделения текства в pdf
     property bool isOpenedSidebar: false//true - открыта боковая панель
+    property bool nichegoNet: false//true - поиск закончен и совпадений ноль (сигнал из C++)
     //Настройки
     focus: true
     //Сигналы.
@@ -132,7 +133,11 @@ Item {
                 font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
-                text: root.text	+ " [" + (root.currentResult + 1) + "|" + root.sumPoisk + "]"
+                text: {
+                    if(root.nichegoNet)//Поиск окончен и совпадений нет — говорим прямо.
+                        return root.text + qsTr("  Ничего не найдено")
+                    return root.text + " [" + (root.currentResult + 1) + "|" + root.sumPoisk + "]"
+                }
 				onTextChanged: {//Если текст изменился, то...
 					if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
                     for(var ltShag=txtPoisk.font.pixelSize; ltShag<root.ntWidth*root.ntCoff; ltShag++){

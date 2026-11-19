@@ -58,7 +58,8 @@ Item {
     }
     Timer {
         id: tmrProgress
-        interval: 1100; repeat: true; running: true
+        interval: 1100; repeat: true; running: false//По умолчанию таймер выключен: прогресс
+        //задают извне (привязкой или присваиванием), иначе он сбрасывал бы progress сам.
         onTriggered: {//Срабатывает таймер.
             if(root.progress <= 100)//Если меньше 100%
                 root.progress += 1;//+1

@@ -1,108 +1,107 @@
-#ifndef DCPDFPOISK_H
-#define DCPDFPOISK_H
-
 #pragma once
+
 #include <QObject>
 #include <QUrl>
+#include <QTimer>
+#include <QString>
 #include <QtPdf/QPdfDocument>
 #include <QtPdf/QPdfSearchModel>
-#include <QVariantList>
-#include <QVariantMap>
-#include <QRectF>
 
-class DCPdfPoisk : public QObject {
+//Модель поиска с управляемым сканированием страниц. Базовый QPdfSearchModel
+//устроен «вечно»: у него нет сигнала окончания, счётчик недостоверен, и он
+//тихо сканирует страницы внутренним таймером. Потомок перехватывает эти
+//внутренние таймеры в timerEvent, гасит их и ведёт обход сам: своим тиком
+//100 мс двигает updatePage(страница) по одной странице за тик (тот же темп,
+//что у штатного сканирования PdfMultiPageView, поэтому список боковой панели
+//успевает за счётчиком). Итог: точное число совпадений, точный номер
+//просмотренной страницы и точный сигнал «обход завершён», без догадок.
+class PoiskModelSkanirovannyj : public QPdfSearchModel {
     Q_OBJECT
-    Q_PROPERTY(QUrl urlPdf
-                    READ urlPdf
-                    WRITE setUrlPdf
-                    NOTIFY urlPdfChanged)
-    Q_PROPERTY(QString strPoisk
-                    READ strPoisk
-                    WRITE setStrPoisk
-                    NOTIFY strPoiskChanged)
-    Q_PROPERTY(int 	ntSchetchik
-                    READ ntSchetchik
-                    NOTIFY ntSchetchikChanged)
-    Q_PROPERTY(bool isPoisk
-                    READ isPoisk
-                    NOTIFY isPoiskChanged)
-    Q_PROPERTY(QPdfSearchModel* psmModel
-                    READ psmModel CONSTANT)
-
 public:
-    explicit DCPdfPoisk(QObject* proditel = nullptr);//Конструктор.
-    ~ 		DCPdfPoisk();//Деструктор.
-    //---Методы Q_PROPERTY---//
-    QUrl	urlPdf() const { return m_urlPdf; }//Возвратить путь pdf документа.
-    void	setUrlPdf(const QUrl& urlPdf);//Задаём путь к pdf документу.
-    QString strPoisk() const { return m_strPoisk; }//Возвратить строку запроса на поиск.
-    void 	setStrPoisk(const QString& strPoisk);//Задаём запрос на поиск
-    int 	ntSchetchik() const { return m_ntSchetchik; }//Возвратить счётчик совпадений по поиску.
-    bool 	isPoisk() const { return m_isPoisk; }//Возвращает статус поиска.
-    QPdfSearchModel* psmModel() { return &m_psmModel; }
-    Q_INVOKABLE QVariantList resultsOnPage(int ntStranica) const;//Прямоугольники совпадений на странице (нормализованные 0..1)
-
-
-    // === Новые удобные методы для доступа к результатам ===
-    // Прочитать {page, location:{x,y,width,height}, index, valid:true} из любой модели по индексу row
-    Q_INVOKABLE QVariantMap getFromModel(QObject* modelObj, int row) const;
-    // Прочитать текущий результат из любой модели с currentResult
-    Q_INVOKABLE QVariantMap getCurrentFromModel(QObject* modelObj) const;
-    // Кол-во строк в любой модели
-    Q_INVOKABLE int modelCount(QObject* modelObj) const;
-    // Сопоставление "глобального" индекса совпадения → page+rect через наш QPdfSearchModel
-    Q_INVOKABLE QVariantMap resultAt(int globalIndex) const;
-    // Быстрый доступ к общему числу совпадений (то же, что ntSchetchik)
-    Q_INVOKABLE int totalResults() const { return m_ntSchetchik; }
-
-
-private:
-    void 	pereschetSchetchika();//Пересчёт количества совпадений при поиске.
-    bool 	ustPdfDoc(const QUrl& urlPdf);//Задаём pdf документ по ссылке url.
-
-
-    // Вспомогательные
-    static int findRole(const QAbstractItemModel* model, const QByteArray& roleName);
-    static int findFirstOfRoles(const QAbstractItemModel* model, std::initializer_list<const char*> names);
-    static QVariantMap rectToMap(const QRectF& r);
-    static QVariantMap makeResult(int page, const QRectF& r, int index, bool valid = true);
-
-
-    QUrl	m_urlPdf;//Переменная хранящая ссылку на pdf документ.
-    QPdfDocument	m_pdfDoc;//pdf документ, в котором мы будет считать совпадения поиска.
-    QPdfSearchModel	m_psmModel;//Модель поиска.
-    QString	m_strPoisk;//Запрос на поиск. ЧТо будем искать.
-    int		m_ntSchetchik;//Счётчик количества совпадений.
-    bool 	m_isPoisk;//Статус поиска. true - поиск идёт, false - поиск окончен.
-
-private slots:
-    void	qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог
-
+    explicit PoiskModelSkanirovannyj(QObject* proditel = nullptr);//Конструктор.
+    void nachatObhod(const QString& strPoisk);//Задать запрос: базовый таймер будет перехвачен.
+    void ostanovitObhod();//Остановить внешний тик обхода (смена документа/запроса).
+    int ntNextPage;//Индекс следующей страницы для обхода.
+    bool blIdetObhod;//true - обход ведут наш тик, не таймеры базового класса.
+public slots:
+    void proskanirovatStranicyTik();//Тик обхода: одна страница updatePage за 100 мс.
 signals:
-    void 	urlPdfChanged();//Сигнал о том, что путь к pdf документу изменилась.
-    void 	strPoiskChanged();//Сигнал о том, что запрос поисковый изменился.
-    void 	ntSchetchikChanged();//Сигнал о том, что Счётчик совпадений поиска изменился.
-    void 	isPoiskChanged();//Сигнал о том, что статус поиска изменился.
-    void	signalDebug(QString strDebug);//Испускаем сигнал со строчкой Лог
+    void sgnTikObhoda(int ntProsmotreno, int ntVsego);//Прогресс обхода страниц.
+    void sgnObhodZavershen(int ntVsegoStranic);//Обход всех страниц завершён точно.
+protected:
+    void timerEvent(QTimerEvent* event) override;//Перехват и гашение таймеров базовой модели.
+private:
+    QTimer m_tmrTik;//Тик 100 мс, которым сами ведём обход страниц.
 };
 
-#endif // DCPDFPOISK_H
+//Бизнес-логика поиска в pdf документе. Класс держит СВОЙ экземпляр QPdfDocument
+//и управляемую модель поиска, поэтому точно знает: когда поиск начался, сколько
+//страниц просмотрено, сколько найдено совпадений и когда обход реально закончен.
+//QML получает: isPoisk (поиск идёт), netSovpadenij (поиск окончен, ничего нет),
+//ntSchetchik (число совпадений), ntProgress (процент обхода), ntPageProsmotra
+//(номер просмотренной страницы). Для подсветки в PdfMultiPageView используется
+//штатный поиск того же вида, но его ходом мы не управляем: только строчками.
+class DCPdfPoisk : public QObject {
+    Q_OBJECT
+    //Ссылка на pdf документ.
+    Q_PROPERTY(QUrl urlPdf READ urlPdf WRITE setUrlPdf NOTIFY urlPdfChanged FINAL)
+    //Запрос для поиска.
+    Q_PROPERTY(QString strPoisk READ strPoisk WRITE setStrPoisk NOTIFY strPoiskChanged FINAL)
+    //true - поиск идёт (обход страниц не завершён), false - поиск окончен.
+    Q_PROPERTY(bool isPoisk READ isPoisk NOTIFY isPoiskChanged FINAL)
+    //true - поиск закончен и совпадений нет (готовится к показу «Ничего не найдено»).
+    Q_PROPERTY(bool netSovpadenij READ netSovpadenij NOTIFY netSovpadenijChanged FINAL)
+    //Число найденных совпадений (точная строка счётчика).
+    Q_PROPERTY(int ntSchetchik READ ntSchetchik NOTIFY ntSchetchikChanged FINAL)
+    //Прогресс обхода страниц поиска 0..100, ровно 100 - обход завершён.
+    Q_PROPERTY(int ntProgress READ ntProgress NOTIFY ntProgressChanged FINAL)
+    //Номер просмотренной страницы обхода (для подписи вида «страница 37 из 214»).
+    Q_PROPERTY(int ntPageProsmotra READ ntPageProsmotra NOTIFY ntPageProsmotraChanged FINAL)
+public:
+    explicit DCPdfPoisk(QObject* proditel = nullptr);//Конструктор.
+    ~DCPdfPoisk();//Деструктор.
 
-/*
-// читать текущий результат из QML-модели
-const r = dcPdfPoisk.getCurrentFromModel(pmpDoc.searchModel);
-if (r.valid) {
-    console.log("Страница:", r.page, "x:", r.location.x, "y:", r.location.y);
-}
-//Или по конкретному индексу:
-const r = dcPdfPoisk.getFromModel(pmpDoc.searchModel, pmpDoc.searchModel.currentResult);
-//Если хочешь отобразить/перейти по “глобальному” индексу совпадения, опираясь на внутренний
-    C++ QPdfSearchModel (тот, что в DCPdfPoisk)
-const r = dcPdfPoisk.resultAt(pmpDoc.searchModel.currentResult);
-// или любой другой индекс
-//resultAt() маппит глобальный индекс совпадения через твой C++ QPdfSearchModel, разрезая его по спискам
-    “locations”/“rectangles” на каждой строке (странице). Это полезно, если хочется полностью обойтись
-    без QML-объекта searchModel.
-//Если попадётся вариант QPdfSearchModel, который не отдаёт список прямоугольников, а только
-    hitCount — координаты извлечь нельзя; в этом случае вернётся valid:false.
-*/
+    QUrl urlPdf() const;//Возвращает путь к pdf документу.
+    void setUrlPdf(const QUrl& urlPdf);//Задаёт путь к pdf документу, загружает свой экземпляр.
+
+    QString strPoisk() const;//Возвращает запрос для поиска.
+    void setStrPoisk(const QString& strPoisk);//Задаёт запрос: начал/закончил поиск по факту.
+
+    bool isPoisk() const;//Возвращает статус: идёт ли поиск.
+    bool netSovpadenij() const;//Возвращает результат: пуст ли завершённый поиск.
+    int ntSchetchik() const;//Возвращает число найденных совпадений.
+    int ntProgress() const;//Возвращает процент обхода страниц.
+    int ntPageProsmotra() const;//Возвращает номер просмотренной страницы обхода.
+    void qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог.
+signals:
+    void urlPdfChanged();//Сигнал о том, что изменился путь к pdf документу.
+    void strPoiskChanged();//Сигнал о том, что изменился запрос для поиска.
+    void isPoiskChanged();//Сигнал о том, что изменился статус поиска.
+    void netSovpadenijChanged();//Сигнал о том, что изменился результат «пусто».
+    void ntSchetchikChanged();//Сигнал о том, что изменился счётчик совпадений.
+    void ntProgressChanged();//Сигнал о том, что изменился прогресс обхода.
+    void ntPageProsmotraChanged();//Сигнал о том, что просмотрена новая страница обхода.
+    void signalDebug(QString strDebug);//Сигнал отладки со строчкой Лог
+public slots:
+    void onTikObhoda(int ntProsmotreno, int ntVsego);//Тик обхода: обновить счётчики и прогресс.
+    void onObhodZavershen(int ntVsegoStranic);//Обход завершён точно: подводим итог поиска.
+    void onStatusDokumenta(int utStatus);//Смена состояния документа: старт/авария обхода.
+private slots:
+    //Внутренние слоты нет.
+private:
+    bool ustPdfDoc(const QUrl& urlPdf);//Задаём путь и загружаем свой экземпляр документа.
+    void nachalPoisk();//Состояние: поиск начался, запуск управляемого обхода.
+    void konchilPoisk(const char* strPrichina);//Состояние: обход окончен, подводим итог.
+
+    QPdfDocument m_pdfDoc;//Свой экземпляр документа: по нему ведём управляемый обход.
+    PoiskModelSkanirovannyj m_modelPoiska;//Управляемая модель поиска (прикреплен к m_pdfDoc).
+    QUrl m_urlPdf;//Путь к pdf документу.
+    QString m_strPoisk;//Запрос для поиска.
+    bool m_isPoisk;//true - поиск идёт, false - поиск окончен.
+    bool m_netSovpadenij;//true - поиск закончен, совпадений нет.
+    bool m_blZhdemDokument;//true - запрос задан, ждём готовности документа.
+    int m_ntSchetchik;//Число найденных совпадений (точная строка счётчика).
+    int m_ntProgress;//Прогресс обхода страниц 0..100.
+    int m_ntPageProsmotra;//Номер просмотренной страницы обхода.
+    int m_ntVsegoStranic;//Всего страниц в документе обхода.
+};
