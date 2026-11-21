@@ -329,11 +329,10 @@ Item {
                 spbPdfPage.visible = false;//Делаем невидимым DCSpinBox
                 pdfScale.visible = false;//Делаем невидимым DCScale
                 knopkaPoisk.enabled = false;//Делаем неактивной кнопку Поиска.
+				if(pdfLoader.isPoisk) prgPoisk.visible = false;//Делаем невидимую полосу загрузки.
             }
             else{//Если таймер выключен, то...
-                ldrProgress.active = false;//Отключаем прогресс. 
-                spbPdfPage.visible = true;//Делаем видимым DCSpinBox
-                pdfScale.visible = true;//Делаем видимым DCScale
+                ldrProgress.active = false;//Отключаем прогресс.  
                 if(pskPoisk.visible){//Если видим виджет поиска, то...
                     knopkaVidelit.visible = false;//Делаем невидимым кнопку Выделить текст.
                     knopkaSidebar.visible = false;//Делаем невидимой кнопку боковой панели.
@@ -347,6 +346,14 @@ Item {
                     knopkaPovorotProtiv.enabled = true;//Делаем активной кнопку Против часовой стрелки.
                     knopkaPoisk.enabled = true;//Делаем активной кнопку Поиска.
                 }
+				if(pdfLoader.isPoisk){//Если идёт процесс поиска, то...
+					prgPoisk.visible = true;//Делаем видимую полосу загрузки.
+					spbPdfPage.visible = false;//Делаем видимым DCSpinBox
+                	pdfScale.visible = false;//Делаем видимым DCScale
+				} else {
+					spbPdfPage.visible = true;//Делаем видимым DCSpinBox
+                	pdfScale.visible = true;//Делаем видимым DCScale
+				}
             }
         }
     }
@@ -574,6 +581,7 @@ Item {
             property int pdfRotation: 0//Угол поворота (может быть: 0, 90, 180, 270)
             property bool isDannie: false//true-открывается файл из Данных
             property bool isKatalog: false//true-открывается файл из Каталога
+			property bool isPoisk: false//true - поиск в данный момент идёт
             property int ntWidth: root.ntWidth//Передаём длину символа для боковой панели
             property int ntCoff: root.ntCoff//Передаём коэффициент для боковой панели
             property color clrTexta: root.clrTexta
@@ -676,16 +684,16 @@ Item {
                 //Кнопки вверх/вниз по совпадениям активны и во время поиска: пользователь
                 //смотрит уже найденное, не дожидаясь окончания обхода страниц.
                 //Полоса прогресса поиска в тулбаре: показываем всё время поиска.
-                if(pdfLoader.item.isSearch){//Поиск идёт: полоса на месте, прятанье отменено.
-                    tmrPrgPoisk.stop();
-                    prgPoisk.visible = true;
+				pdfLoader.isPoisk = pdfLoader.item.isSearch
+                if(pdfLoader.isPoisk){//Поиск идёт
+                    tmrPrgPoisk.stop();//прятанье полосы прогресса отменено.
+                    prgPoisk.visible = true;//Показать полосу прогресса
                 }
                 else if(cppqml.pdfPoisk.strPoisk !== "") {//Поиск закончен: показать 100%...
-                    prgPoisk.visible = true;
+                    prgPoisk.visible = true;//Показать полосу прогресса
                     tmrPrgPoisk.restart();//...и спрятать через паузу.
-                }
-                else//Запрос пуст (отмена): полоса уходит сразу.
-                    prgPoisk.visible = false;
+                } else//Запрос пуст (отмена): полоса уходит сразу.
+                	prgPoisk.visible = false;
             }
             function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
                 pskPoisk.currentResult = pdfLoader.item.currentResult//Задаём отображение номера поиска.
@@ -769,8 +777,13 @@ Item {
 					spbPdfPage.visible = false
 					pdfScale.visible = false
 				} else {//Если виджет невидимый, то виджеты страницы и масштаба видимые
-					spbPdfPage.visible = true
-					pdfScale.visible = true
+					if(ldrProgress.active) {//Если поменялся размер окна pdf документа и идёт загрузка, то...
+						spbPdfPage.visible = false
+						pdfScale.visible = false
+					} else {//Если нет загрузки документа, то...
+						spbPdfPage.visible = true
+						pdfScale.visible = true
+					}
 				}
 			}
         }
