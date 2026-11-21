@@ -229,6 +229,8 @@ Item {
                     }
                 }
                 Component.onCompleted:{//Когда текст отрисовался, нужно выставить размер шрифта.
+					if (!txtText || !rctZona) return;//Если объект уничтожен, просто выходим
+					if (rctZona.height <= 0) return; // Защита от отрицательного или нулевого размера
                     if(rctZona.width > txtText.width){//Если длина строки больше длины текста, то...
                         for(var ltShag=txtText.font.pixelSize; ltShag<rctZona.height-root.ntCoff; ltShag++){
                             if(txtText.width < rctZona.width){//Если длина текста меньше динны строки
@@ -244,10 +246,13 @@ Item {
                         for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
                             if(txtText.width > rctZona.width)//Если текст дилиннее строки, то...
                                 txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+							else break;//Для выхода из цикла, как только условие выполнено
                         }
                     }
                 }
                 onWidthChanged: {//Если длина строки изменилась, то...
+					if (!txtText || !rctZona) return;//Если объект уничтожен, просто выходим
+					if (rctZona.height <= 0) return; // Защита от отрицательного или нулевого размера
                     if(rctZona.width > txtText.width){//Если длина строки больше длины текста, то...
                         for(var ltShag=txtText.font.pixelSize; ltShag<rctZona.height-root.ntCoff; ltShag++){
                             if(txtText.width < rctZona.width){//Если длина текста меньше динны строки
@@ -269,9 +274,7 @@ Item {
                 onHeightChanged: {//Если изменилась высота, значит изменился размер Шрифта в StrMenu.
                     Qt.callLater(function () {//Делаем паузу на такт,иначе не успеет пересчитаться высота!
                         if (!txtText || !rctZona) return;//Если объект уничтожен, просто выходим
-                        let targetSize = rctZona.height - root.ntCoff;
-                        if (targetSize <= 0) return; // Защита от отрицательного или нулевого размера
-                        txtText.font.pixelSize = targetSize;
+                        if (rctZona.height <= 0) return; // Защита от отрицательного или нулевого размера
                         if(rctZona.width > txtText.width){//Если длина строки больше длины текста, то...
                             for(var ltShag=txtText.font.pixelSize;ltShag<rctZona.height-root.ntCoff;ltShag++){
                                 if(txtText.width < rctZona.width){//Если длина текста меньше динны строки

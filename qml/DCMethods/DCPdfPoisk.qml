@@ -130,7 +130,7 @@ Item {
 				anchors.horizontalCenter: rctText.horizontalCenter
 				anchors.verticalCenter: rctText.verticalCenter
                 color: root.clrTexta
-                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
+                font.pixelSize: rctText.height-root.ntCoff
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 text: {
@@ -139,8 +139,10 @@ Item {
                     return root.text + " [" + (root.currentResult + 1) + "|" + root.sumPoisk + "]"
                 }
 				onTextChanged: {//Если текст изменился, то...
+					if (!rctText|| !txtPoisk) return;//Если объект уничтожен, выходим
+					if (rctText.height <= 0) return; //от отрицательного или нулевого размера
 					if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
-                    for(var ltShag=txtPoisk.font.pixelSize; ltShag<root.ntWidth*root.ntCoff; ltShag++){
+                    	for(var ltShag=txtPoisk.font.pixelSize; ltShag<root.ntWidth*root.ntCoff; ltShag++){
 							if(txtPoisk.width < rctText.width){//Если длина текста меньше динны строки
 								txtPoisk.font.pixelSize = ltShag;//Увеличиваем размер шрифта
 								if(txtPoisk.width > rctText.width){//Но, если переборщили
@@ -154,13 +156,16 @@ Item {
 						for(let ltShag = txtPoisk.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения 
 							if(txtPoisk.width > rctText.width)//Если текст дилиннее строки, то...
 								txtPoisk.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+							else break;//Для выхода из цикла, как только условие выполнено
 						}
 					}
 				}
 			}
 			onWidthChanged: {//Если длина строки измениасть, то...
+				if (!rctText|| !txtPoisk) return;//Если объект уничтожен, выходим
+				if (rctText.height <= 0) return; //от отрицательного или нулевого размера
 				if(rctText.width > txtPoisk.width){//Если длина строки больше длины текста, то...
-                for(var ltShag = txtPoisk.font.pixelSize;
+                	for(var ltShag = txtPoisk.font.pixelSize;
 												ltShag<root.ntWidth*root.ntCoff; ltShag++){
 						if(txtPoisk.width < rctText.width){//Если длина текста меньше динны строки
 							txtPoisk.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -175,6 +180,7 @@ Item {
                     for(let ltShag = txtPoisk.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
 						if(txtPoisk.width > rctText.width)//Если текст дилиннее строки, то...
 							txtPoisk.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						else break;//Для выхода из цикла, как только условие выполнено
 					}
 				}
 			}

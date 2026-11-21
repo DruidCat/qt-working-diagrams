@@ -303,6 +303,8 @@ Item {
                 font.pixelSize: rctStroka.height-root.ntCoff
             }
             Component.onCompleted:{//Когда текст отрисовался, нужно выставить размер шрифта.
+				if (!rctStroka || !txtText) return;//Если объект уничтожен, выходим
+				if (rctStroka.height <= 0) return; //от отрицательного или нулевого размера
                 if(rctStroka.width > txtText.width){//Если длина строки больше длины текста, то...
                     for(var ltShag=txtText.font.pixelSize; ltShag<rctStroka.height-root.ntCoff; ltShag++){
                         if(txtText.width < rctStroka.width){//Если длина текста меньше динны строки
@@ -318,10 +320,13 @@ Item {
                     for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
                         if(txtText.width > rctStroka.width)//Если текст дилиннее строки, то...
                             txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						else break;//Для выхода из цикла, как только условие выполнено
                     }
                 }
             }
             onWidthChanged: {//Если длина строки изменилась, то...
+				if (!rctStroka || !txtText) return;//Если объект уничтожен, выходим
+				if (rctStroka.height <= 0) return; //от отрицательного или нулевого размера
                 if(rctStroka.width > txtText.width){//Если длина строки больше длины текста, то...
                     for(var ltShag=txtText.font.pixelSize; ltShag<rctStroka.height-root.ntCoff; ltShag++){
                         if(txtText.width < rctStroka.width){//Если длина текста меньше динны строки
@@ -337,13 +342,15 @@ Item {
                     for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
                         if(txtText.width > rctStroka.width)//Если текст дилиннее строки, то...
                             txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						else break;//Для выхода из цикла, как только условие выполнено
                     }
                 }
             }
             onHeightChanged: {//Если изменилась высота, значит изменился размер Шрифта в StrMenu.
 				let ltCoff = root.ntCoff
                 Qt.callLater(function () {//Делаем паузу на такт,иначе не успеет пересчитаться высота!
-                    txtText.font.pixelSize = rctStroka.height-ltCoff
+					if (!rctStroka || !txtText) return;//Если объект уничтожен, выходим
+					if (rctStroka.height <= 0) return; //от отрицательного или нулевого размера
                     if(rctStroka.width > txtText.width){//Если длина строки больше длины текста, то...
                         for(var ltShag=txtText.font.pixelSize;ltShag<rctStroka.height-ltCoff;ltShag++){
                             if(txtText.width < rctStroka.width){//Если длина текста меньше динны строки
@@ -359,6 +366,7 @@ Item {
                         for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
                             if(txtText.width > rctStroka.width)//Если текст дилиннее строки, то...
                                 txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+							else break;//Для выхода из цикла, как только условие выполнено
                         }
                     }
                 })

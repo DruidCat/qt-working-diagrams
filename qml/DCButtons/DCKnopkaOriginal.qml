@@ -25,27 +25,10 @@ Item {
 	//Длина кнопки расчитывается автоматически в слоте onCompleted в конце файла.
     //Сигналы.
 	signal clicked();
-    //Функции.
-    onHeightChanged: {//Если изменился ntHeight или ntCoff (размер шрифта), то...
-        txtText.font.pixelSize = root.height - root.ntCoff//Выставляем размер текста, и...
-        if(rctKnopka.width > txtText.width){//Если длина строки больше длины текста, то...
-            for(var ltShag=txtText.font.pixelSize; ltShag<rctKnopka.height-root.ntCoff; ltShag++){
-                if(txtText.width < rctKnopka.width){//Если длина текста меньше динны строки
-                    txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                    if(txtText.width > rctKnopka.width){//Но, если переборщили
-                        txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
-                        return;//Выходим из увеличения шрифта.
-                    }
-                }
-            }
-        }
-        else{//Если длина строки меньше длины текста, то...
-            for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
-                if(txtText.width > rctKnopka.width)//Если текст дилиннее строки, то...
-                    txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-            }
-        }
-    }
+    //Функции. 
+	Component.onCompleted: {//Слот обрабатывает данные, когда сомпонет полностью отрисовался.
+        root.width = txtText.text.length*root.height;//Расчёт длины строки (кол-во символов на высоту кнопки).
+	}
     //Для Авроры комментируем TapHandler, расскомментируем MouseArea и наоборот.
     TapHandler {//Обработка нажатия, замена MouseArea с Qt5.10
         id: tphKnopkaOriginal
@@ -119,6 +102,8 @@ Item {
             font.italic: false//Не курсивный текст
             opacity: root.opacityTexta//Прозрачность Текста.
             onTextChanged: {//Если поменяется текст в кнопке, то и размер шрифта пересчитается.
+				if (!rctKnopka || !txtText) return;//Если объект уничтожен, выходим
+				if (rctKnopka.height <= 0) return; //от отрицательного или нулевого размера
                 if(rctKnopka.width > txtText.width){//Если длина строки больше длины текста, то...
                     for(var ltShag=txtText.font.pixelSize; ltShag<rctKnopka.height-root.ntCoff; ltShag++){
                         if(txtText.width < rctKnopka.width){//Если длина текста меньше динны строки
@@ -134,11 +119,14 @@ Item {
                     for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
                         if(txtText.width > rctKnopka.width)//Если текст дилиннее строки, то...
                             txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						else break;//Для выхода из цикла, как только условие выполнено
                     }
                 }
             }
         }
         onWidthChanged: {//При onComplited посчитается ширина, а на основании её, сработает этот сигнал.
+			if (!rctKnopka || !txtText) return;//Если объект уничтожен, выходим
+			if (rctKnopka.height <= 0) return; //от отрицательного или нулевого размера
             if(rctKnopka.width > txtText.width){//Если длина строки больше длины текста, то...
                 for(var ltShag=txtText.font.pixelSize; ltShag<rctKnopka.height-root.ntCoff; ltShag++){
                     if(txtText.width < rctKnopka.width){//Если длина текста меньше динны строки
@@ -154,11 +142,31 @@ Item {
                 for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
                     if(txtText.width > rctKnopka.width)//Если текст дилиннее строки, то...
                         txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+					else break;//Для выхода из цикла, как только условие выполнено
                 }
             }
         }
-	}
-	Component.onCompleted: {//Слот обрабатывает данные, когда сомпонет полностью отрисовался.
-        root.width = txtText.text.length*root.height;//Расчёт длины строки (кол-во символов на высоту кнопки).
-	}
+	}	
+	onHeightChanged: {//Если изменился ntHeight или ntCoff (размер шрифта), то...
+		if (!rctKnopka || !txtText) return;//Если объект уничтожен, выходим
+		if (rctKnopka.height <= 0) return; //от отрицательного или нулевого размера
+        if(rctKnopka.width > txtText.width){//Если длина строки больше длины текста, то...
+            for(var ltShag=txtText.font.pixelSize; ltShag<rctKnopka.height-root.ntCoff; ltShag++){
+                if(txtText.width < rctKnopka.width){//Если длина текста меньше динны строки
+                    txtText.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                    if(txtText.width > rctKnopka.width){//Но, если переборщили
+                        txtText.font.pixelSize--;//То уменьшаем размер шрифта и...
+                        return;//Выходим из увеличения шрифта.
+                    }
+                }
+            }
+        }
+        else{//Если длина строки меньше длины текста, то...
+            for(let ltShag = txtText.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
+                if(txtText.width > rctKnopka.width)//Если текст дилиннее строки, то...
+                    txtText.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+				else break;//Для выхода из цикла, как только условие выполнено
+            }
+        }
+    }
 }

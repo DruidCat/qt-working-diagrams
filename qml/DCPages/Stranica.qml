@@ -20,30 +20,6 @@ Page {
     property real toolbarLevi: 1//Коэффициент ширины левой кнопки в тулбар.
     property real toolbarPravi: 1//Коэффициент ширины правой кнопки в тулбар.
     //Функции.
-    onNtWidthChanged: {//Если изменился размер Шрифта в StrMenu, то....
-        Qt.callLater(function () {//Делаем паузу на такт,иначе не успеет пересчитаться размер Заголовка ВЕЗДЕ!
-            txtStrZagolovok.font.pixelSize = rctStrZagolovokText.height//Задаём высоту шрифта изменённую, и...
-            if(rctStrZagolovokText.width > txtStrZagolovok.width){//длина строки больше текста
-                for(var ltShag=txtStrZagolovok.font.pixelSize;
-                                                ltShag<rctStrZagolovokText.height; ltShag++){
-                    if(txtStrZagolovok.width < rctStrZagolovokText.width){
-                        txtStrZagolovok.font.pixelSize = ltShag;//Увеличиваем размер шрифта
-                        if(txtStrZagolovok.width > rctStrZagolovokText.width){//если переборщи
-                            txtStrZagolovok.font.pixelSize--;//То уменьшаем размер шрифта и...
-                            return;//Выходим из увеличения шрифта.
-                        }
-                    }
-                }
-            }
-            else{//Если длина строки меньше длины текста, то...
-                for(let ltShag = txtStrZagolovok.font.pixelSize; ltShag > 0; ltShag--){//Цикл
-                    if(txtStrZagolovok.width > rctStrZagolovokText.width)//текст дилиннее стро
-                        txtStrZagolovok.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
-                }
-            }
-        })
-    }
-
 	Item{
 		id: tmStr
         anchors.fill: parent
@@ -84,6 +60,8 @@ Page {
                         font.bold: true
 						font.pixelSize: rctStrZagolovokText.height
 						onTextChanged: {//Если изменился текст, втавили длинный текст.
+							if (!rctStrZagolovokText || !txtStrZagolovok) return;//объект уничтожен, выходим
+							if (rctStrZagolovokText.height <= 0) return;//от отрицательного или 0 размера
 							if(rctStrZagolovokText.width > txtStrZagolovok.width){//длина строки больше текста
                                 for(var ltShag=txtStrZagolovok.font.pixelSize;
 																ltShag<rctStrZagolovokText.height; ltShag++){
@@ -100,11 +78,14 @@ Page {
 								for(let ltShag = txtStrZagolovok.font.pixelSize; ltShag > 0; ltShag--){//Цикл
 									if(txtStrZagolovok.width > rctStrZagolovokText.width)//текст дилиннее стро
 										txtStrZagolovok.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+									else break;//Для выхода из цикла, как только условие выполнено
 								}
 							}
 						}
 					}
                     onWidthChanged: {//Если длина строки изменилась, то...
+						if (!rctStrZagolovokText || !txtStrZagolovok) return;//Если объект уничтожен, выходим
+						if (rctStrZagolovokText.height <= 0) return;//от отрицательного или нулевого размера
                         if(rctStrZagolovokText.width > txtStrZagolovok.width){//длина строки больше текста, то
                             for(var ltShag=txtStrZagolovok.font.pixelSize; ltShag<rctStrZagolovokText.height;
                                                                                                     ltShag++){
@@ -121,6 +102,7 @@ Page {
                             for(let ltShag = txtStrZagolovok.font.pixelSize; ltShag > 0; ltShag--){//Цикл
                                 if(txtStrZagolovok.width > rctStrZagolovokText.width)//текст дилиннее строки
                                     txtStrZagolovok.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+								else break;//Для выхода из цикла, как только условие выполнено
                             }
                         }
 					}
@@ -178,6 +160,8 @@ Page {
 						text: ""
                         font.pixelSize: rctStrToolbarText.height
                         onTextChanged: {//Если длина строки изменилась, то...
+							if (!rctStrToolbarText || !txtStrToolbar) return;//Если объект уничтожен, выходим
+							if (rctStrToolbarText.height <= 0) return;//от отрицательного или нулевого размера
                             if(rctStrToolbarText.width > txtStrToolbar.width){//длина строки больше текста, то
                                 for(var ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;
                                                                                                     ltShag++){
@@ -194,11 +178,14 @@ Page {
                                 for(let ltShag = txtStrToolbar.font.pixelSize; ltShag > 0; ltShag--){//Цикл
                                     if(txtStrToolbar.width > rctStrToolbarText.width)//текст дилиннее строки
                                         txtStrToolbar.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+									else break;//Для выхода из цикла, как только условие выполнено
                                 }
                             }
                         }
 					}
 					onWidthChanged: {//Если длина строки изменилась, то...
+						if (!rctStrToolbarText || !txtStrToolbar) return;//Если объект уничтожен, выходим
+						if (rctStrToolbarText.height <= 0) return; //от отрицательного или нулевого размера
 						if(rctStrToolbarText.width > txtStrToolbar.width){//длина строки больше текста, то...
                             for(var ltShag=txtStrToolbar.font.pixelSize;ltShag<rctStrToolbarText.height;
                                                                                                     ltShag++){
@@ -215,6 +202,7 @@ Page {
 							for(let ltShag = txtStrToolbar.font.pixelSize; ltShag > 0; ltShag--){//Цикл
 								if(txtStrToolbar.width > rctStrToolbarText.width)//текст дилиннее строки
 									txtStrToolbar.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+								else break;//Для выхода из цикла, как только условие выполнено
 							}
 						}
 					}
@@ -236,4 +224,30 @@ Page {
 			}
 		}
 	}
+	onNtWidthChanged: {//Если изменился размер Шрифта в StrMenu, то....
+        Qt.callLater(function () {//Делаем паузу на такт,иначе не успеет пересчитаться размер Заголовка ВЕЗДЕ!
+			if (!rctStrZagolovokText || !txtStrZagolovok) return;//Если объект уничтожен, выходим
+			if (rctStrZagolovokText.height <= 0) return; //от отрицательного или нулевого размера
+            //txtStrZagolovok.font.pixelSize = rctStrZagolovokText.height//Задаём высоту шрифта изменённую, и...
+            if(rctStrZagolovokText.width > txtStrZagolovok.width){//длина строки больше текста
+                for(var ltShag=txtStrZagolovok.font.pixelSize;
+                                                ltShag<rctStrZagolovokText.height; ltShag++){
+                    if(txtStrZagolovok.width < rctStrZagolovokText.width){
+                        txtStrZagolovok.font.pixelSize = ltShag;//Увеличиваем размер шрифта
+                        if(txtStrZagolovok.width > rctStrZagolovokText.width){//если переборщи
+                            txtStrZagolovok.font.pixelSize--;//То уменьшаем размер шрифта и...
+                            return;//Выходим из увеличения шрифта.
+                        }
+                    }
+                }
+            }
+            else{//Если длина строки меньше длины текста, то...
+                for(let ltShag = txtStrZagolovok.font.pixelSize; ltShag > 0; ltShag--){//Цикл
+                    if(txtStrZagolovok.width > rctStrZagolovokText.width)//текст дилиннее стро
+                        txtStrZagolovok.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+					else break;//Для выхода из цикла, как только условие выполнено
+                }
+            }
+        })
+    }
 }

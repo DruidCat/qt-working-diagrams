@@ -76,11 +76,13 @@ Item {
 				anchors.horizontalCenter: rctText.horizontalCenter
 				anchors.verticalCenter: rctText.verticalCenter
                 color: root.clrTexta
-                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
+                font.pixelSize: rctText.height-root.ntCoff
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 text: qsTr("УДАЛИТЬ:")+root.text+"?"
 				onTextChanged: {//Если текст изменился, то...
+					if (!rctText || !txtTextUdalit) return;//Если объект уничтожен, выходим
+					if (rctText.height <= 0) return; //от отрицательного или нулевого размера
 					if(rctText.width > txtTextUdalit.width){//Если длина строки больше длины текста, то...
                         for(var ltShag=txtTextUdalit.font.pixelSize;
                                                 ltShag<root.ntWidth*root.ntCoff; ltShag++){
@@ -97,13 +99,16 @@ Item {
                         for(let ltShag = txtTextUdalit.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения
 							if(txtTextUdalit.width > rctText.width)//Если текст дилиннее строки, то...
 								txtTextUdalit.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+							else break;//Для выхода из цикла, как только условие выполнено
 						}
 					}
 				}
 			}
 			onWidthChanged: {//Если длина строки измениасть, то...
+				if (!rctText || !txtTextUdalit) return;//Если объект уничтожен, выходим
+				if (rctText.height <= 0) return; //от отрицательного или нулевого размера
 				if(rctText.width > txtTextUdalit.width){//Если длина строки больше длины текста, то...
-                for(var ltShag=txtTextUdalit.font.pixelSize;
+                	for(var ltShag=txtTextUdalit.font.pixelSize;
                                                 ltShag<root.ntWidth*root.ntCoff; ltShag++){
 						if(txtTextUdalit.width < rctText.width){//Если длина текста меньше динны строки
 							txtTextUdalit.font.pixelSize = ltShag;//Увеличиваем размер шрифта
@@ -118,6 +123,7 @@ Item {
 					for(let ltShag = txtTextUdalit.font.pixelSize; ltShag > 0; ltShag--){//Цикл уменьшения 
 						if(txtTextUdalit.width > rctText.width)//Если текст дилиннее строки, то...
 							txtTextUdalit.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						else break;//Для выхода из цикла, как только условие выполнено
 					}
 				}
 			}

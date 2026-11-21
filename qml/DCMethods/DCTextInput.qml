@@ -72,7 +72,7 @@ Item {
                 //regExp: blSqlProtect ? /[^';*%_\\?]+/ : /.*/
             //}
             text: ""
-            font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
+            font.pixelSize: rctTextInput.height-root.ntCoff
 			//font.capitalization: Font.AllUppercase//Отображает текст весь с заглавных букв.
             //inputMethodHints: Qt.ImhUppercaseOnly//Буквы в виртуальной клавиатуре заглавные
             //cursorPosition: text.length;//Курсор в конец текста
@@ -106,7 +106,7 @@ Item {
             Text {//Текст, подсказывающий пользователю, что нужно вводить.
                 id: txtTextInput
                 anchors.centerIn: txnTextInput//Обязательно по центру, иначе масштабирование не будет работать
-                font.pixelSize: root.ntWidth*root.ntCoff//размер шрифта текста.
+                font.pixelSize: rctTextInput.height-root.ntCoff
                 text: ""//По умолчанию нет надписи.
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
@@ -115,6 +115,8 @@ Item {
 				onVisibleChanged: {//Если изменилась видимость, то...
 					if(text){//(Защита от пустого текста) Если не пустой текст, то...
 						if(visible){//Если подсказка становится видимой, то...
+							if (!rctTextInput || !txtTextInput) return;//Если объект уничтожен, выходим
+							if (rctTextInput.height <= 0) return; //от отрицательного или нулевого размера
 							if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
                                 for(var ltShag = txtTextInput.font.pixelSize;
 												ltShag < rctTextInput.height-root.ntCoff; ltShag++){
@@ -131,6 +133,7 @@ Item {
 								for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
 									if(txtTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
 										txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+									else break;//Для выхода из цикла, как только условие выполнено
 								}
 							}
 						}
@@ -142,6 +145,8 @@ Item {
 	onWidthChanged: {//Если изменилась ширина прямоугольника, то...
 		if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
 			if(txtTextInput.visible){//Если подсказка становится видимой, то...
+				if (!rctTextInput || !txtTextInput) return;//Если объект уничтожен, выходим
+				if (rctTextInput.height <= 0) return; //от отрицательного или нулевого размера
 				if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
                     for(var ltShag = txtTextInput.font.pixelSize;
 									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
@@ -158,12 +163,15 @@ Item {
 					for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
 						if(txtTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
 							txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						else break;//Для выхода из цикла, как только условие выполнено
 					}
 				}
 			}
 		}
 		if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
 			if(txnTextInput.visible){//Если текст становится видимым, то...
+				if (!rctTextInput || !txnTextInput) return;//Если объект уничтожен, выходим
+				if (rctTextInput.height <= 0) return; //от отрицательного или нулевого размера
 				if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста,то
 					for(let ltShag = txnTextInput.font.pixelSize;
 									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
@@ -180,6 +188,7 @@ Item {
 					for(let ltShag = txnTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
 						if(txnTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
 							txnTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						else break;//Для выхода из цикла, как только условие выполнено
 					}
 				}
 			}
@@ -188,6 +197,8 @@ Item {
 	onPlaceholderTextChanged: {//Если изменилcя текст подсказки, то...
 		if(txtTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
 			if(txtTextInput.visible){//Если подсказка становится видимой, то...
+				if (!rctTextInput || !txtTextInput) return;//Если объект уничтожен, выходим
+				if (rctTextInput.height <= 0) return; //от отрицательного или нулевого размера
 				if(rctTextInput.width > txtTextInput.width){//Если длина строки > длины текста,то
                     for(var ltShag = txtTextInput.font.pixelSize;
 									ltShag < rctTextInput.height-root.ntCoff; ltShag++){
@@ -204,6 +215,7 @@ Item {
 					for(let ltShag = txtTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
 						if(txtTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
 							txtTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+						else break;//Для выхода из цикла, как только условие выполнено
 					}
 				}
 			}
@@ -213,6 +225,8 @@ Item {
         Qt.callLater(function() {//Чтоб успела посчитаться длина строки вставленного текста.
             if(txnTextInput.text){//(Защита от пустого текста) Если не пустой текст, то...
                 if(txnTextInput.visible){//Если текст становится видимым, то...
+					if (!rctTextInput || !txnTextInput) return;//Если объект уничтожен, выходим
+					if (rctTextInput.height <= 0) return; //от отрицательного или нулевого размера
                     if(rctTextInput.width > txnTextInput.width){//Если длина строки > длины текста,то
                         for(var ltShag = txnTextInput.font.pixelSize;
                                         ltShag < rctTextInput.height-root.ntCoff; ltShag++){
@@ -229,6 +243,7 @@ Item {
                         for(let ltShag = txnTextInput.font.pixelSize; ltShag > 0; ltShag--){//Цикл --
                             if(txnTextInput.width > rctTextInput.width)//Если текст дилиннее строки,то
                                 txnTextInput.font.pixelSize = ltShag;//Уменьшаем размер шрифта.
+							else break;//Для выхода из цикла, как только условие выполнено
                         }
                     }
                 }
