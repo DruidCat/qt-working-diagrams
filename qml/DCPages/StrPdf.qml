@@ -756,7 +756,6 @@ Item {
         DCProgress {//Полоса прогресса поиска: видна только пока идёт поиск (isSearch).
             id: prgPoisk
             anchors.fill: tmToolbar
-            anchors.topMargin: root.ntCoff/4; anchors.bottomMargin: root.ntCoff/4
             ntWidth: root.ntWidth; ntCoff: root.ntCoff
             clrProgress: root.clrPoisk; clrTexta: root.clrMenuFon
             running: false//Внутренний таймер DCProgress выключен, прогресс гоняет C++.
