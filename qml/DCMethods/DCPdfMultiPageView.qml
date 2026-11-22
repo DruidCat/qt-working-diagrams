@@ -680,6 +680,10 @@ Item {
         root.ntTsentraPage = ntPage
         root.ntTsentraX = ntX
         root.ntTsentraY = ntY
+        tmrCentrovka.ntPopitki = 0//Свежий раунд доводки.
+        tmrCentrovka.ntProshliyY = -100000
+        tmrCentrovka.ntNashY = 100000
+        tmrCentrovka.ntTikhih = 0
         tmrCentrovka.restart()
     }
     Timer {
@@ -687,8 +691,24 @@ Item {
         interval: 40
         repeat: true
         property int ntPopitki: 0
+        property real ntProshliyY: -100000//contentY прошлого тика (детектор движения).
+        property real ntNashY: 100000//Последнее, что записали мы сами.
+        property int ntTikhih: 0//Сколько тиков подряд вид неподвижен.
         onTriggered: {
             const cnDelegate = tableView.itemAtCell(0, root.ntTsentraPage)
+            const cnFakt = tableView.contentY
+            const blDvizhetsya = Math.abs(cnFakt - ntProshliyY) > 0.5
+            ntProshliyY = cnFakt
+            const blChuzhoyDvizhenie = blDvizhetsya && Math.abs(cnFakt - ntNashY) > 0.5
+            if (blChuzhoyDvizhenie) {
+                // Родственный движок (отложенный Contain из positionViewAtCell)
+                // сам ведёт прокрутку — уступаем, не воюем с ним.
+                ntTikhih = 0
+            } else if (blDvizhetsya) {
+                ntTikhih = 0//Наш собственный скачок записи.
+            } else {
+                ntTikhih += 1
+            }
             if (cnDelegate) {
                 const cnMinX = -tableView.originX
                 const cnMaxX = Math.max(cnMinX, tableView.contentWidth - tableView.width
@@ -704,23 +724,27 @@ Item {
                                           - tableView.height / 2))
                 root.ntTsentraCelX = cnX
                 root.ntTsentraCelY = cnY
-                const blUehalo = Math.abs(cnX - tableView.contentX) > 0.5
-                              || Math.abs(cnY - tableView.contentY) > 0.5
-                if (blUehalo) {
-                    tableView.flick(0, 0)//Гасим остаточную анимацию positionViewAtCell,
-                    //иначе её доскролл уедет с нашей точки центрирования.
-                    tableView.contentX = cnX
-                    tableView.contentY = cnY
-                    if (root.blCentrovkaLog)
-                        console.log("CENTR ->", cnX.toFixed(1), cnY.toFixed(1),
-                                    "page", root.ntTsentraPage,
-                                    "scale", root.renderScale.toFixed(3))
+                if (!blChuzhoyDvizhenie && ntTikhih >= 2) {
+                    // Вид в покое — дописываем цель ОДНИМ скачком, без дребезга.
+                    const blUehalo = Math.abs(cnX - tableView.contentX) > 0.5
+                                  || Math.abs(cnY - tableView.contentY) > 0.5
+                    if (blUehalo) {
+                        tableView.flick(0, 0)//Гасим остаточную инерцию прокрутки.
+                        tableView.contentX = cnX
+                        tableView.contentY = cnY
+                        ntNashY = tableView.contentY//Что кламперовал Flickable.
+                        ntTikhih = 0
+                        if (root.blCentrovkaLog)
+                            console.log("CENTR ->", cnX.toFixed(1), cnY.toFixed(1),
+                                        "page", root.ntTsentraPage,
+                                        "scale", root.renderScale.toFixed(3))
+                    } else {
+                        ntPopitki = 0//Цель совпала с фактом — готово.
+                        stop()
+                    }
                 }
-                if (!blUehalo || ++ntPopitki > 25) {//Стабильно или делегат не едет.
-                    ntPopitki = 0
-                    stop()
-                }
-            } else if (++ntPopitki > 25) {//Делегат так и не создался — не мучаем.
+            }
+            if (++ntPopitki > 40) {//Таймаут доводки — прекращаем наблюдение.
                 ntPopitki = 0
                 stop()
             }
