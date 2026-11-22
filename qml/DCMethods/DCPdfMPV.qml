@@ -13,6 +13,7 @@ Item {
     property real renderScale: 1//Коэффициент масштаба 1.
     property int currentPage : -1//Номер страницы устанавливаемый вне виджет(set).(не путать с ntStranica)
     property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
+    readonly property var pmpRef: pmpDoc//Доступ к vendored-виду для автотестов.
     property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
     //Запрос на поиск. Один вход: обработчик onSearchStringChanged несёт его в
     //C++ (cppqml.pdfPoisk), нативного скана больше нет.
@@ -104,10 +105,6 @@ Item {
     }
     function fnClickedKeyVpravo(){//Функция нажатия клавиши вправо.
         dcScroll.fnKeyVpravo()//Функция скролла вправо страницы
-    }
-    function fnModelPoisk(index){//Функция возвращающая объект модели на конкретный currentResult
-        const cnModel = dlmPoisk.items.get(index);//Получаем объект на конкретный currentResult
-        return cnModel ? cnModel.model : null;//если модель пустая, возвращаем null, если нет, то модель
     }
     function fnClickedKeyEnter(){//Функция перехода нажатия клавиши Enter.
         if(dcSidebar.opened){//Если боковая панель открыта, то...
@@ -691,20 +688,20 @@ Item {
         value: root.ntScrollMargin; when: !!pmpDoc.flickable
         restoreMode: Binding.RestoreNone
     }
-    Connections {//Автовыбор первого совпадения и переход
+    Connections {//Подсветка выбранного совпадения в боковой панели.
         target: pmpDoc.searchModel
         function onCurrentResultChanged(){//Если обрабатываемый результат поиска изменён, то...
             root.currentResult = pmpDoc.searchModel.currentResult//Присваиваем действующий результат поиска.
-            if(root.currentResult >= 0){//Проверка на -1, если нет, то...
-                const cnModel = fnModelPoisk(root.currentResult);//Получаем объект модели по currentResult
-                if (cnModel){//Если модень не null, то...
-                    dcSidebar.fnNaidenoIndex(root.currentResult)//Подсвечиваем в боковой панели
-                    pmpDoc.goToLocation(cnModel.page,//Номер страницы
-                                        Qt.point(cnModel.location.x, cnModel.location.y),//Координаты
-                                        pmpDoc.renderScale//Масштаю
-                                        )//Переходим на страницу номера поиска.
-                }
-            }
+            if(root.currentResult >= 0)//Проверка на -1, если нет, то...
+                dcSidebar.fnNaidenoIndex(root.currentResult)//Подсвечиваем в боковой панели
+        }
+    }
+    Connections {//Костя: автовыбор первого совпадения после завершения обхода (если никто не выбран).
+        target: cppqml.pdfPoisk
+        function onIsPoiskChanged(){//Поиск только что закончился...
+            if(!cppqml.pdfPoisk.isPoisk && cppqml.pdfPoisk.ntSchetchik > 0
+                    && root.currentResult < 0 && pmpDoc.searchModel.currentResult < 0)
+                pmpDoc.searchModel.currentResult = 0//Плавно переходим к первому совпадению.
         }
     }
     Rectangle {//Дополнительный элемент UI отображающий страницы, общее количество и текущую.

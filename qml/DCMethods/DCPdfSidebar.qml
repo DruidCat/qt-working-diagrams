@@ -444,22 +444,12 @@ Drawer {
                 }
                 highlighted: ListView.isCurrentItem
                 onClicked: lsvNaideno.fnClicedEnter(tmdResult.index)//Нажатие Enter или клика по элементу
-                Component.onCompleted: {//Если создался элемент делегата, то...
-                    if (index === 0 && root.pmpDoc){//Если index поиска первый (0), то...
-                        root.pmpDoc.searchModel.currentResult = -1//Сбрасываем результат прошлого поиска.
-                        tmrCurrentResult.running = true//Запускаем таймер,чтоб нет прерывания в прерывании
-                    }
-                }
-                Timer {//Таймер необходим, чтобы выйти из прерывания и подсветить первый элемент.
-                    id: tmrCurrentResult
-                    interval: 3; running: false; repeat: false
-                    onTriggered: {//Когда таймер отработает, то...
-                        if (root.pmpDoc){//Если не null, то...
-                            lsvNaideno.focus = true//Фокус на Найдено
-                            root.pmpDoc.searchModel.currentResult = 0//Переход на первый
-                        }
-                    }
-                }
+                // Костя: здесь был хак — первый делегат сбрасывал currentResult в -1 и через
+                // 3 мс выбирал 0. Делегаты виртуализированного списка пересоздаются в любой
+                // момент (скролл, дописывание строк поиска) и молча перебивали выбор
+                // пользователя («нажал — ничего не произошло»). Теперь модель поиска сама
+                // сбрасывает выбор при смене запроса (C++), а первый результат автовыбирается
+                // после завершения обхода в DCPdfMPV.qml.
             }
         }
     }

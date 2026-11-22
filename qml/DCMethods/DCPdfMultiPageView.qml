@@ -7,13 +7,17 @@
 // используется единственная управляемая модель C++ (cppqml.pdfPoisk.modelPoiska,
 // класс PoiskModelSkanirovannyj). Так поиск в приложении ровно один: с точным
 // счётчиком, точным концом обхода и без фриза двойного сканирования на OK.
-// Отличия от оригинала ровно три (помечены «Костя»):
+// Отличия от оригинала помечены «Костя»:
 //   1) свойство searchModel привязано к модели из C++ (был alias на внутренний);
 //   2) внутренний объект PdfSearchModel заменён на Connections с jump() по
 //      currentResultChanged (та же логика, что была у модели);
-//   3) шапка-комментарий.
+//   3) searchString — обычное свойство вместо alias (alias не указывает на var);
+//   4) центрирование совпадения в середине окна в onJumped (родной Contain лишь
+//      минимально показывает хит) + функция/таймер центрирования внизу файла;
+//   5) readonly tableViewRef — доступ к внутреннему TableView для автотестов;
+//   6) шапка-комментарий.
 // При апгрейде Qt: взять новый PdfMultiPageView.qml из \$QT/qml/QtQuick/Pdf/,
-// наложить эти три отличия (diff с этой копии покажет их за секунды).
+// наложить эти отличия (diff с этой копии покажет их за секунды).
 
 pragma ComponentBehavior: Bound
 
@@ -614,6 +618,14 @@ Item {
                                        rectPts.width * root.renderScale + tableView.jumpLocationMargin.x * 2,
                                        rectPts.height * root.renderScale + tableView.jumpLocationMargin.y * 2)
                 tableView.positionViewAtCell(0, current.page, TableView.Contain, Qt.point(0, 0), rectPx)
+                // Костя: родной Contain лишь минимально показывает хит; центрируем
+                // совпадение в середине окна, в том числе по X при увеличении.
+                // При повороте страниц не центрируем (координаты внутри делегата
+                // повёрнуты — остаёмся на штатном поведении Contain).
+                if (root.pageRotation % 180 === 0)
+                    root.fnCentrovatPoIsku(current.page,
+                                           rectPts.x + rectPts.width / 2,
+                                           rectPts.y + rectPts.height / 2)
                 console.log(lcMPV, "going to zoom", root.renderScale, "rect", rectPx, "on page", current.page,
                             "ended up @", tableView.contentX.toFixed(1) + ", " + tableView.contentY.toFixed(1))
             } else {
@@ -642,8 +654,78 @@ Item {
     // Костя: здесь был внутренний PdfSearchModel { id: searchModel; document: ... }.
     // Модель теперь живёт в C++ (cppqml.pdfPoisk.modelPoiska) — смотри начало файла.
     // Логика та же: по смене выбранного результата прыгаем на её страницу.
+    // Guard: при сбросе модели currentResult уходит в -1 и ссылка невалидна —
+    // jump по ней задвинул бы currentPage в -1 (рендер Null → ложная авария).
     Connections {
         target: root.searchModel
-        function onCurrentResultChanged() { pageNavigator.jump(target.currentResultLink) }
+        function onCurrentResultChanged() {
+            if (target && target.currentResult >= 0)
+                pageNavigator.jump(target.currentResultLink)
+        }
     }
+    // ===== Костя: центрирование совпадения поиска в середине окна =====
+    // Делегат дальней страницы создаётся асинхронно TableView: коротким таймером
+    // (40 мс, до ~1 с) ДОСТАБИЛИЗУЕМ позицию: делегаты перекладываются по мере
+    // откладки ленивых строк, а конвейер может сменить renderScale после прыжка.
+    // Поэтому цели пересчитываем каждый тик по ТЕКУЩЕМУ renderScale (координаты
+    // храним в точках PDF) и пишем contentX/Y, пока расчёт не перестанет
+    // отличаться от фактической прокрутки (с клампом о границы контента).
+    property int ntTsentraPage: -1
+    property real ntTsentraX: 0//Центр совпадения, точки PDF (не пиксели!).
+    property real ntTsentraY: 0
+    property bool blCentrovkaLog: false//Замер в автотестах: печатать расчёт центрирования.
+    property real ntTsentraCelX: 0//Замер: последняя цель центрирования (для автотестов).
+    property real ntTsentraCelY: 0
+    function fnCentrovatPoIsku(ntPage, ntX, ntY) {
+        root.ntTsentraPage = ntPage
+        root.ntTsentraX = ntX
+        root.ntTsentraY = ntY
+        tmrCentrovka.restart()
+    }
+    Timer {
+        id: tmrCentrovka
+        interval: 40
+        repeat: true
+        property int ntPopitki: 0
+        onTriggered: {
+            const cnDelegate = tableView.itemAtCell(0, root.ntTsentraPage)
+            if (cnDelegate) {
+                const cnMinX = -tableView.originX
+                const cnMaxX = Math.max(cnMinX, tableView.contentWidth - tableView.width
+                                                             - tableView.originX)
+                const cnMinY = -tableView.originY
+                const cnMaxY = Math.max(cnMinY, tableView.contentHeight - tableView.height
+                                                             - tableView.originY)
+                const cnX = Math.min(cnMaxX, Math.max(cnMinX,
+                              cnDelegate.x + root.ntTsentraX * root.renderScale
+                                          - tableView.width / 2))
+                const cnY = Math.min(cnMaxY, Math.max(cnMinY,
+                              cnDelegate.y + root.ntTsentraY * root.renderScale
+                                          - tableView.height / 2))
+                root.ntTsentraCelX = cnX
+                root.ntTsentraCelY = cnY
+                const blUehalo = Math.abs(cnX - tableView.contentX) > 0.5
+                              || Math.abs(cnY - tableView.contentY) > 0.5
+                if (blUehalo) {
+                    tableView.flick(0, 0)//Гасим остаточную анимацию positionViewAtCell,
+                    //иначе её доскролл уедет с нашей точки центрирования.
+                    tableView.contentX = cnX
+                    tableView.contentY = cnY
+                    if (root.blCentrovkaLog)
+                        console.log("CENTR ->", cnX.toFixed(1), cnY.toFixed(1),
+                                    "page", root.ntTsentraPage,
+                                    "scale", root.renderScale.toFixed(3))
+                }
+                if (!blUehalo || ++ntPopitki > 25) {//Стабильно или делегат не едет.
+                    ntPopitki = 0
+                    stop()
+                }
+            } else if (++ntPopitki > 25) {//Делегат так и не создался — не мучаем.
+                ntPopitki = 0
+                stop()
+            }
+        }
+    }
+    // Костя: доступ к внутреннему TableView для автотестов (только чтение).
+    readonly property var tableViewRef: tableView
 }
