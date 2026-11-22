@@ -4,13 +4,99 @@
 #include <QDebug>
 
 PoiskModelSkanirovannyj::PoiskModelSkanirovannyj(QObject* proditel)
-    : QPdfSearchModel(proditel), ntNextPage(0), blIdetObhod(false){//Конструктор.
+    : QPdfSearchModel(proditel), ntNextPage(0), blIdetObhod(false),
+      m_ntTekushijResulta(-1){//Конструктор.
 /////////////////////////////////////////////////////////////////////////
 
     //Темп как у штатного сканирования PdfMultiPageView: одна страница за тик,
     //чтобы поисковая модель интерфейса успевала заполнять список боковой панели.
     m_tmrTik.setInterval(100);
     connect(&m_tmrTik, &QTimer::timeout, this, &PoiskModelSkanirovannyj::proskanirovatStranicyTik);
+    //Сброс модели (новый запрос): выбранного результата больше нет, обновим зависимые свойства.
+    connect(this, &QAbstractItemModel::modelReset, this, [this](){
+        if(m_ntTekushijResulta != -1){
+            m_ntTekushijResulta = -1;
+            emit currentResultChanged();
+            emit currentPageChanged();
+            emit currentResultBoundingPolygonsChanged();
+        }
+        emit currentPageBoundingPolygonsChanged();//Подсветку всех страниц перечитать (стала пуста).
+    });
+}
+int PoiskModelSkanirovannyj::currentResult() const{//Номер выбранного совпадения.
+/////////////////////////////////////////
+    return m_ntTekushijResulta;
+}
+void PoiskModelSkanirovannyj::setCurrentResult(int ntNovyj){//Выбор совпадения с клампом.
+/////////////////////////////////////////////////
+
+    int ntGranica = rowCount(QModelIndex()) - 1;//Последний допустимый индекс строки.
+    if(ntGranica < 0)//Строк ещё нет — выбрать ничего нельзя.
+        ntGranica = -1;
+    if(ntNovyj > ntGranica)//Выше хвоста модели не залезаем (там же wrap по всему списку).
+        ntNovyj = ntGranica;
+    if(ntNovyj < -1)//Ниже «ничего не выбрано» не опускаемся.
+        ntNovyj = -1;
+    if(m_ntTekushijResulta == ntNovyj)//Значение не изменилось — сигналов не будет.
+        return;
+    m_ntTekushijResulta = ntNovyj;//Запоминаем выбранный результат.
+    emit currentResultChanged();//По нему DCPdfMultiPageView прыгнет на страницу.
+    emit currentPageChanged();//Пересчитаем подсветку страниц-хитов.
+    emit currentResultBoundingPolygonsChanged();//И жёлтый полигон текущего результата.
+}
+int PoiskModelSkanirovannyj::ntRolStranicy() const{//Роль «page» в таблице ролей базы.
+/////////////////////////////////////////////
+
+    const QHash<int,QByteArray> cnRoli = roleNames();//Имена ролей даёт базовая модель.
+    for(auto it = cnRoli.constBegin(); it != cnRoli.constEnd(); ++it){//Ищем роль с именем page.
+        if(it.value() == "page")//Нашли роль страницы.
+            return it.key();
+    }
+    return -1;//Роли страницы нет — был бы баг Qt, вернём -1 (данных не покажем).
+}
+int PoiskModelSkanirovannyj::currentPage() const{//Страница выбранного совпадения.
+///////////////////////////////////////////
+
+    if(m_ntTekushijResulta < 0 || m_ntTekushijResulta >= ntVsegoStrok())//Выбора нет.
+        return -1;
+    return data(index(m_ntTekushijResulta, 0), ntRolStranicy()).toInt();//Страница строки.
+}
+int PoiskModelSkanirovannyj::ntVsegoStrok() const{//Число найденных строк модели.
+///////////////////////////////////////
+    return rowCount(QModelIndex());
+}
+QPdfLink PoiskModelSkanirovannyj::currentResultLink() const{//Ссылка выбранного результата.
+////////////////////////////////////////////////
+
+    if(m_ntTekushijResulta < 0 || m_ntTekushijResulta >= ntVsegoStrok())//Выбора нет.
+        return QPdfLink();//Пустая ссылка: jump() её проигнорирует.
+    return resultAtIndex(m_ntTekushijResulta);//Штатная ссылка базовой модели на строку.
+}
+QList<QPolygonF> PoiskModelSkanirovannyj::currentResultBoundingPolygons() const{//Полигон выбора.
+/////////////////////////////////////////////////////////////
+
+    QList<QPolygonF> lstPoligony;//Список полигонов для ItemSelection (жёлтая рамка).
+    if(m_ntTekushijResulta < 0 || m_ntTekushijResulta >= ntVsegoStrok())//Выбора нет — полигонов нет.
+        return lstPoligony;
+    const QList<QRectF> lstPryamoug = resultAtIndex(m_ntTekushijResulta).rectangles();
+    for(const QRectF& rcPryamoug : lstPryamoug)//Каждый прямоугольник совпадения — в полигон.
+        lstPoligony.append(QPolygonF(rcPryamoug));
+    return lstPoligony;
+}
+QList<QPolygonF> PoiskModelSkanirovannyj::boundingPolygonsOnPage(int ntStranica){//Хиты страницы.
+///////////////////////////////////////////////////////////
+
+    QList<QPolygonF> lstPoligony;//Список полигонов серой подсветки всех хитов страницы.
+    const int ntRol = ntRolStranicy();//Роль страницы в базовой модели.
+    const int ntVsego = ntVsegoStrok();//Сколько строк найдено на данный момент.
+    for(int nt = 0; nt < ntVsego; ++nt){//Идём по всем строкам результата.
+        if(data(index(nt, 0), ntRol).toInt() != ntStranica)//Строка не с этой страницы — мимо.
+            continue;
+        const QList<QRectF> lstPryamoug = resultAtIndex(nt).rectangles();
+        for(const QRectF& rcPryamoug : lstPryamoug)//Прямоугольники совпадения — в полигоны.
+            lstPoligony.append(QPolygonF(rcPryamoug));
+    }
+    return lstPoligony;
 }
 void PoiskModelSkanirovannyj::timerEvent(QTimerEvent* event){//Перехват таймеров базовой модели.
 /////////////////////////////////////////////////////
@@ -64,7 +150,10 @@ void PoiskModelSkanirovannyj::proskanirovatStranicyTik(){//Тик: одна ст
         emit sgnObhodZavershen(pDoc->pageCount());
         return;
     }
+    const int ntStrokiDo = rowCount(QModelIndex());//Сколько строк было до этой страницы.
     updatePage(ntNextPage);//Ищет эту страницу и дописывает строки в модель.
+    if(rowCount(QModelIndex()) != ntStrokiDo)//На странице есть хиты — подсветку страниц перечитать.
+        emit currentPageBoundingPolygonsChanged();//Частота как у родного скана: раз на страницу.
     ntNextPage += 1;//Страница просмотрена.
     emit sgnTikObhoda(ntNextPage, pDoc->pageCount());
     if(ntNextPage >= pDoc->pageCount()){//Последняя страница просмотрена — обход точечно завершён.
@@ -132,6 +221,10 @@ int DCPdfPoisk::ntProgress() const{//Возвращает процент обх�
 int DCPdfPoisk::ntPageProsmotra() const{//Возвращает номер просмотренной страницы обхода.
 /////////////////////////////////////////
     return m_ntPageProsmotra;
+}
+QAbstractItemModel* DCPdfPoisk::modelPoiska(){//Возвращает единственную модель поиска для QML.
+////////////////////////////////////////////
+    return &m_modelPoiska;
 }
 bool DCPdfPoisk::ustPdfDoc(const QUrl& urlPdf){//Загрузка своего экземпляра pdf документа.
 /////////////////////////////////////

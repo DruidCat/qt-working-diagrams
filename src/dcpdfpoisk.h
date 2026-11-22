@@ -6,31 +6,64 @@
 #include <QString>
 #include <QtPdf/QPdfDocument>
 #include <QtPdf/QPdfSearchModel>
+#include <QtPdf/QPdfLink>
+#include <QPolygonF>
+#include <QAbstractItemModel>
 
 //Модель поиска с управляемым сканированием страниц. Базовый QPdfSearchModel
 //устроен «вечно»: у него нет сигнала окончания, счётчик недостоверен, и он
 //тихо сканирует страницы внутренним таймером. Потомок перехватывает эти
 //внутренние таймеры в timerEvent, гасит их и ведёт обход сам: своим тиком
-//100 мс двигает updatePage(страница) по одной странице за тик (тот же темп,
-//что у штатного сканирования PdfMultiPageView, поэтому список боковой панели
-//успевает за счётчиком). Итог: точное число совпадений, точный номер
-//просмотренной страницы и точный сигнал «обход завершён», без догадок.
+//100 мс двигает updatePage(страница) по одной странице за тик. Это ЕДИНСТВЕН-
+//НАЯ модель поиска в приложении: боковая панель, PdfMultiPageView (подсветка,
+//прыжок pageNavigator.jump, жёлтый полигон) и счётчики живут от неё одной,
+//поэтому гонки двух поисков больше нет. Роли строк — родные Qt (page,
+//indexOnPage, location, contextBefore, contextAfter), делегаты не менялись.
+//Класс добавляет свойства, на которые смотрит DCPdfMultiPageView.qml:
+//currentResult, currentPage, count, currentResultLink, полигоны подсветки.
 class PoiskModelSkanirovannyj : public QPdfSearchModel {
     Q_OBJECT
+    //Номер выбранного совпадения: -1 (не выбрано) .. count-1, с клампом при записи.
+    Q_PROPERTY(int currentResult READ currentResult WRITE setCurrentResult
+               NOTIFY currentResultChanged FINAL)
+    //Страница выбранного совпадения (для подсветки DCPdfMultiPageView), -1 если нет.
+    Q_PROPERTY(int currentPage READ currentPage NOTIFY currentPageChanged FINAL)
+    //Ссылка на выбранный результат: по ней pageNavigator.jump прыгает на страницу.
+    Q_PROPERTY(QPdfLink currentResultLink READ currentResultLink
+               NOTIFY currentResultChanged FINAL)
+    //Полигоны выбранного совпадения: жёлтая подсветка текущего результата.
+    Q_PROPERTY(QList<QPolygonF> currentResultBoundingPolygons
+               READ currentResultBoundingPolygons
+               NOTIFY currentResultBoundingPolygonsChanged FINAL)
 public:
     explicit PoiskModelSkanirovannyj(QObject* proditel = nullptr);//Конструктор.
     void nachatObhod(const QString& strPoisk);//Задать запрос: базовый таймер будет перехвачен.
     void ostanovitObhod();//Остановить внешний тик обхода (смена документа/запроса).
     int ntNextPage;//Индекс следующей страницы для обхода.
     bool blIdetObhod;//true - обход ведут наш тик, не таймеры базового класса.
+
+    int currentResult() const;//Номер выбранного совпадения.
+    void setCurrentResult(int ntNovyj);//Выбрать совпадение: клампим в [-1 .. count-1].
+    int currentPage() const;//Страница выбранного совпадения, -1 если ничего не выбрано.
+    int ntVsegoStrok() const;//Число найденных строк модели (родной count не переопределяем).
+    QPdfLink currentResultLink() const;//Ссылка выбранного результата для jump().
+    QList<QPolygonF> currentResultBoundingPolygons() const;//Полигоны выбранного результата.
+    Q_INVOKABLE QList<QPolygonF> boundingPolygonsOnPage(int ntStranica);//Все хиты страницы.
 public slots:
     void proskanirovatStranicyTik();//Тик обхода: одна страница updatePage за 100 мс.
 signals:
     void sgnTikObhoda(int ntProsmotreno, int ntVsego);//Прогресс обхода страниц.
     void sgnObhodZavershen(int ntVsegoStranic);//Обход всех страниц завершён точно.
+    void currentResultChanged();//Сменилось выбранное совпадение.
+    void currentPageChanged();//Сменилась страница выбранного совпадения.
+    void currentResultBoundingPolygonsChanged();//Сменились полигоны выбранного совпадения.
+    void currentPageBoundingPolygonsChanged();//Родное имя сигнала базовой QPdfSearchModel:
+    //DCPdfMultiPageView по нему перезапускает подсветку всех страниц (новые строки обхода).
 protected:
     void timerEvent(QTimerEvent* event) override;//Перехват и гашение таймеров базовой модели.
 private:
+    int ntRolStranicy() const;//Роль «page» в ролевой таблице базовой модели.
+    int m_ntTekushijResulta;//Выбранное совпадение (-1 — ничего не выбрано).
     QTimer m_tmrTik;//Тик 100 мс, которым сами ведём обход страниц.
 };
 
@@ -57,6 +90,8 @@ class DCPdfPoisk : public QObject {
     Q_PROPERTY(int ntProgress READ ntProgress NOTIFY ntProgressChanged FINAL)
     //Номер просмотренной страницы обхода (для подписи вида «страница 37 из 214»).
     Q_PROPERTY(int ntPageProsmotra READ ntPageProsmotra NOTIFY ntPageProsmotraChanged FINAL)
+    //Единственная модель поиска: её берут боковая панель и DCPdfMultiPageView.
+    Q_PROPERTY(QAbstractItemModel* modelPoiska READ modelPoiska CONSTANT FINAL)
 public:
     explicit DCPdfPoisk(QObject* proditel = nullptr);//Конструктор.
     ~DCPdfPoisk();//Деструктор.
@@ -72,6 +107,7 @@ public:
     int ntSchetchik() const;//Возвращает число найденных совпадений.
     int ntProgress() const;//Возвращает процент обхода страниц.
     int ntPageProsmotra() const;//Возвращает номер просмотренной страницы обхода.
+    QAbstractItemModel* modelPoiska();//Возвращает единственную модель поиска для QML.
     void qdebug(QString strDebug);//Метод отладки, излучающий строчку Лог.
 signals:
     void urlPdfChanged();//Сигнал о том, что изменился путь к pdf документу.

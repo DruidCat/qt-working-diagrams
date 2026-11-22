@@ -14,7 +14,9 @@ Item {
     property int currentPage : -1//Номер страницы устанавливаемый вне виджет(set).(не путать с ntStranica)
     property alias nomerStranici: pmpDoc.currentPage//Номер страницы внутри виджета(get).
     property alias pageCount: pdfDoc.pageCount//Общее количество страниц в документе.
-    property alias searchString: pmpDoc.searchString//Запрос на поиск.
+    //Запрос на поиск. Один вход: обработчик onSearchStringChanged несёт его в
+    //C++ (cppqml.pdfPoisk), нативного скана больше нет.
+    property string searchString: ""
     //property int searchCount: cppqml.pdfPoisk.ntSchetchik//Количество совпадений при поиске.
     property int searchCount: cppqml.pdfPoisk.ntSchetchik//Количество совпадений при поиске.
     property bool isSearch: cppqml.pdfPoisk.isPoisk//true - поиск идёт, false - поиск остановлен.
@@ -232,7 +234,7 @@ Item {
         //Считаем по меньшему из двух: наш C++ счётчик и строки интерфейсной модели
         //(ей принадлежит подсветка currentResult), чтоб не провалиться в индекс,
         //который ещё не долетел до модели.
-        const cnCount = Math.min(cppqml.pdfPoisk.ntSchetchik, pmpDoc.searchModel.rowCount())
+        const cnCount = cppqml.pdfPoisk.ntSchetchik//Один источник: модель и счётчик теперь одна сущность.
         if(cnCount <= 0) return//Совпадений нет, переходить некуда.
         const cnNext = pmpDoc.searchModel.currentResult + 1//Следующий результат
         pmpDoc.searchModel.currentResult = (cnNext >= cnCount) ? 0 : cnNext//После последнего идёт первый.
@@ -240,7 +242,7 @@ Item {
     function searchBack(){//Функция предыдущего поиска, пробрасываем вне виджета.
         //pmpDoc.searchBack();
         //Счёт по меньшему из двух счётчиков — см. поиск вперёд (без провалов в пустой индекс).
-        const cnCount = Math.min(cppqml.pdfPoisk.ntSchetchik, pmpDoc.searchModel.rowCount())
+        const cnCount = cppqml.pdfPoisk.ntSchetchik//Один источник: модель и счётчик теперь одна сущность.
         if(cnCount <= 0) return
         const cnPrev = pmpDoc.searchModel.currentResult - 1//Предыдущий результат
         pmpDoc.searchModel.currentResult = (cnPrev < 0) ? cnCount - 1 : cnPrev//Перед первым идёт последний.
@@ -450,11 +452,10 @@ Item {
 			}
         }
     } 
-    PdfMultiPageView {
+    DCPdfMultiPageView {//Костя: наш vendored PdfMultiPageView (модель поиска из C++).
         id: pmpDoc
         anchors.fill: root
         anchors.leftMargin: dcSidebar.position * dcSidebar.width - dcSidebar.position * root.ntCoff
-        searchString: ""
         //Иннициализация Свойств при каждой загрузке, от сюда берутся первоначальные данные Свойств.
         property bool isSceneReset: false//true - идёт сброс сцены, статусы рендера Null/Error игнорируем.
         property bool blScale: false//true - когда в pdf документе масштабирование произошло.

@@ -9,6 +9,7 @@ DCMenu 1.0 DCMenu.qml
 DCPassword 1.0 DCPassword.qml
 DCPathView 1.0 DCPathView.qml
 DCPdfMPV 1.0 DCPdfMPV.qml
+DCPdfMultiPageView 1.0 DCPdfMultiPageView.qml
 DCPdfPoisk 1.0 DCPdfPoisk.qml
 DCPdfScroll 1.0 DCPdfScroll.qml
 DCPdfSidebar 1.0 DCPdfSidebar.qml
