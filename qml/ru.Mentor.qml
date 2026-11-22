@@ -118,11 +118,27 @@ ApplicationWindow {
         if(!isMobile) Qt.callLater(ensureOnScreen)//Немного отложим, чтобы гарантированно применились размеры
     }
 
+    //Aurora: «безопасный нижний отступ» над экранной клавиатурой. Когда
+    //maliit-плагин успевает урезать окно (портрет/правый ландшафт), край
+    //клавиатуры совпадает с краем окна и отступ равен нулю. При левом
+    //ландшафте композитор qtium не пускает окно в верхнюю полосу (позицию
+    //окна он игнорирует), поэтому там окно целое, а контент приподнимается
+    //над клавиатурой этим отступом.
+    readonly property real klavaOtstupNiz: {
+        if (!isAurora || !Qt.inputMethod.visible) return 0//Без клавиатуры отступа нет.
+        var klava = Qt.inputMethod.keyboardRectangle//Прямоугольник клавиатуры в координатах окна.
+        if (klava.height <= 0) return 0//Клавиатура скрыта/не сообщена.
+        return Math.max(0, height - klava.y)//Ноль, когда окно уже урезано до клавиатуры.
+    }
+
 	StackView {
 		id: stvStr
 		property string strOpisanie: "titul"
         property string infoElement: ""//Запоминает элемент, на котором нажата кнопка Информации.
-		anchors.fill: parent
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.top: parent.top
+        height: parent.height - root.klavaOtstupNiz//Отступ над клавиатурой (левый ландшафт Aurora).
         initialItem: pgStrSpisok
 
 		Stranica {//Меню

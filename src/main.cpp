@@ -7,12 +7,6 @@
 #include <QDebug>//Отладка.
 #include <QQuickWindow>
 #include <QSysInfo>//Определение ОС по /etc/os-release (ID=auroraos на Авроре).
-#include <QDir>//Каталог данных приложения для маркера kbtrace.
-#include <QFileInfo>//Проверка маркера kbtrace.
-#include <cstdio>//freopen для перенаправления stderr в kb.log.
-#include <QTimer>//Отложенный показ тестового окна kbtrace.
-#include <QInputMethod>//Отслеживание видимости экранной клавиатуры.
-#include <QQmlComponent>//Инлайн-QML тестового окна kbtrace.
 
 #include "cppqml.h"
 
@@ -33,7 +27,6 @@ int main(int argc, char *argv[])
     // XDG_RUNTIME_DIR. Внутри песочницы firejail сессионная шина проксируется и
     // запрос адреса org.maliit.server может не вернуться; фиксированный адрес
     // заставляет плагин подключаться к сокету напрямую (minputcontext.cpp, FixedAddress).
-    bool kbtraceRezhim = false;//Флаг временной диагностики клавиатуры (маркер kbtrace).
     if (QSysInfo::productType().compare(QStringLiteral("auroraos"), Qt::CaseInsensitive) == 0) {
         qputenv("QT_IM_MODULE", QByteArrayLiteral("maliit"));
         qputenv("QT_QPA_WAYLAND_ROTATION", QByteArrayLiteral("1"));
@@ -41,16 +34,6 @@ int main(int argc, char *argv[])
         const QByteArray rtDir = qgetenv("XDG_RUNTIME_DIR");
         if (!rtDir.isEmpty())
             qputenv("MALIIT_SERVER_ADDRESS", "unix:path=" + rtDir + "/maliit-server/dbus-socket");
-        // Временная диагностика клавиатуры: маркер kbtrace в каталоге данных приложения
-        // перенаправляет stderr в kb.log и включает MALIIT_DEBUG (само-диагностика,
-        // как wltrace в aurora-mentor). Убрать после отладки.
-        const QString kbDir = QDir::homePath() + QStringLiteral("/.local/share/ru.druidcat/mentor");
-        if (QFileInfo::exists(kbDir + QStringLiteral("/kbtrace"))) {
-            kbtraceRezhim = true;
-            qputenv("MALIIT_DEBUG", QByteArrayLiteral("1"));
-            qputenv("QT_LOGGING_RULES", QByteArrayLiteral("qt.qpa.*=true"));
-            freopen(QFile::encodeName(kbDir + QStringLiteral("/kb.log")).constData(), "a", stderr);
-        }
     }
 
     QGuiApplication app(argc, argv);
@@ -100,32 +83,6 @@ int main(int argc, char *argv[])
 #else
     pkornevoiKontekst->setContextProperty("dbMobileMode", false);
 #endif
-    // Временная самопроверка клавиатуры (kbtrace): через 5 секунд показать окно
-    // с полем ввода в фокусе; maliit должен сам поднять клавиатуру. Логируем
-    // изменение видимости и геометрию — это конец end-to-end цепочки без тапа.
-    if (kbtraceRezhim) {
-        QInputMethod *im = QGuiApplication::inputMethod();
-        QObject::connect(im, &QInputMethod::visibleChanged, [im]() {
-            qWarning() << "KBTEST vidimost:" << im->isVisible()
-                       << "rect:" << im->keyboardRectangle();
-        });
-        QTimer::singleShot(5000, qApp, [&engine]() {
-            QQmlComponent comp(&engine);
-            comp.setData(
-                "import QtQuick\n"
-                "Window { width: 320; height: 200; visible: true; title: \"KBTEST\"\n"
-                "  TextInput { x: 20; y: 20; width: 280; height: 60\n"
-                "    color: \"#000000\"; font.pixelSize: 24\n"
-                "    Component.onCompleted: forceActiveFocus() }\n"
-                "}\n", QUrl(QStringLiteral("kbtest-inline")));
-            if (comp.isError()) {
-                qWarning() << "KBTEST oshibka QML:" << comp.errorString();
-                return;
-            }
-            comp.create();
-            qWarning() << "KBTEST okno pokazano, fokus pola ustanovlen";
-        });
-    }
     engine.load(url);
     return app.exec();
 }
