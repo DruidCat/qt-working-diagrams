@@ -34,7 +34,9 @@ Item {
     property bool isVidelit: isMobile ? true : false//true - режим выделения текста, false - режим движения
     property int ntScrollMargin: 0//Ширина/высота ползунка полосы прокрутки.
 	property int msWatchdog: 70000//Время сторожа открытия в миллисекундах (70000 = 1 мин 10 с).
-	property real renderScaleWidth: 0//Масштаб «ширина страницы = ширине окна» у горизонтального документа. 0 - промежуточной ступени нет.
+    //Масштаб «ширина страницы = ширине окна»: у горизонтального документа это старт,
+    //у вертикального - низ уменьшения. 0 - промежуточной ступени нет.
+    property real renderScaleWidth: 0
     property bool blLog: true//true - отладочные сообщения включены, false - выключены (для релиза).
     property alias sbCurrentIndex: dcSidebar.currentIndex//Индекс открытой вкладки в боковой панели.
     property int currentResult: -1//Номер Поиска, совпадение от 0....
@@ -330,33 +332,48 @@ Item {
 			const cnW = (cnFl ? cnFl.width : pmpDoc.width) - root.ntScrollMargin//Область без полосы
 			const cnH = (cnFl ? cnFl.height : pmpDoc.height) - root.ntScrollMargin
 			const isRot90 = !((root.rotation === 0) || (root.rotation === 180))//Сцена повёрнута на 90/270.
-			const isVisGor = pdfDoc.isDocVert ? isRot90 : !isRot90//true - документ на экране выглядит горизонтальным.
-			if(isVisGor){//Горизонтальный документ: две ступени масштаба.
-				pmpDoc.scaleToPage(cnW, cnH)//Высота страницы = высоте окна.
-				const rlPage = pmpDoc.renderScale
-				pmpDoc.scaleToWidth(cnW, cnH)//Ширина страницы = ширине окна, это стартовый масштаб, как раньше.
+			//Ступени выбираются по конфигурации окна, не по документу. Конфигурация -
+			//в экранных осях, а масштабы считаются в осях содержимого: при повороте
+			//сцены на 90/270 ширина и высота окна меняются местами относительно контента.
+			const cnWc = isRot90 ? cnH : cnW//Ось содержимого: ширина окна.
+			const cnHc = isRot90 ? cnW : cnH//Ось содержимого: высота окна.
+			if(cnW >= cnH){//Горизонтальная конфигурация: старт по ширине, уменьшение до подгонки.
+				pmpDoc.scaleToPage(cnWc, cnHc)//Страница целиком видна, это низ диапазона.
+				const rlFit = pmpDoc.renderScale
+				pmpDoc.scaleToWidth(cnWc, cnHc)//Ширина страницы = ширине окна, это стартовый масштаб.
 				const rlWidth = pmpDoc.renderScale
-				if(rlPage < rlWidth * 0.99){//Страница по высоте даёт заметно меньший масштаб, вторая ступень есть.
+				if(rlFit < rlWidth * 0.99){//Страница по высоте даёт заметно меньший масштаб, ступени две.
 					root.renderScaleWidth = rlWidth//Промежуточная ступень.
-					rlScaleMin = rlPage//Новый минимум.
+					rlScaleMin = rlFit//Новый минимум.
 				}
 				else{//Страница очень широкая: ступень одна, как раньше.
 					root.renderScaleWidth = 0
 					rlScaleMin = rlWidth
 				}
 			}
-			else{//Вертикальный документ, всё как раньше.
-				pmpDoc.scaleToPage(cnW, cnH)
-				root.renderScaleWidth = 0
-				rlScaleMin = pmpDoc.renderScale
+			else{//Вертикальная конфигурация: старт по высоте, уменьшение до ширины.
+				pmpDoc.scaleToWidth(cnWc, cnHc)//Ступень «ширина страницы = ширине окна».
+				root.renderScaleWidth = pmpDoc.renderScale
+				pmpDoc.scaleToHeight(cnWc, cnHc)//Старт: высота страницы = высоте окна (последнее присваивание).
+				const rlHeight = pmpDoc.renderScale
+				if(root.renderScaleWidth < rlHeight * 0.99){//Есть куда уменьшать: низ по ширине, дальше нельзя.
+					rlScaleMin = root.renderScaleWidth
+				}
+				else{//Окно почти квадратное или страница низкая: ступень одна.
+					root.renderScaleWidth = 0
+					rlScaleMin = rlHeight
+				}
 			}
+			//Низ щипка: PinchHandler читает minScale у TableView, ставим ему наш минимум.
+			if(cnFl) cnFl.minScale = rlScaleMin
 		}
 		else
 			pmpDoc.renderScale = root.renderScale;//Выставляем масштаб из Свойства.
 		root.fnLog(6, "Окончание масштабирования документа.")
 		root.sgnProgress(55, qsTr("6/11 Остановка анимации: ожидайте."));
-		if(pmpDoc.blScaleAuto)//Минимум меняется только при автоматическом масштабировании.
+		if(pmpDoc.blScaleAuto){//Минимум меняется только при автоматическом масштабировании.
 			root.sgnScaleMin(rlScaleMin)//Минимальный масштаб в DCScale.
+		}
 		pmpDoc.isSceneReset = true;//Сброс сцены запланирован: ошибки рендера Null/Error игнорируем.
 		tmrResetScene.running = true;//запускаем таймер, сброса сцены.
 	}

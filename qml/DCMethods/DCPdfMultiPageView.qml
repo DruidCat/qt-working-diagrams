@@ -246,6 +246,20 @@ Item {
     }
 
     /*!
+        \qmlmethod void PdfMultiPageView::scaleToHeight(real width, real height)
+
+        Костя: наш метод, зеркало scaleToWidth.
+        Sets \l renderScale such that the height of the first page will fit into a
+        viewport with the given \a width and \a height. If the page is not rotated,
+        it will be scaled so that its height fits \a height. If it is rotated +/- 90
+        degrees, it will be scaled so that its height fits \a width.
+    */
+    function scaleToHeight(width, height) {
+        root.renderScale = height / (tableView.rot90 ? tableView.firstPagePointSize.width
+                                                     : tableView.firstPagePointSize.height)
+    }
+
+    /*!
         \qmlmethod void PdfMultiPageView::scaleToPage(real width, real height)
 
         Sets \l renderScale such that the whole first page will fit into a viewport
