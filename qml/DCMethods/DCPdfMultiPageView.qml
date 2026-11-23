@@ -216,6 +216,12 @@ Item {
     */
     property real renderScale: 1
 
+    //Низ масштаба для PinchHandler внутреннего TableView (по умолчанию 0.1).
+    property alias minScale: tableView.minScale
+
+    //Верх масштаба для PinchHandler внутреннего TableView (по умолчанию 10).
+    property alias maxScale: tableView.maxScale
+
     /*!
         \qmlproperty real PdfMultiPageView::pageRotation
 

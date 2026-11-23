@@ -602,6 +602,7 @@ Item {
                 item.clrMenuFon = clrMenuFon
                 item.clrPoisk = clrPoisk
                 item.isMobile = isMobile
+                item.rlMaxScale = pdfScale.rlMax / 100//Потолок щипка равен потолку слайдера масштаба.
             }
             onLoaded: { 
                 if(isDannie)//Если открывается из Данных документ, то...

@@ -37,6 +37,7 @@ Item {
     //Масштаб «ширина страницы = ширине окна»: у горизонтального документа это старт,
     //у вертикального - низ уменьшения. 0 - промежуточной ступени нет.
     property real renderScaleWidth: 0
+    property real rlMaxScale: 0//Верх щипка (3 = 300%); 0 - щипок не ограничен сверху.
     property bool blLog: true//true - отладочные сообщения включены, false - выключены (для релиза).
     property alias sbCurrentIndex: dcSidebar.currentIndex//Индекс открытой вкладки в боковой панели.
     property int currentResult: -1//Номер Поиска, совпадение от 0....
@@ -364,8 +365,10 @@ Item {
 					rlScaleMin = rlHeight
 				}
 			}
-			//Низ щипка: PinchHandler читает minScale у TableView, ставим ему наш минимум.
-			if(cnFl) cnFl.minScale = rlScaleMin
+			//Низ щипка: PinchHandler читает minScale у вью, ставим ему наш минимум.
+			pmpDoc.minScale = rlScaleMin
+			//Верх щипка: когда задан потолок rlMaxScale, PinchHandler упирается в него.
+			if(root.rlMaxScale > 0) pmpDoc.maxScale = root.rlMaxScale
 		}
 		else
 			pmpDoc.renderScale = root.renderScale;//Выставляем масштаб из Свойства.
