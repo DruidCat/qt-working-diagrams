@@ -252,6 +252,13 @@ Item {
 	}
 	function fnPinchStart(){//Вход в конвейер после щипка: Ready или страховочный таймер.
 		tmrPinch.stop()//Кто первый пришёл, тот и начал, второй просто не запускаемся.
+		//Issue 26: в момент смены масштаба жест ещё не дописан, pageNavigator.currentPage
+		//отстаёт, а центральная страница после перестроения уже другая (±1). Цель — та
+		//страница, что реально под центром окна: центр запомнен позже прыжка, он главнее.
+		if(pmpDoc.blTsentrValid)
+			pmpDoc.ntPdfPage = pmpDoc.ntTsentrPage
+		else if(pmpDoc.currentPage >= 0)
+			pmpDoc.ntPdfPage = pmpDoc.currentPage
 		pmpDoc.isSceneReset = true;//Взводим сразу, чтоб повторный Ready не запустил второй сброс.
 		pmpDoc.goToPage(0);//Переходим на первую страницу, потом goTo на заданную страницу
 		root.fnLog(6, "Окончание масштабирования документа (щипок).")
@@ -263,13 +270,16 @@ Item {
 			pmpDoc.isBusy = true
 			if(pmpDoc.currentPage >= 0)
 				pmpDoc.ntPdfPage = pmpDoc.currentPage
-			if(blTsentr)//Ручной масштаб/щипок: запоминаем центр окна для возврата.
+			if(blTsentr){//Ручной масштаб/щипок: запоминаем центр окна для возврата.
+				pmpDoc.blTsentrValid = false//Сброс: сигнал обработчика задаст точный центр.
 				Qt.callLater(fnZapomnitTsentr)//callLater: при щипке contentX/Y допишутся в этом же тике.
+			}
 		}
 		root.visible = false
 		tmrWatchdog.restart()
 	}
 	function fnZapomnitTsentr(){//Центр окна в пунктах страницы: возврат после смены масштаба.
+		if(pmpDoc.blTsentrValid) return//issue 26: обработчик щипка уже дал точный центр.
 		pmpDoc.blTsentrValid = false
 		const cnFl = pmpDoc.flickable
 		if(!cnFl || typeof cnFl.cellAtPos !== "function") return
@@ -785,6 +795,16 @@ Item {
         target: pmpDoc.flickable; property: "bottomMargin"
         value: root.ntScrollMargin; when: !!pmpDoc.flickable
         restoreMode: Binding.RestoreNone
+    }
+    Connections {//issue 26: обработчик щипка диктует точный центр окна без раскладки.
+        target: pmpDoc
+        function onSgnPinchTsentr(ntStranitsa, rlPtX, rlPtY) {
+            pmpDoc.ntTsentrPage = ntStranitsa
+            pmpDoc.rlTsentrX = rlPtX
+            pmpDoc.rlTsentrY = rlPtY
+            pmpDoc.blTsentrRot = false
+            pmpDoc.blTsentrValid = true
+        }
     }
     Connections {//Подсветка выбранного совпадения в боковой панели.
         target: pmpDoc.searchModel

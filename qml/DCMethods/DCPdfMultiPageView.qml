@@ -216,6 +216,11 @@ Item {
     */
     property real renderScale: 1
 
+    //issue 26: точный центр окна после щипка (страница и пункт на ней). Обёртка
+    //не может снять его с TableView сразу после forceLayout: раскладка мгновение
+    //неконсистентна (cellAtPos/itemAtCell врут), а обработчик знает якорь точно.
+    signal sgnPinchTsentr(int page, real xPt, real yPt)
+
     //Низ масштаба для PinchHandler внутреннего TableView (по умолчанию 0.1).
     property alias minScale: tableView.minScale
 
@@ -474,14 +479,26 @@ Item {
                     maximumScale: Math.max(1, tableView.maxScale / root.renderScale)
                     minimumRotation: root.pageRotation
                     maximumRotation: root.pageRotation
+                    //issue 26: точка центра окна, снятая при старте жеста (бумажный
+                    //лист ещё не масштабирован и не сдвинут) — якорь зума. Снимать в
+                    //конце нельзя: за жест paper успевает сдвинуться, и центр уезжает.
+                    property point anchorLocal
                     onActiveChanged:
                         if (active) {
                             paper.z = 10
+                            anchorLocal = tableView.mapToItem(paper,
+                                tableView.width / 2, tableView.height / 2)
                         } else {
                             paper.z = 0
-                            const centroidInPoints = Qt.point(pinch.centroid.position.x / root.renderScale,
-                                                            pinch.centroid.position.y / root.renderScale)
-                            const centroidInFlickable = tableView.mapFromItem(paper, pinch.centroid.position.x, pinch.centroid.position.y)
+                            const anchorPage = pageHolder.index//До перестроения индекс точен.
+                            //Issue 26: якорь зума — центр окна на СТАРТ жеста
+                            //(pinch.anchorLocal): палец редко по центру, а за жест
+                            //рука сдвигает paper — центр окна уезжал на ±1 страницу.
+                            const centroidInFlickable =
+                                Qt.point(tableView.width / 2, tableView.height / 2)
+                            const centroidInPoints = Qt.point(
+                                pinch.anchorLocal.x / root.renderScale,
+                                pinch.anchorLocal.y / root.renderScale)
                             const newSourceWidth = image.sourceSize.width * paper.scale
                             const ratio = newSourceWidth / image.sourceSize.width
                             console.log(lcMPV, "pinch ended on page", pageHolder.index,
@@ -499,8 +516,15 @@ Item {
                                 root.renderScale *= ratio
                                 tableView.forceLayout()
                                 if (tableView.rotationNorm == 0) {
-                                    tableView.contentX = pageHolder.x + tableView.originX + centroidOnPage.x - centroidInFlickable.x
-                                    tableView.contentY = pageHolder.y + tableView.originY + centroidOnPage.y - centroidInFlickable.y
+                                    //issue 26: paper центрирован в ячейке, а формула
+                                    //выше считает от угла ячейки — при колонке шире
+                                    //страницы это сдвиг на пол-разницы запаса.
+                                    tableView.contentX = pageHolder.x + tableView.originX
+                                        + (pageHolder.width - paper.width) / 2
+                                        + centroidOnPage.x - centroidInFlickable.x
+                                    tableView.contentY = pageHolder.y + tableView.originY
+                                        + (pageHolder.height - paper.height) / 2
+                                        + centroidOnPage.y - centroidInFlickable.y
                                 } else if (tableView.rotationNorm == 90) {
                                     tableView.contentX = pageHolder.x + tableView.originX + image.height - centroidOnPage.y - centroidInFlickable.x
                                     tableView.contentY = pageHolder.y + tableView.originY + centroidOnPage.x - centroidInFlickable.y
@@ -513,6 +537,8 @@ Item {
                                 }
                                 console.log(lcMPV, "contentX/Y adjusted to", tableView.contentX.toFixed(2), tableView.contentY.toFixed(2), "y @top", pageHolder.y)
                                 tableView.returnToBounds()
+                                if (tableView.rotationNorm == 0)
+                                    root.sgnPinchTsentr(anchorPage, centroidInPoints.x, centroidInPoints.y)
                             }
                         }
                     grabPermissions: PointerHandler.CanTakeOverFromAnything
