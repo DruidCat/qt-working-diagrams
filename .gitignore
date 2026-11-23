@@ -127,3 +127,5 @@ workingdata/bundleversion.txt
 # Лог установщика Qt (aqt).
 aqtinstall.log
 /build-android-arm64/
+build-android-arm64-db/
+build-android-armv7-db/
