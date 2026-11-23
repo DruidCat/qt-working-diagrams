@@ -247,25 +247,58 @@ Item {
 	function fnClampPage(ntStranica){//Страница в пределах документа.
 		return Math.max(0, Math.min(ntStranica, pdfDoc.pageCount - 1))
 	}
-	function fnBeginPipeline(){//Общее начало: прячем виджет, взводим isBusy, будим сторожа.
+	function fnBeginPipeline(blTsentr){//Общее начало: прячем виджет, взводим isBusy, будим сторожа.
 		if(!pmpDoc.isBusy){//Страницу запоминаем только при ПЕРВОМ входе, иначе запомнится 0 из fnScale.
 			pmpDoc.isBusy = true
 			if(pmpDoc.currentPage >= 0)
 				pmpDoc.ntPdfPage = pmpDoc.currentPage
+			if(blTsentr)//Ручной масштаб/щипок: запоминаем центр окна для возврата.
+				Qt.callLater(fnZapomnitTsentr)//callLater: при щипке contentX/Y допишутся в этом же тике.
 		}
 		root.visible = false
 		tmrWatchdog.restart()
 	}
+	function fnZapomnitTsentr(){//Центр окна в пунктах страницы: возврат после смены масштаба.
+		pmpDoc.blTsentrValid = false
+		const cnFl = pmpDoc.flickable
+		if(!cnFl || typeof cnFl.cellAtPos !== "function") return
+		const cnCell = cnFl.cellAtPos(cnFl.width / 2, cnFl.height / 2)//Ячейка под центром окна.
+		const cnItem = cnFl.itemAtCell(cnCell)
+		if(!cnItem) return
+		const rlPt = pdfDoc.pagePointSize(cnCell.y)//Размер страницы в пунктах.
+		pmpDoc.ntTsentrPage = cnCell.y
+		//Точка считается от ЛЕВОГО КРАЯ картинки: она центрирована в ячейке, а край
+		//ячейки при смене масштаба плывёт (ширина ячейки = max(окно, самая широкая)).
+		pmpDoc.rlTsentrX = (cnFl.contentX + cnFl.width / 2 - cnItem.x
+		                    - cnFl.columnWidthProvider(0) / 2) / pmpDoc.renderScale + rlPt.width / 2
+		pmpDoc.rlTsentrY = (cnFl.contentY + cnFl.height / 2 - cnItem.y) / pmpDoc.renderScale
+		pmpDoc.blTsentrRot = cnFl.rot90//При повороте 90/270 эта разметка недействительна.
+		pmpDoc.blTsentrValid = true
+	}
+	function fnVerniTsentr(ntStranica){//Ставим TableView цель: центр окна на запомненную точку.
+		const cnFl = pmpDoc.flickable
+		if(!cnFl) return
+		const rlPt = pdfDoc.pagePointSize(ntStranica)
+		//Смещение от центра ячейки до точки: картинка центрирована в ячейке, поэтому
+		//оно равно масштаб * (пункт точки - половина размера страницы в пунктах).
+		const cnOffX = pmpDoc.renderScale * (pmpDoc.rlTsentrX - rlPt.width / 2)
+		const cnOffY = pmpDoc.renderScale * (pmpDoc.rlTsentrY - rlPt.height / 2)
+		cnFl.positionViewAtCell(0, ntStranica,
+		                        TableView.AlignHCenter | TableView.AlignVCenter,
+		                        Qt.point(cnOffX, cnOffY))
+	}
 	function fnStopTimers(){//Останавливаем всё, что запущено конвейером, чтоб старый прогон не дошёл до конца.
 		tmrAppSize.stop()
 		tmrScale.stop()
+		tmrTsentrKick.stop()
+		pmpDoc.ntTsentrKick = -1
 		tmrResetScene.stop()
 		tmrGoToPage.stop()
 		tmrVisible.stop()
 	}
 	function fnRestartPipeline(strPrichina, blAuto, tmrStart){//ЕДИНАЯ точка запуска конвейера.
 		const blNew = !pmpDoc.isBusy//true - конвейер запускается, false - перезапуск посреди прогона.
-		fnBeginPipeline()
+		fnBeginPipeline(!blAuto)//Центр окна нужен только при ручном масштабе (не авто).
 		fnStopTimers()
 		pmpDoc.blPinch = false//Перезапуск полностью заменяет щипок.
 		pmpDoc.blScaleAuto = blAuto//Обязательно перед таймером.
@@ -336,6 +369,20 @@ Item {
 		//После поворота старый contentX относится к прежней сцене, поэтому берём левый край страницы.
 		const cnX = (cnFl && !pmpDoc.blRotation) ? cnFl.contentX / pmpDoc.renderScale : 0
 		pmpDoc.goToLocation(ntStranica, Qt.point(cnX, 0), pmpDoc.renderScale)
+		//Костя-центр: после ручного масштаба/щипка возвращаем запомненный центр окна
+		//на то же место страницы. Цель отдаём самому TableView (как хиту поиска):
+		//он применяет её нативно и повторяет при всех ленивых перестроениях сцены.
+		if(cnFl && pmpDoc.blTsentrValid){
+			pmpDoc.blTsentrValid = false//Один раз: обычная листка страниц центр не тянет.
+			if(pmpDoc.ntTsentrPage === ntStranica && !pmpDoc.blTsentrRot && !cnFl.rot90){
+				fnVerniTsentr(ntStranica)
+				//Пинёк: TableView лениво применяет цель на свежем раскрое, целься повторно
+				//до показа виджета (tmrVisible 333мс) — пользователь дёрганья не увидит.
+				pmpDoc.ntTsentrKick = ntStranica
+				tmrTsentrKick.restart()
+				root.fnLog(0, "Центр окна возвращён на страницу " + ntStranica + ".")
+			}
+		}
 		root.fnLog(11, "Старт таймера видимости.");
 		root.sgnProgress(100, qsTr("11/11 Старт таймера отображения."));
 		tmrVisible.running = true;//Запускаем таймер отображения документа.
@@ -395,6 +442,15 @@ Item {
 			root.fnLog(9, "Стоп таймера страницы.")
 			root.sgnProgress(82, qsTr("9/11 Стоп таймера страницы."))
 			fnGoToPage(pmpDoc.ntPdfPage)//Единая страница назначения для всех входов.
+		}
+	}
+	Timer {//Пинёк центрирования: TableView применяет цель лениво, обновляем её на свежем раскрое.
+		id: tmrTsentrKick
+		interval: 300; running: false; repeat: false
+		onTriggered: {
+			if(pmpDoc.ntTsentrKick < 0) return
+			root.fnVerniTsentr(pmpDoc.ntTsentrKick)
+			pmpDoc.ntTsentrKick = -1
 		}
 	}
     Timer {//Таймер необходим, чтоб после перехода на страницу произошла небольшая пауза, минимум 333.
@@ -463,6 +519,12 @@ Item {
         property bool blPinch: false//true - когда пользователь щипком изменил масштаб.
         property bool blRotation: false//true - нажата кнопка поворота документа.
         property int ntPdfPage: 0//Номер страницы запомненный перед изменением масштаба root.renderScale.
+        property int ntTsentrPage: -1//Страница центра окна при ручном масштабе/щипке.
+        property real rlTsentrX: 0//Центр окна по X в пунктах страницы (от левого края).
+        property real rlTsentrY: 0//Центр окна по Y в пунктах страницы (от верхнего края).
+        property bool blTsentrRot: false//Сцена была повёрнута на 90/270 при запоминании.
+        property bool blTsentrValid: false//true - центр запомнен, его надо вернуть.
+        property int ntTsentrKick: -1//Страница для пинька центрирования, -1 - пинька нет.
         property bool blPassword: false//true - когда в pdf документе запрашиваем пароль.
         //Scroll мышью документа
         property bool handMode: true//Режим "рука" активирован
@@ -575,7 +637,8 @@ Item {
 		onRenderScaleChanged: {//Если масштаб изменился, то...
 			if(!pmpDoc.isScaleStart && pmpDoc.blScale){//Масштаб изменил пользователь щипком.
 				pmpDoc.blPinch = true//То это увеличение масштаба пользователем через щипок
-				root.fnBeginPipeline()//Только прячем и запоминаем страницу. Таймеры не трогаем: вход идёт через Image.Ready.
+				//Только прячем и запоминаем страницу и центр. Таймеры не трогаем: вход через Image.Ready.
+				root.fnBeginPipeline(true)
 			}
 			pmpDoc.blRenderScale = true//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
 			root.renderScale = pmpDoc.renderScale//Присваемаем масштаб внутри виджета.
