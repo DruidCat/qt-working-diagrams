@@ -250,6 +250,14 @@ Item {
 	function fnClampPage(ntStranica){//Страница в пределах документа.
 		return Math.max(0, Math.min(ntStranica, pdfDoc.pageCount - 1))
 	}
+	function fnPinchStart(){//Вход в конвейер после щипка: Ready или страховочный таймер.
+		tmrPinch.stop()//Кто первый пришёл, тот и начал, второй просто не запускаемся.
+		pmpDoc.isSceneReset = true;//Взводим сразу, чтоб повторный Ready не запустил второй сброс.
+		pmpDoc.goToPage(0);//Переходим на первую страницу, потом goTo на заданную страницу
+		root.fnLog(6, "Окончание масштабирования документа (щипок).")
+		root.sgnProgress(55, qsTr("6/11 Остановка анимации: ожидайте."));
+		tmrResetScene.running = true;//запускаем таймер, сброса сцены.
+	}
 	function fnBeginPipeline(blTsentr){//Общее начало: прячем виджет, взводим isBusy, будим сторожа.
 		if(!pmpDoc.isBusy){//Страницу запоминаем только при ПЕРВОМ входе, иначе запомнится 0 из fnScale.
 			pmpDoc.isBusy = true
@@ -293,6 +301,7 @@ Item {
 	function fnStopTimers(){//Останавливаем всё, что запущено конвейером, чтоб старый прогон не дошёл до конца.
 		tmrAppSize.stop()
 		tmrScale.stop()
+		tmrPinch.stop()
 		tmrTsentrKick.stop()
 		pmpDoc.ntTsentrKick = -1
 		tmrResetScene.stop()
@@ -412,6 +421,15 @@ Item {
         const cnMin = Math.floor(cnSek / 60)//Целых минут.
         const cnOst = cnSek % 60//Оставшиеся секунды.
         return (cnMin > 0 ? cnMin + " мин " : "") + cnOst + " с"
+    }
+    Timer {//Страховка входа щипка: после сильного уменьшения TableView может переразобрать
+    	id: tmrPinch//делегаты и Ready текущего рендера не придёт никогда.
+    	interval: 500; running: false; repeat: false
+    	onTriggered: {
+    		if(!pmpDoc.blPinch || pmpDoc.isSceneReset) return//Ready или перезапуск уже начали конвейер.
+    		root.fnLog(6, "Щипок: Ready не пришёл, входим по страховке.")
+    		fnPinchStart()
+    	}
     }
     Timer {//Таймер сброса сцены документа, чтоб сцена пересчиталась под новый масштаб.
         id: tmrResetScene
@@ -623,11 +641,7 @@ Item {
     				pmpDoc.ntPdfPage = root.fnClampPage(root.currentPage)//Стартовая страница из вне (при -1 будет 0).
                 }
                 else if(pmpDoc.blPinch && !pmpDoc.isSceneReset){//Щипок был, и сброс сцены ещё не запущен, то.
-                    pmpDoc.isSceneReset = true;//Взводим сразу, чтоб повторный Ready не запустил второй сброс.
-                    pmpDoc.goToPage(0);//Переходим на первую страницу, потом goTo на заданную страницу
-                    root.fnLog(6, "Окончание масштабирования документа (щипок).")
-                    root.sgnProgress(55, qsTr("6/11 Остановка анимации: ожидайте."));
-                    tmrResetScene.running = true;//запускаем таймер, сброса сцены.
+                    fnPinchStart();//Вход в конвейер по Ready текущего рендера.
                 }
                 break;
             case Image.Error://Статус рендеринга страницы ОШИБКА.
@@ -657,8 +671,9 @@ Item {
 		onRenderScaleChanged: {//Если масштаб изменился, то...
 			if(!pmpDoc.isScaleStart && pmpDoc.blScale){//Масштаб изменил пользователь щипком.
 				pmpDoc.blPinch = true//То это увеличение масштаба пользователем через щипок
-				//Только прячем и запоминаем страницу и центр. Таймеры не трогаем: вход через Image.Ready.
+				//Только прячем и запоминаем страницу и центр: вход по Ready или по страховке tmrPinch.
 				root.fnBeginPipeline(true)
+				tmrPinch.restart()//Страховка: при сильном уменьшении Ready текущего рендера может не прийти.
 			}
 			pmpDoc.blRenderScale = true//Взводим флаг, предотвращаем обработку root onRenderScaleChanged
 			root.renderScale = pmpDoc.renderScale//Присваемаем масштаб внутри виджета.
