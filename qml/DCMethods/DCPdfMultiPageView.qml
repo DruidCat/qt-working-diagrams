@@ -17,7 +17,13 @@
 //      AlignHCenter|AlignVCenter и смещением в центр хита; при повороте
 //      страницы остаётся штатный Contain;
 //   5) readonly tableViewRef — доступ к внутреннему TableView для автотестов;
-//   6) шапка-комментарий.
+//   6) PinchHandler: якорь зума — центр окна, снятый при старте жеста
+//      (anchorLocal), вместо родного центроида пальца: от пальца центр окна
+//      уезжал на ±1 страницу (issue 26);
+//   7) сигнал sgnPinchTsentr — точный центр окна после щипка обёртке (issue 26);
+//   8) прыжок contentX/Y при rotationNorm==0 с запасом центрирования
+//      (размер ячейки − размер paper)/2, родная формула считала от угла ячейки;
+//   9) шапка-комментарий.
 // При апгрейде Qt: взять новый PdfMultiPageView.qml из \$QT/qml/QtQuick/Pdf/,
 // наложить эти отличия (diff с этой копии покажет их за секунды).
 
@@ -216,9 +222,10 @@ Item {
     */
     property real renderScale: 1
 
-    //issue 26: точный центр окна после щипка (страница и пункт на ней). Обёртка
-    //не может снять его с TableView сразу после forceLayout: раскладка мгновение
-    //неконсистентна (cellAtPos/itemAtCell врут), а обработчик знает якорь точно.
+    // Костя: добавлен сигнал (issue 26) — точный центр окна после щипка
+    //(страница и пункт на ней). Обёртка не может снять его с TableView сразу
+    //после forceLayout: мгновение раскладка неконсистентна (cellAtPos/itemAtCell
+    //врут), а обработчик знает якорь точно без раскладки.
     signal sgnPinchTsentr(int page, real xPt, real yPt)
 
     //Низ масштаба для PinchHandler внутреннего TableView (по умолчанию 0.1).
@@ -479,9 +486,10 @@ Item {
                     maximumScale: Math.max(1, tableView.maxScale / root.renderScale)
                     minimumRotation: root.pageRotation
                     maximumRotation: root.pageRotation
-                    //issue 26: точка центра окна, снятая при старте жеста (бумажный
-                    //лист ещё не масштабирован и не сдвинут) — якорь зума. Снимать в
-                    //конце нельзя: за жест paper успевает сдвинуться, и центр уезжает.
+                    // Костя: добавлено (issue 26) — якорь зума: точка центра окна,
+                    //снятая при старте жеста, пока paper не тронут. Снимать в конце
+                    //нельзя: к active==false anchors.centerIn уже вернул paper в
+                    //центр, трансформ жеста прочитан неверно — −1 страница.
                     property point anchorLocal
                     onActiveChanged:
                         if (active) {
@@ -490,10 +498,16 @@ Item {
                                 tableView.width / 2, tableView.height / 2)
                         } else {
                             paper.z = 0
-                            const anchorPage = pageHolder.index//До перестроения индекс точен.
-                            //Issue 26: якорь зума — центр окна на СТАРТ жеста
-                            //(pinch.anchorLocal): палец редко по центру, а за жест
-                            //рука сдвигает paper — центр окна уезжал на ±1 страницу.
+                            // Костя: был якорь по пальцу:
+                            // const centroidInPoints = Qt.point(
+                            //     pinch.centroid.position.x / root.renderScale,
+                            //     pinch.centroid.position.y / root.renderScale)
+                            // const centroidInFlickable = tableView.mapFromItem(
+                            //     paper, pinch.centroid.position.x, pinch.centroid.position.y)
+                            // Теперь центр окна на старт жеста (pinch.anchorLocal):
+                            // палец редко по центру, и за жест рука сдвигает paper —
+                            // центр окна уезжал на ±1 страницу (issue 26).
+                            const anchorPage = pageHolder.index//Костя: до перестроения точен.
                             const centroidInFlickable =
                                 Qt.point(tableView.width / 2, tableView.height / 2)
                             const centroidInPoints = Qt.point(
@@ -516,9 +530,12 @@ Item {
                                 root.renderScale *= ratio
                                 tableView.forceLayout()
                                 if (tableView.rotationNorm == 0) {
-                                    //issue 26: paper центрирован в ячейке, а формула
-                                    //выше считает от угла ячейки — при колонке шире
-                                    //страницы это сдвиг на пол-разницы запаса.
+                                    // Костя: был прыжок от угла ячейки:
+                                    // tableView.contentX = pageHolder.x + tableView.originX
+                                    //     + centroidOnPage.x - centroidInFlickable.x
+                                    // (и так же contentY). paper центрирован в ячейке
+                                    // (anchors.centerIn), добавлена половина запаса —
+                                    // при колонке шире страницы был дрифт (issue 26).
                                     tableView.contentX = pageHolder.x + tableView.originX
                                         + (pageHolder.width - paper.width) / 2
                                         + centroidOnPage.x - centroidInFlickable.x
@@ -537,6 +554,7 @@ Item {
                                 }
                                 console.log(lcMPV, "contentX/Y adjusted to", tableView.contentX.toFixed(2), tableView.contentY.toFixed(2), "y @top", pageHolder.y)
                                 tableView.returnToBounds()
+                                // Костя: точный центр окна обёртке, без раскладки (issue 26).
                                 if (tableView.rotationNorm == 0)
                                     root.sgnPinchTsentr(anchorPage, centroidInPoints.x, centroidInPoints.y)
                             }
