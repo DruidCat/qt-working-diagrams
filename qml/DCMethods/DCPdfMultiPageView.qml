@@ -12,8 +12,10 @@
 //   2) внутренний объект PdfSearchModel заменён на Connections с jump() по
 //      currentResultChanged (та же логика, что была у модели);
 //   3) searchString — обычное свойство вместо alias (alias не указывает на var);
-//   4) центрирование совпадения в середине окна в onJumped (родной Contain лишь
-//      минимально показывает хит) + функция/таймер центрирования внизу файла;
+//   4) центрирование совпадения в середине окна в onJumped: вместо родного
+//      Contain (он лишь минимально показывает хит) — positionViewAtCell с
+//      AlignHCenter|AlignVCenter и смещением в центр хита; при повороте
+//      страницы остаётся штатный Contain;
 //   5) readonly tableViewRef — доступ к внутреннему TableView для автотестов;
 //   6) шапка-комментарий.
 // При апгрейде Qt: взять новый PdfMultiPageView.qml из \$QT/qml/QtQuick/Pdf/,
@@ -613,21 +615,41 @@ Item {
                 pageSize.width *= root.renderScale
                 pageSize.height *= root.renderScale
                 const rectPts = current.rectangles[0]
-                const rectPx = Qt.rect(rectPts.x * root.renderScale - tableView.jumpLocationMargin.x,
-                                       rectPts.y * root.renderScale - tableView.jumpLocationMargin.y,
-                                       rectPts.width * root.renderScale + tableView.jumpLocationMargin.x * 2,
-                                       rectPts.height * root.renderScale + tableView.jumpLocationMargin.y * 2)
-                tableView.positionViewAtCell(0, current.page, TableView.Contain, Qt.point(0, 0), rectPx)
-                // Костя: родной Contain лишь минимально показывает хит; центрируем
-                // совпадение в середине окна, в том числе по X при увеличении.
-                // При повороте страниц не центрируем (координаты внутри делегата
-                // повёрнуты — остаёмся на штатном поведении Contain).
-                if (root.pageRotation % 180 === 0)
-                    root.fnCentrovatPoIsku(current.page,
-                                           rectPts.x + rectPts.width / 2,
-                                           rectPts.y + rectPts.height / 2)
-                console.log(lcMPV, "going to zoom", root.renderScale, "rect", rectPx, "on page", current.page,
-                            "ended up @", tableView.contentX.toFixed(1) + ", " + tableView.contentY.toFixed(1))
+                if (root.pageRotation % 180 === 0) {
+                    // Костя: центрирование совпадения в середине окна. Родной Contain
+                    // лишь минимально показывает хит, а наша прямая запись contentX/Y
+                    // дерётся с TableView: при дальней странице positionViewAtRow
+                    // откладывается до перестроения и TableView сам многократно
+                    // применяет свою позицию по ходу ленивой загрузки — дребезг.
+                    // Поэтому цель передаём САМОМУ TableView: AlignHCenter|AlignVCenter
+                    // со смещением — он применяет её нативно и при всех перестроениях
+                    // повторяет ту же цель. Смещение: из центра ячейки в центр хита.
+                    const cnOffX = (rectPts.x + rectPts.width / 2) * root.renderScale
+                                 - tableView.columnWidthProvider(0) / 2
+                    const cnOffY = (rectPts.y + rectPts.height / 2) * root.renderScale
+                                 - tableView.rowHeightProvider(current.page) / 2
+                    root.ntTsentraOtsY = cnOffY//Замер в автотестах.
+                    tableView.positionViewAtCell(0, current.page,
+                                                 TableView.AlignHCenter | TableView.AlignVCenter,
+                                                 Qt.point(cnOffX, cnOffY))
+                    console.log(lcMPV, "centering hit on page", current.page,
+                                "offset", cnOffX.toFixed(1), cnOffY.toFixed(1),
+                                "ended up @", tableView.contentX.toFixed(1) + ", "
+                                + tableView.contentY.toFixed(1))
+                } else {
+                    // Поворот: координаты внутри делегата повёрнуты — штатный Contain.
+                    const cnMarg = tableView.jumpLocationMargin
+                    const rectPx = Qt.rect(rectPts.x * root.renderScale - cnMarg.x,
+                                           rectPts.y * root.renderScale - cnMarg.y,
+                                           rectPts.width * root.renderScale + cnMarg.x * 2,
+                                           rectPts.height * root.renderScale + cnMarg.y * 2)
+                    tableView.positionViewAtCell(0, current.page, TableView.Contain,
+                                                 Qt.point(0, 0), rectPx)
+                    console.log(lcMPV, "going to zoom", root.renderScale, "rect", rectPx,
+                                "on page", current.page, "ended up @",
+                                tableView.contentX.toFixed(1) + ", "
+                                + tableView.contentY.toFixed(1))
+                }
             } else {
                 // jump to a page and position the given location relative to the top-left corner of the viewport
                 pageSize.width *= root.renderScale
@@ -663,93 +685,10 @@ Item {
                 pageNavigator.jump(target.currentResultLink)
         }
     }
-    // ===== Костя: центрирование совпадения поиска в середине окна =====
-    // Делегат дальней страницы создаётся асинхронно TableView: коротким таймером
-    // (40 мс, до ~1 с) ДОСТАБИЛИЗУЕМ позицию: делегаты перекладываются по мере
-    // откладки ленивых строк, а конвейер может сменить renderScale после прыжка.
-    // Поэтому цели пересчитываем каждый тик по ТЕКУЩЕМУ renderScale (координаты
-    // храним в точках PDF) и пишем contentX/Y, пока расчёт не перестанет
-    // отличаться от фактической прокрутки (с клампом о границы контента).
-    property int ntTsentraPage: -1
-    property real ntTsentraX: 0//Центр совпадения, точки PDF (не пиксели!).
-    property real ntTsentraY: 0
-    property bool blCentrovkaLog: false//Замер в автотестах: печатать расчёт центрирования.
-    property real ntTsentraCelX: 0//Замер: последняя цель центрирования (для автотестов).
-    property real ntTsentraCelY: 0
-    function fnCentrovatPoIsku(ntPage, ntX, ntY) {
-        root.ntTsentraPage = ntPage
-        root.ntTsentraX = ntX
-        root.ntTsentraY = ntY
-        tmrCentrovka.ntPopitki = 0//Свежий раунд доводки.
-        tmrCentrovka.ntProshliyY = -100000
-        tmrCentrovka.ntNashY = 100000
-        tmrCentrovka.ntTikhih = 0
-        tmrCentrovka.restart()
-    }
-    Timer {
-        id: tmrCentrovka
-        interval: 40
-        repeat: true
-        property int ntPopitki: 0
-        property real ntProshliyY: -100000//contentY прошлого тика (детектор движения).
-        property real ntNashY: 100000//Последнее, что записали мы сами.
-        property int ntTikhih: 0//Сколько тиков подряд вид неподвижен.
-        onTriggered: {
-            const cnDelegate = tableView.itemAtCell(0, root.ntTsentraPage)
-            const cnFakt = tableView.contentY
-            const blDvizhetsya = Math.abs(cnFakt - ntProshliyY) > 0.5
-            ntProshliyY = cnFakt
-            const blChuzhoyDvizhenie = blDvizhetsya && Math.abs(cnFakt - ntNashY) > 0.5
-            if (blChuzhoyDvizhenie) {
-                // Родственный движок (отложенный Contain из positionViewAtCell)
-                // сам ведёт прокрутку — уступаем, не воюем с ним.
-                ntTikhih = 0
-            } else if (blDvizhetsya) {
-                ntTikhih = 0//Наш собственный скачок записи.
-            } else {
-                ntTikhih += 1
-            }
-            if (cnDelegate) {
-                const cnMinX = -tableView.originX
-                const cnMaxX = Math.max(cnMinX, tableView.contentWidth - tableView.width
-                                                             - tableView.originX)
-                const cnMinY = -tableView.originY
-                const cnMaxY = Math.max(cnMinY, tableView.contentHeight - tableView.height
-                                                             - tableView.originY)
-                const cnX = Math.min(cnMaxX, Math.max(cnMinX,
-                              cnDelegate.x + root.ntTsentraX * root.renderScale
-                                          - tableView.width / 2))
-                const cnY = Math.min(cnMaxY, Math.max(cnMinY,
-                              cnDelegate.y + root.ntTsentraY * root.renderScale
-                                          - tableView.height / 2))
-                root.ntTsentraCelX = cnX
-                root.ntTsentraCelY = cnY
-                if (!blChuzhoyDvizhenie && ntTikhih >= 2) {
-                    // Вид в покое — дописываем цель ОДНИМ скачком, без дребезга.
-                    const blUehalo = Math.abs(cnX - tableView.contentX) > 0.5
-                                  || Math.abs(cnY - tableView.contentY) > 0.5
-                    if (blUehalo) {
-                        tableView.flick(0, 0)//Гасим остаточную инерцию прокрутки.
-                        tableView.contentX = cnX
-                        tableView.contentY = cnY
-                        ntNashY = tableView.contentY//Что кламперовал Flickable.
-                        ntTikhih = 0
-                        if (root.blCentrovkaLog)
-                            console.log("CENTR ->", cnX.toFixed(1), cnY.toFixed(1),
-                                        "page", root.ntTsentraPage,
-                                        "scale", root.renderScale.toFixed(3))
-                    } else {
-                        ntPopitki = 0//Цель совпала с фактом — готово.
-                        stop()
-                    }
-                }
-            }
-            if (++ntPopitki > 40) {//Таймаут доводки — прекращаем наблюдение.
-                ntPopitki = 0
-                stop()
-            }
-        }
-    }
+    // ===== Костя: замер центрирования для автотестов =====
+    // Центрирование делает сам TableView (AlignHCenter|AlignVCenter + смещение
+    // в onJumped) — здесь только последняя цель по Y для пробников.
+    property real ntTsentraOtsY: 1e9//Последнее смещение центрирования, px.
     // Костя: доступ к внутреннему TableView для автотестов (только чтение).
     readonly property var tableViewRef: tableView
 }
