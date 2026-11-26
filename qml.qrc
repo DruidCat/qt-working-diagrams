@@ -23,6 +23,7 @@
         <file>images/ts-rus-orange.svg</file>
         <file>js/jsJSON.js</file>
         <file>js/jsProgress.js</file>
+        <file>qml/DCButtons/DCKnopkaCopy.qml</file>
         <file>qml/DCButtons/DCKnopkaInfo.qml</file>
         <file>qml/DCButtons/DCKnopkaKruglaya.qml</file>
         <file>qml/DCButtons/DCKnopkaMenu.qml</file>
