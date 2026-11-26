@@ -60,6 +60,7 @@ Item {
         }
     }
     function fnClickedNazad(){//Функция нажатия кнопки Назад
+		cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
         drwSidebar.close();//Закрываем боковую панели при закрытии инструкции.
         root.clickedNazad();//Закрываем Инструкцию.
     }
@@ -101,6 +102,12 @@ Item {
             anchors.rightMargin: drwSidebar.position * drwSidebar.width - drwSidebar.position * root.ntCoff
             readOnly: true//Запрещено редактировать текст
             textEdit.selectByMouse: false//Запрещаем выделять текст, то нужно для свайпа Android
+            textEdit.onLinkActivated: {//Нажатие на ссылку внутри текста инструкции.
+            if(link === "copy")//Ссылка на код устройства: копируем код в буфер обмена.
+            cppqml.kopiyovatKodUstroystva()
+            else//Сайт, GitHub, почта: открываем стороннем приложением.
+            Qt.openUrlExternally(link)
+            }
 			textEdit.textFormat: TextEdit.AutoText//Формат АВТОМАТИЧЕСКИ определяется. Предпочтителен HTML4
             pixelSize: root.ntWidth/2*root.ntCoff//размер шрифта текста в два раза меньше.
             text: 	""//По умолчанию пустая строка.
@@ -352,6 +359,7 @@ Item {
         fnInstrukciya(root.strInstrukciya)//Функция загружающая заголовок и инструкцию по ключу.
     }
     function fnInstrukciya(strKluch){//Функция загружающая заголовок и инструкцию по ключу.
+		cppqml.strDebug = "";//Делаем пустую строку в Toolbar.
         root.strInstrukciya = strKluch
         for (var vrShag = 0; vrShag < mdlInstrukcii.count; ++vrShag){//Цикл перебора модели.
             if(mdlInstrukcii.get(vrShag).key === strKluch){//Если есть равенство с ключом, то...
@@ -381,8 +389,8 @@ Item {
 <p><center>Приложение: <b>Ментор</b></center></p>
 <p><center>Версия: <b>")+ Qt.application.version +qsTr("</b></center></p>")
                 + (cppqml.kodUstroystva.length > 0
-                   ? qsTr("<p><center>Код устройства: <b>") + cppqml.kodUstroystva
-                         + qsTr("</b></center></p>")
+                   ? qsTr("<p><center>Код устройства: <a href=\"copy\"><b>") + cppqml.kodUstroystva
+                         + qsTr("</b></a></center></p>")
                    : "")
                 + qsTr("<p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
 <p><center>Приложение скомпилированно с <b>Qt версии ") + cppqml.qtVersion + qsTr("</b></center></p>

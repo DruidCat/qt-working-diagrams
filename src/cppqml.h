@@ -310,6 +310,7 @@ public:
 
     QString		qtVersion() const;//Метод возвращающий версию Qt
     QString		kodUstroystva() const;//Код устройства android_id (пусто вне Android).
+    Q_INVOKABLE void kopiyovatKodUstroystva();//Копировать код устройства в буфер обмена.
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//
 	QString 	redaktorTexta(QString strTekst);//Редактор текста по стандартам Приложения.

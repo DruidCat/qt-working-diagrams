@@ -8,6 +8,8 @@
 #include <QTranslator>//переводчик английского интерфейса (:i18n/mentor_en.qm).
 #include <QQmlEngine>//retranslate() страниц QML при смене языка.
 #include <QCoreApplication>//qApp - установка/снятие переводчика.
+#include <QGuiApplication>//clipboard() - буфер обмена при копировании кода устройства.
+#include <QClipboard>//setText() - запись текста кода в буфер обмена.
 
 #ifdef Q_OS_ANDROID
 #include <QDir>
@@ -1166,6 +1168,16 @@ QString DCCppQml::kodUstroystva() const {//Код устройства android_i
 #else
     return QString();//Не Android: строка кода скрывается в интерфейсе.
 #endif
+}
+void DCCppQml::kopiyovatKodUstroystva() {//Копировать код устройства в буфер обмена.
+/////////////////////////////////////////////////
+//---К О П И Р О В А Т Ь   К О Д   У С Т Р О Й С Т В А---//
+/////////////////////////////////////////////////
+    const QString m_kod = kodUstroystva();//Берём код тем же способом что и в интерфейсе.
+    if(m_kod.isEmpty())
+        return;//Кода нет (не Android) - копировать нечего.
+    QGuiApplication::clipboard()->setText(m_kod);//Пишем код в системный буфер обмена.
+    qdebug(tr("Код устройства скопирован в буфер обмена."));//Отчёт в журнал приложения.
 }
 void DCCppQml::setStrDebug(QString& strDebugNovi){//Установить Новую ошибку.
 ///////////////////////////////////////////////////////

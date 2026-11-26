@@ -4,108 +4,113 @@
 <context>
     <name>DCCppQml</name>
     <message>
-        <location filename="../src/cppqml.cpp" line="193"/>
+        <location filename="../src/cppqml.cpp" line="195"/>
         <source>DataDannie::DataDannie: ошибка перехода в созданную папку хранения документов!</source>
         <translation>DataDannie::DataDannie: failed to enter the created documents storage folder!</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="197"/>
+        <location filename="../src/cppqml.cpp" line="199"/>
         <source>DataDannie::DataDannie: ошибка создания папки хранения документов.</source>
         <translation>DataDannie::DataDannie: failed to create the documents storage folder.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="459"/>
+        <location filename="../src/cppqml.cpp" line="461"/>
         <source>Размер шрифта имеет неверное значение.</source>
         <translation>Invalid font size value.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="477"/>
+        <location filename="../src/cppqml.cpp" line="479"/>
         <source>Путь к сохранению каталога документов пустой.</source>
         <translation>The documents catalog save path is empty.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="529"/>
+        <location filename="../src/cppqml.cpp" line="531"/>
         <source>Переименован титул: </source>
         <translation>Title renamed: </translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="551"/>
+        <location filename="../src/cppqml.cpp" line="553"/>
         <source>Новая запись в описании заголовка.</source>
         <translation>New entry in the header description.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="582"/>
-        <location filename="../src/cppqml.cpp" line="737"/>
+        <location filename="../src/cppqml.cpp" line="584"/>
+        <location filename="../src/cppqml.cpp" line="739"/>
         <source>Ошибка удаления элемента.</source>
         <translation>Failed to delete the element.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="587"/>
-        <location filename="../src/cppqml.cpp" line="740"/>
+        <location filename="../src/cppqml.cpp" line="589"/>
+        <location filename="../src/cppqml.cpp" line="742"/>
         <source>Ошибка удаления таблицы выбранного элемента.</source>
         <translation>Failed to delete the table of the selected element.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="592"/>
-        <location filename="../src/cppqml.cpp" line="743"/>
+        <location filename="../src/cppqml.cpp" line="594"/>
+        <location filename="../src/cppqml.cpp" line="745"/>
         <source>Ошибка удаления данных выбранного элемента.</source>
         <translation>Failed to delete the data of the selected element.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="603"/>
+        <location filename="../src/cppqml.cpp" line="605"/>
         <source>Ошибка удаления списка.</source>
         <translation>Failed to delete the list.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="627"/>
-        <location filename="../src/cppqml.cpp" line="649"/>
+        <location filename="../src/cppqml.cpp" line="629"/>
+        <location filename="../src/cppqml.cpp" line="651"/>
         <source>Список с таким именем уже существует.</source>
         <translation>A list with this name already exists.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="632"/>
+        <location filename="../src/cppqml.cpp" line="634"/>
         <source>Создан список: </source>
         <translation>List created: </translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="765"/>
-        <location filename="../src/cppqml.cpp" line="787"/>
+        <location filename="../src/cppqml.cpp" line="767"/>
+        <location filename="../src/cppqml.cpp" line="789"/>
         <source>Элемент с таким именем уже существует.</source>
         <translation>An element with this name already exists.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="770"/>
+        <location filename="../src/cppqml.cpp" line="772"/>
         <source>Создан элемент: </source>
         <translation>Element created: </translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="839"/>
+        <location filename="../src/cppqml.cpp" line="841"/>
         <source>Новая запись в описании элемента.</source>
         <translation>New entry in the element description.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="890"/>
-        <location filename="../src/cppqml.cpp" line="914"/>
+        <location filename="../src/cppqml.cpp" line="892"/>
+        <location filename="../src/cppqml.cpp" line="916"/>
         <source>Нельзя сохранить пустые данные.</source>
         <translation>Cannot save empty data.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="899"/>
-        <location filename="../src/cppqml.cpp" line="921"/>
-        <location filename="../src/cppqml.cpp" line="944"/>
+        <location filename="../src/cppqml.cpp" line="901"/>
+        <location filename="../src/cppqml.cpp" line="923"/>
+        <location filename="../src/cppqml.cpp" line="946"/>
         <source>Документ с таким именем уже существует.</source>
         <translation>A document with this name already exists.</translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="906"/>
-        <location filename="../src/cppqml.cpp" line="927"/>
+        <location filename="../src/cppqml.cpp" line="908"/>
+        <location filename="../src/cppqml.cpp" line="929"/>
         <source>Добавлен документ: </source>
         <translation>Document added: </translation>
     </message>
     <message>
-        <location filename="../src/cppqml.cpp" line="1119"/>
+        <location filename="../src/cppqml.cpp" line="1121"/>
         <source>Добавлен план: </source>
         <translation>Plan added: </translation>
+    </message>
+    <message>
+        <location filename="../src/cppqml.cpp" line="1180"/>
+        <source>Код устройства скопирован в буфер обмена.</source>
+        <translation>Device code copied to clipboard.</translation>
     </message>
 </context>
 <context>
@@ -1870,102 +1875,102 @@
 <context>
     <name>StrInstrukciya</name>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="199"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="205"/>
         <source>Список инструкций</source>
         <translation>Instructions list</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="279"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="285"/>
         <source>Горячие клавиши</source>
         <translation>hotkeys</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="280"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="286"/>
         <source>ГОРЯЧИЕ КЛАВИШИ</source>
         <translation>HOTKEYS</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="281"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="287"/>
         <source>менторPDF</source>
         <translation>mentorPDF</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="282"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="288"/>
         <source>ИНСТРУКЦИЯ ПО МЕНТОРPDF</source>
         <translation>MENTORPDF INSTRUCTIONS</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="283"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="289"/>
         <source>Меню</source>
         <translation>menu</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="284"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="290"/>
         <source>ОПИСАНИЕ НАСТРОЕК МЕНЮ</source>
         <translation>MENU SETTINGS DESCRIPTION</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="285"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="291"/>
         <source>О приложении</source>
         <translation>about the application</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="286"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="292"/>
         <source>О ПРИЛОЖЕНИИ</source>
         <translation>ABOUT THE APPLICATION</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="287"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="293"/>
         <source>О Qt</source>
         <translation>about Qt</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="288"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="294"/>
         <source>О QT</source>
         <translation>ABOUT QT</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="289"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="295"/>
         <source>Проводник</source>
         <translation>file explorer</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="290"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="296"/>
         <source>ИНСТРУКЦИЯ ПО ПРОВОДНИКУ</source>
         <translation>FILE EXPLORER INSTRUCTIONS</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="291"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="297"/>
         <source>Каталог документов</source>
         <translation>documents catalog</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="292"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="298"/>
         <source>ИНСТРУКЦИЯ ПО СОЗДАНИЮ КАТАЛОГА ДОКУМЕНТОВ</source>
         <translation>DOCUMENTS CATALOG CREATION INSTRUCTIONS</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="293"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="299"/>
         <source>Журнал</source>
         <translation>journal</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="294"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="300"/>
         <source>ИНСТРУКЦИЯ ПО ЖУРНАЛУ</source>
         <translation>JOURNAL INSTRUCTIONS</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="295"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="301"/>
         <source>Анимация</source>
         <translation>animation</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="296"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="302"/>
         <source>ИНСТРУКЦИЯ ПО АНИМАЦИИ</source>
         <translation>ANIMATION INSTRUCTIONS</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="368"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="374"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -1980,7 +1985,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="377"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="383"/>
         <source>
 				&lt;html&gt;
 					&lt;body&gt;
@@ -1995,18 +2000,26 @@
 &lt;p&gt;&lt;center&gt;Version: &lt;b&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="382"/>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="385"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="388"/>
         <source>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;</source>
         <translation>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="384"/>
-        <source>&lt;p&gt;&lt;center&gt;Код устройства: &lt;b&gt;</source>
-        <translation>&lt;p&gt;&lt;center&gt;Device code: &lt;b&gt;</translation>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="390"/>
+        <source>&lt;p&gt;&lt;center&gt;Код устройства: &lt;a href=&quot;copy&quot;&gt;&lt;b&gt;</source>
+        <translation>&lt;p&gt;&lt;center&gt;Device code: &lt;a href=&quot;copy&quot;&gt;&lt;b&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="387"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="391"/>
+        <source>&lt;/b&gt;&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;</source>
+        <translation>&lt;/b&gt;&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;&lt;center&gt;Код устройства: &lt;b&gt;</source>
+        <translation type="vanished">&lt;p&gt;&lt;center&gt;Device code: &lt;b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="393"/>
         <source>&lt;p&gt;&lt;center&gt;Сайт: &lt;a href=&quot;https://tmk-group.ru&quot;&gt;tmk-group.ru&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Приложение скомпилированно с &lt;b&gt;Qt версии </source>
         <translation>&lt;p&gt;&lt;center&gt;Website: &lt;a href=&quot;https://tmk-group.ru&quot;&gt;tmk-group.ru&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
@@ -2021,7 +2034,7 @@
 &lt;p&gt;&lt;center&gt;Compiled with &lt;b&gt;Qt version </translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="388"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="394"/>
         <source>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Лицензия: &lt;b&gt;GPLv3&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Git URL: &lt;a href=&quot;https://github.com/DruidCat/qt-working-diagrams&quot;&gt;github.com/DruidCat/qt-working-diagrams&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
@@ -2126,7 +2139,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="410"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="416"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2171,7 +2184,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="434"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="440"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2184,7 +2197,7 @@
 &lt;p&gt;This program uses Qt version </translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="458"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="464"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2249,7 +2262,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="493"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="499"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2364,7 +2377,7 @@
 &lt;p&gt;&lt;b&gt;[PgDn]&lt;/b&gt; - Page down.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="550"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="556"/>
         <source>&lt;/ol&gt;
 &lt;p&gt;&lt;b&gt;АНИМАЦИЯ:&lt;/b&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2415,7 +2428,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="576"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="582"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;</source>
@@ -2424,7 +2437,7 @@
                     &lt;body&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="580"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="586"/>
         <source>&lt;p&gt;&lt;b&gt;менторPDF&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- [вкл] включен встроенный просмотщик pdf.&lt;/p&gt;
 &lt;p&gt;- [выкл] включен внешний просмотщик pdf.&lt;/p&gt;</source>
@@ -2433,7 +2446,7 @@
 &lt;p&gt;- [off] an external pdf viewer is used.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="583"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="589"/>
         <source>&lt;p&gt;&lt;b&gt;горячие клавиши&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- описание всех горячих клавиш в приложении.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;шрифт&lt;/b&gt;&lt;/p&gt;
@@ -2448,7 +2461,7 @@
 &lt;p&gt;- [large] font size.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="590"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="596"/>
         <source>&lt;p&gt;&lt;b&gt;анимация&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- создание и воспроизведение анимационной заставки для видео роликов.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;журнал&lt;/b&gt;&lt;/p&gt;
@@ -2459,7 +2472,7 @@
 &lt;p&gt;- all messages, warnings and errors from the application are recorded on this page.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="594"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="600"/>
         <source>&lt;p&gt;&lt;b&gt;о приложении&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- краткая информация о приложении и его создатиле.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;о Qt&lt;/b&gt;&lt;/p&gt;
@@ -2470,7 +2483,7 @@
 &lt;p&gt;- information about the framework the application is written with.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="599"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="605"/>
         <source>&lt;p&gt;&lt;b&gt;редактор&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- [вкл] включен редактор создания каталогов.&lt;/p&gt;
 &lt;p&gt;- [выкл] выключен редактор создания каталогов.&lt;/p&gt;
@@ -2483,7 +2496,7 @@
 &lt;p&gt;- in the folder [</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="603"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="609"/>
         <source>] создаётся каталог со всеми документами из приложения.&lt;/p&gt;
                     &lt;/body&gt;
                 &lt;/html&gt;</source>
@@ -2492,7 +2505,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="608"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="614"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2523,7 +2536,7 @@
 &lt;p&gt;- [</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="621"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="627"/>
         <source>].&lt;/p&gt;
 &lt;p&gt;&lt;img src = &quot;/images/DCButtons/24x24/DCKnopkaInfo.png&quot;&gt; - Инструкция по созданию каталога документов.&lt;/p&gt;
 &lt;p&gt;&lt;img src = &quot;/images/DCButtons/24x24/DCKnopkaNastroiki.png&quot;&gt; - Меню создания каталогов.&lt;/p&gt;
@@ -2554,7 +2567,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="637"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="643"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2621,7 +2634,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="672"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="678"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
