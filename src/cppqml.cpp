@@ -186,6 +186,15 @@ DCCppQml::DCCppQml(QObject* proditel) : QObject{proditel},
     //при этом принудительно выключен — добавить/удалить/переименовать нельзя.
     QString strMentorPut = DCAssets::polDataPut(strKatalogDB);
     DCAssets::obnovitRabochieData(strMentorPut);
+#ifdef MENTOR_DATA_ENCRYPTED
+    //Если защищённый пакет не распаковался (например устройство не зарегистрировано),
+    //сообщим в журнал после завершения конструктора: signalDebug->slotDebug будет связан.
+    QTimer::singleShot(0, this, [this]() {
+        const QString strOshestkaRaspakovi = DCAssets::polPosledneyayaOshestka();
+        if(!strOshestkaRaspakovi.isEmpty())
+            slotDebug(strOshestkaRaspakovi);
+    });
+#endif // MENTOR_DATA_ENCRYPTED
     strKatalogDebug = QDir(strMentorPut).filePath(strKatalogDebug);//Логи рядом с данными.
 #else
     QDir odrMentor = QDir::current();//Объект каталога приложения.

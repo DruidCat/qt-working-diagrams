@@ -12,6 +12,7 @@ class DCAssets
 public:
     static QString polDataPut(const QString& strImyaKataloga);//Каталог данных + подкаталог.
     static bool obnovitRabochieData(const QString& strRabochiPut);//Синхронизировать с пакетом.
+    static QString polPosledneyayaOshestka();//Ошибка распаковки пакета ('' если всё хорошо).
 };
 
 #endif // DCASSETS_H

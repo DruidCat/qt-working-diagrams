@@ -41,6 +41,16 @@ endif()
 # принудительно выключен (isAdmin=false): править базу в таком пакете нельзя.
 option(MENTOR_DB_MOBILE "База данных и документы внутри установочного пакета" OFF)
 
+# ==== MENTOR_DATA_ENCRYPTED: шифрование workingdata в APK (только Android) ====
+# ON (требует MENTOR_DB_MOBILE=ON и сборку под Android): вместо открытых файлов в
+# assets кладётся зашифрованный blob dannie.tar.enc (AES-256-GCM, ключ DK) и таблица
+# licenziya.bin {код устройства -> E_i}, где E_i = AES-GCM(PBKDF2(мастер-секрет, код), DK).
+# Телефон, кода которого нет в таблице, развернуть DK не может - документы не
+# распаковываются. Мастер-секрет берётся из license.json ВНЕ git (путь ниже или
+# -DMENTOR_LICENSE_JSON=...) и компилируется в бинарь определением
+# MENTOR_MASTER_SECRET_HEX. Десктоп, Аврора и CI не затронуты: флаг OFF по умолчанию.
+option(MENTOR_DATA_ENCRYPTED "Шифрование workingdata в APK (Android, MENTOR_DB_MOBILE)" OFF)
+
 # Создаём переменную PROJECT_SOURCES и добавляем в неё файлы *.cpp и *.h
 set(PROJECT_SOURCES
         src/copydannie.h
@@ -266,13 +276,51 @@ if(MENTOR_DB_MOBILE)
     endif()
     if(ANDROID)
         target_link_libraries(${EXECUTABLE_NAME} PRIVATE android)# AAssetManager для распаковки assets
-        # Перед линковкой синхронизируем workingdata в android/assets (инкрементально,
-        # rsync копирует только изменения). MENTOR_WORKINGDATA — источник данных вне
-        # репозитория (полный комплект документов), по умолчанию workingdata проекта.
-        add_custom_command(TARGET ${EXECUTABLE_NAME} PRE_LINK
-            COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/tools/sync_dbmobile_assets.sh
-                    ${CMAKE_CURRENT_SOURCE_DIR}
-            COMMENT "MENTOR_DB_MOBILE: обновление workingdata в assets APK"
-            VERBATIM)
+        if(MENTOR_DATA_ENCRYPTED)
+            # Защищённый бандл: вместо rsync открываем шифрование утилитой на Python.
+            if(NOT MENTOR_LICENSE_JSON)
+                set(MENTOR_LICENSE_JSON "$ENV{HOME}/secrets/mentor-licensing/license.json")
+            endif()
+            if(NOT EXISTS "${MENTOR_LICENSE_JSON}")
+                message(FATAL_ERROR
+                    "MENTOR_DATA_ENCRYPTED: файл лицензии не найден: ${MENTOR_LICENSE_JSON}"
+                    " (-DMENTOR_LICENSE_JSON=путь)")
+            endif()
+            # Мастер-секрет из лицензии -> в бинарь определением MENTOR_MASTER_SECRET_HEX.
+            execute_process(COMMAND python3 -c
+                "import json,sys;print(json.load(open(sys.argv[1]))['master_secret_hex'])"
+                "${MENTOR_LICENSE_JSON}"
+                OUTPUT_VARIABLE MENTOR_MASTER_HEX OUTPUT_STRIP_TRAILING_WHITESPACE)
+            string(STRIP "${MENTOR_MASTER_HEX}" MENTOR_MASTER_HEX)
+            string(LENGTH "${MENTOR_MASTER_HEX}" unt_longina_mastera)
+            if(NOT unt_longina_mastera EQUAL 64)
+                message(FATAL_ERROR
+                    "MENTOR_DATA_ENCRYPTED: master_secret_hex должен быть 64 hex-символа")
+            endif()
+            target_compile_definitions(${EXECUTABLE_NAME} PRIVATE
+                MENTOR_DATA_ENCRYPTED MENTOR_MASTER_SECRET_HEX="${MENTOR_MASTER_HEX}")
+            message(WARNING
+                "MENTOR_DATA_ENCRYPTED=ON: мастер-секрет попал в build-каталог "
+                "(кэш CMake и бинарь). Каталог сборки - приватный, в git не входит.")
+            add_custom_command(TARGET ${EXECUTABLE_NAME} PRE_LINK
+                COMMAND ${CMAKE_COMMAND} -E env
+                        MENTOR_LICENSE_JSON=${MENTOR_LICENSE_JSON}
+                        MENTOR_WORKINGDATA=$ENV{MENTOR_WORKINGDATA}
+                        python3 ${CMAKE_CURRENT_SOURCE_DIR}/tools/shifruj_dannie.py
+                                ${CMAKE_CURRENT_SOURCE_DIR}
+                COMMENT "MENTOR_DATA_ENCRYPTED: шифрование workingdata в assets APK"
+                VERBATIM)
+        else()
+            # Перед линковкой синхронизируем workingdata в android/assets (инкрементально,
+            # rsync копирует только изменения). MENTOR_WORKINGDATA — источник данных вне
+            # репозитория (полный комплект документов), по умолчанию workingdata проекта.
+            add_custom_command(TARGET ${EXECUTABLE_NAME} PRE_LINK
+                COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/tools/sync_dbmobile_assets.sh
+                        ${CMAKE_CURRENT_SOURCE_DIR}
+                COMMENT "MENTOR_DB_MOBILE: обновление workingdata в assets APK"
+                VERBATIM)
+        endif()
     endif()
+elseif(MENTOR_DATA_ENCRYPTED)
+    message(FATAL_ERROR "MENTOR_DATA_ENCRYPTED требует MENTOR_DB_MOBILE=ON")
 endif()
