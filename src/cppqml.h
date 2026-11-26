@@ -193,6 +193,9 @@ class DCCppQml : public QObject {
 
     Q_PROPERTY(QString qtVersion
                    READ qtVersion CONSTANT)
+
+    Q_PROPERTY(QString kodUstroystva//Код устройства (android_id); пусто на desktop/Авроре.
+                   READ kodUstroystva CONSTANT)
 public:
     explicit	DCCppQml(QObject* proditel = nullptr);//Конструктор.
 	~			DCCppQml();//Деструктор.
@@ -306,6 +309,7 @@ public:
     QString		strDebug();//Возвращает ошибку.
 
     QString		qtVersion() const;//Метод возвращающий версию Qt
+    QString		kodUstroystva() const;//Код устройства android_id (пусто вне Android).
     void		setStrDebug(QString& strErrorNovi);//Установить Новую ошибку.
 	//---Методы---//
 	QString 	redaktorTexta(QString strTekst);//Редактор текста по стандартам Приложения.

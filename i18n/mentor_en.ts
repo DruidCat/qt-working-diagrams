@@ -1105,113 +1105,113 @@
 <context>
     <name>DCPdfMPV</name>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="275"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="329"/>
         <source>3/11 Старт таймера масштабирования.</source>
         <translation>3/11 Scaling timer started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="294"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="348"/>
         <source>5/11 Начало масштабирования документа.</source>
         <translation>5/11 Document scaling started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="325"/>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="549"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="265"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="395"/>
         <source>6/11 Остановка анимации: ожидайте.</source>
         <translation>6/11 Stopping animation: please wait.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="335"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="406"/>
         <source>10/11 Переходим на страницу.</source>
         <translation>10/11 Navigating to the page.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="341"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="426"/>
         <source>11/11 Старт таймера отображения.</source>
         <translation>11/11 Display timer started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="354"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="448"/>
         <source>7/11 Сброс сцены документа.</source>
         <translation>7/11 Document scene reset.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="369"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="463"/>
         <source>8/11 Старт таймера страницы.</source>
         <translation>8/11 Page timer started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="386"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="480"/>
         <source>4/11 Стоп таймера масштабирования.</source>
         <translation>4/11 Scaling timer stopped.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="397"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="491"/>
         <source>9/11 Стоп таймера страницы.</source>
         <translation>9/11 Page timer stopped.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="420"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="523"/>
         <source>11/11 Ошибка, окончание загрузки.</source>
         <translation>11/11 Error, loading finished.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="427"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="530"/>
         <source>Ошибка открытия документа: </source>
         <translation>Failed to open document: </translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="445"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="548"/>
         <source>11/11 Таймаут открытия: документ показан как есть.</source>
         <translation>11/11 Open timeout: document shown as is.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="488"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="596"/>
         <source>10/11 Старт таймера ошибки.</source>
         <translation>10/11 Error timer started.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="493"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="601"/>
         <source>2/11 Загрузка большого документа.</source>
         <translation>2/11 Loading a large document.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="506"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="614"/>
         <source>1/11 Статус документа: Загрузка.</source>
         <translation>1/11 Document status: loading.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="560"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="664"/>
         <source>11/11 Ошибка рендера страницы.</source>
         <translation>11/11 Page render error.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="561"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="665"/>
         <source>Ошибка рендера страницы.</source>
         <translation>Failed to render the page.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="571"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="675"/>
         <source>11/11 Рендера страницы Null.</source>
         <translation>11/11 Page render is null.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="572"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="676"/>
         <source>Рендера страницы Null.</source>
         <translation>Page render is null.</translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="721"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="837"/>
         <source>Страница </source>
         <translation>Page </translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="723"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="839"/>
         <source> из </source>
         <translation> of </translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="737"/>
+        <location filename="../qml/DCMethods/DCPdfMPV.qml" line="853"/>
         <source>Загрузка</source>
         <translation>Loading</translation>
     </message>
@@ -1261,7 +1261,7 @@
         <translation>Page </translation>
     </message>
     <message>
-        <location filename="../qml/DCMethods/DCPdfSidebar.qml" line="489"/>
+        <location filename="../qml/DCMethods/DCPdfSidebar.qml" line="479"/>
         <source>Нет закладок</source>
         <translation>No bookmarks</translation>
     </message>
@@ -1996,15 +1996,32 @@
     </message>
     <message>
         <location filename="../qml/DCPages/StrInstrukciya.qml" line="382"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="385"/>
+        <source>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;</source>
+        <translation>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="384"/>
+        <source>&lt;p&gt;&lt;center&gt;Код устройства: &lt;b&gt;</source>
+        <translation>&lt;p&gt;&lt;center&gt;Device code: &lt;b&gt;</translation>
+    </message>
+    <message>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="387"/>
+        <source>&lt;p&gt;&lt;center&gt;Сайт: &lt;a href=&quot;https://tmk-group.ru&quot;&gt;tmk-group.ru&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;Приложение скомпилированно с &lt;b&gt;Qt версии </source>
+        <translation>&lt;p&gt;&lt;center&gt;Website: &lt;a href=&quot;https://tmk-group.ru&quot;&gt;tmk-group.ru&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
+&lt;p&gt;&lt;center&gt;Compiled with &lt;b&gt;Qt version </translation>
+    </message>
+    <message>
         <source>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Сайт: &lt;a href=&quot;https://tmk-group.ru&quot;&gt;tmk-group.ru&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Приложение скомпилированно с &lt;b&gt;Qt версии </source>
-        <translation>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
+        <translation type="vanished">&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Website: &lt;a href=&quot;https://tmk-group.ru&quot;&gt;tmk-group.ru&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Compiled with &lt;b&gt;Qt version </translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="384"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="388"/>
         <source>&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Лицензия: &lt;b&gt;GPLv3&lt;/b&gt;&lt;/center&gt;&lt;/p&gt;
 &lt;p&gt;&lt;center&gt;Git URL: &lt;a href=&quot;https://github.com/DruidCat/qt-working-diagrams&quot;&gt;github.com/DruidCat/qt-working-diagrams&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;
@@ -2109,7 +2126,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="406"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="410"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2154,7 +2171,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="430"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="434"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2167,7 +2184,7 @@
 &lt;p&gt;This program uses Qt version </translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="454"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="458"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2232,7 +2249,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="489"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="493"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2347,7 +2364,7 @@
 &lt;p&gt;&lt;b&gt;[PgDn]&lt;/b&gt; - Page down.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="546"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="550"/>
         <source>&lt;/ol&gt;
 &lt;p&gt;&lt;b&gt;АНИМАЦИЯ:&lt;/b&gt;&lt;/p&gt;
 &lt;ol&gt;
@@ -2398,7 +2415,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="572"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="576"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;</source>
@@ -2407,7 +2424,7 @@
                     &lt;body&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="576"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="580"/>
         <source>&lt;p&gt;&lt;b&gt;менторPDF&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- [вкл] включен встроенный просмотщик pdf.&lt;/p&gt;
 &lt;p&gt;- [выкл] включен внешний просмотщик pdf.&lt;/p&gt;</source>
@@ -2416,7 +2433,7 @@
 &lt;p&gt;- [off] an external pdf viewer is used.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="579"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="583"/>
         <source>&lt;p&gt;&lt;b&gt;горячие клавиши&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- описание всех горячих клавиш в приложении.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;шрифт&lt;/b&gt;&lt;/p&gt;
@@ -2431,7 +2448,7 @@
 &lt;p&gt;- [large] font size.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="586"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="590"/>
         <source>&lt;p&gt;&lt;b&gt;анимация&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- создание и воспроизведение анимационной заставки для видео роликов.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;журнал&lt;/b&gt;&lt;/p&gt;
@@ -2442,7 +2459,7 @@
 &lt;p&gt;- all messages, warnings and errors from the application are recorded on this page.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="590"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="594"/>
         <source>&lt;p&gt;&lt;b&gt;о приложении&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- краткая информация о приложении и его создатиле.&lt;/p&gt;
 &lt;p&gt;&lt;b&gt;о Qt&lt;/b&gt;&lt;/p&gt;
@@ -2453,7 +2470,7 @@
 &lt;p&gt;- information about the framework the application is written with.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="595"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="599"/>
         <source>&lt;p&gt;&lt;b&gt;редактор&lt;/b&gt;&lt;/p&gt;
 &lt;p&gt;- [вкл] включен редактор создания каталогов.&lt;/p&gt;
 &lt;p&gt;- [выкл] выключен редактор создания каталогов.&lt;/p&gt;
@@ -2466,7 +2483,7 @@
 &lt;p&gt;- in the folder [</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="599"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="603"/>
         <source>] создаётся каталог со всеми документами из приложения.&lt;/p&gt;
                     &lt;/body&gt;
                 &lt;/html&gt;</source>
@@ -2475,7 +2492,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="604"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="608"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2506,7 +2523,7 @@
 &lt;p&gt;- [</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="617"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="621"/>
         <source>].&lt;/p&gt;
 &lt;p&gt;&lt;img src = &quot;/images/DCButtons/24x24/DCKnopkaInfo.png&quot;&gt; - Инструкция по созданию каталога документов.&lt;/p&gt;
 &lt;p&gt;&lt;img src = &quot;/images/DCButtons/24x24/DCKnopkaNastroiki.png&quot;&gt; - Меню создания каталогов.&lt;/p&gt;
@@ -2537,7 +2554,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="633"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="637"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2604,7 +2621,7 @@
                 &lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrInstrukciya.qml" line="668"/>
+        <location filename="../qml/DCPages/StrInstrukciya.qml" line="672"/>
         <source>
                 &lt;html&gt;
                     &lt;body&gt;
@@ -2882,22 +2899,22 @@
         <translation>ENTER A SEARCH QUERY</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrPdf.qml" line="528"/>
+        <location filename="../qml/DCPages/StrPdf.qml" line="535"/>
         <source>ВВЕДИТЕ ПАРОЛЬ ДОКУМЕНТА</source>
         <translation>ENTER THE DOCUMENT PASSWORD</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrPdf.qml" line="529"/>
+        <location filename="../qml/DCPages/StrPdf.qml" line="536"/>
         <source>НЕВЕРНЫЙ ПАРОЛЬ ДОКУМЕНТА</source>
         <translation>WRONG DOCUMENT PASSWORD</translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrPdf.qml" line="765"/>
+        <location filename="../qml/DCPages/StrPdf.qml" line="773"/>
         <source>страница </source>
         <translation>page </translation>
     </message>
     <message>
-        <location filename="../qml/DCPages/StrPdf.qml" line="767"/>
+        <location filename="../qml/DCPages/StrPdf.qml" line="775"/>
         <source>найдено: </source>
         <translation>found: </translation>
     </message>
@@ -3056,79 +3073,79 @@
         <translation>Mentor by druidcat@yandex.ru</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="136"/>
+        <location filename="../qml/ru.Mentor.qml" line="152"/>
         <source>МЕНЮ</source>
         <translation>MENU</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="208"/>
+        <location filename="../qml/ru.Mentor.qml" line="224"/>
         <source>АНИМАЦИЯ</source>
         <translation>ANIMATION</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="245"/>
+        <location filename="../qml/ru.Mentor.qml" line="261"/>
         <source>ЖУРНАЛ</source>
         <translation>JOURNAL</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="317"/>
+        <location filename="../qml/ru.Mentor.qml" line="333"/>
         <source>СОЗДАНИЕ КАТАЛОГА ДОКУМЕНТОВ</source>
         <translation>CREATING A DOCUMENTS CATALOG</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="345"/>
+        <location filename="../qml/ru.Mentor.qml" line="361"/>
         <source>Выберите документ для просмотра.</source>
         <translation>Select a document to view.</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="353"/>
+        <location filename="../qml/ru.Mentor.qml" line="369"/>
         <source>&lt;- Выберите папку сохранения и нажмите Ок.</source>
         <translation>&lt;- Select the save folder and press Ok.</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="503"/>
-        <location filename="../qml/ru.Mentor.qml" line="768"/>
+        <location filename="../qml/ru.Mentor.qml" line="519"/>
+        <location filename="../qml/ru.Mentor.qml" line="784"/>
         <source>Выберите PDF документ для добавления.</source>
         <translation>Select a PDF document to add.</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="607"/>
-        <location filename="../qml/ru.Mentor.qml" line="614"/>
-        <location filename="../qml/ru.Mentor.qml" line="645"/>
-        <location filename="../qml/ru.Mentor.qml" line="710"/>
-        <location filename="../qml/ru.Mentor.qml" line="717"/>
+        <location filename="../qml/ru.Mentor.qml" line="623"/>
+        <location filename="../qml/ru.Mentor.qml" line="630"/>
+        <location filename="../qml/ru.Mentor.qml" line="661"/>
+        <location filename="../qml/ru.Mentor.qml" line="726"/>
+        <location filename="../qml/ru.Mentor.qml" line="733"/>
         <source></source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="613"/>
-        <location filename="../qml/ru.Mentor.qml" line="716"/>
+        <location filename="../qml/ru.Mentor.qml" line="629"/>
+        <location filename="../qml/ru.Mentor.qml" line="732"/>
         <source>В стороннем приложении план: </source>
         <translation>Plan in a third-party application: </translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="616"/>
-        <location filename="../qml/ru.Mentor.qml" line="719"/>
+        <location filename="../qml/ru.Mentor.qml" line="632"/>
+        <location filename="../qml/ru.Mentor.qml" line="735"/>
         <source>Открывается план.</source>
         <translation>Opening the plan.</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="644"/>
+        <location filename="../qml/ru.Mentor.qml" line="660"/>
         <source>В стороннем приложении документ: </source>
         <translation>Document in a third-party application: </translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="647"/>
+        <location filename="../qml/ru.Mentor.qml" line="663"/>
         <source>Открывается документ: </source>
         <translation>Opening document: </translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="678"/>
+        <location filename="../qml/ru.Mentor.qml" line="694"/>
         <source>Для изменения описания нажмите иконку (+).</source>
         <translation>Press the (+) icon to change the description.</translation>
     </message>
     <message>
-        <location filename="../qml/ru.Mentor.qml" line="741"/>
+        <location filename="../qml/ru.Mentor.qml" line="757"/>
         <source>ПЛАН</source>
         <translation>PLAN</translation>
     </message>

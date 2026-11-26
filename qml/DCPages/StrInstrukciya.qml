@@ -379,8 +379,12 @@ Item {
 					<body>
 <p><center><font color=\"black\">.<img src = \"/images/ts-rus-color.svg\">.</font></center></p>
 <p><center>Приложение: <b>Ментор</b></center></p>
-<p><center>Версия: <b>")+ Qt.application.version +qsTr("</b></center></p>
-<p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
+<p><center>Версия: <b>")+ Qt.application.version +qsTr("</b></center></p>")
+                + (cppqml.kodUstroystva.length > 0
+                   ? qsTr("<p><center>Код устройства: <b>") + cppqml.kodUstroystva
+                         + qsTr("</b></center></p>")
+                   : "")
+                + qsTr("<p><center>Сайт: <a href=\"https://tmk-group.ru\">tmk-group.ru</a></center></p>
 <p><center>Приложение скомпилированно с <b>Qt версии ") + cppqml.qtVersion + qsTr("</b></center></p>
 <p><center>Лицензия: <b>GPLv3</b></center></p>
 <p><center>Git URL: <a href=\"https://github.com/DruidCat/qt-working-diagrams\">\

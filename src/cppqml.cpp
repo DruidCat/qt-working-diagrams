@@ -1142,6 +1142,31 @@ QString DCCppQml::qtVersion() const {//Метод возвращающий ве�
 /////////////////////////////////////////////
     return qVersion();//воззвращаем строку с версией Qt
 }
+QString DCCppQml::kodUstroystva() const {//Код устройства android_id.
+/////////////////////////////////////////////////
+//---К О Д   У С Т Р О Й С Т В А   ( A N D R O I D )---//
+/////////////////////////////////////////////////
+// Система вычисляет android_id из связки (устройство + ключ подписи пакета),
+// поэтому значение одинаково у всех сборок, подписанных одним релизным ключом,
+// и отличается от того, что отдаёт `adb shell settings get secure android_id`.
+#ifdef Q_OS_ANDROID
+    QJniObject m_pOdrContext = QNativeInterface::QAndroidApplication::context();
+    if(!m_pOdrContext.isValid())
+        return QString();//Контекст недоступен - кода нет.
+    QJniObject m_pOdrCr = m_pOdrContext.callObjectMethod("getContentResolver",
+            "()Landroid/content/ContentResolver;");//Резолвер системных настроек.
+    if(!m_pOdrCr.isValid())
+        return QString();//Резолвер недоступен - кода нет.
+    QJniObject m_pOdrKluch = QJniObject::fromString(QStringLiteral("android_id"));
+    QJniObject m_pOdrId = QJniObject::callStaticObjectMethod(
+            "android/provider/Settings$Secure", "getString",
+            "(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;",
+            m_pOdrCr.object(), m_pOdrKluch.object());
+    return m_pOdrId.isValid() ? m_pOdrId.toString() : QString();//Код или пусто.
+#else
+    return QString();//Не Android: строка кода скрывается в интерфейсе.
+#endif
+}
 void DCCppQml::setStrDebug(QString& strDebugNovi){//Установить Новую ошибку.
 ///////////////////////////////////////////////////////
 //---У С Т А Н О В И Т Ь   Т Е К С Т   О Ш И Б К И---//
