@@ -207,45 +207,43 @@ for i in 0 1; do
     [ -f "${APK_UN[$i]}" ] || { echo "СБОРКА НЕ УДАЛАСЬ: ${APK_UN[$i]}"; exit 1; }
 done
 
-echo "=== Шаг 5: склейка multi-ABI и подпись ==="
-# Имя APK кодирует режим (worker - защищённый) и версию из git describe.
+echo "=== Шаг 5: подпись двух APK (arm64 и armv7) ==="
+# Имена APK кодируют режим и версию из git describe.
+# (27.11.2026) Universal-склейка ОТМЕНЕНА: Qt 6.7.3 не умеет multi-ABI,
+# его загрузчик в склеенном APK не определяет ABI (ищет libru.Mentor_null.so)
+# и приложение убивается на старте. Официальный multi-ABI только в Qt >= 6.8,
+# где уже нет бинарей armv7. Правильный результат - два отдельных APK.
 VER=$(git describe --tags | sed -e 's/^v//' -e 's/-g[0-9a-f]*$//')
-MERGED=/tmp/mkapk/merged.apk
-ALIGNED=/tmp/mkapk/aligned.apk
-FINAL=mentor-worker-$VER.apk
-rm -rf /tmp/mkapk && mkdir -p /tmp/mkapk && cd /tmp/mkapk
-unzip -q "$REPO/${APK_UN[0]}"
-# удалять ТОЛЬКО файлы старой подписи: внутри META-INF лежат обязательные
-# для coroutines/androidx ServiceLoader-файлы (META-INF/services/*)
-rm -f META-INF/*.SF META-INF/*.RSA META-INF/*.DSA META-INF/*.EC META-INF/MANIFEST.MF
-mkdir -p t64
-unzip -q "$REPO/${APK_UN[1]}" 'lib/*' -d t64
-cp -a t64/lib/arm64-v8a lib/
-rm -rf t64   # временный каталог не должен попасть в APK
-# resources.arsc обязан лежать БЕЗ сжатия (STORE), иначе Android 11+
-# отказывается ставить APK (ошибка -124). Остальное - Deflate.
-zip -X -r9 -q "$MERGED" . -x resources.arsc
-zip -X -0 -q "$MERGED" resources.arsc
-cd "$REPO"
-"$SDKDIR/build-tools/$BT_VER/zipalign" -f 4 "$MERGED" "$ALIGNED"
+OUT_V7=mentor-worker-$VER-armv7.apk
+OUT_A64=mentor-worker-$VER-arm64.apk
 KS="$HOME/secrets/mentor-release.keystore"
 KSPASS="$HOME/secrets/mentor-release-keystore-pass.txt"
 SIGNED=NO
+sign_rel() {
+    "$SDKDIR/build-tools/$BT_VER/zipalign" -f 4 "$1" "$2"
+    "$SDKDIR/build-tools/$BT_VER/apksigner" sign --ks "$KS" --ks-key-alias mentor \
+        --ks-pass env:MENTOR_KS_PASS --key-pass env:MENTOR_KS_PASS "$2"
+}
 if [ -f "$KS" ] && [ -f "$KSPASS" ]; then
     echo "Найден релизный ключ DruidCat: $KS"
     if ask "Подписать релизным ключом?"; then
         export MENTOR_KS_PASS
         MENTOR_KS_PASS=$(< "$KSPASS")
-        "$SDKDIR/build-tools/$BT_VER/apksigner" sign --ks "$KS" --ks-key-alias mentor \
-            --ks-pass env:MENTOR_KS_PASS --key-pass env:MENTOR_KS_PASS "$ALIGNED"
+        sign_rel "${APK_UN[0]}" "$OUT_V7"
+        sign_rel "${APK_UN[1]}" "$OUT_A64"
         unset MENTOR_KS_PASS
-        mv "$ALIGNED" "$FINAL"
         SIGNED=YES
     fi
 elif [ -f "$KS" ]; then
     echo "Внимание: keystore есть, но нет файла пароля $KSPASS."
 else
-    echo "Папки ~/secrets с релизным ключом нет - подпись будет отладочной."
+    echo "Папки ~/secrets с релизным ключом нет. Инструкция создания:"
+    echo "  mkdir -p ~/secrets && chmod 700 ~/secrets"
+    echo "  положить mentor-release.keystore (из хранилища DruidCat)"
+    echo "  echo ПАРОЛЬ > ~/secrets/mentor-release-keystore-pass.txt"
+    echo "  chmod 600 ~/secrets/mentor-release-keystore-pass.txt"
+    echo "Без релизного ключа подпись будет отладочной:"
+    echo "приложение установится, но обновления поверх релизных версий не встанут."
 fi
 if [ "$SIGNED" = NO ]; then
     DBG="$HOME/.android/debug.keystore"
@@ -256,21 +254,26 @@ if [ "$SIGNED" = NO ]; then
             -keyalg RSA -keysize 2048 -validity 10000 >/dev/null
     fi
     echo "Подпись отладочным ключом ($DBG)"
-    "$SDKDIR/build-tools/$BT_VER/apksigner" sign --ks "$DBG" \
-        --ks-pass pass:android --key-pass pass:android "$ALIGNED"
-    mv "$ALIGNED" "$FINAL"
+    for pair in "${APK_UN[0]}|$OUT_V7" "${APK_UN[1]}|$OUT_A64"; do
+        src=${pair%%|*}; dst=${pair#*|}
+        "$SDKDIR/build-tools/$BT_VER/zipalign" -f 4 "$src" "$dst"
+        "$SDKDIR/build-tools/$BT_VER/apksigner" sign --ks "$DBG" \
+            --ks-pass pass:android --key-pass pass:android "$dst"
+    done
 fi
 
 echo "=== Шаг 6: статистика сборки ==="
-echo "APK: $REPO/$FINAL"
-ls -la "$FINAL"
-"$SDKDIR/build-tools/$BT_VER/aapt2" dump badging "$FINAL" | \
-    grep -E "^package|sdkVersion|targetSdkVersion|native-code"
-unzip -v "$FINAL" | grep "resources.arsc" | awk '{print "resources.arsc метод:", $2}'
-unzip -l "$FINAL" | grep -E "dannie.tar.enc|licenziya.bin"
-"$SDKDIR/build-tools/$BT_VER/apksigner" verify --print-certs "$FINAL" 2>/dev/null | \
-    grep -E "Signer|SHA-256" | head -3
+for F in "$OUT_A64" "$OUT_V7"; do
+    echo "APK: $REPO/$F"
+    ls -la "$F"
+    "$SDKDIR/build-tools/$BT_VER/aapt2" dump badging "$F" | \
+        grep -E "^package|sdkVersion|targetSdkVersion|native-code"
+    "$SDKDIR/build-tools/$BT_VER/apksigner" verify --print-certs "$F" 2>/dev/null | \
+        grep -E "Signer #1 certificate DN|SHA-256" | head -2
+    unzip -l "$F" | grep -E "dannie.tar.enc|licenziya.bin"
+done
 echo "Время сборки: $((SECONDS - T0)) с"
-echo "Внимание: APK ~600 МБ, на телефоне нужно ~1.2 ГБ свободно."
+echo "APK ~600 МБ, на телефоне нужно ~1.2 ГБ свободно."
 echo "Доступ к данным - только у устройств с кодом из лицензии."
-echo "Установка на телефон: adb install -r $FINAL"
+echo "64-битные телефоны (POCO X7 Pro и новее) - ставьте $OUT_A64."
+echo "32-битные телефоны (Luck L130) - ставьте $OUT_V7."
