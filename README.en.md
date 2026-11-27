@@ -121,15 +121,19 @@ The script then:
    64-bit phones and `...-armv7.apk` for older 32-bit ones. A single merged
    universal APK does not work with Qt 6.7.3 (its loader cannot detect the
    ABI inside a hand-merged package).
-5. Signs the APK with the DruidCat release key from `~/secrets` (if the key is
-   missing it prints placement instructions; if you decline, it signs with a
-   debug key - the app installs but cannot be updated over release versions).
+5. Signs the APK with your own release key `~/secrets/mentor-release.keystore`
+   (passphrase in `~/secrets/mentor-release-keystore-pass.txt`). Every builder
+   creates and keeps their own key; if none is found the script prints how to
+   create and place one. If you decline signing, a debug key is used - the app
+   installs but cannot be updated over release versions.
 6. Prints build statistics: size, version, minSdk/targetSdk, ABI list,
    signing certificate fingerprint and elapsed time.
 
-The result is `mentor-admin-<version>.apk` in the project root (for example
-`mentor-admin-1.1.1-8.apk`, where the number after the version is the count of
-commits since the nearest tag). This is an **"Administrator" user-mode build**:
+The result is two files in the project root: `mentor-admin-<version>-arm64.apk`
+and `mentor-admin-<version>-armv7.apk` (for example
+`mentor-admin-1.1.1-14-arm64.apk`, where the number after the version is the
+count of commits since the nearest tag). These are **"Administrator" user-mode
+builds**:
 the document database and PDFs are not embedded into the APK, the app works
 with the shared device storage. The hardened build for field workers
 (encrypted data, non-admin mode) is configured separately and is not produced
