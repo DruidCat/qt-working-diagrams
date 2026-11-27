@@ -197,7 +197,7 @@ sign_rel() {
         --ks-pass env:MENTOR_KS_PASS --key-pass env:MENTOR_KS_PASS "$2"
 }
 if [ -f "$KS" ] && [ -f "$KSPASS" ]; then
-    echo "Найден релизный ключ DruidCat: $KS"
+    echo "Найден релизный ключ: $KS"
     if ask "Подписать релизным ключом?"; then
         export MENTOR_KS_PASS
         MENTOR_KS_PASS=$(< "$KSPASS")
@@ -211,7 +211,9 @@ elif [ -f "$KS" ]; then
 else
     echo "Папки ~/secrets с релизным ключом нет. Инструкция создания:"
     echo "  mkdir -p ~/secrets && chmod 700 ~/secrets"
-    echo "  положить mentor-release.keystore (из хранилища DruidCat)"
+    echo "  положить свой релизный ключ mentor-release.keystore"
+    echo "  или создать новый: keytool -genkeypair -alias mentor -keyalg RSA \\"
+    echo "    -keysize 2048 -validity 10000 -keystore ~/secrets/mentor-release.keystore"
     echo "  echo ПАРОЛЬ > ~/secrets/mentor-release-keystore-pass.txt"
     echo "  chmod 600 ~/secrets/mentor-release-keystore-pass.txt"
     echo "Без релизного ключа подпись будет отладочной:"
