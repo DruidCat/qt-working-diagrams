@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Классическая сборка «Ментора» под Android (armeabi-v7a + arm64-v8a, без assets
 # и без шифрования) с самопроверкой окружения: утилиты, Qt 6.7.3, Android SDK/NDK.
-# Запуск из корня клона: bash tools/sobratj_android.sh [-y]
+# Запуск из корня клона: bash tools/compilation_android_admin.sh [-y]
 # Флаг -y отвечает «да» на все вопросы (для автоматизации).
 set -euo pipefail
 
