@@ -133,4 +133,5 @@ build-android-armeabi-v7a/
 build-android-arm64-v8a/
 /mentor-release-universal.apk
 /mentor-admin-*.apk
+/mentor-worker-*.apk
 *.apk.idsig
