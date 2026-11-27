@@ -176,17 +176,22 @@ for i in 0 1; do
 done
 
 echo "=== Шаг 5: склейка multi-ABI и подпись ==="
+MERGED=/tmp/mkapk/merged.apk
+ALIGNED=/tmp/mkapk/aligned.apk
+FINAL=mentor-release-universal.apk
 rm -rf /tmp/mkapk && mkdir -p /tmp/mkapk && cd /tmp/mkapk
 unzip -q "$REPO/${APK_UN[0]}"
 rm -rf META-INF
 mkdir -p t64
 unzip -q "$REPO/${APK_UN[1]}" 'lib/*' -d t64
 cp -a t64/lib/arm64-v8a lib/
-zip -X -r9 -q merged.apk .
+# resources.arsc обязан лежать БЕЗ сжатия (STORE) иначе Android 11+
+# отказывается ставить APK: "Targeting R+ requires the resources.arsc
+# to be stored uncompressed" (ошибка -124). Остальное - Deflate.
+zip -X -r9 -q "$MERGED" . -x resources.arsc
+zip -X -0 -q "$MERGED" resources.arsc
 cd "$REPO"
-ALIGNED=build-android-merged.apk
-FINAL=mentor-release-universal.apk
-"$SDKDIR/build-tools/$BT_VER/zipalign" -f 4 /tmp/mkapk/merged.apk "$ALIGNED"
+"$SDKDIR/build-tools/$BT_VER/zipalign" -f 4 "$MERGED" "$ALIGNED"
 KS="$HOME/secrets/mentor-release.keystore"
 KSPASS="$HOME/secrets/mentor-release-keystore-pass.txt"
 SIGNED=NO
@@ -231,6 +236,7 @@ echo "APK: $REPO/$FINAL"
 ls -la "$FINAL"
 "$SDKDIR/build-tools/$BT_VER/aapt2" dump badging "$FINAL" | \
     grep -E "^package|sdkVersion|targetSdkVersion|native-code"
+unzip -v "$FINAL" | grep "resources.arsc" | awk '{print "resources.arsc метод:", $2}'
 "$SDKDIR/build-tools/$BT_VER/apksigner" verify --print-certs "$FINAL" 2>/dev/null | \
     grep -E "Signer|SHA-256" | head -3
 echo "Время сборки: $((SECONDS - T0)) с"
