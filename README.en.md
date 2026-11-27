@@ -96,6 +96,42 @@ Build from Qt Creator using the Android kit.
 The manifest and resources are in the [android](android) folder.
 The minimum supported version is Android 6.0 (API 23).
 
+#### Automated APK build on Ubuntu
+
+On Ubuntu 22.04 or later the whole Android build can be delegated to
+[tools/compilation_android_admin.sh](tools/compilation_android_admin.sh).
+Run it from the repository root:
+
+```bash
+cd qt-working-diagrams
+bash tools/compilation_android_admin.sh
+```
+
+The script then:
+
+1. Checks the base utilities (git, cmake, ninja, python3, zip, unzip, curl,
+   7za, JDK 11) and offers to install any that are missing (apt / Adoptium).
+2. Checks Qt 6.7.3 in `~/Qt6/6.7.3` (host `gcc_64`, `android_armv7`,
+   `android_arm64_v8a`); if absent it downloads it from the official
+   ftp.fau.de mirror and installs it.
+3. Checks the Android SDK in `~/Android/Sdk` (platform-34, build-tools 34.0.0,
+   NDK 26.1.10909125) and downloads anything missing from dl.google.com.
+4. Builds the app for **both processor families**, `armeabi-v7a` (32-bit) and
+   `arm64-v8a` (64-bit), and merges them into a single universal APK.
+5. Signs the APK with the DruidCat release key from `~/secrets` (if the key is
+   missing it prints placement instructions; if you decline, it signs with a
+   debug key - the app installs but cannot be updated over release versions).
+6. Prints build statistics: size, version, minSdk/targetSdk, ABI list,
+   signing certificate fingerprint and elapsed time.
+
+The result is `mentor-admin-<version>.apk` in the project root (for example
+`mentor-admin-1.1.1-8.apk`, where the number after the version is the count of
+commits since the nearest tag). This is an **"Administrator" user-mode build**:
+the document database and PDFs are not embedded into the APK, the app works
+with the shared device storage. The hardened build for field workers
+(encrypted data, non-admin mode) is configured separately and is not produced
+by this script.
+
 ## Usage
 
 On start, the application opens the document catalog following the scheme
