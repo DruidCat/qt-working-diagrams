@@ -117,7 +117,10 @@ The script then:
 3. Checks the Android SDK in `~/Android/Sdk` (platform-34, build-tools 34.0.0,
    NDK 26.1.10909125) and downloads anything missing from dl.google.com.
 4. Builds the app for **both processor families**, `armeabi-v7a` (32-bit) and
-   `arm64-v8a` (64-bit), and merges them into a single universal APK.
+   `arm64-v8a` (64-bit), as two separate APKs: `...-arm64.apk` for modern
+   64-bit phones and `...-armv7.apk` for older 32-bit ones. A single merged
+   universal APK does not work with Qt 6.7.3 (its loader cannot detect the
+   ABI inside a hand-merged package).
 5. Signs the APK with the DruidCat release key from `~/secrets` (if the key is
    missing it prints placement instructions; if you decline, it signs with a
    debug key - the app installs but cannot be updated over release versions).
