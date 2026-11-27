@@ -176,9 +176,12 @@ for i in 0 1; do
 done
 
 echo "=== Шаг 5: склейка multi-ABI и подпись ==="
+# Имя APK кодирует режим (admin - скрипт) и версию из git describe:
+# v1.1.1-4-g8ad43d6 -> mentor-admin-1.1.1-4.apk (на теге -> mentor-admin-1.1.1.apk)
+VER=$(git describe --tags | sed -e 's/^v//' -e 's/-g[0-9a-f]*$//')
 MERGED=/tmp/mkapk/merged.apk
 ALIGNED=/tmp/mkapk/aligned.apk
-FINAL=mentor-release-universal.apk
+FINAL=mentor-admin-$VER.apk
 rm -rf /tmp/mkapk && mkdir -p /tmp/mkapk && cd /tmp/mkapk
 unzip -q "$REPO/${APK_UN[0]}"
 rm -rf META-INF
