@@ -76,7 +76,11 @@ if [ -n "$APT_PKGS" ]; then
     echo "Установка: sudo apt-get install -y$APT_PKGS"
     echo "или инструкция: https://packages.ubuntu.com/"
     if ask "Установить эти пакеты?"; then
-        sudo apt-get update -qq && sudo apt-get install -y $APT_PKGS
+        # сломанные сторонние репозитории не должны блокировать установку:
+        # apt использует прошлые списки пакетов
+        sudo apt-get update -qq || \
+            echo "apt update завершился ошибкой - ставлю из кэшированных списков"
+        sudo apt-get install -y $APT_PKGS
     else
         echo "Без них сборка невозможна - выход."
         exit 1
