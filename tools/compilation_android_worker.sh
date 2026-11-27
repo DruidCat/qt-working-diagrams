@@ -215,7 +215,9 @@ ALIGNED=/tmp/mkapk/aligned.apk
 FINAL=mentor-worker-$VER.apk
 rm -rf /tmp/mkapk && mkdir -p /tmp/mkapk && cd /tmp/mkapk
 unzip -q "$REPO/${APK_UN[0]}"
-rm -rf META-INF
+# удалять ТОЛЬКО файлы старой подписи: внутри META-INF лежат обязательные
+# для coroutines/androidx ServiceLoader-файлы (META-INF/services/*)
+rm -f META-INF/*.SF META-INF/*.RSA META-INF/*.DSA META-INF/*.EC META-INF/MANIFEST.MF
 mkdir -p t64
 unzip -q "$REPO/${APK_UN[1]}" 'lib/*' -d t64
 cp -a t64/lib/arm64-v8a lib/
