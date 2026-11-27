@@ -192,6 +192,7 @@ rm -rf META-INF
 mkdir -p t64
 unzip -q "$REPO/${APK_UN[1]}" 'lib/*' -d t64
 cp -a t64/lib/arm64-v8a lib/
+rm -rf t64   # временный каталог не должен попасть в APK
 # resources.arsc обязан лежать БЕЗ сжатия (STORE) иначе Android 11+
 # отказывается ставить APK: "Targeting R+ requires the resources.arsc
 # to be stored uncompressed" (ошибка -124). Остальное - Deflate.
