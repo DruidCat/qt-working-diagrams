@@ -152,7 +152,7 @@ bash tools/compilation_android_worker.sh
 - `~/secrets/mentor-licensing/license.json` - лицензия: мастер-секрет и список
   разрешённых кодов устройств. Копируйте тот же самый файл: новый
   мастер-секрет сделает ранее выданные APK нечитаемыми.
-- каталог workingdata (~553 МБ) - через `MENTOR_WORKINGDATA` или
+- каталог workingdata - через `MENTOR_WORKINGDATA` или
   `<репозиторий>/workingdata`;
 - релизный ключ `~/secrets/mentor-release.keystore` (тот же, что у скрипта
   администратора).

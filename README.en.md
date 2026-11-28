@@ -153,7 +153,7 @@ downloaded - copy them from the main build machine):
 - `~/secrets/mentor-licensing/license.json` - the license: master secret and
   the list of allowed device codes. Always copy the very same file: a new
   master secret makes every previously issued APK unreadable.
-- the workingdata directory (~553 MB) - via `MENTOR_WORKINGDATA` or
+- the workingdata directory - via `MENTOR_WORKINGDATA` or
   `<repo>/workingdata`;
 - the release key `~/secrets/mentor-release.keystore` (the same one the admin
   script uses).
