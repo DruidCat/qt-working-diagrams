@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Сборка «Ментора» под Android в защищённом режиме мобильных рабочих:
 # MENTOR_DB_MOBILE=ON + MENTOR_DATA_ENCRYPTED=ON (шифрованный workingdata
-# с проверкой по коду устройства), оба ABI, universal APK.
+# с проверкой по коду устройства), оба ABI отдельными APK.
 # Отличия от compilation_android_admin.sh помечены словом (worker).
 # Запуск из корня клона: bash tools/compilation_android_worker.sh [-y]
 # Требуется (worker, скачать нельзя - только привезти/скопировать):
