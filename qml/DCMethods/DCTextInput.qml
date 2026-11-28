@@ -111,7 +111,9 @@ Item {
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 color: "#aaa"//Светло серый цвет по умолчанию.
-                visible: !txnTextInput.text
+                //На Android клавиатура пишет слово в composing-буфер, и text пуст
+                //до коммита: подсказка должна прятаться и во время набора тоже.
+                visible: !txnTextInput.text && !txnTextInput.inputMethod.composing
 				onVisibleChanged: {//Если изменилась видимость, то...
 					if(text){//(Защита от пустого текста) Если не пустой текст, то...
 						if(visible){//Если подсказка становится видимой, то...
