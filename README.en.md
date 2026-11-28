@@ -118,9 +118,7 @@ The script then:
    NDK 26.1.10909125) and downloads anything missing from dl.google.com.
 4. Builds the app for **both processor families**, `armeabi-v7a` (32-bit) and
    `arm64-v8a` (64-bit), as two separate APKs: `...-arm64.apk` for modern
-   64-bit phones and `...-armv7.apk` for older 32-bit ones. A single merged
-   universal APK does not work with Qt 6.7.3 (its loader cannot detect the
-   ABI inside a hand-merged package).
+   64-bit phones and `...-armv7.apk` for older 32-bit ones.
 5. Signs the APK with your own release key `~/secrets/mentor-release.keystore`
    (passphrase in `~/secrets/mentor-release-keystore-pass.txt`). Every builder
    creates and keeps their own key; if none is found the script prints how to
@@ -138,6 +136,42 @@ the document database and PDFs are not embedded into the APK, the app works
 with the shared device storage. The hardened build for field workers
 (encrypted data, non-admin mode) is configured separately and is not produced
 by this script.
+
+The hardened build for field workers is produced by a separate script
+[tools/compilation_android_worker.sh](tools/compilation_android_worker.sh).
+It builds with `MENTOR_DB_MOBILE=ON` + `MENTOR_DATA_ENCRYPTED=ON`: worker
+mode (no administrator) and workingdata encrypted inside the APK. Run it
+from the repository root:
+
+```bash
+bash tools/compilation_android_worker.sh
+```
+
+On top of the usual dependencies it additionally requires (these cannot be
+downloaded - copy them from the main build machine):
+
+- `~/secrets/mentor-licensing/license.json` - the license: master secret and
+  the list of allowed device codes. Always copy the very same file: a new
+  master secret makes every previously issued APK unreadable.
+- the workingdata directory (~553 MB) - via `MENTOR_WORKINGDATA` or
+  `<repo>/workingdata`;
+- the release key `~/secrets/mentor-release.keystore` (the same one the admin
+  script uses).
+
+The script then:
+
+1. Checks the license and the data; if either is missing it stops and prints
+   exactly what has to be copied.
+2. Encrypts workingdata with `tools/shifruj_dannie.py`: the APK assets then
+   contain the AES-256-GCM blob `dannie.tar.enc` plus `licenziya.bin` with
+   one entry per allowed device code.
+3. Builds both ABIs (arm64 and armv7 - separate APKs) and signs them.
+
+The result is two files in the project root: `mentor-worker-<version>-arm64.apk`
+and `mentor-worker-<version>-armv7.apk`. On first start the app unpacks the
+documents once (about 30 seconds) if the phone's code is listed in the
+license. A phone whose code is not listed installs and starts but shows no
+documents; its code is shown on the "About" page.
 
 ## Usage
 
